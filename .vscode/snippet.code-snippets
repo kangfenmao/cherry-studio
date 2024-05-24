@@ -1,0 +1,19 @@
+{
+  "Function component": {
+    "prefix": "rnfc",
+    "body": [
+      "import { FC } from 'react'",
+      "import styled from 'styled-components'",
+      "",
+      "const $1: FC = () => {",
+      "  return <Container></Container>",
+      "}",
+      "",
+      "const Container = styled.div``",
+      "",
+      "export default $1",
+      ""
+    ],
+    "description": "Function component"
+  }
+}
