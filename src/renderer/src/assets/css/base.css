@@ -21,6 +21,12 @@
   --ev-button-alt-hover-border: transparent;
   --ev-button-alt-hover-text: var(--ev-c-text-1);
   --ev-button-alt-hover-bg: var(--ev-c-gray-2);
+
+  --navbar-height: 48px;
+  --sidebar-width: 64px;
+  --conversations-width: 240px;
+  --settings-width: 320px;
+  --status-bar-height: 48px;
 }
 
 :root {
@@ -29,6 +35,7 @@
   --color-background-mute: var(--ev-c-black-mute);
 
   --color-text: var(--ev-c-text-1);
+  --color-text-2: var(--ev-c-text-2);
 }
 
 *,
@@ -64,4 +71,34 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  display: flex;
+  overflow: hidden;
+  background-size: cover;
+  user-select: none;
+  background-color: #0b0a09;
+}
+
+code {
+  font-weight: 600;
+  padding: 3px 5px;
+  border-radius: 2px;
+  background-color: var(--color-background-mute);
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    SF Mono,
+    Menlo,
+    Consolas,
+    Liberation Mono,
+    monospace;
+  font-size: 85%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }

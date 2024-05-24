@@ -24,7 +24,10 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "electron-updater": "^6.1.7",
-    "electron-window-state": "^5.0.3"
+    "electron-window-state": "^5.0.3",
+    "react-router": "6",
+    "react-router-dom": "6",
+    "styled-components": "^6.1.11"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
@@ -42,6 +45,7 @@
     "prettier": "^3.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sass": "^1.77.2",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
   }
