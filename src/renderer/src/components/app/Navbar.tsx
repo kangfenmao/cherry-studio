@@ -1,22 +1,22 @@
 import { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 
-interface Props extends PropsWithChildren {}
+type Props = PropsWithChildren & JSX.IntrinsicElements['div']
 
-export const Navbar: FC<Props> = ({ children }) => {
-  return <NavbarContainer>{children}</NavbarContainer>
+export const Navbar: FC<Props> = ({ children, ...props }) => {
+  return <NavbarContainer {...props}>{children}</NavbarContainer>
 }
 
-export const NavbarLeft: FC<Props> = ({ children }) => {
-  return <NavbarLeftContainer>{children}</NavbarLeftContainer>
+export const NavbarLeft: FC<Props> = ({ children, ...props }) => {
+  return <NavbarLeftContainer {...props}>{children}</NavbarLeftContainer>
 }
 
-export const NavbarCenter: FC<Props> = ({ children }) => {
-  return <NavbarCenterContainer>{children}</NavbarCenterContainer>
+export const NavbarCenter: FC<Props> = ({ children, ...props }) => {
+  return <NavbarCenterContainer {...props}>{children}</NavbarCenterContainer>
 }
 
-export const NavbarRight: FC<Props> = ({ children }) => {
-  return <NavbarRightContainer>{children}</NavbarRightContainer>
+export const NavbarRight: FC<Props> = ({ children, ...props }) => {
+  return <NavbarRightContainer {...props}>{children}</NavbarRightContainer>
 }
 
 const NavbarContainer = styled.div`
@@ -31,6 +31,10 @@ const NavbarContainer = styled.div`
 const NavbarLeftContainer = styled.div`
   min-width: var(--conversations-width);
   border-right: 1px solid #ffffff20;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 const NavbarCenterContainer = styled.div`

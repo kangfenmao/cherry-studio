@@ -1,3 +1,5 @@
+@import 'https://at.alicdn.com/t/c/font_4563475_m52ypmvg0jc.css';
+
 :root {
   --ev-c-white: #ffffff;
   --ev-c-white-soft: #f8f8f8;
@@ -30,12 +32,14 @@
 }
 
 :root {
-  --color-background: var(--ev-c-black);
-  --color-background-soft: var(--ev-c-black-soft);
+  --color-background: #1b1b1f;
+  --color-background-soft: #222222;
   --color-background-mute: var(--ev-c-black-mute);
 
   --color-text: var(--ev-c-text-1);
   --color-text-2: var(--ev-c-text-2);
+  --color-icon: #ffffff99;
+  --color-icon-white: #ffffff;
 }
 
 *,

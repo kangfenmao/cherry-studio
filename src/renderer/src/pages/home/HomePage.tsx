@@ -3,10 +3,17 @@ import { FC } from 'react'
 import styled from 'styled-components'
 
 const HomePage: FC = () => {
+  const onCreateConversation = () => {
+    window.electron.ipcRenderer.send('storage.set', { key: 'conversations', value: [] })
+  }
+
   return (
     <MainContainer>
       <Navbar>
-        <NavbarLeft />
+        <NavbarLeft style={{ justifyContent: 'space-between' }}>
+          <NewButton onClick={onCreateConversation}>new</NewButton>
+          <NewButton onClick={onCreateConversation}>new</NewButton>
+        </NavbarLeft>
         <NavbarCenter>Cherry AI</NavbarCenter>
         <NavbarRight />
       </Navbar>
@@ -23,6 +30,18 @@ const MainContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+`
+
+const NewButton = styled.button`
+  -webkit-app-region: none;
+  border-radius: 4px;
+  color: var(--color-text-1);
+  background-color: var(--color-background-soft);
+  border: 1px solid var(--color-background-soft);
+  &:hover {
+    background-color: var(--color-background-soft-hover);
+    cursor: pointer;
+  }
 `
 
 const ContentContainer = styled.div`

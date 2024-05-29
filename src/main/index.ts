@@ -3,6 +3,7 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import windowStateKeeper from 'electron-window-state'
+import { initStore } from './store'
 
 function createWindow(): void {
   // Load the previous state with fallback to defaults
@@ -20,6 +21,7 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
+    trafficLightPosition: { x: 10, y: 16 },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -63,6 +65,8 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  initStore()
 
   createWindow()
 
