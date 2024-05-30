@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import Sidebar from './components/app/Sidebar'
 import Statusbar from './components/app/Statusbar'
 import HomePage from './pages/home/HomePage'
@@ -10,23 +9,15 @@ import '@fontsource/inter'
 function App(): JSX.Element {
   return (
     <BrowserRouter>
-      <MainContainer>
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/apps" element={<AppsPage />} />
-          <Route path="/settings/*" element={<SettingsPage />} />
-        </Routes>
-        <Statusbar />
-      </MainContainer>
+      <Sidebar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/apps" element={<AppsPage />} />
+        <Route path="/settings/*" element={<SettingsPage />} />
+      </Routes>
+      <Statusbar />
     </BrowserRouter>
   )
 }
-
-const MainContainer = styled.main`
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-`
 
 export default App

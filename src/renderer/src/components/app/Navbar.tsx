@@ -23,7 +23,8 @@ const NavbarContainer = styled.div`
   min-width: 100%;
   display: flex;
   flex-direction: row;
-  height: var(--navbar-height);
+  min-height: var(--navbar-height);
+  max-height: var(--navbar-height);
   border-bottom: 1px solid #ffffff20;
   -webkit-app-region: drag;
 `

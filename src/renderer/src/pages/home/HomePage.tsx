@@ -1,67 +1,90 @@
 import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
-import { FC } from 'react'
+import useConversations from '@renderer/hooks/useConversactions'
+import { FC, useEffect } from 'react'
 import styled from 'styled-components'
+import Conversations from './components/Conversations'
+import Chat from './components/Chat'
 
 const HomePage: FC = () => {
+  const { conversations, activeConversation, setActiveConversation, addConversation } = useConversations()
+
+  useEffect(() => {
+    if (!activeConversation) {
+      setActiveConversation(conversations[0])
+    }
+  }, [activeConversation, conversations])
+
   const onCreateConversation = () => {
-    window.electron.ipcRenderer.send('storage.set', { key: 'conversations', value: [] })
+    const _conversation = {
+      // ID auto increment
+      id: Math.random().toString(),
+      name: 'New conversation',
+      // placeholder url
+      avatar: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
+      lastMessage: 'message',
+      lastMessageAt: 'now'
+    }
+    addConversation(_conversation)
+    setActiveConversation(_conversation)
   }
 
   return (
-    <MainContainer>
+    <Container>
       <Navbar>
-        <NavbarLeft style={{ justifyContent: 'space-between' }}>
-          <NewButton onClick={onCreateConversation}>new</NewButton>
-          <NewButton onClick={onCreateConversation}>new</NewButton>
+        <NavbarLeft style={{ justifyContent: 'flex-end' }}>
+          <NewButton onClick={onCreateConversation}>
+            <i className="iconfont icon-a-addchat"></i>
+          </NewButton>
         </NavbarLeft>
         <NavbarCenter>Cherry AI</NavbarCenter>
         <NavbarRight />
       </Navbar>
       <ContentContainer>
-        <Conversations />
-        <Chat />
+        <Conversations
+          conversations={conversations}
+          activeConversation={activeConversation}
+          onSelectConversation={setActiveConversation}
+        />
+        <Chat activeConversation={activeConversation} />
         <Settings />
       </ContentContainer>
-    </MainContainer>
+    </Container>
   )
 }
 
-const MainContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-`
-
-const NewButton = styled.button`
-  -webkit-app-region: none;
-  border-radius: 4px;
-  color: var(--color-text-1);
-  background-color: var(--color-background-soft);
-  border: 1px solid var(--color-background-soft);
-  &:hover {
-    background-color: var(--color-background-soft-hover);
-    cursor: pointer;
-  }
+  height: 100%;
 `
 
 const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
-`
-
-const Conversations = styled.div`
-  display: flex;
-  min-width: var(--conversations-width);
-  border-right: 1px solid #ffffff20;
   height: 100%;
 `
 
-const Chat = styled.div`
+const NewButton = styled.div`
+  -webkit-app-region: none;
+  border-radius: 4px;
+  width: 34px;
+  height: 34px;
   display: flex;
-  height: 100%;
-  flex: 1;
-  border-right: 1px solid #ffffff20;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  color: var(--color-icon);
+  .iconfont {
+    font-size: 22px;
+  }
+  &:hover {
+    background-color: var(--color-background-soft);
+    cursor: pointer;
+    color: var(--color-icon-white);
+  }
 `
 
 const Settings = styled.div`

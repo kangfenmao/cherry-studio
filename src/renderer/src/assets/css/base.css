@@ -1,4 +1,4 @@
-@import 'https://at.alicdn.com/t/c/font_4563475_m52ypmvg0jc.css';
+@import 'https://at.alicdn.com/t/c/font_4563475_65n90fm9f93.css';
 
 :root {
   --ev-c-white: #ffffff;
@@ -101,8 +101,17 @@ code {
   font-size: 85%;
 }
 
+html,
+body,
 #root {
-  display: flex;
-  flex-direction: column;
+  height: 100%;
+  margin: 0;
+}
+
+#root {
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
 }
