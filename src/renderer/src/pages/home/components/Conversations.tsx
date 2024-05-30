@@ -33,6 +33,9 @@ const Container = styled.div`
   height: calc(100vh - var(--navbar-height) - var(--status-bar-height));
   padding: 10px;
   overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const Conversation = styled.div`

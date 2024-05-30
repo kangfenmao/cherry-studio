@@ -18,6 +18,8 @@ function createWindow(): void {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
+    minWidth: 800,
+    minHeight: 500,
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
