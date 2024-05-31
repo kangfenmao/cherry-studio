@@ -1,13 +1,13 @@
-import { Conversation } from '@renderer/hooks/useConversactions'
+import { Thread } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  activeConversation?: Conversation
+  activeThread?: Thread
 }
 
-const Chat: FC<Props> = ({ activeConversation }) => {
-  return <Container>{activeConversation?.lastMessage}</Container>
+const Chat: FC<Props> = ({ activeThread }) => {
+  return <Container>{activeThread?.lastMessage}</Container>
 }
 
 const Container = styled.div`
@@ -15,6 +15,7 @@ const Container = styled.div`
   height: 100%;
   flex: 1;
   border-right: 1px solid #ffffff20;
+  padding: 15px;
 `
 
 export default Chat

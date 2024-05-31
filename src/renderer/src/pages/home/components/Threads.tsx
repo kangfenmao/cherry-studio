@@ -1,25 +1,25 @@
-import type { Conversation } from '@renderer/hooks/useConversactions'
+import type { Thread } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  conversations: Conversation[]
-  activeConversation?: Conversation
-  onSelectConversation: (conversation: Conversation) => void
+  threads: Thread[]
+  activeThread?: Thread
+  onSelectThread: (conversation: Thread) => void
 }
 
-const Conversations: FC<Props> = ({ conversations, activeConversation, onSelectConversation }) => {
+const Conversations: FC<Props> = ({ threads, activeThread, onSelectThread }) => {
   return (
     <Container>
-      {conversations.map((conversation) => (
-        <Conversation
-          key={conversation.id}
-          onClick={() => onSelectConversation(conversation)}
-          className={conversation.id === activeConversation?.id ? 'active' : ''}>
-          <ConversationTime>{conversation.lastMessageAt}</ConversationTime>
-          <ConversationName>{conversation.name}</ConversationName>
-          <ConversationLastMessage>{conversation.lastMessage}</ConversationLastMessage>
-        </Conversation>
+      {threads.map((thread) => (
+        <ThreadItem
+          key={thread.id}
+          onClick={() => onSelectThread(thread)}
+          className={thread.id === activeThread?.id ? 'active' : ''}>
+          <ThreadTime>{thread.lastMessageAt}</ThreadTime>
+          <ThreadName>{thread.name}</ThreadName>
+          <ThreadLastMessage>{thread.lastMessage}</ThreadLastMessage>
+        </ThreadItem>
       ))}
     </Container>
   )
@@ -38,7 +38,7 @@ const Container = styled.div`
   }
 `
 
-const Conversation = styled.div`
+const ThreadItem = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -54,18 +54,18 @@ const Conversation = styled.div`
   margin-bottom: 10px;
 `
 
-const ConversationTime = styled.div`
+const ThreadTime = styled.div`
   font-size: 12px;
   color: var(--color-text-2);
 `
 
-const ConversationName = styled.div`
+const ThreadName = styled.div`
   font-size: 14px;
   color: var(--color-text-1);
   font-weight: bold;
 `
 
-const ConversationLastMessage = styled.div`
+const ThreadLastMessage = styled.div`
   font-size: 12px;
   color: var(--color-text-2);
 `

@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Thread } from '@renderer/types'
 
-interface State {
+export interface ThreadsState {
   threads: Thread[]
+  activeThread?: Thread
 }
 
-const initialState: State = {
-  threads: []
+const initialState: ThreadsState = {
+  threads: [],
+  activeThread: undefined
 }
 
 const threadsSlice = createSlice({
@@ -21,10 +23,13 @@ const threadsSlice = createSlice({
     },
     updateThread: (state, action: PayloadAction<Thread>) => {
       state.threads = state.threads.map((c) => (c.id === action.payload.id ? action.payload : c))
+    },
+    setActiveThread: (state, action: PayloadAction<Thread>) => {
+      state.activeThread = action.payload
     }
   }
 })
 
-export const { addThread, removeThread, updateThread } = threadsSlice.actions
+export const { addThread, removeThread, updateThread, setActiveThread } = threadsSlice.actions
 
-export default threadsSlice
+export default threadsSlice.reducer

@@ -1,21 +1,21 @@
 import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
-import useConversations from '@renderer/hooks/useConversactions'
+import useThreads from '@renderer/hooks/useThreads'
 import { FC, useEffect } from 'react'
 import styled from 'styled-components'
-import Conversations from './components/Conversations'
 import Chat from './components/Chat'
+import Threads from './components/Threads'
 
 const HomePage: FC = () => {
-  const { conversations, activeConversation, setActiveConversation, addConversation } = useConversations()
+  const { threads, activeThread, setActiveThread, addThread } = useThreads()
 
   useEffect(() => {
-    if (!activeConversation) {
-      setActiveConversation(conversations[0])
+    if (!activeThread) {
+      setActiveThread(threads[0])
     }
-  }, [activeConversation, conversations])
+  }, [activeThread, threads])
 
   const onCreateConversation = () => {
-    const _conversation = {
+    const _thread = {
       // ID auto increment
       id: Math.random().toString(),
       name: 'New conversation',
@@ -24,8 +24,8 @@ const HomePage: FC = () => {
       lastMessage: 'message',
       lastMessageAt: 'now'
     }
-    addConversation(_conversation)
-    setActiveConversation(_conversation)
+    addThread(_thread)
+    setActiveThread(_thread)
   }
 
   return (
@@ -40,12 +40,8 @@ const HomePage: FC = () => {
         <NavbarRight />
       </Navbar>
       <ContentContainer>
-        <Conversations
-          conversations={conversations}
-          activeConversation={activeConversation}
-          onSelectConversation={setActiveConversation}
-        />
-        <Chat activeConversation={activeConversation} />
+        <Threads threads={threads} activeThread={activeThread} onSelectThread={setActiveThread} />
+        <Chat activeThread={activeThread} />
         <Settings />
       </ContentContainer>
     </Container>

@@ -1,8 +1,7 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
-import { initStore } from './store'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow(): void {
@@ -67,8 +66,6 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
-
-  initStore()
 
   createWindow()
 
