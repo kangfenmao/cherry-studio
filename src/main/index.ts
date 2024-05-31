@@ -1,9 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import windowStateKeeper from 'electron-window-state'
+import { join } from 'path'
 import { initStore } from './store'
+import icon from '../../resources/icon.png?asset'
 
 function createWindow(): void {
   // Load the previous state with fallback to defaults
