@@ -30,7 +30,7 @@ const Container = styled.div`
   flex-direction: column;
   min-width: var(--conversations-width);
   border-right: 1px solid #ffffff20;
-  height: calc(100vh - var(--navbar-height) - var(--status-bar-height));
+  height: calc(100vh - var(--navbar-height));
   padding: 10px;
   overflow-y: scroll;
   &::-webkit-scrollbar {

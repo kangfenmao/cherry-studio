@@ -1,4 +1,4 @@
-@import 'https://at.alicdn.com/t/c/font_4563475_65n90fm9f93.css';
+@import 'https://at.alicdn.com/t/c/font_4563475_yuh5d3ftmm.css';
 
 :root {
   --ev-c-white: #ffffff;
@@ -24,15 +24,13 @@
   --ev-button-alt-hover-text: var(--ev-c-text-1);
   --ev-button-alt-hover-bg: var(--ev-c-gray-2);
 
-  --navbar-height: 48px;
-  --sidebar-width: 64px;
+  --navbar-height: 40px;
+  --sidebar-width: 70px;
   --conversations-width: 240px;
-  --settings-width: 320px;
-  --status-bar-height: 48px;
-}
+  --settings-width: 280px;
+  --status-bar-height: 40px;
 
-:root {
-  --color-background: #1b1b1f;
+  --color-background: #181818;
   --color-background-soft: #222222;
   --color-background-mute: var(--ev-c-black-mute);
 
@@ -55,10 +53,14 @@ ul {
 }
 
 body {
+  display: flex;
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
   line-height: 1.6;
+  overflow: hidden;
+  background-size: cover;
+  user-select: none;
   font-family:
     Inter,
     -apple-system,
@@ -75,14 +77,6 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  display: flex;
-  overflow: hidden;
-  background-size: cover;
-  user-select: none;
-  background-color: #0b0a09;
 }
 
 code {
@@ -116,6 +110,7 @@ body,
   flex: 1;
 }
 
+/*
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -131,4 +126,4 @@ body,
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #444c51;
-}
+} */

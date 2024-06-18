@@ -16,10 +16,8 @@ const HomePage: FC = () => {
 
   const onCreateConversation = () => {
     const _thread = {
-      // ID auto increment
       id: Math.random().toString(),
       name: 'New conversation',
-      // placeholder url
       avatar: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
       lastMessage: 'message',
       lastMessageAt: 'now'
@@ -36,13 +34,16 @@ const HomePage: FC = () => {
             <i className="iconfont icon-a-addchat"></i>
           </NewButton>
         </NavbarLeft>
-        <NavbarCenter>Cherry AI</NavbarCenter>
-        <NavbarRight />
+        <NavbarCenter style={{ border: 'none' }}>{activeThread.name}</NavbarCenter>
+        <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
+          <NewButton>
+            <i className="iconfont icon-showsidebarhoriz"></i>
+          </NewButton>
+        </NavbarRight>
       </Navbar>
       <ContentContainer>
         <Threads threads={threads} activeThread={activeThread} onSelectThread={setActiveThread} />
         <Chat activeThread={activeThread} />
-        <Settings />
       </ContentContainer>
     </Container>
   )
@@ -76,17 +77,14 @@ const NewButton = styled.div`
   .iconfont {
     font-size: 22px;
   }
+  .icon-showsidebarhoriz {
+    font-size: 18px;
+  }
   &:hover {
     background-color: var(--color-background-soft);
     cursor: pointer;
     color: var(--color-icon-white);
   }
-`
-
-const Settings = styled.div`
-  display: flex;
-  height: 100%;
-  min-width: var(--settings-width);
 `
 
 export default HomePage
