@@ -15,12 +15,14 @@ const store = configureStore({
       threads
     })
   ),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
     })
+  },
+  devTools: true
 })
 
 export type RootState = ReturnType<typeof store.getState>

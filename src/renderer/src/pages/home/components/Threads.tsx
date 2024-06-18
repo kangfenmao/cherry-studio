@@ -1,21 +1,34 @@
-import type { Thread } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
+import { IconMore } from '@douyinfe/semi-icons'
+import { Dropdown } from '@douyinfe/semi-ui'
+import useThreads from '@renderer/hooks/useThreads'
 
-interface Props {
-  threads: Thread[]
-  activeThread?: Thread
-  onSelectThread: (conversation: Thread) => void
-}
+const Threads: FC = () => {
+  const { threads, activeThread, setActiveThread, removeThread } = useThreads()
 
-const Threads: FC<Props> = ({ threads, activeThread, onSelectThread }) => {
   return (
     <Container>
       {threads.map((thread) => (
         <ThreadItem
           key={thread.id}
-          onClick={() => onSelectThread(thread)}
+          onClick={() => setActiveThread(thread)}
           className={thread.id === activeThread?.id ? 'active' : ''}>
+          <Dropdown
+            trigger="click"
+            render={
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={(event) => {
+                    removeThread(thread.id)
+                    event.stopPropagation()
+                  }}>
+                  Delete
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            }>
+            <IconMore style={{ position: 'absolute', right: 12, top: 12 }} />
+          </Dropdown>
           <ThreadTime>{thread.lastMessageAt}</ThreadTime>
           <ThreadName>{thread.name}</ThreadName>
           <ThreadLastMessage>{thread.lastMessage}</ThreadLastMessage>
@@ -42,9 +55,16 @@ const ThreadItem = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+  position: relative;
   cursor: pointer;
+  .semi-icon {
+    display: none;
+  }
   &:hover {
     background-color: var(--color-background-soft);
+    .semi-icon {
+      display: block;
+    }
   }
   &.active {
     background-color: var(--color-background-mute);

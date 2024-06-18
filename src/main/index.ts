@@ -3,6 +3,7 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 function createWindow(): void {
   // Load the previous state with fallback to defaults
@@ -74,6 +75,10 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  installExtension(REDUX_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err))
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
