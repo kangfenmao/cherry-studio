@@ -4,12 +4,14 @@ export type Thread = {
   avatar: string
   lastMessage: string
   lastMessageAt: string
+  conversations: string[]
 }
 
 export type Message = {
   id: string
   content: string
   threadId: string
+  conversationId: string
   createdAt: string
 }
 

@@ -4,6 +4,7 @@ import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import Chat from './components/Chat'
 import Threads from './components/Threads'
+import { uuid } from '@renderer/utils'
 
 const HomePage: FC = () => {
   const { threads, activeThread, setActiveThread, addThread } = useThreads()
@@ -14,11 +15,12 @@ const HomePage: FC = () => {
 
   const onCreateConversation = () => {
     const _thread = {
-      id: Math.random().toString(),
+      id: uuid(),
       name: 'New conversation',
       avatar: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
       lastMessage: 'message',
-      lastMessageAt: 'now'
+      lastMessageAt: 'now',
+      conversations: []
     }
     addThread(_thread)
     setActiveThread(_thread)
@@ -32,7 +34,7 @@ const HomePage: FC = () => {
             <i className="iconfont icon-a-addchat"></i>
           </NewButton>
         </NavbarLeft>
-        <NavbarCenter style={{ border: 'none' }}>{activeThread.name}</NavbarCenter>
+        <NavbarCenter style={{ border: 'none' }}>{activeThread?.name}</NavbarCenter>
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
           <NewButton>
             <i className="iconfont icon-showsidebarhoriz"></i>

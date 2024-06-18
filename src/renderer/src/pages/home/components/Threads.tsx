@@ -16,22 +16,17 @@ const Threads: FC = () => {
           className={thread.id === activeThread?.id ? 'active' : ''}>
           <Dropdown
             trigger="click"
+            stopPropagation
             render={
               <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={(event) => {
-                    removeThread(thread.id)
-                    event.stopPropagation()
-                  }}>
-                  Delete
-                </Dropdown.Item>
+                <Dropdown.Item onClick={() => removeThread(thread.id)}>Delete</Dropdown.Item>
               </Dropdown.Menu>
             }>
             <IconMore style={{ position: 'absolute', right: 12, top: 12 }} />
           </Dropdown>
-          <ThreadTime>{thread.lastMessageAt}</ThreadTime>
           <ThreadName>{thread.name}</ThreadName>
           <ThreadLastMessage>{thread.lastMessage}</ThreadLastMessage>
+          <ThreadTime>{thread.lastMessageAt}</ThreadTime>
         </ThreadItem>
       ))}
     </Container>
@@ -42,6 +37,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-width: var(--conversations-width);
+  max-width: var(--conversations-width);
   border-right: 1px solid #ffffff20;
   height: calc(100vh - var(--navbar-height));
   padding: 10px;
@@ -87,7 +83,14 @@ const ThreadName = styled.div`
 
 const ThreadLastMessage = styled.div`
   font-size: 12px;
+  line-height: 20px;
   color: var(--color-text-2);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  height: 20px;
 `
 
 export default Threads

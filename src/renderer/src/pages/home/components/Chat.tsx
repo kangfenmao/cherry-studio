@@ -1,12 +1,13 @@
 import { Message } from '@renderer/types'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Conversations from './Conversations'
 import useThreads from '@renderer/hooks/useThreads'
+import { uuid } from '@renderer/utils'
 
 const Chat: FC = () => {
-  const { activeThread } = useThreads()
+  const { activeThread, addConversation } = useThreads()
   const [messages, setMessages] = useState<Message[]>([])
 
   const onSendMessage = (message: Message) => {

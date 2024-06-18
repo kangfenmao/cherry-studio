@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 export const runAsyncFunction = async (fn: () => void) => {
   await fn()
 }
@@ -44,3 +46,5 @@ export const waitAsyncFunction = (fn: () => Promise<any>, interval = 200, stopTi
     }
   })()
 }
+
+export const uuid = () => uuidv4()

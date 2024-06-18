@@ -1,4 +1,5 @@
 import { Message, Thread } from '@renderer/types'
+import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
@@ -10,16 +11,21 @@ interface Props {
 const Inputbar: FC<Props> = ({ activeThread, onSendMessage }) => {
   const [text, setText] = useState('')
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
+      const conversationId = activeThread.conversations[0] ? activeThread.conversations[0] : uuid()
+
       const message: Message = {
-        id: Math.random().toString(),
+        id: uuid(),
         content: text,
         threadId: activeThread.id,
+        conversationId,
         createdAt: 'now'
       }
+
       onSendMessage(message)
       setText('')
+      event.preventDefault()
     }
   }
 
