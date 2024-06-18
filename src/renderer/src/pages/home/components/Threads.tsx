@@ -8,7 +8,7 @@ interface Props {
   onSelectThread: (conversation: Thread) => void
 }
 
-const Conversations: FC<Props> = ({ threads, activeThread, onSelectThread }) => {
+const Threads: FC<Props> = ({ threads, activeThread, onSelectThread }) => {
   return (
     <Container>
       {threads.map((thread) => (
@@ -70,4 +70,4 @@ const ThreadLastMessage = styled.div`
   color: var(--color-text-2);
 `
 
-export default Conversations
+export default Threads

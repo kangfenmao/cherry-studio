@@ -1,13 +1,24 @@
+import { Message, Thread } from '@renderer/types'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
-const Inputbar: FC = () => {
+interface Props {
+  activeThread: Thread
+  onSendMessage: (message: Message) => void
+}
+
+const Inputbar: FC<Props> = ({ activeThread, onSendMessage }) => {
   const [text, setText] = useState('')
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      // 当用户按下Enter键时执行的操作
-      console.log('Enter key was pressed')
+      const message: Message = {
+        id: Math.random().toString(),
+        content: text,
+        threadId: activeThread.id,
+        createdAt: 'now'
+      }
+      onSendMessage(message)
       setText('')
     }
   }
