@@ -5,15 +5,15 @@ import { Dropdown } from '@douyinfe/semi-ui'
 import useThreads from '@renderer/hooks/useThreads'
 
 const Threads: FC = () => {
-  const { threads, activeThread, setActiveThread, removeThread } = useThreads()
+  const { threads, thread, setThread, removeThread } = useThreads()
 
   return (
     <Container>
       {threads.map((thread) => (
         <ThreadItem
           key={thread.id}
-          onClick={() => setActiveThread(thread)}
-          className={thread.id === activeThread?.id ? 'active' : ''}>
+          onClick={() => setThread(thread)}
+          className={thread.id === thread?.id ? 'active' : ''}>
           <Dropdown
             trigger="click"
             stopPropagation

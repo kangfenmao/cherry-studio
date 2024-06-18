@@ -1,23 +1,24 @@
-import { Message } from '@renderer/types'
-import { FC, useEffect, useState } from 'react'
+import { Message, Thread } from '@renderer/types'
+import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Conversations from './Conversations'
 import useThreads from '@renderer/hooks/useThreads'
+import { isEmpty } from 'lodash'
+import localforage from 'localforage'
 import { uuid } from '@renderer/utils'
 
-const Chat: FC = () => {
-  const { activeThread, addConversation } = useThreads()
-  const [messages, setMessages] = useState<Message[]>([])
+interface Props {
+  thread: Thread
+}
 
-  const onSendMessage = (message: Message) => {
-    setMessages([...messages, message])
-  }
+const Chat: FC<Props> = ({ thread }) => {
+  const [conversationId] = useState<string>(thread.conversations[0] || uuid())
 
   return (
     <Container>
-      <Conversations messages={messages}></Conversations>
-      <Inputbar onSendMessage={onSendMessage} activeThread={activeThread} />
+      <Conversations thread={thread} conversationId={conversationId} />
+      <Inputbar thread={thread} />
     </Container>
   )
 }

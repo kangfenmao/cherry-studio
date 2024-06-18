@@ -4,19 +4,20 @@ import {
   addThread,
   removeConversationFromThread,
   removeThread,
-  setActiveThread,
   updateThread
 } from '@renderer/store/threads'
 import { Thread } from '@renderer/types'
+import { useState } from 'react'
 
 export default function useThreads() {
-  const { threads, activeThread } = useAppSelector((state) => state.threads)
+  const { threads } = useAppSelector((state) => state.threads)
+  const [threadId, setThreadId] = useState(threads[0]?.id)
   const dispatch = useAppDispatch()
 
   return {
     threads,
-    activeThread,
-    setActiveThread: (thread: Thread) => dispatch(setActiveThread(thread)),
+    thread: threads.find((t) => t.id === threadId),
+    setThread: (thread: Thread) => setThreadId(thread.id),
     addThread: (thread: Thread) => dispatch(addThread(thread)),
     removeThread: (id: string) => dispatch(removeThread({ id })),
     updateThread: (thread: Thread) => dispatch(updateThread(thread)),

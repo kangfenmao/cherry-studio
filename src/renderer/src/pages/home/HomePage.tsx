@@ -7,11 +7,11 @@ import Threads from './components/Threads'
 import { uuid } from '@renderer/utils'
 
 const HomePage: FC = () => {
-  const { threads, activeThread, setActiveThread, addThread } = useThreads()
+  const { threads, thread, setThread, addThread } = useThreads()
 
   useEffect(() => {
-    !activeThread && setActiveThread(threads[0])
-  }, [activeThread, threads])
+    !thread && threads[0] && setThread(threads[0])
+  }, [thread, threads])
 
   const onCreateConversation = () => {
     const _thread = {
@@ -23,7 +23,7 @@ const HomePage: FC = () => {
       conversations: []
     }
     addThread(_thread)
-    setActiveThread(_thread)
+    setThread(_thread)
   }
 
   return (
@@ -34,7 +34,7 @@ const HomePage: FC = () => {
             <i className="iconfont icon-a-addchat"></i>
           </NewButton>
         </NavbarLeft>
-        <NavbarCenter style={{ border: 'none' }}>{activeThread?.name}</NavbarCenter>
+        <NavbarCenter style={{ border: 'none' }}>{thread?.name}</NavbarCenter>
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
           <NewButton>
             <i className="iconfont icon-showsidebarhoriz"></i>
@@ -43,7 +43,7 @@ const HomePage: FC = () => {
       </Navbar>
       <ContentContainer>
         <Threads />
-        <Chat />
+        {thread && <Chat thread={thread} />}
       </ContentContainer>
     </Container>
   )

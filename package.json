@@ -30,6 +30,7 @@
     "@reduxjs/toolkit": "^2.2.5",
     "electron-updater": "^6.1.7",
     "electron-window-state": "^5.0.3",
+    "emittery": "^1.0.3",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "react-redux": "^9.1.2",
