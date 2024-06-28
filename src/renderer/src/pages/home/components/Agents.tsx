@@ -2,32 +2,29 @@ import { FC } from 'react'
 import styled from 'styled-components'
 import { IconMore } from '@douyinfe/semi-icons'
 import { Dropdown } from '@douyinfe/semi-ui'
-import useThreads from '@renderer/hooks/useThreads'
+import useAgents from '@renderer/hooks/useAgents'
 
-const Threads: FC = () => {
-  const { threads, thread, setThread, removeThread } = useThreads()
+const Agents: FC = () => {
+  const { agents, setAgent, removeAgent } = useAgents()
 
   return (
     <Container>
-      {threads.map((thread) => (
-        <ThreadItem
-          key={thread.id}
-          onClick={() => setThread(thread)}
-          className={thread.id === thread?.id ? 'active' : ''}>
+      {agents.map((agent) => (
+        <AgentItem key={agent.id} onClick={() => setAgent(agent)} className={agent.id === agent?.id ? 'active' : ''}>
           <Dropdown
             trigger="click"
             stopPropagation
             render={
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => removeThread(thread.id)}>Delete</Dropdown.Item>
+                <Dropdown.Item onClick={() => removeAgent(agent.id)}>Delete</Dropdown.Item>
               </Dropdown.Menu>
             }>
             <IconMore style={{ position: 'absolute', right: 12, top: 12 }} />
           </Dropdown>
-          <ThreadName>{thread.name}</ThreadName>
-          <ThreadLastMessage>{thread.lastMessage}</ThreadLastMessage>
-          <ThreadTime>{thread.lastMessageAt}</ThreadTime>
-        </ThreadItem>
+          <AgentName>{agent.name}</AgentName>
+          <AgentLastMessage>{agent.lastMessage}</AgentLastMessage>
+          <AgentTime>{agent.lastMessageAt}</AgentTime>
+        </AgentItem>
       ))}
     </Container>
   )
@@ -47,7 +44,7 @@ const Container = styled.div`
   }
 `
 
-const ThreadItem = styled.div`
+const AgentItem = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -70,18 +67,18 @@ const ThreadItem = styled.div`
   margin-bottom: 10px;
 `
 
-const ThreadTime = styled.div`
+const AgentTime = styled.div`
   font-size: 12px;
   color: var(--color-text-2);
 `
 
-const ThreadName = styled.div`
+const AgentName = styled.div`
   font-size: 14px;
   color: var(--color-text-1);
   font-weight: bold;
 `
 
-const ThreadLastMessage = styled.div`
+const AgentLastMessage = styled.div`
   font-size: 12px;
   line-height: 20px;
   color: var(--color-text-2);
@@ -93,4 +90,4 @@ const ThreadLastMessage = styled.div`
   height: 20px;
 `
 
-export default Threads
+export default Agents

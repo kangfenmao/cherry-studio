@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import threads from './threads'
+import agents from './agents'
 
 const store = configureStore({
   reducer: persistReducer(
@@ -12,7 +12,7 @@ const store = configureStore({
       version: 1
     },
     combineReducers({
-      threads
+      agents
     })
   ),
   middleware: (getDefaultMiddleware) => {

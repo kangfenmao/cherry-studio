@@ -1,4 +1,4 @@
-export function getDefaultThread() {
+export function getDefaultAgent() {
   return {
     id: 'default',
     name: 'Chat Assistant',

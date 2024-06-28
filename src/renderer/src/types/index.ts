@@ -1,4 +1,4 @@
-export type Thread = {
+export type Agent = {
   id: string
   name: string
   avatar: string
@@ -10,7 +10,7 @@ export type Thread = {
 export type Message = {
   id: string
   content: string
-  threadId: string
+  agentId: string
   conversationId: string
   createdAt: string
 }

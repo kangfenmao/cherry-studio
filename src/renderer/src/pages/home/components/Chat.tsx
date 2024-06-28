@@ -1,24 +1,24 @@
-import { Message, Thread } from '@renderer/types'
+import { Message, Agent } from '@renderer/types'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Conversations from './Conversations'
-import useThreads from '@renderer/hooks/useThreads'
+import useAgents from '@renderer/hooks/useAgents'
 import { isEmpty } from 'lodash'
 import localforage from 'localforage'
 import { uuid } from '@renderer/utils'
 
 interface Props {
-  thread: Thread
+  agent: Agent
 }
 
-const Chat: FC<Props> = ({ thread }) => {
-  const [conversationId] = useState<string>(thread.conversations[0] || uuid())
+const Chat: FC<Props> = ({ agent }) => {
+  const [conversationId] = useState<string>(agent.conversations[0] || uuid())
 
   return (
     <Container>
-      <Conversations thread={thread} conversationId={conversationId} />
-      <Inputbar thread={thread} />
+      <Conversations agent={agent} conversationId={conversationId} />
+      <Inputbar agent={agent} />
     </Container>
   )
 }

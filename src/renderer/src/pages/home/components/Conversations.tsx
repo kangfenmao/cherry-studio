@@ -1,7 +1,7 @@
 import { Avatar } from '@douyinfe/semi-ui'
-import useThreads from '@renderer/hooks/useThreads'
+import useAgents from '@renderer/hooks/useAgents'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Conversation, Message, Thread } from '@renderer/types'
+import { Conversation, Message, Agent } from '@renderer/types'
 import { runAsyncFunction } from '@renderer/utils'
 import localforage from 'localforage'
 import { isEmpty } from 'lodash'
@@ -9,19 +9,19 @@ import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  thread: Thread
+  agent: Agent
   conversationId: string
 }
 
-const Conversations: FC<Props> = ({ thread, conversationId }) => {
+const Conversations: FC<Props> = ({ agent, conversationId }) => {
   const [messages, setMessages] = useState<Message[]>([])
-  const { addConversation } = useThreads()
+  const { addConversation } = useAgents()
 
   const onSendMessage = (message: Message) => {
     setMessages([...messages, message])
 
-    if (isEmpty(thread?.conversations)) {
-      addConversation(thread.id, conversationId)
+    if (isEmpty(agent?.conversations)) {
+      addConversation(agent.id, conversationId)
     }
 
     localforage.setItem<Conversation>(`conversation:${conversationId}`, {

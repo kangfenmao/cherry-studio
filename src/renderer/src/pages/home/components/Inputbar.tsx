@@ -1,24 +1,24 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Message, Thread } from '@renderer/types'
+import { Message, Agent } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  thread: Thread
+  agent: Agent
 }
 
-const Inputbar: FC<Props> = ({ thread }) => {
+const Inputbar: FC<Props> = ({ agent }) => {
   const [text, setText] = useState('')
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
-      const conversationId = thread.conversations[0] ? thread.conversations[0] : uuid()
+      const conversationId = agent.conversations[0] ? agent.conversations[0] : uuid()
 
       const message: Message = {
         id: uuid(),
         content: text,
-        threadId: thread.id,
+        agentId: agent.id,
         conversationId,
         createdAt: 'now'
       }
