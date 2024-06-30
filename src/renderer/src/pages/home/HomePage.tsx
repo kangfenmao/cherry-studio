@@ -1,17 +1,16 @@
 import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import useAgents from '@renderer/hooks/useAgents'
-import { FC, useEffect } from 'react'
+import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Chat from './components/Chat'
 import Agents from './components/Agents'
 import { uuid } from '@renderer/utils'
+import { Agent } from '@renderer/types'
+import { last } from 'lodash'
 
 const HomePage: FC = () => {
-  const { agents, agent, setAgent, addAgent } = useAgents()
-
-  useEffect(() => {
-    !agent && agents[0] && setAgent(agents[0])
-  }, [agent, agents])
+  const { agents, addAgent } = useAgents()
+  const [activeAgent, setActiveAgent] = useState(agents[0])
 
   const onCreateConversation = () => {
     const _agent = {
@@ -23,18 +22,23 @@ const HomePage: FC = () => {
       conversations: []
     }
     addAgent(_agent)
-    setAgent(_agent)
+    setActiveAgent(_agent)
+  }
+
+  const onRemoveAgent = (agent: Agent) => {
+    const _agent = last(agents.filter((a) => a.id !== agent.id))
+    _agent && setActiveAgent(_agent)
   }
 
   return (
     <Container>
       <Navbar>
-        <NavbarLeft style={{ justifyContent: 'flex-end' }}>
+        <NavbarLeft style={{ justifyContent: 'flex-end', borderRight: 'none' }}>
           <NewButton onClick={onCreateConversation}>
             <i className="iconfont icon-a-addchat"></i>
           </NewButton>
         </NavbarLeft>
-        <NavbarCenter style={{ border: 'none' }}>{agent?.name}</NavbarCenter>
+        <NavbarCenter style={{ border: 'none' }}>{activeAgent?.name}</NavbarCenter>
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
           <NewButton>
             <i className="iconfont icon-showsidebarhoriz"></i>
@@ -42,8 +46,8 @@ const HomePage: FC = () => {
         </NavbarRight>
       </Navbar>
       <ContentContainer>
-        <Agents />
-        {agent && <Chat agent={agent} />}
+        <Agents activeAgent={activeAgent} onActive={setActiveAgent} onRemove={onRemoveAgent} />
+        <Chat agent={activeAgent} />
       </ContentContainer>
     </Container>
   )

@@ -4,6 +4,10 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 import storage from 'redux-persist/lib/storage'
 import agents from './agents'
 
+const rootReducer = combineReducers({
+  agents
+})
+
 const store = configureStore({
   reducer: persistReducer(
     {
@@ -11,9 +15,7 @@ const store = configureStore({
       storage,
       version: 1
     },
-    combineReducers({
-      agents
-    })
+    rootReducer
   ),
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
@@ -25,13 +27,12 @@ const store = configureStore({
   devTools: true
 })
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch
 
 export const persistor = persistStore(store)
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 export const useAppStore = useStore.withTypes<typeof store>()
-// export const dispatch: AppDispatch = useDispatch()
 
 export default store

@@ -1,0 +1,87 @@
+@import 'https://at.alicdn.com/t/c/font_4563475_yuh5d3ftmm.css';
+@import './markdown.scss';
+:root {
+  --color-white: #ffffff;
+  --color-white-soft: #f8f8f8;
+  --color-white-mute: #f2f2f2;
+
+  --color-black: #1b1b1f;
+  --color-black-soft: #303030;
+  --color-black-mute: #363636;
+
+  --color-gray-1: #515c67;
+  --color-gray-2: #414853;
+  --color-gray-3: #32363f;
+
+  --color-text-1: rgba(255, 255, 245, 0.86);
+  --color-text-2: rgba(235, 235, 245, 0.6);
+  --color-text-3: rgba(235, 235, 245, 0.38);
+
+  --color-background: #1e1e1e;
+  --color-background-soft: var(--color-black-soft);
+  --color-background-mute: var(--color-black-mute);
+
+  --color-text: var(--color-text-1);
+  --color-icon: #ffffff99;
+  --color-icon-white: #ffffff;
+
+  --navbar-height: 40px;
+  --sidebar-width: 70px;
+  --conversations-width: 240px;
+  --settings-width: 280px;
+  --status-bar-height: 40px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  line-height: 1.6;
+  overflow: hidden;
+  background-size: cover;
+  user-select: none;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}

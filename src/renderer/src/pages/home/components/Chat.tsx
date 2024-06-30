@@ -1,11 +1,8 @@
-import { Message, Agent } from '@renderer/types'
-import { FC, useState } from 'react'
+import { Agent } from '@renderer/types'
+import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Conversations from './Conversations'
-import useAgents from '@renderer/hooks/useAgents'
-import { isEmpty } from 'lodash'
-import localforage from 'localforage'
 import { uuid } from '@renderer/utils'
 
 interface Props {
@@ -13,10 +10,18 @@ interface Props {
 }
 
 const Chat: FC<Props> = ({ agent }) => {
-  const [conversationId] = useState<string>(agent.conversations[0] || uuid())
+  const [conversationId, setConversationId] = useState<string>(agent?.conversations[0] || uuid())
+
+  useEffect(() => {
+    setConversationId(agent?.conversations[0] || uuid())
+  }, [agent])
+
+  if (!agent) {
+    return null
+  }
 
   return (
-    <Container>
+    <Container id="chat">
       <Conversations agent={agent} conversationId={conversationId} />
       <Inputbar agent={agent} />
     </Container>
@@ -28,7 +33,7 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   flex: 1;
-  border-right: 1px solid #ffffff20;
+  justify-content: space-between;
 `
 
 export default Chat

@@ -26,12 +26,3 @@ export type User = {
   avatar: string
   email: string
 }
-
-export type Agent = {
-  id: string
-  name: string
-  description: string
-  avatar: string
-  model: string
-  default: boolean
-}

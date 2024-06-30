@@ -1,25 +1,56 @@
-import { FC } from 'react'
+import { FC, useRef } from 'react'
 import styled from 'styled-components'
-import { IconMore } from '@douyinfe/semi-icons'
-import { Dropdown } from '@douyinfe/semi-ui'
 import useAgents from '@renderer/hooks/useAgents'
+import { Agent } from '@renderer/types'
+import { Dropdown, MenuProps } from 'antd'
+import { EllipsisOutlined } from '@ant-design/icons'
 
-const Agents: FC = () => {
-  const { agents, setAgent, removeAgent } = useAgents()
+interface Props {
+  activeAgent: Agent
+  onActive: (agent: Agent) => void
+  onRemove: (agent: Agent) => void
+}
+
+const Agents: FC<Props> = ({ activeAgent, onActive, onRemove }) => {
+  const { agents, removeAgent } = useAgents()
+  const targetAgent = useRef<Agent | null>(null)
+
+  const onDelete = (agent: Agent) => {
+    removeAgent(agent.id)
+    onRemove(agent)
+  }
+
+  const items: MenuProps['items'] = [
+    {
+      label: 'Edit',
+      key: 'edit'
+    },
+    {
+      label: 'Favorite',
+      key: 'favorite'
+    },
+    {
+      label: 'Delete',
+      key: 'delete',
+      onClick: () => targetAgent.current && onDelete(targetAgent.current)
+    }
+  ]
 
   return (
     <Container>
       {agents.map((agent) => (
-        <AgentItem key={agent.id} onClick={() => setAgent(agent)} className={agent.id === agent?.id ? 'active' : ''}>
-          <Dropdown
-            trigger="click"
-            stopPropagation
-            render={
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => removeAgent(agent.id)}>Delete</Dropdown.Item>
-              </Dropdown.Menu>
-            }>
-            <IconMore style={{ position: 'absolute', right: 12, top: 12 }} />
+        <AgentItem
+          key={agent.id}
+          onClick={() => onActive(agent)}
+          className={agent.id === activeAgent?.id ? 'active' : ''}>
+          <Dropdown menu={{ items }} trigger={['click']} placement="bottom">
+            <EllipsisOutlined
+              style={{ position: 'absolute', right: 12, top: 12 }}
+              onClick={(e) => {
+                e.stopPropagation()
+                targetAgent.current = agent
+              }}
+            />
           </Dropdown>
           <AgentName>{agent.name}</AgentName>
           <AgentLastMessage>{agent.lastMessage}</AgentLastMessage>
@@ -35,9 +66,8 @@ const Container = styled.div`
   flex-direction: column;
   min-width: var(--conversations-width);
   max-width: var(--conversations-width);
-  border-right: 1px solid #ffffff20;
+  border-right: 0.5px solid #ffffff20;
   height: calc(100vh - var(--navbar-height));
-  padding: 10px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -50,12 +80,12 @@ const AgentItem = styled.div`
   padding: 10px;
   position: relative;
   cursor: pointer;
-  .semi-icon {
+  .anticon {
     display: none;
   }
   &:hover {
     background-color: var(--color-background-soft);
-    .semi-icon {
+    .anticon {
       display: block;
     }
   }
@@ -63,8 +93,6 @@ const AgentItem = styled.div`
     background-color: var(--color-background-mute);
     cursor: pointer;
   }
-  border-radius: 8px;
-  margin-bottom: 10px;
 `
 
 const AgentTime = styled.div`

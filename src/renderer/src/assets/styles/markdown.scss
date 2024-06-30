@@ -1,0 +1,96 @@
+.markdown {
+  width: 100%;
+  max-width: 800px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.6;
+  user-select: text;
+
+  .hljs {
+    background-color: transparent;
+    border: 1px solid #333;
+    border-radius: 3px;
+  }
+
+  p:first-of-type {
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 1.5em 0 0.5em 0;
+    font-weight: 800;
+  }
+
+  h1 {
+    font-size: 2em;
+    color: #fff;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    color: #fff;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    color: #fff;
+  }
+
+  h4 {
+    font-size: 1em;
+    color: #fff;
+  }
+
+  h5 {
+    font-size: 0.9em;
+    color: #fff;
+  }
+
+  h6 {
+    font-size: 0.8em;
+    color: #fff;
+  }
+
+  p {
+    margin: 1em 0;
+    color: #ccc;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+    margin: 1em 0;
+    color: #ccc;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 20px 0;
+    background-color: #555;
+  }
+
+  code {
+    font-weight: 600;
+    padding: 3px 5px;
+    border-radius: 2px;
+    font-family:
+      ui-monospace,
+      SFMono-Regular,
+      SF Mono,
+      Menlo,
+      Consolas,
+      Liberation Mono,
+      monospace;
+    font-size: 80%;
+  }
+}

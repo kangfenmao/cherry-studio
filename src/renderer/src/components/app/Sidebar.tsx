@@ -45,8 +45,7 @@ const Container = styled.div`
   padding: 16px 0;
   min-width: var(--sidebar-width);
   min-height: 100%;
-  border-top: 1px solid #ffffff20;
-  border-right: 1px solid #ffffff20;
+  background: #262626;
   padding-top: 40px;
   padding-bottom: 10px;
   -webkit-app-region: drag !important;

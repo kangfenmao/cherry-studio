@@ -1,5 +1,5 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Message, Agent } from '@renderer/types'
+import { Agent, Message } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
@@ -44,14 +44,15 @@ const Inputbar: FC<Props> = ({ agent }) => {
 const Textarea = styled.textarea`
   padding: 15px;
   width: 100%;
-  height: 100px;
+  height: 120px;
+  min-height: 120px;
   border: none;
   outline: none;
   resize: none;
   font-size: 14px;
   color: var(--color-text);
   background-color: transparent;
-  border-top: 1px solid #ffffff20;
+  border-top: 0.5px solid #ffffff20;
 `
 
 export default Inputbar
