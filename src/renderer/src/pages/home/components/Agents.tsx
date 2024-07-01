@@ -39,8 +39,6 @@ const Agents: FC<Props> = ({ activeAgent, onActive }) => {
     }
   ]
 
-  console.debug('activeAgent', activeAgent)
-
   return (
     <Container>
       {agents.map((agent) => (

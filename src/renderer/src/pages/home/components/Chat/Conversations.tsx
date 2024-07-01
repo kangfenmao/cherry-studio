@@ -1,4 +1,3 @@
-import useAgents from '@renderer/hooks/useAgents'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { openaiProvider } from '@renderer/services/provider'
 import { Agent, Conversation, Message } from '@renderer/types'
@@ -8,28 +7,32 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { reverse } from 'lodash'
+import hljs from 'highlight.js'
 
 interface Props {
   agent: Agent
-  conversationId: string
 }
 
-const Conversations: FC<Props> = ({ agent, conversationId }) => {
+const Conversations: FC<Props> = ({ agent }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
-  const { addConversation } = useAgents()
+
+  const { id: conversationId } = agent.conversations[0]
 
   const onSendMessage = useCallback(
     (message: Message) => {
       const _messages = [...messages, message]
       setMessages(_messages)
-      addConversation(agent.id, conversationId)
-      localforage.setItem<Conversation>(`conversation:${conversationId}`, {
+
+      const conversation = {
         id: conversationId,
+        name: 'Default Topic',
         messages: _messages
-      })
+      }
+
+      localforage.setItem<Conversation>(`conversation:${conversationId}`, conversation)
     },
-    [addConversation, agent.id, conversationId, messages]
+    [conversationId, messages]
   )
 
   const fetchChatCompletion = useCallback(
@@ -85,6 +88,8 @@ const Conversations: FC<Props> = ({ agent, conversationId }) => {
       setMessages(conversation ? conversation.messages : [])
     })
   }, [conversationId])
+
+  useEffect(() => hljs.highlightAll())
 
   return (
     <Container id="conversations">

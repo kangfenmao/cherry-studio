@@ -1,12 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
+  addConversation as _addConversation,
+  removeConversation as _removeConversation,
   addAgent,
-  addConversationToAgent,
   removeAgent,
-  removeConversationFromAgent,
   updateAgent
 } from '@renderer/store/agents'
-import { Agent } from '@renderer/types'
+import { Agent, Conversation } from '@renderer/types'
 import localforage from 'localforage'
 
 export default function useAgents() {
@@ -23,12 +23,21 @@ export default function useAgents() {
         agent.conversations.forEach((id) => localforage.removeItem(`conversation:${id}`))
       }
     },
-    updateAgent: (agent: Agent) => dispatch(updateAgent(agent)),
-    addConversation: (agentId: string, conversationId: string) => {
-      dispatch(addConversationToAgent({ agentId, conversationId }))
+    updateAgent: (agent: Agent) => dispatch(updateAgent(agent))
+  }
+}
+
+export function useAgent(id: string) {
+  const agent = useAppSelector((state) => state.agents.agents.find((a) => a.id === id) as Agent)
+  const dispatch = useAppDispatch()
+
+  return {
+    agent,
+    addConversation: (conversation: Conversation) => {
+      dispatch(_addConversation({ agentId: agent?.id!, conversation }))
     },
-    removeConversation: (agentId: string, conversationId: string) => {
-      dispatch(removeConversationFromAgent({ agentId, conversationId }))
+    removeConversation: (conversation: Conversation) => {
+      dispatch(_removeConversation({ agentId: agent?.id!, conversation }))
     }
   }
 }

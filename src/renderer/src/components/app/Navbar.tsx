@@ -26,7 +26,7 @@ const NavbarContainer = styled.div`
   min-height: var(--navbar-height);
   max-height: var(--navbar-height);
   background-color: #111;
-  border-bottom: 1px solid #ffffff20;
+  border-bottom: 0.5px solid #ffffff20;
   -webkit-app-region: drag;
 `
 

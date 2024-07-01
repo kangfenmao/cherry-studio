@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getDefaultAgent } from '@renderer/services/agent'
-import { Agent } from '@renderer/types'
+import { Agent, Conversation } from '@renderer/types'
+import { uniqBy } from 'lodash'
 
 export interface AgentsState {
   agents: Agent[]
@@ -23,22 +24,23 @@ const agentsSlice = createSlice({
     updateAgent: (state, action: PayloadAction<Agent>) => {
       state.agents = state.agents.map((c) => (c.id === action.payload.id ? action.payload : c))
     },
-    addConversationToAgent: (state, action: PayloadAction<{ agentId: string; conversationId: string }>) => {
+    addConversation: (state, action: PayloadAction<{ agentId: string; conversation: Conversation }>) => {
+      console.debug(action.payload)
       state.agents = state.agents.map((agent) =>
         agent.id === action.payload.agentId
           ? {
               ...agent,
-              conversations: [...new Set([...agent.conversations, action.payload.conversationId])]
+              conversations: uniqBy([action.payload.conversation, ...agent.conversations], 'id')
             }
           : agent
       )
     },
-    removeConversationFromAgent: (state, action: PayloadAction<{ agentId: string; conversationId: string }>) => {
+    removeConversation: (state, action: PayloadAction<{ agentId: string; conversation: Conversation }>) => {
       state.agents = state.agents.map((agent) =>
         agent.id === action.payload.agentId
           ? {
               ...agent,
-              conversations: agent.conversations.filter((id) => id !== action.payload.conversationId)
+              conversations: agent.conversations.filter(({ id }) => id !== action.payload.conversation.id)
             }
           : agent
       )
@@ -46,7 +48,6 @@ const agentsSlice = createSlice({
   }
 })
 
-export const { addAgent, removeAgent, updateAgent, addConversationToAgent, removeConversationFromAgent } =
-  agentsSlice.actions
+export const { addAgent, removeAgent, updateAgent, addConversation, removeConversation } = agentsSlice.actions
 
 export default agentsSlice.reducer

@@ -1,11 +1,12 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Agent, Message } from '@renderer/types'
+import { Agent, Conversation, Message } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Tooltip } from 'antd'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import { useAgent } from '@renderer/hooks/useAgents'
 
 interface Props {
   agent: Agent
@@ -14,6 +15,7 @@ interface Props {
 const Inputbar: FC<Props> = ({ agent }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
+  const { addConversation } = useAgent(agent.id)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
@@ -35,18 +37,27 @@ const Inputbar: FC<Props> = ({ agent }) => {
     }
   }
 
+  const addNewConversation = () => {
+    const conversation: Conversation = {
+      id: uuid(),
+      name: 'Default Topic',
+      messages: []
+    }
+    addConversation(conversation)
+  }
+
   return (
     <Container>
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title=" New Chat " arrow>
-            <ToolbarItem>
+            <ToolbarItem onClick={addNewConversation}>
               <i className="iconfont icon-a-new-chat"></i>
             </ToolbarItem>
           </Tooltip>
           <Tooltip placement="top" title=" Topics " arrow>
             <ToolbarItem onClick={setShowRightSidebar}>
-              <i className="iconfont icon-textedit_text_topic"></i>
+              <i className="iconfont icon-textedit_text_topic" />
             </ToolbarItem>
           </Tooltip>
         </ToolbarMenu>

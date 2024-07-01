@@ -5,7 +5,7 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  showRightSidebar: true
+  showRightSidebar: false
 }
 
 const settingsSlice = createSlice({

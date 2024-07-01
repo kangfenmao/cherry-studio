@@ -1,19 +1,15 @@
 import { Message } from '@renderer/types'
 import { Avatar } from 'antd'
-import hljs from 'highlight.js'
 import { marked } from 'marked'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import styled from 'styled-components'
+import Logo from '@renderer/assets/images/logo.png'
 
 const MessageItem: FC<{ message: Message }> = ({ message }) => {
-  useEffect(() => {
-    hljs.highlightAll()
-  })
-
   return (
     <MessageContainer key={message.id}>
       <AvatarWrapper>
-        <Avatar alt="Alice Swift">Y</Avatar>
+        {message.role === 'agent' ? <Avatar src={Logo} /> : <Avatar alt="Alice Swift">Y</Avatar>}
       </AvatarWrapper>
       <div className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }}></div>
     </MessageContainer>

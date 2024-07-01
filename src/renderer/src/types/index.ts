@@ -2,7 +2,7 @@ export type Agent = {
   id: string
   name: string
   description: string
-  conversations: string[]
+  conversations: Conversation[]
 }
 
 export type Message = {
@@ -16,6 +16,7 @@ export type Message = {
 
 export type Conversation = {
   id: string
+  name: string
   messages: Message[]
 }
 
