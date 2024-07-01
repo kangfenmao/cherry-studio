@@ -1,5 +1,5 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Agent, Conversation, Message } from '@renderer/types'
+import { Agent, Message, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
@@ -10,23 +10,24 @@ import { useAgent } from '@renderer/hooks/useAgents'
 
 interface Props {
   agent: Agent
+  setActiveTopic: (topic: Topic) => void
 }
 
-const Inputbar: FC<Props> = ({ agent }) => {
+const Inputbar: FC<Props> = ({ agent, setActiveTopic }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
-  const { addConversation } = useAgent(agent.id)
+  const { addTopic } = useAgent(agent.id)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
-      const conversationId = agent.conversations[0] ? agent.conversations[0] : uuid()
+      const topicId = agent.topics[0] ? agent.topics[0] : uuid()
 
       const message: Message = {
         id: uuid(),
         role: 'user',
         content: text,
         agentId: agent.id,
-        conversationId,
+        topicId,
         createdAt: 'now'
       }
 
@@ -38,12 +39,13 @@ const Inputbar: FC<Props> = ({ agent }) => {
   }
 
   const addNewConversation = () => {
-    const conversation: Conversation = {
+    const topic: Topic = {
       id: uuid(),
       name: 'Default Topic',
       messages: []
     }
-    addConversation(conversation)
+    addTopic(topic)
+    setActiveTopic(topic)
   }
 
   return (

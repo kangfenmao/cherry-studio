@@ -6,7 +6,7 @@ export function getDefaultAgent(): Agent {
     id: 'default',
     name: 'Default Agent',
     description: "Hello, I'm Default Agent.",
-    conversations: [
+    topics: [
       {
         id: uuid(),
         name: 'Default Topic',

@@ -1,19 +1,16 @@
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
-import { Agent } from '@renderer/types'
-import { FC, useEffect, useState } from 'react'
+import { Agent, Topic } from '@renderer/types'
+import { FC } from 'react'
 import styled from 'styled-components'
 
 interface Props {
   agent: Agent
+  activeTopic: Topic
+  setActiveTopic: (topic: Topic) => void
 }
 
-const TopicList: FC<Props> = ({ agent }) => {
+const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
-  const [activeTopic, setActiveTopic] = useState(agent.conversations[0])
-
-  useEffect(() => {
-    setActiveTopic(agent.conversations[0])
-  }, [agent.conversations, agent.id])
 
   if (!showRightSidebar) {
     return null
@@ -21,7 +18,7 @@ const TopicList: FC<Props> = ({ agent }) => {
 
   return (
     <Container className={showRightSidebar ? '' : 'collapsed'}>
-      {agent.conversations.map((topic) => (
+      {agent.topics.map((topic) => (
         <TopicListItem
           key={topic.id}
           className={topic.id === activeTopic?.id ? 'active' : ''}

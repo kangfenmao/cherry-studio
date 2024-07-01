@@ -1,5 +1,5 @@
 import { Agent } from '@renderer/types'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Conversations from './Conversations'
@@ -13,6 +13,7 @@ interface Props {
 
 const Chat: FC<Props> = (props) => {
   const { agent } = useAgent(props.agent.id)
+  const [activeTopic, setActiveTopic] = useState(agent.topics[0])
 
   if (!agent) {
     return null
@@ -21,10 +22,10 @@ const Chat: FC<Props> = (props) => {
   return (
     <Container id="chat">
       <Flex vertical flex={1} justify="space-between">
-        <Conversations agent={agent} />
-        <Inputbar agent={agent} />
+        <Conversations agent={agent} topic={activeTopic} />
+        <Inputbar agent={agent} setActiveTopic={setActiveTopic} />
       </Flex>
-      <TopicList agent={agent} />
+      <TopicList agent={agent} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
     </Container>
   )
 }

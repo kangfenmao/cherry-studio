@@ -2,7 +2,7 @@ export type Agent = {
   id: string
   name: string
   description: string
-  conversations: Conversation[]
+  topics: Topic[]
 }
 
 export type Message = {
@@ -10,11 +10,11 @@ export type Message = {
   role: 'user' | 'agent'
   content: string
   agentId: string
-  conversationId: string
+  topicId: string
   createdAt: string
 }
 
-export type Conversation = {
+export type Topic = {
   id: string
   name: string
   messages: Message[]
