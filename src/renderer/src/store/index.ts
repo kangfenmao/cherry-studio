@@ -3,9 +3,11 @@ import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import agents from './agents'
+import settings from './settings'
 
 const rootReducer = combineReducers({
-  agents
+  agents,
+  settings
 })
 
 const store = configureStore({

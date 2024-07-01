@@ -18,7 +18,7 @@ function createWindow(): void {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    minWidth: 800,
+    minWidth: 1080,
     minHeight: 500,
     show: false,
     autoHideMenuBar: true,
@@ -38,6 +38,9 @@ function createWindow(): void {
     const menu = new Menu()
     menu.append(new MenuItem({ label: 'Copy', role: 'copy' }))
     menu.append(new MenuItem({ label: 'Paste', role: 'paste' }))
+    menu.append(new MenuItem({ label: 'Cut', role: 'cut' }))
+    menu.append(new MenuItem({ type: 'separator' }))
+    menu.append(new MenuItem({ label: 'Select All', role: 'selectAll' }))
     menu.popup()
   })
 

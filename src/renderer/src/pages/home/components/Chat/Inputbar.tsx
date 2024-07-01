@@ -5,6 +5,7 @@ import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Tooltip } from 'antd'
+import { useShowRightSidebar } from '@renderer/hooks/useStore'
 
 interface Props {
   agent: Agent
@@ -12,6 +13,7 @@ interface Props {
 
 const Inputbar: FC<Props> = ({ agent }) => {
   const [text, setText] = useState('')
+  const { setShowRightSidebar } = useShowRightSidebar()
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
@@ -43,7 +45,7 @@ const Inputbar: FC<Props> = ({ agent }) => {
             </ToolbarItem>
           </Tooltip>
           <Tooltip placement="top" title=" Topics " arrow>
-            <ToolbarItem>
+            <ToolbarItem onClick={setShowRightSidebar}>
               <i className="iconfont icon-textedit_text_topic"></i>
             </ToolbarItem>
           </Tooltip>

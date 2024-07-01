@@ -82,7 +82,7 @@ const Container = styled.div`
 const AgentItem = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 10px 15px;
   position: relative;
   cursor: pointer;
   .anticon {

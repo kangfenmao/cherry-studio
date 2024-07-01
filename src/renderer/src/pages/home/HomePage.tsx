@@ -6,10 +6,13 @@ import Chat from './components/Chat/Chat'
 import Agents from './components/Agents'
 import { uuid } from '@renderer/utils'
 import { getDefaultAgent } from '@renderer/services/agent'
+import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import { Tooltip } from 'antd'
 
 const HomePage: FC = () => {
   const { agents, addAgent } = useAgents()
   const [activeAgent, setActiveAgent] = useState(agents[0])
+  const { showRightSidebar, setShowRightSidebar } = useShowRightSidebar()
 
   const onCreateAgent = () => {
     const _agent = getDefaultAgent()
@@ -28,9 +31,11 @@ const HomePage: FC = () => {
         </NavbarLeft>
         <NavbarCenter style={{ border: 'none' }}>{activeAgent?.name}</NavbarCenter>
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
-          <NewButton>
-            <i className="iconfont icon-showsidebarhoriz"></i>
-          </NewButton>
+          <Tooltip placement="left" title={showRightSidebar ? 'Hide Topics' : 'Show Topics'} arrow>
+            <NewButton onClick={setShowRightSidebar}>
+              <i className={`iconfont ${showRightSidebar ? 'icon-showsidebarhoriz' : 'icon-hidesidebarhoriz'}`} />
+            </NewButton>
+          </Tooltip>
         </NavbarRight>
       </Navbar>
       <ContentContainer>
@@ -69,7 +74,8 @@ const NewButton = styled.div`
   .iconfont {
     font-size: 22px;
   }
-  .icon-showsidebarhoriz {
+  .icon-showsidebarhoriz,
+  .icon-hidesidebarhoriz {
     font-size: 18px;
   }
   &:hover {
