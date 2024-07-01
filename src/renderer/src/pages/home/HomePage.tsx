@@ -2,7 +2,7 @@ import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/compone
 import useAgents from '@renderer/hooks/useAgents'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
-import Chat from './components/Chat'
+import Chat from './components/Chat/Chat'
 import Agents from './components/Agents'
 import { uuid } from '@renderer/utils'
 import { getDefaultAgent } from '@renderer/services/agent'
