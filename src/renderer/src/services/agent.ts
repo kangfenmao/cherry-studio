@@ -1,10 +1,8 @@
 export function getDefaultAgent() {
   return {
     id: 'default',
-    name: 'Chat Assistant',
-    avatar: '',
-    lastMessage: 'I am your personal intelligent assistant Cherry, how can I help you now?',
-    lastMessageAt: 'now',
+    name: 'Default Agent',
+    description: "Hello, I'm Default Agent.",
     conversations: []
   }
 }

@@ -31,7 +31,7 @@ const NavbarContainer = styled.div`
 `
 
 const NavbarLeftContainer = styled.div`
-  min-width: var(--conversations-width);
+  min-width: var(--agents-width);
   border-right: 1px solid #ffffff20;
   padding: 0 16px;
   display: flex;

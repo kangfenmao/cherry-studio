@@ -1,14 +1,13 @@
 export type Agent = {
   id: string
   name: string
-  avatar: string
-  lastMessage: string
-  lastMessageAt: string
+  description: string
   conversations: string[]
 }
 
 export type Message = {
   id: string
+  role: 'user' | 'agent'
   content: string
   agentId: string
   conversationId: string

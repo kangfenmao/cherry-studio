@@ -1,6 +1,4 @@
 .markdown {
-  width: 100%;
-  max-width: 800px;
   color: #fff;
   font-size: 14px;
   line-height: 1.6;
@@ -79,6 +77,14 @@
     background-color: #555;
   }
 
+  pre {
+    white-space: pre-wrap;
+  }
+
+  span {
+    word-break: break-all;
+  }
+
   code {
     font-weight: 600;
     padding: 3px 5px;
@@ -92,5 +98,6 @@
       Liberation Mono,
       monospace;
     font-size: 80%;
+    display: inline-block;
   }
 }

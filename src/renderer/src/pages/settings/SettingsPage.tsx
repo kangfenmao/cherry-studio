@@ -65,7 +65,7 @@ const ContentContainer = styled.div`
 const SettingMenus = styled.ul`
   display: flex;
   flex-direction: column;
-  min-width: var(--conversations-width);
+  min-width: var(--agents-width);
   border-right: 1px solid #ffffff20;
   padding: 10px;
 `

@@ -43,6 +43,7 @@ const Conversations: FC<Props> = ({ agent, conversationId }) => {
 
       const _message: Message = {
         id: uuid(),
+        role: 'agent',
         content: '',
         agentId: agent.id,
         conversationId,
@@ -82,7 +83,6 @@ const Conversations: FC<Props> = ({ agent, conversationId }) => {
   useEffect(() => {
     runAsyncFunction(async () => {
       const conversation = await localforage.getItem<Conversation>(`conversation:${conversationId}`)
-      console.debug('conversation', conversation)
       setMessages(conversation ? conversation.messages : [])
     })
   }, [conversationId])
@@ -102,6 +102,7 @@ const Container = styled.div`
   flex-direction: column;
   overflow-y: scroll;
   flex-direction: column-reverse;
+  max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
   &::-webkit-scrollbar {
     display: none;
   }
