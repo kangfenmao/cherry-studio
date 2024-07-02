@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { TopView } from '../TopView'
 import { Box } from '../Layout'
 import { Agent } from '@renderer/types'
+import TextArea from 'antd/es/input/TextArea'
 
 interface AgentSettingPopupShowParams {
   agent: Agent
@@ -32,13 +33,15 @@ const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   return (
     <Modal title={agent.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
       <Box mb={8}>Agent name</Box>
-      <Input placeholder="Agent Name" value={name} onChange={(e) => setName(e.target.value)} allowClear autoFocus />
-      <Box mb={8}>Description</Box>
-      <Input
+      <Input placeholder="Agent Name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+      <Box mt={8} mb={8}>
+        Description
+      </Box>
+      <TextArea
+        rows={4}
         placeholder="Agent Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        allowClear
         autoFocus
       />
     </Modal>
