@@ -7,29 +7,25 @@ import Sidebar from './components/app/Sidebar'
 import AppsPage from './pages/apps/AppsPage'
 import HomePage from './pages/home/HomePage'
 import SettingsPage from './pages/settings/SettingsPage'
-import { ConfigProvider, theme } from 'antd'
+import { ConfigProvider } from 'antd'
+import TopViewContainer from './components/TopView'
+import { AntdThemeConfig } from './config/antd'
 
 function App(): JSX.Element {
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#00b96b',
-          borderRadius: 5,
-          colorBgContainer: '#f6ffed'
-        },
-        algorithm: [theme.darkAlgorithm, theme.compactAlgorithm]
-      }}>
+    <ConfigProvider theme={AntdThemeConfig}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <BrowserRouter>
-            <Sidebar />
-            <Routes>
-              <Route path="" element={<HomePage />} />
-              <Route path="/apps" element={<AppsPage />} />
-              <Route path="/settings/*" element={<SettingsPage />} />
-            </Routes>
-          </BrowserRouter>
+          <TopViewContainer>
+            <BrowserRouter>
+              <Sidebar />
+              <Routes>
+                <Route path="" element={<HomePage />} />
+                <Route path="/apps" element={<AppsPage />} />
+                <Route path="/settings/*" element={<SettingsPage />} />
+              </Routes>
+            </BrowserRouter>
+          </TopViewContainer>
         </PersistGate>
       </Provider>
     </ConfigProvider>

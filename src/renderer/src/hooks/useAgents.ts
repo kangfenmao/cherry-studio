@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addTopic as _addTopic,
   removeTopic as _removeTopic,
+  updateTopic as _updateTopic,
   addAgent,
   removeAgent,
   updateAgent
@@ -34,10 +35,13 @@ export function useAgent(id: string) {
   return {
     agent,
     addTopic: (topic: Topic) => {
-      dispatch(_addTopic({ agentId: agent?.id!, topic }))
+      dispatch(_addTopic({ agentId: agent?.id, topic }))
     },
     removeTopic: (topic: Topic) => {
-      dispatch(_removeTopic({ agentId: agent?.id!, topic }))
+      dispatch(_removeTopic({ agentId: agent?.id, topic }))
+    },
+    updateTopic: (topic: Topic) => {
+      dispatch(_updateTopic({ agentId: agent?.id, topic }))
     }
   }
 }

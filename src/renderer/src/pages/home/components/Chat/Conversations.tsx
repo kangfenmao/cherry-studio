@@ -18,22 +18,16 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
 
-  const { id: topicId } = topic
-
   const onSendMessage = useCallback(
     (message: Message) => {
       const _messages = [...messages, message]
       setMessages(_messages)
-
-      const topic = {
-        id: topicId,
-        name: 'Default Topic',
+      localforage.setItem(`topic:${topic.id}`, {
+        ...topic,
         messages: _messages
-      }
-
-      localforage.setItem<Topic>(`topic:${topicId}`, topic)
+      })
     },
-    [topicId, messages]
+    [messages, topic]
   )
 
   const fetchChatCompletion = useCallback(
@@ -49,7 +43,7 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
         role: 'agent',
         content: '',
         agentId: agent.id,
-        topicId,
+        topicId: topic.id,
         createdAt: 'now'
       }
 
@@ -66,7 +60,7 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
 
       return _message
     },
-    [agent.id, topicId]
+    [agent.id, topic]
   )
 
   useEffect(() => {
@@ -85,10 +79,10 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
 
   useEffect(() => {
     runAsyncFunction(async () => {
-      const topic = await localforage.getItem<Topic>(`topic:${topicId}`)
-      setMessages(topic ? topic.messages : [])
+      const _topic = await localforage.getItem<Topic>(`topic:${topic.id}`)
+      setMessages(_topic ? _topic.messages : [])
     })
-  }, [topicId])
+  }, [topic])
 
   useEffect(() => hljs.highlightAll())
 

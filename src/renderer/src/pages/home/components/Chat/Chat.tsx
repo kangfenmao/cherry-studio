@@ -1,5 +1,5 @@
 import { Agent } from '@renderer/types'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Conversations from './Conversations'
@@ -14,6 +14,10 @@ interface Props {
 const Chat: FC<Props> = (props) => {
   const { agent } = useAgent(props.agent.id)
   const [activeTopic, setActiveTopic] = useState(agent.topics[0])
+
+  useEffect(() => {
+    setActiveTopic(agent.topics[0])
+  }, [agent])
 
   if (!agent) {
     return null

@@ -44,10 +44,20 @@ const agentsSlice = createSlice({
             }
           : agent
       )
+    },
+    updateTopic: (state, action: PayloadAction<{ agentId: string; topic: Topic }>) => {
+      state.agents = state.agents.map((agent) =>
+        agent.id === action.payload.agentId
+          ? {
+              ...agent,
+              topics: agent.topics.map((topic) => (topic.id === action.payload.topic.id ? action.payload.topic : topic))
+            }
+          : agent
+      )
     }
   }
 })
 
-export const { addAgent, removeAgent, updateAgent, addTopic, removeTopic } = agentsSlice.actions
+export const { addAgent, removeAgent, updateAgent, addTopic, removeTopic, updateTopic } = agentsSlice.actions
 
 export default agentsSlice.reducer
