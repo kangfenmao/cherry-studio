@@ -76,12 +76,14 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
       <TopicTitle>
         <span>Topics ({agent.topics.length})</span>
         <Popconfirm
+          icon={false}
           title="Delete all topic?"
           description="Are you sure to delete all topics?"
           placement="leftBottom"
           onConfirm={removeAllTopics}
-          okText="Yes"
-          cancelText="No">
+          okText="Delete All"
+          okType="danger"
+          cancelText="Cancel">
           <DeleteButton type="text">
             <DeleteIcon />
           </DeleteButton>
