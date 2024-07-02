@@ -2,6 +2,7 @@ export type Agent = {
   id: string
   name: string
   description: string
+  prompt: string
   topics: Topic[]
 }
 

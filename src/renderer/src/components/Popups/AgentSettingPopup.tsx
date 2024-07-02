@@ -16,6 +16,7 @@ interface Props extends AgentSettingPopupShowParams {
 const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   const [name, setName] = useState(agent.name)
   const [description, setDescription] = useState(agent.description)
+  const [prompt, setPrompt] = useState(agent.prompt)
   const [open, setOpen] = useState(true)
 
   const onOk = () => {
@@ -27,12 +28,12 @@ const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   }
 
   const onClose = () => {
-    resolve({ ...agent, name, description })
+    resolve({ ...agent, name, description, prompt })
   }
 
   return (
     <Modal title={agent.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
-      <Box mb={8}>Agent name</Box>
+      <Box mb={8}>Name</Box>
       <Input placeholder="Agent Name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
       <Box mt={8} mb={8}>
         Description
@@ -42,6 +43,16 @@ const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
         placeholder="Agent Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        autoFocus
+      />
+      <Box mt={8} mb={8}>
+        Prompt
+      </Box>
+      <TextArea
+        rows={4}
+        placeholder="Agent Prompt"
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
         autoFocus
       />
     </Modal>

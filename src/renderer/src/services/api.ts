@@ -14,7 +14,10 @@ interface FetchChatCompletionParams {
 export async function fetchChatCompletion({ message, agent, topic, onResponse }: FetchChatCompletionParams) {
   const stream = await openaiProvider.chat.completions.create({
     model: 'Qwen/Qwen2-7B-Instruct',
-    messages: [{ role: 'user', content: message.content }],
+    messages: [
+      { role: 'system', content: agent.prompt },
+      { role: 'user', content: message.content }
+    ],
     stream: true
   })
 

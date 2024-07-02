@@ -7,6 +7,7 @@ export function getDefaultAgent(): Agent {
     id: 'default',
     name: 'Default Agent',
     description: "Hello, I'm Default Agent.",
+    prompt: '',
     topics: [
       {
         id: uuid(),
