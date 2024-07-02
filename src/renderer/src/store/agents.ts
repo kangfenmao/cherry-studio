@@ -25,7 +25,6 @@ const agentsSlice = createSlice({
       state.agents = state.agents.map((c) => (c.id === action.payload.id ? action.payload : c))
     },
     addTopic: (state, action: PayloadAction<{ agentId: string; topic: Topic }>) => {
-      console.debug(action.payload)
       state.agents = state.agents.map((agent) =>
         agent.id === action.payload.agentId
           ? {

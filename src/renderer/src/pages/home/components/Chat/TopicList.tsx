@@ -1,6 +1,8 @@
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAgent } from '@renderer/hooks/useAgents'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import { fetchConversationSummary } from '@renderer/services/api'
+import { getTopicMessages } from '@renderer/services/topic'
 import { Agent, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
 import { FC, useRef } from 'react'
@@ -14,13 +16,22 @@ interface Props {
 
 const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
-  const currentTopic = useRef<Topic | null>(null)
   const { removeTopic, updateTopic } = useAgent(agent.id)
+  const currentTopic = useRef<Topic | null>(null)
 
   const items: MenuProps['items'] = [
     {
       label: 'AI Rename',
-      key: 'ai-rename'
+      key: 'ai-rename',
+      async onClick() {
+        if (currentTopic.current) {
+          const messages = await getTopicMessages(currentTopic.current.id)
+          const summaryText = await fetchConversationSummary({ messages })
+          if (summaryText) {
+            updateTopic({ ...currentTopic.current, name: summaryText })
+          }
+        }
+      }
     },
     {
       label: 'Rename',
@@ -35,8 +46,12 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
           updateTopic({ ...currentTopic.current, name })
         }
       }
-    },
-    {
+    }
+  ]
+
+  if (agent.topics.length > 1) {
+    items.push({ type: 'divider' })
+    items.push({
       label: 'Delete',
       danger: true,
       key: 'delete',
@@ -46,8 +61,8 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
         currentTopic.current = null
         setActiveTopic(agent.topics[0])
       }
-    }
-  ]
+    })
+  }
 
   if (!showRightSidebar) {
     return null
@@ -98,7 +113,7 @@ const TopicListItem = styled.div`
 
 const TopicTitle = styled.div`
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   font-size: 14px;
   color: var(--color-text-1);
 `

@@ -1,13 +1,16 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { openaiProvider } from '@renderer/services/provider'
 import { Agent, Message, Topic } from '@renderer/types'
-import { runAsyncFunction, uuid } from '@renderer/utils'
 import localforage from 'localforage'
 import { FC, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { reverse } from 'lodash'
 import hljs from 'highlight.js'
+import { fetchChatCompletion, fetchConversationSummary } from '@renderer/services/api'
+import { getTopicMessages } from '@renderer/services/topic'
+import { useAgent } from '@renderer/hooks/useAgents'
+import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
+import { runAsyncFunction } from '@renderer/utils'
 
 interface Props {
   agent: Agent
@@ -17,6 +20,7 @@ interface Props {
 const Conversations: FC<Props> = ({ agent, topic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
+  const { updateTopic } = useAgent(agent.id)
 
   const onSendMessage = useCallback(
     (message: Message) => {
@@ -30,59 +34,37 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
     [messages, topic]
   )
 
-  const fetchChatCompletion = useCallback(
-    async (message: Message) => {
-      const stream = await openaiProvider.chat.completions.create({
-        model: 'Qwen/Qwen2-7B-Instruct',
-        messages: [{ role: 'user', content: message.content }],
-        stream: true
-      })
-
-      const _message: Message = {
-        id: uuid(),
-        role: 'agent',
-        content: '',
-        agentId: agent.id,
-        topicId: topic.id,
-        createdAt: 'now'
+  const autoRenameTopic = useCallback(async () => {
+    if (topic.name === DEFAULT_TOPIC_NAME && messages.length >= 2) {
+      const summaryText = await fetchConversationSummary({ messages })
+      if (summaryText) {
+        updateTopic({ ...topic, name: summaryText })
       }
-
-      let content = ''
-
-      for await (const chunk of stream) {
-        content = content + (chunk.choices[0]?.delta?.content || '')
-        setLastMessage({ ..._message, content })
-      }
-
-      _message.content = content
-
-      EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, _message)
-
-      return _message
-    },
-    [agent.id, topic]
-  )
+    }
+  }, [messages, topic, updateTopic])
 
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         onSendMessage(msg)
-        fetchChatCompletion(msg)
+        fetchChatCompletion({ agent, message: msg, topic, onResponse: setLastMessage })
       }),
       EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
         setLastMessage(null)
         onSendMessage(msg)
-      })
+        setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
+      }),
+      EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic)
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [fetchChatCompletion, onSendMessage])
+  }, [agent, autoRenameTopic, onSendMessage, topic])
 
   useEffect(() => {
     runAsyncFunction(async () => {
-      const _topic = await localforage.getItem<Topic>(`topic:${topic.id}`)
-      setMessages(_topic ? _topic.messages : [])
+      const messages = await getTopicMessages(topic.id)
+      setMessages(messages)
     })
-  }, [topic])
+  }, [topic.id])
 
   useEffect(() => hljs.highlightAll())
 
