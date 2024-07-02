@@ -13,7 +13,7 @@ const Statusbar: FC = () => {
 
 const Container = styled.div`
   min-height: var(--status-bar-height);
-  border-top: 1px solid #ffffff20;
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: row;
   position: absolute;

@@ -88,7 +88,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: var(--input-bar-height);
-  border-top: 0.5px solid #ffffff20;
+  border-top: 0.5px solid var(--color-border);
   padding: 5px 15px;
 `
 

@@ -66,7 +66,7 @@ const SettingMenus = styled.ul`
   display: flex;
   flex-direction: column;
   min-width: var(--agents-width);
-  border-right: 1px solid #ffffff20;
+  border-right: 1px solid var(--color-border);
   padding: 10px;
 `
 
@@ -95,7 +95,7 @@ const SettingContent = styled.div`
   display: flex;
   height: 100%;
   flex: 1;
-  border-right: 1px solid #ffffff20;
+  border-right: 1px solid var(--color-border);
   padding: 20px;
 `
 

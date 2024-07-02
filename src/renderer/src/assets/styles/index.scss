@@ -17,19 +17,20 @@
   --color-text-2: rgba(235, 235, 245, 0.6);
   --color-text-3: rgba(235, 235, 245, 0.38);
 
-  --color-background: #1e1e1e;
+  --color-background: #181818;
   --color-background-soft: var(--color-black-soft);
   --color-background-mute: var(--color-black-mute);
 
   --color-text: var(--color-text-1);
   --color-icon: #ffffff99;
   --color-icon-white: #ffffff;
+  --color-border: #ffffff20;
 
-  --navbar-height: 45px;
+  --navbar-height: 42px;
   --sidebar-width: 68px;
   --agents-width: 250px;
   --topic-list-width: var(--agents-width);
-  --settings-width: 280px;
+  --settings-width: var(--agents-width);
   --status-bar-height: 40px;
   --input-bar-height: 120px;
 }

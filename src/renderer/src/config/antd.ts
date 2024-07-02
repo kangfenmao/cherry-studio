@@ -5,5 +5,5 @@ export const AntdThemeConfig: ThemeConfig = {
     colorPrimary: '#00b96b',
     borderRadius: 5
   },
-  algorithm: [theme.darkAlgorithm, theme.compactAlgorithm]
+  algorithm: [theme.darkAlgorithm]
 }

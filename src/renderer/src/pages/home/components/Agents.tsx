@@ -5,6 +5,7 @@ import { Agent } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { last } from 'lodash'
+import AgentSettingPopup from '@renderer/components/Popups/AgentSettingPopup'
 
 interface Props {
   activeAgent: Agent
@@ -26,15 +27,22 @@ const Agents: FC<Props> = ({ activeAgent, onActive }) => {
   const items: MenuProps['items'] = [
     {
       label: 'Edit',
-      key: 'edit'
+      key: 'edit',
+      async onClick() {
+        if (targetAgent.current) {
+          const _agent = await AgentSettingPopup.show({ agent: targetAgent.current })
+        }
+      }
     },
     {
       label: 'Favorite',
       key: 'favorite'
     },
+    { type: 'divider' },
     {
       label: 'Delete',
       key: 'delete',
+      danger: true,
       onClick: () => targetAgent.current && onDelete(targetAgent.current)
     }
   ]
@@ -69,7 +77,7 @@ const Container = styled.div`
   flex-direction: column;
   min-width: var(--agents-width);
   max-width: var(--agents-width);
-  border-right: 0.5px solid #ffffff20;
+  border-right: 0.5px solid var(--color-border);
   height: calc(100vh - var(--navbar-height));
   overflow-y: scroll;
   &::-webkit-scrollbar {

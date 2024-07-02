@@ -26,9 +26,11 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
       async onClick() {
         if (currentTopic.current) {
           const messages = await getTopicMessages(currentTopic.current.id)
-          const summaryText = await fetchConversationSummary({ messages })
-          if (summaryText) {
-            updateTopic({ ...currentTopic.current, name: summaryText })
+          if (messages.length >= 2) {
+            const summaryText = await fetchConversationSummary({ messages })
+            if (summaryText) {
+              updateTopic({ ...currentTopic.current, name: summaryText })
+            }
           }
         }
       }
@@ -89,7 +91,7 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
 const Container = styled.div`
   width: var(--topic-list-width);
   height: 100%;
-  border-left: 0.5px solid #ffffff20;
+  border-left: 0.5px solid var(--color-border);
   padding: 10px;
   &.collapsed {
     width: 0;
