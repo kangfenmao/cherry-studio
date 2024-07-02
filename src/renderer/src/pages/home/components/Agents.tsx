@@ -6,6 +6,7 @@ import { Dropdown, MenuProps } from 'antd'
 import { MoreOutlined } from '@ant-design/icons'
 import { last } from 'lodash'
 import AgentSettingPopup from '@renderer/components/Popups/AgentSettingPopup'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
 interface Props {
   activeAgent: Agent
@@ -28,6 +29,7 @@ const Agents: FC<Props> = ({ activeAgent, onActive }) => {
     {
       label: 'Edit',
       key: 'edit',
+      icon: <EditOutlined />,
       async onClick() {
         if (targetAgent.current) {
           const _agent = await AgentSettingPopup.show({ agent: targetAgent.current })
@@ -39,6 +41,7 @@ const Agents: FC<Props> = ({ activeAgent, onActive }) => {
     {
       label: 'Delete',
       key: 'delete',
+      icon: <DeleteOutlined />,
       danger: true,
       onClick: () => targetAgent.current && onDelete(targetAgent.current)
     }

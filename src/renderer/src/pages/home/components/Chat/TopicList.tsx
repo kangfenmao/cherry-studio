@@ -6,7 +6,7 @@ import { Agent, Topic } from '@renderer/types'
 import { Button, Dropdown, MenuProps, Popconfirm } from 'antd'
 import { FC, useRef } from 'react'
 import styled from 'styled-components'
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, SignatureOutlined } from '@ant-design/icons'
 import LocalStorage from '@renderer/services/storage'
 
 interface Props {
@@ -22,8 +22,9 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
 
   const topicMenuItems: MenuProps['items'] = [
     {
-      label: 'AI Rename',
-      key: 'ai-rename',
+      label: 'Auto Rename',
+      key: 'auto-rename',
+      icon: <SignatureOutlined />,
       async onClick() {
         if (currentTopic.current) {
           const messages = await LocalStorage.getTopicMessages(currentTopic.current.id)
@@ -39,6 +40,7 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
     {
       label: 'Rename',
       key: 'rename',
+      icon: <EditOutlined />,
       async onClick() {
         const name = await PromptPopup.show({
           title: 'Rename Topic',
@@ -58,6 +60,7 @@ const TopicList: FC<Props> = ({ agent, activeTopic, setActiveTopic }) => {
       label: 'Delete',
       danger: true,
       key: 'delete',
+      icon: <DeleteOutlined />,
       onClick() {
         if (agent.topics.length === 1) return
         currentTopic.current && removeTopic(currentTopic.current)
