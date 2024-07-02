@@ -7,10 +7,10 @@ import MessageItem from './Message'
 import { reverse } from 'lodash'
 import hljs from 'highlight.js'
 import { fetchChatCompletion, fetchConversationSummary } from '@renderer/services/api'
-import { getTopicMessages } from '@renderer/services/topic'
 import { useAgent } from '@renderer/hooks/useAgents'
 import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
 import { runAsyncFunction } from '@renderer/utils'
+import LocalStorage from '@renderer/services/storage'
 
 interface Props {
   agent: Agent
@@ -61,7 +61,7 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
 
   useEffect(() => {
     runAsyncFunction(async () => {
-      const messages = await getTopicMessages(topic.id)
+      const messages = await LocalStorage.getTopicMessages(topic.id)
       setMessages(messages)
     })
   }, [topic.id])

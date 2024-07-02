@@ -1,6 +1,5 @@
-import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
 import { Agent } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { getDefaultTopic } from './topic'
 
 export function getDefaultAgent(): Agent {
   return {
@@ -8,12 +7,6 @@ export function getDefaultAgent(): Agent {
     name: 'Default Agent',
     description: "Hello, I'm Default Agent.",
     prompt: '',
-    topics: [
-      {
-        id: uuid(),
-        name: DEFAULT_TOPIC_NAME,
-        messages: []
-      }
-    ]
+    topics: [getDefaultTopic()]
   }
 }

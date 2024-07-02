@@ -1,7 +1,10 @@
 import { Topic } from '@renderer/types'
-import localforage from 'localforage'
+import { uuid } from '@renderer/utils'
 
-export async function getTopicMessages(id: string) {
-  const topic = await localforage.getItem<Topic>(`topic:${id}`)
-  return topic ? topic.messages : []
+export function getDefaultTopic(): Topic {
+  return {
+    id: uuid(),
+    name: 'Default Topic',
+    messages: []
+  }
 }
