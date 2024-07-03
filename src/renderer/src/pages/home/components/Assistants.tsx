@@ -2,8 +2,7 @@ import { FC, useRef } from 'react'
 import styled from 'styled-components'
 import useAssistants from '@renderer/hooks/useAssistants'
 import { Assistant } from '@renderer/types'
-import { Button, Dropdown, MenuProps } from 'antd'
-import { MoreOutlined } from '@ant-design/icons'
+import { Dropdown, MenuProps } from 'antd'
 import { last } from 'lodash'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
@@ -16,7 +15,6 @@ interface Props {
 const Assistants: FC<Props> = ({ activeAssistant, onActive }) => {
   const { assistants, removeAssistant, updateAssistant } = useAssistants()
   const targetAssistant = useRef<Assistant | null>(null)
-  const menuOpenRef = useRef(false)
 
   const onDelete = (assistant: Assistant) => {
     removeAssistant(assistant.id)
@@ -61,17 +59,6 @@ const Assistants: FC<Props> = ({ activeAssistant, onActive }) => {
           <AssistantItem
             onClick={() => onActive(assistant)}
             className={assistant.id === activeAssistant?.id ? 'active' : ''}>
-            <Dropdown
-              menu={{ items }}
-              trigger={['click']}
-              placement="bottom"
-              destroyPopupOnHide
-              arrow
-              onOpenChange={() => (targetAssistant.current = assistant)}>
-              <MenuButton type="text" onClick={(e) => e.stopPropagation()}>
-                <MoreOutlined />
-              </MenuButton>
-            </Dropdown>
             <AssistantName>{assistant.name}</AssistantName>
             <AssistantLastMessage>{assistant.description}</AssistantLastMessage>
           </AssistantItem>
@@ -132,29 +119,6 @@ const AssistantLastMessage = styled.div`
   text-overflow: ellipsis;
   -webkit-line-clamp: 1;
   height: 20px;
-`
-
-const MenuButton = styled(Button)`
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  right: 6px;
-  top: 6px;
-  font-size: 18px;
-  border-radius: 50%;
-  transition: background-color 0.2s ease;
-  z-index: 10;
-  .anticon {
-    transition: all 0.3s ease;
-    color: var(--color-icon);
-  }
-  &:hover {
-    background-color: #ffffff30;
-    .anticon {
-      color: white;
-    }
-  }
 `
 
 export default Assistants
