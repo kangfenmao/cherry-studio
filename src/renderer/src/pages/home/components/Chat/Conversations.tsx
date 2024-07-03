@@ -1,5 +1,5 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Agent, Message, Topic } from '@renderer/types'
+import { Assistant, Message, Topic } from '@renderer/types'
 import localforage from 'localforage'
 import { FC, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -7,20 +7,20 @@ import MessageItem from './Message'
 import { reverse } from 'lodash'
 import hljs from 'highlight.js'
 import { fetchChatCompletion, fetchConversationSummary } from '@renderer/services/api'
-import { useAgent } from '@renderer/hooks/useAgents'
+import { useAssistant } from '@renderer/hooks/useAssistants'
 import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
 import { runAsyncFunction } from '@renderer/utils'
 import LocalStorage from '@renderer/services/storage'
 
 interface Props {
-  agent: Agent
+  assistant: Assistant
   topic: Topic
 }
 
-const Conversations: FC<Props> = ({ agent, topic }) => {
+const Conversations: FC<Props> = ({ assistant, topic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
-  const { updateTopic } = useAgent(agent.id)
+  const { updateTopic } = useAssistant(assistant.id)
 
   const onSendMessage = useCallback(
     (message: Message) => {
@@ -47,7 +47,7 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         onSendMessage(msg)
-        fetchChatCompletion({ agent, message: msg, topic, onResponse: setLastMessage })
+        fetchChatCompletion({ assistant, message: msg, topic, onResponse: setLastMessage })
       }),
       EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
         setLastMessage(null)
@@ -62,7 +62,7 @@ const Conversations: FC<Props> = ({ agent, topic }) => {
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [agent, autoRenameTopic, onSendMessage, topic, updateTopic])
+  }, [assistant, autoRenameTopic, onSendMessage, topic, updateTopic])
 
   useEffect(() => {
     runAsyncFunction(async () => {

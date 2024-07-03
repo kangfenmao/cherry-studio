@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import styled from 'styled-components'
 
-const ModelsSetting: FC = () => {
-  return <Container>Models</Container>
+const AboutSettings: FC = () => {
+  return <Container>About</Container>
 }
 
 const Container = styled.div``
 
-export default ModelsSetting
+export default AboutSettings

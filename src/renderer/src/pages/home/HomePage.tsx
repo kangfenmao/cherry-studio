@@ -1,35 +1,35 @@
 import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
-import useAgents from '@renderer/hooks/useAgents'
+import useAssistants from '@renderer/hooks/useAssistants'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Chat from './components/Chat/Chat'
-import Agents from './components/Agents'
+import Assistants from './components/Assistants'
 import { uuid } from '@renderer/utils'
-import { getDefaultAgent } from '@renderer/services/agent'
+import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { Tooltip } from 'antd'
 
 const HomePage: FC = () => {
-  const { agents, addAgent } = useAgents()
-  const [activeAgent, setActiveAgent] = useState(agents[0])
+  const { assistants, addAssistant } = useAssistants()
+  const [activeAssistant, setActiveAssistant] = useState(assistants[0])
   const { showRightSidebar, setShowRightSidebar } = useShowRightSidebar()
 
-  const onCreateAgent = () => {
-    const _agent = getDefaultAgent()
-    _agent.id = uuid()
-    addAgent(_agent)
-    setActiveAgent(_agent)
+  const onCreateAssistant = () => {
+    const _assistant = getDefaultAssistant()
+    _assistant.id = uuid()
+    addAssistant(_assistant)
+    setActiveAssistant(_assistant)
   }
 
   return (
     <Container>
       <Navbar>
         <NavbarLeft style={{ justifyContent: 'flex-end', borderRight: 'none' }}>
-          <NewButton onClick={onCreateAgent}>
+          <NewButton onClick={onCreateAssistant}>
             <i className="iconfont icon-a-addchat"></i>
           </NewButton>
         </NavbarLeft>
-        <NavbarCenter style={{ border: 'none' }}>{activeAgent?.name}</NavbarCenter>
+        <NavbarCenter style={{ border: 'none' }}>{activeAssistant?.name}</NavbarCenter>
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
           <Tooltip placement="left" title={showRightSidebar ? 'Hide Topics' : 'Show Topics'} arrow>
             <NewButton onClick={setShowRightSidebar}>
@@ -39,8 +39,8 @@ const HomePage: FC = () => {
         </NavbarRight>
       </Navbar>
       <ContentContainer>
-        <Agents activeAgent={activeAgent} onActive={setActiveAgent} />
-        <Chat agent={activeAgent} />
+        <Assistants activeAssistant={activeAssistant} onActive={setActiveAssistant} />
+        <Chat assistant={activeAssistant} />
       </ContentContainer>
     </Container>
   )

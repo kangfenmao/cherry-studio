@@ -1,4 +1,4 @@
-export type Agent = {
+export type Assistant = {
   id: string
   name: string
   description: string
@@ -8,9 +8,9 @@ export type Agent = {
 
 export type Message = {
   id: string
-  role: 'user' | 'agent'
+  role: 'user' | 'assistant'
   content: string
-  agentId: string
+  assistantId: string
   topicId: string
   createdAt: string
 }

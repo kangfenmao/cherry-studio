@@ -24,7 +24,7 @@ const Container = styled.div`
 `
 
 const StatusbarLeft = styled.div`
-  min-width: var(--sidebar-width) + var(--agents-width);
+  min-width: var(--sidebar-width) + var(--assistants-width);
 `
 
 const StatusbarCenter = styled.div`

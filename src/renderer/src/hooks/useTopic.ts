@@ -1,12 +1,12 @@
-import { Agent } from '@renderer/types'
+import { Assistant } from '@renderer/types'
 import { useEffect, useState } from 'react'
 
-export function useActiveTopic(agent: Agent) {
-  const [activeTopic, setActiveTopic] = useState(agent?.topics[0])
+export function useActiveTopic(assistant: Assistant) {
+  const [activeTopic, setActiveTopic] = useState(assistant?.topics[0])
 
   useEffect(() => {
-    agent?.topics && setActiveTopic(agent?.topics[0])
-  }, [agent])
+    assistant?.topics && setActiveTopic(assistant?.topics[0])
+  }, [assistant])
 
   return { activeTopic, setActiveTopic }
 }

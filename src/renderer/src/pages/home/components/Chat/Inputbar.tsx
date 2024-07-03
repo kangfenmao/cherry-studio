@@ -1,33 +1,33 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Agent, Message, Topic } from '@renderer/types'
+import { Assistant, Message, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
-import { useAgent } from '@renderer/hooks/useAgents'
+import { useAssistant } from '@renderer/hooks/useAssistants'
 import { ClearOutlined, HistoryOutlined, PlusCircleOutlined } from '@ant-design/icons'
 
 interface Props {
-  agent: Agent
+  assistant: Assistant
   setActiveTopic: (topic: Topic) => void
 }
 
-const Inputbar: FC<Props> = ({ agent, setActiveTopic }) => {
+const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
-  const { addTopic } = useAgent(agent.id)
+  const { addTopic } = useAssistant(assistant.id)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
-      const topicId = agent.topics[0] ? agent.topics[0] : uuid()
+      const topicId = assistant.topics[0] ? assistant.topics[0] : uuid()
 
       const message: Message = {
         id: uuid(),
         role: 'user',
         content: text,
-        agentId: agent.id,
+        assistantId: assistant.id,
         topicId,
         createdAt: 'now'
       }

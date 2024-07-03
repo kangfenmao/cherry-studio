@@ -2,21 +2,21 @@ import { Input, Modal } from 'antd'
 import { useState } from 'react'
 import { TopView } from '../TopView'
 import { Box } from '../Layout'
-import { Agent } from '@renderer/types'
+import { Assistant } from '@renderer/types'
 import TextArea from 'antd/es/input/TextArea'
 
-interface AgentSettingPopupShowParams {
-  agent: Agent
+interface AssistantSettingPopupShowParams {
+  assistant: Assistant
 }
 
-interface Props extends AgentSettingPopupShowParams {
-  resolve: (agent: Agent) => void
+interface Props extends AssistantSettingPopupShowParams {
+  resolve: (assistant: Assistant) => void
 }
 
-const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
-  const [name, setName] = useState(agent.name)
-  const [description, setDescription] = useState(agent.description)
-  const [prompt, setPrompt] = useState(agent.prompt)
+const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve }) => {
+  const [name, setName] = useState(assistant.name)
+  const [description, setDescription] = useState(assistant.description)
+  const [prompt, setPrompt] = useState(assistant.prompt)
   const [open, setOpen] = useState(true)
 
   const onOk = () => {
@@ -28,19 +28,19 @@ const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   }
 
   const onClose = () => {
-    resolve({ ...agent, name, description, prompt })
+    resolve({ ...assistant, name, description, prompt })
   }
 
   return (
-    <Modal title={agent.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
+    <Modal title={assistant.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
       <Box mb={8}>Name</Box>
-      <Input placeholder="Agent Name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+      <Input placeholder="Assistant Name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
       <Box mt={8} mb={8}>
         Description
       </Box>
       <TextArea
         rows={4}
-        placeholder="Agent Description"
+        placeholder="Assistant Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         autoFocus
@@ -50,7 +50,7 @@ const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
       </Box>
       <TextArea
         rows={4}
-        placeholder="Agent Prompt"
+        placeholder="Assistant Prompt"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         autoFocus
@@ -59,15 +59,15 @@ const AgentSettingPopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   )
 }
 
-export default class AgentSettingPopup {
+export default class AssistantSettingPopup {
   static topviewId = 0
   static hide() {
     TopView.hide(this.topviewId)
   }
-  static show(props: AgentSettingPopupShowParams) {
-    return new Promise<Agent>((resolve) => {
+  static show(props: AssistantSettingPopupShowParams) {
+    return new Promise<Assistant>((resolve) => {
       this.topviewId = TopView.show(
-        <AgentSettingPopupContainer
+        <AssistantSettingPopupContainer
           {...props}
           resolve={(v) => {
             resolve(v)

@@ -6,7 +6,7 @@ const AppsPage: FC = () => {
   return (
     <Container>
       <Navbar>
-        <NavbarCenter>Agent Market</NavbarCenter>
+        <NavbarCenter>Assistant Market</NavbarCenter>
       </Navbar>
     </Container>
   )
