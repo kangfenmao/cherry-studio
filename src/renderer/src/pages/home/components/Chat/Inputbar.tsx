@@ -1,13 +1,14 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { FC, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { ClearOutlined, HistoryOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { TextAreaRef } from 'antd/es/input/TextArea'
 
 interface Props {
   assistant: Assistant
@@ -18,6 +19,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
+  const inputRef = useRef<TextAreaRef>(null)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter') {
@@ -39,7 +41,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     }
   }
 
-  const addNewConversation = () => {
+  const addNewTopic = useCallback(() => {
     const topic: Topic = {
       id: uuid(),
       name: 'Default Topic',
@@ -47,18 +49,34 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     }
     addTopic(topic)
     setActiveTopic(topic)
-  }
+  }, [addTopic, setActiveTopic])
 
   const clearTopic = () => {
     EventEmitter.emit(EVENT_NAMES.CLEAR_CONVERSATION)
   }
+
+  // Command or Ctrl + N create new topic
+  useEffect(() => {
+    const onKeydown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        addNewTopic()
+        inputRef.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', onKeydown)
+    return () => document.removeEventListener('keydown', onKeydown)
+  }, [addNewTopic])
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [assistant])
 
   return (
     <Container>
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title=" New Chat " arrow>
-            <ToolbarButton type="text" onClick={addNewConversation}>
+            <ToolbarButton type="text" onClick={addNewTopic}>
               <PlusCircleOutlined />
             </ToolbarButton>
           </Tooltip>
@@ -97,6 +115,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         placeholder="Type your message here..."
         autoFocus
         contextMenu="true"
+        ref={inputRef}
       />
     </Container>
   )
