@@ -11,6 +11,7 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
 import { runAsyncFunction } from '@renderer/utils'
 import LocalStorage from '@renderer/services/storage'
+import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 
 interface Props {
   assistant: Assistant
@@ -21,6 +22,7 @@ const Conversations: FC<Props> = ({ assistant, topic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const { updateTopic } = useAssistant(assistant.id)
+  const provider = useProviderByAssistant(assistant)
 
   const onSendMessage = useCallback(
     (message: Message) => {
@@ -46,8 +48,10 @@ const Conversations: FC<Props> = ({ assistant, topic }) => {
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
+        console.debug({ assistant, provider, message: msg, topic })
+        return
         onSendMessage(msg)
-        fetchChatCompletion({ assistant, message: msg, topic, onResponse: setLastMessage })
+        fetchChatCompletion({ assistant, provider, message: msg, topic, onResponse: setLastMessage })
       }),
       EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
         setLastMessage(null)

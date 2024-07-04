@@ -1,4 +1,4 @@
-import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
@@ -8,6 +8,7 @@ import { uuid } from '@renderer/utils'
 import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { Tooltip } from 'antd'
+import NavigationCenter from './components/Chat/NavigationCenter'
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
@@ -29,7 +30,7 @@ const HomePage: FC = () => {
             <i className="iconfont icon-a-addchat"></i>
           </NewButton>
         </NavbarLeft>
-        <NavbarCenter style={{ border: 'none' }}>{activeAssistant?.name}</NavbarCenter>
+        <NavigationCenter activeAssistant={activeAssistant} />
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
           <Tooltip placement="left" title={showRightSidebar ? 'Hide Topics' : 'Show Topics'} arrow>
             <NewButton onClick={setShowRightSidebar}>

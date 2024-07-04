@@ -1,19 +1,32 @@
-import { Assistant, Message, Topic } from '@renderer/types'
-import { openaiProvider } from './provider'
+import { Assistant, Message, Provider, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { EVENT_NAMES, EventEmitter } from './event'
 import { ChatCompletionMessageParam, ChatCompletionSystemMessageParam } from 'openai/resources'
+import OpenAI from 'openai'
 
 interface FetchChatCompletionParams {
   message: Message
-  assistant: Assistant
   topic: Topic
+  assistant: Assistant
+  provider: Provider
   onResponse: (message: Message) => void
 }
 
-export async function fetchChatCompletion({ message, assistant, topic, onResponse }: FetchChatCompletionParams) {
+export async function fetchChatCompletion({
+  message,
+  topic,
+  assistant,
+  provider,
+  onResponse
+}: FetchChatCompletionParams) {
+  const openaiProvider = new OpenAI({
+    dangerouslyAllowBrowser: true,
+    apiKey: provider.apiKey,
+    baseURL: `${provider.apiHost}/v1/`
+  })
+
   const stream = await openaiProvider.chat.completions.create({
-    model: 'Qwen/Qwen2-7B-Instruct',
+    model: assistant.model?.name || '',
     messages: [
       { role: 'system', content: assistant.prompt },
       { role: 'user', content: message.content }

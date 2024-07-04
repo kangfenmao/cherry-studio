@@ -13,7 +13,6 @@ interface Props {
 const ModalProviderSetting: FC<Props> = ({ provider }) => {
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
-  const [apiPath, setApiPath] = useState(provider.apiPath)
   const { updateProvider, models } = useProvider(provider.id)
 
   const modelGroups = groupBy(models, 'group')
@@ -21,7 +20,6 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
   useEffect(() => {
     setApiKey(provider.apiKey)
     setApiHost(provider.apiHost)
-    setApiPath(provider.apiPath)
   }, [provider])
 
   const onUpdateApiKey = () => {
@@ -29,10 +27,6 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
   }
 
   const onUpdateApiHost = () => {
-    updateProvider({ ...provider, apiHost })
-  }
-
-  const onUpdateApiPath = () => {
     updateProvider({ ...provider, apiHost })
   }
 
@@ -52,13 +46,6 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
         placeholder="API Host"
         onChange={(e) => setApiHost(e.target.value)}
         onBlur={onUpdateApiHost}
-      />
-      <SubTitle>API Path</SubTitle>
-      <Input
-        value={apiPath}
-        placeholder="API Path"
-        onChange={(e) => setApiPath(e.target.value)}
-        onBlur={onUpdateApiPath}
       />
       <SubTitle>Models</SubTitle>
       {Object.keys(modelGroups).map((group) => (

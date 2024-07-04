@@ -4,7 +4,8 @@ import {
   removeModel as _removeModel,
   updateProvider as _updateProvider
 } from '@renderer/store/llm'
-import { Model, Provider } from '@renderer/types'
+import { Assistant, Model, Provider } from '@renderer/types'
+import { useDefaultModel } from './useAssistant'
 
 export function useProviders() {
   return useAppSelector((state) => state.llm.providers)
@@ -21,6 +22,13 @@ export function useProvider(id: string) {
     addModel: (model: Model) => dispatch(_addModel({ providerId: id, model })),
     removeModel: (model: Model) => dispatch(_removeModel({ providerId: id, model }))
   }
+}
+
+export function useProviderByAssistant(assistant: Assistant) {
+  const { defaultModel } = useDefaultModel()
+  const model = assistant.model || defaultModel
+  const { provider } = useProvider(model.provider)
+  return provider
 }
 
 export function useDefaultProvider() {
