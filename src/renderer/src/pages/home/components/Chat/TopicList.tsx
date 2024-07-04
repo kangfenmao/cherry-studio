@@ -1,5 +1,5 @@
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
-import { useAssistant } from '@renderer/hooks/useAssistants'
+import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { fetchConversationSummary } from '@renderer/services/api'
 import { Assistant, Topic } from '@renderer/types'

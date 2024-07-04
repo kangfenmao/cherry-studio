@@ -28,7 +28,7 @@ const Sidebar: FC = () => {
         </Menus>
       </MainMenus>
       <Menus>
-        <StyledLink to="/settings/general">
+        <StyledLink to="/settings/common">
           <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
             <i className="iconfont icon-setting"></i>
           </Icon>

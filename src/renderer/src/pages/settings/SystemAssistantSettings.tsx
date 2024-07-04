@@ -5,6 +5,7 @@ const SystemAssistantSettings: FC = () => {
   return <Container>System Assistant</Container>
 }
 
-const Container = styled.div``
-
+const Container = styled.div`
+  padding: 20px;
+`
 export default SystemAssistantSettings

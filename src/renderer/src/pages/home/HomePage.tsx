@@ -1,5 +1,5 @@
 import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
-import useAssistants from '@renderer/hooks/useAssistants'
+import { useAssistants } from '@renderer/hooks/useAssistant'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Chat from './components/Chat/Chat'

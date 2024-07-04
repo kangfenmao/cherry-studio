@@ -96,8 +96,7 @@ const SettingContent = styled.div`
   display: flex;
   height: 100%;
   flex: 1;
-  border-right: 1px solid var(--color-border);
-  padding: 20px;
+  border-right: 0.5px solid var(--color-border);
 `
 
 export default SettingsPage

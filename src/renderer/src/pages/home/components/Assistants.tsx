@@ -1,6 +1,6 @@
 import { FC, useRef } from 'react'
 import styled from 'styled-components'
-import useAssistants from '@renderer/hooks/useAssistants'
+import { useAssistants } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
 import { last } from 'lodash'

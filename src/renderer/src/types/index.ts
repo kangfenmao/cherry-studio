@@ -27,3 +27,29 @@ export type User = {
   avatar: string
   email: string
 }
+
+export type Provider = {
+  id: string
+  name: string
+  apiKey: string
+  apiHost: string
+  apiPath: string
+  models: Model[]
+  isSystem?: boolean
+  isDefault?: boolean
+}
+
+export type Model = {
+  id: string
+  name: string
+  group: string
+  temperature: number
+}
+
+export type SystemAssistant = {
+  id: string
+  name: string
+  description: string
+  prompt: string
+  group: string
+}

@@ -5,7 +5,7 @@ import Inputbar from './Inputbar'
 import Conversations from './Conversations'
 import { Flex } from 'antd'
 import TopicList from './TopicList'
-import { useAssistant } from '@renderer/hooks/useAssistants'
+import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
 
 interface Props {

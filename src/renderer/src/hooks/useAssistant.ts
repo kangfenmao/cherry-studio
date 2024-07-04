@@ -11,7 +11,7 @@ import {
 import { Assistant, Topic } from '@renderer/types'
 import localforage from 'localforage'
 
-export default function useAssistants() {
+export function useAssistants() {
   const { assistants } = useAppSelector((state) => state.assistants)
   const dispatch = useAppDispatch()
 

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
-import { useAssistant } from '@renderer/hooks/useAssistants'
+import { useAssistant } from '@renderer/hooks/useAssistant'
 import { ClearOutlined, HistoryOutlined, PlusCircleOutlined } from '@ant-design/icons'
 
 interface Props {
