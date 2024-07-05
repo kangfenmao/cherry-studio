@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(
   {
-    key: 'cherry-ai',
+    key: 'cherry-studio',
     storage,
     version: 1,
     blacklist: ['runtime']
