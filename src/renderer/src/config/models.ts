@@ -7,50 +7,34 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'gpt-3.5-turbo',
       provider: 'openai',
-      name: 'gpt-3.5-turbo',
+      name: 'GPT-3.5 Turbo',
       group: 'GPT 3.5',
       temperature: 0.7,
       defaultEnabled: true
     },
     {
-      id: 'gpt-3.5-turbo-0301',
+      id: 'gpt-4-turbo',
       provider: 'openai',
-      name: 'gpt-3.5-turbo',
-      group: 'GPT 3.5',
-      temperature: 0.3,
-      defaultEnabled: false
+      name: ' GPT-4 Turbo',
+      group: 'GPT 4',
+      temperature: 0.7,
+      defaultEnabled: true
     },
     {
       id: 'gpt-4',
       provider: 'openai',
-      name: 'gpt-4',
+      name: ' GPT-4',
       group: 'GPT 4',
       temperature: 0.7,
       defaultEnabled: true
     },
     {
-      id: 'gpt-4-0314',
+      id: 'gpt-4o',
       provider: 'openai',
-      name: 'gpt-4',
-      group: 'GPT 4',
-      temperature: 0.3,
-      defaultEnabled: false
-    },
-    {
-      id: 'gpt-4-32k',
-      provider: 'openai',
-      name: 'gpt-4-32k',
-      group: 'GPT 4',
+      name: ' GPT-4o',
+      group: 'GPT 4o',
       temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'gpt-4-32k-0314',
-      provider: 'openai',
-      name: 'gpt-4-32k',
-      group: 'GPT 4',
-      temperature: 0.3,
-      defaultEnabled: false
+      defaultEnabled: true
     }
   ],
   silicon: [
