@@ -1,5 +1,8 @@
 import { Topic } from '@renderer/types'
+import { convertToBase64 } from '@renderer/utils'
 import localforage from 'localforage'
+
+const IMAGE_PREFIX = 'image://'
 
 export default class LocalStorage {
   static async getTopic(id: string) {
@@ -20,5 +23,24 @@ export default class LocalStorage {
       topic.messages = []
       await localforage.setItem(`topic:${id}`, topic)
     }
+  }
+
+  static async storeImage(name: string, file: File) {
+    try {
+      const base64Image = await convertToBase64(file)
+      if (typeof base64Image === 'string') {
+        await localforage.setItem(IMAGE_PREFIX + name, base64Image)
+      }
+    } catch (error) {
+      console.error('Error storing the image', error)
+    }
+  }
+
+  static async getImage(name: string) {
+    return localforage.getItem<string>(IMAGE_PREFIX + name)
+  }
+
+  static async removeImage(name: string) {
+    await localforage.removeItem(IMAGE_PREFIX + name)
   }
 }

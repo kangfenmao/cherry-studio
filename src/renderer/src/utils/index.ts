@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import imageCompression from 'browser-image-compression'
 
 export const runAsyncFunction = async (fn: () => void) => {
   await fn()
@@ -48,3 +49,20 @@ export const waitAsyncFunction = (fn: () => Promise<any>, interval = 200, stopTi
 }
 
 export const uuid = () => uuidv4()
+
+export const convertToBase64 = (file: File): Promise<string | ArrayBuffer | null> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
+export const compressImage = async (file: File) => {
+  return await imageCompression(file, {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 300,
+    useWebWorker: false
+  })
+}

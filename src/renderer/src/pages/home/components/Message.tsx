@@ -4,13 +4,14 @@ import { marked } from 'marked'
 import { FC } from 'react'
 import styled from 'styled-components'
 import Logo from '@renderer/assets/images/logo.png'
+import useAvatar from '@renderer/hooks/useAvatar'
 
 const MessageItem: FC<{ message: Message }> = ({ message }) => {
+  const avatar = useAvatar()
+
   return (
     <MessageContainer key={message.id}>
-      <AvatarWrapper>
-        {message.role === 'assistant' ? <Avatar src={Logo} /> : <Avatar alt="Alice Swift">Y</Avatar>}
-      </AvatarWrapper>
+      <AvatarWrapper>{message.role === 'assistant' ? <Avatar src={Logo} /> : <Avatar src={avatar} />}</AvatarWrapper>
       <div className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }} />
     </MessageContainer>
   )

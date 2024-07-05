@@ -30,3 +30,15 @@ export const SettingSubtitle = styled.div`
 export const SettingDivider = styled(Divider)`
   margin: 10px 0;
 `
+
+export const SettingRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const SettingRowTitle = styled.div`
+  font-size: 14px;
+  color: var(--color-text-1);
+`

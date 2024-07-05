@@ -2,16 +2,18 @@ import { FC } from 'react'
 import Logo from '@renderer/assets/images/logo.png'
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
+import useAvatar from '@renderer/hooks/useAvatar'
 
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
+  const avatar = useAvatar()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
   return (
     <Container>
       <Avatar>
-        <AvatarImg src={Logo} />
+        <AvatarImg src={avatar || Logo} />
       </Avatar>
       <MainMenus>
         <Menus>
