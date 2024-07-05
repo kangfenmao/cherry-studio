@@ -1,11 +1,10 @@
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
-import { useAssistants } from '@renderer/hooks/useAssistant'
+import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import Chat from './components/Chat'
 import Assistants from './components/Assistants'
 import { uuid } from '@renderer/utils'
-import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { Tooltip } from 'antd'
 import Navigation from './components/Navigation'
@@ -14,12 +13,12 @@ const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const [activeAssistant, setActiveAssistant] = useState(assistants[0])
   const { showRightSidebar, setShowRightSidebar } = useShowRightSidebar()
+  const { defaultAssistant } = useDefaultAssistant()
 
   const onCreateAssistant = () => {
-    const _assistant = getDefaultAssistant()
-    _assistant.id = uuid()
-    addAssistant(_assistant)
-    setActiveAssistant(_assistant)
+    const assistant = { ...defaultAssistant, id: uuid() }
+    addAssistant(assistant)
+    setActiveAssistant(assistant)
   }
 
   return (

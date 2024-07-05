@@ -34,7 +34,7 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
   return (
     <Modal title={assistant.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
       <Box mb={8}>Name</Box>
-      <Input placeholder="Assistant Name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+      <Input placeholder="Assistant Name" value={name} onChange={(e) => setName(e.target.value)} />
       <Box mt={8} mb={8}>
         Description
       </Box>
@@ -43,18 +43,11 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
         placeholder="Assistant Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        autoFocus
       />
       <Box mt={8} mb={8}>
         Prompt
       </Box>
-      <TextArea
-        rows={4}
-        placeholder="Assistant Prompt"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        autoFocus
-      />
+      <TextArea rows={4} placeholder="Assistant Prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} />
     </Modal>
   )
 }

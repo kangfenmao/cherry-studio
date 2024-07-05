@@ -5,10 +5,12 @@ import { Assistant, Model, Topic } from '@renderer/types'
 import { uniqBy } from 'lodash'
 
 export interface AssistantsState {
+  defaultAssistant: Assistant
   assistants: Assistant[]
 }
 
 const initialState: AssistantsState = {
+  defaultAssistant: getDefaultAssistant(),
   assistants: [getDefaultAssistant()]
 }
 
@@ -16,6 +18,9 @@ const assistantsSlice = createSlice({
   name: 'assistants',
   initialState,
   reducers: {
+    updateDefaultAssistant: (state, action: PayloadAction<{ assistant: Assistant }>) => {
+      state.defaultAssistant = action.payload.assistant
+    },
     addAssistant: (state, action: PayloadAction<Assistant>) => {
       state.assistants.push(action.payload)
     },
@@ -83,6 +88,7 @@ const assistantsSlice = createSlice({
 })
 
 export const {
+  updateDefaultAssistant,
   addAssistant,
   removeAssistant,
   updateAssistant,

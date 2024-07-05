@@ -4,6 +4,7 @@ import {
   removeAllTopics as _removeAllTopics,
   removeTopic as _removeTopic,
   setModel as _setModel,
+  updateDefaultAssistant as _updateDefaultAssistant,
   updateTopic as _updateTopic,
   addAssistant,
   removeAssistant,
@@ -44,6 +45,16 @@ export function useAssistant(id: string) {
     updateTopic: (topic: Topic) => dispatch(_updateTopic({ assistantId: assistant.id, topic })),
     removeAllTopics: () => dispatch(_removeAllTopics({ assistantId: assistant.id })),
     setModel: (model: Model) => dispatch(_setModel({ assistantId: assistant.id, model }))
+  }
+}
+
+export function useDefaultAssistant() {
+  const { defaultAssistant } = useAppSelector((state) => state.assistants)
+  const dispatch = useAppDispatch()
+
+  return {
+    defaultAssistant,
+    updateDefaultAssistant: (assistant: Assistant) => dispatch(_updateDefaultAssistant({ assistant }))
   }
 }
 
