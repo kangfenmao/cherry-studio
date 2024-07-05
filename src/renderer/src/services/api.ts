@@ -3,30 +3,29 @@ import { uuid } from '@renderer/utils'
 import { EVENT_NAMES, EventEmitter } from './event'
 import { ChatCompletionMessageParam, ChatCompletionSystemMessageParam } from 'openai/resources'
 import OpenAI from 'openai'
+import { getAssistantProvider } from './assistant'
 
 interface FetchChatCompletionParams {
   message: Message
   topic: Topic
   assistant: Assistant
-  provider: Provider
   onResponse: (message: Message) => void
 }
 
-export async function fetchChatCompletion({
-  message,
-  topic,
-  assistant,
-  provider,
-  onResponse
-}: FetchChatCompletionParams) {
-  const openaiProvider = new OpenAI({
+const getOpenAiProvider = (provider: Provider) => {
+  return new OpenAI({
     dangerouslyAllowBrowser: true,
     apiKey: provider.apiKey,
     baseURL: `${provider.apiHost}/v1/`
   })
+}
+
+export async function fetchChatCompletion({ message, topic, assistant, onResponse }: FetchChatCompletionParams) {
+  const provider = getAssistantProvider(assistant)
+  const openaiProvider = getOpenAiProvider(provider)
 
   const stream = await openaiProvider.chat.completions.create({
-    model: assistant.model?.name || '',
+    model: assistant.model?.id || '',
     messages: [
       { role: 'system', content: assistant.prompt },
       { role: 'user', content: message.content }
@@ -59,9 +58,13 @@ export async function fetchChatCompletion({
 
 interface FetchConversationSummaryParams {
   messages: Message[]
+  assistant: Assistant
 }
 
-export async function fetchConversationSummary({ messages }: FetchConversationSummaryParams) {
+export async function fetchConversationSummary({ messages, assistant }: FetchConversationSummaryParams) {
+  const provider = getAssistantProvider(assistant)
+  const openaiProvider = getOpenAiProvider(provider)
+
   const userMessages: ChatCompletionMessageParam[] = messages.map((message) => ({
     role: 'user',
     content: message.content
@@ -74,7 +77,7 @@ export async function fetchConversationSummary({ messages }: FetchConversationSu
   }
 
   const response = await openaiProvider.chat.completions.create({
-    model: 'Qwen/Qwen2-7B-Instruct',
+    model: assistant.model?.id || '',
     messages: [systemMessage, ...userMessages],
     stream: false
   })

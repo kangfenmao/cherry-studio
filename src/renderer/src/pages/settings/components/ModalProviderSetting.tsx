@@ -39,7 +39,13 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
       <Title>{provider.name}</Title>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
       <SubTitle>API Key</SubTitle>
-      <Input value={apiKey} placeholder="API Key" onChange={(e) => setApiKey(e.target.value)} onBlur={onUpdateApiKey} />
+      <Input
+        value={apiKey}
+        placeholder="API Key"
+        onChange={(e) => setApiKey(e.target.value)}
+        onBlur={onUpdateApiKey}
+        spellCheck={false}
+      />
       <SubTitle>API Host</SubTitle>
       <Input
         value={apiHost}

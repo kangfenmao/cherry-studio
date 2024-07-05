@@ -29,7 +29,7 @@ const TopicList: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
         if (currentTopic.current) {
           const messages = await LocalStorage.getTopicMessages(currentTopic.current.id)
           if (messages.length >= 2) {
-            const summaryText = await fetchConversationSummary({ messages })
+            const summaryText = await fetchConversationSummary({ messages, assistant })
             if (summaryText) {
               updateTopic({ ...currentTopic.current, name: summaryText })
             }

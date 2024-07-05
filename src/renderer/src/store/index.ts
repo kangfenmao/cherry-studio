@@ -12,15 +12,18 @@ const rootReducer = combineReducers({
   llm
 })
 
+const persistedReducer = persistReducer(
+  {
+    key: 'cherry-ai',
+    storage,
+    version: 1
+  },
+  rootReducer
+)
+
 const store = configureStore({
-  reducer: persistReducer(
-    {
-      key: 'cherry-ai',
-      storage,
-      version: 1
-    },
-    rootReducer
-  ),
+  // @ts-ignore store type is unknown
+  reducer: persistedReducer as typeof rootReducer,
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: {

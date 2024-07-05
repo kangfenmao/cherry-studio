@@ -1,5 +1,6 @@
-import { Assistant } from '@renderer/types'
+import { Assistant, Provider } from '@renderer/types'
 import { getDefaultTopic } from './topic'
+import store from '@renderer/store'
 
 export function getDefaultAssistant(): Assistant {
   return {
@@ -9,4 +10,14 @@ export function getDefaultAssistant(): Assistant {
     prompt: '',
     topics: [getDefaultTopic()]
   }
+}
+
+export function getAssistantProvider(assistant: Assistant) {
+  const providers = store.getState().llm.providers
+  return providers.find((p) => p.id === assistant.id) || getDefaultProvider()
+}
+
+export function getDefaultProvider() {
+  const provider = store.getState().llm.providers.find((p) => p.isSystem)
+  return provider as Provider
 }

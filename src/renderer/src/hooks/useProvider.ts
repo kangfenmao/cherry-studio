@@ -31,10 +31,6 @@ export function useProviderByAssistant(assistant: Assistant) {
   return provider
 }
 
-export function useDefaultProvider() {
-  return useAppSelector((state) => state.llm.providers.find((p) => p.isDefault))
-}
-
 export function useSystemProviders() {
-  return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem))
+  return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem)) as unknown as Provider
 }

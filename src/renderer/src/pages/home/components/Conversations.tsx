@@ -38,20 +38,17 @@ const Conversations: FC<Props> = ({ assistant, topic }) => {
 
   const autoRenameTopic = useCallback(async () => {
     if (topic.name === DEFAULT_TOPIC_NAME && messages.length >= 2) {
-      const summaryText = await fetchConversationSummary({ messages })
-      if (summaryText) {
-        updateTopic({ ...topic, name: summaryText })
-      }
+      const summaryText = await fetchConversationSummary({ messages, assistant })
+      summaryText && updateTopic({ ...topic, name: summaryText })
     }
-  }, [messages, topic, updateTopic])
+  }, [assistant, messages, topic, updateTopic])
 
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         console.debug({ assistant, provider, message: msg, topic })
-        return
         onSendMessage(msg)
-        fetchChatCompletion({ assistant, provider, message: msg, topic, onResponse: setLastMessage })
+        fetchChatCompletion({ assistant, message: msg, topic, onResponse: setLastMessage })
       }),
       EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
         setLastMessage(null)
@@ -66,12 +63,12 @@ const Conversations: FC<Props> = ({ assistant, topic }) => {
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [assistant, autoRenameTopic, onSendMessage, topic, updateTopic])
+  }, [assistant, autoRenameTopic, onSendMessage, provider, topic, updateTopic])
 
   useEffect(() => {
     runAsyncFunction(async () => {
       const messages = await LocalStorage.getTopicMessages(topic.id)
-      setMessages(messages)
+      setMessages(messages || [])
     })
   }, [topic.id])
 

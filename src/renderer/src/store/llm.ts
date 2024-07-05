@@ -38,7 +38,7 @@ const initialState: LlmState = {
       id: 'groq',
       name: 'Groq',
       apiKey: '',
-      apiHost: 'https://api.groq.com',
+      apiHost: 'https://api.groq.com/openai',
       isSystem: true,
       models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled)
     }

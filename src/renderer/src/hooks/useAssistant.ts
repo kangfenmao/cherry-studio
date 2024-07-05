@@ -30,11 +30,6 @@ export function useAssistants() {
   }
 }
 
-export function useDefaultModel() {
-  const defaultModel = useAppSelector((state) => state.llm.defaultModel)
-  return { defaultModel }
-}
-
 export function useAssistant(id: string) {
   const assistant = useAppSelector((state) => state.assistants.assistants.find((a) => a.id === id) as Assistant)
   const dispatch = useAppDispatch()
@@ -59,4 +54,9 @@ export function useAssistant(id: string) {
       dispatch(_setModel({ assistantId: assistant.id, model }))
     }
   }
+}
+
+export function useDefaultModel() {
+  const defaultModel = useAppSelector((state) => state.llm.defaultModel)
+  return { defaultModel }
 }
