@@ -11,7 +11,7 @@ const MessageItem: FC<{ message: Message }> = ({ message }) => {
       <AvatarWrapper>
         {message.role === 'assistant' ? <Avatar src={Logo} /> : <Avatar alt="Alice Swift">Y</Avatar>}
       </AvatarWrapper>
-      <div className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }}></div>
+      <div className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }} />
     </MessageContainer>
   )
 }
