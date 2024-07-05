@@ -9,10 +9,11 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 
 interface Props {
   activeAssistant: Assistant
-  onActive: (assistant: Assistant) => void
+  setActiveAssistant: (assistant: Assistant) => void
+  onCreateAssistant: () => void
 }
 
-const Assistants: FC<Props> = ({ activeAssistant, onActive }) => {
+const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
   const { assistants, removeAssistant, updateAssistant } = useAssistants()
   const targetAssistant = useRef<Assistant | null>(null)
 
@@ -20,7 +21,7 @@ const Assistants: FC<Props> = ({ activeAssistant, onActive }) => {
     removeAssistant(assistant.id)
     setTimeout(() => {
       const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
-      _assistant && onActive(_assistant)
+      _assistant ? setActiveAssistant(_assistant) : onCreateAssistant()
     }, 0)
   }
 
@@ -57,7 +58,7 @@ const Assistants: FC<Props> = ({ activeAssistant, onActive }) => {
           trigger={['contextMenu']}
           onOpenChange={() => (targetAssistant.current = assistant)}>
           <AssistantItem
-            onClick={() => onActive(assistant)}
+            onClick={() => setActiveAssistant(assistant)}
             className={assistant.id === activeAssistant?.id ? 'active' : ''}>
             <AssistantName>{assistant.name}</AssistantName>
             <AssistantLastMessage>{assistant.description}</AssistantLastMessage>

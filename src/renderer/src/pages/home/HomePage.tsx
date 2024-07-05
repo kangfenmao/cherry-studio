@@ -39,7 +39,11 @@ const HomePage: FC = () => {
         </NavbarRight>
       </Navbar>
       <ContentContainer>
-        <Assistants activeAssistant={activeAssistant} onActive={setActiveAssistant} />
+        <Assistants
+          activeAssistant={activeAssistant}
+          setActiveAssistant={setActiveAssistant}
+          onCreateAssistant={onCreateAssistant}
+        />
         <Chat assistant={activeAssistant} />
       </ContentContainer>
     </Container>

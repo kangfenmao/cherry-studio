@@ -1,3 +1,4 @@
+import { getDefaultTopic } from '@renderer/services/assistant'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addTopic as _addTopic,
@@ -53,7 +54,10 @@ export function useDefaultAssistant() {
   const dispatch = useAppDispatch()
 
   return {
-    defaultAssistant,
+    defaultAssistant: {
+      ...defaultAssistant,
+      topics: [getDefaultTopic()]
+    },
     updateDefaultAssistant: (assistant: Assistant) => dispatch(_updateDefaultAssistant({ assistant }))
   }
 }

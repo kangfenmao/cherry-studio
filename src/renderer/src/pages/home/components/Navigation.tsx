@@ -10,7 +10,7 @@ interface Props {
   activeAssistant: Assistant
 }
 
-const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
+const Navigation: FC<Props> = ({ activeAssistant }) => {
   const providers = useProviders()
   const { model, setModel } = useAssistant(activeAssistant.id)
 
@@ -42,4 +42,4 @@ const DropdownMenu = styled(Dropdown)`
   margin-left: 10px;
 `
 
-export default NavigationCenter
+export default Navigation
