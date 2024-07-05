@@ -26,12 +26,15 @@ export function getAssistantProvider(assistant: Assistant) {
   return provider || getDefaultProvider()
 }
 
+export function getDefaultModel() {
+  return store.getState().llm.defaultModel
+}
+
 export function getProviderByModel(model: Model) {
   const providers = store.getState().llm.providers
   return providers.find((p) => p.id === model.provider) as Provider
 }
 
 export function getDefaultProvider() {
-  const defaultModel = store.getState().llm.defaultModel
-  return getProviderByModel(defaultModel)
+  return getProviderByModel(getDefaultModel())
 }
