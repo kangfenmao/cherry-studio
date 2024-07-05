@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getDefaultAssistant } from '@renderer/services/assistant'
+import { getDefaultAssistant, getDefaultTopic } from '@renderer/services/assistant'
 import LocalStorage from '@renderer/services/storage'
-import { getDefaultTopic } from '@renderer/services/topic'
 import { Assistant, Model, Topic } from '@renderer/types'
 import { uniqBy } from 'lodash'
 

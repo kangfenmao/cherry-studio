@@ -1,6 +1,6 @@
-import { Assistant, Provider } from '@renderer/types'
-import { getDefaultTopic } from './topic'
+import { Assistant, Model, Provider, Topic } from '@renderer/types'
 import store from '@renderer/store'
+import { uuid } from '@renderer/utils'
 
 export function getDefaultAssistant(): Assistant {
   return {
@@ -12,12 +12,26 @@ export function getDefaultAssistant(): Assistant {
   }
 }
 
+export function getDefaultTopic(): Topic {
+  return {
+    id: uuid(),
+    name: 'Default Topic',
+    messages: []
+  }
+}
+
 export function getAssistantProvider(assistant: Assistant) {
   const providers = store.getState().llm.providers
-  return providers.find((p) => p.id === assistant.id) || getDefaultProvider()
+  const provider = providers.find((p) => p.id === assistant.model?.provider)
+  return provider || getDefaultProvider()
+}
+
+export function getProviderByModel(model: Model) {
+  const providers = store.getState().llm.providers
+  return providers.find((p) => p.id === model.provider) as Provider
 }
 
 export function getDefaultProvider() {
-  const provider = store.getState().llm.providers.find((p) => p.isSystem)
-  return provider as Provider
+  const defaultModel = store.getState().llm.defaultModel
+  return getProviderByModel(defaultModel)
 }

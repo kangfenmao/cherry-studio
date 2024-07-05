@@ -9,6 +9,7 @@ export interface LlmState {
 }
 
 const initialState: LlmState = {
+  defaultModel: SYSTEM_MODELS.openai[0],
   providers: [
     {
       id: 'openai',
@@ -42,8 +43,7 @@ const initialState: LlmState = {
       isSystem: true,
       models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled)
     }
-  ],
-  defaultModel: SYSTEM_MODELS.openai[0]
+  ]
 }
 
 const settingsSlice = createSlice({
