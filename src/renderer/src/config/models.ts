@@ -39,46 +39,6 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
   ],
   silicon: [
     {
-      id: 'deepseek-ai/DeepSeek-V2-Chat',
-      provider: 'silicon',
-      name: 'DeepSeek-V2-Chat',
-      group: 'DeepSeek',
-      temperature: 0.7,
-      defaultEnabled: true
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
-      provider: 'silicon',
-      name: 'DeepSeek-Coder-V2-Instruct',
-      group: 'DeepSeek',
-      temperature: 0.7,
-      defaultEnabled: true
-    },
-    {
-      id: 'deepseek-ai/deepseek-llm-67b-chat',
-      provider: 'silicon',
-      name: 'deepseek-llm-67b-chat',
-      group: 'DeepSeek',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'google/gemma-2-27b-it',
-      provider: 'silicon',
-      name: 'gemma-2-27b-it',
-      group: 'Gemma',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'google/gemma-2-9b-it',
-      provider: 'silicon',
-      name: 'gemma-2-9b-it',
-      group: 'Gemma',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
       id: 'Qwen/Qwen2-7B-Instruct',
       provider: 'silicon',
       name: 'Qwen2-7B-Instruct',
@@ -139,6 +99,46 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       provider: 'silicon',
       name: 'Qwen1.5-14B-Chat',
       group: 'Qwen1.5',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'deepseek-ai/DeepSeek-V2-Chat',
+      provider: 'silicon',
+      name: 'DeepSeek-V2-Chat',
+      group: 'DeepSeek',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
+      provider: 'silicon',
+      name: 'DeepSeek-Coder-V2-Instruct',
+      group: 'DeepSeek',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'deepseek-ai/deepseek-llm-67b-chat',
+      provider: 'silicon',
+      name: 'deepseek-llm-67b-chat',
+      group: 'DeepSeek',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'google/gemma-2-27b-it',
+      provider: 'silicon',
+      name: 'gemma-2-27b-it',
+      group: 'Gemma',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'google/gemma-2-9b-it',
+      provider: 'silicon',
+      name: 'gemma-2-9b-it',
+      group: 'Gemma',
       temperature: 0.7,
       defaultEnabled: false
     },

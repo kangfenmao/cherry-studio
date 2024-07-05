@@ -4,8 +4,7 @@ import { FC, useState } from 'react'
 import styled from 'styled-components'
 import ModalProviderSetting from './components/ModalProviderSetting'
 
-// OpenAI Silicon deepseek Groq
-const LanguageModelsSettings: FC = () => {
+const ProviderSettings: FC = () => {
   const providers = useSystemProviders()
   const [selectedProvider, setSelectedProvider] = useState<Provider>(providers[0])
 
@@ -61,4 +60,4 @@ const ProviderListItem = styled.div`
   }
 `
 
-export default LanguageModelsSettings
+export default ProviderSettings

@@ -2,11 +2,11 @@ import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { FC } from 'react'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import CommonSettings from './CommonSettings'
+import GeneralSettings from './GeneralSettings'
 import AboutSettings from './AboutSettings'
-import DefaultAssistantSetting from './DefaultAssistantSetting'
-import SystemAssistantSettings from './SystemAssistantSettings'
-import LanguageModelsSettings from './LanguageModelsSettings'
+import AssistantSettings from './AssistantSettings'
+import ModelSettings from './ModelSettings'
+import ProviderSettings from './ProviderSettings'
 
 const SettingsPage: FC = () => {
   const { pathname } = useLocation()
@@ -20,17 +20,17 @@ const SettingsPage: FC = () => {
       </Navbar>
       <ContentContainer>
         <SettingMenus>
-          <MenuItemLink to="/settings/common">
-            <MenuItem className={isRoute('/settings/common')}>Common Settings</MenuItem>
+          <MenuItemLink to="/settings/general">
+            <MenuItem className={isRoute('/settings/general')}>General</MenuItem>
           </MenuItemLink>
-          <MenuItemLink to="/settings/llm">
-            <MenuItem className={isRoute('/settings/llm')}>Language Model</MenuItem>
+          <MenuItemLink to="/settings/provider">
+            <MenuItem className={isRoute('/settings/provider')}>Model Provider</MenuItem>
           </MenuItemLink>
-          <MenuItemLink to="/settings/system-assistant">
-            <MenuItem className={isRoute('/settings/system-assistant')}>System Assistant</MenuItem>
+          <MenuItemLink to="/settings/model">
+            <MenuItem className={isRoute('/settings/model')}>Model Settings</MenuItem>
           </MenuItemLink>
-          <MenuItemLink to="/settings/default-assistant">
-            <MenuItem className={isRoute('/settings/default-assistant')}>Default Assistant</MenuItem>
+          <MenuItemLink to="/settings/assistant">
+            <MenuItem className={isRoute('/settings/assistant')}>Default Assistant</MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/about">
             <MenuItem className={isRoute('/settings/about')}>About</MenuItem>
@@ -38,10 +38,10 @@ const SettingsPage: FC = () => {
         </SettingMenus>
         <SettingContent>
           <Routes>
-            <Route path="common" element={<CommonSettings />} />
-            <Route path="system-assistant" element={<SystemAssistantSettings />} />
-            <Route path="default-assistant" element={<DefaultAssistantSetting />} />
-            <Route path="llm" element={<LanguageModelsSettings />} />
+            <Route path="general" element={<GeneralSettings />} />
+            <Route path="provider" element={<ProviderSettings />} />
+            <Route path="model" element={<ModelSettings />} />
+            <Route path="assistant" element={<AssistantSettings />} />
             <Route path="about" element={<AboutSettings />} />
           </Routes>
         </SettingContent>

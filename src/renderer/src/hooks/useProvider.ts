@@ -32,5 +32,5 @@ export function useProviderByAssistant(assistant: Assistant) {
 }
 
 export function useSystemProviders() {
-  return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem)) as unknown as Provider
+  return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem))
 }

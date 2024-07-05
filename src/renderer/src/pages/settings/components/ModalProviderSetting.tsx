@@ -5,6 +5,7 @@ import { Button, Card, Divider, Input } from 'antd'
 import { useProvider } from '@renderer/hooks/useProvider'
 import ModalListPopup from '@renderer/components/Popups/ModalListPopup'
 import { groupBy } from 'lodash'
+import { SettingContainer, SettingSubtitle, SettingTitle } from './SettingComponent'
 
 interface Props {
   provider: Provider
@@ -35,10 +36,10 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
   }
 
   return (
-    <Container>
-      <Title>{provider.name}</Title>
+    <SettingContainer>
+      <SettingTitle>{provider.name}</SettingTitle>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
-      <SubTitle>API Key</SubTitle>
+      <SettingSubtitle>API Key</SettingSubtitle>
       <Input
         value={apiKey}
         placeholder="API Key"
@@ -46,14 +47,14 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
         onBlur={onUpdateApiKey}
         spellCheck={false}
       />
-      <SubTitle>API Host</SubTitle>
+      <SettingSubtitle>API Host</SettingSubtitle>
       <Input
         value={apiHost}
         placeholder="API Host"
         onChange={(e) => setApiHost(e.target.value)}
         onBlur={onUpdateApiHost}
       />
-      <SubTitle>Models</SubTitle>
+      <SettingSubtitle>Models</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
           {modelGroups[group].map((model) => (
@@ -64,35 +65,9 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
       <Button type="primary" style={{ width: '100px', marginTop: '10px' }} onClick={onAddModal}>
         Edit Models
       </Button>
-    </Container>
+    </SettingContainer>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: calc(100vh - var(--navbar-height));
-  padding: 15px;
-  overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`
-
-const Title = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const SubTitle = styled.div`
-  font-size: 12px;
-  color: var(--color-text-3);
-  margin: 10px 0;
-`
 
 const ModelListItem = styled.div`
   display: flex;
