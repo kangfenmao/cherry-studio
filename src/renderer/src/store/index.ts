@@ -19,7 +19,7 @@ const persistedReducer = persistReducer(
     key: 'cherry-ai',
     storage,
     version: 1,
-    whitelist: ['runtime']
+    blacklist: ['runtime']
   },
   rootReducer
 )

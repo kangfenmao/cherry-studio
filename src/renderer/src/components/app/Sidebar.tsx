@@ -12,9 +12,9 @@ const Sidebar: FC = () => {
 
   return (
     <Container>
-      <Avatar>
+      <StyledLink to="/settings/general">
         <AvatarImg src={avatar || Logo} />
-      </Avatar>
+      </StyledLink>
       <MainMenus>
         <Menus>
           <StyledLink to="/">
@@ -53,8 +53,6 @@ const Container = styled.div`
   background-color: #1f1f1f;
   border-right: 0.5px solid var(--color-border);
 `
-
-const Avatar = styled.div``
 
 const AvatarImg = styled.img`
   border-radius: 50%;
@@ -107,6 +105,7 @@ const Icon = styled.div`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  -webkit-app-region: none;
 `
 
 export default Sidebar
