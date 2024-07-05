@@ -52,7 +52,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [addTopic, setActiveTopic])
 
   const clearTopic = () => {
-    EventEmitter.emit(EVENT_NAMES.CLEAR_CONVERSATION)
+    EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
   }
 
   // Command or Ctrl + N create new topic

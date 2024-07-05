@@ -2,7 +2,7 @@ import { Assistant } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
 import Inputbar from './Inputbar'
-import Conversations from './Conversations'
+import Messages from './Messages'
 import { Flex } from 'antd'
 import TopicList from './TopicList'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -23,7 +23,7 @@ const Chat: FC<Props> = (props) => {
   return (
     <Container id="chat">
       <Flex vertical flex={1} justify="space-between">
-        <Conversations assistant={assistant} topic={activeTopic} />
+        <Messages assistant={assistant} topic={activeTopic} />
         <Inputbar assistant={assistant} setActiveTopic={setActiveTopic} />
       </Flex>
       <TopicList assistant={assistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />

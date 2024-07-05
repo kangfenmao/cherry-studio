@@ -1,7 +1,7 @@
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
-import { fetchConversationSummary } from '@renderer/services/api'
+import { fetchMessagesSummary } from '@renderer/services/api'
 import { Assistant, Topic } from '@renderer/types'
 import { Button, Dropdown, MenuProps, Popconfirm } from 'antd'
 import { FC, useRef } from 'react'
@@ -29,7 +29,7 @@ const TopicList: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
         if (currentTopic.current) {
           const messages = await LocalStorage.getTopicMessages(currentTopic.current.id)
           if (messages.length >= 2) {
-            const summaryText = await fetchConversationSummary({ messages, assistant })
+            const summaryText = await fetchMessagesSummary({ messages, assistant })
             if (summaryText) {
               updateTopic({ ...currentTopic.current, name: summaryText })
             }
@@ -124,6 +124,9 @@ const TopicListItem = styled.div`
   cursor: pointer;
   border-radius: 5px;
   font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &:hover {
     background-color: var(--color-background-soft);
   }

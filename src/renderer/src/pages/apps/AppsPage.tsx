@@ -53,14 +53,22 @@ const AppsPage: FC = () => {
                         <Title level={5} style={{ marginBottom: 0, color: '#00b96b' }}>
                           {assistant.name}
                         </Title>
-                        {added && <Button type="primary" shape="circle" size="small" icon={<CheckOutlined />} />}
+                        {added && (
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            size="small"
+                            icon={<CheckOutlined style={{ fontSize: 12 }} />}
+                          />
+                        )}
                         {!added && (
                           <Tooltip placement="top" title=" Add to assistant list " arrow>
                             <Button
                               type="default"
                               shape="circle"
                               size="small"
-                              icon={<PlusOutlined />}
+                              style={{ padding: 0 }}
+                              icon={<PlusOutlined style={{ fontSize: 12 }} />}
                               onClick={() => onAddAssistant(assistant)}
                             />
                           </Tooltip>
