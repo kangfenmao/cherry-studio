@@ -1,5 +1,5 @@
-appId: com.cherry-ai.app
-productName: Cherry AI
+appId: com.cherry-studio.app
+productName: Cherry Studio
 directories:
   buildResources: build
 files:

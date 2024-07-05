@@ -1,6 +1,6 @@
-# Cherry AI
+# Cherry Studio
 
-Cherry AI is a desktop client for multiple cutting-edge LLM models, available on Windows, Mac and Linux.
+Cherry Studio is a desktop client for multiple cutting-edge LLM models, available on Windows, Mac and Linux.
 
 ## Recommended IDE Setup
 

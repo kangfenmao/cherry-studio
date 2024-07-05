@@ -6,7 +6,7 @@ const Statusbar: FC = () => {
     <Container>
       <StatusbarLeft />
       <StatusbarCenter />
-      <StatusbarRight>Cherry AI v0.1.0</StatusbarRight>
+      <StatusbarRight>Cherry Studio v0.1.0</StatusbarRight>
     </Container>
   )
 }
