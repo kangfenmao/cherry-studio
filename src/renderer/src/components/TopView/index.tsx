@@ -1,3 +1,4 @@
+import { useAppInitEffect } from '@renderer/hooks/useAppInitEffect'
 import { message, Modal } from 'antd'
 import { findIndex, pullAt } from 'lodash'
 import React, { useEffect, useState } from 'react'
@@ -20,6 +21,8 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
   const [elements, setElements] = useState<ElementItem[]>([])
   const [messageApi, messageContextHolder] = message.useMessage()
   const [modal, modalContextHolder] = Modal.useModal()
+
+  useAppInitEffect()
 
   onPop = () => {
     const views = [...elements]
