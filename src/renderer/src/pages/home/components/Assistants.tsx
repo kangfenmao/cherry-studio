@@ -5,7 +5,9 @@ import { Assistant } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
 import { last } from 'lodash'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { uuid } from '@renderer/utils'
+import { getDefaultTopic } from '@renderer/services/assistant'
 
 interface Props {
   activeAssistant: Assistant
@@ -14,7 +16,7 @@ interface Props {
 }
 
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
-  const { assistants, removeAssistant, updateAssistant } = useAssistants()
+  const { assistants, removeAssistant, updateAssistant, addAssistant } = useAssistants()
   const targetAssistant = useRef<Assistant | null>(null)
 
   const onDelete = (assistant: Assistant) => {
@@ -35,6 +37,16 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
           const _assistant = await AssistantSettingPopup.show({ assistant: targetAssistant.current })
           updateAssistant(_assistant)
         }
+      }
+    },
+    {
+      label: 'Duplicate',
+      key: 'duplicate',
+      icon: <CopyOutlined />,
+      async onClick() {
+        const assistant: Assistant = { ...activeAssistant, id: uuid(), topics: [getDefaultTopic()] }
+        addAssistant(assistant)
+        setActiveAssistant(assistant)
       }
     },
     { type: 'divider' },
