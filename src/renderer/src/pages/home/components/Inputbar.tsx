@@ -9,6 +9,9 @@ import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { ClearOutlined, HistoryOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { TextAreaRef } from 'antd/es/input/TextArea'
+import { isEmpty } from 'lodash'
+import SendMessageSetting from './SendMessageSetting'
+import { useSettings } from '@renderer/hooks/useSettings'
 
 interface Props {
   assistant: Assistant
@@ -19,25 +22,40 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
+  const { sendMessageShortcut } = useSettings()
   const inputRef = useRef<TextAreaRef>(null)
 
+  const sendMessage = () => {
+    if (isEmpty(text.trim())) {
+      return
+    }
+
+    const message: Message = {
+      id: uuid(),
+      role: 'user',
+      content: text,
+      assistantId: assistant.id,
+      topicId: assistant.topics[0].id || uuid(),
+      createdAt: 'now'
+    }
+
+    EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
+
+    setText('')
+  }
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter') {
-      const topicId = assistant.topics[0] ? assistant.topics[0] : uuid()
-
-      const message: Message = {
-        id: uuid(),
-        role: 'user',
-        content: text,
-        assistantId: assistant.id,
-        topicId,
-        createdAt: 'now'
+    if (sendMessageShortcut === 'Enter' && event.key === 'Enter') {
+      if (event.shiftKey) {
+        return
       }
+      sendMessage()
+      return event.preventDefault()
+    }
 
-      EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
-
-      setText('')
-      event.preventDefault()
+    if (sendMessageShortcut === 'Shift+Enter' && event.key === 'Enter' && event.shiftKey) {
+      sendMessage()
+      return event.preventDefault()
     }
   }
 
@@ -101,11 +119,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           </Tooltip>
         </ToolbarMenu>
         <ToolbarMenu>
-          <Tooltip placement="top" title=" Settings " arrow>
+          <SendMessageSetting>
             <ToolbarButton type="text" style={{ marginRight: 0 }}>
               <MoreOutlined />
             </ToolbarButton>
-          </Tooltip>
+          </SendMessageSetting>
         </ToolbarMenu>
       </Toolbar>
       <Textarea
