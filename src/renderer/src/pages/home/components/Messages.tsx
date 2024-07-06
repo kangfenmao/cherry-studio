@@ -52,12 +52,21 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     }
   }, [assistant, messages, topic, updateTopic])
 
+  const onDeleteMessage = (message: Message) => {
+    const _messages = messages.filter((m) => m.id !== message.id)
+    setMessages(_messages)
+    localforage.setItem(`topic:${topic.id}`, {
+      ...topic,
+      messages: _messages
+    })
+  }
+
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         console.debug({ assistant, provider, message: msg, topic })
         onSendMessage(msg)
-        fetchChatCompletion({ assistant, messages: [messages, msg], topic, onResponse: setLastMessage })
+        fetchChatCompletion({ assistant, messages: [...messages, msg], topic, onResponse: setLastMessage })
       }),
       EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
         setLastMessage(null)
@@ -84,10 +93,10 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   useEffect(() => hljs.highlightAll())
 
   return (
-    <Container id="topics">
+    <Container id="messages">
       {lastMessage && <MessageItem message={lastMessage} />}
       {reverse([...messages]).map((message) => (
-        <MessageItem message={message} key={message.id} />
+        <MessageItem message={message} key={message.id} showMenu onDeleteMessage={onDeleteMessage} />
       ))}
       <MessageItem message={assistantDefaultMessage} />
     </Container>

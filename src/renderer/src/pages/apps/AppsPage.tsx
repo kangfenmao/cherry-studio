@@ -1,6 +1,6 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { SYSTEM_ASSISTANTS } from '@renderer/config/assistant'
-import { Button, Col, message, Row, Tooltip, Typography } from 'antd'
+import { Button, Col, Row, Tooltip, Typography } from 'antd'
 import { find, groupBy } from 'lodash'
 import { FC } from 'react'
 import styled from 'styled-components'
@@ -14,26 +14,21 @@ const { Title } = Typography
 const AppsPage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const assistantGroups = groupBy(SYSTEM_ASSISTANTS, 'group')
-  const [messageApi, contextHolder] = message.useMessage()
 
   const onAddAssistant = (assistant: SystemAssistant) => {
     addAssistant({
       ...getDefaultAssistant(),
       ...assistant
     })
-    messageApi.destroy()
-    messageApi.open({
-      type: 'success',
+    window.message.success({
       content: 'Assistant added successfully',
-      style: {
-        marginTop: '5vh'
-      }
+      key: 'assistant-added',
+      style: { marginTop: '5vh' }
     })
   }
 
   return (
     <Container>
-      {contextHolder}
       <Navbar>
         <NavbarCenter>Assistant Market</NavbarCenter>
       </Navbar>

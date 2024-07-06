@@ -1,5 +1,6 @@
+import { message, Modal } from 'antd'
 import { findIndex, pullAt } from 'lodash'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 let id = 0
 let onPop = () => {}
@@ -17,6 +18,8 @@ type ElementItem = {
 
 const TopViewContainer: React.FC<Props> = ({ children }) => {
   const [elements, setElements] = useState<ElementItem[]>([])
+  const [messageApi, messageContextHolder] = message.useMessage()
+  const [modal, modalContextHolder] = Modal.useModal()
 
   onPop = () => {
     const views = [...elements]
@@ -34,9 +37,16 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
     setElements(views)
   }
 
+  useEffect(() => {
+    window.message = messageApi
+    window.modal = modal
+  }, [messageApi, modal])
+
   return (
     <>
       {children}
+      {messageContextHolder}
+      {modalContextHolder}
       {elements.length > 0 && (
         <div style={{ display: 'flex', flex: 1, position: 'absolute', width: '100%', height: '100%' }}>
           <div style={{ position: 'absolute', width: '100%', height: '100%' }} onClick={onPop} />
