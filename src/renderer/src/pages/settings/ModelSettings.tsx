@@ -7,7 +7,7 @@ import { find } from 'lodash'
 import { Model } from '@renderer/types'
 
 const ModelSettings: FC = () => {
-  const { defaultModel, setDefaultModel, setTopicNamingModel } = useDefaultModel()
+  const { defaultModel, topicNamingModel, setDefaultModel, setTopicNamingModel } = useDefaultModel()
   const providers = useProviders()
   const allModels = providers.map((p) => p.models).flat()
 
@@ -32,7 +32,7 @@ const ModelSettings: FC = () => {
       <SettingTitle>Topic Naming Model</SettingTitle>
       <SettingDivider />
       <Select
-        defaultValue={defaultModel.id}
+        defaultValue={topicNamingModel.id}
         style={{ width: 200 }}
         onChange={(id) => setTopicNamingModel(find(allModels, { id }) as Model)}
         options={providers.map((p) => ({
