@@ -4,9 +4,10 @@ import { EVENT_NAMES, EventEmitter } from './event'
 import { ChatCompletionMessageParam, ChatCompletionSystemMessageParam } from 'openai/resources'
 import OpenAI from 'openai'
 import { getAssistantProvider, getDefaultModel } from './assistant'
+import { takeRight } from 'lodash'
 
 interface FetchChatCompletionParams {
-  message: Message
+  messages: Message[]
   topic: Topic
   assistant: Assistant
   onResponse: (message: Message) => void
@@ -20,7 +21,7 @@ const getOpenAiProvider = (provider: Provider) => {
   })
 }
 
-export async function fetchChatCompletion({ message, topic, assistant, onResponse }: FetchChatCompletionParams) {
+export async function fetchChatCompletion({ messages, topic, assistant, onResponse }: FetchChatCompletionParams) {
   const provider = getAssistantProvider(assistant)
   const openaiProvider = getOpenAiProvider(provider)
   const defaultModel = getDefaultModel()
@@ -30,7 +31,7 @@ export async function fetchChatCompletion({ message, topic, assistant, onRespons
     model: model.id,
     messages: [
       { role: 'system', content: assistant.prompt },
-      { role: 'user', content: message.content }
+      ...takeRight(messages, 5).map((message) => ({ role: message.role, content: message.content }))
     ],
     stream: true
   })
@@ -69,7 +70,7 @@ export async function fetchMessagesSummary({ messages, assistant }: FetchMessage
   const defaultModel = getDefaultModel()
   const model = assistant.model || defaultModel
 
-  const userMessages: ChatCompletionMessageParam[] = messages.map((message) => ({
+  const userMessages: ChatCompletionMessageParam[] = takeRight(messages, 5).map((message) => ({
     role: 'user',
     content: message.content
   }))
