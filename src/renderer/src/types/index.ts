@@ -13,6 +13,7 @@ export type Message = {
   content: string
   assistantId: string
   topicId: string
+  modelId?: string
   createdAt: string
 }
 

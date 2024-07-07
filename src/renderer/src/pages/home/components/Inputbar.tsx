@@ -12,6 +12,7 @@ import { TextAreaRef } from 'antd/es/input/TextArea'
 import { isEmpty } from 'lodash'
 import SendMessageSetting from './SendMessageSetting'
 import { useSettings } from '@renderer/hooks/useSettings'
+import dayjs from 'dayjs'
 
 interface Props {
   assistant: Assistant
@@ -36,7 +37,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       content: text,
       assistantId: assistant.id,
       topicId: assistant.topics[0].id || uuid(),
-      createdAt: 'now'
+      createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
     }
 
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
