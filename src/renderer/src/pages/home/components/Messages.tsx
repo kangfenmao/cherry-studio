@@ -1,7 +1,7 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
 import localforage from 'localforage'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { reverse } from 'lodash'
@@ -23,6 +23,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const { updateTopic } = useAssistant(assistant.id)
   const provider = useProviderByAssistant(assistant)
+  const messagesRef = useRef<HTMLDivElement>(null)
 
   const assistantDefaultMessage: Message = {
     id: 'assistant',
@@ -90,10 +91,14 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     })
   }, [topic.id])
 
-  useEffect(() => hljs.highlightAll())
+  useEffect(() => hljs.highlightAll(), [messages, lastMessage])
+
+  useEffect(() => {
+    messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   return (
-    <Container id="messages">
+    <Container id="messages" ref={messagesRef}>
       {lastMessage && <MessageItem message={lastMessage} />}
       {reverse([...messages]).map((message) => (
         <MessageItem message={message} key={message.id} showMenu onDeleteMessage={onDeleteMessage} />
@@ -109,6 +114,8 @@ const Container = styled.div`
   overflow-y: scroll;
   flex-direction: column-reverse;
   max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
+  padding-top: 10px;
+  padding-bottom: 20px;
   &::-webkit-scrollbar {
     display: none;
   }

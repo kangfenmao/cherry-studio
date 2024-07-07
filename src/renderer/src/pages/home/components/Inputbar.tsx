@@ -24,7 +24,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut } = useSettings()
-  const inputRef = useRef<TextAreaRef>(null)
+  const inputRef = useRef<TextAreaRef>()
 
   const sendMessage = () => {
     if (isEmpty(text.trim())) {

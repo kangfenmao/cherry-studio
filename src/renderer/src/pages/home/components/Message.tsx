@@ -23,6 +23,7 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
 
   const onDelete = async () => {
     const confirmed = await window.modal.confirm({
+      icon: null,
       title: 'Delete Message',
       content: 'Are you sure you want to delete this message?',
       okText: 'Delete',
