@@ -11,6 +11,14 @@ const ModelSettings: FC = () => {
   const providers = useProviders()
   const allModels = providers.map((p) => p.models).flat()
 
+  const selectOptions = providers
+    .filter((p) => p.models.length > 0)
+    .map((p) => ({
+      label: p.name,
+      title: p.name,
+      options: p.models.map((m) => ({ label: m.name, value: m.id }))
+    }))
+
   return (
     <SettingContainer>
       <SettingTitle>Default Assistant Model</SettingTitle>
@@ -19,14 +27,7 @@ const ModelSettings: FC = () => {
         defaultValue={defaultModel.id}
         style={{ width: 200 }}
         onChange={(id) => setDefaultModel(find(allModels, { id }) as Model)}
-        options={providers.map((p) => ({
-          label: p.name,
-          title: p.name,
-          options: p.models.map((m) => ({
-            label: m.name,
-            value: m.id
-          }))
-        }))}
+        options={selectOptions}
       />
       <div style={{ height: 40 }} />
       <SettingTitle>Topic Naming Model</SettingTitle>
@@ -35,14 +36,7 @@ const ModelSettings: FC = () => {
         defaultValue={topicNamingModel.id}
         style={{ width: 200 }}
         onChange={(id) => setTopicNamingModel(find(allModels, { id }) as Model)}
-        options={providers.map((p) => ({
-          label: p.name,
-          title: p.name,
-          options: p.models.map((m) => ({
-            label: m.name,
-            value: m.id
-          }))
-        }))}
+        options={selectOptions}
       />
     </SettingContainer>
   )

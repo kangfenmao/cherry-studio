@@ -14,16 +14,18 @@ const Navigation: FC<Props> = ({ activeAssistant }) => {
   const providers = useProviders()
   const { model, setModel } = useAssistant(activeAssistant.id)
 
-  const items: MenuProps['items'] = providers.map((p) => ({
-    key: p.id,
-    label: p.name,
-    type: 'group',
-    children: p.models.map((m) => ({
-      key: m.id,
-      label: m.name,
-      onClick: () => setModel(m)
+  const items: MenuProps['items'] = providers
+    .filter((p) => p.models.length > 0)
+    .map((p) => ({
+      key: p.id,
+      label: p.name,
+      type: 'group',
+      children: p.models.map((m) => ({
+        key: m.id,
+        label: m.name,
+        onClick: () => setModel(m)
+      }))
     }))
-  }))
 
   return (
     <NavbarCenter style={{ border: 'none' }}>
