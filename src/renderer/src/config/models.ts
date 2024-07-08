@@ -181,46 +181,6 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       group: 'Yi',
       temperature: 0.7,
       defaultEnabled: false
-    },
-    {
-      id: 'OpenAI/GPT-4o',
-      provider: 'silicon',
-      name: 'GPT-4o',
-      group: 'OpenAI',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'OpenAI/GPT-3.5 Turbo',
-      provider: 'silicon',
-      name: 'GPT-3.5 Turbo',
-      group: 'OpenAI',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'Anthropic/claude-3-5-sonnet',
-      provider: 'silicon',
-      name: 'claude-3-5-sonnet',
-      group: 'Claude',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'meta-llama/Meta-Llama-3-8B-Instruct',
-      provider: 'silicon',
-      name: 'Meta-Llama-3-8B-Instruct',
-      group: 'Meta Llama',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'meta-llama/Meta-Llama-3-70B-Instruct',
-      provider: 'silicon',
-      name: 'Meta-Llama-3-70B-Instruct',
-      group: 'Meta Llama',
-      temperature: 0.7,
-      defaultEnabled: false
     }
   ],
   deepseek: [
