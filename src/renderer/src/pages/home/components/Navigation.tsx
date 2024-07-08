@@ -23,6 +23,7 @@ const Navigation: FC<Props> = ({ activeAssistant }) => {
       children: p.models.map((m) => ({
         key: m.id,
         label: m.name,
+        style: m.id === model?.id ? { color: '#00b96b' } : undefined,
         onClick: () => setModel(m)
       }))
     }))
