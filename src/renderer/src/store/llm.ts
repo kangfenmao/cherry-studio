@@ -38,6 +38,14 @@ const initialState: LlmState = {
       models: SYSTEM_MODELS.deepseek.filter((m) => m.defaultEnabled)
     },
     {
+      id: 'yi',
+      name: 'Yi',
+      apiKey: '',
+      apiHost: 'https://api.lingyiwanwu.com',
+      isSystem: true,
+      models: SYSTEM_MODELS.yi.filter((m) => m.defaultEnabled)
+    },
+    {
       id: 'groq',
       name: 'Groq',
       apiKey: '',

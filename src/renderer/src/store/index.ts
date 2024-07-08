@@ -6,6 +6,7 @@ import assistants from './assistants'
 import settings from './settings'
 import llm from './llm'
 import runtime from './runtime'
+import migrate from './migrate'
 
 const rootReducer = combineReducers({
   assistants,
@@ -18,8 +19,9 @@ const persistedReducer = persistReducer(
   {
     key: 'cherry-studio',
     storage,
-    version: 1,
-    blacklist: ['runtime']
+    version: 2,
+    blacklist: ['runtime'],
+    migrate
   },
   rootReducer
 )

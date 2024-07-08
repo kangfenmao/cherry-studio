@@ -201,6 +201,56 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       defaultEnabled: true
     }
   ],
+  yi: [
+    {
+      id: 'yi-large',
+      provider: 'yi',
+      name: 'yi-large',
+      group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'yi-large-turbo',
+      provider: 'yi',
+      name: 'yi-large-turbo',
+      group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'yi-large-rag',
+      provider: 'yi',
+      name: 'yi-large-rag',
+      group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'yi-medium',
+      provider: 'yi',
+      name: 'yi-medium',
+      group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'yi-medium-200k',
+      provider: 'yi',
+      name: 'yi-medium-200k',
+      group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'yi-spark',
+      provider: 'yi',
+      name: 'yi-spark',
+      group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: false
+    }
+  ],
   groq: [
     {
       id: 'llama3-8b-8192',
