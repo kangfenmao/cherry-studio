@@ -1,5 +1,5 @@
 import React from 'react'
-import SyntaxHighlighter from 'react-syntax-highlighter'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import styled from 'styled-components'
 import { CopyOutlined } from '@ant-design/icons'
