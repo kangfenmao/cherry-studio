@@ -112,6 +112,7 @@ const Container = styled.div`
   height: 100%;
   border-left: 0.5px solid var(--color-border);
   padding: 10px;
+  overflow-y: auto;
   &.collapsed {
     width: 0;
     border-left: none;

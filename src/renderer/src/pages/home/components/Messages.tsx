@@ -108,14 +108,11 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-direction: column-reverse;
   max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
   padding-top: 10px;
   padding-bottom: 20px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `
 
 export default Messages

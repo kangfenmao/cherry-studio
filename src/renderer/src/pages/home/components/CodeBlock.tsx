@@ -28,6 +28,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
         {...rest}
         language={match[1]}
         style={atomDark}
+        wrapLongLines={true}
         customStyle={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}>
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>
