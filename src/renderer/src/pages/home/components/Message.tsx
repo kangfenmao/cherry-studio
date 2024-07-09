@@ -1,12 +1,13 @@
 import { Message } from '@renderer/types'
-import { Avatar } from 'antd'
+import { Avatar, Tooltip } from 'antd'
 import { FC } from 'react'
 import styled from 'styled-components'
 import Logo from '@renderer/assets/images/logo.png'
 import useAvatar from '@renderer/hooks/useAvatar'
-import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
+import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import Markdown from 'react-markdown'
 import CodeBlock from './CodeBlock'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 
 interface Props {
   message: Message
@@ -33,6 +34,10 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
     confirmed && onDeleteMessage?.(message)
   }
 
+  const onEdit = () => {
+    EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message)
+  }
+
   return (
     <MessageContainer key={message.id}>
       <AvatarWrapper>{message.role === 'assistant' ? <Avatar src={Logo} /> : <Avatar src={avatar} />}</AvatarWrapper>
@@ -40,11 +45,19 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
         <Markdown className="markdown" components={{ code: CodeBlock as any }}>
           {message.content}
         </Markdown>
-        {/* <Markdown className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }} /> */}
         {showMenu && (
           <MenusBar className="menubar">
-            <CopyOutlined onClick={onCopy} />
-            <DeleteOutlined onClick={onDelete} />
+            {message.role === 'user' && (
+              <Tooltip title="Edit" mouseEnterDelay={1}>
+                <EditOutlined onClick={onEdit} />
+              </Tooltip>
+            )}
+            <Tooltip title="Copy" mouseEnterDelay={1}>
+              <CopyOutlined onClick={onCopy} />
+            </Tooltip>
+            <Tooltip title="Delete" mouseEnterDelay={1}>
+              <DeleteOutlined onClick={onDelete} />
+            </Tooltip>
             <ModelName>{message.modelId}</ModelName>
           </MenusBar>
         )}
@@ -63,8 +76,6 @@ const MessageContainer = styled.div`
 const AvatarWrapper = styled.div`
   margin-right: 10px;
 `
-
-// const Markdown = styled.div``
 
 const MessageContent = styled.div`
   display: flex;

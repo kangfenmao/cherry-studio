@@ -8,7 +8,7 @@ import { Button, Popconfirm, Tooltip } from 'antd'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { ClearOutlined, HistoryOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { TextAreaRef } from 'antd/es/input/TextArea'
+import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import { isEmpty } from 'lodash'
 import SendMessageSetting from './SendMessageSetting'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -24,7 +24,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut } = useSettings()
-  const inputRef = useRef<TextAreaRef>()
+  const inputRef = useRef<TextAreaRef>(null)
 
   const sendMessage = () => {
     if (isEmpty(text.trim())) {
@@ -86,6 +86,16 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [addNewTopic])
 
   useEffect(() => {
+    const unsubscribes = [
+      EventEmitter.on(EVENT_NAMES.EDIT_MESSAGE, (message: Message) => {
+        setText(message.content)
+        inputRef.current?.focus()
+      })
+    ]
+    return () => unsubscribes.forEach((unsub) => unsub())
+  }, [])
+
+  useEffect(() => {
     inputRef.current?.focus()
   }, [assistant])
 
@@ -133,6 +143,9 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         placeholder="Type your message here..."
         autoFocus
         contextMenu="true"
+        variant="borderless"
+        styles={{ textarea: { resize: 'none', paddingLeft: 0 } }}
+        allowClear
         ref={inputRef}
       />
     </Container>
@@ -148,16 +161,11 @@ const Container = styled.div`
   padding: 5px 15px;
 `
 
-const Textarea = styled.textarea`
+const Textarea = styled(TextArea)`
+  padding: 0;
+  border-radius: 0;
   display: flex;
   flex: 1;
-  border: none;
-  outline: none;
-  resize: none;
-  font-size: 13px;
-  line-height: 18px;
-  color: var(--color-text);
-  background-color: transparent;
 `
 
 const Toolbar = styled.div`
