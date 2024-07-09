@@ -1,4 +1,5 @@
 import { NavbarCenter } from '@renderer/components/app/Navbar'
+import { colorPrimary } from '@renderer/config/antd'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { Assistant } from '@renderer/types'
@@ -23,7 +24,7 @@ const Navigation: FC<Props> = ({ activeAssistant }) => {
       children: p.models.map((m) => ({
         key: m.id,
         label: m.name,
-        style: m.id === model?.id ? { color: '#00b96b' } : undefined,
+        style: m.id === model?.id ? { color: colorPrimary } : undefined,
         onClick: () => setModel(m)
       }))
     }))

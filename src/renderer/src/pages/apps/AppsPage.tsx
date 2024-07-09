@@ -8,6 +8,7 @@ import { CheckOutlined, PlusOutlined } from '@ant-design/icons'
 import { SystemAssistant } from '@renderer/types'
 import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useAssistants } from '@renderer/hooks/useAssistant'
+import { colorPrimary } from '@renderer/config/antd'
 
 const { Title } = Typography
 
@@ -45,7 +46,7 @@ const AppsPage: FC = () => {
                   <Col span={6} key={group + index} style={{ marginBottom: 16 }}>
                     <AssistantCard>
                       <AssistantHeader>
-                        <Title level={5} style={{ marginBottom: 0, color: '#00b96b' }}>
+                        <Title level={5} style={{ marginBottom: 0, color: colorPrimary }}>
                           {assistant.name}
                         </Title>
                         {added && (

@@ -28,15 +28,6 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
   const defaultModel = getDefaultModel()
   const model = assistant.model || defaultModel
 
-  const stream = await openaiProvider.chat.completions.create({
-    model: model.id,
-    messages: [
-      { role: 'system', content: assistant.prompt },
-      ...takeRight(messages, 5).map((message) => ({ role: message.role, content: message.content }))
-    ],
-    stream: true
-  })
-
   const _message: Message = {
     id: uuid(),
     role: 'assistant',
@@ -47,14 +38,27 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
   }
 
-  let content = ''
+  try {
+    const stream = await openaiProvider.chat.completions.create({
+      model: model.id,
+      messages: [
+        { role: 'system', content: assistant.prompt },
+        ...takeRight(messages, 5).map((message) => ({ role: message.role, content: message.content }))
+      ],
+      stream: true
+    })
 
-  for await (const chunk of stream) {
-    content = content + (chunk.choices[0]?.delta?.content || '')
-    onResponse({ ..._message, content })
+    let content = ''
+
+    for await (const chunk of stream) {
+      content = content + (chunk.choices[0]?.delta?.content || '')
+      onResponse({ ..._message, content })
+    }
+
+    _message.content = content
+  } catch (error: any) {
+    _message.content = `Error: ${error.message}`
   }
-
-  _message.content = content
 
   EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, _message)
 

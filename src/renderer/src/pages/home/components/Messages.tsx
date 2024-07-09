@@ -94,11 +94,11 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   useEffect(() => hljs.highlightAll(), [messages, lastMessage])
 
   useEffect(() => {
-    messagesRef.current?.scrollIntoView({ behavior: 'smooth' })
+    messagesRef.current?.scrollTo({ top: 100000, behavior: 'auto' })
   }, [messages])
 
   return (
-    <Container id="messages" ref={messagesRef}>
+    <Container id="messages" key={assistant.id} ref={messagesRef}>
       {lastMessage && <MessageItem message={lastMessage} />}
       {reverse([...messages]).map((message) => (
         <MessageItem message={message} key={message.id} showMenu onDeleteMessage={onDeleteMessage} />
