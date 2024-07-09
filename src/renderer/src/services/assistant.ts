@@ -34,7 +34,14 @@ export function getAssistantProvider(assistant: Assistant) {
   return provider || getDefaultProvider()
 }
 
-export function getProviderByModel(model: Model) {
+export function getProviderByModel(model?: Model) {
   const providers = store.getState().llm.providers
-  return providers.find((p) => p.id === model.provider) as Provider
+  const providerId = model ? model.provider : getDefaultProvider().id
+  return providers.find((p) => p.id === providerId) as Provider
+}
+
+export function getProviderByModelId(modelId?: string) {
+  const providers = store.getState().llm.providers
+  const _modelId = modelId || getDefaultModel().id
+  return providers.find((p) => p.models.find((m) => m.id === _modelId)) as Provider
 }

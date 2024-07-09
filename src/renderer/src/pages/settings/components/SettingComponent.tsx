@@ -19,6 +19,7 @@ export const SettingTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  font-weight: 900;
 `
 
 export const SettingSubtitle = styled.div`

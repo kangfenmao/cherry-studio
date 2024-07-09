@@ -2,12 +2,13 @@ import { Message } from '@renderer/types'
 import { Avatar, Tooltip } from 'antd'
 import { FC } from 'react'
 import styled from 'styled-components'
-import Logo from '@renderer/assets/images/logo.png'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import Markdown from 'react-markdown'
 import CodeBlock from './CodeBlock'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { getModelLogo } from '@renderer/services/provider'
+import Logo from '@renderer/assets/images/logo.png'
 
 interface Props {
   message: Message
@@ -40,7 +41,13 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
 
   return (
     <MessageContainer key={message.id}>
-      <AvatarWrapper>{message.role === 'assistant' ? <Avatar src={Logo} /> : <Avatar src={avatar} />}</AvatarWrapper>
+      <AvatarWrapper>
+        {message.role === 'assistant' ? (
+          <Avatar src={message.modelId ? getModelLogo(message.modelId) : Logo} />
+        ) : (
+          <Avatar src={avatar} />
+        )}
+      </AvatarWrapper>
       <MessageContent>
         <Markdown className="markdown" components={{ code: CodeBlock as any }}>
           {message.content}

@@ -16,7 +16,10 @@ const ModelSettings: FC = () => {
     .map((p) => ({
       label: p.name,
       title: p.name,
-      options: p.models.map((m) => ({ label: m.name, value: m.id }))
+      options: p.models.map((m) => ({
+        label: m.name,
+        value: m.id
+      }))
     }))
 
   return (

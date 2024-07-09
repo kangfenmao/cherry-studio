@@ -1,11 +1,12 @@
 import { Provider } from '@renderer/types'
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Card, Divider, Input } from 'antd'
+import { Avatar, Button, Card, Divider, Input } from 'antd'
 import { useProvider } from '@renderer/hooks/useProvider'
 import ModalListPopup from '@renderer/components/Popups/ModalListPopup'
 import { groupBy } from 'lodash'
 import { SettingContainer, SettingSubtitle, SettingTitle } from './SettingComponent'
+import { getModelLogo } from '@renderer/services/provider'
 
 interface Props {
   provider: Provider
@@ -58,7 +59,10 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
           {modelGroups[group].map((model) => (
-            <ModelListItem key={model.id}>{model.id}</ModelListItem>
+            <ModelListItem key={model.id}>
+              <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }} />
+              {model.id}
+            </ModelListItem>
           ))}
         </Card>
       ))}
@@ -73,7 +77,7 @@ const ModelListItem = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 5px 0;
 `
 

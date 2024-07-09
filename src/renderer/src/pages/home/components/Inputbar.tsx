@@ -100,7 +100,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container>
+    <Container id="inputbar">
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title=" New Chat " arrow>
@@ -144,7 +144,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         autoFocus
         contextMenu="true"
         variant="borderless"
-        styles={{ textarea: { resize: 'none', paddingLeft: 0 } }}
+        styles={{ textarea: { paddingLeft: 0 } }}
         allowClear
         ref={inputRef}
       />

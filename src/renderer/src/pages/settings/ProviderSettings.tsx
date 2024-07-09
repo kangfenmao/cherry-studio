@@ -3,6 +3,8 @@ import { Provider } from '@renderer/types'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import ModalProviderSetting from './components/ModalProviderSetting'
+import { Avatar } from 'antd'
+import { getProviderLogo } from '@renderer/services/provider'
 
 const ProviderSettings: FC = () => {
   const providers = useSystemProviders()
@@ -16,7 +18,8 @@ const ProviderSettings: FC = () => {
             key={JSON.stringify(provider)}
             className={provider.id === selectedProvider?.id ? 'active' : ''}
             onClick={() => setSelectedProvider(provider)}>
-            {provider.name}
+            <Avatar src={getProviderLogo(provider.id)} size={22} />
+            <ProviderItemName>{provider.name}</ProviderItemName>
           </ProviderListItem>
         ))}
       </ProviderListContainer>
@@ -58,6 +61,11 @@ const ProviderListItem = styled.div`
     background: #135200;
     font-weight: bold;
   }
+`
+
+const ProviderItemName = styled.div`
+  margin-left: 10px;
+  font-weight: bold;
 `
 
 export default ProviderSettings

@@ -94,3 +94,7 @@ body,
   flex-direction: row;
   flex: 1;
 }
+
+#inputbar .ant-input {
+  resize: none;
+}
