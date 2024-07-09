@@ -35,7 +35,8 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     assistantId: assistant.id,
     topicId: topic.id,
     modelId: model.id,
-    createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
+    createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    status: 'pending'
   }
 
   try {
@@ -59,6 +60,8 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
   } catch (error: any) {
     _message.content = `Error: ${error.message}`
   }
+
+  _message.status = 'success'
 
   EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, _message)
 

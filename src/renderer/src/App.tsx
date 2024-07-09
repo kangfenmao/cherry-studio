@@ -10,6 +10,7 @@ import SettingsPage from './pages/settings/SettingsPage'
 import { ConfigProvider } from 'antd'
 import TopViewContainer from './components/TopView'
 import { AntdThemeConfig } from './config/antd'
+import './i18n'
 
 function App(): JSX.Element {
   return (

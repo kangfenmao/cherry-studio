@@ -37,7 +37,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       content: text,
       assistantId: assistant.id,
       topicId: assistant.topics[0].id || uuid(),
-      createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      status: 'success'
     }
 
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
@@ -70,9 +71,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setActiveTopic(topic)
   }, [addTopic, setActiveTopic])
 
-  const clearTopic = () => {
-    EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
-  }
+  const clearTopic = () => EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
 
   // Command or Ctrl + N create new topic
   useEffect(() => {

@@ -7,33 +7,35 @@ import AboutSettings from './AboutSettings'
 import AssistantSettings from './AssistantSettings'
 import ModelSettings from './ModelSettings'
 import ProviderSettings from './ProviderSettings'
+import { useTranslation } from 'react-i18next'
 
 const SettingsPage: FC = () => {
   const { pathname } = useLocation()
+  const { t } = useTranslation()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
   return (
     <Container>
       <Navbar>
-        <NavbarCenter>Settings</NavbarCenter>
+        <NavbarCenter>{t('settings.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer>
         <SettingMenus>
           <MenuItemLink to="/settings/general">
-            <MenuItem className={isRoute('/settings/general')}>General</MenuItem>
+            <MenuItem className={isRoute('/settings/general')}>{t('settings.general')}</MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/provider">
-            <MenuItem className={isRoute('/settings/provider')}>Model Provider</MenuItem>
+            <MenuItem className={isRoute('/settings/provider')}>{t('settings.provider')}</MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/model">
-            <MenuItem className={isRoute('/settings/model')}>Model Settings</MenuItem>
+            <MenuItem className={isRoute('/settings/model')}>{t('settings.model')}</MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/assistant">
-            <MenuItem className={isRoute('/settings/assistant')}>Default Assistant</MenuItem>
+            <MenuItem className={isRoute('/settings/assistant')}>{t('settings.assistant')}</MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/about">
-            <MenuItem className={isRoute('/settings/about')}>About</MenuItem>
+            <MenuItem className={isRoute('/settings/about')}>{t('settings.about')}</MenuItem>
           </MenuItemLink>
         </SettingMenus>
         <SettingContent>

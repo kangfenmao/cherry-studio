@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Inputbar from './Inputbar'
 import Messages from './Messages'
 import { Flex } from 'antd'
-import TopicList from './TopicList'
+import Topics from './Topics'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
 
@@ -26,7 +26,7 @@ const Chat: FC<Props> = (props) => {
         <Messages assistant={assistant} topic={activeTopic} />
         <Inputbar assistant={assistant} setActiveTopic={setActiveTopic} />
       </Flex>
-      <TopicList assistant={assistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
+      <Topics assistant={assistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
     </Container>
   )
 }

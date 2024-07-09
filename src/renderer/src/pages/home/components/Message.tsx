@@ -1,11 +1,12 @@
 import { Message } from '@renderer/types'
 import { Avatar } from 'antd'
-import { marked } from 'marked'
 import { FC } from 'react'
 import styled from 'styled-components'
 import Logo from '@renderer/assets/images/logo.png'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { CopyOutlined, DeleteOutlined } from '@ant-design/icons'
+import Markdown from 'react-markdown'
+import CodeBlock from './CodeBlock'
 
 interface Props {
   message: Message
@@ -36,7 +37,10 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
     <MessageContainer key={message.id}>
       <AvatarWrapper>{message.role === 'assistant' ? <Avatar src={Logo} /> : <Avatar src={avatar} />}</AvatarWrapper>
       <MessageContent>
-        <div className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }} />
+        <Markdown className="markdown" components={{ code: CodeBlock as any }}>
+          {message.content}
+        </Markdown>
+        {/* <Markdown className="markdown" dangerouslySetInnerHTML={{ __html: marked(message.content) }} /> */}
         {showMenu && (
           <MenusBar className="menubar">
             <CopyOutlined onClick={onCopy} />
@@ -59,6 +63,8 @@ const MessageContainer = styled.div`
 const AvatarWrapper = styled.div`
   margin-right: 10px;
 `
+
+// const Markdown = styled.div``
 
 const MessageContent = styled.div`
   display: flex;

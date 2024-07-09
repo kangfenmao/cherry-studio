@@ -5,12 +5,6 @@
   user-select: text;
   margin-top: 4px;
 
-  .hljs {
-    background-color: transparent;
-    border: 1px solid #333;
-    border-radius: 3px;
-  }
-
   p:first-of-type {
     margin-top: 0;
   }
@@ -78,27 +72,7 @@
     background-color: #555;
   }
 
-  pre {
-    white-space: pre-wrap;
-  }
-
   span {
     word-break: break-all;
-  }
-
-  code {
-    font-weight: 600;
-    padding: 3px 5px;
-    border-radius: 2px;
-    font-size: 90%;
-    display: inline-block;
-    font-family:
-      ui-monospace,
-      SFMono-Regular,
-      SF Mono,
-      Menlo,
-      Consolas,
-      Liberation Mono,
-      monospace;
   }
 }

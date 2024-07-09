@@ -5,7 +5,6 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { reverse } from 'lodash'
-import hljs from 'highlight.js'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
@@ -90,8 +89,6 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
       setMessages(messages || [])
     })
   }, [topic.id])
-
-  useEffect(() => hljs.highlightAll(), [messages, lastMessage])
 
   useEffect(() => {
     messagesRef.current?.scrollTo({ top: 100000, behavior: 'auto' })

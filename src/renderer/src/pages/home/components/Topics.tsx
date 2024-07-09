@@ -15,7 +15,7 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-const TopicList: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
+const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
   const { removeTopic, updateTopic, removeAllTopics } = useAssistant(assistant.id)
   const currentTopic = useRef<Topic | null>(null)
@@ -162,4 +162,4 @@ const DeleteIcon = styled(DeleteOutlined)`
   font-size: 16px;
 `
 
-export default TopicList
+export default Topics
