@@ -31,7 +31,7 @@ const AppsPage: FC = () => {
   return (
     <Container>
       <Navbar>
-        <NavbarCenter>Assistant Market</NavbarCenter>
+        <NavbarCenter style={{ borderRight: 'none' }}>Assistant Market</NavbarCenter>
       </Navbar>
       <ContentContainer>
         {Object.keys(assistantGroups).map((group) => (

@@ -5,8 +5,15 @@ import React, { useEffect, useState } from 'react'
 
 let id = 0
 let onPop = () => {}
-let onShow = ({ element, key }: { element: React.FC | React.ReactNode; key: number }) => {}
-let onHide = ({ key }: { key: number }) => {}
+
+let onShow = ({ element, key }: { element: React.FC | React.ReactNode; key: number }) => {
+  element
+  key
+}
+
+let onHide = ({ key }: { key: number }) => {
+  key
+}
 
 interface Props {
   children?: React.ReactNode

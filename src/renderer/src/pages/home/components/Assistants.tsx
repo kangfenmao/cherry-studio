@@ -88,10 +88,7 @@ const Container = styled.div`
   max-width: var(--assistants-width);
   border-right: 0.5px solid var(--color-border);
   height: calc(100vh - var(--navbar-height));
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  overflow-y: auto;
 `
 
 const AssistantItem = styled.div`

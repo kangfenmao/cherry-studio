@@ -8,7 +8,7 @@ import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 function createWindow(): void {
   // Load the previous state with fallback to defaults
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 900,
+    defaultWidth: 1080,
     defaultHeight: 670
   })
 
@@ -20,10 +20,9 @@ function createWindow(): void {
     height: mainWindowState.height,
     minWidth: 1080,
     minHeight: 500,
-    show: false,
+    show: true,
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
-    transparent: true,
     trafficLightPosition: { x: 8, y: 8 },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {

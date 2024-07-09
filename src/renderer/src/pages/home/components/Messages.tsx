@@ -30,6 +30,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     content: assistant.description,
     assistantId: assistant.id,
     topicId: topic.id,
+    status: 'pending',
     createdAt: new Date().toISOString()
   }
 
