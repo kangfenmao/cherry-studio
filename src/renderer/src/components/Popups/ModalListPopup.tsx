@@ -1,4 +1,4 @@
-import { Button, Modal } from 'antd'
+import { Avatar, Button, Modal } from 'antd'
 import { useState } from 'react'
 import { TopView } from '../TopView'
 import { Model, Provider } from '@renderer/types'
@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { SYSTEM_MODELS } from '@renderer/config/models'
+import { getModelLogo } from '@renderer/services/provider'
 
 interface ShowParams {
   provider: Provider
@@ -64,7 +65,10 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
               const hasModel = provider.models.find((m) => m.id === model.id)
               return (
                 <ListItem key={model.id}>
-                  <ListItemName>{model.id}</ListItemName>
+                  <ListItemHeader>
+                    <Avatar src={getModelLogo(model.id)} size={24} />
+                    <ListItemName>{model.id}</ListItemName>
+                  </ListItemHeader>
                   {hasModel ? (
                     <Button type="default" onClick={() => onRemoveModel(model)} icon={<MinusOutlined />} />
                   ) : (
@@ -104,10 +108,20 @@ const ListItem = styled.div`
   padding: 10px 22px;
 `
 
+const ListItemHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-right: 10px;
+  height: 22px;
+`
+
 const ListItemName = styled.div`
   color: #fff;
   font-size: 14px;
   font-weight: 600;
+  margin-left: 6px;
 `
 
 export default class ModalListPopup {

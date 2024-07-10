@@ -127,22 +127,6 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       defaultEnabled: false
     },
     {
-      id: 'google/gemma-2-27b-it',
-      provider: 'silicon',
-      name: 'gemma-2-27b-it',
-      group: 'Gemma',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
-      id: 'google/gemma-2-9b-it',
-      provider: 'silicon',
-      name: 'gemma-2-9b-it',
-      group: 'Gemma',
-      temperature: 0.7,
-      defaultEnabled: false
-    },
-    {
       id: 'THUDM/glm-4-9b-chat',
       provider: 'silicon',
       name: 'glm-4-9b-chat',
