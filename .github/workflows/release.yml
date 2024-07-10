@@ -1,0 +1,59 @@
+name: Build/Release Cherry Studio
+
+on:
+  push:
+    tags:
+      - v*.*.*
+  push:
+    branches:
+      - release
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: build-linux
+        if: matrix.os == 'ubuntu-latest'
+        run: yarn build:linux
+
+      - name: build-mac
+        if: matrix.os == 'macos-latest'
+        run: yarn build:mac
+
+      - name: build-win
+        if: matrix.os == 'windows-latest'
+        run: yarn build:win
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.snap
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/*.yml
+            dist/*.blockmap
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
