@@ -3,7 +3,7 @@ import { uuid } from '@renderer/utils'
 import { EVENT_NAMES, EventEmitter } from './event'
 import { ChatCompletionMessageParam, ChatCompletionSystemMessageParam } from 'openai/resources'
 import OpenAI from 'openai'
-import { getAssistantProvider, getDefaultModel } from './assistant'
+import { getAssistantProvider, getDefaultModel, getProviderByModel, getTopNamingModel } from './assistant'
 import { takeRight } from 'lodash'
 import dayjs from 'dayjs'
 
@@ -77,10 +77,9 @@ interface FetchMessagesSummaryParams {
 }
 
 export async function fetchMessagesSummary({ messages, assistant }: FetchMessagesSummaryParams) {
-  const provider = getAssistantProvider(assistant)
+  const model = getTopNamingModel() || getDefaultModel()
+  const provider = getProviderByModel(model)
   const openaiProvider = getOpenAiProvider(provider)
-  const defaultModel = getDefaultModel()
-  const model = assistant.model || defaultModel
 
   const userMessages: ChatCompletionMessageParam[] = takeRight(messages, 5).map((message) => ({
     role: 'user',

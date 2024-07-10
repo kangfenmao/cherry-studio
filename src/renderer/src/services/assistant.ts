@@ -28,6 +28,10 @@ export function getDefaultModel() {
   return store.getState().llm.defaultModel
 }
 
+export function getTopNamingModel() {
+  return store.getState().llm.topicNamingModel
+}
+
 export function getAssistantProvider(assistant: Assistant) {
   const providers = store.getState().llm.providers
   const provider = providers.find((p) => p.id === assistant.model?.provider)
