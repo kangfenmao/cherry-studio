@@ -73,7 +73,9 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
           {modelGroups[group].map((model) => (
             <ModelListItem key={model.id}>
-              <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }} />
+              <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
+                {model.name[0]}
+              </Avatar>
               {model.name}
             </ModelListItem>
           ))}

@@ -31,7 +31,7 @@ export function getProviderLogo(providerId: string) {
     case 'ollama':
       return OllamaProviderLogo
     default:
-      return ''
+      return undefined
   }
 }
 
@@ -53,5 +53,5 @@ export function getModelLogo(modelId: string) {
     }
   }
 
-  return ''
+  return undefined
 }

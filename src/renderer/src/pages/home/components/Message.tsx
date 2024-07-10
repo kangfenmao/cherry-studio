@@ -10,6 +10,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { getModelLogo } from '@renderer/services/provider'
 import Logo from '@renderer/assets/images/logo.png'
 import { SyncOutlined } from '@ant-design/icons'
+import { firstLetter } from '@renderer/utils'
 
 interface Props {
   message: Message
@@ -44,7 +45,9 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
     <MessageContainer key={message.id}>
       <AvatarWrapper>
         {message.role === 'assistant' ? (
-          <Avatar src={message.modelId ? getModelLogo(message.modelId) : Logo} />
+          <Avatar src={message.modelId ? getModelLogo(message.modelId) : Logo}>
+            {firstLetter(message.modelId).toUpperCase()}
+          </Avatar>
         ) : (
           <Avatar src={avatar} />
         )}

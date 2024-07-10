@@ -88,3 +88,8 @@ export function droppableReorder<T>(list: T[], startIndex: number, endIndex: num
   result.splice(endIndex, 0, ...removed)
   return result
 }
+
+// firstLetter
+export const firstLetter = (str?: string) => {
+  return str ? str[0] : ''
+}
