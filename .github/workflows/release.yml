@@ -4,9 +4,6 @@ on:
   push:
     tags:
       - v*.*.*
-  push:
-    branches:
-      - release
 
 jobs:
   release:
@@ -14,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
