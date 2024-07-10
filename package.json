@@ -31,6 +31,7 @@
     "@electron-toolkit/eslint-config-ts": "^1.0.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@fontsource/inter": "^5.0.18",
+    "@hello-pangea/dnd": "^16.6.0",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/lodash": "^4.17.5",
     "@types/node": "^18.19.9",

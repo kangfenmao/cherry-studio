@@ -21,6 +21,9 @@ const assistantsSlice = createSlice({
     updateDefaultAssistant: (state, action: PayloadAction<{ assistant: Assistant }>) => {
       state.defaultAssistant = action.payload.assistant
     },
+    updateAssistants: (state, action: PayloadAction<Assistant[]>) => {
+      state.assistants = action.payload
+    },
     addAssistant: (state, action: PayloadAction<Assistant>) => {
       state.assistants.push(action.payload)
     },
@@ -89,6 +92,7 @@ const assistantsSlice = createSlice({
 
 export const {
   updateDefaultAssistant,
+  updateAssistants,
   addAssistant,
   removeAssistant,
   updateAssistant,

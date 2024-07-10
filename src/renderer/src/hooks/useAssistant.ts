@@ -5,6 +5,7 @@ import {
   removeAllTopics as _removeAllTopics,
   removeTopic as _removeTopic,
   setModel as _setModel,
+  updateAssistants as _updateAssistants,
   updateDefaultAssistant as _updateDefaultAssistant,
   updateTopic as _updateTopic,
   addAssistant,
@@ -21,6 +22,7 @@ export function useAssistants() {
 
   return {
     assistants,
+    updateAssistants: (assistants: Assistant[]) => dispatch(_updateAssistants(assistants)),
     addAssistant: (assistant: Assistant) => dispatch(addAssistant(assistant)),
     updateAssistant: (assistant: Assistant) => dispatch(updateAssistant(assistant)),
     removeAssistant: (id: string) => {

@@ -1,13 +1,14 @@
-import { FC, useRef } from 'react'
-import styled from 'styled-components'
+import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistants } from '@renderer/hooks/useAssistant'
+import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant } from '@renderer/types'
+import { uuid } from '@renderer/utils'
 import { Dropdown, MenuProps } from 'antd'
 import { last } from 'lodash'
-import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { uuid } from '@renderer/utils'
-import { getDefaultTopic } from '@renderer/services/assistant'
+import { FC, useRef } from 'react'
+import styled from 'styled-components'
 
 interface Props {
   activeAssistant: Assistant
@@ -15,8 +16,15 @@ interface Props {
   onCreateAssistant: () => void
 }
 
+const reorder = (list: Assistant[], startIndex: number, endIndex: number, len = 1) => {
+  const result = Array.from(list)
+  const removed = result.splice(startIndex, len)
+  result.splice(endIndex, 0, ...removed)
+  return result
+}
+
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
-  const { assistants, removeAssistant, updateAssistant, addAssistant } = useAssistants()
+  const { assistants, removeAssistant, updateAssistant, addAssistant, updateAssistants } = useAssistants()
   const targetAssistant = useRef<Assistant | null>(null)
 
   const onDelete = (assistant: Assistant) => {
@@ -61,22 +69,45 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
     }
   ]
 
+  const onDragEnd = (result: DropResult) => {
+    if (result.destination) {
+      const sourceIndex = result.source.index
+      const destIndex = result.destination.index
+      const reorderAssistants = reorder(assistants, sourceIndex, destIndex)
+      updateAssistants(reorderAssistants)
+    }
+  }
+
   return (
     <Container>
-      {assistants.map((assistant) => (
-        <Dropdown
-          key={assistant.id}
-          menu={{ items }}
-          trigger={['contextMenu']}
-          onOpenChange={() => (targetAssistant.current = assistant)}>
-          <AssistantItem
-            onClick={() => setActiveAssistant(assistant)}
-            className={assistant.id === activeAssistant?.id ? 'active' : ''}>
-            <AssistantName>{assistant.name}</AssistantName>
-            <AssistantLastMessage>{assistant.description}</AssistantLastMessage>
-          </AssistantItem>
-        </Dropdown>
-      ))}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {assistants.map((assistant, index) => (
+                <Draggable key={`draggable_${assistant.id}_${index}`} draggableId={assistant.id} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Dropdown
+                        key={assistant.id}
+                        menu={{ items }}
+                        trigger={['contextMenu']}
+                        onOpenChange={() => (targetAssistant.current = assistant)}>
+                        <AssistantItem
+                          onClick={() => setActiveAssistant(assistant)}
+                          className={assistant.id === activeAssistant?.id ? 'active' : ''}>
+                          <AssistantName>{assistant.name}</AssistantName>
+                          <AssistantLastMessage>{assistant.description}</AssistantLastMessage>
+                        </AssistantItem>
+                      </Dropdown>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </Container>
   )
 }
