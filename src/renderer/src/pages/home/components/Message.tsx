@@ -9,6 +9,7 @@ import CodeBlock from './CodeBlock'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { getModelLogo } from '@renderer/services/provider'
 import Logo from '@renderer/assets/images/logo.png'
+import { SyncOutlined } from '@ant-design/icons'
 
 interface Props {
   message: Message
@@ -49,9 +50,16 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
         )}
       </AvatarWrapper>
       <MessageContent>
-        <Markdown className="markdown" components={{ code: CodeBlock as any }}>
-          {message.content}
-        </Markdown>
+        {message.status === 'sending' && (
+          <MessageContentLoading>
+            <SyncOutlined spin size={24} />
+          </MessageContentLoading>
+        )}
+        {message.status !== 'sending' && (
+          <Markdown className="markdown" components={{ code: CodeBlock as any }}>
+            {message.content}
+          </Markdown>
+        )}
         {showMenu && (
           <MenusBar className="menubar">
             {message.role === 'user' && (
@@ -96,6 +104,13 @@ const MessageContent = styled.div`
       opacity: 1;
     }
   }
+`
+
+const MessageContentLoading = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 32px;
 `
 
 const MenusBar = styled.div`

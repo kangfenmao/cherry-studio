@@ -37,8 +37,10 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     topicId: topic.id,
     modelId: model.id,
     createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    status: 'pending'
+    status: 'sending'
   }
+
+  onResponse({ ..._message })
 
   try {
     const stream = await openaiProvider.chat.completions.create({
@@ -54,7 +56,7 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
 
     for await (const chunk of stream) {
       content = content + (chunk.choices[0]?.delta?.content || '')
-      onResponse({ ..._message, content })
+      onResponse({ ..._message, content, status: 'pending' })
     }
 
     _message.content = content

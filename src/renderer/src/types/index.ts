@@ -15,7 +15,7 @@ export type Message = {
   topicId: string
   modelId?: string
   createdAt: string
-  status: 'pending' | 'success' | 'error'
+  status: 'sending' | 'pending' | 'success' | 'error'
 }
 
 export type Topic = {
@@ -37,7 +37,7 @@ export type Provider = {
   apiKey: string
   apiHost: string
   models: Model[]
-  enabled: boolean
+  enabled?: boolean
   isSystem?: boolean
 }
 
