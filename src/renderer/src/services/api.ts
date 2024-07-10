@@ -77,7 +77,7 @@ interface FetchMessagesSummaryParams {
 }
 
 export async function fetchMessagesSummary({ messages, assistant }: FetchMessagesSummaryParams) {
-  const model = getTopNamingModel() || getDefaultModel()
+  const model = getTopNamingModel() || assistant.model || getDefaultModel()
   const provider = getProviderByModel(model)
   const openaiProvider = getOpenAiProvider(provider)
 
