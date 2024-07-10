@@ -42,6 +42,26 @@ const migrate = createMigrate({
         ]
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '4': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'ollama',
+            name: 'Ollama',
+            apiKey: '',
+            apiHost: 'http://localhost:11434/v1/',
+            isSystem: true,
+            models: []
+          }
+        ]
+      }
+    }
   }
 })
 

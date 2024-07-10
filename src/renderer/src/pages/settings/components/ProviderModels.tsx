@@ -1,18 +1,20 @@
 import { Provider } from '@renderer/types'
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Avatar, Button, Card, Divider, Input } from 'antd'
+import { Avatar, Button, Card, Divider, Flex, Input } from 'antd'
 import { useProvider } from '@renderer/hooks/useProvider'
-import ModalListPopup from '@renderer/components/Popups/ModalListPopup'
 import { groupBy } from 'lodash'
 import { SettingContainer, SettingSubtitle, SettingTitle } from './SettingComponent'
 import { getModelLogo } from '@renderer/services/provider'
+import { EditOutlined, PlusOutlined } from '@ant-design/icons'
+import ModalAddPopup from './ModelAddPopup'
+import ModelListPopup from './ModelListPopup'
 
 interface Props {
   provider: Provider
 }
 
-const ProviderModals: FC<Props> = ({ provider }) => {
+const ProviderModels: FC<Props> = ({ provider }) => {
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
   const { updateProvider, models } = useProvider(provider.id)
@@ -32,8 +34,12 @@ const ProviderModals: FC<Props> = ({ provider }) => {
     updateProvider({ ...provider, apiHost })
   }
 
-  const onAddModal = () => {
-    ModalListPopup.show({ provider })
+  const onManageModel = () => {
+    ModelListPopup.show({ provider })
+  }
+
+  const onAddModel = () => {
+    ModalAddPopup.show({ title: 'Add Model', provider })
   }
 
   return (
@@ -66,9 +72,14 @@ const ProviderModals: FC<Props> = ({ provider }) => {
           ))}
         </Card>
       ))}
-      <Button type="primary" style={{ width: '100px', marginTop: '10px' }} onClick={onAddModal}>
-        Edit Models
-      </Button>
+      <Flex gap={10} style={{ marginTop: '10px' }}>
+        <Button type="primary" onClick={onManageModel} icon={<EditOutlined />}>
+          Manage
+        </Button>
+        <Button type="default" onClick={onAddModel} icon={<PlusOutlined />}>
+          Add
+        </Button>
+      </Flex>
     </SettingContainer>
   )
 }
@@ -81,4 +92,4 @@ const ModelListItem = styled.div`
   padding: 5px 0;
 `
 
-export default ProviderModals
+export default ProviderModels

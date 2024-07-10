@@ -1,8 +1,8 @@
-import { Avatar, Button, Modal } from 'antd'
+import { Avatar, Button, Empty, Modal } from 'antd'
 import { useState } from 'react'
-import { TopView } from '../TopView'
+import { TopView } from '../../../components/TopView'
 import { Model, Provider } from '@renderer/types'
-import { groupBy } from 'lodash'
+import { groupBy, isEmpty, uniqBy } from 'lodash'
 import styled from 'styled-components'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { useProvider } from '@renderer/hooks/useProvider'
@@ -19,10 +19,11 @@ interface Props extends ShowParams {
 
 const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
   const [open, setOpen] = useState(true)
-  const { provider, addModel, removeModel } = useProvider(_provider.id)
+  const { provider, models, addModel, removeModel } = useProvider(_provider.id)
 
-  const systemModels = SYSTEM_MODELS[_provider.id]
-  const systemModelGroups = groupBy(systemModels, 'group')
+  const systemModels = SYSTEM_MODELS[_provider.id] || []
+  const allModels = uniqBy([...systemModels, ...models], 'id')
+  const systemModelGroups = groupBy(allModels, 'group')
 
   const onOk = () => {
     setOpen(false)
@@ -79,6 +80,7 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
             })}
           </div>
         ))}
+        {isEmpty(allModels) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No models" />}
       </ListContainer>
     </Modal>
   )
@@ -124,7 +126,7 @@ const ListItemName = styled.div`
   margin-left: 6px;
 `
 
-export default class ModalListPopup {
+export default class ModelListPopup {
   static topviewId = 0
   static hide() {
     TopView.hide(this.topviewId)

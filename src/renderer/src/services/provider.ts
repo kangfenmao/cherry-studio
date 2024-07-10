@@ -4,6 +4,7 @@ import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png
 import YiProviderLogo from '@renderer/assets/images/providers/yi.svg'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
+import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
@@ -14,66 +15,42 @@ import LlamaModelLogo from '@renderer/assets/images/models/llama.jpeg'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
 
 export function getProviderLogo(providerId: string) {
-  if (providerId === 'openai') {
-    return OpenAiProviderLogo
+  switch (providerId) {
+    case 'openai':
+      return OpenAiProviderLogo
+    case 'silicon':
+      return SiliconFlowProviderLogo
+    case 'deepseek':
+      return DeepSeekProviderLogo
+    case 'yi':
+      return YiProviderLogo
+    case 'groq':
+      return GroqProviderLogo
+    case 'zhipu':
+      return ZhipuProviderLogo
+    case 'ollama':
+      return OllamaProviderLogo
+    default:
+      return ''
   }
-
-  if (providerId === 'silicon') {
-    return SiliconFlowProviderLogo
-  }
-
-  if (providerId === 'deepseek') {
-    return DeepSeekProviderLogo
-  }
-
-  if (providerId === 'yi') {
-    return YiProviderLogo
-  }
-
-  if (providerId === 'groq') {
-    return GroqProviderLogo
-  }
-
-  if (providerId === 'zhipu') {
-    return ZhipuProviderLogo
-  }
-
-  return ''
 }
 
 export function getModelLogo(modelId: string) {
-  const _modelId = modelId.toLowerCase()
-
-  if (_modelId.includes('gpt')) {
-    return ChatGPTModelLogo
+  const logoMap = {
+    gpt: ChatGPTModelLogo,
+    glm: ChatGLMModelLogo,
+    deepseek: DeepSeekModelLogo,
+    qwen: QwenModelLogo,
+    gemma: GemmaModelLogo,
+    'yi-': YiModelLogo,
+    llama: LlamaModelLogo,
+    mixtral: MixtralModelLogo
   }
 
-  if (_modelId.includes('glm')) {
-    return ChatGLMModelLogo
-  }
-
-  if (_modelId.includes('deepseek')) {
-    return DeepSeekModelLogo
-  }
-
-  if (_modelId.includes('qwen')) {
-    return QwenModelLogo
-  }
-
-  if (_modelId.includes('gemma')) {
-    return GemmaModelLogo
-  }
-
-  if (_modelId.includes('yi-')) {
-    return YiModelLogo
-  }
-
-  if (_modelId.includes('llama')) {
-    return LlamaModelLogo
-  }
-
-  if (_modelId.includes('mixtral')) {
-    return MixtralModelLogo
+  for (const key in logoMap) {
+    if (modelId.toLowerCase().includes(key)) {
+      return logoMap[key]
+    }
   }
 
   return ''
