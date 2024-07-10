@@ -18,56 +18,63 @@ const initialState: LlmState = {
       name: 'OpenAI',
       apiKey: '',
       apiHost: 'https://api.openai.com',
+      models: SYSTEM_MODELS.openai.filter((m) => m.defaultEnabled),
       isSystem: true,
-      models: SYSTEM_MODELS.openai.filter((m) => m.defaultEnabled)
+      enabled: true
     },
     {
       id: 'silicon',
       name: 'Silicon',
       apiKey: '',
       apiHost: 'https://api.siliconflow.cn',
+      models: SYSTEM_MODELS.silicon.filter((m) => m.defaultEnabled),
       isSystem: true,
-      models: SYSTEM_MODELS.silicon.filter((m) => m.defaultEnabled)
+      enabled: false
     },
     {
       id: 'deepseek',
       name: 'deepseek',
       apiKey: '',
       apiHost: 'https://api.deepseek.com',
+      models: SYSTEM_MODELS.deepseek.filter((m) => m.defaultEnabled),
       isSystem: true,
-      models: SYSTEM_MODELS.deepseek.filter((m) => m.defaultEnabled)
+      enabled: false
     },
     {
       id: 'yi',
       name: 'Yi',
       apiKey: '',
       apiHost: 'https://api.lingyiwanwu.com',
+      models: SYSTEM_MODELS.yi.filter((m) => m.defaultEnabled),
       isSystem: true,
-      models: SYSTEM_MODELS.yi.filter((m) => m.defaultEnabled)
+      enabled: false
     },
     {
       id: 'zhipu',
       name: 'ZhiPu',
       apiKey: '',
       apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
+      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled),
       isSystem: true,
-      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled)
+      enabled: false
     },
     {
       id: 'groq',
       name: 'Groq',
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
+      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled),
       isSystem: true,
-      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled)
+      enabled: false
     },
     {
       id: 'ollama',
       name: 'Ollama',
       apiKey: '',
       apiHost: 'http://localhost:11434/v1/',
+      models: [],
       isSystem: true,
-      models: []
+      enabled: false
     }
   ]
 }

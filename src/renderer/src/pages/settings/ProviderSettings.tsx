@@ -2,9 +2,9 @@ import { useSystemProviders } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
-import { Avatar } from 'antd'
+import { Avatar, Tag } from 'antd'
 import { getProviderLogo } from '@renderer/services/provider'
-import ProviderModels from './components/ProviderModels'
+import ProviderSetting from './components/ProviderSetting'
 
 const ProviderSettings: FC = () => {
   const providers = useSystemProviders()
@@ -20,10 +20,15 @@ const ProviderSettings: FC = () => {
             onClick={() => setSelectedProvider(provider)}>
             <Avatar src={getProviderLogo(provider.id)} size={22} />
             <ProviderItemName>{provider.name}</ProviderItemName>
+            {provider.enabled && (
+              <Tag color="green" style={{ marginLeft: 'auto' }}>
+                ON
+              </Tag>
+            )}
           </ProviderListItem>
         ))}
       </ProviderListContainer>
-      <ProviderModels provider={selectedProvider} />
+      <ProviderSetting provider={selectedProvider} key={JSON.stringify(selectedProvider)} />
     </Container>
   )
 }

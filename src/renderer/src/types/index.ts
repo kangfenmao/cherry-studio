@@ -37,6 +37,7 @@ export type Provider = {
   apiKey: string
   apiHost: string
   models: Model[]
+  enabled: boolean
   isSystem?: boolean
 }
 

@@ -1,7 +1,7 @@
 import { Provider } from '@renderer/types'
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Avatar, Button, Card, Divider, Flex, Input } from 'antd'
+import { Avatar, Button, Card, Divider, Flex, Input, Switch } from 'antd'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { groupBy } from 'lodash'
 import { SettingContainer, SettingSubtitle, SettingTitle } from './SettingComponent'
@@ -14,7 +14,7 @@ interface Props {
   provider: Provider
 }
 
-const ProviderModels: FC<Props> = ({ provider }) => {
+const ProviderSetting: FC<Props> = ({ provider }) => {
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
   const { updateProvider, models } = useProvider(provider.id)
@@ -44,7 +44,14 @@ const ProviderModels: FC<Props> = ({ provider }) => {
 
   return (
     <SettingContainer>
-      <SettingTitle>{provider.name}</SettingTitle>
+      <SettingTitle>
+        <span>{provider.name}</span>
+        <Switch
+          defaultValue={provider.enabled}
+          key={provider.id}
+          onChange={(enabled) => updateProvider({ ...provider, enabled })}
+        />
+      </SettingTitle>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
       <SettingSubtitle>API Key</SettingSubtitle>
       <Input
@@ -92,4 +99,4 @@ const ModelListItem = styled.div`
   padding: 5px 0;
 `
 
-export default ProviderModels
+export default ProviderSetting

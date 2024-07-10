@@ -8,7 +8,11 @@ import { Assistant, Model, Provider } from '@renderer/types'
 import { useDefaultModel } from './useAssistant'
 
 export function useProviders() {
-  return useAppSelector((state) => state.llm.providers)
+  return useAppSelector((state) => state.llm.providers.filter((p) => p.enabled))
+}
+
+export function useSystemProviders() {
+  return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem))
 }
 
 export function useProvider(id: string) {
@@ -29,8 +33,4 @@ export function useProviderByAssistant(assistant: Assistant) {
   const model = assistant.model || defaultModel
   const { provider } = useProvider(model.provider)
   return provider
-}
-
-export function useSystemProviders() {
-  return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem))
 }
