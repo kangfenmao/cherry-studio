@@ -2,7 +2,7 @@ import { useSystemProviders } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
-import ModalProviderSetting from './components/ModalProviderSetting'
+import ProviderModals from './components/ProviderModals'
 import { Avatar } from 'antd'
 import { getProviderLogo } from '@renderer/services/provider'
 
@@ -23,7 +23,7 @@ const ProviderSettings: FC = () => {
           </ProviderListItem>
         ))}
       </ProviderListContainer>
-      <ModalProviderSetting provider={selectedProvider} />
+      <ProviderModals provider={selectedProvider} />
     </Container>
   )
 }

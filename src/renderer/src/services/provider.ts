@@ -3,6 +3,7 @@ import SiliconFlowProviderLogo from '@renderer/assets/images/providers/silicon.p
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
 import YiProviderLogo from '@renderer/assets/images/providers/yi.svg'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
+import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
@@ -31,6 +32,10 @@ export function getProviderLogo(providerId: string) {
 
   if (providerId === 'groq') {
     return GroqProviderLogo
+  }
+
+  if (providerId === 'zhipu') {
+    return ZhipuProviderLogo
   }
 
   return ''

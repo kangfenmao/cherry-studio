@@ -12,7 +12,7 @@ interface Props {
   provider: Provider
 }
 
-const ModalProviderSetting: FC<Props> = ({ provider }) => {
+const ProviderModals: FC<Props> = ({ provider }) => {
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
   const { updateProvider, models } = useProvider(provider.id)
@@ -61,7 +61,7 @@ const ModalProviderSetting: FC<Props> = ({ provider }) => {
           {modelGroups[group].map((model) => (
             <ModelListItem key={model.id}>
               <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }} />
-              {model.id}
+              {model.name}
             </ModelListItem>
           ))}
         </Card>
@@ -81,4 +81,4 @@ const ModelListItem = styled.div`
   padding: 5px 0;
 `
 
-export default ModalProviderSetting
+export default ProviderModals

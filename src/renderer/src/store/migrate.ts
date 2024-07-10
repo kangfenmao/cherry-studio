@@ -22,6 +22,26 @@ const migrate = createMigrate({
         ]
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '3': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'zhipu',
+            name: 'ZhiPu',
+            apiKey: '',
+            apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
+            isSystem: true,
+            models: SYSTEM_MODELS.zhipu.filter((m) => m.defaultEnabled)
+          }
+        ]
+      }
+    }
   }
 })
 

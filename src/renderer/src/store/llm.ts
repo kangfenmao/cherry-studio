@@ -46,6 +46,14 @@ const initialState: LlmState = {
       models: SYSTEM_MODELS.yi.filter((m) => m.defaultEnabled)
     },
     {
+      id: 'zhipu',
+      name: 'ZhiPu',
+      apiKey: '',
+      apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
+      isSystem: true,
+      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled)
+    },
+    {
       id: 'groq',
       name: 'Groq',
       apiKey: '',

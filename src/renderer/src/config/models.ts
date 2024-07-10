@@ -121,7 +121,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'deepseek-ai/deepseek-llm-67b-chat',
       provider: 'silicon',
-      name: 'deepseek-llm-67b-chat',
+      name: 'Deepseek-LLM-67B-Chat',
       group: 'DeepSeek',
       temperature: 0.7,
       defaultEnabled: false
@@ -129,7 +129,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'THUDM/glm-4-9b-chat',
       provider: 'silicon',
-      name: 'glm-4-9b-chat',
+      name: 'GLM-4-9B-Chat',
       group: 'GLM',
       temperature: 0.7,
       defaultEnabled: true
@@ -137,7 +137,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'THUDM/chatglm3-6b',
       provider: 'silicon',
-      name: 'chatglm3-6b',
+      name: 'GhatGLM3-6B',
       group: 'GLM',
       temperature: 0.7,
       defaultEnabled: false
@@ -171,16 +171,16 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'deepseek-chat',
       provider: 'deepseek',
-      name: 'deepseek-chat',
-      group: 'Deepseek Chat',
+      name: 'DeepSeek Chat',
+      group: 'DeepSeek Chat',
       temperature: 0.7,
       defaultEnabled: true
     },
     {
       id: 'deepseek-coder',
       provider: 'deepseek',
-      name: 'deepseek-coder',
-      group: 'Deepseek Coder',
+      name: 'DeepSeek Coder',
+      group: 'DeepSeek Coder',
       temperature: 1.0,
       defaultEnabled: true
     }
@@ -189,7 +189,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'yi-large',
       provider: 'yi',
-      name: 'yi-large',
+      name: 'Yi-Large',
       group: 'Yi',
       temperature: 0.7,
       defaultEnabled: false
@@ -197,7 +197,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'yi-large-turbo',
       provider: 'yi',
-      name: 'yi-large-turbo',
+      name: 'Yi-Large-Turbo',
       group: 'Yi',
       temperature: 0.7,
       defaultEnabled: true
@@ -205,7 +205,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'yi-large-rag',
       provider: 'yi',
-      name: 'yi-large-rag',
+      name: 'Yi-Large-Rag',
       group: 'Yi',
       temperature: 0.7,
       defaultEnabled: false
@@ -213,7 +213,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'yi-medium',
       provider: 'yi',
-      name: 'yi-medium',
+      name: 'Yi-Medium',
       group: 'Yi',
       temperature: 0.7,
       defaultEnabled: true
@@ -221,7 +221,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'yi-medium-200k',
       provider: 'yi',
-      name: 'yi-medium-200k',
+      name: 'Yi-Medium-200k',
       group: 'Yi',
       temperature: 0.7,
       defaultEnabled: false
@@ -229,8 +229,58 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'yi-spark',
       provider: 'yi',
-      name: 'yi-spark',
+      name: 'Yi-Spark',
       group: 'Yi',
+      temperature: 0.7,
+      defaultEnabled: false
+    }
+  ],
+  zhipu: [
+    {
+      id: 'glm-4-0520',
+      provider: 'zhipu',
+      name: 'GLM-4-0520',
+      group: 'GLM',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'glm-4',
+      provider: 'zhipu',
+      name: 'GLM-4',
+      group: 'GLM',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'glm-4-airx',
+      provider: 'zhipu',
+      name: 'GLM-4-AirX',
+      group: 'GLM',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'glm-4-air',
+      provider: 'zhipu',
+      name: 'GLM-4-Air',
+      group: 'GLM',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'glm-4v',
+      provider: 'zhipu',
+      name: 'GLM-4V',
+      group: 'GLM',
+      temperature: 0.7,
+      defaultEnabled: false
+    },
+    {
+      id: 'glm-4-alltools',
+      provider: 'zhipu',
+      name: 'GLM-4-AllTools',
+      group: 'GLM',
       temperature: 0.7,
       defaultEnabled: false
     }
@@ -239,7 +289,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'llama3-8b-8192',
       provider: 'groq',
-      name: 'LLaMA3 8b',
+      name: 'LLaMA3 8B',
       group: 'Llama3',
       temperature: 0.7,
       defaultEnabled: false
@@ -247,7 +297,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'llama3-70b-8192',
       provider: 'groq',
-      name: 'LLaMA3 70b',
+      name: 'LLaMA3 70B',
       group: 'Llama3',
       temperature: 0.7,
       defaultEnabled: true
@@ -255,7 +305,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'mixtral-8x7b-32768',
       provider: 'groq',
-      name: 'Mixtral 8x7b',
+      name: 'Mixtral 8x7B',
       group: 'Mixtral',
       temperature: 0.7,
       defaultEnabled: false
@@ -263,7 +313,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     {
       id: 'gemma-7b-it',
       provider: 'groq',
-      name: 'Gemma 7b',
+      name: 'Gemma 7B',
       group: 'Gemma',
       temperature: 0.7,
       defaultEnabled: false

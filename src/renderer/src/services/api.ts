@@ -15,10 +15,11 @@ interface FetchChatCompletionParams {
 }
 
 const getOpenAiProvider = (provider: Provider) => {
+  const host = provider.apiHost
   return new OpenAI({
     dangerouslyAllowBrowser: true,
     apiKey: provider.apiKey,
-    baseURL: `${provider.apiHost}/v1/`
+    baseURL: host.endsWith('/') ? host : `${provider.apiHost}/v1/`
   })
 }
 
