@@ -21,7 +21,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
   return match ? (
     <div>
       <CodeHeader>
-        <CodeLanguage>{match[1]}</CodeLanguage>
+        <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
         <CopyOutlined className="copy" onClick={onCopy} />
       </CodeHeader>
       <SyntaxHighlighter
