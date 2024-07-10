@@ -1,4 +1,4 @@
-appId: com.cherry-studio.app
+appId: com.kangfenmao.CherryStudio
 productName: Cherry Studio
 directories:
   buildResources: build
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: cherry-studio
+  executableName: CherryStudio
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -43,3 +43,4 @@ publish:
   url: https://example.com/auto-updates
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
+afterSign: scripts/notarize.js
