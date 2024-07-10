@@ -4,7 +4,7 @@ import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingP
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { droppableReorder, uuid } from '@renderer/utils'
 import { Dropdown, MenuProps } from 'antd'
 import { last } from 'lodash'
 import { FC, useRef } from 'react'
@@ -14,13 +14,6 @@ interface Props {
   activeAssistant: Assistant
   setActiveAssistant: (assistant: Assistant) => void
   onCreateAssistant: () => void
-}
-
-const reorder = (list: Assistant[], startIndex: number, endIndex: number, len = 1) => {
-  const result = Array.from(list)
-  const removed = result.splice(startIndex, len)
-  result.splice(endIndex, 0, ...removed)
-  return result
 }
 
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
@@ -73,7 +66,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
     if (result.destination) {
       const sourceIndex = result.source.index
       const destIndex = result.destination.index
-      const reorderAssistants = reorder(assistants, sourceIndex, destIndex)
+      const reorderAssistants = droppableReorder<Assistant>(assistants, sourceIndex, destIndex)
       updateAssistants(reorderAssistants)
     }
   }

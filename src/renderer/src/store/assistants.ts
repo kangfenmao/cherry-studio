@@ -65,6 +65,16 @@ const assistantsSlice = createSlice({
           : assistant
       )
     },
+    updateTopics: (state, action: PayloadAction<{ assistantId: string; topics: Topic[] }>) => {
+      state.assistants = state.assistants.map((assistant) =>
+        assistant.id === action.payload.assistantId
+          ? {
+              ...assistant,
+              topics: action.payload.topics
+            }
+          : assistant
+      )
+    },
     removeAllTopics: (state, action: PayloadAction<{ assistantId: string }>) => {
       state.assistants = state.assistants.map((assistant) => {
         if (assistant.id === action.payload.assistantId) {
@@ -99,6 +109,7 @@ export const {
   addTopic,
   removeTopic,
   updateTopic,
+  updateTopics,
   removeAllTopics,
   setModel
 } = assistantsSlice.actions

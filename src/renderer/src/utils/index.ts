@@ -81,3 +81,10 @@ export const getDefaultGroupName = (id: string) => {
 
   return id.toUpperCase()
 }
+
+export function droppableReorder<T>(list: T[], startIndex: number, endIndex: number, len = 1) {
+  const result = Array.from(list)
+  const removed = result.splice(startIndex, len)
+  result.splice(endIndex, 0, ...removed)
+  return result
+}

@@ -8,6 +8,7 @@ import {
   updateAssistants as _updateAssistants,
   updateDefaultAssistant as _updateDefaultAssistant,
   updateTopic as _updateTopic,
+  updateTopics as _updateTopics,
   addAssistant,
   removeAssistant,
   updateAssistant
@@ -46,6 +47,7 @@ export function useAssistant(id: string) {
     addTopic: (topic: Topic) => dispatch(_addTopic({ assistantId: assistant.id, topic })),
     removeTopic: (topic: Topic) => dispatch(_removeTopic({ assistantId: assistant.id, topic })),
     updateTopic: (topic: Topic) => dispatch(_updateTopic({ assistantId: assistant.id, topic })),
+    updateTopics: (topics: Topic[]) => dispatch(_updateTopics({ assistantId: assistant.id, topics })),
     removeAllTopics: () => dispatch(_removeAllTopics({ assistantId: assistant.id })),
     setModel: (model: Model) => dispatch(_setModel({ assistantId: assistant.id, model }))
   }

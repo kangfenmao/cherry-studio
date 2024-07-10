@@ -8,6 +8,8 @@ import { FC, useRef } from 'react'
 import styled from 'styled-components'
 import { DeleteOutlined, EditOutlined, SignatureOutlined } from '@ant-design/icons'
 import LocalStorage from '@renderer/services/storage'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import { droppableReorder } from '@renderer/utils'
 
 interface Props {
   assistant: Assistant
@@ -17,7 +19,7 @@ interface Props {
 
 const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
-  const { removeTopic, updateTopic, removeAllTopics } = useAssistant(assistant.id)
+  const { removeTopic, updateTopic, removeAllTopics, updateTopics } = useAssistant(assistant.id)
   const currentTopic = useRef<Topic | null>(null)
 
   const topicMenuItems: MenuProps['items'] = [
@@ -70,6 +72,14 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
     })
   }
 
+  const onDragEnd = (result: DropResult) => {
+    if (result.destination) {
+      const sourceIndex = result.source.index
+      const destIndex = result.destination.index
+      updateTopics(droppableReorder(assistant.topics, sourceIndex, destIndex))
+    }
+  }
+
   if (!showRightSidebar) {
     return null
   }
@@ -92,17 +102,33 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
           </DeleteButton>
         </Popconfirm>
       </TopicTitle>
-      {assistant.topics.map((topic) => (
-        <Dropdown
-          menu={{ items: topicMenuItems }}
-          trigger={['contextMenu']}
-          key={topic.id}
-          onOpenChange={(open) => open && (currentTopic.current = topic)}>
-          <TopicListItem className={topic.id === activeTopic?.id ? 'active' : ''} onClick={() => setActiveTopic(topic)}>
-            {topic.name}
-          </TopicListItem>
-        </Dropdown>
-      ))}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {assistant.topics.map((topic, index) => (
+                <Draggable key={`draggable_${topic.id}_${index}`} draggableId={topic.id} index={index}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <Dropdown
+                        menu={{ items: topicMenuItems }}
+                        trigger={['contextMenu']}
+                        key={topic.id}
+                        onOpenChange={(open) => open && (currentTopic.current = topic)}>
+                        <TopicListItem
+                          className={topic.id === activeTopic?.id ? 'active' : ''}
+                          onClick={() => setActiveTopic(topic)}>
+                          {topic.name}
+                        </TopicListItem>
+                      </Dropdown>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </Container>
   )
 }
