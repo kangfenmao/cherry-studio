@@ -7,7 +7,13 @@ import { MoreOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { ClearOutlined, HistoryOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import {
+  ClearOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined,
+  HistoryOutlined,
+  PlusCircleOutlined
+} from '@ant-design/icons'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import { isEmpty } from 'lodash'
 import SendMessageSetting from './SendMessageSetting'
@@ -24,6 +30,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut } = useSettings()
+  const [expended, setExpend] = useState(false)
   const inputRef = useRef<TextAreaRef>(null)
 
   const sendMessage = () => {
@@ -100,7 +107,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container id="inputbar">
+    <Container id="inputbar" style={{ minHeight: expended ? '35%' : 'var(--input-bar-height)' }}>
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title=" New Chat " arrow>
@@ -126,6 +133,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                 <ClearOutlined />
               </ToolbarButton>
             </Popconfirm>
+          </Tooltip>
+          <Tooltip placement="top" title=" Expand " arrow>
+            <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
+              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            </ToolbarButton>
           </Tooltip>
         </ToolbarMenu>
         <ToolbarMenu>
@@ -159,6 +171,7 @@ const Container = styled.div`
   height: var(--input-bar-height);
   border-top: 0.5px solid var(--color-border);
   padding: 5px 15px;
+  transition: all 0.3s ease;
 `
 
 const Textarea = styled(TextArea)`
