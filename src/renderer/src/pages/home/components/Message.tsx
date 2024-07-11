@@ -24,6 +24,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const avatar = useAvatar()
 
   const isLastMessage = index === 0
+  const canRegenerate = isLastMessage && message.role === 'assistant'
 
   const onCopy = () => {
     navigator.clipboard.writeText(message.content)
@@ -85,7 +86,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             <Tooltip title="Delete" mouseEnterDelay={0.8}>
               <DeleteOutlined onClick={onDelete} />
             </Tooltip>
-            {isLastMessage && (
+            {canRegenerate && (
               <Tooltip title="Regenerate" mouseEnterDelay={0.8}>
                 <SyncOutlined onClick={onRegenerate} />
               </Tooltip>
