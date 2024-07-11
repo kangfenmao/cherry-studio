@@ -14,12 +14,16 @@ import { firstLetter } from '@renderer/utils'
 
 interface Props {
   message: Message
+  index?: number
+  total?: number
   showMenu?: boolean
   onDeleteMessage?: (message: Message) => void
 }
 
-const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
+const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) => {
   const avatar = useAvatar()
+
+  const isLastMessage = index === 0
 
   const onCopy = () => {
     navigator.clipboard.writeText(message.content)
@@ -39,6 +43,11 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
 
   const onEdit = () => {
     EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message)
+  }
+
+  const onRegenerate = () => {
+    onDeleteMessage?.(message)
+    setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE), 100)
   }
 
   return (
@@ -64,18 +73,23 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
           </Markdown>
         )}
         {showMenu && (
-          <MenusBar className="menubar">
+          <MenusBar className={`menubar ${isLastMessage && 'show'}`}>
             {message.role === 'user' && (
-              <Tooltip title="Edit" mouseEnterDelay={1}>
+              <Tooltip title="Edit" mouseEnterDelay={0.8}>
                 <EditOutlined onClick={onEdit} />
               </Tooltip>
             )}
-            <Tooltip title="Copy" mouseEnterDelay={1}>
+            <Tooltip title="Copy" mouseEnterDelay={0.8}>
               <CopyOutlined onClick={onCopy} />
             </Tooltip>
-            <Tooltip title="Delete" mouseEnterDelay={1}>
+            <Tooltip title="Delete" mouseEnterDelay={0.8}>
               <DeleteOutlined onClick={onDelete} />
             </Tooltip>
+            {isLastMessage && (
+              <Tooltip title="Regenerate" mouseEnterDelay={0.8}>
+                <SyncOutlined onClick={onRegenerate} />
+              </Tooltip>
+            )}
             <MessageMetadata>{message.modelId}</MessageMetadata>
             {message.usage && (
               <>
@@ -110,6 +124,9 @@ const MessageContent = styled.div`
   justify-content: space-between;
   .menubar {
     opacity: 0;
+    &.show {
+      opacity: 1;
+    }
   }
   &:hover {
     .menubar {
