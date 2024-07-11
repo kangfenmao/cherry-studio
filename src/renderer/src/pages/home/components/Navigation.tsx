@@ -12,7 +12,7 @@ interface Props {
 }
 
 const Navigation: FC<Props> = ({ activeAssistant }) => {
-  const providers = useProviders()
+  const { providers } = useProviders()
   const { model, setModel } = useAssistant(activeAssistant.id)
 
   const items: MenuProps['items'] = providers

@@ -1,32 +1,58 @@
-import { useSystemProviders } from '@renderer/hooks/useProvider'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import { useProviders, useSystemProviders } from '@renderer/hooks/useProvider'
+import { getProviderLogo } from '@renderer/services/provider'
 import { Provider } from '@renderer/types'
+import { droppableReorder } from '@renderer/utils'
+import { Avatar, Tag } from 'antd'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
-import { Avatar, Tag } from 'antd'
-import { getProviderLogo } from '@renderer/services/provider'
 import ProviderSetting from './components/ProviderSetting'
 
 const ProviderSettings: FC = () => {
   const providers = useSystemProviders()
+  const { updateProviders } = useProviders()
   const [selectedProvider, setSelectedProvider] = useState<Provider>(providers[0])
+
+  const onDragEnd = (result: DropResult) => {
+    if (result.destination) {
+      const sourceIndex = result.source.index
+      const destIndex = result.destination.index
+      const reorderProviders = droppableReorder<Provider>(providers, sourceIndex, destIndex)
+      updateProviders(reorderProviders)
+    }
+  }
 
   return (
     <Container>
       <ProviderListContainer>
-        {providers.map((provider) => (
-          <ProviderListItem
-            key={JSON.stringify(provider)}
-            className={provider.id === selectedProvider?.id ? 'active' : ''}
-            onClick={() => setSelectedProvider(provider)}>
-            <Avatar src={getProviderLogo(provider.id)} size={22} />
-            <ProviderItemName>{provider.name}</ProviderItemName>
-            {provider.enabled && (
-              <Tag color="green" style={{ marginLeft: 'auto' }}>
-                ON
-              </Tag>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {providers.map((provider, index) => (
+                  <Draggable key={`draggable_${provider.id}_${index}`} draggableId={provider.id} index={index}>
+                    {(provided) => (
+                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <ProviderListItem
+                          key={JSON.stringify(provider)}
+                          className={provider.id === selectedProvider?.id ? 'active' : ''}
+                          onClick={() => setSelectedProvider(provider)}>
+                          <Avatar src={getProviderLogo(provider.id)} size={22} />
+                          <ProviderItemName>{provider.name}</ProviderItemName>
+                          {provider.enabled && (
+                            <Tag color="green" style={{ marginLeft: 'auto' }}>
+                              ON
+                            </Tag>
+                          )}
+                        </ProviderListItem>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              </div>
             )}
-          </ProviderListItem>
-        ))}
+          </Droppable>
+        </DragDropContext>
       </ProviderListContainer>
       <ProviderSetting provider={selectedProvider} key={JSON.stringify(selectedProvider)} />
     </Container>

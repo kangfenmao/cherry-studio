@@ -8,7 +8,7 @@ import { Model } from '@renderer/types'
 
 const ModelSettings: FC = () => {
   const { defaultModel, topicNamingModel, setDefaultModel, setTopicNamingModel } = useDefaultModel()
-  const providers = useProviders()
+  const { providers } = useProviders()
   const allModels = providers.map((p) => p.models).flat()
 
   const selectOptions = providers
