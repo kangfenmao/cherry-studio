@@ -5,6 +5,7 @@ import YiProviderLogo from '@renderer/assets/images/providers/yi.svg'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
 import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
+import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
@@ -13,6 +14,7 @@ import QwenModelLogo from '@renderer/assets/images/models/qwen.jpeg'
 import YiModelLogo from '@renderer/assets/images/models/yi.svg'
 import LlamaModelLogo from '@renderer/assets/images/models/llama.jpeg'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
+import MoonshotModelLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 
 export function getProviderLogo(providerId: string) {
   switch (providerId) {
@@ -30,6 +32,8 @@ export function getProviderLogo(providerId: string) {
       return ZhipuProviderLogo
     case 'ollama':
       return OllamaProviderLogo
+    case 'moonshot':
+      return MoonshotProviderLogo
     default:
       return undefined
   }
@@ -44,7 +48,8 @@ export function getModelLogo(modelId: string) {
     gemma: GemmaModelLogo,
     'yi-': YiModelLogo,
     llama: LlamaModelLogo,
-    mixtral: MixtralModelLogo
+    mixtral: MixtralModelLogo,
+    moonshot: MoonshotModelLogo
   }
 
   for (const key in logoMap) {

@@ -285,6 +285,32 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       defaultEnabled: false
     }
   ],
+  moonshot: [
+    {
+      id: 'moonshot-v1-8k',
+      provider: 'moonshot',
+      name: 'Moonshot V1 8k',
+      group: 'Moonshot V1',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'moonshot-v1-32k',
+      provider: 'moonshot',
+      name: 'Moonshot V1 32k',
+      group: 'Moonshot V1',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'moonshot-v1-128k',
+      provider: 'moonshot',
+      name: 'Moonshot V1 128k',
+      group: 'Moonshot V1',
+      temperature: 0.7,
+      defaultEnabled: true
+    }
+  ],
   groq: [
     {
       id: 'llama3-8b-8192',

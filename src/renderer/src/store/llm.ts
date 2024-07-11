@@ -59,6 +59,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'moonshot',
+      name: 'Moonshot AI',
+      apiKey: '',
+      apiHost: 'https://api.moonshot.cn',
+      models: SYSTEM_MODELS.moonshot.filter((m) => m.defaultEnabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'groq',
       name: 'Groq',
       apiKey: '',

@@ -62,6 +62,26 @@ const migrate = createMigrate({
         ]
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '5': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'moonshot',
+            name: 'Moonshot',
+            apiKey: '',
+            apiHost: 'https://api.moonshot.cn',
+            isSystem: true,
+            models: SYSTEM_MODELS.moonshot.filter((m) => m.defaultEnabled)
+          }
+        ]
+      }
+    }
   }
 })
 
