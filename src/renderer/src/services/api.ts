@@ -100,3 +100,13 @@ export async function fetchMessagesSummary({ messages, assistant }: FetchMessage
 
   return response.choices[0].message?.content
 }
+
+export async function fetchModels(provider: Provider) {
+  try {
+    const openaiProvider = getOpenAiProvider(provider)
+    const response = await openaiProvider.models.list()
+    return response.data
+  } catch (error) {
+    return []
+  }
+}
