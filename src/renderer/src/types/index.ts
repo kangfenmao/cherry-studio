@@ -1,3 +1,5 @@
+import OpenAI from 'openai'
+
 export type Assistant = {
   id: string
   name: string
@@ -16,6 +18,7 @@ export type Message = {
   modelId?: string
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'error'
+  usage?: OpenAI.Completions.CompletionUsage
 }
 
 export type Topic = {

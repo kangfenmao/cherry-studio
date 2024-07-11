@@ -76,7 +76,15 @@ const MessageItem: FC<Props> = ({ message, showMenu, onDeleteMessage }) => {
             <Tooltip title="Delete" mouseEnterDelay={1}>
               <DeleteOutlined onClick={onDelete} />
             </Tooltip>
-            <ModelName>{message.modelId}</ModelName>
+            <MessageMetadata>{message.modelId}</MessageMetadata>
+            {message.usage && (
+              <>
+                <MessageMetadata style={{ textTransform: 'uppercase' }}>
+                  tokens used: {message.usage.total_tokens} (IN:{message.usage.prompt_tokens}/OUT:
+                  {message.usage.completion_tokens})
+                </MessageMetadata>
+              </>
+            )}
           </MenusBar>
         )}
       </MessageContent>
@@ -133,9 +141,10 @@ const MenusBar = styled.div`
   }
 `
 
-const ModelName = styled.div`
+const MessageMetadata = styled.div`
   font-size: 12px;
   color: var(--color-text-2);
+  user-select: text;
 `
 
 export default MessageItem

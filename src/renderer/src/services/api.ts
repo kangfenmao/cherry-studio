@@ -53,13 +53,16 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     })
 
     let content = ''
+    let usage: OpenAI.Completions.CompletionUsage | undefined = undefined
 
     for await (const chunk of stream) {
       content = content + (chunk.choices[0]?.delta?.content || '')
+      chunk.usage && (usage = chunk.usage)
       onResponse({ ..._message, content, status: 'pending' })
     }
 
     _message.content = content
+    _message.usage = usage
   } catch (error: any) {
     _message.content = `Error: ${error.message}`
   }
