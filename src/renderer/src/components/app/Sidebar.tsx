@@ -13,7 +13,7 @@ const Sidebar: FC = () => {
   return (
     <Container>
       <StyledLink to="/">
-        <AvatarImg src={avatar || Logo} />
+        <AvatarImg src={avatar || Logo} draggable={false} />
       </StyledLink>
       <MainMenus>
         <Menus>
@@ -106,6 +106,9 @@ const Icon = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   -webkit-app-region: none;
+  &* {
+    user-select: none;
+  }
 `
 
 export default Sidebar

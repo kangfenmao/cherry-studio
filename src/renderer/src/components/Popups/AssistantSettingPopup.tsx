@@ -39,7 +39,7 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
         Description
       </Box>
       <TextArea
-        rows={4}
+        rows={2}
         placeholder="Assistant Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}

@@ -61,7 +61,6 @@ body {
   line-height: 1.6;
   overflow: hidden;
   background-size: cover;
-  user-select: none;
   font-family:
     Inter,
     -apple-system,
@@ -78,6 +77,10 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  -webkit-user-drag: none;
 }
 
 html,

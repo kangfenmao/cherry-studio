@@ -124,6 +124,7 @@ const MessageContent = styled.div`
   justify-content: space-between;
   .menubar {
     opacity: 0;
+    transition: opacity 0.2s ease;
     &.show {
       opacity: 1;
     }
