@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import imageCompression from 'browser-image-compression'
+import { Model } from '@renderer/types'
 
 export const runAsyncFunction = async (fn: () => void) => {
   await fn()
@@ -92,4 +93,8 @@ export function droppableReorder<T>(list: T[], startIndex: number, endIndex: num
 // firstLetter
 export const firstLetter = (str?: string) => {
   return str ? str[0] : ''
+}
+
+export function isFreeModel(model: Model) {
+  return (model.id + model.name).toLocaleLowerCase().includes('free')
 }

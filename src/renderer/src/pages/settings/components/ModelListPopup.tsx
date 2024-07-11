@@ -1,11 +1,11 @@
-import { LoadingOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
+import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/api'
 import { getModelLogo } from '@renderer/services/provider'
 import { Model, Provider } from '@renderer/types'
-import { getDefaultGroupName, runAsyncFunction } from '@renderer/utils'
-import { Avatar, Button, Empty, Flex, Modal } from 'antd'
+import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/utils'
+import { Avatar, Button, Empty, Flex, Modal, Tag } from 'antd'
 import Search from 'antd/es/input/Search'
 import { groupBy, isEmpty, uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
@@ -67,7 +67,9 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
             // @ts-ignore name
             name: model.name || model.id,
             provider: _provider.id,
-            group: getDefaultGroupName(model.id)
+            group: getDefaultGroupName(model.id),
+            // @ts-ignore name
+            description: model?.description
           }))
         )
         setLoading(false)
@@ -115,7 +117,15 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
                     <Avatar src={getModelLogo(model.id)} size={24}>
                       {model.name[0].toUpperCase()}
                     </Avatar>
-                    <ListItemName>{model.name}</ListItemName>
+                    <ListItemName>
+                      {model.name}
+                      {isFreeModel(model) && (
+                        <Tag style={{ marginLeft: 10 }} color="green">
+                          Free
+                        </Tag>
+                      )}
+                      {!isEmpty(model.description) && <Question onClick={() => onShowModelInfo(model)} />}
+                    </ListItemName>
                   </ListItemHeader>
                   {hasModel ? (
                     <Button type="default" onClick={() => onRemoveModel(model)} icon={<MinusOutlined />} />
@@ -131,6 +141,13 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
       </ListContainer>
     </Modal>
   )
+}
+
+const onShowModelInfo = (model: Model) => {
+  window.modal.info({
+    title: model.name,
+    content: model.description
+  })
 }
 
 const SearchContainer = styled.div`
@@ -187,6 +204,12 @@ const ModelHeaderTitle = styled.div`
   font-size: 18px;
   font-weight: 600;
   margin-right: 10px;
+`
+
+const Question = styled(QuestionCircleOutlined)`
+  cursor: pointer;
+  margin: 0 10px;
+  color: #888;
 `
 
 export default class ModelListPopup {

@@ -46,6 +46,7 @@ export type Model = {
   provider: string
   name: string
   group: string
+  description?: string
 }
 
 export type SystemAssistant = {
