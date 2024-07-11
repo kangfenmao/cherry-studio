@@ -60,11 +60,13 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
         onChange={(e) => setApiKey(e.target.value)}
         onBlur={onUpdateApiKey}
         spellCheck={false}
+        disabled={provider.id === 'ollama'}
       />
       <SettingSubtitle>API Host</SettingSubtitle>
       <Input
         value={apiHost}
         placeholder="API Host"
+        disabled={provider.isSystem}
         onChange={(e) => setApiHost(e.target.value)}
         onBlur={onUpdateApiHost}
       />
