@@ -49,8 +49,7 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
       id: values.id,
       provider: provider.id,
       name: values.name ? values.name : values.id.toUpperCase(),
-      group: getDefaultGroupName(values.group || values.id),
-      temperature: 0.7
+      group: getDefaultGroupName(values.group || values.id)
     }
 
     addModel(model)

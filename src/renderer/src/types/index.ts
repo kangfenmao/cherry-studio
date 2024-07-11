@@ -46,7 +46,6 @@ export type Model = {
   provider: string
   name: string
   group: string
-  temperature: number
 }
 
 export type SystemAssistant = {
