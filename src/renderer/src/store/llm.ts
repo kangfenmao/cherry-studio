@@ -68,6 +68,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'openrouter',
+      name: 'OpenRouter',
+      apiKey: '',
+      apiHost: 'https://openrouter.ai/api/v1/',
+      models: SYSTEM_MODELS.openrouter.filter((m) => m.defaultEnabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'groq',
       name: 'Groq',
       apiKey: '',

@@ -67,7 +67,9 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
               return (
                 <ListItem key={model.id}>
                   <ListItemHeader>
-                    <Avatar src={getModelLogo(model.id)} size={24} />
+                    <Avatar src={getModelLogo(model.id)} size={24}>
+                      {model.name[0].toUpperCase()}
+                    </Avatar>
                     <ListItemName>{model.name}</ListItemName>
                   </ListItemHeader>
                   {hasModel ? (

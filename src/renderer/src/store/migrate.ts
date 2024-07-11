@@ -82,6 +82,26 @@ const migrate = createMigrate({
         ]
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '6': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'openrouter',
+            name: 'OpenRouter',
+            apiKey: '',
+            apiHost: 'https://openrouter.ai/api/v1/',
+            models: SYSTEM_MODELS.openrouter.filter((m) => m.defaultEnabled),
+            isSystem: true
+          }
+        ]
+      }
+    }
   }
 })
 

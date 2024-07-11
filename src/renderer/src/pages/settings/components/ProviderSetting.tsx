@@ -49,7 +49,7 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
         <Switch
           defaultValue={provider.enabled}
           key={provider.id}
-          onChange={(enabled) => updateProvider({ ...provider, enabled })}
+          onChange={(enabled) => updateProvider({ ...provider, apiKey, apiHost, enabled })}
         />
       </SettingTitle>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
@@ -74,7 +74,7 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
           {modelGroups[group].map((model) => (
             <ModelListItem key={model.id}>
               <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
-                {model.name[0]}
+                {model.name[0].toUpperCase()}
               </Avatar>
               {model.name}
             </ModelListItem>

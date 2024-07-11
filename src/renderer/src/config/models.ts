@@ -311,6 +311,48 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       defaultEnabled: true
     }
   ],
+  openrouter: [
+    {
+      id: 'google/gemma-2-9b-it:free',
+      provider: 'openrouter',
+      name: 'Google: Gemma 2 9B',
+      group: 'Gemma',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'microsoft/phi-3-mini-128k-instruct:free',
+      provider: 'openrouter',
+      name: 'Phi-3 Mini 128K Instruct',
+      group: 'Phi',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'microsoft/phi-3-medium-128k-instruct:free',
+      provider: 'openrouter',
+      name: 'Phi-3 Medium 128K Instruct',
+      group: 'Phi',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'meta-llama/llama-3-8b-instruct:free',
+      provider: 'openrouter',
+      name: 'Meta: Llama 3 8B Instruct',
+      group: 'Llama3',
+      temperature: 0.7,
+      defaultEnabled: true
+    },
+    {
+      id: 'mistralai/mistral-7b-instruct:free',
+      provider: 'openrouter',
+      name: 'Mistral: Mistral 7B Instruct',
+      group: 'Mistral',
+      temperature: 0.7,
+      defaultEnabled: true
+    }
+  ],
   groq: [
     {
       id: 'llama3-8b-8192',
