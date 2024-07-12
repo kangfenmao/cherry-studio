@@ -42,13 +42,19 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
 
   onResponse({ ..._message })
 
+  const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
+
+  const userMessages = takeRight(messages, 5).map((message) => ({
+    role: message.role,
+    content: message.content
+  }))
+
+  const _messages = [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[]
+
   try {
     const stream = await openaiProvider.chat.completions.create({
       model: model.id,
-      messages: [
-        { role: 'system', content: assistant.prompt },
-        ...takeRight(messages, 5).map((message) => ({ role: message.role, content: message.content }))
-      ],
+      messages: _messages,
       stream: true
     })
 

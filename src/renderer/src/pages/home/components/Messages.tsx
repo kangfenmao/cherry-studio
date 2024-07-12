@@ -57,7 +57,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     const _messages = messages.filter((m) => m.id !== message.id)
     setMessages(_messages)
     localforage.setItem(`topic:${topic.id}`, {
-      ...topic,
+      id: topic.id,
       messages: _messages
     })
   }
