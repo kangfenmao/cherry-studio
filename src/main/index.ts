@@ -4,6 +4,7 @@ import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
+import { autoUpdater } from 'electron-updater'
 
 function createWindow(): void {
   // Load the previous state with fallback to defaults
@@ -101,6 +102,8 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+autoUpdater.checkForUpdatesAndNotify()
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.

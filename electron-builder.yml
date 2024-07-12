@@ -39,8 +39,9 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  repo: cherry-studio
+  owner: kangfenmao
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
 afterSign: scripts/notarize.js
