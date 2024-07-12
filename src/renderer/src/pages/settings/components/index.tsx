@@ -20,12 +20,14 @@ export const SettingTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   font-weight: 900;
+  user-select: none;
 `
 
 export const SettingSubtitle = styled.div`
   font-size: 12px;
   color: var(--color-text-2);
   margin: 15px 0 10px 0;
+  user-select: none;
 `
 
 export const SettingDivider = styled(Divider)`

@@ -104,6 +104,53 @@ export async function fetchMessagesSummary({ messages, assistant }: FetchMessage
   return response.choices[0].message?.content
 }
 
+export async function checkApi(provider: Provider) {
+  const openaiProvider = getOpenAiProvider(provider)
+  const model = provider.models[0]
+  const key = 'api-check'
+  const style = { marginTop: '3vh' }
+
+  if (!provider.apiKey) {
+    window.message.error({ content: 'Please enter your API key first', key, style })
+    return false
+  }
+
+  if (!provider.apiHost) {
+    window.message.error({ content: 'Please enter your API host first', key, style })
+    return false
+  }
+
+  if (!model) {
+    window.message.error({ content: 'Please select a model first', key, style })
+    return false
+  }
+
+  let valid = false
+  let errorMessage = ''
+
+  try {
+    const response = await openaiProvider.chat.completions.create({
+      model: model.id,
+      messages: [{ role: 'user', content: 'hello' }],
+      stream: false
+    })
+
+    valid = Boolean(response?.choices[0].message)
+  } catch (error) {
+    errorMessage = (error as Error).message
+    valid = false
+  }
+
+  window.message[valid ? 'success' : 'error']({
+    key: 'api-check',
+    style: { marginTop: '3vh' },
+    duration: valid ? 2 : 8,
+    content: valid ? 'API connection successful' : 'API connection failed ' + errorMessage
+  })
+
+  return valid
+}
+
 export async function fetchModels(provider: Provider) {
   try {
     const openaiProvider = getOpenAiProvider(provider)

@@ -1,15 +1,16 @@
 import { Provider } from '@renderer/types'
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Avatar, Button, Card, Divider, Flex, Input, Switch } from 'antd'
+import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { groupBy } from 'lodash'
 import { SettingContainer, SettingSubtitle, SettingTitle } from '.'
 import { getModelLogo } from '@renderer/services/provider'
-import { EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons'
+import { CheckOutlined, EditOutlined, ExportOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
 import Link from 'antd/es/typography/Link'
+import { checkApi } from '@renderer/services/api'
 
 interface Props {
   provider: Provider
@@ -92,6 +93,8 @@ const PROVIDER_CONFIG = {
 const ProviderSetting: FC<Props> = ({ provider }) => {
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
+  const [apiValid, setApiValid] = useState(false)
+  const [apiChecking, setApiChecking] = useState(false)
   const { updateProvider, models } = useProvider(provider.id)
 
   const modelGroups = groupBy(models, 'group')
@@ -106,11 +109,21 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
   const onManageModel = () => EditModelsPopup.show({ provider })
   const onAddModel = () => AddModelPopup.show({ title: 'Add Model', provider })
 
+  const onCheckApi = async () => {
+    setApiChecking(true)
+    const valid = await checkApi({ ...provider, apiKey, apiHost })
+    setApiValid(valid)
+    setApiChecking(false)
+    setTimeout(() => setApiValid(false), 3000)
+  }
+
   const providerConfig = PROVIDER_CONFIG[provider.id]
   const officialWebsite = providerConfig?.websites?.official
   const apiKeyWebsite = providerConfig?.websites?.apiKey
   const docsWebsite = providerConfig?.websites?.docs
   const modelsWebsite = providerConfig?.websites?.models
+
+  const apiKeyDisabled = provider.id === 'ollama'
 
   return (
     <SettingContainer>
@@ -131,15 +144,22 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
       </SettingTitle>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
       <SettingSubtitle style={{ marginTop: 5 }}>API Key</SettingSubtitle>
-      <Input
-        value={apiKey}
-        placeholder="API Key"
-        onChange={(e) => setApiKey(e.target.value)}
-        onBlur={onUpdateApiKey}
-        spellCheck={false}
-        disabled={provider.id === 'ollama'}
-        autoFocus={provider.enabled && apiKey === ''}
-      />
+      <Space.Compact style={{ width: '100%' }}>
+        <Input
+          value={apiKey}
+          placeholder="API Key"
+          onChange={(e) => setApiKey(e.target.value)}
+          onBlur={onUpdateApiKey}
+          spellCheck={false}
+          disabled={apiKeyDisabled}
+          autoFocus={provider.enabled && apiKey === ''}
+        />
+        {!apiKeyDisabled && (
+          <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi}>
+            {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : 'Check'}
+          </Button>
+        )}
+      </Space.Compact>
       {apiKeyWebsite && (
         <HelpTextRow>
           <HelpText>Get API key from: </HelpText>
