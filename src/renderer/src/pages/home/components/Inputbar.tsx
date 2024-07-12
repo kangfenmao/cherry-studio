@@ -19,6 +19,7 @@ import { isEmpty } from 'lodash'
 import SendMessageSetting from './SendMessageSetting'
 import { useSettings } from '@renderer/hooks/useSettings'
 import dayjs from 'dayjs'
+import { useAppSelector } from '@renderer/store'
 
 interface Props {
   assistant: Assistant
@@ -31,9 +32,14 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut } = useSettings()
   const [expended, setExpend] = useState(false)
+  const generating = useAppSelector((state) => state.runtime.generating)
   const inputRef = useRef<TextAreaRef>(null)
 
   const sendMessage = () => {
+    if (generating) {
+      return
+    }
+
     if (isEmpty(text.trim())) {
       return
     }

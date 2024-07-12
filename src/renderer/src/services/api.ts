@@ -6,6 +6,8 @@ import OpenAI from 'openai'
 import { getAssistantProvider, getDefaultModel, getProviderByModel, getTopNamingModel } from './assistant'
 import { takeRight } from 'lodash'
 import dayjs from 'dayjs'
+import store from '@renderer/store'
+import { setGenerating } from '@renderer/store/runtime'
 
 interface FetchChatCompletionParams {
   messages: Message[]
@@ -28,6 +30,8 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
   const openaiProvider = getOpenAiProvider(provider)
   const defaultModel = getDefaultModel()
   const model = assistant.model || defaultModel
+
+  store.dispatch(setGenerating(true))
 
   const _message: Message = {
     id: uuid(),
@@ -74,8 +78,8 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
   }
 
   _message.status = 'success'
-
   EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, _message)
+  store.dispatch(setGenerating(false))
 
   return _message
 }
