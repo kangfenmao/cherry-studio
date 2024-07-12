@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { SettingContainer, SettingDivider, SettingTitle } from './components/SettingComponent'
+import { SettingContainer, SettingDivider, SettingTitle } from './components'
 import { Select } from 'antd'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'

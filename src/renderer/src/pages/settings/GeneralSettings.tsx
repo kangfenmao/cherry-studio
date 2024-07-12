@@ -1,11 +1,5 @@
 import { FC } from 'react'
-import {
-  SettingContainer,
-  SettingDivider,
-  SettingRow,
-  SettingRowTitle,
-  SettingTitle
-} from './components/SettingComponent'
+import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
 import { Avatar, message, Upload } from 'antd'
 import styled from 'styled-components'
 import LocalStorage from '@renderer/services/storage'

@@ -102,7 +102,7 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
   )
 }
 
-export default class ModalAddPopup {
+export default class AddModelPopup {
   static topviewId = 0
   static hide() {
     TopView.hide(this.topviewId)

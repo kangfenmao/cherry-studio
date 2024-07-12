@@ -24,8 +24,8 @@ export const SettingTitle = styled.div`
 
 export const SettingSubtitle = styled.div`
   font-size: 12px;
-  color: var(--color-text-3);
-  margin: 10px 0;
+  color: var(--color-text-2);
+  margin: 15px 0 10px 0;
 `
 
 export const SettingDivider = styled(Divider)`

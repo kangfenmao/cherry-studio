@@ -214,7 +214,7 @@ const Question = styled(QuestionCircleOutlined)`
   color: #888;
 `
 
-export default class ModelListPopup {
+export default class EditModelsPopup {
   static topviewId = 0
   static hide() {
     TopView.hide(this.topviewId)
