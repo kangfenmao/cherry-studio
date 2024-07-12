@@ -75,5 +75,9 @@
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0"
-  }
+  },
+  "resolutions": {
+    "@electron/notarize": "2.3.2"
+  },
+  "packageManager": "yarn@4.3.1"
 }

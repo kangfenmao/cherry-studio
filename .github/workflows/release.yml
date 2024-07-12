@@ -25,31 +25,39 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install corepack
+        run: corepack enable && corepack prepare yarn@4.3.1 --activate
+
       - name: Install Dependencies
         run: yarn install
 
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
         run: yarn build:linux
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: build-mac
+        if: matrix.os == 'macos-latest'
+        run: yarn build:mac
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           APPLE_ID: ${{ vars.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ vars.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
-        if: matrix.os == 'macos-latest'
-        run: yarn build:mac
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: build-win
         if: matrix.os == 'windows-latest'
         run: yarn build:win
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          draft: true
+          draft: false
           files: |
             dist/*.exe
             dist/*.zip
@@ -62,4 +70,4 @@ jobs:
             dist/*.yml
             dist/*.blockmap
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
