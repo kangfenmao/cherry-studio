@@ -11,7 +11,7 @@ const AssistantSettings: FC = () => {
     <SettingContainer>
       <SettingTitle>Default Assistant</SettingTitle>
       <SettingDivider />
-      <SettingSubtitle>Name</SettingSubtitle>
+      <SettingSubtitle style={{ marginTop: 0 }}>Name</SettingSubtitle>
       <Input
         placeholder="Assistant Name"
         value={defaultAssistant.name}
@@ -19,7 +19,7 @@ const AssistantSettings: FC = () => {
       />
       <SettingSubtitle>Description</SettingSubtitle>
       <TextArea
-        rows={4}
+        rows={2}
         placeholder="Assistant Description"
         value={defaultAssistant.description}
         onChange={(e) => updateDefaultAssistant({ ...defaultAssistant, description: e.target.value })}

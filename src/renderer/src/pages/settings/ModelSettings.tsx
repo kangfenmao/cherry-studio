@@ -32,7 +32,7 @@ const ModelSettings: FC = () => {
         onChange={(id) => setDefaultModel(find(allModels, { id }) as Model)}
         options={selectOptions}
       />
-      <div style={{ height: 40 }} />
+      <div style={{ height: 30 }} />
       <SettingTitle>Topic Naming Model</SettingTitle>
       <SettingDivider />
       <Select
