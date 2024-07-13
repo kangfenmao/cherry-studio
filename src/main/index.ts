@@ -93,6 +93,8 @@ app.whenReady().then(() => {
   installExtension(REDUX_DEVTOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err))
+
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -103,8 +105,6 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-autoUpdater.checkForUpdatesAndNotify()
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
