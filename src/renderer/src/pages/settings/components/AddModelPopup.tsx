@@ -5,6 +5,7 @@ import { getDefaultGroupName } from '@renderer/utils'
 import { Button, Form, FormProps, Input, Modal } from 'antd'
 import { find } from 'lodash'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ShowParams {
   title: string
@@ -26,6 +27,7 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
   const [open, setOpen] = useState(true)
   const [form] = Form.useForm()
   const { addModel, models } = useProvider(provider.id)
+  const { t } = useTranslation()
 
   const onOk = () => {
     setOpen(false)
@@ -73,12 +75,16 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
         colon={false}
         style={{ marginTop: 25 }}
         onFinish={onFinish}>
-        <Form.Item label="Provider" name="provider" initialValue={provider.id} rules={[{ required: true }]}>
-          <Input placeholder="Provider Name" disabled />
+        <Form.Item name="provider" label={t('common.provider')} initialValue={provider.id} rules={[{ required: true }]}>
+          <Input placeholder={t('settings.models.add.provider_name.placeholder')} disabled />
         </Form.Item>
-        <Form.Item label="Model ID" name="id" tooltip="Example: gpt-3.5-turbo" rules={[{ required: true }]}>
+        <Form.Item
+          name="id"
+          label={t('settings.models.add.model_id')}
+          tooltip={t('settings.models.add.model_id.tooltip')}
+          rules={[{ required: true }]}>
           <Input
-            placeholder="Required e.g. gpt-3.5-turbo"
+            placeholder={t('settings.models.add.model_id.placeholder')}
             spellCheck={false}
             onChange={(e) => {
               form.setFieldValue('name', e.target.value.toUpperCase())
@@ -86,15 +92,18 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
             }}
           />
         </Form.Item>
-        <Form.Item label="Model Name" tooltip="Example: GPT-3.5" name="name">
-          <Input placeholder="Optional e.g. GPT-4" spellCheck={false} />
+        <Form.Item name="name" label={t('settings.models.add.model_name')} tooltip="Example: GPT-3.5">
+          <Input placeholder={t('settings.models.add.model_name.placeholder')} spellCheck={false} />
         </Form.Item>
-        <Form.Item label="Group Name" tooltip="Example: ChatGPT" name="group">
-          <Input placeholder="Optional e.g. OpenAI" spellCheck={false} />
+        <Form.Item
+          name="group"
+          label={t('settings.models.add.group_name')}
+          tooltip={t('settings.models.add.group_name.tooltip')}>
+          <Input placeholder={t('settings.models.add.group_name.placeholder')} spellCheck={false} />
         </Form.Item>
         <Form.Item label=" ">
           <Button type="primary" htmlType="submit">
-            Add Model
+            {t('settings.models.add.add_model')}
           </Button>
         </Form.Item>
       </Form>

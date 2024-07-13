@@ -3,6 +3,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import styled from 'styled-components'
 import { CopyOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 interface CodeBlockProps {
   children: string
@@ -13,9 +14,11 @@ interface CodeBlockProps {
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) => {
   const match = /language-(\w+)/.exec(className || '')
 
+  const { t } = useTranslation()
+
   const onCopy = () => {
     navigator.clipboard.writeText(children)
-    window.message.success({ content: 'Copied!', key: 'copy-code' })
+    window.message.success({ content: t('message.copied'), key: 'copy-code' })
   }
 
   return match ? (

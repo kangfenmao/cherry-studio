@@ -7,11 +7,13 @@ import { Avatar, Tag } from 'antd'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 import ProviderSetting from './components/ProviderSetting'
+import { useTranslation } from 'react-i18next'
 
 const ProviderSettings: FC = () => {
   const providers = useSystemProviders()
   const { updateProviders } = useProviders()
   const [selectedProvider, setSelectedProvider] = useState<Provider>(providers[0])
+  const { t } = useTranslation()
 
   const onDragEnd = (result: DropResult) => {
     if (result.destination) {
@@ -38,7 +40,7 @@ const ProviderSettings: FC = () => {
                           className={provider.id === selectedProvider?.id ? 'active' : ''}
                           onClick={() => setSelectedProvider(provider)}>
                           <Avatar src={getProviderLogo(provider.id)} size={22} />
-                          <ProviderItemName>{provider.name}</ProviderItemName>
+                          <ProviderItemName>{t(`provider.${provider.id}`)}</ProviderItemName>
                           {provider.enabled && (
                             <Tag color="green" style={{ marginLeft: 'auto' }}>
                               ON

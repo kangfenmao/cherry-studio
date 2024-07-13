@@ -7,10 +7,10 @@ import MessageItem from './Message'
 import { reverse } from 'lodash'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { DEFAULT_TOPIC_NAME } from '@renderer/config/constant'
 import { runAsyncFunction } from '@renderer/utils'
 import LocalStorage from '@renderer/services/storage'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
+import { t } from 'i18next'
 
 interface Props {
   assistant: Assistant
@@ -47,7 +47,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   )
 
   const autoRenameTopic = useCallback(async () => {
-    if (topic.name === DEFAULT_TOPIC_NAME && messages.length >= 2) {
+    if (topic.name === t('assistant.default.topic.name') && messages.length >= 2) {
       const summaryText = await fetchMessagesSummary({ messages, assistant })
       summaryText && updateTopic({ ...topic, name: summaryText })
     }

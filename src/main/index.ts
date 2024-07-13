@@ -37,11 +37,11 @@ function createWindow(): void {
 
   mainWindow.webContents.on('context-menu', () => {
     const menu = new Menu()
-    menu.append(new MenuItem({ label: 'Copy', role: 'copy' }))
-    menu.append(new MenuItem({ label: 'Paste', role: 'paste' }))
-    menu.append(new MenuItem({ label: 'Cut', role: 'cut' }))
+    menu.append(new MenuItem({ label: '复制', role: 'copy', sublabel: '⌘ + C' }))
+    menu.append(new MenuItem({ label: '粘贴', role: 'paste', sublabel: '⌘ + V' }))
+    menu.append(new MenuItem({ label: '剪切', role: 'cut', sublabel: '⌘ + X' }))
     menu.append(new MenuItem({ type: 'separator' }))
-    menu.append(new MenuItem({ label: 'Select All', role: 'selectAll' }))
+    menu.append(new MenuItem({ label: '全选', role: 'selectAll', sublabel: '⌘ + A' }))
     menu.popup()
   })
 
@@ -68,7 +68,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.kangfenmao.CherryStudio')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

@@ -5,11 +5,13 @@ export type SendMessageShortcut = 'Enter' | 'Shift+Enter'
 export interface SettingsState {
   showRightSidebar: boolean
   sendMessageShortcut: SendMessageShortcut
+  language: string
 }
 
 const initialState: SettingsState = {
   showRightSidebar: true,
-  sendMessageShortcut: 'Enter'
+  sendMessageShortcut: 'Enter',
+  language: navigator.language
 }
 
 const settingsSlice = createSlice({
@@ -21,10 +23,13 @@ const settingsSlice = createSlice({
     },
     setSendMessageShortcut: (state, action: PayloadAction<SendMessageShortcut>) => {
       state.sendMessageShortcut = action.payload
+    },
+    setLanguage: (state, action: PayloadAction<string>) => {
+      state.language = action.payload
     }
   }
 })
 
-export const { toggleRightSidebar, setSendMessageShortcut } = settingsSlice.actions
+export const { toggleRightSidebar, setSendMessageShortcut, setLanguage } = settingsSlice.actions
 
 export default settingsSlice.reducer

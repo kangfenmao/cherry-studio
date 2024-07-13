@@ -11,6 +11,7 @@ import { getModelLogo } from '@renderer/services/provider'
 import Logo from '@renderer/assets/images/logo.png'
 import { SyncOutlined } from '@ant-design/icons'
 import { firstLetter } from '@renderer/utils'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   message: Message
@@ -22,21 +23,22 @@ interface Props {
 
 const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) => {
   const avatar = useAvatar()
+  const { t } = useTranslation()
 
   const isLastMessage = index === 0
   const canRegenerate = isLastMessage && message.role === 'assistant'
 
   const onCopy = () => {
     navigator.clipboard.writeText(message.content)
-    window.message.success({ content: 'Copied!', key: 'copy-message' })
+    window.message.success({ content: t('message.copied'), key: 'copy-message' })
   }
 
   const onDelete = async () => {
     const confirmed = await window.modal.confirm({
       icon: null,
-      title: 'Delete Message',
-      content: 'Are you sure you want to delete this message?',
-      okText: 'Delete',
+      title: t('message.message.delete.title'),
+      content: t('message.message.delete.content'),
+      okText: t('common.delete'),
       okType: 'danger'
     })
     confirmed && onDeleteMessage?.(message)
@@ -80,14 +82,14 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                 <EditOutlined onClick={onEdit} />
               </Tooltip>
             )}
-            <Tooltip title="Copy" mouseEnterDelay={0.8}>
+            <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
               <CopyOutlined onClick={onCopy} />
             </Tooltip>
-            <Tooltip title="Delete" mouseEnterDelay={0.8}>
+            <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
               <DeleteOutlined onClick={onDelete} />
             </Tooltip>
             {canRegenerate && (
-              <Tooltip title="Regenerate" mouseEnterDelay={0.8}>
+              <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
                 <SyncOutlined onClick={onRegenerate} />
               </Tooltip>
             )}

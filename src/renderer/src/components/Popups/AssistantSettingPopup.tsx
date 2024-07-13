@@ -4,6 +4,7 @@ import { TopView } from '../TopView'
 import { Box } from '../Layout'
 import { Assistant } from '@renderer/types'
 import TextArea from 'antd/es/input/TextArea'
+import { useTranslation } from 'react-i18next'
 
 interface AssistantSettingPopupShowParams {
   assistant: Assistant
@@ -18,6 +19,7 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
   const [description, setDescription] = useState(assistant.description)
   const [prompt, setPrompt] = useState(assistant.prompt)
   const [open, setOpen] = useState(true)
+  const { t } = useTranslation()
 
   const onOk = () => {
     setOpen(false)
@@ -33,21 +35,30 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
 
   return (
     <Modal title={assistant.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
-      <Box mb={8}>Name</Box>
-      <Input placeholder="Assistant Name" value={name} onChange={(e) => setName(e.target.value)} />
+      <Box mb={8}>{t('common.name')}</Box>
+      <Input
+        placeholder={t('common.assistant') + t('common.name')}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <Box mt={8} mb={8}>
-        Description
+        {t('common.description')}
       </Box>
       <TextArea
         rows={2}
-        placeholder="Assistant Description"
+        placeholder={t('common.assistant') + t('common.description')}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       <Box mt={8} mb={8}>
-        Prompt
+        {t('common.prompt')}
       </Box>
-      <TextArea rows={4} placeholder="Assistant Prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+      <TextArea
+        rows={4}
+        placeholder={t('common.assistant') + t('common.prompt')}
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+      />
     </Modal>
   )
 }

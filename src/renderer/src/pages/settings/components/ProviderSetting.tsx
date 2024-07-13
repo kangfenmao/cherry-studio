@@ -11,83 +11,11 @@ import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
 import Link from 'antd/es/typography/Link'
 import { checkApi } from '@renderer/services/api'
+import { useTranslation } from 'react-i18next'
+import { PROVIDER_CONFIG } from '@renderer/config/provider'
 
 interface Props {
   provider: Provider
-}
-
-const PROVIDER_CONFIG = {
-  openai: {
-    websites: {
-      official: 'https://openai.com/',
-      apiKey: 'https://platform.openai.com/api-keys',
-      docs: 'https://platform.openai.com/docs',
-      models: 'https://platform.openai.com/docs/models'
-    }
-  },
-  silicon: {
-    websites: {
-      official: 'https://www.siliconflow.cn/',
-      apiKey: 'https://cloud.siliconflow.cn/account/ak',
-      docs: 'https://docs.siliconflow.cn/',
-      models: 'https://docs.siliconflow.cn/docs/model-names'
-    }
-  },
-  deepseek: {
-    websites: {
-      official: 'https://deepseek.com/',
-      apiKey: 'https://platform.deepseek.com/api_keys',
-      docs: 'https://platform.deepseek.com/api-docs/',
-      models: 'https://platform.deepseek.com/api-docs/'
-    }
-  },
-  yi: {
-    websites: {
-      official: 'https://platform.lingyiwanwu.com/',
-      apiKey: 'https://platform.lingyiwanwu.com/apikeys',
-      docs: 'https://platform.lingyiwanwu.com/docs',
-      models: 'https://platform.lingyiwanwu.com/docs#%E6%A8%A1%E5%9E%8B'
-    }
-  },
-  zhipu: {
-    websites: {
-      official: 'https://open.bigmodel.cn/',
-      apiKey: 'https://open.bigmodel.cn/usercenter/apikeys',
-      docs: 'https://open.bigmodel.cn/dev/howuse/introduction',
-      models: 'https://open.bigmodel.cn/modelcenter/square'
-    }
-  },
-  moonshot: {
-    websites: {
-      official: 'https://moonshot.ai/',
-      apiKey: 'https://platform.moonshot.cn/console/api-keys',
-      docs: 'https://platform.moonshot.cn/docs/',
-      models: 'https://platform.moonshot.cn/docs/intro#%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8'
-    }
-  },
-  openrouter: {
-    websites: {
-      official: 'https://openrouter.ai/',
-      apiKey: 'https://openrouter.ai/settings/keys',
-      docs: 'https://openrouter.ai/docs/quick-start',
-      models: 'https://openrouter.ai/docs/models'
-    }
-  },
-  groq: {
-    websites: {
-      official: 'https://groq.com/',
-      apiKey: 'https://console.groq.com/keys',
-      docs: 'https://console.groq.com/docs/quickstart',
-      models: 'https://console.groq.com/docs/models'
-    }
-  },
-  ollama: {
-    websites: {
-      official: 'https://ollama.com/',
-      docs: 'https://github.com/ollama/ollama/tree/main/docs',
-      models: 'https://ollama.com/library'
-    }
-  }
 }
 
 const ProviderSetting: FC<Props> = ({ provider }) => {
@@ -96,6 +24,7 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
   const [apiValid, setApiValid] = useState(false)
   const [apiChecking, setApiChecking] = useState(false)
   const { updateProvider, models } = useProvider(provider.id)
+  const { t } = useTranslation()
 
   const modelGroups = groupBy(models, 'group')
 
@@ -107,7 +36,7 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
   const onUpdateApiKey = () => updateProvider({ ...provider, apiKey })
   const onUpdateApiHost = () => updateProvider({ ...provider, apiHost })
   const onManageModel = () => EditModelsPopup.show({ provider })
-  const onAddModel = () => AddModelPopup.show({ title: 'Add Model', provider })
+  const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add_model'), provider })
 
   const onCheckApi = async () => {
     setApiChecking(true)
@@ -129,7 +58,7 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
     <SettingContainer>
       <SettingTitle>
         <Flex align="center">
-          <span>{provider.name}</span>
+          <span>{t(`provider.${provider.id}`)}</span>
           {officialWebsite! && (
             <Link target="_blank" href={providerConfig.websites.official}>
               <ExportOutlined style={{ marginLeft: '8px', color: 'white', fontSize: '12px' }} />
@@ -143,11 +72,11 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
         />
       </SettingTitle>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
-      <SettingSubtitle style={{ marginTop: 5 }}>API Key</SettingSubtitle>
+      <SettingSubtitle style={{ marginTop: 5 }}>{t('settings.provider.api_key')}</SettingSubtitle>
       <Space.Compact style={{ width: '100%' }}>
         <Input
           value={apiKey}
-          placeholder="API Key"
+          placeholder={t('settings.provider.api_key')}
           onChange={(e) => setApiKey(e.target.value)}
           onBlur={onUpdateApiKey}
           spellCheck={false}
@@ -156,27 +85,26 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
         />
         {!apiKeyDisabled && (
           <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi}>
-            {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : 'Check'}
+            {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : t('settings.provider.check')}
           </Button>
         )}
       </Space.Compact>
       {apiKeyWebsite && (
         <HelpTextRow>
-          <HelpText>Get API key from: </HelpText>
           <HelpLink target="_blank" href={apiKeyWebsite}>
-            {provider.name}
+            {t('settings.provider.get_api_key')}
           </HelpLink>
         </HelpTextRow>
       )}
-      <SettingSubtitle>API Host</SettingSubtitle>
+      <SettingSubtitle>{t('settings.provider.api_host')}</SettingSubtitle>
       <Input
         value={apiHost}
-        placeholder="API Host"
+        placeholder={t('settings.provider.api_host')}
         disabled={provider.isSystem}
         onChange={(e) => setApiHost(e.target.value)}
         onBlur={onUpdateApiHost}
       />
-      <SettingSubtitle>Models</SettingSubtitle>
+      <SettingSubtitle>{t('common.models')}</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
           {modelGroups[group].map((model) => (
@@ -191,23 +119,24 @@ const ProviderSetting: FC<Props> = ({ provider }) => {
       ))}
       {docsWebsite && (
         <HelpTextRow>
-          <HelpText>Check </HelpText>
+          <HelpText>{t('settings.provider.docs_check')} </HelpText>
           <HelpLink target="_blank" href={docsWebsite}>
-            {provider.name} Docs
+            {t(`provider.${provider.id}`)}
+            {t('common.docs')}
           </HelpLink>
-          <HelpText>and</HelpText>
+          <HelpText>{t('common.and')}</HelpText>
           <HelpLink target="_blank" href={modelsWebsite}>
-            Models
+            {t('common.models')}
           </HelpLink>
-          <HelpText>for more details</HelpText>
+          <HelpText>{t('settings.provider.docs_more_details')}</HelpText>
         </HelpTextRow>
       )}
       <Flex gap={10} style={{ marginTop: '10px' }}>
         <Button type="primary" onClick={onManageModel} icon={<EditOutlined />}>
-          Manage
+          {t('button.manage')}
         </Button>
         <Button type="default" onClick={onAddModel} icon={<PlusOutlined />}>
-          Add
+          {t('button.add')}
         </Button>
       </Flex>
     </SettingContainer>

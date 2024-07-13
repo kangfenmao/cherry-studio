@@ -11,7 +11,6 @@ export function useAppInitEffect() {
     runAsyncFunction(async () => {
       const storedImage = await LocalStorage.getImage('avatar')
       storedImage && dispatch(setAvatar(storedImage))
-      console.debug('Avatar loaded from storage')
     })
   }, [dispatch])
 }

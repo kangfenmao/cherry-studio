@@ -20,6 +20,8 @@ import SendMessageSetting from './SendMessageSetting'
 import { useSettings } from '@renderer/hooks/useSettings'
 import dayjs from 'dayjs'
 import { useAppSelector } from '@renderer/store'
+import { getDefaultTopic } from '@renderer/services/assistant'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   assistant: Assistant
@@ -34,6 +36,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [expended, setExpend] = useState(false)
   const generating = useAppSelector((state) => state.runtime.generating)
   const inputRef = useRef<TextAreaRef>(null)
+
+  const { t } = useTranslation()
 
   const sendMessage = () => {
     if (generating) {
@@ -75,11 +79,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }
 
   const addNewTopic = useCallback(() => {
-    const topic: Topic = {
-      id: uuid(),
-      name: 'Default Topic',
-      messages: []
-    }
+    const topic: Topic = getDefaultTopic()
     addTopic(topic)
     setActiveTopic(topic)
   }, [addTopic, setActiveTopic])
@@ -116,21 +116,21 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     <Container id="inputbar" style={{ minHeight: expended ? '35%' : 'var(--input-bar-height)' }}>
       <Toolbar>
         <ToolbarMenu>
-          <Tooltip placement="top" title=" New Chat " arrow>
+          <Tooltip placement="top" title={t('assistant.input.new_chat')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
               <PlusCircleOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title=" Topics " arrow>
+          <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
             <ToolbarButton type="text" onClick={setShowRightSidebar}>
               <HistoryOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title=" Clear " arrow>
+          <Tooltip placement="top" title={t('assistant.input.clear')} arrow>
             <Popconfirm
               icon={false}
-              title="Clear all messages?"
-              description="Are you sure to clear all messages?"
+              title={t('assistant.input.clear.title')}
+              description={t('assistant.input.clear.content')}
               placement="top"
               onConfirm={clearTopic}
               okText="Clear"
@@ -140,7 +140,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Popconfirm>
           </Tooltip>
-          <Tooltip placement="top" title=" Expand " arrow>
+          <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             </ToolbarButton>
@@ -158,12 +158,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Type your message here..."
+        placeholder={t('assistant.input.placeholder')}
         autoFocus
         contextMenu="true"
         variant="borderless"
         styles={{ textarea: { paddingLeft: 0 } }}
-        allowClear
         ref={inputRef}
       />
     </Container>

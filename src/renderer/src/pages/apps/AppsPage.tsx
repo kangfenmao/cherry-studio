@@ -9,12 +9,14 @@ import { SystemAssistant } from '@renderer/types'
 import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { colorPrimary } from '@renderer/config/antd'
+import { useTranslation } from 'react-i18next'
 
 const { Title } = Typography
 
 const AppsPage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const assistantGroups = groupBy(SYSTEM_ASSISTANTS, 'group')
+  const { t } = useTranslation()
 
   const onAddAssistant = (assistant: SystemAssistant) => {
     addAssistant({
@@ -22,7 +24,7 @@ const AppsPage: FC = () => {
       ...assistant
     })
     window.message.success({
-      content: 'Assistant added successfully',
+      content: t('message.assistant.added.content'),
       key: 'assistant-added',
       style: { marginTop: '5vh' }
     })
@@ -31,7 +33,7 @@ const AppsPage: FC = () => {
   return (
     <Container>
       <Navbar>
-        <NavbarCenter style={{ borderRight: 'none' }}>Assistant Market</NavbarCenter>
+        <NavbarCenter style={{ borderRight: 'none' }}>{t('apps.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer>
         {Object.keys(assistantGroups).map((group) => (
