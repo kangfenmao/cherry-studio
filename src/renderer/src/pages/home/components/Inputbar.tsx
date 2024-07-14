@@ -135,8 +135,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               description={t('assistant.input.clear.content')}
               placement="top"
               onConfirm={clearTopic}
-              okText="Clear"
-              cancelText="Cancel">
+              okText={t('assistant.input.clear')}>
               <ToolbarButton type="text">
                 <ClearOutlined />
               </ToolbarButton>
