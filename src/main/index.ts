@@ -4,7 +4,7 @@ import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
-import { autoUpdater } from 'electron-updater'
+import AppUpdater from './updater'
 
 function createWindow(): void {
   // Load the previous state with fallback to defaults
@@ -94,7 +94,7 @@ app.whenReady().then(() => {
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err))
 
-  autoUpdater.checkForUpdatesAndNotify()
+  setTimeout(() => new AppUpdater(), 5000)
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

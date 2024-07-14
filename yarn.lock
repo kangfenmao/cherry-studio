@@ -2642,6 +2642,7 @@ __metadata:
     electron: "npm:^28.2.0"
     electron-builder: "npm:^24.9.1"
     electron-devtools-installer: "npm:^3.2.0"
+    electron-log: "npm:^5.1.5"
     electron-updater: "npm:^6.1.7"
     electron-vite: "npm:^2.0.0"
     electron-window-state: "npm:^5.0.3"
@@ -3248,6 +3249,13 @@ __metadata:
     tslib: "npm:^2.1.0"
     unzip-crx-3: "npm:^0.2.0"
   checksum: 10c0/50d56e174e3bbe568d3d4a56a56e8c87faf44aa54a49ecc93ab672905f30ca1bf4e6a1b5a0b297c6ffeec1e89848086a6ff47f0db8197edb16d1bda16d6440c2
+  languageName: node
+  linkType: hard
+
+"electron-log@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "electron-log@npm:5.1.5"
+  checksum: 10c0/40bb497d1a515855d52d49ec86dee55b1eddf990b8cf74b24e79b1af5830413fd47afb8c060b830201e3b7d2c5f5401f5cc5c2321e91ab0c66fc8e862c9b8380
   languageName: node
   linkType: hard
 
