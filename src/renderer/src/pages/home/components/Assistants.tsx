@@ -121,7 +121,7 @@ const Container = styled.div`
 const AssistantItem = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 8px 10px;
+  padding: 7px 10px;
   position: relative;
   border-radius: 5px;
   margin-bottom: 5px;

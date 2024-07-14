@@ -56,6 +56,7 @@ const AppsPage: FC = () => {
                             type="primary"
                             shape="circle"
                             size="small"
+                            ghost
                             icon={<CheckOutlined style={{ fontSize: 12 }} />}
                           />
                         )}
