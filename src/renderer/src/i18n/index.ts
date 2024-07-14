@@ -104,6 +104,7 @@ const resources = {
         'models.add.group_name': 'Group Name',
         'models.add.group_name.tooltip': 'Optional e.g. ChatGPT',
         'models.add.group_name.placeholder': 'Optional e.g. ChatGPT',
+        'models.empty': 'No models found',
         'assistant.title': 'Default Assistant',
         'about.description': 'A powerful AI assistant for producer'
       }
@@ -149,7 +150,7 @@ const resources = {
       },
       assistant: {
         'default.name': '默认助手',
-        'default.description': '你可以随时随地和我聊天',
+        'default.description': '你好，我是默认助手。你可以立刻开始跟我聊天。',
         'default.topic.name': '默认话题',
         'topics.title': '话题',
         'topics.hide_topics': '隐藏话题',
@@ -210,6 +211,7 @@ const resources = {
         'models.add.group_name': '分组名称',
         'models.add.group_name.tooltip': '例如 ChatGPT',
         'models.add.group_name.placeholder': '例如 ChatGPT',
+        'models.empty': '没有模型',
         'assistant.title': '默认助手',
         'about.description': '一个为创造者而生的 AI 助手'
       }

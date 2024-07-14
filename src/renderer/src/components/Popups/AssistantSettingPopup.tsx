@@ -16,7 +16,6 @@ interface Props extends AssistantSettingPopupShowParams {
 
 const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve }) => {
   const [name, setName] = useState(assistant.name)
-  const [description, setDescription] = useState(assistant.description)
   const [prompt, setPrompt] = useState(assistant.prompt)
   const [open, setOpen] = useState(true)
   const { t } = useTranslation()
@@ -30,7 +29,7 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
   }
 
   const onClose = () => {
-    resolve({ ...assistant, name, description, prompt })
+    resolve({ ...assistant, name, prompt })
   }
 
   return (
@@ -40,15 +39,6 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
         placeholder={t('common.assistant') + t('common.name')}
         value={name}
         onChange={(e) => setName(e.target.value)}
-      />
-      <Box mt={8} mb={8}>
-        {t('common.description')}
-      </Box>
-      <TextArea
-        rows={2}
-        placeholder={t('common.assistant') + t('common.description')}
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
       />
       <Box mt={8} mb={8}>
         {t('common.prompt')}

@@ -20,13 +20,6 @@ const AssistantSettings: FC = () => {
         value={defaultAssistant.name}
         onChange={(e) => updateDefaultAssistant({ ...defaultAssistant, name: e.target.value })}
       />
-      <SettingSubtitle>{t('common.description')}</SettingSubtitle>
-      <TextArea
-        rows={2}
-        placeholder={t('common.assistant') + t('common.description')}
-        value={defaultAssistant.description}
-        onChange={(e) => updateDefaultAssistant({ ...defaultAssistant, description: e.target.value })}
-      />
       <SettingSubtitle>{t('common.prompt')}</SettingSubtitle>
       <TextArea
         rows={4}

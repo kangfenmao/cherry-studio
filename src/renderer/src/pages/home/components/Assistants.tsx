@@ -93,7 +93,6 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
                           onClick={() => setActiveAssistant(assistant)}
                           className={assistant.id === activeAssistant?.id ? 'active' : ''}>
                           <AssistantName>{assistant.name}</AssistantName>
-                          <AssistantLastMessage>{assistant.description}</AssistantLastMessage>
                         </AssistantItem>
                       </Dropdown>
                     </div>
@@ -115,14 +114,17 @@ const Container = styled.div`
   max-width: var(--assistants-width);
   border-right: 0.5px solid var(--color-border);
   height: calc(100vh - var(--navbar-height));
+  padding: 10px;
   overflow-y: auto;
 `
 
 const AssistantItem = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 15px;
+  padding: 8px 10px;
   position: relative;
+  border-radius: 5px;
+  margin-bottom: 5px;
   cursor: pointer;
   .anticon {
     display: none;

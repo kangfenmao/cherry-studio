@@ -72,7 +72,6 @@ const AppsPage: FC = () => {
                           </Tooltip>
                         )}
                       </AssistantHeader>
-                      <AssistantCardDescription>{assistant.description}</AssistantCardDescription>
                       <AssistantCardPrompt>{assistant.prompt}</AssistantCardPrompt>
                     </AssistantCard>
                   </Col>
@@ -114,14 +113,6 @@ const AssistantHeader = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`
-
-const AssistantCardDescription = styled.div`
-  font-size: 12px;
-  color: #888;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  line-height: 1.5;
 `
 
 const AssistantCardPrompt = styled.div`

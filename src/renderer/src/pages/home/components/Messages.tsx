@@ -27,7 +27,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   const assistantDefaultMessage: Message = {
     id: 'assistant',
     role: 'assistant',
-    content: assistant.description,
+    content: assistant.prompt || t('assistant.default.description'),
     assistantId: assistant.id,
     topicId: topic.id,
     status: 'pending',

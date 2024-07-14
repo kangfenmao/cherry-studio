@@ -141,7 +141,7 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
             })}
           </div>
         ))}
-        {isEmpty(list) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No models" />}
+        {isEmpty(list) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('settings.models.empty')} />}
       </ListContainer>
     </Modal>
   )
@@ -150,7 +150,7 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
 const onShowModelInfo = (model: Model) => {
   window.modal.info({
     title: model.name,
-    content: model.description,
+    content: model?.description,
     icon: null,
     maskClosable: true
   })
