@@ -89,14 +89,16 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-        addNewTopic()
-        inputRef.current?.focus()
+      if (!generating) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+          addNewTopic()
+          inputRef.current?.focus()
+        }
       }
     }
     document.addEventListener('keydown', onKeydown)
     return () => document.removeEventListener('keydown', onKeydown)
-  }, [addNewTopic])
+  }, [addNewTopic, generating])
 
   useEffect(() => {
     const unsubscribes = [

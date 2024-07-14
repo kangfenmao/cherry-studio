@@ -156,7 +156,7 @@ export async function checkApi(provider: Provider) {
     key: 'api-check',
     style: { marginTop: '3vh' },
     duration: valid ? 2 : 8,
-    content: valid ? t('api.connection.successful') : t('api.connection.failed') + ' ' + errorMessage
+    content: valid ? t('message.api.connection.successful') : t('message.api.connection.failed') + ' ' + errorMessage
   })
 
   return valid
