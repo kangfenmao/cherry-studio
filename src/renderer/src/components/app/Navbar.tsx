@@ -28,12 +28,14 @@ const NavbarContainer = styled.div`
   border-bottom: 0.5px solid var(--color-border);
   -webkit-app-region: drag;
   background-color: #1f1f1f;
+  margin-left: calc(var(--sidebar-width) * -1);
+  padding-left: var(--sidebar-width);
 `
 
 const NavbarLeftContainer = styled.div`
   min-width: var(--assistants-width);
   border-right: 1px solid var(--color-border);
-  padding: 0 16px;
+  padding: 0 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -48,7 +50,7 @@ const NavbarCenterContainer = styled.div`
   color: var(--color-text-1);
   text-align: center;
   border-right: 1px solid var(--color-border);
-  padding: 0 16px;
+  padding: 0 20px;
 `
 
 const NavbarRightContainer = styled.div`

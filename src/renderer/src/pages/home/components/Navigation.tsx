@@ -32,7 +32,7 @@ const Navigation: FC<Props> = ({ activeAssistant }) => {
     }))
 
   return (
-    <NavbarCenter style={{ border: 'none' }}>
+    <NavbarCenter style={{ border: 'none', padding: '0 15px' }}>
       {activeAssistant?.name}
       <DropdownMenu menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }} trigger={['click']}>
         <Button size="small" type="primary" ghost style={{ fontSize: '11px' }}>
