@@ -148,16 +148,4 @@ const AssistantName = styled.div`
   font-weight: bold;
 `
 
-const AssistantLastMessage = styled.div`
-  font-size: 12px;
-  line-height: 20px;
-  color: var(--color-text-2);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 1;
-  height: 20px;
-`
-
 export default Assistants

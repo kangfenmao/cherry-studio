@@ -31,13 +31,13 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: build-linux
+      - name: Build Linux
         if: matrix.os == 'ubuntu-latest'
         run: yarn build:linux
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: build-mac
+      - name: Build Mac
         if: matrix.os == 'macos-latest'
         run: yarn build:mac
         env:
@@ -48,13 +48,16 @@ jobs:
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: build-win
+      - name: Build Windows
         if: matrix.os == 'windows-latest'
         run: yarn build:win
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: release
+      - name: Replace spaces in filenames
+        run: node scripts/replaceSpaces.js
+
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
