@@ -8,12 +8,12 @@ export default class AppUpdater {
     autoUpdater.logger = logger
     autoUpdater.forceDevUpdateConfig = true
     autoUpdater.autoDownload = false
-    autoUpdater.checkForUpdatesAndNotify()
+    autoUpdater.checkForUpdates()
 
     // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
     ipcMain.on('check-for-update', () => {
       logger.info('触发检查更新')
-      autoUpdater.checkForUpdates()
+      return autoUpdater.checkForUpdates()
     })
 
     // 检测下载错误
