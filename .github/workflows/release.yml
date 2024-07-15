@@ -70,6 +70,6 @@ jobs:
             dist/*.deb
             dist/*.rpm
             dist/*.tar.gz
-            dist/*.yml
+            dist/latest*.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
