@@ -225,11 +225,15 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: store.getState().settings.language || 'en-US',
+  lng: localStorage.getItem('language') || 'en-US',
   fallbackLng: 'en-US',
   interpolation: {
     escapeValue: false
   }
 })
+
+export function i18nInit() {
+  i18n.changeLanguage(store.getState().settings.language || 'en-US')
+}
 
 export default i18n

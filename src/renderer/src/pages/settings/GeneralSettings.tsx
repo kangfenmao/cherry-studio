@@ -21,7 +21,7 @@ const GeneralSettings: FC = () => {
   const onSelectLanguage = (value: string) => {
     dispatch(setLanguage(value))
     i18next.changeLanguage(value)
-    setTimeout(() => window.location.reload(), 500)
+    localStorage.setItem('language', value)
   }
 
   return (

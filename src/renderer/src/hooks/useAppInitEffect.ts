@@ -1,3 +1,4 @@
+import { i18nInit } from '@renderer/i18n'
 import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
@@ -12,5 +13,6 @@ export function useAppInitEffect() {
       const storedImage = await LocalStorage.getImage('avatar')
       storedImage && dispatch(setAvatar(storedImage))
     })
+    i18nInit()
   }, [dispatch])
 }
