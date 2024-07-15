@@ -1051,6 +1051,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kangfenmao/keyv-storage@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@kangfenmao/keyv-storage@npm:0.1.0"
+  checksum: 10c0/647cf2d2f2e403ec91d1835546aa08bc6af1468a2823c3aa2cef883bacf67eb1a88bb97be1b4c0a09bc3ed69dba2ccbb8ecc3fd13242e84d4e234d5b77707156
+  languageName: node
+  linkType: hard
+
 "@malept/cross-spawn-promise@npm:^1.1.0":
   version: 1.1.1
   resolution: "@malept/cross-spawn-promise@npm:1.1.1"
@@ -2628,6 +2635,7 @@ __metadata:
     "@electron-toolkit/utils": "npm:^3.0.0"
     "@fontsource/inter": "npm:^5.0.18"
     "@hello-pangea/dnd": "npm:^16.6.0"
+    "@kangfenmao/keyv-storage": "npm:^0.1.0"
     "@reduxjs/toolkit": "npm:^2.2.5"
     "@types/lodash": "npm:^4.17.5"
     "@types/node": "npm:^18.19.9"
