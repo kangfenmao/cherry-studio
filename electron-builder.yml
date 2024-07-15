@@ -56,6 +56,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    - 【功能】新增消息暂停发送功能
-    - 【修复】修复多语言切换不彻底问题
-    - 【构建】支持 macOS Intel 架构
+    - 修复默认助理名称为空的问题
+    - 修复首次安装默认语言检测问题
+    - 更新日志样式微调

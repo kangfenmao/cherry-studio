@@ -1,6 +1,6 @@
 $background-color: #121212;
 $text-color: #ffffff;
-$heading-color: #bb86fc;
+$heading-color: #00b96b;
 $link-color: #3498db;
 $code-background: #1e1e1e;
 $code-color: #f0e7db;
@@ -20,6 +20,11 @@ $code-color: #f0e7db;
   h5,
   h6 {
     color: $heading-color;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
   }
 
   h3 {
