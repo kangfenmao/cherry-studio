@@ -127,17 +127,17 @@ export async function checkApi(provider: Provider) {
   const style = { marginTop: '3vh' }
 
   if (!provider.apiKey) {
-    window.message.error({ content: t('error.enter.api.key'), key, style })
+    window.message.error({ content: t('message.error.enter.api.key'), key, style })
     return false
   }
 
   if (!provider.apiHost) {
-    window.message.error({ content: t('error.enter.api.host'), key, style })
+    window.message.error({ content: t('message.error.enter.api.host'), key, style })
     return false
   }
 
   if (!model) {
-    window.message.error({ content: t('error.enter.model'), key, style })
+    window.message.error({ content: t('message.error.enter.model'), key, style })
     return false
   }
 
@@ -147,7 +147,8 @@ export async function checkApi(provider: Provider) {
   try {
     const response = await openaiProvider.chat.completions.create({
       model: model.id,
-      messages: [{ role: 'user', content: 'hello' }],
+      messages: [{ role: 'user', content: 'hi' }],
+      max_tokens: 100,
       stream: false
     })
 

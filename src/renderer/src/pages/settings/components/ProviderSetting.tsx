@@ -18,7 +18,8 @@ interface Props {
   provider: Provider
 }
 
-const ProviderSetting: FC<Props> = ({ provider }) => {
+const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
+  const { provider } = useProvider(_provider.id)
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
   const [apiValid, setApiValid] = useState(false)
