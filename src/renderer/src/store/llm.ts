@@ -54,7 +54,7 @@ const initialState: LlmState = {
       name: 'ZhiPu',
       apiKey: '',
       apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
-      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.zhipu.filter((m) => m.defaultEnabled),
       isSystem: true,
       enabled: false
     },
