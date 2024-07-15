@@ -29,11 +29,10 @@ mac:
   target:
     - target: dmg
       arch:
-        - x64
         - arm64
-
+        - x64
 dmg:
-  artifactName: ${productName}-${version}.${ext}
+  artifactName: ${productName}-${version}-${arch}.${ext}
 linux:
   target:
     - AppImage
