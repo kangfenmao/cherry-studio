@@ -94,7 +94,9 @@ app.whenReady().then(() => {
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err))
 
-  setTimeout(() => new AppUpdater(), 3000)
+  if (app.isPackaged) {
+    setTimeout(() => new AppUpdater(), 3000)
+  }
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
