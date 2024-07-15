@@ -27,6 +27,8 @@ const getOpenAiProvider = (provider: Provider) => {
 }
 
 export async function fetchChatCompletion({ messages, topic, assistant, onResponse }: FetchChatCompletionParams) {
+  window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, false)
+
   const provider = getAssistantProvider(assistant)
   const openaiProvider = getOpenAiProvider(provider)
   const defaultModel = getDefaultModel()
@@ -34,7 +36,7 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
 
   store.dispatch(setGenerating(true))
 
-  const _message: Message = {
+  const message: Message = {
     id: uuid(),
     role: 'assistant',
     content: '',
@@ -45,7 +47,7 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     status: 'sending'
   }
 
-  onResponse({ ..._message })
+  onResponse({ ...message })
 
   const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
 
@@ -54,12 +56,10 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     content: message.content
   }))
 
-  const _messages = [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[]
-
   try {
     const stream = await openaiProvider.chat.completions.create({
       model: model.id,
-      messages: _messages,
+      messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
       stream: true
     })
 
@@ -67,22 +67,27 @@ export async function fetchChatCompletion({ messages, topic, assistant, onRespon
     let usage: OpenAI.Completions.CompletionUsage | undefined = undefined
 
     for await (const chunk of stream) {
+      if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
+        break
+      }
+
       content = content + (chunk.choices[0]?.delta?.content || '')
       chunk.usage && (usage = chunk.usage)
-      onResponse({ ..._message, content, status: 'pending' })
+      onResponse({ ...message, content, status: 'pending' })
     }
 
-    _message.content = content
-    _message.usage = usage
+    message.content = content
+    message.usage = usage
   } catch (error: any) {
-    _message.content = `Error: ${error.message}`
+    message.content = `Error: ${error.message}`
   }
 
-  _message.status = 'success'
-  EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, _message)
+  const paused = window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)
+  message.status = paused ? 'paused' : 'success'
+  EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, message)
   store.dispatch(setGenerating(false))
 
-  return _message
+  return message
 }
 
 interface FetchMessagesSummaryParams {

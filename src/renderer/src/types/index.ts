@@ -16,7 +16,7 @@ export type Message = {
   topicId: string
   modelId?: string
   createdAt: string
-  status: 'sending' | 'pending' | 'success' | 'error'
+  status: 'sending' | 'pending' | 'success' | 'paused' | 'error'
   usage?: OpenAI.Completions.CompletionUsage
 }
 

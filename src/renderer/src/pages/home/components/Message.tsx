@@ -12,6 +12,7 @@ import Logo from '@renderer/assets/images/logo.png'
 import { SyncOutlined } from '@ant-design/icons'
 import { firstLetter } from '@renderer/utils'
 import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
 
 interface Props {
   message: Message
@@ -53,6 +54,13 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE), 100)
   }
 
+  const getMessageContent = (message: Message) => {
+    if (isEmpty(message.content) && message.status === 'paused') {
+      return t('message.chat.completion.paused')
+    }
+    return message.content
+  }
+
   return (
     <MessageContainer key={message.id}>
       <AvatarWrapper>
@@ -72,7 +80,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
         )}
         {message.status !== 'sending' && (
           <Markdown className="markdown" components={{ code: CodeBlock as any }}>
-            {message.content}
+            {getMessageContent(message)}
           </Markdown>
         )}
         {showMenu && (

@@ -39,7 +39,8 @@ const resources = {
         'error.enter.api.host': 'Please enter your API host first',
         'error.enter.model': 'Please select a model first',
         'api.connection.failed': 'Connection failed',
-        'api.connection.success': 'Connection successful'
+        'api.connection.success': 'Connection successful',
+        'chat.completion.paused': 'Chat completion paused'
       },
       assistant: {
         'default.name': 'Default Assistant',
@@ -61,7 +62,8 @@ const resources = {
         'input.clear.title': 'Clear all messages?',
         'input.clear.content': 'Are you sure to clear all messages?',
         'input.placeholder': 'Type your message here...',
-        'input.send': 'Send'
+        'input.send': 'Send',
+        'input.pause': 'Pause'
       },
       apps: {
         title: 'Agents'
@@ -146,7 +148,8 @@ const resources = {
         'error.enter.api.host': '请输入您的 API 地址',
         'error.enter.model': '请选择一个模型',
         'api.connection.failed': '连接失败',
-        'api.connection.successful': '连接成功'
+        'api.connection.successful': '连接成功',
+        'chat.completion.paused': '会话已停止'
       },
       assistant: {
         'default.name': '默认助手',
@@ -168,7 +171,8 @@ const resources = {
         'input.clear.title': '清除所有消息?',
         'input.clear.content': '确定要清除所有消息吗?',
         'input.placeholder': '在这里输入消息...',
-        'input.send': '发送'
+        'input.send': '发送',
+        'input.pause': '暂停'
       },
       apps: {
         title: '智能体'

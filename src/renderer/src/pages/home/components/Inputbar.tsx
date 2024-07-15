@@ -12,6 +12,7 @@ import {
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
+  PauseCircleOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
@@ -19,9 +20,10 @@ import { isEmpty } from 'lodash'
 import SendMessageSetting from './SendMessageSetting'
 import { useSettings } from '@renderer/hooks/useSettings'
 import dayjs from 'dayjs'
-import { useAppSelector } from '@renderer/store'
+import store, { useAppSelector } from '@renderer/store'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { useTranslation } from 'react-i18next'
+import { setGenerating } from '@renderer/store/runtime'
 
 interface Props {
   assistant: Assistant
@@ -86,6 +88,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   const clearTopic = () => EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
 
+  const onPause = () => {
+    window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
+    store.dispatch(setGenerating(false))
+  }
+
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -148,6 +155,13 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           </Tooltip>
         </ToolbarMenu>
         <ToolbarMenu>
+          {generating && (
+            <Tooltip placement="top" title={t('assistant.input.pause')} arrow>
+              <ToolbarButton type="text" onClick={onPause}>
+                <PauseCircleOutlined />
+              </ToolbarButton>
+            </Tooltip>
+          )}
           <SendMessageSetting>
             <ToolbarButton type="text" style={{ marginRight: 0 }}>
               <MoreOutlined />
