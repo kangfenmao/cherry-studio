@@ -50,3 +50,8 @@ publish:
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
 afterSign: scripts/notarize.js
+releaseInfo:
+  releaseNotes: |
+    - 【功能】新增消息暂停发送功能
+    - 【修复】修复多语言切换不彻底问题
+    - 【构建】支持 macOS Intel 架构

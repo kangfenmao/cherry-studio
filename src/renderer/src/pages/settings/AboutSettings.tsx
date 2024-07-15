@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import Logo from '@renderer/assets/images/logo.png'
 import { runAsyncFunction } from '@renderer/utils'
 import { useTranslation } from 'react-i18next'
+import Markdown from 'react-markdown'
+import changelogs from '@renderer/CHANGELOG.md?raw'
 
 const AboutSettings: FC = () => {
   const [version, setVersion] = useState('')
@@ -23,6 +25,9 @@ const AboutSettings: FC = () => {
         Cherry Studio <Version>(v{version})</Version>
       </Title>
       <Description>{t('settings.about.description')}</Description>
+      <ChangeLog>
+        <Markdown className="markdown">{changelogs}</Markdown>
+      </ChangeLog>
     </Container>
   )
 }
@@ -53,6 +58,16 @@ const Description = styled.div`
   font-size: 14px;
   color: var(--color-text-2);
   text-align: center;
+`
+
+const ChangeLog = styled.div`
+  font-size: 14px;
+  color: var(--color-text-2);
+  background-color: var(--color-background-soft);
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 5px;
+  width: 800px;
 `
 
 export default AboutSettings
