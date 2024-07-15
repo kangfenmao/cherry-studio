@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
-import { Avatar, message, Select, Upload } from 'antd'
+import { Avatar, Select, Upload } from 'antd'
 import styled from 'styled-components'
 import LocalStorage from '@renderer/services/storage'
 import { compressImage } from '@renderer/utils'
@@ -14,7 +14,6 @@ import i18next from 'i18next'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const [messageApi, contextHolder] = message.useMessage()
   const { language } = useSettings()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -22,13 +21,25 @@ const GeneralSettings: FC = () => {
   const onSelectLanguage = (value: string) => {
     dispatch(setLanguage(value))
     i18next.changeLanguage(value)
-    // window.location.reload()
+    setTimeout(() => window.location.reload(), 500)
   }
 
   return (
     <SettingContainer>
-      {contextHolder}
       <SettingTitle>{t('settings.general.title')}</SettingTitle>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('common.language')}</SettingRowTitle>
+        <Select
+          defaultValue={language || 'en-US'}
+          style={{ width: 120 }}
+          onChange={onSelectLanguage}
+          options={[
+            { value: 'zh-CN', label: '中文' },
+            { value: 'en-US', label: 'English' }
+          ]}
+        />
+      </SettingRow>
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('common.avatar')}</SettingRowTitle>
@@ -44,27 +55,11 @@ const GeneralSettings: FC = () => {
               await LocalStorage.storeImage('avatar', compressedFile)
               dispatch(setAvatar(await LocalStorage.getImage('avatar')))
             } catch (error: any) {
-              messageApi.open({
-                type: 'error',
-                content: error.message
-              })
+              window.message.error(error.message)
             }
           }}>
           <UserAvatar src={avatar} size="large" />
         </Upload>
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('common.language')}</SettingRowTitle>
-        <Select
-          defaultValue={language || 'en-US'}
-          style={{ width: 120 }}
-          onChange={onSelectLanguage}
-          options={[
-            { value: 'zh-CN', label: '中文' },
-            { value: 'en-US', label: 'English' }
-          ]}
-        />
       </SettingRow>
       <SettingDivider />
     </SettingContainer>
