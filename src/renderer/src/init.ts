@@ -10,6 +10,7 @@ function init() {
     storeName: 'cherryai',
     description: 'Cherry Studio Storage'
   })
+
   window.keyv = new KeyvStorage()
   window.keyv.init()
 
