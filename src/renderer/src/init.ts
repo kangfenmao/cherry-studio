@@ -1,26 +1,24 @@
 import localforage from 'localforage'
 import KeyvStorage from '@kangfenmao/keyv-storage'
 import * as Sentry from '@sentry/electron/renderer'
+import { isProduction } from './utils'
 
-function initSentry() {
-  // Disable sentry in development mode
-  if (process?.env?.NODE_ENV === 'development') {
-    return
+async function initSentry() {
+  if (await isProduction()) {
+    Sentry.init({
+      integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
+
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 1.0,
+
+      // Capture Replay for 10% of all sessions,
+      // plus for 100% of sessions with an error
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0
+    })
   }
-
-  Sentry.init({
-    integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
-
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-
-    // Capture Replay for 10% of all sessions,
-    // plus for 100% of sessions with an error
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0
-  })
 }
 
 function init() {

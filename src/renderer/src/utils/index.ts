@@ -98,3 +98,13 @@ export const firstLetter = (str?: string) => {
 export function isFreeModel(model: Model) {
   return (model.id + model.name).toLocaleLowerCase().includes('free')
 }
+
+export async function isProduction() {
+  const { isPackaged } = await window.api.getAppInfo()
+  return isPackaged
+}
+
+export async function isDev() {
+  const isProd = await isProduction()
+  return !isProd
+}
