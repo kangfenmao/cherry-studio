@@ -5,6 +5,7 @@ import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import AppUpdater from './updater'
+import * as Sentry from '@sentry/electron/main'
 
 function createWindow(): void {
   // Load the previous state with fallback to defaults
@@ -110,3 +111,6 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+Sentry.init({
+  dsn: 'https://f0e972deff79c2df3e887e232d8a46a3@o4507610668007424.ingest.us.sentry.io/4507610670563328'
+})
