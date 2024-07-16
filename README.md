@@ -17,6 +17,7 @@ Cherry Studio is a desktop client for multiple cutting-edge LLM models, availabl
 5. Supports drag-and-drop sorting.
 6. Code highlighting.
 
+# Develop
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
