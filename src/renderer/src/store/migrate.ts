@@ -141,6 +141,21 @@ const migrate = createMigrate({
         assistants: state.assistants.assistants.map((assistant) => fixAssistantName(assistant))
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '9': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: state.llm.providers.map((provider) => {
+          if (provider.id === 'zhipu' && provider.models[0] && provider.models[0].id === 'llama3-70b-8192') {
+            provider.models = SYSTEM_MODELS.zhipu.filter((m) => m.defaultEnabled)
+          }
+          return provider
+        })
+      }
+    }
   }
 })
 
