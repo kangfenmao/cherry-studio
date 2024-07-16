@@ -1,5 +1,5 @@
-import changelogEn from '@renderer/assets/changelog/CHANGELOG.en.md?raw'
-import changelogZh from '@renderer/assets/changelog/CHANGELOG.zh.md?raw'
+import changelogEn from '@renderer/CHANGELOG.en.md?raw'
+import changelogZh from '@renderer/CHANGELOG.zh.md?raw'
 import { FC } from 'react'
 import Markdown from 'react-markdown'
 import styled from 'styled-components'

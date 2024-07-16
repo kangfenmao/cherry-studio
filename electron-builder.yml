@@ -56,6 +56,7 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    - 修复默认助理名称为空的问题
-    - 修复首次安装默认语言检测问题
-    - 更新日志样式微调
+    - 修复多语言提示错误
+    - 修复智谱AI默认模型错误问题
+    - 修复 OpenRouter API 检测出错问题
+    - 修复模型提供商多语言翻译错误问题
