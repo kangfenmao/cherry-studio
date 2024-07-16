@@ -108,7 +108,12 @@ const resources = {
         'models.add.group_name.placeholder': 'Optional e.g. ChatGPT',
         'models.empty': 'No models found',
         'assistant.title': 'Default Assistant',
-        'about.description': 'A powerful AI assistant for producer'
+        'about.description': 'A powerful AI assistant for producer',
+        'about.updateNotAvailable': 'You are using the latest version',
+        'about.checkingUpdate': 'Checking for updates...',
+        'about.updateError': 'Update error',
+        'about.checkUpdate': 'Check Update',
+        'about.downloading': 'Downloading...'
       }
     }
   },
@@ -217,7 +222,12 @@ const resources = {
         'models.add.group_name.placeholder': '例如 ChatGPT',
         'models.empty': '没有模型',
         'assistant.title': '默认助手',
-        'about.description': '一个为创造者而生的 AI 助手'
+        'about.description': '一个为创造者而生的 AI 助手',
+        'about.updateNotAvailable': '你的软件已是最新版本',
+        'about.checkingUpdate': '正在检查更新...',
+        'about.updateError': '更新出错',
+        'about.checkUpdate': '检查更新',
+        'about.downloading': '正在下载更新...'
       }
     }
   }

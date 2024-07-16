@@ -15,4 +15,11 @@ export function useAppInitEffect() {
     })
     i18nInit()
   }, [dispatch])
+
+  useEffect(() => {
+    runAsyncFunction(async () => {
+      const { isPackaged } = await window.api.getAppInfo()
+      isPackaged && setTimeout(window.api.checkForUpdate, 3000)
+    })
+  }, [])
 }

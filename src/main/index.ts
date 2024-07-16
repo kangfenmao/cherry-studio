@@ -1,13 +1,13 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import * as Sentry from '@sentry/electron/main'
 import { app, BrowserWindow, ipcMain, Menu, MenuItem, shell } from 'electron'
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import AppUpdater from './updater'
-import * as Sentry from '@sentry/electron/main'
 
-function createWindow(): void {
+function createWindow() {
   // Load the previous state with fallback to defaults
   const mainWindowState = windowStateKeeper({
     defaultWidth: 1080,
@@ -62,6 +62,8 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  return mainWindow
 }
 
 // This method will be called when Electron has finished
@@ -78,26 +80,36 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC
-  ipcMain.handle('get-app-info', () => ({
-    version: app.getVersion()
-  }))
-
-  createWindow()
-
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 
-  installExtension(REDUX_DEVTOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err))
+  const mainWindow = createWindow()
 
-  if (app.isPackaged) {
-    setTimeout(() => new AppUpdater(), 3000)
-  }
+  const { autoUpdater } = new AppUpdater(mainWindow)
+
+  // IPC
+  ipcMain.handle('get-app-info', () => ({
+    version: app.getVersion(),
+    isPackaged: app.isPackaged
+  }))
+
+  ipcMain.handle('open-website', (_, url: string) => {
+    shell.openExternal(url)
+  })
+
+  // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
+  ipcMain.handle('check-for-update', async () => {
+    autoUpdater.logger?.info('触发检查更新')
+    return {
+      currentVersion: autoUpdater.currentVersion,
+      update: await autoUpdater.checkForUpdates()
+    }
+  })
+
+  installExtension(REDUX_DEVTOOLS)
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

@@ -4,7 +4,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   getAppInfo: () => ipcRenderer.invoke('get-app-info'),
-  checkForUpdate: () => ipcRenderer.invoke('check-for-update')
+  checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
+  openWebsite: (url: string) => ipcRenderer.invoke('open-website', url)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

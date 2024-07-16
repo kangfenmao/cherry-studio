@@ -1,24 +1,20 @@
-import { autoUpdater, UpdateInfo } from 'electron-updater'
+import { AppUpdater as _AppUpdater, autoUpdater, UpdateInfo } from 'electron-updater'
 import logger from 'electron-log'
-import { dialog, ipcMain } from 'electron'
+import { BrowserWindow, dialog } from 'electron'
 
 export default class AppUpdater {
-  constructor() {
+  autoUpdater: _AppUpdater = autoUpdater
+
+  constructor(mainWindow: BrowserWindow) {
     logger.transports.file.level = 'debug'
     autoUpdater.logger = logger
     autoUpdater.forceDevUpdateConfig = true
     autoUpdater.autoDownload = false
-    autoUpdater.checkForUpdates()
-
-    // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
-    ipcMain.on('check-for-update', () => {
-      logger.info('触发检查更新')
-      return autoUpdater.checkForUpdates()
-    })
 
     // 检测下载错误
     autoUpdater.on('error', (error) => {
       logger.error('更新异常', error)
+      mainWindow.webContents.send('update-error', error)
     })
 
     // 检测是否需要更新
@@ -28,6 +24,7 @@ export default class AppUpdater {
 
     autoUpdater.on('update-available', (releaseInfo: UpdateInfo) => {
       autoUpdater.logger?.info('检测到新版本，确认是否下载')
+      mainWindow.webContents.send('update-available', releaseInfo)
       const releaseNotes = releaseInfo.releaseNotes
       let releaseContent = ''
       if (releaseNotes) {
@@ -49,10 +46,12 @@ export default class AppUpdater {
           title: '应用有新的更新',
           detail: releaseContent,
           message: '发现新版本，是否现在更新？',
-          buttons: ['否', '是']
+          buttons: ['下次再说', '更新']
         })
         .then(({ response }) => {
           if (response === 1) {
+            logger.info('用户选择更新，准备下载更新')
+            mainWindow.webContents.send('download-update')
             autoUpdater.downloadUpdate()
           }
         })
@@ -61,11 +60,13 @@ export default class AppUpdater {
     // 检测到不需要更新时
     autoUpdater.on('update-not-available', () => {
       logger.info('现在使用的就是最新版本，不用更新')
+      mainWindow.webContents.send('update-not-available')
     })
 
     // 更新下载进度
     autoUpdater.on('download-progress', (progress) => {
       logger.info('下载进度', progress)
+      mainWindow.webContents.send('download-progress', progress)
     })
 
     // 当需要更新的内容下载完成后
@@ -80,5 +81,7 @@ export default class AppUpdater {
           setImmediate(() => autoUpdater.quitAndInstall())
         })
     })
+
+    this.autoUpdater = autoUpdater
   }
 }

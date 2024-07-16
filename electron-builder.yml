@@ -56,7 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    - 修复多语言提示错误
-    - 修复智谱AI默认模型错误问题
-    - 修复 OpenRouter API 检测出错问题
-    - 修复模型提供商多语言翻译错误问题
+    - 修复更新日志页面不能滚动问题
+    - 新增检查更新按钮

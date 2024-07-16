@@ -6,7 +6,10 @@ declare global {
     api: {
       getAppInfo: () => Promise<{
         version: string
+        isPackaged: boolean
       }>
+      checkForUpdate: () => void
+      openWebsite: (url: string) => void
     }
   }
 }

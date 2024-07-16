@@ -3,7 +3,7 @@ import changelogZh from '@renderer/CHANGELOG.zh.md?raw'
 import { FC } from 'react'
 import Markdown from 'react-markdown'
 import styled from 'styled-components'
-import styles from '@renderer/assets/styles/changelog.module.scss'
+import styles from './changelog.module.scss'
 import i18n from '@renderer/i18n'
 
 const Changelog: FC = () => {
