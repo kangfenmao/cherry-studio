@@ -98,9 +98,7 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
           description={t('assistant.topics.delete.all.content')}
           placement="leftBottom"
           onConfirm={removeAllTopics}
-          okText="Delete All"
-          okType="danger"
-          cancelText="Cancel">
+          okType="danger">
           <DeleteButton type="text">
             <DeleteIcon />
           </DeleteButton>
