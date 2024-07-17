@@ -3,6 +3,7 @@ import OpenAI from 'openai'
 export type Assistant = {
   id: string
   name: string
+  description?: string
   prompt: string
   topics: Topic[]
   model?: Model

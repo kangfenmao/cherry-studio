@@ -1,15 +1,14 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
-import { SYSTEM_ASSISTANTS } from '@renderer/config/assistant'
 import { Button, Col, Row, Tooltip, Typography } from 'antd'
 import { find, groupBy } from 'lodash'
 import { FC } from 'react'
 import styled from 'styled-components'
-import { CheckOutlined, PlusOutlined } from '@ant-design/icons'
 import { SystemAssistant } from '@renderer/types'
 import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { colorPrimary } from '@renderer/config/antd'
 import { useTranslation } from 'react-i18next'
+import SYSTEM_ASSISTANTS from '@renderer/config/assistants.json'
 
 const { Title } = Typography
 
@@ -47,33 +46,29 @@ const AppsPage: FC = () => {
                 return (
                   <Col span={6} key={group + index} style={{ marginBottom: 16 }}>
                     <AssistantCard>
-                      <AssistantHeader>
-                        <Title level={5} style={{ marginBottom: 0, color: colorPrimary }}>
-                          {assistant.name}
-                        </Title>
-                        {added && (
-                          <Button
-                            type="primary"
-                            shape="circle"
-                            size="small"
-                            ghost
-                            icon={<CheckOutlined style={{ fontSize: 12 }} />}
-                          />
-                        )}
-                        {!added && (
-                          <Tooltip placement="top" title=" Add to assistant list " arrow>
-                            <Button
-                              type="default"
-                              shape="circle"
-                              size="small"
-                              style={{ padding: 0 }}
-                              icon={<PlusOutlined style={{ fontSize: 12 }} />}
-                              onClick={() => onAddAssistant(assistant)}
-                            />
-                          </Tooltip>
-                        )}
-                      </AssistantHeader>
-                      <AssistantCardPrompt>{assistant.prompt}</AssistantCardPrompt>
+                      <EmojiHeader>{assistant.emoji}</EmojiHeader>
+                      <Col>
+                        <AssistantHeader>
+                          <AssistantName level={5} style={{ marginBottom: 0, color: colorPrimary }}>
+                            {assistant.name.replace(assistant.emoji + ' ', '')}
+                          </AssistantName>
+                        </AssistantHeader>
+                        <AssistantCardPrompt>{assistant.prompt}</AssistantCardPrompt>
+                        <Row>
+                          {added && (
+                            <Button type="default" disabled>
+                              {t('button.added')}
+                            </Button>
+                          )}
+                          {!added && (
+                            <Tooltip placement="top" title=" Add to assistant list " arrow>
+                              <Button type="default" onClick={() => onAddAssistant(assistant as any)}>
+                                {t('button.add')}
+                              </Button>
+                            </Tooltip>
+                          )}
+                        </Row>
+                      </Col>
                     </AssistantCard>
                   </Col>
                 )
@@ -93,6 +88,16 @@ const Container = styled.div`
   height: 100%;
 `
 
+const EmojiHeader = styled.div`
+  width: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 50px;
+  line-height: 50px;
+  margin-right: 10px;
+`
+
 const ContentContainer = styled.div`
   display: flex;
   flex: 1;
@@ -103,10 +108,21 @@ const ContentContainer = styled.div`
 `
 
 const AssistantCard = styled.div`
+  display: flex;
+  flex-direction: row;
   margin-bottom: 16px;
-  background-color: #141414;
+  background-color: #2b2b2b;
   border-radius: 10px;
   padding: 20px;
+  position: relative;
+`
+
+const AssistantName = styled(Title)`
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `
 
 const AssistantHeader = styled.div`
@@ -117,10 +133,14 @@ const AssistantHeader = styled.div`
 `
 
 const AssistantCardPrompt = styled.div`
-  color: white;
+  color: #eee;
   margin-top: 10px;
   margin-bottom: 10px;
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `
 
 export default AppsPage

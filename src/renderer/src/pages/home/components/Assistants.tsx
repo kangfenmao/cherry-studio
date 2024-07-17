@@ -146,6 +146,10 @@ const AssistantName = styled.div`
   font-size: 14px;
   color: var(--color-text-1);
   font-weight: bold;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `
 
 export default Assistants

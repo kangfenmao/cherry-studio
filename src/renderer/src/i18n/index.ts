@@ -27,6 +27,7 @@ const resources = {
       },
       button: {
         add: 'Add',
+        added: 'Added',
         manage: 'Manage',
         select_model: 'Select Model'
       },
@@ -142,6 +143,7 @@ const resources = {
       },
       button: {
         add: '添加',
+        added: '已添加',
         manage: '管理',
         select_model: '选择模型'
       },
