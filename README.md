@@ -6,6 +6,8 @@ Cherry Studio is a desktop client for multiple cutting-edge LLM models, availabl
 
 ![image.png](https://s2.loli.net/2024/07/16/IAVSOorsfFQyGhM.png)
 
+![](https://github.com/user-attachments/assets/18c10eed-4711-4975-bf9c-b274c61924f3)
+
 ![image.png](https://s2.loli.net/2024/07/16/IQPz12OajfNoBTV.png)
 
 # Feature
