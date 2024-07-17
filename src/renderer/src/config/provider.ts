@@ -73,6 +73,7 @@ export const PROVIDER_CONFIG = {
   baichuan: {
     websites: {
       official: 'https://www.baichuan-ai.com/',
+      apiKey: 'https://platform.baichuan-ai.com/console/apikey',
       docs: 'https://platform.baichuan-ai.com/docs',
       models: 'https://platform.baichuan-ai.com/price'
     }

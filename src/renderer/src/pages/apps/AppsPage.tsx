@@ -1,12 +1,11 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
-import { Button, Col, Row, Tooltip, Typography } from 'antd'
+import { Col, Row, Typography } from 'antd'
 import { find, groupBy } from 'lodash'
 import { FC } from 'react'
 import styled from 'styled-components'
 import { SystemAssistant } from '@renderer/types'
 import { getDefaultAssistant } from '@renderer/services/assistant'
 import { useAssistants } from '@renderer/hooks/useAssistant'
-import { colorPrimary } from '@renderer/config/antd'
 import { useTranslation } from 'react-i18next'
 import SYSTEM_ASSISTANTS from '@renderer/config/assistants.json'
 
@@ -19,6 +18,21 @@ const AppsPage: FC = () => {
     'group'
   )
   const { t } = useTranslation()
+
+  const onAddAssistantConfirm = (assistant: SystemAssistant) => {
+    const added = find(assistants, { id: assistant.id })
+
+    window.modal.confirm({
+      title: assistant.name,
+      content: assistant.description || assistant.prompt,
+      icon: null,
+      closable: true,
+      maskClosable: true,
+      okButtonProps: { type: 'primary', disabled: Boolean(added) },
+      okText: added ? t('button.added') : t('button.add'),
+      onOk: () => onAddAssistant(assistant)
+    })
+  }
 
   const onAddAssistant = (assistant: SystemAssistant) => {
     addAssistant({
@@ -39,47 +53,35 @@ const AppsPage: FC = () => {
         <NavbarCenter style={{ borderRight: 'none' }}>{t('apps.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer>
-        {Object.keys(assistantGroups).map((group) => (
-          <div key={group}>
-            <Title level={3} key={group} style={{ marginBottom: 16 }}>
-              {group}
-            </Title>
-            <Row gutter={16}>
-              {assistantGroups[group].map((assistant, index) => {
-                const added = find(assistants, { id: assistant.id })
-                return (
-                  <Col span={8} key={group + index}>
-                    <AssistantCard>
-                      <EmojiHeader>{assistant.emoji}</EmojiHeader>
-                      <Col>
-                        <AssistantHeader>
-                          <AssistantName level={5} style={{ marginBottom: 0, color: colorPrimary }}>
-                            {assistant.name.replace(assistant.emoji + ' ', '')}
-                          </AssistantName>
-                        </AssistantHeader>
-                        <AssistantCardPrompt>{assistant.prompt}</AssistantCardPrompt>
-                        <Row>
-                          {added && (
-                            <Button type="default" size="small" disabled>
-                              {t('button.added')}
-                            </Button>
-                          )}
-                          {!added && (
-                            <Tooltip placement="top" title=" Add to assistant list " arrow>
-                              <Button type="default" size="small" onClick={() => onAddAssistant(assistant as any)}>
-                                {t('button.add')}
-                              </Button>
-                            </Tooltip>
-                          )}
-                        </Row>
-                      </Col>
-                    </AssistantCard>
-                  </Col>
-                )
-              })}
-            </Row>
-          </div>
-        ))}
+        <AssistantsContainer>
+          {Object.keys(assistantGroups).map((group) => (
+            <div key={group}>
+              <Title level={3} key={group} style={{ marginBottom: 16 }}>
+                {group}
+              </Title>
+              <Row gutter={16}>
+                {assistantGroups[group].map((assistant, index) => {
+                  return (
+                    <Col span={8} key={group + index}>
+                      <AssistantCard onClick={() => onAddAssistantConfirm(assistant)}>
+                        <EmojiHeader>{assistant.emoji}</EmojiHeader>
+                        <Col>
+                          <AssistantHeader>
+                            <AssistantName level={5} style={{ marginBottom: 0 }}>
+                              {assistant.name.replace(assistant.emoji + ' ', '')}
+                            </AssistantName>
+                          </AssistantHeader>
+                          <AssistantCardPrompt>{assistant.prompt}</AssistantCardPrompt>
+                        </Col>
+                      </AssistantCard>
+                    </Col>
+                  )
+                })}
+              </Row>
+            </div>
+          ))}
+          <div style={{ minHeight: 20 }} />
+        </AssistantsContainer>
       </ContentContainer>
     </Container>
   )
@@ -92,41 +94,44 @@ const Container = styled.div`
   height: 100%;
 `
 
-const EmojiHeader = styled.div`
-  width: 36px;
+const ContentContainer = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: row;
   justify-content: center;
-  margin-right: 5px;
-  font-size: 36px;
-  line-height: 36px;
+  height: 100%;
+  overflow-y: scroll;
 `
 
-const ContentContainer = styled.div`
+const AssistantsContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
   height: calc(100vh - var(--navbar-height));
   padding: 20px;
-  overflow-y: scroll;
+  max-width: 1000px;
 `
 
 const AssistantCard = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 16px;
-  background-color: #2b2b2b;
+  background-color: #111;
+  border: 0.5px solid #151515;
   border-radius: 10px;
   padding: 15px;
   position: relative;
+  cursor: pointer;
 `
-
-const AssistantName = styled(Title)`
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+const EmojiHeader = styled.div`
+  width: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+  font-size: 25px;
+  line-height: 25px;
 `
 
 const AssistantHeader = styled.div`
@@ -136,13 +141,22 @@ const AssistantHeader = styled.div`
   align-items: center;
 `
 
-const AssistantCardPrompt = styled.div`
-  color: #eee;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  line-height: 1.5;
+const AssistantName = styled(Title)`
+  font-size: 18px;
+  line-height: 1.2;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #fff;
+  font-weight: 900;
+`
+
+const AssistantCardPrompt = styled.div`
+  color: #666;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 `

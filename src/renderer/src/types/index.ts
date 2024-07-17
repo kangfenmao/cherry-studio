@@ -55,6 +55,8 @@ export type Model = {
 export type SystemAssistant = {
   id: string
   name: string
+  emoji: string
+  description?: string
   prompt: string
   group: string
 }
