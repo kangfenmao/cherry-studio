@@ -14,13 +14,17 @@ const { Title } = Typography
 
 const AppsPage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
-  const assistantGroups = groupBy(SYSTEM_ASSISTANTS, 'group')
+  const assistantGroups = groupBy(
+    SYSTEM_ASSISTANTS.map((a) => ({ ...a, id: String(a.id) })),
+    'group'
+  )
   const { t } = useTranslation()
 
   const onAddAssistant = (assistant: SystemAssistant) => {
     addAssistant({
       ...getDefaultAssistant(),
-      ...assistant
+      ...assistant,
+      id: String(assistant.id)
     })
     window.message.success({
       content: t('message.assistant.added.content'),
@@ -44,7 +48,7 @@ const AppsPage: FC = () => {
               {assistantGroups[group].map((assistant, index) => {
                 const added = find(assistants, { id: assistant.id })
                 return (
-                  <Col span={6} key={group + index} style={{ marginBottom: 16 }}>
+                  <Col span={8} key={group + index}>
                     <AssistantCard>
                       <EmojiHeader>{assistant.emoji}</EmojiHeader>
                       <Col>
@@ -56,13 +60,13 @@ const AppsPage: FC = () => {
                         <AssistantCardPrompt>{assistant.prompt}</AssistantCardPrompt>
                         <Row>
                           {added && (
-                            <Button type="default" disabled>
+                            <Button type="default" size="small" disabled>
                               {t('button.added')}
                             </Button>
                           )}
                           {!added && (
                             <Tooltip placement="top" title=" Add to assistant list " arrow>
-                              <Button type="default" onClick={() => onAddAssistant(assistant as any)}>
+                              <Button type="default" size="small" onClick={() => onAddAssistant(assistant as any)}>
                                 {t('button.add')}
                               </Button>
                             </Tooltip>
@@ -89,13 +93,13 @@ const Container = styled.div`
 `
 
 const EmojiHeader = styled.div`
-  width: 60px;
+  width: 36px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  font-size: 50px;
-  line-height: 50px;
-  margin-right: 10px;
+  margin-right: 5px;
+  font-size: 36px;
+  line-height: 36px;
 `
 
 const ContentContainer = styled.div`
@@ -113,7 +117,7 @@ const AssistantCard = styled.div`
   margin-bottom: 16px;
   background-color: #2b2b2b;
   border-radius: 10px;
-  padding: 20px;
+  padding: 15px;
   position: relative;
 `
 
