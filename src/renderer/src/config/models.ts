@@ -340,5 +340,28 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       group: 'Gemma',
       defaultEnabled: false
     }
+  ],
+  baichuan: [
+    {
+      id: 'Baichuan4',
+      provider: 'baichuan',
+      name: 'Baichuan4',
+      group: 'Baichuan4',
+      defaultEnabled: true
+    },
+    {
+      id: 'Baichuan3-Turbo',
+      provider: 'baichuan',
+      name: 'Baichuan3 Turbo',
+      group: 'Baichuan3',
+      defaultEnabled: true
+    },
+    {
+      id: 'Baichuan3-Turbo-128k',
+      provider: 'baichuan',
+      name: 'Baichuan3 Turbo 128k',
+      group: 'Baichuan3',
+      defaultEnabled: true
+    }
   ]
 }

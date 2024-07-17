@@ -156,6 +156,27 @@ const migrate = createMigrate({
         })
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '10': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'baichuan',
+            name: 'BAICHUAN AI',
+            apiKey: '',
+            apiHost: 'https://api.baichuan-ai.com',
+            models: SYSTEM_MODELS.baichuan.filter((m) => m.defaultEnabled),
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 })
 

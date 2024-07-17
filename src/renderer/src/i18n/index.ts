@@ -77,7 +77,8 @@ const resources = {
         yi: 'Yi',
         zhipu: 'ZHIPU AI',
         groq: 'Groq',
-        ollama: 'Ollama'
+        ollama: 'Ollama',
+        baichuan: 'Baichuan'
       },
       settings: {
         title: 'Settings',
@@ -191,7 +192,8 @@ const resources = {
         yi: '零一万物',
         zhipu: '智谱AI',
         groq: 'Groq',
-        ollama: 'Ollama'
+        ollama: 'Ollama',
+        baichuan: '百川'
       },
       settings: {
         title: '设置',

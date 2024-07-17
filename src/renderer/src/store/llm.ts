@@ -93,6 +93,15 @@ const initialState: LlmState = {
       models: [],
       isSystem: true,
       enabled: false
+    },
+    {
+      id: 'baichuan',
+      name: 'BAICHUAN AI',
+      apiKey: '',
+      apiHost: 'https://api.baichuan-ai.com',
+      models: SYSTEM_MODELS.baichuan.filter((m) => m.defaultEnabled),
+      isSystem: true,
+      enabled: false
     }
   ]
 }

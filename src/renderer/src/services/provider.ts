@@ -7,6 +7,7 @@ import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
 import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter.png'
+import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
@@ -17,6 +18,7 @@ import LlamaModelLogo from '@renderer/assets/images/models/llama.jpeg'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
 import MoonshotModelLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import MicrosoftModelLogo from '@renderer/assets/images/models/microsoft.png'
+import BaichuanModelLogo from '@renderer/assets/images/models/baichuan.png'
 
 export function getProviderLogo(providerId: string) {
   switch (providerId) {
@@ -38,6 +40,8 @@ export function getProviderLogo(providerId: string) {
       return MoonshotProviderLogo
     case 'openrouter':
       return OpenRouterProviderLogo
+    case 'baichuan':
+      return BaichuanProviderLogo
     default:
       return undefined
   }
@@ -55,7 +59,8 @@ export function getModelLogo(modelId: string) {
     mixtral: MixtralModelLogo,
     mistral: MixtralModelLogo,
     moonshot: MoonshotModelLogo,
-    phi: MicrosoftModelLogo
+    phi: MicrosoftModelLogo,
+    baichuan: BaichuanModelLogo
   }
 
   for (const key in logoMap) {

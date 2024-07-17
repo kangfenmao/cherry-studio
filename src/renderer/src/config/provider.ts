@@ -69,5 +69,12 @@ export const PROVIDER_CONFIG = {
       docs: 'https://github.com/ollama/ollama/tree/main/docs',
       models: 'https://ollama.com/library'
     }
+  },
+  baichuan: {
+    websites: {
+      official: 'https://www.baichuan-ai.com/',
+      docs: 'https://platform.baichuan-ai.com/docs',
+      models: 'https://platform.baichuan-ai.com/price'
+    }
   }
 }
