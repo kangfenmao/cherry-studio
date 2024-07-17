@@ -1,5 +1,10 @@
 # CHANGES LOG
 
+### v0.2.6 - 2024-07-17
+
+- 🆕 Fixed the issue of the BaiChuan API KEY not displaying when clicking to obtain the URL
+- 📢 New intelligent body center style
+
 ### v0.2.5 - 2024-07-17
 
 - 🆕 Baichuan AI Service Providers

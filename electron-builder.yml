@@ -56,6 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    🆕 新增百川AI服务商
-    📢 全新的智能体页面，新增多种职业助手
-    🌐 多语言问题修复，细节优化
+    🆕 修复百川 API KEY 网址没有显示问题
+    📢 新的智能体中心
