@@ -1,6 +1,6 @@
 # Cherry Studio
 
-Cherry Studio is a desktop client for multiple cutting-edge LLM models, available on Windows, Mac and Linux.
+🍒 Cherry Studio is a desktop client that supports multiple Large Language Model (LLM) providers, available on Windows, Mac and Linux.
 
 # Screenshot
 
