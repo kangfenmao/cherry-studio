@@ -386,5 +386,35 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       group: 'Gemma',
       enabled: false
     }
+  ],
+  anthropic: [
+    {
+      id: 'claude-3-5-sonnet-20240620',
+      provider: 'anthropic',
+      name: 'Claude 3.5 Sonnet',
+      group: 'Claude 3.5',
+      enabled: true
+    },
+    {
+      id: 'claude-3-opus-20240229',
+      provider: 'anthropic',
+      name: 'Claude 3 Opus',
+      group: 'Claude 3',
+      enabled: true
+    },
+    {
+      id: 'claude-3-sonnet-20240229',
+      provider: 'anthropic',
+      name: 'Claude 3 Sonnet',
+      group: 'Claude 3',
+      enabled: true
+    },
+    {
+      id: 'claude-3-haiku-20240307',
+      provider: 'anthropic',
+      name: 'Claude 3 Haiku',
+      group: 'Claude 3',
+      enabled: true
+    }
   ]
 }

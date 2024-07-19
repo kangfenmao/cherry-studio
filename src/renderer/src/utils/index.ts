@@ -108,3 +108,27 @@ export async function isDev() {
   const isProd = await isProduction()
   return !isProd
 }
+
+export function getErrorMessage(error: any) {
+  if (!error) {
+    return ''
+  }
+
+  if (typeof error === 'string') {
+    return error
+  }
+
+  if (error?.error) {
+    return getErrorMessage(error.error)
+  }
+
+  if (error?.message) {
+    return error.message
+  }
+
+  return ''
+}
+
+export function removeQuotes(str) {
+  return str.replace(/['"]+/g, '')
+}

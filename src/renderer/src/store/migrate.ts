@@ -194,6 +194,15 @@ const migrate = createMigrate({
             models: SYSTEM_MODELS.dashscope.filter((m) => m.enabled),
             isSystem: true,
             enabled: false
+          },
+          {
+            id: 'anthropic',
+            name: 'Anthropic',
+            apiKey: '',
+            apiHost: 'https://api.anthropic.com/',
+            models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
+            isSystem: true,
+            enabled: false
           }
         ]
       }

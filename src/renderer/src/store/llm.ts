@@ -86,6 +86,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'anthropic',
+      name: 'Anthropic',
+      apiKey: '',
+      apiHost: 'https://api.anthropic.com/',
+      models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'openrouter',
       name: 'OpenRouter',
       apiKey: '',
