@@ -56,5 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    🆕 修复百川 API KEY 网址没有显示问题
-    📢 新的智能体中心
+    - 📢 新增阿里云灵积服务商
+    - 📢 新增 Anthropic 服务商
