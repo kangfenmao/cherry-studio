@@ -75,13 +75,14 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       <Divider style={{ width: '100%', margin: '10px 0' }} />
       <SettingSubtitle style={{ marginTop: 5 }}>{t('settings.provider.api_key')}</SettingSubtitle>
       <Space.Compact style={{ width: '100%' }}>
-        <Input
+        <Input.Password
           value={apiKey}
           placeholder={t('settings.provider.api_key')}
           onChange={(e) => setApiKey(e.target.value)}
           onBlur={onUpdateApiKey}
           spellCheck={false}
           disabled={apiKeyDisabled}
+          type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
         {!apiKeyDisabled && (
