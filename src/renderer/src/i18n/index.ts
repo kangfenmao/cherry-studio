@@ -79,7 +79,8 @@ const resources = {
         zhipu: 'ZHIPU AI',
         groq: 'Groq',
         ollama: 'Ollama',
-        baichuan: 'Baichuan'
+        baichuan: 'Baichuan',
+        dashscope: 'DashScope'
       },
       settings: {
         title: 'Settings',
@@ -156,7 +157,7 @@ const resources = {
         'error.enter.api.host': '请输入您的 API 地址',
         'error.enter.model': '请选择一个模型',
         'api.connection.failed': '连接失败',
-        'api.connection.successful': '连接成功',
+        'api.connection.success': '连接成功',
         'chat.completion.paused': '会话已停止'
       },
       assistant: {
@@ -195,7 +196,8 @@ const resources = {
         zhipu: '智谱AI',
         groq: 'Groq',
         ollama: 'Ollama',
-        baichuan: '百川'
+        baichuan: '百川',
+        dashscope: '阿里云灵积'
       },
       settings: {
         title: '设置',

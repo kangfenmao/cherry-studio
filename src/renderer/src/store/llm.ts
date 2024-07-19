@@ -18,7 +18,7 @@ const initialState: LlmState = {
       name: 'OpenAI',
       apiKey: '',
       apiHost: 'https://api.openai.com',
-      models: SYSTEM_MODELS.openai.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.openai.filter((m) => m.enabled),
       isSystem: true,
       enabled: true
     },
@@ -27,7 +27,7 @@ const initialState: LlmState = {
       name: 'Silicon',
       apiKey: '',
       apiHost: 'https://api.siliconflow.cn',
-      models: SYSTEM_MODELS.silicon.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.silicon.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -36,7 +36,7 @@ const initialState: LlmState = {
       name: 'deepseek',
       apiKey: '',
       apiHost: 'https://api.deepseek.com',
-      models: SYSTEM_MODELS.deepseek.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.deepseek.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -45,7 +45,7 @@ const initialState: LlmState = {
       name: 'Yi',
       apiKey: '',
       apiHost: 'https://api.lingyiwanwu.com',
-      models: SYSTEM_MODELS.yi.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.yi.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -54,7 +54,7 @@ const initialState: LlmState = {
       name: 'ZhiPu',
       apiKey: '',
       apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
-      models: SYSTEM_MODELS.zhipu.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.zhipu.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -63,7 +63,25 @@ const initialState: LlmState = {
       name: 'Moonshot AI',
       apiKey: '',
       apiHost: 'https://api.moonshot.cn',
-      models: SYSTEM_MODELS.moonshot.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.moonshot.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'baichuan',
+      name: 'BAICHUAN AI',
+      apiKey: '',
+      apiHost: 'https://api.baichuan-ai.com',
+      models: SYSTEM_MODELS.baichuan.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'dashscope',
+      name: 'DashScope',
+      apiKey: '',
+      apiHost: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',
+      models: SYSTEM_MODELS.dashscope.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -72,7 +90,7 @@ const initialState: LlmState = {
       name: 'OpenRouter',
       apiKey: '',
       apiHost: 'https://openrouter.ai/api/v1/',
-      models: SYSTEM_MODELS.openrouter.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.openrouter.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -81,7 +99,7 @@ const initialState: LlmState = {
       name: 'Groq',
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
-      models: SYSTEM_MODELS.groq.filter((m) => m.defaultEnabled),
+      models: SYSTEM_MODELS.groq.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -91,15 +109,6 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'http://localhost:11434/v1/',
       models: [],
-      isSystem: true,
-      enabled: false
-    },
-    {
-      id: 'baichuan',
-      name: 'BAICHUAN AI',
-      apiKey: '',
-      apiHost: 'https://api.baichuan-ai.com',
-      models: SYSTEM_MODELS.baichuan.filter((m) => m.defaultEnabled),
       isSystem: true,
       enabled: false
     }

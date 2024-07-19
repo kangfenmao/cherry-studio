@@ -2,7 +2,7 @@ import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } 
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/api'
-import { getModelLogo } from '@renderer/services/provider'
+import { getModelLogo } from '@renderer/config/provider'
 import { Model, Provider } from '@renderer/types'
 import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Empty, Flex, Modal, Tag } from 'antd'

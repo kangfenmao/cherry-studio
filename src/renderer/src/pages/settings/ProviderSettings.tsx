@@ -1,6 +1,6 @@
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import { useProviders, useSystemProviders } from '@renderer/hooks/useProvider'
-import { getProviderLogo } from '@renderer/services/provider'
+import { getProviderLogo } from '@renderer/config/provider'
 import { Provider } from '@renderer/types'
 import { droppableReorder } from '@renderer/utils'
 import { Avatar, Tag } from 'antd'
@@ -39,7 +39,7 @@ const ProviderSettings: FC = () => {
                           key={JSON.stringify(provider)}
                           className={provider.id === selectedProvider?.id ? 'active' : ''}
                           onClick={() => setSelectedProvider(provider)}>
-                          <Avatar src={getProviderLogo(provider.id)} size={22} />
+                          <Avatar src={getProviderLogo(provider.id)} size={24} />
                           <ProviderItemName>{t(`provider.${provider.id}`)}</ProviderItemName>
                           {provider.enabled && (
                             <Tag color="green" style={{ marginLeft: 'auto' }}>
