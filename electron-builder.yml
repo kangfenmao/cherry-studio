@@ -56,5 +56,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    - 📢 新增阿里云灵积服务商
-    - 📢 新增 Anthropic 服务商
+    📢 新功能：可以添加自定义服务提供商了

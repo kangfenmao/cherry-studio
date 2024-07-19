@@ -1,5 +1,9 @@
 # CHANGES LOG
 
+### v0.2.8 - 2024-07-20
+
+- 🆕 Feature: Add customized service providers
+
 ### v0.2.7 - 2024-07-19
 
 - 📢 Add DashScope Provider
