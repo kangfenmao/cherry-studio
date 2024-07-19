@@ -137,8 +137,8 @@ const settingsSlice = createSlice({
     addProvider: (state, action: PayloadAction<Provider>) => {
       state.providers.push(action.payload)
     },
-    removeProvider: (state, action: PayloadAction<{ id: string }>) => {
-      state.providers = state.providers.filter((p) => p.id !== action.payload.id && !p.isSystem)
+    removeProvider: (state, action: PayloadAction<Provider>) => {
+      state.providers = state.providers.filter((p) => p.id !== action.payload.id)
     },
     addModel: (state, action: PayloadAction<{ providerId: string; model: Model }>) => {
       state.providers = state.providers.map((p) =>

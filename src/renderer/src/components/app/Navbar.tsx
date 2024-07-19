@@ -39,18 +39,20 @@ const NavbarLeftContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color-text-1);
 `
 
 const NavbarCenterContainer = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
+  border-right: 1px solid var(--color-border);
+  padding: 0 20px;
   font-size: 14px;
   font-weight: bold;
   color: var(--color-text-1);
-  text-align: center;
-  border-right: 1px solid var(--color-border);
-  padding: 0 20px;
 `
 
 const NavbarRightContainer = styled.div`

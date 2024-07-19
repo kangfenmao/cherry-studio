@@ -16,7 +16,7 @@ const ModelSettings: FC = () => {
   const selectOptions = providers
     .filter((p) => p.models.length > 0)
     .map((p) => ({
-      label: t(`provider.${p.id}`),
+      label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       title: p.name,
       options: p.models.map((m) => ({
         label: m.name,

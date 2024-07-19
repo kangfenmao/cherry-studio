@@ -48,8 +48,8 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
     }
 
     const model: Model = {
-      id: values.id,
       provider: provider.id,
+      id: values.id,
       name: values.name ? values.name : values.id.toUpperCase(),
       group: getDefaultGroupName(values.group || values.id)
     }
@@ -75,9 +75,6 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
         colon={false}
         style={{ marginTop: 25 }}
         onFinish={onFinish}>
-        <Form.Item name="provider" label={t('common.provider')} initialValue={provider.id} rules={[{ required: true }]}>
-          <Input placeholder={t('settings.models.add.provider_name.placeholder')} disabled />
-        </Form.Item>
         <Form.Item
           name="id"
           label={t('settings.models.add.model_id')}
@@ -86,13 +83,17 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
           <Input
             placeholder={t('settings.models.add.model_id.placeholder')}
             spellCheck={false}
+            maxLength={50}
             onChange={(e) => {
               form.setFieldValue('name', e.target.value.toUpperCase())
               form.setFieldValue('group', getDefaultGroupName(e.target.value))
             }}
           />
         </Form.Item>
-        <Form.Item name="name" label={t('settings.models.add.model_name')} tooltip="Example: GPT-3.5">
+        <Form.Item
+          name="name"
+          label={t('settings.models.add.model_name')}
+          tooltip={t('settings.models.add.model_name.placeholder')}>
           <Input placeholder={t('settings.models.add.model_name.placeholder')} spellCheck={false} />
         </Form.Item>
         <Form.Item

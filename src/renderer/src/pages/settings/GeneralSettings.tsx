@@ -10,7 +10,7 @@ import { setAvatar } from '@renderer/store/runtime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { setLanguage } from '@renderer/store/settings'
 import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
+import i18n from '@renderer/i18n'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
@@ -20,7 +20,7 @@ const GeneralSettings: FC = () => {
 
   const onSelectLanguage = (value: string) => {
     dispatch(setLanguage(value))
-    i18next.changeLanguage(value)
+    i18n.changeLanguage(value)
     localStorage.setItem('language', value)
   }
 

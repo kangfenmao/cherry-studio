@@ -3,7 +3,9 @@ import {
   addModel as _addModel,
   removeModel as _removeModel,
   updateProvider as _updateProvider,
-  updateProviders as _updateProviders
+  updateProviders as _updateProviders,
+  addProvider,
+  removeProvider
 } from '@renderer/store/llm'
 import { Assistant, Model, Provider } from '@renderer/types'
 import { useDefaultModel } from './useAssistant'
@@ -14,12 +16,23 @@ export function useProviders() {
 
   return {
     providers,
+    addProvider: (provider: Provider) => dispatch(addProvider(provider)),
+    removeProvider: (provider: Provider) => dispatch(removeProvider(provider)),
+    updateProvider: (provider: Provider) => dispatch(_updateProvider(provider)),
     updateProviders: (providers: Provider[]) => dispatch(_updateProviders(providers))
   }
 }
 
 export function useSystemProviders() {
   return useAppSelector((state) => state.llm.providers.filter((p) => p.isSystem))
+}
+
+export function useUserProviders() {
+  return useAppSelector((state) => state.llm.providers.filter((p) => !p.isSystem))
+}
+
+export function useAllProviders() {
+  return useAppSelector((state) => state.llm.providers)
 }
 
 export function useProvider(id: string) {

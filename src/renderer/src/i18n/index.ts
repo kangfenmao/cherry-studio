@@ -101,7 +101,6 @@ const resources = {
         'models.default_assistant_model': 'Default Assistant Model',
         'models.topic_naming_model': 'Topic Naming Model',
         'models.add.add_model': 'Add Model',
-        'models.add.provider_name.placeholder': 'Provider Name',
         'models.add.model_id.placeholder': 'Required e.g. gpt-3.5-turbo',
         'models.add.model_id': 'Model ID',
         'models.add.model_id.tooltip': 'Example: gpt-3.5-turbo',
@@ -117,7 +116,11 @@ const resources = {
         'about.checkingUpdate': 'Checking for updates...',
         'about.updateError': 'Update error',
         'about.checkUpdate': 'Check Update',
-        'about.downloading': 'Downloading...'
+        'about.downloading': 'Downloading...',
+        'provider.delete.title': 'Delete Provider',
+        'provider.delete.content': 'Are you sure you want to delete this provider?',
+        'provider.edit.name': 'Provider Name',
+        'provider.edit.name.placeholder': 'Example: OpenAI'
       }
     }
   },
@@ -219,7 +222,6 @@ const resources = {
         'models.default_assistant_model': '默认助手模型',
         'models.topic_naming_model': '话题命名模型',
         'models.add.add_model': '添加模型',
-        'models.add.provider_name.placeholder': '必填 例如 OpenAI',
         'models.add.model_id.placeholder': '必填 例如 gpt-3.5-turbo',
         'models.add.model_id': '模型 ID',
         'models.add.model_id.tooltip': '例如 gpt-3.5-turbo',
@@ -235,7 +237,11 @@ const resources = {
         'about.checkingUpdate': '正在检查更新...',
         'about.updateError': '更新出错',
         'about.checkUpdate': '检查更新',
-        'about.downloading': '正在下载更新...'
+        'about.downloading': '正在下载更新...',
+        'provider.delete.title': '删除提供商',
+        'provider.delete.content': '确定要删除此模型提供商吗?',
+        'provider.edit.name': '模型提供商名称',
+        'provider.edit.name.placeholder': '例如 OpenAI'
       }
     }
   }

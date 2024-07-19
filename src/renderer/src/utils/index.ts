@@ -132,3 +132,35 @@ export function getErrorMessage(error: any) {
 export function removeQuotes(str) {
   return str.replace(/['"]+/g, '')
 }
+
+export function generateColorFromChar(char) {
+  // 使用字符的Unicode值作为随机种子
+  const seed = char.charCodeAt(0)
+
+  // 使用简单的线性同余生成器创建伪随机数
+  const a = 1664525
+  const c = 1013904223
+  const m = Math.pow(2, 32)
+
+  // 生成三个伪随机数作为RGB值
+  let r = (a * seed + c) % m
+  let g = (a * r + c) % m
+  let b = (a * g + c) % m
+
+  // 将伪随机数转换为0-255范围内的整数
+  r = Math.floor((r / m) * 256)
+  g = Math.floor((g / m) * 256)
+  b = Math.floor((b / m) * 256)
+
+  // 返回十六进制颜色字符串
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+}
+
+export function getFirstCharacter(str) {
+  if (str.length === 0) return ''
+
+  // 使用 for...of 循环来获取第一个字符
+  for (const char of str) {
+    return char
+  }
+}

@@ -22,7 +22,7 @@ const Navigation: FC<Props> = ({ activeAssistant }) => {
     .filter((p) => p.models.length > 0)
     .map((p) => ({
       key: p.id,
-      label: t(`provider.${p.id}`),
+      label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       type: 'group',
       children: p.models.map((m) => ({
         key: m.id,

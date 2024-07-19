@@ -61,7 +61,11 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
         <div style={{ display: 'flex', flex: 1, position: 'absolute', width: '100%', height: '100%' }}>
           <div style={{ position: 'absolute', width: '100%', height: '100%' }} onClick={onPop} />
           {elements.map(({ element: Element, key }) =>
-            typeof Element === 'function' ? <Element key={`TOPVIEW_${key}`} /> : Element
+            typeof Element === 'function' ? (
+              <Element key={`TOPVIEW_${key}`} />
+            ) : (
+              <div key={`TOPVIEW_${key}`}>{Element}</div>
+            )
           )}
         </div>
       )}

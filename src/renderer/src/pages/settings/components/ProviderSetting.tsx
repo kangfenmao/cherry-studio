@@ -37,7 +37,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const onUpdateApiKey = () => updateProvider({ ...provider, apiKey })
   const onUpdateApiHost = () => updateProvider({ ...provider, apiHost })
   const onManageModel = () => EditModelsPopup.show({ provider })
-  const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add_model'), provider })
+  const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add.add_model'), provider })
 
   const onCheckApi = async () => {
     setApiChecking(true)
@@ -59,7 +59,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     <SettingContainer>
       <SettingTitle>
         <Flex align="center">
-          <span>{t(`provider.${provider.id}`)}</span>
+          <span>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</span>
           {officialWebsite! && (
             <Link target="_blank" href={providerConfig.websites.official}>
               <ExportOutlined style={{ marginLeft: '8px', color: 'white', fontSize: '12px' }} />
