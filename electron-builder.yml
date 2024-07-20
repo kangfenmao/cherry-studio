@@ -56,4 +56,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    📢 新功能：可以添加自定义服务提供商了
+    📢 新增 AiMixHub 服务提供商

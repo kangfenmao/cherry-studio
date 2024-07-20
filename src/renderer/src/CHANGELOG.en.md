@@ -1,5 +1,9 @@
 # CHANGES LOG
 
+### v0.2.9 - 2024-07-20
+
+- 📢 Add AiHubMix provider
+
 ### v0.2.8 - 2024-07-20
 
 - 🆕 Feature: Add customized service providers
