@@ -28,7 +28,7 @@ const SendMessageSetting: FC<Props> = ({ children }) => {
   return (
     <Dropdown
       menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
-      placement="top"
+      placement="topRight"
       trigger={['click']}
       arrow>
       {children}
