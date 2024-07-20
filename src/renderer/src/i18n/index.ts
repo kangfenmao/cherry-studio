@@ -44,7 +44,7 @@ const resources = {
         'chat.completion.paused': 'Chat completion paused'
       },
       assistant: {
-        'default.name': 'Default Assistant',
+        'default.name': '😀 Default Assistant',
         'default.description': "Hello, I'm Default Assistant. You can start chatting with me right away",
         'default.topic.name': 'Default Topic',
         'topics.title': 'Topics',
@@ -166,7 +166,7 @@ const resources = {
         'chat.completion.paused': '会话已停止'
       },
       assistant: {
-        'default.name': '默认助手',
+        'default.name': '😃 默认助手 - Assistant',
         'default.description': '你好，我是默认助手。你可以立刻开始跟我聊天。',
         'default.topic.name': '默认话题',
         'topics.title': '话题',

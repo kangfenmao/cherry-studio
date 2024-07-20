@@ -228,6 +228,21 @@ const migrate = createMigrate({
         ]
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '13': (state: RootState) => {
+    return {
+      ...state,
+      assistants: {
+        ...state.assistants,
+        defaultAssistant: {
+          ...state.assistants.defaultAssistant,
+          name: ['Default Assistant', '默认助手'].includes(state.assistants.defaultAssistant.name)
+            ? i18n.t(`assistant.default.name`)
+            : state.assistants.defaultAssistant.name
+        }
+      }
+    }
   }
 })
 
