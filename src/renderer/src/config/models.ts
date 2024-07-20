@@ -320,6 +320,22 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       enabled: true
     }
   ],
+  aihubmix: [
+    {
+      id: 'gpt-4o-mini',
+      provider: 'aihubmix',
+      name: 'GPT-4o Mini',
+      group: 'GPT-4o',
+      enabled: true
+    },
+    {
+      id: 'aihubmix-Llama-3-70B-Instruct',
+      provider: 'aihubmix',
+      name: 'Llama 3 70B Instruct',
+      group: 'Llama3',
+      enabled: true
+    }
+  ],
   openrouter: [
     {
       id: 'google/gemma-2-9b-it:free',

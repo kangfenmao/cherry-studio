@@ -207,6 +207,27 @@ const migrate = createMigrate({
         ]
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '12': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'aihubmix',
+            name: 'AiHubMix',
+            apiKey: '',
+            apiHost: 'https://aihubmix.com',
+            models: SYSTEM_MODELS.aihubmix.filter((m) => m.enabled),
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 })
 

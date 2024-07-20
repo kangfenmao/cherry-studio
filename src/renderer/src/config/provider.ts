@@ -10,6 +10,7 @@ import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter
 import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
 import DashScopeProviderLogo from '@renderer/assets/images/providers/dashscope.png'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.jpeg'
+import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
@@ -49,6 +50,8 @@ export function getProviderLogo(providerId: string) {
       return DashScopeProviderLogo
     case 'anthropic':
       return AnthropicProviderLogo
+    case 'aihubmix':
+      return AiHubMixProviderLogo
     default:
       return undefined
   }
@@ -174,6 +177,14 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.anthropic.com/settings/keys',
       docs: 'https://docs.anthropic.com/en/docs',
       models: 'https://docs.anthropic.com/en/docs/about-claude/models'
+    }
+  },
+  aihubmix: {
+    websites: {
+      official: 'https://aihubmix.com/',
+      apiKey: 'https://aihubmix.com/token',
+      docs: 'https://doc.aihubmix.com/',
+      models: 'https://aihubmix.com/models'
     }
   }
 }

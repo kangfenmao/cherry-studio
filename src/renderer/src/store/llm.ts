@@ -95,6 +95,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'aihubmix',
+      name: 'AiHubMix',
+      apiKey: '',
+      apiHost: 'https://aihubmix.com',
+      models: SYSTEM_MODELS.aihubmix.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'openrouter',
       name: 'OpenRouter',
       apiKey: '',

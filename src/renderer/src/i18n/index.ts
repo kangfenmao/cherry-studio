@@ -81,7 +81,8 @@ const resources = {
         ollama: 'Ollama',
         baichuan: 'Baichuan',
         dashscope: 'DashScope',
-        anthropic: 'Anthropic'
+        anthropic: 'Anthropic',
+        aihubmix: 'AiHubMix'
       },
       settings: {
         title: 'Settings',
@@ -202,7 +203,8 @@ const resources = {
         ollama: 'Ollama',
         baichuan: '百川',
         dashscope: '阿里云灵积',
-        anthropic: 'Anthropic'
+        anthropic: 'Anthropic',
+        aihubmix: 'AiHubMix'
       },
       settings: {
         title: '设置',

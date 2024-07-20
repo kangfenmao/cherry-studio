@@ -100,11 +100,11 @@ const ProviderSettings: FC = () => {
                               key={JSON.stringify(provider)}
                               className={provider.id === selectedProvider?.id ? 'active' : ''}
                               onClick={() => setSelectedProvider(provider)}>
-                              {provider.isSystem && <Avatar src={getProviderLogo(provider.id)} size={24} />}
+                              {provider.isSystem && <Avatar src={getProviderLogo(provider.id)} size={28} />}
                               {!provider.isSystem && (
                                 <Avatar
-                                  size={24}
-                                  style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 24 }}>
+                                  size={28}
+                                  style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 28 }}>
                                   {getFirstCharacter(provider.name)}
                                 </Avatar>
                               )}
@@ -151,7 +151,7 @@ const ProviderListContainer = styled.div`
   width: var(--assistants-width);
   height: calc(100vh - var(--navbar-height));
   border-right: 0.5px solid var(--color-border);
-  padding: 10px;
+  padding: 10px 8px;
   overflow-y: auto;
 `
 
@@ -165,7 +165,7 @@ const ProviderListItem = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 6px 10px;
+  padding: 5px 8px;
   margin-bottom: 5px;
   width: 100%;
   cursor: pointer;
