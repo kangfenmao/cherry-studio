@@ -1,5 +1,11 @@
 # CHANGES LOG
 
+### v0.3.0 - 2024-07-21
+
+- Supports setting the model Temperature parameter
+- Support for setting the number of contexts
+- Token consumption estimation added to the input box
+
 ### v0.2.9 - 2024-07-20
 
 - 📢 Add AiHubMix provider

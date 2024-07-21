@@ -56,4 +56,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    📢 新增 AiMixHub 服务提供商
+    支持设置模型 Temperature 参数
+    支持设置上下文数量
+    输入框增加 Token 消耗预估
