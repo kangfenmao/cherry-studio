@@ -47,7 +47,7 @@ export default class ProviderSDK {
           model: model.id,
           messages: [systemMessage, ...userMessages].filter(Boolean) as MessageParam[],
           max_tokens: 4096,
-          temperature: assistant.settings?.temperature
+          temperature: assistant?.settings?.temperature
         })
         .on('text', (text) => onChunk({ text: text || '' }))
         .on('finalMessage', (message) =>
@@ -64,7 +64,7 @@ export default class ProviderSDK {
         model: model.id,
         messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
         stream: true,
-        temperature: assistant.settings?.temperature
+        temperature: assistant?.settings?.temperature
       })
       for await (const chunk of stream) {
         if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break

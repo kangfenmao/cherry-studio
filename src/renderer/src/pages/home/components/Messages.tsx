@@ -65,7 +65,6 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
-        console.debug({ assistant, provider, message: msg, topic })
         onSendMessage(msg)
         fetchChatCompletion({ assistant, messages: [...messages, msg], topic, onResponse: setLastMessage })
       }),

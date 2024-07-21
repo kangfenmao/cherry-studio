@@ -169,10 +169,10 @@ export function getFirstCharacter(str) {
 }
 
 export const getAssistantSettings = (assistant: Assistant): AssistantSettings => {
-  const contextCount = assistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
+  const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
   return {
     contextCount: contextCount === 20 ? 100000 : contextCount,
-    temperature: assistant.settings?.temperature ?? DEFAULT_TEMPERATURE
+    temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE
   }
 }
 

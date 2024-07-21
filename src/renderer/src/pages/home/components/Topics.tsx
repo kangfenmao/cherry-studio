@@ -4,7 +4,7 @@ import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import { Assistant, Topic } from '@renderer/types'
 import { Button, Dropdown, MenuProps, Popconfirm } from 'antd'
-import { FC, useRef } from 'react'
+import { FC } from 'react'
 import styled from 'styled-components'
 import { DeleteOutlined, EditOutlined, SignatureOutlined } from '@ant-design/icons'
 import LocalStorage from '@renderer/services/storage'
@@ -21,57 +21,57 @@ interface Props {
 const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
   const { removeTopic, updateTopic, removeAllTopics, updateTopics } = useAssistant(assistant.id)
-  const currentTopic = useRef<Topic | null>(null)
   const { t } = useTranslation()
 
-  const topicMenuItems: MenuProps['items'] = [
-    {
-      label: t('assistant.topics.auto_rename'),
-      key: 'auto-rename',
-      icon: <SignatureOutlined />,
-      async onClick() {
-        if (currentTopic.current) {
-          const messages = await LocalStorage.getTopicMessages(currentTopic.current.id)
+  const getTopicMenuItems = (topic: Topic) => {
+    const menus: MenuProps['items'] = [
+      {
+        label: t('assistant.topics.auto_rename'),
+        key: 'auto-rename',
+        icon: <SignatureOutlined />,
+        async onClick() {
+          const messages = await LocalStorage.getTopicMessages(topic.id)
           if (messages.length >= 2) {
             const summaryText = await fetchMessagesSummary({ messages, assistant })
             if (summaryText) {
-              updateTopic({ ...currentTopic.current, name: summaryText })
+              updateTopic({ ...topic, name: summaryText })
             }
           }
         }
-      }
-    },
-    {
-      label: t('common.rename'),
-      key: 'rename',
-      icon: <EditOutlined />,
-      async onClick() {
-        const name = await PromptPopup.show({
-          title: t('assistant.topics.edit.title'),
-          message: t('assistant.topics.edit.placeholder'),
-          defaultValue: currentTopic.current?.name || ''
-        })
-        if (name && currentTopic.current && currentTopic.current?.name !== name) {
-          updateTopic({ ...currentTopic.current, name })
+      },
+      {
+        label: t('common.rename'),
+        key: 'rename',
+        icon: <EditOutlined />,
+        async onClick() {
+          const name = await PromptPopup.show({
+            title: t('assistant.topics.edit.title'),
+            message: t('assistant.topics.edit.placeholder'),
+            defaultValue: topic?.name || ''
+          })
+          if (name && topic?.name !== name) {
+            updateTopic({ ...topic, name })
+          }
         }
       }
-    }
-  ]
+    ]
 
-  if (assistant.topics.length > 1) {
-    topicMenuItems.push({ type: 'divider' })
-    topicMenuItems.push({
-      label: t('common.delete'),
-      danger: true,
-      key: 'delete',
-      icon: <DeleteOutlined />,
-      onClick() {
-        if (assistant.topics.length === 1) return
-        currentTopic.current && removeTopic(currentTopic.current)
-        currentTopic.current = null
-        setActiveTopic(assistant.topics[0])
-      }
-    })
+    if (assistant.topics.length > 1) {
+      menus.push({ type: 'divider' })
+      menus.push({
+        label: t('common.delete'),
+        danger: true,
+        key: 'delete',
+        icon: <DeleteOutlined />,
+        onClick() {
+          if (assistant.topics.length === 1) return
+          removeTopic(topic)
+          setActiveTopic(assistant.topics[0])
+        }
+      })
+    }
+
+    return menus
   }
 
   const onDragEnd = (result: DropResult) => {
@@ -108,11 +108,7 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
                 <Draggable key={`draggable_${topic.id}_${index}`} draggableId={topic.id} index={index}>
                   {(provided) => (
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                      <Dropdown
-                        menu={{ items: topicMenuItems }}
-                        trigger={['contextMenu']}
-                        key={topic.id}
-                        onOpenChange={(open) => open && (currentTopic.current = topic)}>
+                      <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
                         <TopicListItem
                           className={topic.id === activeTopic?.id ? 'active' : ''}
                           onClick={() => setActiveTopic(topic)}>

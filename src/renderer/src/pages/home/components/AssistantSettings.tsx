@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
-import { useAssistants } from '@renderer/hooks/useAssistant'
+import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
 import { Button, Col, InputNumber, Popover, Row, Slider, Tooltip } from 'antd'
 import { debounce } from 'lodash'
@@ -12,10 +12,11 @@ interface Props {
   assistant: Assistant
 }
 
-const PopoverContent: FC<Props> = ({ assistant }) => {
+const PopoverContent: FC<Props> = (props) => {
+  const { assistant } = useAssistant(props.assistant.id)
   const { updateAssistant } = useAssistants()
-  const [temperature, setTemperature] = useState(assistant.settings?.temperature ?? DEFAULT_TEMPERATURE)
-  const [contextCount, setConextCount] = useState(assistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
+  const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
+  const [contextCount, setConextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
   const { t } = useTranslation()
 
   const onUpdateAssistantSettings = useCallback(
@@ -64,8 +65,8 @@ const PopoverContent: FC<Props> = ({ assistant }) => {
   }
 
   useEffect(() => {
-    setTemperature(assistant.settings?.temperature ?? DEFAULT_TEMPERATURE)
-    setConextCount(assistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
+    setTemperature(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
+    setConextCount(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
   }, [assistant])
 
   return (
