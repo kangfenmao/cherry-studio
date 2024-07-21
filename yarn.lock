@@ -3440,6 +3440,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.34.3"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     eslint-plugin-unused-imports: "npm:^4.0.0"
+    gpt-tokens: "npm:^1.3.6"
     i18next: "npm:^23.11.5"
     localforage: "npm:^1.10.0"
     lodash: "npm:^4.17.21"
@@ -3794,6 +3795,13 @@ __metadata:
     supports-color:
       optional: true
   checksum: 10c0/082c375a2bdc4f4469c99f325ff458adad62a3fc2c482d59923c260cb08152f34e2659f72b3767db8bb2f21ca81a60a42d1019605a412132d7b9f59363a005cc
+  languageName: node
+  linkType: hard
+
+"decimal.js@npm:^10.4.3":
+  version: 10.4.3
+  resolution: "decimal.js@npm:10.4.3"
+  checksum: 10c0/6d60206689ff0911f0ce968d40f163304a6c1bc739927758e6efc7921cfa630130388966f16bf6ef6b838cb33679fbe8e7a78a2f3c478afce841fd55ac8fb8ee
   languageName: node
   linkType: hard
 
@@ -5241,6 +5249,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gpt-tokens@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "gpt-tokens@npm:1.3.6"
+  dependencies:
+    decimal.js: "npm:^10.4.3"
+    js-tiktoken: "npm:^1.0.10"
+    openai-chat-tokens: "npm:^0.2.8"
+  checksum: 10c0/0efc1da655a16a306df4f17646832693d7cbec569fe44d4fcc9d4a605f8614f1eb974e04b24a4e8c71095fe0fab6de7251a34c6e2d6805a5e1b5811eea37437b
+  languageName: node
+  linkType: hard
+
 "graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.6":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
@@ -6064,6 +6083,15 @@ __metadata:
   version: 2.2.1
   resolution: "js-cookie@npm:2.2.1"
   checksum: 10c0/ee67fc0f8495d0800b851910b5eb5bf49d3033adff6493d55b5c097ca6da46f7fe666b10e2ecb13cfcaf5b88d71c205ce00a7e646de791689bfd053bbb36a376
+  languageName: node
+  linkType: hard
+
+"js-tiktoken@npm:^1.0.10, js-tiktoken@npm:^1.0.7":
+  version: 1.0.12
+  resolution: "js-tiktoken@npm:1.0.12"
+  dependencies:
+    base64-js: "npm:^1.5.1"
+  checksum: 10c0/7afb4826e21342386a1884754fbc1c1828f948c4dd0ab093bf778d1323e65343bd5343d15f7cda46af396f1fe4a0297739936149b7c40a0601eefe3fcaef8727
   languageName: node
   linkType: hard
 
@@ -7191,6 +7219,15 @@ __metadata:
   dependencies:
     wrappy: "npm:1"
   checksum: 10c0/5d48aca287dfefabd756621c5dfce5c91a549a93e9fdb7b8246bc4c4790aa2ec17b34a260530474635147aeb631a2dcc8b32c613df0675f96041cbb8244517d0
+  languageName: node
+  linkType: hard
+
+"openai-chat-tokens@npm:^0.2.8":
+  version: 0.2.8
+  resolution: "openai-chat-tokens@npm:0.2.8"
+  dependencies:
+    js-tiktoken: "npm:^1.0.7"
+  checksum: 10c0/b415fda706b408f29b4584998990f29ad7f80f2ac1e84179a0976742ba8a80859fedeae5745a9bfe73443d95960b77328610074952ad198a18bc0e5c0ceb5b7b
   languageName: node
   linkType: hard
 

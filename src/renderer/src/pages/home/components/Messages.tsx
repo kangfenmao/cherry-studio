@@ -1,7 +1,7 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
 import localforage from 'localforage'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { reverse } from 'lodash'
@@ -15,14 +15,15 @@ import { t } from 'i18next'
 interface Props {
   assistant: Assistant
   topic: Topic
+  messagesRef: MutableRefObject<Message[]>
 }
 
-const Messages: FC<Props> = ({ assistant, topic }) => {
+const Messages: FC<Props> = ({ assistant, topic, messagesRef }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const { updateTopic } = useAssistant(assistant.id)
   const provider = useProviderByAssistant(assistant)
-  const messagesRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const assistantDefaultMessage: Message = {
     id: 'assistant',
@@ -95,11 +96,12 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   }, [topic.id])
 
   useEffect(() => {
-    messagesRef.current?.scrollTo({ top: 100000, behavior: 'auto' })
-  }, [messages])
+    containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' })
+    messagesRef.current = messages
+  }, [messages, messagesRef])
 
   return (
-    <Container id="messages" key={assistant.id} ref={messagesRef}>
+    <Container id="messages" key={assistant.id} ref={containerRef}>
       {lastMessage && <MessageItem message={lastMessage} />}
       {reverse([...messages]).map((message, index) => (
         <MessageItem key={message.id} message={message} showMenu index={index} onDeleteMessage={onDeleteMessage} />

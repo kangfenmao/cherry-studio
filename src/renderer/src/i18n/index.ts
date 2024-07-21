@@ -64,7 +64,18 @@ const resources = {
         'input.clear.content': 'Are you sure to clear all messages?',
         'input.placeholder': 'Type your message here...',
         'input.send': 'Send',
-        'input.pause': 'Pause'
+        'input.pause': 'Pause',
+        'input.settings': 'Settings',
+        'settings.temperature': 'Temperature',
+        'settings.temperature.tip':
+          'Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.',
+        'settings.max_tokens': 'Max Tokens',
+        'settings.max_tokens.tip': 'The maximum number of tokens to generate in the completion.',
+        'settings.conext_count': 'Context',
+        'settings.conext_count.tip': 'The number of previous messages to keep in the context.',
+        'settings.reset': 'Reset',
+        'settings.set_as_default': 'Apply to default assistant',
+        'settings.max': 'Max'
       },
       apps: {
         title: 'Agents'
@@ -112,6 +123,7 @@ const resources = {
         'models.add.group_name.placeholder': 'Optional e.g. ChatGPT',
         'models.empty': 'No models found',
         'assistant.title': 'Default Assistant',
+        'assistant.model_params': 'Model Parameters',
         'about.description': 'A powerful AI assistant for producer',
         'about.updateNotAvailable': 'You are using the latest version',
         'about.checkingUpdate': 'Checking for updates...',
@@ -186,7 +198,20 @@ const resources = {
         'input.clear.content': '确定要清除所有消息吗?',
         'input.placeholder': '在这里输入消息...',
         'input.send': '发送',
-        'input.pause': '暂停'
+        'input.pause': '暂停',
+        'input.settings': '设置',
+        'settings.temperature': '模型温度',
+        'settings.temperature.tip':
+          '模型生成文本的随机程度。值越大，回复内容越赋有多样性、创造性、随机性；设为 0 根据事实回答。日常聊天建议设置为 0.7',
+        'settings.max_tokens': '最大回复',
+        'settings.max_tokens.tip':
+          '最大回复内容多少，数值越大，生成的文本越长。普通聊天建议 500-800；短文生成建议 800-2000；代码生成建议 2000-3600；长文生成建议切换模型到 4000 左右',
+        'settings.conext_count': '上下文数',
+        'settings.conext_count.tip':
+          '要保留在上下文中的消息数量，数值越大，上下文越长，消耗的 token 越多。普通聊天建议 5-10，代码生成建议 5-10',
+        'settings.reset': '重置',
+        'settings.set_as_default': '应用到默认助手',
+        'settings.max': '不限'
       },
       apps: {
         title: '智能体'
@@ -234,6 +259,7 @@ const resources = {
         'models.add.group_name.placeholder': '例如 ChatGPT',
         'models.empty': '没有模型',
         'assistant.title': '默认助手',
+        'assistant.model_params': '模型参数',
         'about.description': '一个为创造者而生的 AI 助手',
         'about.updateNotAvailable': '你的软件已是最新版本',
         'about.checkingUpdate': '正在检查更新...',

@@ -6,7 +6,7 @@ import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } fr
 import { sum, takeRight } from 'lodash'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
 import { EVENT_NAMES } from './event'
-import { removeQuotes } from '@renderer/utils'
+import { getAssistantSettings, removeQuotes } from '@renderer/utils'
 
 export default class ProviderSDK {
   provider: Provider
@@ -32,10 +32,11 @@ export default class ProviderSDK {
   ) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
+    const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
 
-    const userMessages = takeRight(messages, 5).map((message) => ({
+    const userMessages = takeRight(messages, contextCount).map((message) => ({
       role: message.role,
       content: message.content
     }))
@@ -43,9 +44,10 @@ export default class ProviderSDK {
     if (this.isAnthropic) {
       await this.anthropicSdk.messages
         .stream({
-          max_tokens: 2048,
+          model: model.id,
           messages: [systemMessage, ...userMessages].filter(Boolean) as MessageParam[],
-          model: model.id
+          max_tokens: assistant.settings?.maxTokens || maxTokens,
+          temperature: assistant.settings?.temperature
         })
         .on('text', (text) => onChunk({ text: text || '' }))
         .on('finalMessage', (message) =>
@@ -61,7 +63,9 @@ export default class ProviderSDK {
       const stream = await this.openaiSdk.chat.completions.create({
         model: model.id,
         messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
-        stream: true
+        stream: true,
+        max_tokens: assistant.settings?.maxTokens,
+        temperature: assistant.settings?.temperature
       })
       for await (const chunk of stream) {
         if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break

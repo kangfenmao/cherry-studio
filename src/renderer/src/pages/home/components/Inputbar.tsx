@@ -1,7 +1,7 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
-import { uuid } from '@renderer/utils'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { estimateTokenCount, uuid } from '@renderer/utils'
+import { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Tooltip } from 'antd'
@@ -13,7 +13,8 @@ import {
   FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  SettingOutlined
 } from '@ant-design/icons'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import { isEmpty } from 'lodash'
@@ -24,13 +25,15 @@ import store, { useAppSelector } from '@renderer/store'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { useTranslation } from 'react-i18next'
 import { setGenerating } from '@renderer/store/runtime'
+import AssistantSettings from './AssistantSettings'
 
 interface Props {
   assistant: Assistant
   setActiveTopic: (topic: Topic) => void
+  messagesRef: MutableRefObject<Message[]>
 }
 
-const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
+const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
@@ -93,6 +96,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     store.dispatch(setGenerating(false))
   }
 
+  const textCount = text.length === 0 ? '' : (text: string) => estimateTokenCount(text, assistant, messagesRef.current)
+
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -148,6 +153,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Popconfirm>
           </Tooltip>
+          <AssistantSettings assistant={assistant}>
+            <ToolbarButton type="text">
+              <SettingOutlined />
+            </ToolbarButton>
+          </AssistantSettings>
           <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
@@ -177,8 +187,19 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         autoFocus
         contextMenu="true"
         variant="borderless"
-        styles={{ textarea: { paddingLeft: 0 } }}
+        showCount
+        count={{ strategy: textCount }}
         ref={inputRef}
+        styles={{
+          textarea: { paddingLeft: 0 },
+          count: {
+            position: 'absolute',
+            right: 5,
+            bottom: 5,
+            fontSize: 11,
+            display: text.length === 0 ? 'none' : 'block'
+          }
+        }}
       />
     </Container>
   )

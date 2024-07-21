@@ -7,6 +7,13 @@ export type Assistant = {
   prompt: string
   topics: Topic[]
   model?: Model
+  settings?: AssistantSettings
+}
+
+export type AssistantSettings = {
+  contextCount: number
+  temperature: number
+  maxTokens: number
 }
 
 export type Message = {

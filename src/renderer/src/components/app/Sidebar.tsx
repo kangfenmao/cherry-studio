@@ -44,14 +44,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 0;
+  padding: 8px 0;
   min-width: var(--sidebar-width);
   min-height: 100%;
   -webkit-app-region: drag !important;
   background-color: #1f1f1f;
   border-right: 0.5px solid var(--color-border);
-  margin-top: var(--navbar-height);
-  padding-bottom: calc(var(--navbar-height) + 6px);
+  padding-top: var(--navbar-height);
 `
 
 const AvatarImg = styled.img`
@@ -60,6 +59,7 @@ const AvatarImg = styled.img`
   height: 28px;
   background-color: var(--color-background-soft);
   margin: 5px 0;
+  margin-top: 12px;
 `
 const MainMenus = styled.div`
   display: flex;

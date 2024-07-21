@@ -9,9 +9,15 @@ import {
 } from '@renderer/store/llm'
 import { Assistant, Model, Provider } from '@renderer/types'
 import { useDefaultModel } from './useAssistant'
+import { createSelector } from '@reduxjs/toolkit'
+
+const selectEnabledProviders = createSelector(
+  (state) => state.llm.providers,
+  (providers) => providers.filter((p) => p.enabled)
+)
 
 export function useProviders() {
-  const providers = useAppSelector((state) => state.llm.providers.filter((p) => p.enabled))
+  const providers = useAppSelector(selectEnabledProviders)
   const dispatch = useAppDispatch()
 
   return {
