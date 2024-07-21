@@ -82,12 +82,8 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
     }
   }
 
-  if (!showRightSidebar) {
-    return null
-  }
-
   return (
-    <Container className={showRightSidebar ? '' : 'collapsed'}>
+    <Container style={{ display: showRightSidebar ? 'block' : 'none' }}>
       <TopicTitle>
         <span>
           {t('assistant.topics.title')} ({assistant.topics.length})

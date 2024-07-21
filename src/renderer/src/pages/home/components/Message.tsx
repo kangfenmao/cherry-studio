@@ -104,8 +104,8 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             <MessageMetadata>{message.modelId}</MessageMetadata>
             {message.usage && (
               <>
-                <MessageMetadata style={{ textTransform: 'uppercase' }}>
-                  tokens used: {message.usage.total_tokens} (IN:{message.usage.prompt_tokens}/OUT:
+                <MessageMetadata>
+                  Tokens: {message.usage.total_tokens} (IN:{message.usage.prompt_tokens}/OUT:
                   {message.usage.completion_tokens})
                 </MessageMetadata>
               </>

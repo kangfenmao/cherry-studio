@@ -66,11 +66,10 @@ const resources = {
         'input.send': 'Send',
         'input.pause': 'Pause',
         'input.settings': 'Settings',
+        'input.estimated_tokens': 'Estimated tokens: ',
         'settings.temperature': 'Temperature',
         'settings.temperature.tip':
           'Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.',
-        'settings.max_tokens': 'Max Tokens',
-        'settings.max_tokens.tip': 'The maximum number of tokens to generate in the completion.',
         'settings.conext_count': 'Context',
         'settings.conext_count.tip': 'The number of previous messages to keep in the context.',
         'settings.reset': 'Reset',
@@ -200,12 +199,10 @@ const resources = {
         'input.send': '发送',
         'input.pause': '暂停',
         'input.settings': '设置',
+        'input.estimated_tokens': '预估消耗',
         'settings.temperature': '模型温度',
         'settings.temperature.tip':
           '模型生成文本的随机程度。值越大，回复内容越赋有多样性、创造性、随机性；设为 0 根据事实回答。日常聊天建议设置为 0.7',
-        'settings.max_tokens': '最大回复',
-        'settings.max_tokens.tip':
-          '最大回复内容多少，数值越大，生成的文本越长。普通聊天建议 500-800；短文生成建议 800-2000；代码生成建议 2000-3600；长文生成建议切换模型到 4000 左右',
         'settings.conext_count': '上下文数',
         'settings.conext_count.tip':
           '要保留在上下文中的消息数量，数值越大，上下文越长，消耗的 token 越多。普通聊天建议 5-10，代码生成建议 5-10',
@@ -233,7 +230,7 @@ const resources = {
       },
       settings: {
         title: '设置',
-        general: '常规',
+        general: '常规设置',
         provider: '模型提供商',
         model: '模型设置',
         assistant: '默认助手',

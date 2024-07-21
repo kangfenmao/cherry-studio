@@ -24,11 +24,9 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const { t } = useTranslation()
 
   const onDelete = (assistant: Assistant) => {
+    const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
+    _assistant ? setActiveAssistant(_assistant) : onCreateAssistant()
     removeAssistant(assistant.id)
-    setTimeout(() => {
-      const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
-      _assistant ? setActiveAssistant(_assistant) : onCreateAssistant()
-    }, 0)
   }
 
   const items: MenuProps['items'] = [

@@ -32,11 +32,11 @@ export default class ProviderSDK {
   ) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
-    const { contextCount, maxTokens } = getAssistantSettings(assistant)
+    const { contextCount } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
 
-    const userMessages = takeRight(messages, contextCount).map((message) => ({
+    const userMessages = takeRight(messages, contextCount + 1).map((message) => ({
       role: message.role,
       content: message.content
     }))
@@ -46,7 +46,7 @@ export default class ProviderSDK {
         .stream({
           model: model.id,
           messages: [systemMessage, ...userMessages].filter(Boolean) as MessageParam[],
-          max_tokens: assistant.settings?.maxTokens || maxTokens,
+          max_tokens: 4096,
           temperature: assistant.settings?.temperature
         })
         .on('text', (text) => onChunk({ text: text || '' }))
@@ -64,7 +64,6 @@ export default class ProviderSDK {
         model: model.id,
         messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
         stream: true,
-        max_tokens: assistant.settings?.maxTokens,
         temperature: assistant.settings?.temperature
       })
       for await (const chunk of stream) {

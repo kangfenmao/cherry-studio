@@ -1,7 +1,7 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
-import { estimateTokenCount, uuid } from '@renderer/utils'
-import { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { estimateInputTokenCount, uuid } from '@renderer/utils'
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { MoreOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Tooltip } from 'antd'
@@ -9,15 +9,15 @@ import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import {
   ClearOutlined,
+  ControlOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
-  PlusCircleOutlined,
-  SettingOutlined
+  PlusCircleOutlined
 } from '@ant-design/icons'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
-import { isEmpty } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 import SendMessageSetting from './SendMessageSetting'
 import { useSettings } from '@renderer/hooks/useSettings'
 import dayjs from 'dayjs'
@@ -30,15 +30,15 @@ import AssistantSettings from './AssistantSettings'
 interface Props {
   assistant: Assistant
   setActiveTopic: (topic: Topic) => void
-  messagesRef: MutableRefObject<Message[]>
 }
 
-const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
+const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
   const { setShowRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut } = useSettings()
   const [expended, setExpend] = useState(false)
+  const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const inputRef = useRef<TextAreaRef>(null)
 
@@ -68,6 +68,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
     setText('')
   }
 
+  const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (sendMessageShortcut === 'Enter' && event.key === 'Enter') {
       if (event.shiftKey) {
@@ -96,8 +98,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
     store.dispatch(setGenerating(false))
   }
 
-  const textCount = text.length === 0 ? '' : (text: string) => estimateTokenCount(text, assistant, messagesRef.current)
-
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -113,11 +113,13 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
   }, [addNewTopic, generating])
 
   useEffect(() => {
+    const _setEstimateTokenCount = debounce(setEstimateTokenCount, 100, { leading: false, trailing: true })
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.EDIT_MESSAGE, (message: Message) => {
         setText(message.content)
         inputRef.current?.focus()
-      })
+      }),
+      EventEmitter.on(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, _setEstimateTokenCount)
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [])
@@ -155,7 +157,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
           </Tooltip>
           <AssistantSettings assistant={assistant}>
             <ToolbarButton type="text">
-              <SettingOutlined />
+              <ControlOutlined />
             </ToolbarButton>
           </AssistantSettings>
           <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
@@ -188,19 +190,12 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, messagesRef }) => {
         contextMenu="true"
         variant="borderless"
         showCount
-        count={{ strategy: textCount }}
         ref={inputRef}
-        styles={{
-          textarea: { paddingLeft: 0 },
-          count: {
-            position: 'absolute',
-            right: 5,
-            bottom: 5,
-            fontSize: 11,
-            display: text.length === 0 ? 'none' : 'block'
-          }
-        }}
+        styles={{ textarea: { paddingLeft: 0 } }}
       />
+      <TextCount>
+        {t('assistant.input.estimated_tokens')}: {`${inputTokenCount}/${estimateTokenCount}`}
+      </TextCount>
     </Container>
   )
 }
@@ -213,6 +208,7 @@ const Container = styled.div`
   border-top: 0.5px solid var(--color-border);
   padding: 5px 15px;
   transition: all 0.3s ease;
+  position: relative;
 `
 
 const Textarea = styled(TextArea)`
@@ -254,6 +250,14 @@ const ToolbarButton = styled(Button)`
       color: white;
     }
   }
+`
+
+const TextCount = styled.div`
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: 11px;
+  color: var(--color-text-3);
 `
 
 export default Inputbar

@@ -1,13 +1,13 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
 import localforage from 'localforage'
-import { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { reverse } from 'lodash'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { runAsyncFunction } from '@renderer/utils'
+import { estimateHistoryTokenCount, runAsyncFunction } from '@renderer/utils'
 import LocalStorage from '@renderer/services/storage'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { t } from 'i18next'
@@ -15,10 +15,9 @@ import { t } from 'i18next'
 interface Props {
   assistant: Assistant
   topic: Topic
-  messagesRef: MutableRefObject<Message[]>
 }
 
-const Messages: FC<Props> = ({ assistant, topic, messagesRef }) => {
+const Messages: FC<Props> = ({ assistant, topic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const { updateTopic } = useAssistant(assistant.id)
@@ -97,8 +96,11 @@ const Messages: FC<Props> = ({ assistant, topic, messagesRef }) => {
 
   useEffect(() => {
     containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' })
-    messagesRef.current = messages
-  }, [messages, messagesRef])
+  }, [messages])
+
+  useEffect(() => {
+    EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, estimateHistoryTokenCount(assistant, messages))
+  }, [assistant, messages])
 
   return (
     <Container id="messages" key={assistant.id} ref={containerRef}>

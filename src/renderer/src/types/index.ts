@@ -13,7 +13,6 @@ export type Assistant = {
 export type AssistantSettings = {
   contextCount: number
   temperature: number
-  maxTokens: number
 }
 
 export type Message = {

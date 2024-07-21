@@ -1,3 +1,2 @@
 export const DEFAULT_TEMPERATURE = 0.7
-export const DEFAULT_MAXTOKENS = 800
 export const DEFAULT_CONEXTCOUNT = 5

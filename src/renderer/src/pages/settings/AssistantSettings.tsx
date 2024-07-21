@@ -1,52 +1,43 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { DEFAULT_CONEXTCOUNT, DEFAULT_MAXTOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { Button, Col, Input, InputNumber, Row, Slider, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { FC, useState } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { SettingContainer, SettingDivider, SettingSubtitle, SettingTitle } from './components'
+import { debounce } from 'lodash'
 
 const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()
-  const [temperature, setTemperature] = useState(defaultAssistant.settings?.temperature || DEFAULT_TEMPERATURE)
-  const [maxTokens, setMaxTokens] = useState(defaultAssistant.settings?.maxTokens || DEFAULT_MAXTOKENS)
-  const [contextCount, setConextCount] = useState(defaultAssistant.settings?.contextCount || DEFAULT_CONEXTCOUNT)
+  const [temperature, setTemperature] = useState(defaultAssistant.settings?.temperature ?? DEFAULT_TEMPERATURE)
+  const [contextCount, setConextCount] = useState(defaultAssistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
 
   const { t } = useTranslation()
 
-  const onUpdateAssistantSettings = ({
-    _temperature,
-    _maxTokens,
-    _contextCount
-  }: {
-    _temperature?: number
-    _maxTokens?: number
-    _contextCount?: number
-  }) => {
-    updateDefaultAssistant({
-      ...defaultAssistant,
-      settings: {
-        ...defaultAssistant.settings,
-        temperature: _temperature || temperature,
-        maxTokens: _maxTokens || maxTokens,
-        contextCount: _contextCount || contextCount
-      }
-    })
-  }
+  const onUpdateAssistantSettings = useCallback(
+    debounce(
+      ({ _temperature, _contextCount }: { _temperature?: number; _contextCount?: number }) => {
+        updateDefaultAssistant({
+          ...defaultAssistant,
+          settings: {
+            ...defaultAssistant.settings,
+            temperature: _temperature ?? temperature,
+            contextCount: _contextCount ?? contextCount
+          }
+        })
+      },
+      1000,
+      { leading: false, trailing: true }
+    ),
+    []
+  )
 
   const onTemperatureChange = (value) => {
     if (!isNaN(value as number)) {
       setTemperature(value)
       onUpdateAssistantSettings({ _temperature: value })
-    }
-  }
-
-  const onMaxTokensChange = (value) => {
-    if (!isNaN(value as number)) {
-      setMaxTokens(value)
-      onUpdateAssistantSettings({ _maxTokens: value })
     }
   }
 
@@ -59,14 +50,12 @@ const AssistantSettings: FC = () => {
 
   const onReset = () => {
     setTemperature(DEFAULT_TEMPERATURE)
-    setMaxTokens(DEFAULT_MAXTOKENS)
     setConextCount(DEFAULT_CONEXTCOUNT)
     updateDefaultAssistant({
       ...defaultAssistant,
       settings: {
         ...defaultAssistant.settings,
         temperature: DEFAULT_TEMPERATURE,
-        maxTokens: DEFAULT_MAXTOKENS,
         contextCount: DEFAULT_CONEXTCOUNT
       }
     })
@@ -147,35 +136,7 @@ const AssistantSettings: FC = () => {
           />
         </Col>
       </Row>
-      <Row align="middle">
-        <Label>{t('assistant.settings.max_tokens')}</Label>
-        <Tooltip title={t('assistant.settings.max_tokens.tip')}>
-          <QuestionIcon />
-        </Tooltip>
-      </Row>
-      <Row align="middle" gutter={20}>
-        <Col span={22}>
-          <Slider
-            min={0}
-            max={5000}
-            onChange={onMaxTokensChange}
-            value={typeof maxTokens === 'number' ? maxTokens : 0}
-            marks={{ 0: '0', 800: '800', 2000: '2000', 3600: '3600', 5000: t('assistant.settings.max') }}
-            step={64}
-          />
-        </Col>
-        <Col span={2}>
-          <InputNumber
-            min={0}
-            max={5000}
-            step={100}
-            value={maxTokens}
-            onChange={onMaxTokensChange}
-            style={{ width: '100%' }}
-          />
-        </Col>
-      </Row>
-      <Button onClick={onReset} style={{ width: 100, marginTop: 20 }}>
+      <Button onClick={onReset} style={{ width: 100 }}>
         {t('assistant.settings.reset')}
       </Button>
     </SettingContainer>

@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import imageCompression from 'browser-image-compression'
 import { Assistant, AssistantSettings, Message, Model } from '@renderer/types'
 import { GPTTokens } from 'gpt-tokens'
-import { DEFAULT_CONEXTCOUNT, DEFAULT_MAXTOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
-import { take } from 'lodash'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { takeRight } from 'lodash'
 
 export const runAsyncFunction = async (fn: () => void) => {
   await fn()
@@ -169,31 +169,32 @@ export function getFirstCharacter(str) {
 }
 
 export const getAssistantSettings = (assistant: Assistant): AssistantSettings => {
+  const contextCount = assistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
   return {
-    contextCount: assistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT,
-    temperature: assistant.settings?.temperature ?? DEFAULT_TEMPERATURE,
-    maxTokens: assistant.settings?.maxTokens ?? DEFAULT_MAXTOKENS
+    contextCount: contextCount === 20 ? 100000 : contextCount,
+    temperature: assistant.settings?.temperature ?? DEFAULT_TEMPERATURE
   }
 }
 
-export function estimateTokenCount(text: string, assistant: Assistant, msgs: Message[]) {
-  const { contextCount } = getAssistantSettings(assistant)
-
-  console.debug('contextCount', contextCount)
-
+export function estimateInputTokenCount(text: string) {
   const input = new GPTTokens({
     model: 'gpt-4o',
     messages: [{ role: 'user', content: text }]
   })
 
+  return input.usedTokens - 7
+}
+
+export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[]) {
+  const { contextCount } = getAssistantSettings(assistant)
+
   const all = new GPTTokens({
     model: 'gpt-4o',
     messages: [
       { role: 'system', content: assistant.prompt },
-      { role: 'user', content: text },
-      ...take(msgs, contextCount).map((message) => ({ role: message.role, content: message.content }))
+      ...takeRight(msgs, contextCount).map((message) => ({ role: message.role, content: message.content }))
     ]
   })
 
-  return `Token ${input.usedTokens - 7} / ${all.usedTokens}` as unknown as number
+  return all.usedTokens - 7
 }
