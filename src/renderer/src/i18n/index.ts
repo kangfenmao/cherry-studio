@@ -135,13 +135,13 @@ const resources = {
         'provider.edit.name': 'Provider Name',
         'provider.edit.name.placeholder': 'Example: OpenAI',
         'about.title': 'About',
-        'about.releases.title': 'Release Notes',
+        'about.releases.title': '📔 Release Notes',
         'about.releases.button': 'Releases',
-        'about.website.title': 'Official Website',
+        'about.website.title': '🌐 Official Website',
         'about.website.button': 'Website',
-        'about.feedback.title': 'Feedback',
+        'about.feedback.title': '📝 Feedback',
         'about.feedback.button': 'Feedback',
-        'about.contact.title': 'Contact',
+        'about.contact.title': '📧 Contact',
         'about.contact.button': 'Email'
       }
     }
