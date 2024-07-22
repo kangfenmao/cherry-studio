@@ -41,7 +41,8 @@ const resources = {
         'error.enter.model': 'Please select a model first',
         'api.connection.failed': 'Connection failed',
         'api.connection.success': 'Connection successful',
-        'chat.completion.paused': 'Chat completion paused'
+        'chat.completion.paused': 'Chat completion paused',
+        'topics.switch.disabled': 'Switching topics is disabled while the assistant is generating'
       },
       assistant: {
         'default.name': '😀 Default Assistant',
@@ -174,7 +175,8 @@ const resources = {
         'error.enter.model': '请选择一个模型',
         'api.connection.failed': '连接失败',
         'api.connection.success': '连接成功',
-        'chat.completion.paused': '会话已停止'
+        'chat.completion.paused': '会话已停止',
+        'topics.switch.disabled': '模型回复完成后才能切换话题'
       },
       assistant: {
         'default.name': '😃 默认助手 - Assistant',

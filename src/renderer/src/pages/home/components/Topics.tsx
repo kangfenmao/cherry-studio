@@ -11,6 +11,7 @@ import LocalStorage from '@renderer/services/storage'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import { droppableReorder } from '@renderer/utils'
 import { useTranslation } from 'react-i18next'
+import { useAppSelector } from '@renderer/store'
 
 interface Props {
   assistant: Assistant
@@ -22,6 +23,7 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
   const { removeTopic, updateTopic, removeAllTopics, updateTopics } = useAssistant(assistant.id)
   const { t } = useTranslation()
+  const generating = useAppSelector((state) => state.runtime.generating)
 
   const getTopicMenuItems = (topic: Topic) => {
     const menus: MenuProps['items'] = [
@@ -82,6 +84,14 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
     }
   }
 
+  const onSwitchTopic = (topic: Topic) => {
+    if (generating) {
+      window.message.info({ content: t('message.topics.switch.disabled'), key: 'switch-topic' })
+      return
+    }
+    setActiveTopic(topic)
+  }
+
   return (
     <Container style={{ display: showRightSidebar ? 'block' : 'none' }}>
       <TopicTitle>
@@ -111,7 +121,7 @@ const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
                       <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
                         <TopicListItem
                           className={topic.id === activeTopic?.id ? 'active' : ''}
-                          onClick={() => setActiveTopic(topic)}>
+                          onClick={() => onSwitchTopic(topic)}>
                           {topic.name}
                         </TopicListItem>
                       </Dropdown>
