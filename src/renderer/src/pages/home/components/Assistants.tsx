@@ -3,6 +3,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic } from '@renderer/services/assistant'
+import { useAppSelector } from '@renderer/store'
 import { Assistant } from '@renderer/types'
 import { droppableReorder, uuid } from '@renderer/utils'
 import { Dropdown } from 'antd'
@@ -21,6 +22,7 @@ interface Props {
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const { updateAssistant } = useAssistant(activeAssistant.id)
+  const generating = useAppSelector((state) => state.runtime.generating)
 
   const { t } = useTranslation()
 
@@ -70,6 +72,14 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
     }
   }
 
+  const onSwitchAssistant = (assistant: Assistant) => {
+    if (generating) {
+      window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
+      return
+    }
+    setActiveAssistant(assistant)
+  }
+
   return (
     <Container>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -82,7 +92,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                       <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
                         <AssistantItem
-                          onClick={() => setActiveAssistant(assistant)}
+                          onClick={() => onSwitchAssistant(assistant)}
                           className={assistant.id === activeAssistant?.id ? 'active' : ''}>
                           <AssistantName>{assistant.name}</AssistantName>
                         </AssistantItem>

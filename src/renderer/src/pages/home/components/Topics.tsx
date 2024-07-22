@@ -86,7 +86,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
   const onSwitchTopic = (topic: Topic) => {
     if (generating) {
-      window.message.info({ content: t('message.topics.switch.disabled'), key: 'switch-topic' })
+      window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
       return
     }
     setActiveTopic(topic)
