@@ -203,3 +203,13 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
 export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+// is valid proxy url
+export const isValidProxyUrl = (url: string) => {
+  try {
+    new URL(url)
+    return true
+  } catch (error) {
+    return false
+  }
+}

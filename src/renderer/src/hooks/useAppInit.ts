@@ -4,9 +4,11 @@ import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { runAsyncFunction } from '@renderer/utils'
 import { useEffect } from 'react'
+import { useSettings } from './useSettings'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
+  const { proxyUrl } = useSettings()
 
   useEffect(() => {
     runAsyncFunction(async () => {
@@ -22,4 +24,8 @@ export function useAppInit() {
       isPackaged && setTimeout(window.api.checkForUpdate, 3000)
     })
   }, [])
+
+  useEffect(() => {
+    proxyUrl && window.api.setProxy(proxyUrl)
+  }, [proxyUrl])
 }

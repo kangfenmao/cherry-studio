@@ -250,7 +250,8 @@ const migrate = createMigrate({
       ...state,
       settings: {
         ...state.settings,
-        showAssistants: true
+        showAssistants: true,
+        proxyUrl: undefined
       }
     }
   }

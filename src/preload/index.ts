@@ -5,7 +5,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   getAppInfo: () => ipcRenderer.invoke('get-app-info'),
   checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
-  openWebsite: (url: string) => ipcRenderer.invoke('open-website', url)
+  openWebsite: (url: string) => ipcRenderer.invoke('open-website', url),
+  setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

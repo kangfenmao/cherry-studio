@@ -1,6 +1,6 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import * as Sentry from '@sentry/electron/main'
-import { app, BrowserWindow, ipcMain, Menu, MenuItem, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, MenuItem, session, shell } from 'electron'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
@@ -99,6 +99,10 @@ app.whenReady().then(() => {
 
   ipcMain.handle('open-website', (_, url: string) => {
     shell.openExternal(url)
+  })
+
+  ipcMain.handle('set-proxy', (_, proxy: string) => {
+    session.defaultSession.setProxy({ proxyRules: proxy })
   })
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)

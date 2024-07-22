@@ -39,6 +39,7 @@ const resources = {
         'error.enter.api.key': 'Please enter your API key first',
         'error.enter.api.host': 'Please enter your API host first',
         'error.enter.model': 'Please select a model first',
+        'error.invalid.proxy.url': 'Invalid proxy URL',
         'api.connection.failed': 'Connection failed',
         'api.connection.success': 'Connection successful',
         'chat.completion.paused': 'Chat completion paused',
@@ -142,7 +143,8 @@ const resources = {
         'about.feedback.title': '📝 Feedback',
         'about.feedback.button': 'Feedback',
         'about.contact.title': '📧 Contact',
-        'about.contact.button': 'Email'
+        'about.contact.button': 'Email',
+        'proxy.title': 'Proxy Address'
       }
     }
   },
@@ -182,6 +184,7 @@ const resources = {
         'error.enter.api.key': '请输入您的 API 密钥',
         'error.enter.api.host': '请输入您的 API 地址',
         'error.enter.model': '请选择一个模型',
+        'error.invalid.proxy.url': '无效的代理地址',
         'api.connection.failed': '连接失败',
         'api.connection.success': '连接成功',
         'chat.completion.paused': '会话已停止',
@@ -286,7 +289,8 @@ const resources = {
         'about.feedback.title': '📝 意见反馈',
         'about.feedback.button': '反馈',
         'about.contact.title': '📧 邮件联系',
-        'about.contact.button': '邮件'
+        'about.contact.button': '邮件',
+        'proxy.title': '代理地址'
       }
     }
   }

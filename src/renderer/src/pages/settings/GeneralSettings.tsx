@@ -1,20 +1,22 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
-import { Avatar, Select, Upload } from 'antd'
+import { Avatar, Input, Select, Upload } from 'antd'
 import styled from 'styled-components'
 import LocalStorage from '@renderer/services/storage'
-import { compressImage } from '@renderer/utils'
+import { compressImage, isValidProxyUrl } from '@renderer/utils'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { setLanguage } from '@renderer/store/settings'
 import { useTranslation } from 'react-i18next'
+import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import i18n from '@renderer/i18n'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const { language } = useSettings()
+  const { language, proxyUrl: storeProxyUrl } = useSettings()
+  const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
 
@@ -22,6 +24,16 @@ const GeneralSettings: FC = () => {
     dispatch(setLanguage(value))
     i18n.changeLanguage(value)
     localStorage.setItem('language', value)
+  }
+
+  const onSetProxyUrl = () => {
+    if (!proxyUrl || !isValidProxyUrl(proxyUrl)) {
+      window.message.error({ content: t('message.error.invalid.proxy.url'), key: 'proxy-error' })
+      return
+    }
+
+    dispatch(_setProxyUrl(proxyUrl))
+    window.api.setProxy(proxyUrl)
   }
 
   return (
@@ -60,6 +72,18 @@ const GeneralSettings: FC = () => {
           }}>
           <UserAvatar src={avatar} size="large" />
         </Upload>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
+        <Input
+          placeholder="socks5://127.0.0.1:6153"
+          value={proxyUrl}
+          onChange={(e) => setProxyUrl(e.target.value)}
+          style={{ width: 300 }}
+          onBlur={() => onSetProxyUrl()}
+          type="url"
+        />
       </SettingRow>
       <SettingDivider />
     </SettingContainer>
