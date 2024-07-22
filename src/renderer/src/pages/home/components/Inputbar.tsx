@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import AssistantSettings from './AssistantSettings'
 import SendMessageSetting from './SendMessageSetting'
+import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 
 interface Props {
   assistant: Assistant
@@ -193,6 +194,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         styles={{ textarea: { paddingLeft: 0 } }}
       />
       <TextCount>
+        <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} |{' '}
         {t('assistant.input.estimated_tokens')}: {`${inputTokenCount}/${estimateTokenCount}`}
       </TextCount>
     </Container>
@@ -257,6 +259,7 @@ const TextCount = styled.div`
   bottom: 8px;
   font-size: 11px;
   color: var(--color-text-3);
+  z-index: 10;
 `
 
 export default Inputbar

@@ -105,7 +105,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             {message.usage && (
               <>
                 <MessageMetadata>
-                  Tokens: {message.usage.total_tokens} (IN:{message.usage.prompt_tokens}/OUT:
+                  tokens: {message.usage.total_tokens} (in:{message.usage.prompt_tokens}/out:
                   {message.usage.completion_tokens})
                 </MessageMetadata>
               </>

@@ -67,7 +67,7 @@ const resources = {
         'input.send': 'Send',
         'input.pause': 'Pause',
         'input.settings': 'Settings',
-        'input.estimated_tokens': 'Estimated tokens: ',
+        'input.estimated_tokens': 'Estimated Tokens: ',
         'settings.temperature': 'Temperature',
         'settings.temperature.tip':
           'Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.',
