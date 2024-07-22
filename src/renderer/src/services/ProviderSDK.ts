@@ -83,7 +83,7 @@ export default class ProviderSDK {
 
     const systemMessage = {
       role: 'system',
-      content: '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，不要加标点符号'
+      content: '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，不要使用标点符号和其他特殊符号。'
     }
 
     if (this.isAnthropic) {
