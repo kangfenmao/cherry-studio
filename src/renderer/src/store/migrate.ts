@@ -243,6 +243,16 @@ const migrate = createMigrate({
         }
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '14': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        showAssistants: true
+      }
+    }
   }
 })
 

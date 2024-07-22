@@ -198,3 +198,8 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
 
   return all.usedTokens - 7
 }
+
+// 首字母大写
+export const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

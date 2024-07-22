@@ -5,15 +5,17 @@ import styled from 'styled-components'
 import Chat from './components/Chat'
 import Assistants from './components/Assistants'
 import { uuid } from '@renderer/utils'
-import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
 import { Tooltip } from 'antd'
 import Navigation from './components/Navigation'
 import { useTranslation } from 'react-i18next'
+import { PlusSquareOutlined } from '@ant-design/icons'
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const [activeAssistant, setActiveAssistant] = useState(assistants[0])
-  const { showRightSidebar, setShowRightSidebar } = useShowRightSidebar()
+  const { showRightSidebar, toggleRightSidebar } = useShowRightSidebar()
+  const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { defaultAssistant } = useDefaultAssistant()
   const { t } = useTranslation()
 
@@ -26,29 +28,36 @@ const HomePage: FC = () => {
   return (
     <Container>
       <Navbar>
-        <NavbarLeft style={{ justifyContent: 'flex-end', borderRight: 'none' }}>
-          <NewButton onClick={onCreateAssistant}>
-            <i className="iconfont icon-a-addchat"></i>
-          </NewButton>
-        </NavbarLeft>
+        {showAssistants && (
+          <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
+            <NewButton onClick={toggleShowAssistants} style={{ marginLeft: 8 }}>
+              <i className="iconfont icon-hidesidebarhoriz" />
+            </NewButton>
+            <NewButton onClick={onCreateAssistant}>
+              <PlusSquareOutlined />
+            </NewButton>
+          </NavbarLeft>
+        )}
         <Navigation activeAssistant={activeAssistant} />
         <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
           <Tooltip
             placement="left"
             title={showRightSidebar ? t('assistant.topics.hide_topics') : t('assistant.topics.show_topics')}
             arrow>
-            <NewButton onClick={setShowRightSidebar}>
+            <NewButton onClick={toggleRightSidebar}>
               <i className={`iconfont ${showRightSidebar ? 'icon-showsidebarhoriz' : 'icon-hidesidebarhoriz'}`} />
             </NewButton>
           </Tooltip>
         </NavbarRight>
       </Navbar>
       <ContentContainer>
-        <Assistants
-          activeAssistant={activeAssistant}
-          setActiveAssistant={setActiveAssistant}
-          onCreateAssistant={onCreateAssistant}
-        />
+        {showAssistants && (
+          <Assistants
+            activeAssistant={activeAssistant}
+            setActiveAssistant={setActiveAssistant}
+            onCreateAssistant={onCreateAssistant}
+          />
+        )}
         <Chat assistant={activeAssistant} />
       </ContentContainer>
     </Container>
@@ -59,33 +68,31 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: calc(100vh - var(--navbar-height));
 `
 
 const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
-  height: 100%;
 `
 
-const NewButton = styled.div`
+export const NewButton = styled.div`
   -webkit-app-region: none;
   border-radius: 4px;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease-in-out;
   color: var(--color-icon);
-  .iconfont {
-    font-size: 22px;
+  .anticon {
+    font-size: 18px;
   }
   .icon-showsidebarhoriz,
   .icon-hidesidebarhoriz {
-    font-size: 18px;
+    font-size: 16px;
   }
   &:hover {
     background-color: var(--color-background-soft);
