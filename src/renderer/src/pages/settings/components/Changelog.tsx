@@ -18,12 +18,13 @@ const Changelog: FC = () => {
 }
 
 const Container = styled.div`
+  display: flex;
+  flex: 1;
   font-size: 14px;
-  background-color: var(--color-background-soft);
-  margin-top: 40px;
   padding: 20px;
-  border-radius: 5px;
-  width: 650px;
+  width: 100%;
+  overflow-y: scroll;
+  border-left: 0.5px solid var(--color-border);
 `
 
 export default Changelog

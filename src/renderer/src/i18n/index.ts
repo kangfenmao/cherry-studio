@@ -97,11 +97,11 @@ const resources = {
       },
       settings: {
         title: 'Settings',
-        general: 'General',
+        general: 'General Settings',
         provider: 'Model Provider',
         model: 'Model Settings',
         assistant: 'Default Assistant',
-        about: 'About',
+        about: 'About & Feedback',
         'general.title': 'General Settings',
         'provider.api_key': 'API Key',
         'provider.check': 'Check',
@@ -133,7 +133,16 @@ const resources = {
         'provider.delete.title': 'Delete Provider',
         'provider.delete.content': 'Are you sure you want to delete this provider?',
         'provider.edit.name': 'Provider Name',
-        'provider.edit.name.placeholder': 'Example: OpenAI'
+        'provider.edit.name.placeholder': 'Example: OpenAI',
+        'about.title': 'About',
+        'about.releases.title': 'Release Notes',
+        'about.releases.button': 'Releases',
+        'about.website.title': 'Official Website',
+        'about.website.button': 'Website',
+        'about.feedback.title': 'Feedback',
+        'about.feedback.button': 'Feedback',
+        'about.contact.title': 'Contact',
+        'about.contact.button': 'Email'
       }
     }
   },
@@ -236,7 +245,7 @@ const resources = {
         provider: '模型提供商',
         model: '模型设置',
         assistant: '默认助手',
-        about: '关于',
+        about: '关于我们',
         'general.title': '常规设置',
         'provider.api_key': 'API 密钥',
         'provider.check': '检查',
@@ -259,7 +268,7 @@ const resources = {
         'models.empty': '没有模型',
         'assistant.title': '默认助手',
         'assistant.model_params': '模型参数',
-        'about.description': '一个为创造者而生的 AI 助手',
+        'about.description': '一款为创造者而生的 AI 助手',
         'about.updateNotAvailable': '你的软件已是最新版本',
         'about.checkingUpdate': '正在检查更新...',
         'about.updateError': '更新出错',
@@ -268,7 +277,16 @@ const resources = {
         'provider.delete.title': '删除提供商',
         'provider.delete.content': '确定要删除此模型提供商吗?',
         'provider.edit.name': '模型提供商名称',
-        'provider.edit.name.placeholder': '例如 OpenAI'
+        'provider.edit.name.placeholder': '例如 OpenAI',
+        'about.title': '关于我们',
+        'about.releases.title': '📔 更新日志',
+        'about.releases.button': '查看',
+        'about.website.title': '🌐 官方网站',
+        'about.website.button': '查看',
+        'about.feedback.title': '📝 意见反馈',
+        'about.feedback.button': '反馈',
+        'about.contact.title': '📧 邮件联系',
+        'about.contact.button': '邮件'
       }
     }
   }

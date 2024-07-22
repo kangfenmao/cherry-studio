@@ -1,12 +1,12 @@
-import { Avatar, Button, Progress } from 'antd'
+import { Avatar, Button, Progress, Row, Tag } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Logo from '@renderer/assets/images/logo.png'
 import { runAsyncFunction } from '@renderer/utils'
 import { useTranslation } from 'react-i18next'
-import Changelog from './components/Changelog'
 import { debounce } from 'lodash'
 import { ProgressInfo } from 'electron-updater'
+import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
 
 const AboutSettings: FC = () => {
   const [version, setVersion] = useState('')
@@ -26,8 +26,17 @@ const AboutSettings: FC = () => {
     { leading: true, trailing: false }
   )
 
-  const onOpenWebsite = (suffix = '') => {
-    window.api.openWebsite('https://github.com/kangfenmao/cherry-studio' + suffix)
+  const onOpenWebsite = (url: string) => {
+    window.api.openWebsite(url)
+  }
+
+  const mailto = async () => {
+    const email = 'kangfenmao@qq.com'
+    const subject = 'Cherry Studio Feedback'
+    const version = (await window.api.getAppInfo()).version
+    const platform = window.electron.process.platform
+    const url = `mailto:${email}?subject=${subject}&body=%0A%0AVersion: ${version} | Platform: ${platform}`
+    onOpenWebsite(url)
   }
 
   useEffect(() => {
@@ -69,57 +78,92 @@ const AboutSettings: FC = () => {
   }, [t])
 
   return (
-    <Container>
-      <AvatarWrapper onClick={() => onOpenWebsite()}>
-        {percent > 0 && (
-          <ProgressCircle
-            type="circle"
-            size={104}
-            percent={percent}
-            showInfo={false}
-            strokeLinecap="butt"
-            strokeColor="#67ad5b"
-          />
-        )}
-        <Avatar src={Logo} size={100} style={{ marginTop: 50, minHeight: 100 }} />
-      </AvatarWrapper>
-      <Title>
-        Cherry Studio <Version onClick={() => onOpenWebsite('/releases')}>(v{version})</Version>
-      </Title>
-      <Description>{t('settings.about.description')}</Description>
-      <CheckUpdateButton onClick={onCheckUpdate} loading={checkUpdateLoading}>
-        {downloading ? t('settings.about.downloading') : t('settings.about.checkUpdate')}
-      </CheckUpdateButton>
-      <Changelog />
-    </Container>
+    <SettingContainer>
+      <SettingTitle>{t('settings.about.title')}</SettingTitle>
+      <SettingDivider />
+      <AboutHeader>
+        <Row align="middle">
+          <AvatarWrapper onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio')}>
+            {percent > 0 && (
+              <ProgressCircle
+                type="circle"
+                size={84}
+                percent={percent}
+                showInfo={false}
+                strokeLinecap="butt"
+                strokeColor="#67ad5b"
+              />
+            )}
+            <Avatar src={Logo} size={80} style={{ minHeight: 80 }} />
+          </AvatarWrapper>
+          <VersionWrapper>
+            <Title>Cherry Studio</Title>
+            <Description>{t('settings.about.description')}</Description>
+            <Tag
+              onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}
+              color="cyan"
+              style={{ marginTop: 8, cursor: 'pointer' }}>
+              v{version}
+            </Tag>
+          </VersionWrapper>
+        </Row>
+        <CheckUpdateButton onClick={onCheckUpdate} loading={checkUpdateLoading}>
+          {downloading ? t('settings.about.downloading') : t('settings.about.checkUpdate')}
+        </CheckUpdateButton>
+      </AboutHeader>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.about.releases.title')}</SettingRowTitle>
+        <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}>
+          {t('settings.about.releases.button')}
+        </Button>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.about.website.title')}</SettingRowTitle>
+        <Button onClick={() => onOpenWebsite('https://easys.run/cherry-studio')}>
+          {t('settings.about.website.button')}
+        </Button>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.about.feedback.title')}</SettingRowTitle>
+        <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues')}>
+          {t('settings.about.feedback.button')}
+        </Button>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.about.contact.title')}</SettingRowTitle>
+        <Button onClick={mailto}>{t('settings.about.contact.button')}</Button>
+      </SettingRow>
+      <SettingDivider />
+    </SettingContainer>
   )
 }
 
-const Container = styled.div`
+const AboutHeader = styled.div`
   display: flex;
-  flex: 1;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  height: calc(100vh - var(--navbar-height));
-  overflow-y: scroll;
-  padding: 0;
-  padding-bottom: 50px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px 0;
+`
+
+const VersionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 80px;
+  justify-content: center;
+  align-items: flex-start;
 `
 
 const Title = styled.div`
   font-size: 20px;
   font-weight: bold;
   color: var(--color-text-1);
-  margin: 10px 0;
-`
-
-const Version = styled.span`
-  font-size: 14px;
-  color: var(--color-text-2);
-  margin: 10px 0;
-  text-align: center;
-  cursor: pointer;
+  margin-bottom: 5px;
 `
 
 const Description = styled.div`
@@ -128,18 +172,17 @@ const Description = styled.div`
   text-align: center;
 `
 
-const CheckUpdateButton = styled(Button)`
-  margin-top: 10px;
-`
+const CheckUpdateButton = styled(Button)``
 
 const AvatarWrapper = styled.div`
   position: relative;
   cursor: pointer;
+  margin-right: 15px;
 `
 
 const ProgressCircle = styled(Progress)`
   position: absolute;
-  top: 48px;
+  top: -2px;
   left: -2px;
 `
 
