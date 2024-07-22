@@ -51,6 +51,7 @@
         height: 100px;
         margin-bottom: 20px;
         border-radius: 10%;
+        margin-top: -10vh;
       }
       h1 {
         font-size: 48px;
@@ -64,6 +65,7 @@
       .download-buttons {
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 15px;
         margin-bottom: 30px;
       }
@@ -107,9 +109,17 @@
         color: #ffffff;
         text-decoration: underline;
       }
+      .loading {
+        flex-direction: row;
+        justify-content: center;
+        height: 200px;
+      }
+      [v-cloak] {
+        display: none;
+      }
     </style>
   </head>
-  <body>
+  <body id="app">
     <a href="https://github.com/kangfenmao/cherry-studio" target="_blank">
       <img src="https://easys.run/cherry-studio/logo.png" alt="Cherry Studio AI Logo" class="logo" />
     </a>
@@ -117,7 +127,7 @@
     <p class="description">Windows/macOS GPT 客户端</p>
     <div class="download-buttons">
       <a
-        href="https://github.com/kangfenmao/cherry-studio/releases/download/v0.3.0/Cherry-Studio-0.3.0-x64.dmg"
+        :href="`https://github.com/kangfenmao/cherry-studio/releases/download/v${version}/Cherry-Studio-${version}-x64.dmg`"
         class="download-btn">
         <svg viewBox="0 0 384 512" width="24" height="24">
           <path
@@ -127,7 +137,7 @@
         macOS Intel
       </a>
       <a
-        href="https://github.com/kangfenmao/cherry-studio/releases/download/v0.3.0/Cherry-Studio-0.3.0-arm64.dmg"
+        :href="`https://github.com/kangfenmao/cherry-studio/releases/download/v${version}/Cherry-Studio-${version}-arm64.dmg`"
         class="download-btn">
         <svg viewBox="0 0 384 512" width="24" height="24">
           <path
@@ -137,7 +147,7 @@
         macOS Apple Silicon
       </a>
       <a
-        href="https://github.com/kangfenmao/cherry-studio/releases/download/v0.3.0/Cherry-Studio-0.3.0-setup.exe"
+        :href="`https://github.com/kangfenmao/cherry-studio/releases/download/v${version}/Cherry-Studio-${version}-setup.exe`"
         class="download-btn">
         <svg viewBox="0 0 448 512" width="24" height="24">
           <path
@@ -149,7 +159,10 @@
     </div>
     <p class="new-app">
       🎉 <a href="https://github.com/kangfenmao/cherry-studio" target="_blank">Cherry Studio AI</a> 最新版本
-      <a href="https://github.com/kangfenmao/cherry-studio/releases/tag/v0.3.0" target="_blank">v0.3.0</a> 发布啦！
+      <a :href="`https://github.com/kangfenmao/cherry-studio/releases/tag/v${version}`" target="_blank" v-cloak
+        >v{{version}}</a
+      >
+      发布啦！
     </p>
     <div class="footer">
       <a href="https://github.com/kangfenmao/cherry-studio" target="_blank">开源</a> |
@@ -171,6 +184,26 @@
           "priceCurrency": "USD"
         }
       }
+    </script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue
+
+      createApp({
+        data() {
+          return {
+            version: '0.3.2',
+            loading: true
+          }
+        },
+        mounted() {
+          this.loading = true
+          fetch('https://api.github.com/repos/kangfenmao/cherry-studio/releases/latest')
+            .then((response) => response.json())
+            .then((data) => (this.version = data.tag_name.replace('v', '')))
+            .finally(() => (this.loading = false))
+        }
+      }).mount('#app')
     </script>
   </body>
 </html>
