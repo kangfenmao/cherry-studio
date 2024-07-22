@@ -1,31 +1,31 @@
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Assistant, Message, Topic } from '@renderer/types'
-import { estimateInputTokenCount, uuid } from '@renderer/utils'
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { MoreOutlined } from '@ant-design/icons'
-import { Button, Popconfirm, Tooltip } from 'antd'
-import { useShowRightSidebar } from '@renderer/hooks/useStore'
-import { useAssistant } from '@renderer/hooks/useAssistant'
 import {
   ClearOutlined,
   ControlOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
+  MoreOutlined,
   PauseCircleOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons'
-import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
-import { debounce, isEmpty } from 'lodash'
-import SendMessageSetting from './SendMessageSetting'
+import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
-import dayjs from 'dayjs'
-import store, { useAppSelector } from '@renderer/store'
+import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
-import { useTranslation } from 'react-i18next'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
+import { Assistant, Message, Topic } from '@renderer/types'
+import { estimateInputTokenCount, uuid } from '@renderer/utils'
+import { Button, Popconfirm, Tooltip } from 'antd'
+import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
+import dayjs from 'dayjs'
+import { debounce, isEmpty } from 'lodash'
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 import AssistantSettings from './AssistantSettings'
+import SendMessageSetting from './SendMessageSetting'
 
 interface Props {
   assistant: Assistant
@@ -41,7 +41,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const inputRef = useRef<TextAreaRef>(null)
-
   const { t } = useTranslation()
 
   const sendMessage = () => {
@@ -86,7 +85,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }
 
   const addNewTopic = useCallback(() => {
-    const topic: Topic = getDefaultTopic()
+    const topic = getDefaultTopic()
     addTopic(topic)
     setActiveTopic(topic)
   }, [addTopic, setActiveTopic])

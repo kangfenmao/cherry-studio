@@ -19,9 +19,9 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-const Topics: FC<Props> = ({ assistant, activeTopic, setActiveTopic }) => {
+const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
   const { showRightSidebar } = useShowRightSidebar()
-  const { removeTopic, updateTopic, removeAllTopics, updateTopics } = useAssistant(assistant.id)
+  const { assistant, removeTopic, updateTopic, removeAllTopics, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
