@@ -1,7 +1,7 @@
 import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
-import { useAssistants } from '@renderer/hooks/useAssistant'
+import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant } from '@renderer/types'
 import { droppableReorder, uuid } from '@renderer/utils'
@@ -19,7 +19,8 @@ interface Props {
 }
 
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
-  const { assistants, removeAssistant, updateAssistant, addAssistant, updateAssistants } = useAssistants()
+  const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
+  const { updateAssistant } = useAssistant(activeAssistant.id)
 
   const { t } = useTranslation()
 

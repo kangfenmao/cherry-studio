@@ -1,20 +1,21 @@
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
-  addTopic as _addTopic,
-  removeAllTopics as _removeAllTopics,
-  removeTopic as _removeTopic,
-  setModel as _setModel,
-  updateAssistants as _updateAssistants,
-  updateDefaultAssistant as _updateDefaultAssistant,
-  updateTopic as _updateTopic,
-  updateTopics as _updateTopics,
   addAssistant,
+  addTopic,
+  removeAllTopics,
   removeAssistant,
-  updateAssistant
+  removeTopic,
+  setModel,
+  updateAssistant,
+  updateAssistants,
+  updateAssistantSettings,
+  updateDefaultAssistant,
+  updateTopic,
+  updateTopics
 } from '@renderer/store/assistants'
 import { setDefaultModel as _setDefaultModel, setTopicNamingModel as _setTopicNamingModel } from '@renderer/store/llm'
-import { Assistant, Model, Topic } from '@renderer/types'
+import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
 import localforage from 'localforage'
 
 export function useAssistants() {
@@ -23,9 +24,8 @@ export function useAssistants() {
 
   return {
     assistants,
-    updateAssistants: (assistants: Assistant[]) => dispatch(_updateAssistants(assistants)),
+    updateAssistants: (assistants: Assistant[]) => dispatch(updateAssistants(assistants)),
     addAssistant: (assistant: Assistant) => dispatch(addAssistant(assistant)),
-    updateAssistant: (assistant: Assistant) => dispatch(updateAssistant(assistant)),
     removeAssistant: (id: string) => {
       dispatch(removeAssistant({ id }))
       const assistant = assistants.find((a) => a.id === id)
@@ -44,17 +44,21 @@ export function useAssistant(id: string) {
   return {
     assistant,
     model: assistant?.model ?? defaultModel,
-    addTopic: (topic: Topic) => dispatch(_addTopic({ assistantId: assistant.id, topic })),
-    removeTopic: (topic: Topic) => dispatch(_removeTopic({ assistantId: assistant.id, topic })),
-    updateTopic: (topic: Topic) => dispatch(_updateTopic({ assistantId: assistant.id, topic })),
-    updateTopics: (topics: Topic[]) => dispatch(_updateTopics({ assistantId: assistant.id, topics })),
-    removeAllTopics: () => dispatch(_removeAllTopics({ assistantId: assistant.id })),
-    setModel: (model: Model) => dispatch(_setModel({ assistantId: assistant.id, model }))
+    addTopic: (topic: Topic) => dispatch(addTopic({ assistantId: assistant.id, topic })),
+    removeTopic: (topic: Topic) => dispatch(removeTopic({ assistantId: assistant.id, topic })),
+    updateTopic: (topic: Topic) => dispatch(updateTopic({ assistantId: assistant.id, topic })),
+    updateTopics: (topics: Topic[]) => dispatch(updateTopics({ assistantId: assistant.id, topics })),
+    removeAllTopics: () => dispatch(removeAllTopics({ assistantId: assistant.id })),
+    setModel: (model: Model) => dispatch(setModel({ assistantId: assistant.id, model })),
+    updateAssistant: (assistant: Assistant) => dispatch(updateAssistant(assistant)),
+    updateAssistantSettings: (settings: AssistantSettings) => {
+      dispatch(updateAssistantSettings({ assistantId: assistant.id, settings }))
+    }
   }
 }
 
 export function useDefaultAssistant() {
-  const { defaultAssistant } = useAppSelector((state) => state.assistants)
+  const defaultAssistant = useAppSelector((state) => state.assistants.defaultAssistant)
   const dispatch = useAppDispatch()
 
   return {
@@ -62,7 +66,7 @@ export function useDefaultAssistant() {
       ...defaultAssistant,
       topics: [getDefaultTopic()]
     },
-    updateDefaultAssistant: (assistant: Assistant) => dispatch(_updateDefaultAssistant({ assistant }))
+    updateDefaultAssistant: (assistant: Assistant) => dispatch(updateDefaultAssistant({ assistant }))
   }
 }
 

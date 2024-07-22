@@ -5,7 +5,7 @@ import { setAvatar } from '@renderer/store/runtime'
 import { runAsyncFunction } from '@renderer/utils'
 import { useEffect } from 'react'
 
-export function useAppInitEffect() {
+export function useAppInit() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { getDefaultAssistant, getDefaultTopic } from '@renderer/services/assistant'
 import LocalStorage from '@renderer/services/storage'
-import { Assistant, Model, Topic } from '@renderer/types'
+import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
 import { uniqBy } from 'lodash'
 
 export interface AssistantsState {
@@ -32,6 +32,16 @@ const assistantsSlice = createSlice({
     },
     updateAssistant: (state, action: PayloadAction<Assistant>) => {
       state.assistants = state.assistants.map((c) => (c.id === action.payload.id ? action.payload : c))
+    },
+    updateAssistantSettings: (state, action: PayloadAction<{ assistantId: string; settings: AssistantSettings }>) => {
+      state.assistants = state.assistants.map((assistant) =>
+        assistant.id === action.payload.assistantId
+          ? {
+              ...assistant,
+              settings: action.payload.settings
+            }
+          : assistant
+      )
     },
     addTopic: (state, action: PayloadAction<{ assistantId: string; topic: Topic }>) => {
       state.assistants = state.assistants.map((assistant) =>
@@ -111,7 +121,8 @@ export const {
   updateTopic,
   updateTopics,
   removeAllTopics,
-  setModel
+  setModel,
+  updateAssistantSettings
 } = assistantsSlice.actions
 
 export default assistantsSlice.reducer

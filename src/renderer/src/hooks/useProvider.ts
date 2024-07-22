@@ -1,11 +1,11 @@
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
-  addModel as _addModel,
-  removeModel as _removeModel,
-  updateProvider as _updateProvider,
-  updateProviders as _updateProviders,
+  addModel,
   addProvider,
-  removeProvider
+  removeModel,
+  removeProvider,
+  updateProvider,
+  updateProviders
 } from '@renderer/store/llm'
 import { Assistant, Model, Provider } from '@renderer/types'
 import { useDefaultModel } from './useAssistant'
@@ -24,8 +24,8 @@ export function useProviders() {
     providers,
     addProvider: (provider: Provider) => dispatch(addProvider(provider)),
     removeProvider: (provider: Provider) => dispatch(removeProvider(provider)),
-    updateProvider: (provider: Provider) => dispatch(_updateProvider(provider)),
-    updateProviders: (providers: Provider[]) => dispatch(_updateProviders(providers))
+    updateProvider: (provider: Provider) => dispatch(updateProvider(provider)),
+    updateProviders: (providers: Provider[]) => dispatch(updateProviders(providers))
   }
 }
 
@@ -48,9 +48,9 @@ export function useProvider(id: string) {
   return {
     provider,
     models: provider.models,
-    updateProvider: (provider: Provider) => dispatch(_updateProvider(provider)),
-    addModel: (model: Model) => dispatch(_addModel({ providerId: id, model })),
-    removeModel: (model: Model) => dispatch(_removeModel({ providerId: id, model }))
+    updateProvider: (provider: Provider) => dispatch(updateProvider(provider)),
+    addModel: (model: Model) => dispatch(addModel({ providerId: id, model })),
+    removeModel: (model: Model) => dispatch(removeModel({ providerId: id, model }))
   }
 }
 
