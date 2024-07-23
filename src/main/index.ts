@@ -52,6 +52,11 @@ function createWindow() {
     menu.popup()
   })
 
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    event.preventDefault()
+    shell.openExternal(url)
+  })
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
