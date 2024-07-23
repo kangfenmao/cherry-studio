@@ -35,7 +35,7 @@ interface Props {
 
 const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
-  const { setShowRightSidebar } = useShowRightSidebar()
+  const { toggleRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut } = useSettings()
   const [expended, setExpend] = useState(false)
@@ -138,7 +138,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={setShowRightSidebar}>
+            <ToolbarButton type="text" onClick={toggleRightSidebar}>
               <HistoryOutlined />
             </ToolbarButton>
           </Tooltip>
