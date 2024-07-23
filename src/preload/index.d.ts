@@ -10,7 +10,7 @@ declare global {
       }>
       checkForUpdate: () => void
       openWebsite: (url: string) => void
-      setProxy: (proxy: string) => void
+      setProxy: (proxy: string | undefined) => void
     }
   }
 }

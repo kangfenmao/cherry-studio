@@ -2,7 +2,7 @@ import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Provider, Topic } from '@renderer/types'
-import { getErrorMessage, uuid } from '@renderer/utils'
+import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
 import { getAssistantProvider, getDefaultModel, getProviderByModel, getTopNamingModel } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
@@ -92,15 +92,13 @@ export async function checkApi(provider: Provider) {
 
   const providerSdk = new ProviderSDK(provider)
 
-  const { valid, error } = await providerSdk.check()
+  const { valid } = await providerSdk.check()
 
   window.message[valid ? 'success' : 'error']({
     key: 'api-check',
     style: { marginTop: '3vh' },
     duration: valid ? 2 : 8,
-    content: valid
-      ? i18n.t('message.api.connection.success')
-      : i18n.t('message.api.connection.failed') + ' : ' + getErrorMessage(error)
+    content: valid ? i18n.t('message.api.connection.success') : i18n.t('message.api.connection.failed')
   })
 
   return valid

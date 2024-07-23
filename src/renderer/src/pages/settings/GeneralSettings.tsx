@@ -27,7 +27,7 @@ const GeneralSettings: FC = () => {
   }
 
   const onSetProxyUrl = () => {
-    if (!proxyUrl || !isValidProxyUrl(proxyUrl)) {
+    if (proxyUrl && !isValidProxyUrl(proxyUrl)) {
       window.message.error({ content: t('message.error.invalid.proxy.url'), key: 'proxy-error' })
       return
     }

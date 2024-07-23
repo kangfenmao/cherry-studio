@@ -206,10 +206,5 @@ export const capitalizeFirstLetter = (str: string) => {
 
 // is valid proxy url
 export const isValidProxyUrl = (url: string) => {
-  try {
-    new URL(url)
-    return true
-  } catch (error) {
-    return false
-  }
+  return url.includes('://')
 }

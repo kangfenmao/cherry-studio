@@ -102,7 +102,7 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('set-proxy', (_, proxy: string) => {
-    session.defaultSession.setProxy({ proxyRules: proxy })
+    session.defaultSession.setProxy(proxy ? { proxyRules: proxy } : {})
   })
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
