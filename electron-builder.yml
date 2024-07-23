@@ -56,5 +56,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    支持配置网络代理
-    支持隐藏左侧智能体
+    Windows 版本界面优化
+    新增 mermaid 图表支持
+    消息样式优化

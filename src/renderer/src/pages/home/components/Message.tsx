@@ -32,6 +32,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const { userName, showMessageDivider } = useSettings()
 
   const isLastMessage = index === 0
+  const isUserMessage = message.role === 'user'
   const canRegenerate = isLastMessage && message.role === 'assistant'
 
   const onCopy = () => {
@@ -112,7 +113,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
           </Markdown>
         )}
         {showMenu && (
-          <MenusBar className={`menubar ${isLastMessage && 'show'} ${message.content.length < 300 && 'user'}`}>
+          <MenusBar className={`menubar ${isLastMessage && 'show'} ${isUserMessage && 'user'}`}>
             {message.role === 'user' && (
               <Tooltip title="Edit" mouseEnterDelay={0.8}>
                 <ActionButton>
