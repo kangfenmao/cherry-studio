@@ -3,7 +3,7 @@ import { Avatar, Tooltip } from 'antd'
 import { FC } from 'react'
 import styled from 'styled-components'
 import useAvatar from '@renderer/hooks/useAvatar'
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, SwitcherOutlined } from '@ant-design/icons'
 import Markdown from 'react-markdown'
 import CodeBlock from './CodeBlock'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
@@ -91,7 +91,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
               </Tooltip>
             )}
             <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
-              <CopyOutlined onClick={onCopy} />
+              <SwitcherOutlined onClick={onCopy} />
             </Tooltip>
             <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
               <DeleteOutlined onClick={onDelete} />

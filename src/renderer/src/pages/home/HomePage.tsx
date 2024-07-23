@@ -9,7 +9,7 @@ import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore
 import { Tooltip } from 'antd'
 import Navigation from './components/Navigation'
 import { useTranslation } from 'react-i18next'
-import { PlusSquareOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined } from '@ant-design/icons'
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
@@ -34,12 +34,12 @@ const HomePage: FC = () => {
               <i className="iconfont icon-hidesidebarhoriz" />
             </NewButton>
             <NewButton onClick={onCreateAssistant}>
-              <PlusSquareOutlined />
+              <PlusCircleOutlined />
             </NewButton>
           </NavbarLeft>
         )}
         <Navigation activeAssistant={activeAssistant} />
-        <NavbarRight style={{ justifyContent: 'flex-end', padding: 5 }}>
+        <NavbarRight style={{ justifyContent: 'flex-end', padding: '0 7px' }}>
           <Tooltip
             placement="left"
             title={showRightSidebar ? t('assistant.topics.hide_topics') : t('assistant.topics.show_topics')}
@@ -79,8 +79,8 @@ const ContentContainer = styled.div`
 export const NewButton = styled.div`
   -webkit-app-region: none;
   border-radius: 4px;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -88,11 +88,11 @@ export const NewButton = styled.div`
   transition: all 0.2s ease-in-out;
   color: var(--color-icon);
   .anticon {
-    font-size: 18px;
+    font-size: 19px;
   }
   .icon-showsidebarhoriz,
   .icon-hidesidebarhoriz {
-    font-size: 16px;
+    font-size: 17px;
   }
   &:hover {
     background-color: var(--color-background-soft);

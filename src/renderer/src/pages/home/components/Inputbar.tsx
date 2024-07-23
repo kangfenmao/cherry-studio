@@ -4,9 +4,9 @@ import {
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
+  MessageOutlined,
   MoreOutlined,
-  PauseCircleOutlined,
-  PlusCircleOutlined
+  PauseCircleOutlined
 } from '@ant-design/icons'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -134,7 +134,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         <ToolbarMenu>
           <Tooltip placement="top" title={t('assistant.input.new_chat')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
-              <PlusCircleOutlined />
+              <MessageOutlined />
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
