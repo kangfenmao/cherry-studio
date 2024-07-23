@@ -129,7 +129,7 @@ const PlaceholderBorderWin = styled.div`
   height: var(--navbar-height);
   position: absolute;
   border-right: 1px solid #1f1f1f;
-  top: 0;
+  top: -1px;
   right: -1px;
 `
 
