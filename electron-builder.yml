@@ -56,6 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    支持设置模型 Temperature 参数
-    支持设置上下文数量
-    输入框增加 Token 消耗预估
+    支持配置网络代理
+    支持隐藏左侧智能体

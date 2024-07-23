@@ -25,16 +25,16 @@ const NavbarContainer = styled.div`
   flex-direction: row;
   min-height: var(--navbar-height);
   max-height: var(--navbar-height);
-  border-bottom: 0.5px solid var(--color-border);
   -webkit-app-region: drag;
   background-color: #1f1f1f;
   margin-left: calc(var(--sidebar-width) * -1);
   padding-left: var(--sidebar-width);
+  border-bottom: 0.5px solid var(--color-border);
+  border-top: 0.5px solid var(--color-border);
 `
 
 const NavbarLeftContainer = styled.div`
   min-width: var(--assistants-width);
-  border-right: 1px solid var(--color-border);
   padding: 0 10px;
   display: flex;
   flex-direction: row;
@@ -48,7 +48,6 @@ const NavbarCenterContainer = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
-  border-right: 1px solid var(--color-border);
   padding: 0 20px;
   font-size: 14px;
   font-weight: bold;

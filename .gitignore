@@ -34,6 +34,9 @@ npm/*/*
 !.yarn/sdks
 !.yarn/versions
 
+# Windows
+Thumbs.db
+
 # Project
 node_modules
 dist

@@ -7,9 +7,10 @@ import Assistants from './components/Assistants'
 import { uuid } from '@renderer/utils'
 import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
 import { Tooltip } from 'antd'
-import Navigation from './components/Navigation'
+import Navigation from './components/NavigationCenter'
 import { useTranslation } from 'react-i18next'
 import { PlusCircleOutlined } from '@ant-design/icons'
+import { isMac } from '@renderer/config/constant'
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
@@ -30,7 +31,7 @@ const HomePage: FC = () => {
       <Navbar>
         {showAssistants && (
           <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
-            <NewButton onClick={toggleShowAssistants} style={{ marginLeft: 8 }}>
+            <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
               <i className="iconfont icon-hidesidebarhoriz" />
             </NewButton>
             <NewButton onClick={onCreateAssistant}>

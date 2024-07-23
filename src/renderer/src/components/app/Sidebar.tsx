@@ -3,6 +3,7 @@ import Logo from '@renderer/assets/images/logo.png'
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import useAvatar from '@renderer/hooks/useAvatar'
+import { isMac, isWindows } from '@renderer/config/constant'
 
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
@@ -11,7 +12,8 @@ const Sidebar: FC = () => {
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
   return (
-    <Container>
+    <Container style={isWindows ? { paddingTop: 0 } : {}}>
+      {isMac && <PlaceholderBorder />}
       <StyledLink to="/">
         <AvatarImg src={avatar || Logo} draggable={false} />
       </StyledLink>
@@ -50,7 +52,9 @@ const Container = styled.div`
   -webkit-app-region: drag !important;
   background-color: #1f1f1f;
   border-right: 0.5px solid var(--color-border);
+  border-top: 0.5px solid var(--color-border);
   padding-top: var(--navbar-height);
+  position: relative;
 `
 
 const AvatarImg = styled.img`
@@ -59,7 +63,7 @@ const AvatarImg = styled.img`
   height: 28px;
   background-color: var(--color-background-soft);
   margin: 5px 0;
-  margin-top: 12px;
+  margin-top: ${isMac ? '16px' : '7px'};
 `
 const MainMenus = styled.div`
   display: flex;
@@ -109,6 +113,16 @@ const StyledLink = styled(Link)`
   &* {
     user-select: none;
   }
+`
+
+const PlaceholderBorder = styled.div`
+  width: var(--sidebar-width);
+  height: var(--navbar-height);
+  border-right: 1px solid #1f1f1f;
+  border-bottom: 0.5px solid var(--color-border);
+  position: absolute;
+  top: -0.5px;
+  left: 0.5px;
 `
 
 export default Sidebar

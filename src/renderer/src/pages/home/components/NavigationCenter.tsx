@@ -10,12 +10,13 @@ import styled from 'styled-components'
 import { NewButton } from '../HomePage'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { capitalizeFirstLetter } from '@renderer/utils'
+import { isMac } from '@renderer/config/constant'
 
 interface Props {
   activeAssistant: Assistant
 }
 
-const Navigation: FC<Props> = ({ activeAssistant }) => {
+const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
   const { assistant } = useAssistant(activeAssistant.id)
   const { model, setModel } = useAssistant(activeAssistant.id)
   const { providers } = useProviders()
@@ -37,7 +38,7 @@ const Navigation: FC<Props> = ({ activeAssistant }) => {
     }))
 
   return (
-    <NavbarCenter style={{ border: 'none', paddingLeft: showAssistants ? 8 : 16 }}>
+    <NavbarCenter style={{ paddingLeft: isMac ? 16 : 8 }}>
       {!showAssistants && (
         <NewButton onClick={toggleShowAssistants} style={{ marginRight: 8 }}>
           <i className="iconfont icon-showsidebarhoriz" />
@@ -69,4 +70,4 @@ const DropdownButton = styled(Button)`
   padding: 0 8px;
 `
 
-export default Navigation
+export default NavigationCenter
