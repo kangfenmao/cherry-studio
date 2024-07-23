@@ -147,7 +147,7 @@ const AssistantItem = styled.div`
 const AssistantName = styled.div`
   font-size: 14px;
   color: var(--color-text-1);
-  font-weight: 600;
+  font-weight: 500;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
