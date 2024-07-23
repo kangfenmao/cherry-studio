@@ -4,7 +4,7 @@
 
 # Screenshot
 
-![image](https://github.com/user-attachments/assets/1763dc38-bece-4d24-9c21-ed82f6142694)
+<img width="1445" alt="image" src="https://github.com/user-attachments/assets/e32b244f-3a84-473a-89ef-0b12ef4127b2">
 
 ![](https://github.com/user-attachments/assets/18c10eed-4711-4975-bf9c-b274c61924f3)
 
