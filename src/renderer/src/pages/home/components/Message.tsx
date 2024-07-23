@@ -83,11 +83,11 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       <MessageHeader>
         <AvatarWrapper>
           {message.role === 'assistant' ? (
-            <Avatar src={message.modelId ? getModelLogo(message.modelId) : Logo}>
+            <Avatar src={message.modelId ? getModelLogo(message.modelId) : Logo} size={35}>
               {firstLetter(message.modelId).toUpperCase()}
             </Avatar>
           ) : (
-            <Avatar src={avatar} />
+            <Avatar src={avatar} size={35} />
           )}
           <UserWrap>
             <UserName>{getUserName()}</UserName>
@@ -147,9 +147,9 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 18px;
+  padding: 10px;
   position: relative;
-  border-bottom: 0.5px solid var(--color-border);
+  border-bottom: 0.5px dotted var(--color-border);
   .menubar {
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -171,7 +171,6 @@ const MessageContainer = styled.div`
 
 const MessageHeader = styled.div`
   margin-right: 10px;
-  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -187,20 +186,19 @@ const AvatarWrapper = styled.div`
 
 const UserWrap = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
-const MessageTime = styled.div`
-  font-size: 12px;
-  color: var(--color-text-2);
+  flex-direction: column;
+  justify-content: space-between;
   margin-left: 12px;
 `
 
 const UserName = styled.div`
   font-size: 14px;
   font-weight: 600;
-  margin-left: 12px;
+`
+
+const MessageTime = styled.div`
+  font-size: 12px;
+  color: var(--color-text-3);
 `
 
 const MessageContent = styled.div`
@@ -208,6 +206,8 @@ const MessageContent = styled.div`
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
+  margin-left: 46px;
+  margin-top: 5px;
 `
 
 const MessageContentLoading = styled.div`
