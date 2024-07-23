@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { NewButton } from '../HomePage'
 import { useShowAssistants } from '@renderer/hooks/useStore'
-import { capitalizeFirstLetter } from '@renderer/utils'
 import { isMac } from '@renderer/config/constant'
+import { upperFirst } from 'lodash'
 
 interface Props {
   activeAssistant: Assistant
@@ -47,7 +47,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
       <AssistantName>{assistant?.name}</AssistantName>
       <DropdownMenu menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }} trigger={['click']}>
         <DropdownButton size="small" type="primary" ghost>
-          {model ? capitalizeFirstLetter(model.name) : t('button.select_model')}
+          {model ? upperFirst(model.name) : t('button.select_model')}
         </DropdownButton>
       </DropdownMenu>
     </NavbarCenter>

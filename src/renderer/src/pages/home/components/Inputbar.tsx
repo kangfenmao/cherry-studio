@@ -170,7 +170,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           {generating && (
             <Tooltip placement="top" title={t('assistant.input.pause')} arrow>
               <ToolbarButton type="text" onClick={onPause}>
-                <PauseCircleOutlined />
+                <PauseCircleOutlined style={{ color: 'var(--color-error)' }} />
               </ToolbarButton>
             </Tooltip>
           )}

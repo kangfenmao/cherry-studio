@@ -23,7 +23,8 @@ const resources = {
         duplicate: 'Duplicate',
         copy: 'Copy',
         regenerate: 'Regenerate',
-        provider: 'Provider'
+        provider: 'Provider',
+        you: 'You'
       },
       button: {
         add: 'Add',
@@ -168,7 +169,8 @@ const resources = {
         duplicate: '复制',
         copy: '复制',
         regenerate: '重新生成',
-        provider: '提供商'
+        provider: '提供商',
+        you: '用户'
       },
       button: {
         add: '添加',
