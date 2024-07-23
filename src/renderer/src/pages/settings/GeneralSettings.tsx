@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
-import { Avatar, Input, Select, Upload } from 'antd'
+import { Avatar, Input, Select, Switch, Upload } from 'antd'
 import styled from 'styled-components'
 import LocalStorage from '@renderer/services/storage'
 import { compressImage, isValidProxyUrl } from '@renderer/utils'
@@ -8,14 +8,14 @@ import useAvatar from '@renderer/hooks/useAvatar'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { setLanguage } from '@renderer/store/settings'
+import { setLanguage, setShowMessageDivider, setUserName } from '@renderer/store/settings'
 import { useTranslation } from 'react-i18next'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import i18n from '@renderer/i18n'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const { language, proxyUrl: storeProxyUrl } = useSettings()
+  const { language, proxyUrl: storeProxyUrl, userName, showMessageDivider } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -75,6 +75,17 @@ const GeneralSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
+        <SettingRowTitle>{t('settings.general.user_name')}</SettingRowTitle>
+        <Input
+          placeholder={t('settings.general.user_name.placeholder')}
+          value={userName}
+          onChange={(e) => dispatch(setUserName(e.target.value))}
+          style={{ width: 150 }}
+          maxLength={30}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
         <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
         <Input
           placeholder="socks5://127.0.0.1:6153"
@@ -84,6 +95,11 @@ const GeneralSettings: FC = () => {
           onBlur={() => onSetProxyUrl()}
           type="url"
         />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.general.message.divider')}</SettingRowTitle>
+        <Switch checked={showMessageDivider} onChange={(checked) => dispatch(setShowMessageDivider(checked))} />
       </SettingRow>
       <SettingDivider />
     </SettingContainer>

@@ -8,6 +8,8 @@ export interface SettingsState {
   sendMessageShortcut: SendMessageShortcut
   language: string
   proxyUrl?: string
+  userName: string
+  showMessageDivider: boolean
 }
 
 const initialState: SettingsState = {
@@ -15,7 +17,9 @@ const initialState: SettingsState = {
   showAssistants: true,
   sendMessageShortcut: 'Enter',
   language: navigator.language,
-  proxyUrl: undefined
+  proxyUrl: undefined,
+  userName: '',
+  showMessageDivider: true
 }
 
 const settingsSlice = createSlice({
@@ -36,11 +40,24 @@ const settingsSlice = createSlice({
     },
     setProxyUrl: (state, action: PayloadAction<string | undefined>) => {
       state.proxyUrl = action.payload
+    },
+    setUserName: (state, action: PayloadAction<string>) => {
+      state.userName = action.payload
+    },
+    setShowMessageDivider: (state, action: PayloadAction<boolean>) => {
+      state.showMessageDivider = action.payload
     }
   }
 })
 
-export const { toggleRightSidebar, toggleShowAssistants, setSendMessageShortcut, setLanguage, setProxyUrl } =
-  settingsSlice.actions
+export const {
+  toggleRightSidebar,
+  toggleShowAssistants,
+  setSendMessageShortcut,
+  setLanguage,
+  setProxyUrl,
+  setUserName,
+  setShowMessageDivider
+} = settingsSlice.actions
 
 export default settingsSlice.reducer

@@ -16,6 +16,7 @@ import { isEmpty, upperFirst } from 'lodash'
 import dayjs from 'dayjs'
 import { useAppSelector } from '@renderer/store'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
 
 interface Props {
   message: Message
@@ -30,6 +31,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
   const { assistant } = useAssistant(message.assistantId)
+  const { userName, showMessageDivider } = useSettings()
 
   const isLastMessage = index === 0
   const isUserMessage = message.role === 'user'
@@ -76,10 +78,10 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       return upperFirst(message.modelId)
     }
 
-    return t('common.you')
+    return userName || t('common.you')
   }
 
-  const borderBottom = (isLastMessage && !isUserMessage) || generating ? 'none' : undefined
+  const borderBottom = (isLastMessage && !isUserMessage) || generating || !showMessageDivider ? 'none' : undefined
 
   return (
     <MessageContainer key={message.id} style={{ borderBottom }}>
@@ -99,7 +101,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
         </AvatarWrapper>
         {message.usage && (
           <MessageMetadata>
-            Tokens: {message.usage.total_tokens} | ↓{message.usage.prompt_tokens}↑{message.usage.completion_tokens}
+            Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
           </MessageMetadata>
         )}
       </MessageHeader>

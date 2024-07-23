@@ -254,6 +254,17 @@ const migrate = createMigrate({
         proxyUrl: undefined
       }
     }
+  },
+  // @ts-ignore store type is unknown
+  '15': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        userName: '',
+        showMessageDivider: true
+      }
+    }
   }
 })
 
