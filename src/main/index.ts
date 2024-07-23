@@ -24,7 +24,12 @@ function createWindow() {
     minHeight: 500,
     show: true,
     autoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      height: 41,
+      color: '#1f1f1f',
+      symbolColor: '#eee'
+    },
     trafficLightPosition: { x: 8, y: 12 },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {

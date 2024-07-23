@@ -120,6 +120,9 @@ const Container = styled.div`
   max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
   padding-top: 10px;
   padding-bottom: 20px;
+  .message:first-child {
+    border: none;
+  }
 `
 
 export default Messages

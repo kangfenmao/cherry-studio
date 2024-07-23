@@ -9,8 +9,7 @@ import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore
 import { Tooltip } from 'antd'
 import Navigation from './components/NavigationCenter'
 import { useTranslation } from 'react-i18next'
-import { PlusCircleOutlined } from '@ant-design/icons'
-import { isMac } from '@renderer/config/constant'
+import { isMac, isWindows } from '@renderer/config/constant'
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
@@ -35,12 +34,12 @@ const HomePage: FC = () => {
               <i className="iconfont icon-hidesidebarhoriz" />
             </NewButton>
             <NewButton onClick={onCreateAssistant}>
-              <PlusCircleOutlined />
+              <i className="iconfont icon-a-addchat"></i>
             </NewButton>
           </NavbarLeft>
         )}
         <Navigation activeAssistant={activeAssistant} />
-        <NavbarRight style={{ justifyContent: 'flex-end', padding: '0 7px' }}>
+        <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 8 }}>
           <Tooltip
             placement="left"
             title={showRightSidebar ? t('assistant.topics.hide_topics') : t('assistant.topics.show_topics')}
@@ -88,6 +87,9 @@ export const NewButton = styled.div`
   align-items: center;
   transition: all 0.2s ease-in-out;
   color: var(--color-icon);
+  .icon-a-addchat {
+    font-size: 20px;
+  }
   .anticon {
     font-size: 19px;
   }

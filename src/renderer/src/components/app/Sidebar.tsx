@@ -13,7 +13,7 @@ const Sidebar: FC = () => {
 
   return (
     <Container style={isWindows ? { paddingTop: 0 } : {}}>
-      {isMac && <PlaceholderBorder />}
+      {isMac ? <PlaceholderBorderMac /> : <PlaceholderBorderWin />}
       <StyledLink to="/">
         <AvatarImg src={avatar || Logo} draggable={false} />
       </StyledLink>
@@ -52,7 +52,6 @@ const Container = styled.div`
   -webkit-app-region: drag !important;
   background-color: #1f1f1f;
   border-right: 0.5px solid var(--color-border);
-  border-top: 0.5px solid var(--color-border);
   padding-top: var(--navbar-height);
   position: relative;
 `
@@ -115,7 +114,7 @@ const StyledLink = styled(Link)`
   }
 `
 
-const PlaceholderBorder = styled.div`
+const PlaceholderBorderMac = styled.div`
   width: var(--sidebar-width);
   height: var(--navbar-height);
   border-right: 1px solid #1f1f1f;
@@ -123,6 +122,15 @@ const PlaceholderBorder = styled.div`
   position: absolute;
   top: -0.5px;
   left: 0.5px;
+`
+
+const PlaceholderBorderWin = styled.div`
+  width: var(--sidebar-width);
+  height: var(--navbar-height);
+  position: absolute;
+  border-right: 1px solid #1f1f1f;
+  top: 0;
+  right: -1px;
 `
 
 export default Sidebar

@@ -30,7 +30,6 @@ const NavbarContainer = styled.div`
   margin-left: calc(var(--sidebar-width) * -1);
   padding-left: var(--sidebar-width);
   border-bottom: 0.5px solid var(--color-border);
-  border-top: 0.5px solid var(--color-border);
 `
 
 const NavbarLeftContainer = styled.div`

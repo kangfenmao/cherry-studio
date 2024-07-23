@@ -14,7 +14,6 @@ import { firstLetter } from '@renderer/utils'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, upperFirst } from 'lodash'
 import dayjs from 'dayjs'
-import { useAppSelector } from '@renderer/store'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 
@@ -29,12 +28,10 @@ interface Props {
 const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) => {
   const avatar = useAvatar()
   const { t } = useTranslation()
-  const generating = useAppSelector((state) => state.runtime.generating)
   const { assistant } = useAssistant(message.assistantId)
   const { userName, showMessageDivider } = useSettings()
 
   const isLastMessage = index === 0
-  const isUserMessage = message.role === 'user'
   const canRegenerate = isLastMessage && message.role === 'assistant'
 
   const onCopy = () => {
@@ -81,10 +78,8 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     return userName || t('common.you')
   }
 
-  const borderBottom = (isLastMessage && !isUserMessage) || generating || !showMessageDivider ? 'none' : undefined
-
   return (
-    <MessageContainer key={message.id} style={{ borderBottom }}>
+    <MessageContainer key={message.id} className="message" style={{ border: showMessageDivider ? undefined : 'none' }}>
       <MessageHeader>
         <AvatarWrapper>
           {message.role === 'assistant' ? (
