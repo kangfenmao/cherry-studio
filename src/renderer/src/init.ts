@@ -1,7 +1,7 @@
 import localforage from 'localforage'
 import KeyvStorage from '@kangfenmao/keyv-storage'
 import * as Sentry from '@sentry/electron/renderer'
-import { isProduction } from './utils'
+import { isProduction, loadScript } from './utils'
 
 async function initSentry() {
   if (await isProduction()) {
@@ -21,6 +21,15 @@ async function initSentry() {
   }
 }
 
+async function initMermaid() {
+  await loadScript('https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js')
+  window.mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    securityLevel: 'loose'
+  })
+}
+
 function init() {
   localforage.config({
     driver: localforage.INDEXEDDB,
@@ -34,6 +43,7 @@ function init() {
   window.keyv.init()
 
   initSentry()
+  initMermaid()
 }
 
 init()

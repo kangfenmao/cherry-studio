@@ -207,3 +207,16 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
 export const isValidProxyUrl = (url: string) => {
   return url.includes('://')
 }
+
+export function loadScript(url: string) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = url
+
+    script.onload = resolve
+    script.onerror = reject
+
+    document.head.appendChild(script)
+  })
+}

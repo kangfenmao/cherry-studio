@@ -4,6 +4,7 @@ import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import styled from 'styled-components'
 import { CopyOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import Mermaid from './Mermaid'
 
 interface CodeBlockProps {
   children: string
@@ -19,6 +20,10 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
   const onCopy = () => {
     navigator.clipboard.writeText(children)
     window.message.success({ content: t('message.copied'), key: 'copy-code' })
+  }
+
+  if (match && match[1] === 'mermaid') {
+    return <Mermaid chart={children} />
   }
 
   return match ? (
