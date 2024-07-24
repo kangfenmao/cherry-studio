@@ -3,6 +3,7 @@ import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic } from '@renderer/services/assistant'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
 import { Assistant } from '@renderer/types'
 import { droppableReorder, uuid } from '@renderer/utils'
@@ -77,6 +78,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
       window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
       return
     }
+    EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
     setActiveAssistant(assistant)
   }
 

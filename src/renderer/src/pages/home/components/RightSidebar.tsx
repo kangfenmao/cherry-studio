@@ -41,7 +41,8 @@ const RightSidebar: FC<Props> = (props) => {
         }
         showRightSidebar()
         setTab('settings')
-      })
+      }),
+      EventEmitter.on(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR, () => setTab('topic'))
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [hideRightSidebar, isSettingsTab, isTopicTab, rightSidebarShown, showRightSidebar])
