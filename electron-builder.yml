@@ -56,6 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    Windows 版本界面优化
-    新增 mermaid 图表支持
-    消息样式优化
+    新增设置面板，方便进行消息功能设置
+    可以自定义消息字体样式
