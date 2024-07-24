@@ -5,7 +5,6 @@ import { setAvatar } from '@renderer/store/runtime'
 import { runAsyncFunction } from '@renderer/utils'
 import { useEffect } from 'react'
 import { useSettings } from './useSettings'
-import { isWindows } from '@renderer/config/constant'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
@@ -29,8 +28,4 @@ export function useAppInit() {
   useEffect(() => {
     proxyUrl && window.api.setProxy(proxyUrl)
   }, [proxyUrl])
-
-  useEffect(() => {
-    isWindows && import('@renderer/assets/styles/scrollbar.scss')
-  }, [])
 }

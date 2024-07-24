@@ -97,11 +97,6 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             <MessageTime>{dayjs(message.createdAt).format('MM/DD HH:mm')}</MessageTime>
           </UserWrap>
         </AvatarWrapper>
-        {message.usage && (
-          <MessageMetadata>
-            Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
-          </MessageMetadata>
-        )}
       </MessageHeader>
       <MessageContent style={{ fontFamily }}>
         {message.status === 'sending' && (
@@ -114,8 +109,13 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             {getMessageContent(message)}
           </Markdown>
         )}
+        {message.usage && (
+          <MessageMetadata>
+            Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
+          </MessageMetadata>
+        )}
         {showMenu && (
-          <MenusBar className={`menubar ${isLastMessage && 'show'} ${isUserMessage && 'user'}`}>
+          <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
             {message.role === 'user' && (
               <Tooltip title="Edit" mouseEnterDelay={0.8}>
                 <ActionButton>

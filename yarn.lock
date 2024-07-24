@@ -961,13 +961,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/inter@npm:^5.0.18":
-  version: 5.0.18
-  resolution: "@fontsource/inter@npm:5.0.18"
-  checksum: 10c0/87863160b18a3a2b2cc0b2949b41b4072f422efb672f183a8fa2ae19bd803da18ec24a65344c42c1686c73e1b65bb4a7cd64ce5c0f015872c5f5dcba4e64bf92
-  languageName: node
-  linkType: hard
-
 "@hello-pangea/dnd@npm:^16.6.0":
   version: 16.6.0
   resolution: "@hello-pangea/dnd@npm:16.6.0"
@@ -3413,7 +3406,6 @@ __metadata:
     "@electron-toolkit/preload": "npm:^3.0.0"
     "@electron-toolkit/tsconfig": "npm:^1.0.1"
     "@electron-toolkit/utils": "npm:^3.0.0"
-    "@fontsource/inter": "npm:^5.0.18"
     "@hello-pangea/dnd": "npm:^16.6.0"
     "@kangfenmao/keyv-storage": "npm:^0.1.0"
     "@reduxjs/toolkit": "npm:^2.2.5"

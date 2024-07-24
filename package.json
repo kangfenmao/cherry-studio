@@ -33,7 +33,6 @@
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^1.0.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@fontsource/inter": "^5.0.18",
     "@hello-pangea/dnd": "^16.6.0",
     "@kangfenmao/keyv-storage": "^0.1.0",
     "@reduxjs/toolkit": "^2.2.5",

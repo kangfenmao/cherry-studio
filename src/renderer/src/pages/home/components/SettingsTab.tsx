@@ -119,7 +119,7 @@ const SettingsTab: FC<Props> = (props) => {
           <Slider
             min={0}
             max={20}
-            marks={{ 0: '0', 5: '5', 10: '10', 15: '15', 20: t('assistant.settings.max') }}
+            marks={{ 0: '0', 10: '10', 20: t('assistant.settings.max') }}
             onChange={onConextCountChange}
             value={typeof contextCount === 'number' ? contextCount : 0}
             step={1}
@@ -142,12 +142,12 @@ const SettingsTab: FC<Props> = (props) => {
       <SettingSubtitle>{t('settings.messages.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.messages.divider')}</SettingRowTitle>
+        <SettingRowTitleSmall>{t('settings.messages.divider')}</SettingRowTitleSmall>
         <Switch checked={showMessageDivider} onChange={(checked) => dispatch(setShowMessageDivider(checked))} />
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.messages.use_serif_font')}</SettingRowTitle>
+        <SettingRowTitleSmall>{t('settings.messages.use_serif_font')}</SettingRowTitleSmall>
         <Switch
           checked={messageFont === 'serif'}
           onChange={(checked) => dispatch(setMessageFont(checked ? 'serif' : 'system'))}
@@ -157,7 +157,7 @@ const SettingsTab: FC<Props> = (props) => {
       <SettingSubtitle style={{ marginTop: 20 }}>{t('settings.messages.input.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.messages.input.show_estimated_tokens')}</SettingRowTitle>
+        <SettingRowTitleSmall>{t('settings.messages.input.show_estimated_tokens')}</SettingRowTitleSmall>
         <Switch
           checked={showInputEstimatedTokens}
           onChange={(checked) => dispatch(setShowInputEstimatedTokens(checked))}
@@ -169,7 +169,7 @@ const SettingsTab: FC<Props> = (props) => {
 }
 
 const Container = styled.div`
-  padding: 0 10px;
+  padding: 0 15px;
 `
 
 const InputNumberic = styled(InputNumber)`
@@ -193,6 +193,10 @@ const QuestionIcon = styled(QuestionCircleOutlined)`
   font-size: 12px;
   cursor: pointer;
   color: var(--color-text-3);
+`
+
+const SettingRowTitleSmall = styled(SettingRowTitle)`
+  font-size: 13px;
 `
 
 export default SettingsTab

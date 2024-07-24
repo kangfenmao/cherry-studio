@@ -1,4 +1,3 @@
-import '@fontsource/inter'
 import store, { persistor } from '@renderer/store'
 import { ConfigProvider } from 'antd'
 import { Provider } from 'react-redux'

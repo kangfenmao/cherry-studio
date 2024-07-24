@@ -77,7 +77,7 @@ const Container = styled.div`
 const Tabs = styled.div`
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 0.5px solid var(--color-border);
   padding: 0 10px;
 `
 
@@ -93,7 +93,7 @@ const Tab = styled.div`
   color: #8a8a8a;
   border-bottom: 1px solid transparent;
   &.active {
-    color: white;
+    color: #a8a8a8;
     font-weight: 600;
   }
 `

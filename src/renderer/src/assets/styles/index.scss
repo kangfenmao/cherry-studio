@@ -1,5 +1,6 @@
 @import 'https://at.alicdn.com/t/c/font_4563475_hrx8c92awui.css';
 @import './markdown.scss';
+@import './scrollbar.scss';
 
 // @font-face {
 //   font-family: 'Playwrite';
@@ -67,19 +68,8 @@ body {
   line-height: 1.6;
   overflow: hidden;
   background-size: cover;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
