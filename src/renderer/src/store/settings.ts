@@ -10,6 +10,7 @@ export interface SettingsState {
   proxyUrl?: string
   userName: string
   showMessageDivider: boolean
+  messageFont: 'system' | 'serif'
 }
 
 const initialState: SettingsState = {
@@ -19,7 +20,8 @@ const initialState: SettingsState = {
   language: navigator.language,
   proxyUrl: undefined,
   userName: '',
-  showMessageDivider: true
+  showMessageDivider: true,
+  messageFont: 'system'
 }
 
 const settingsSlice = createSlice({
@@ -46,6 +48,9 @@ const settingsSlice = createSlice({
     },
     setShowMessageDivider: (state, action: PayloadAction<boolean>) => {
       state.showMessageDivider = action.payload
+    },
+    setMessageFont: (state, action: PayloadAction<'system' | 'serif'>) => {
+      state.messageFont = action.payload
     }
   }
 })
@@ -57,7 +62,8 @@ export const {
   setLanguage,
   setProxyUrl,
   setUserName,
-  setShowMessageDivider
+  setShowMessageDivider,
+  setMessageFont
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

@@ -5,8 +5,7 @@ import { isEmpty } from 'lodash'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
 
-const migrate = createMigrate({
-  // @ts-ignore store type is unknown
+const migrateConfig = {
   '2': (state: RootState) => {
     return {
       ...state,
@@ -26,7 +25,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '3': (state: RootState) => {
     return {
       ...state,
@@ -46,7 +44,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '4': (state: RootState) => {
     return {
       ...state,
@@ -66,7 +63,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '5': (state: RootState) => {
     return {
       ...state,
@@ -86,7 +82,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '6': (state: RootState) => {
     return {
       ...state,
@@ -106,7 +101,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '7': (state: RootState) => {
     return {
       ...state,
@@ -116,7 +110,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '8': (state: RootState) => {
     const fixAssistantName = (assistant: Assistant) => {
       if (isEmpty(assistant.name)) {
@@ -142,7 +135,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '9': (state: RootState) => {
     return {
       ...state,
@@ -157,7 +149,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '10': (state: RootState) => {
     return {
       ...state,
@@ -178,7 +169,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '11': (state: RootState) => {
     return {
       ...state,
@@ -208,7 +198,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '12': (state: RootState) => {
     return {
       ...state,
@@ -229,7 +218,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '13': (state: RootState) => {
     return {
       ...state,
@@ -244,7 +232,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '14': (state: RootState) => {
     return {
       ...state,
@@ -255,7 +242,6 @@ const migrate = createMigrate({
       }
     }
   },
-  // @ts-ignore store type is unknown
   '15': (state: RootState) => {
     return {
       ...state,
@@ -265,7 +251,18 @@ const migrate = createMigrate({
         showMessageDivider: true
       }
     }
+  },
+  '16': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        messageFont: 'system'
+      }
+    }
   }
-})
+}
+
+const migrate = createMigrate(migrateConfig as any)
 
 export default migrate

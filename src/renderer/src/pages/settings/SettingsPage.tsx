@@ -22,6 +22,9 @@ const SettingsPage: FC = () => {
       </Navbar>
       <ContentContainer>
         <SettingMenus>
+          <MenuItemLink to="/settings/general">
+            <MenuItem className={isRoute('/settings/general')}>{t('settings.general')}</MenuItem>
+          </MenuItemLink>
           <MenuItemLink to="/settings/provider">
             <MenuItem className={isRoute('/settings/provider')}>{t('settings.provider')}</MenuItem>
           </MenuItemLink>
@@ -30,9 +33,6 @@ const SettingsPage: FC = () => {
           </MenuItemLink>
           <MenuItemLink to="/settings/assistant">
             <MenuItem className={isRoute('/settings/assistant')}>{t('settings.assistant')}</MenuItem>
-          </MenuItemLink>
-          <MenuItemLink to="/settings/general">
-            <MenuItem className={isRoute('/settings/general')}>{t('settings.general')}</MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/about">
             <MenuItem className={isRoute('/settings/about')}>{t('settings.about')}</MenuItem>

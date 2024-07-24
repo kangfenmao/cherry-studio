@@ -31,7 +31,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
       type: 'group',
       children: p.models.map((m) => ({
         key: m.id,
-        label: m.name,
+        label: upperFirst(m.name),
         style: m.id === model?.id ? { color: colorPrimary } : undefined,
         onClick: () => setModel(m)
       }))

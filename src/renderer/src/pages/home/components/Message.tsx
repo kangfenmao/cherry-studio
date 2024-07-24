@@ -1,21 +1,20 @@
-import { Message } from '@renderer/types'
-import { Avatar, Tooltip } from 'antd'
-import { FC } from 'react'
-import styled from 'styled-components'
-import useAvatar from '@renderer/hooks/useAvatar'
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import Markdown from 'react-markdown'
-import CodeBlock from './CodeBlock'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { getModelLogo } from '@renderer/config/provider'
+import { CopyOutlined, DeleteOutlined, EditOutlined, SyncOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
-import { SyncOutlined } from '@ant-design/icons'
-import { firstLetter } from '@renderer/utils'
-import { useTranslation } from 'react-i18next'
-import { isEmpty, upperFirst } from 'lodash'
-import dayjs from 'dayjs'
+import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { Message } from '@renderer/types'
+import { firstLetter } from '@renderer/utils'
+import { Avatar, Tooltip } from 'antd'
+import dayjs from 'dayjs'
+import { isEmpty, upperFirst } from 'lodash'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import Markdown from 'react-markdown'
+import styled from 'styled-components'
+import CodeBlock from './CodeBlock'
 
 interface Props {
   message: Message
@@ -29,7 +28,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const avatar = useAvatar()
   const { t } = useTranslation()
   const { assistant } = useAssistant(message.assistantId)
-  const { userName, showMessageDivider } = useSettings()
+  const { userName, showMessageDivider, messageFont } = useSettings()
 
   const isLastMessage = index === 0
   const isUserMessage = message.role === 'user'
@@ -79,8 +78,11 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     return userName || t('common.you')
   }
 
+  const fontFamily = messageFont === 'serif' ? "Georgia, Cambria, 'Times New Roman', Times, serif" : undefined
+  const messageBorder = showMessageDivider ? undefined : 'none'
+
   return (
-    <MessageContainer key={message.id} className="message" style={{ border: showMessageDivider ? undefined : 'none' }}>
+    <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
       <MessageHeader>
         <AvatarWrapper>
           {message.role === 'assistant' ? (
@@ -101,7 +103,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
           </MessageMetadata>
         )}
       </MessageHeader>
-      <MessageContent>
+      <MessageContent style={{ fontFamily }}>
         {message.status === 'sending' && (
           <MessageContentLoading>
             <SyncOutlined spin size={24} />
