@@ -120,8 +120,8 @@ const PlaceholderBorderMac = styled.div`
   border-right: 1px solid #1f1f1f;
   border-bottom: 0.5px solid var(--color-border);
   position: absolute;
-  top: -0.5px;
-  left: 0.5px;
+  top: 0;
+  left: 0;
 `
 
 const PlaceholderBorderWin = styled.div`
