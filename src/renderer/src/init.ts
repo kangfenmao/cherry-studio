@@ -21,13 +21,16 @@ async function initSentry() {
   }
 }
 
-async function initMermaid() {
-  await loadScript('https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js')
-  window.mermaid.initialize({
-    startOnLoad: true,
-    theme: 'dark',
-    securityLevel: 'loose'
-  })
+export async function initMermaid() {
+  if (!window.mermaid) {
+    await loadScript('https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js')
+    window.mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      securityLevel: 'loose'
+    })
+    window.mermaid.contentLoaded()
+  }
 }
 
 function init() {
@@ -43,7 +46,6 @@ function init() {
   window.keyv.init()
 
   initSentry()
-  initMermaid()
 }
 
 init()

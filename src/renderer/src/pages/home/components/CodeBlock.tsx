@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { CopyOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import Mermaid from './Mermaid'
+import { initMermaid } from '@renderer/init'
 
 interface CodeBlockProps {
   children: string
@@ -23,6 +24,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
   }
 
   if (match && match[1] === 'mermaid') {
+    initMermaid()
     return <Mermaid chart={children} />
   }
 
