@@ -11,6 +11,7 @@ export interface SettingsState {
   userName: string
   showMessageDivider: boolean
   messageFont: 'system' | 'serif'
+  showInputEstimatedTokens: boolean
 }
 
 const initialState: SettingsState = {
@@ -21,7 +22,8 @@ const initialState: SettingsState = {
   proxyUrl: undefined,
   userName: '',
   showMessageDivider: true,
-  messageFont: 'system'
+  messageFont: 'system',
+  showInputEstimatedTokens: false
 }
 
 const settingsSlice = createSlice({
@@ -51,6 +53,9 @@ const settingsSlice = createSlice({
     },
     setMessageFont: (state, action: PayloadAction<'system' | 'serif'>) => {
       state.messageFont = action.payload
+    },
+    setShowInputEstimatedTokens: (state, action: PayloadAction<boolean>) => {
+      state.showInputEstimatedTokens = action.payload
     }
   }
 })
@@ -63,7 +68,8 @@ export const {
   setProxyUrl,
   setUserName,
   setShowMessageDivider,
-  setMessageFont
+  setMessageFont,
+  setShowInputEstimatedTokens
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

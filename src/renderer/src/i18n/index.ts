@@ -69,7 +69,6 @@ const resources = {
         'input.send': 'Send',
         'input.pause': 'Pause',
         'input.settings': 'Settings',
-        'input.estimated_tokens': 'Estimated Tokens: ',
         'settings.temperature': 'Temperature',
         'settings.temperature.tip':
           'Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.',
@@ -110,6 +109,8 @@ const resources = {
         'general.message.use_serif_font': 'Use serif font',
         'general.user_name': 'User Name',
         'general.user_name.placeholder': 'Enter your name',
+        'general.input.title': 'Input Settings',
+        'general.input.show_estimated_tokens': 'Show estimated input tokens',
         'provider.api_key': 'API Key',
         'provider.check': 'Check',
         'provider.get_api_key': 'Get API Key',
@@ -220,7 +221,6 @@ const resources = {
         'input.send': '发送',
         'input.pause': '暂停',
         'input.settings': '设置',
-        'input.estimated_tokens': '预估消耗',
         'settings.temperature': '模型温度',
         'settings.temperature.tip':
           '模型生成文本的随机程度。值越大，回复内容越赋有多样性、创造性、随机性；设为 0 根据事实回答。日常聊天建议设置为 0.7',
@@ -262,6 +262,8 @@ const resources = {
         'general.message.title': '消息设置',
         'general.message.divider': '消息分割线',
         'general.message.use_serif_font': '使用衬线字体',
+        'general.input.title': '输入设置',
+        'general.input.show_estimated_tokens': '状态显示',
         'provider.api_key': 'API 密钥',
         'provider.check': '检查',
         'provider.get_api_key': '点击这里获取密钥',

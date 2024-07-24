@@ -8,14 +8,27 @@ import useAvatar from '@renderer/hooks/useAvatar'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { setLanguage, setMessageFont, setShowMessageDivider, setUserName } from '@renderer/store/settings'
+import {
+  setLanguage,
+  setMessageFont,
+  setShowInputEstimatedTokens,
+  setShowMessageDivider,
+  setUserName
+} from '@renderer/store/settings'
 import { useTranslation } from 'react-i18next'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import i18n from '@renderer/i18n'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const { language, proxyUrl: storeProxyUrl, userName, showMessageDivider, messageFont } = useSettings()
+  const {
+    language,
+    proxyUrl: storeProxyUrl,
+    userName,
+    showMessageDivider,
+    messageFont,
+    showInputEstimatedTokens
+  } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -109,6 +122,16 @@ const GeneralSettings: FC = () => {
         <Switch
           checked={messageFont === 'serif'}
           onChange={(checked) => dispatch(setMessageFont(checked ? 'serif' : 'system'))}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingTitle style={{ marginTop: 20 }}>{t('settings.general.input.title')}</SettingTitle>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.general.input.show_estimated_tokens')}</SettingRowTitle>
+        <Switch
+          checked={showInputEstimatedTokens}
+          onChange={(checked) => dispatch(setShowInputEstimatedTokens(checked))}
         />
       </SettingRow>
       <SettingDivider />

@@ -257,7 +257,8 @@ const migrateConfig = {
       ...state,
       settings: {
         ...state.settings,
-        messageFont: 'system'
+        messageFont: 'system',
+        showInputEstimatedTokens: false
       }
     }
   }

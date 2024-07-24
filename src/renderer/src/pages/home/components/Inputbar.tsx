@@ -37,7 +37,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
   const { toggleRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
-  const { sendMessageShortcut } = useSettings()
+  const { sendMessageShortcut, showInputEstimatedTokens } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
@@ -193,10 +193,12 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         ref={inputRef}
         styles={{ textarea: { paddingLeft: 0 } }}
       />
-      <TextCount>
-        <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} |{' '}
-        {t('assistant.input.estimated_tokens')}: {`${inputTokenCount}/${estimateTokenCount}`}
-      </TextCount>
+      {showInputEstimatedTokens && (
+        <TextCount>
+          <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} | T↑
+          {`${inputTokenCount}/${estimateTokenCount}`}
+        </TextCount>
+      )}
     </Container>
   )
 }
@@ -255,11 +257,15 @@ const ToolbarButton = styled(Button)`
 
 const TextCount = styled.div`
   position: absolute;
-  right: 8px;
-  bottom: 8px;
+  right: 0;
+  bottom: 0;
   font-size: 11px;
   color: var(--color-text-3);
   z-index: 10;
+  background-color: #121212;
+  padding: 2px 8px;
+  border-top-left-radius: 7px;
+  user-select: none;
 `
 
 export default Inputbar
