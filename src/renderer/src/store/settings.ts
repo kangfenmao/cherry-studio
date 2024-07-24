@@ -33,6 +33,9 @@ const settingsSlice = createSlice({
     toggleRightSidebar: (state) => {
       state.showRightSidebar = !state.showRightSidebar
     },
+    setShowRightSidebar: (state, action: PayloadAction<boolean>) => {
+      state.showRightSidebar = action.payload
+    },
     toggleShowAssistants: (state) => {
       state.showAssistants = !state.showAssistants
     },
@@ -61,6 +64,7 @@ const settingsSlice = createSlice({
 })
 
 export const {
+  setShowRightSidebar,
   toggleRightSidebar,
   toggleShowAssistants,
   setSendMessageShortcut,

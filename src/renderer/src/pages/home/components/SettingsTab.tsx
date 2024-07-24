@@ -1,22 +1,30 @@
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { Assistant } from '@renderer/types'
+import styled from 'styled-components'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { Assistant } from '@renderer/types'
-import { Button, Col, InputNumber, Popover, Row, Slider, Tooltip } from 'antd'
+import { Button, Col, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
 import { debounce } from 'lodash'
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings/components'
+import { useSettings } from '@renderer/hooks/useSettings'
+import { useAppDispatch } from '@renderer/store'
+import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
 
 interface Props {
   assistant: Assistant
 }
 
-const PopoverContent: FC<Props> = (props) => {
+const SettingsTab: FC<Props> = (props) => {
   const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setConextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
   const { t } = useTranslation()
+
+  const dispatch = useAppDispatch()
+
+  const { showMessageDivider, messageFont, showInputEstimatedTokens } = useSettings()
 
   const onUpdateAssistantSettings = useCallback(
     debounce(
@@ -70,30 +78,29 @@ const PopoverContent: FC<Props> = (props) => {
 
   return (
     <Container>
-      <Row align="middle" style={{ marginBottom: 10 }} gutter={20}>
-        <Col span={6}>
-          <Row align="middle" justify="end">
-            <Label>{t('assistant.settings.temperature')}</Label>
-            <Tooltip title={t('assistant.settings.temperature.tip')}>
-              <QuestionIcon />
-            </Tooltip>
-          </Row>
-        </Col>
-        <Col span={14}>
+      <SettingSubtitle>{t('settings.messages.model.title')}</SettingSubtitle>
+      <SettingDivider />
+      <Row align="middle">
+        <Label>{t('assistant.settings.conext_count')}</Label>
+        <Tooltip title={t('assistant.settings.temperature.tip')}>
+          <QuestionIcon />
+        </Tooltip>
+      </Row>
+      <Row align="middle" gutter={10}>
+        <Col span={18}>
           <Slider
             min={0}
             max={1.2}
             onChange={onTemperatureChange}
             value={typeof temperature === 'number' ? temperature : 0}
-            marks={{ 0: '0', 0.7: '0.7', 1: '1', 1.2: '1.2' }}
+            marks={{ 0: '0', 0.7: '0.7', 1.2: '1.2' }}
             step={0.1}
           />
         </Col>
-        <Col span={3}>
-          <InputNumber
+        <Col span={6}>
+          <InputNumberic
             min={0}
             max={1.2}
-            style={{ width: 50, marginLeft: 5, textAlign: 'center' }}
             step={0.1}
             value={temperature}
             onChange={onTemperatureChange}
@@ -101,16 +108,14 @@ const PopoverContent: FC<Props> = (props) => {
           />
         </Col>
       </Row>
-      <Row align="middle" style={{ marginBottom: 10 }} gutter={20}>
-        <Col span={6}>
-          <Row align="middle" justify="end">
-            <Label>{t('assistant.settings.conext_count')}</Label>
-            <Tooltip title={t('assistant.settings.conext_count.tip')}>
-              <QuestionIcon />
-            </Tooltip>
-          </Row>
-        </Col>
-        <Col span={14}>
+      <Row align="middle">
+        <Label>{t('assistant.settings.conext_count')}</Label>
+        <Tooltip title={t('assistant.settings.conext_count.tip')}>
+          <QuestionIcon />
+        </Tooltip>
+      </Row>
+      <Row align="middle" gutter={10}>
+        <Col span={18}>
           <Slider
             min={0}
             max={20}
@@ -120,11 +125,10 @@ const PopoverContent: FC<Props> = (props) => {
             step={1}
           />
         </Col>
-        <Col span={3}>
-          <InputNumber
+        <Col span={6}>
+          <InputNumberic
             min={0}
             max={20}
-            style={{ width: 50, marginLeft: 5, textAlign: 'center' }}
             step={1}
             value={contextCount}
             onChange={onConextCountChange}
@@ -132,49 +136,63 @@ const PopoverContent: FC<Props> = (props) => {
           />
         </Col>
       </Row>
-      <Row justify="center">
-        <Button onClick={onReset}>{t('assistant.settings.reset')}</Button>
-      </Row>
+      <Button onClick={onReset} style={{ width: '100%' }}>
+        {t('assistant.settings.reset')}
+      </Button>
+      <SettingSubtitle>{t('settings.messages.title')}</SettingSubtitle>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.messages.divider')}</SettingRowTitle>
+        <Switch checked={showMessageDivider} onChange={(checked) => dispatch(setShowMessageDivider(checked))} />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.messages.use_serif_font')}</SettingRowTitle>
+        <Switch
+          checked={messageFont === 'serif'}
+          onChange={(checked) => dispatch(setMessageFont(checked ? 'serif' : 'system'))}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingSubtitle style={{ marginTop: 20 }}>{t('settings.messages.input.title')}</SettingSubtitle>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.messages.input.show_estimated_tokens')}</SettingRowTitle>
+        <Switch
+          checked={showInputEstimatedTokens}
+          onChange={(checked) => dispatch(setShowInputEstimatedTokens(checked))}
+        />
+      </SettingRow>
+      <SettingDivider />
     </Container>
   )
 }
 
-const AssistantSettings: FC<Props & PropsWithChildren> = ({ children, assistant }) => {
-  const [open, setOpen] = useState(false)
-  const { t } = useTranslation()
-
-  return (
-    <Popover content={<PopoverContent assistant={assistant} />} trigger="click" onOpenChange={setOpen}>
-      {open ? (
-        children
-      ) : (
-        <Tooltip placement="top" title={t('assistant.input.settings')} arrow>
-          {children}
-        </Tooltip>
-      )}
-    </Popover>
-  )
-}
-
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 8px;
-  width: 420px;
-  padding: 5px;
+  padding: 0 10px;
+`
+
+const InputNumberic = styled(InputNumber)`
+  width: 45px;
+  padding: 0;
+  margin-left: 5px;
+  text-align: center;
+  .ant-input-number-input {
+    text-align: center;
+  }
 `
 
 const Label = styled.p`
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
-  margin-right: 5px;
+  margin-right: 8px;
 `
 
 const QuestionIcon = styled(QuestionCircleOutlined)`
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
   color: var(--color-text-3);
 `
 
-export default AssistantSettings
+export default SettingsTab

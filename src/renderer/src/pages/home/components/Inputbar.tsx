@@ -10,7 +10,6 @@ import {
 } from '@ant-design/icons'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import store, { useAppSelector } from '@renderer/store'
@@ -24,7 +23,6 @@ import { debounce, isEmpty } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import AssistantSettings from './AssistantSettings'
 import SendMessageSetting from './SendMessageSetting'
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 
@@ -35,7 +33,6 @@ interface Props {
 
 const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState('')
-  const { toggleRightSidebar } = useShowRightSidebar()
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut, showInputEstimatedTokens } = useSettings()
   const [expended, setExpend] = useState(false)
@@ -104,6 +101,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       if (!generating) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
           addNewTopic()
+          EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)
           inputRef.current?.focus()
         }
       }
@@ -137,11 +135,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <PlusCircleOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={toggleRightSidebar}>
-              <HistoryOutlined />
-            </ToolbarButton>
-          </Tooltip>
           <Tooltip placement="top" title={t('assistant.input.clear')} arrow>
             <Popconfirm
               icon={false}
@@ -155,11 +148,16 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Popconfirm>
           </Tooltip>
-          <AssistantSettings assistant={assistant}>
-            <ToolbarButton type="text">
+          <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
+              <HistoryOutlined />
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip placement="top" title={t('assistant.input.settings')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
               <ControlOutlined />
             </ToolbarButton>
-          </AssistantSettings>
+          </Tooltip>
           <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}

@@ -39,10 +39,10 @@ export const SettingRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-height: 40px;
 `
 
 export const SettingRowTitle = styled.div`
   font-size: 14px;
+  line-height: 18px;
   color: var(--color-text-1);
 `

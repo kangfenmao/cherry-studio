@@ -3,7 +3,7 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import { Assistant, Topic } from '@renderer/types'
-import { Button, Dropdown, MenuProps, Popconfirm } from 'antd'
+import { Dropdown, MenuProps } from 'antd'
 import { FC } from 'react'
 import styled from 'styled-components'
 import { DeleteOutlined, EditOutlined, SignatureOutlined } from '@ant-design/icons'
@@ -19,9 +19,9 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
-  const { showRightSidebar } = useShowRightSidebar()
-  const { assistant, removeTopic, updateTopic, removeAllTopics, updateTopics } = useAssistant(_assistant.id)
+const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
+  const { rightSidebarShown } = useShowRightSidebar()
+  const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
@@ -93,23 +93,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   }
 
   return (
-    <Container style={{ display: showRightSidebar ? 'block' : 'none' }}>
-      <TopicTitle>
-        <span>
-          {t('assistant.topics.title')} ({assistant.topics.length})
-        </span>
-        <Popconfirm
-          icon={false}
-          title={t('assistant.topics.delete.all.title')}
-          description={t('assistant.topics.delete.all.content')}
-          placement="leftBottom"
-          onConfirm={removeAllTopics}
-          okType="danger">
-          <DeleteButton type="text">
-            <DeleteIcon />
-          </DeleteButton>
-        </Popconfirm>
-      </TopicTitle>
+    <Container style={{ display: rightSidebarShown ? 'block' : 'none' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
@@ -138,15 +122,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 }
 
 const Container = styled.div`
-  width: var(--topic-list-width);
-  height: 100%;
-  border-left: 0.5px solid var(--color-border);
-  padding: 10px;
-  overflow-y: auto;
-  &.collapsed {
-    width: 0;
-    border-left: none;
-  }
+  padding: 15px 10px;
 `
 
 const TopicListItem = styled.div`
@@ -166,31 +142,4 @@ const TopicListItem = styled.div`
   }
 `
 
-const TopicTitle = styled.div`
-  font-weight: bold;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: var(--color-text-1);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const DeleteButton = styled(Button)`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  padding: 0;
-  &:hover {
-    .anticon {
-      color: #ff4d4f;
-    }
-  }
-`
-
-const DeleteIcon = styled(DeleteOutlined)`
-  font-size: 16px;
-`
-
-export default Topics
+export default TopicsTab

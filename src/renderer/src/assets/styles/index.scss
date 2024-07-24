@@ -27,6 +27,10 @@
   --color-background-soft: var(--color-black-soft);
   --color-background-mute: var(--color-black-mute);
 
+  --color-primary: #00b96b;
+  --color-primary-soft: #00b96b99;
+  --color-primary-mute: #00b96b33;
+
   --color-text: var(--color-text-1);
   --color-icon: #ffffff99;
   --color-icon-white: #ffffff;
@@ -36,8 +40,8 @@
   --navbar-background: #1f1f1f;
   --navbar-height: 42px;
   --sidebar-width: 55px;
-  --assistants-width: 250px;
-  --topic-list-width: 250px;
+  --assistants-width: 245px;
+  --topic-list-width: 260px;
   --settings-width: var(--assistants-width);
   --status-bar-height: 40px;
   --input-bar-height: 125px;
@@ -102,30 +106,4 @@ body,
 
 #inputbar .ant-input {
   resize: none;
-}
-
-/* 全局初始化滚动条样式 */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* Safari 和 Chrome */
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-  body {
-    scrollbar-width: thin; /* 告诉 FF 用细滚动条 */
-    scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.1); /* FF 前面色后面色 */
-  }
 }

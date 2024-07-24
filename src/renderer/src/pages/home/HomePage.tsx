@@ -6,18 +6,15 @@ import Chat from './components/Chat'
 import Assistants from './components/Assistants'
 import { uuid } from '@renderer/utils'
 import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
-import { Tooltip } from 'antd'
 import Navigation from './components/NavigationCenter'
-import { useTranslation } from 'react-i18next'
 import { isMac, isWindows } from '@renderer/config/constant'
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const [activeAssistant, setActiveAssistant] = useState(assistants[0])
-  const { showRightSidebar, toggleRightSidebar } = useShowRightSidebar()
+  const { rightSidebarShown, toggleRightSidebar } = useShowRightSidebar()
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { defaultAssistant } = useDefaultAssistant()
-  const { t } = useTranslation()
 
   const onCreateAssistant = () => {
     const assistant = { ...defaultAssistant, id: uuid() }
@@ -40,14 +37,9 @@ const HomePage: FC = () => {
         )}
         <Navigation activeAssistant={activeAssistant} />
         <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 8 }}>
-          <Tooltip
-            placement="left"
-            title={showRightSidebar ? t('assistant.topics.hide_topics') : t('assistant.topics.show_topics')}
-            arrow>
-            <NewButton onClick={toggleRightSidebar}>
-              <i className={`iconfont ${showRightSidebar ? 'icon-showsidebarhoriz' : 'icon-hidesidebarhoriz'}`} />
-            </NewButton>
-          </Tooltip>
+          <NewButton onClick={toggleRightSidebar}>
+            <i className={`iconfont ${rightSidebarShown ? 'icon-showsidebarhoriz' : 'icon-hidesidebarhoriz'}`} />
+          </NewButton>
         </NavbarRight>
       </Navbar>
       <ContentContainer>
