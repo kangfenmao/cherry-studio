@@ -66,8 +66,18 @@ export async function fetchChatCompletion({
 export async function fetchMessagesSummary({ messages, assistant }: { messages: Message[]; assistant: Assistant }) {
   const model = getTopNamingModel() || assistant.model || getDefaultModel()
   const provider = getProviderByModel(model)
+
+  if (!provider.apiKey) {
+    return null
+  }
+
   const providerSdk = new ProviderSDK(provider)
-  return providerSdk.summaries(messages, assistant)
+
+  try {
+    return await providerSdk.summaries(messages, assistant)
+  } catch (error: any) {
+    return null
+  }
 }
 
 export async function checkApi(provider: Provider) {
