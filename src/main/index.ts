@@ -35,8 +35,8 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
-      devTools: !app.isPackaged,
       webSecurity: false
+      // devTools: !app.isPackaged,
     }
   })
 
