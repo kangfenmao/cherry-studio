@@ -117,7 +117,8 @@ const StyledLink = styled(Link)`
 const PlaceholderBorderMac = styled.div`
   width: var(--sidebar-width);
   height: var(--navbar-height);
-  border-right: 1px solid #1f1f1f;
+  background: var(--navbar-background);
+  border-right: 1px solid var(--navbar-background);
   border-bottom: 0.5px solid var(--color-border);
   position: absolute;
   top: 0;
@@ -128,7 +129,7 @@ const PlaceholderBorderWin = styled.div`
   width: var(--sidebar-width);
   height: var(--navbar-height);
   position: absolute;
-  border-right: 1px solid #1f1f1f;
+  border-right: 1px solid var(--navbar-background);
   top: -1px;
   right: -1px;
 `
