@@ -44,7 +44,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
           <i className="iconfont icon-showsidebarhoriz" />
         </NewButton>
       )}
-      <AssistantName>{assistant?.name}</AssistantName>
+      <AssistantName>{assistant?.name || t('assistant.default.name')}</AssistantName>
       <DropdownMenu menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }} trigger={['click']}>
         <DropdownButton size="small" type="primary" ghost>
           {model ? upperFirst(model.name) : t('button.select_model')}

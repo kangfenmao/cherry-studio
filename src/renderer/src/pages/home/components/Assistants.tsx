@@ -96,7 +96,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
                         <AssistantItem
                           onClick={() => onSwitchAssistant(assistant)}
                           className={assistant.id === activeAssistant?.id ? 'active' : ''}>
-                          <AssistantName>{assistant.name}</AssistantName>
+                          <AssistantName>{assistant.name || t('assistant.default.name')}</AssistantName>
                         </AssistantItem>
                       </Dropdown>
                     </div>
