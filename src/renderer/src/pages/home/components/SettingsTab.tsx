@@ -78,7 +78,12 @@ const SettingsTab: FC<Props> = (props) => {
 
   return (
     <Container>
-      <SettingSubtitle>{t('settings.messages.model.title')}</SettingSubtitle>
+      <SettingSubtitle style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        {t('settings.messages.model.title')}{' '}
+        <Button size="small" onClick={onReset}>
+          {t('assistant.settings.reset')}
+        </Button>
+      </SettingSubtitle>
       <SettingDivider />
       <Row align="middle">
         <Label>{t('assistant.settings.conext_count')}</Label>
@@ -136,19 +141,21 @@ const SettingsTab: FC<Props> = (props) => {
           />
         </Col>
       </Row>
-      <Button onClick={onReset} style={{ width: '100%' }}>
-        {t('assistant.settings.reset')}
-      </Button>
       <SettingSubtitle>{t('settings.messages.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>
         <SettingRowTitleSmall>{t('settings.messages.divider')}</SettingRowTitleSmall>
-        <Switch checked={showMessageDivider} onChange={(checked) => dispatch(setShowMessageDivider(checked))} />
+        <Switch
+          size="small"
+          checked={showMessageDivider}
+          onChange={(checked) => dispatch(setShowMessageDivider(checked))}
+        />
       </SettingRow>
       <SettingDivider />
       <SettingRow>
         <SettingRowTitleSmall>{t('settings.messages.use_serif_font')}</SettingRowTitleSmall>
         <Switch
+          size="small"
           checked={messageFont === 'serif'}
           onChange={(checked) => dispatch(setMessageFont(checked ? 'serif' : 'system'))}
         />
@@ -159,6 +166,7 @@ const SettingsTab: FC<Props> = (props) => {
       <SettingRow>
         <SettingRowTitleSmall>{t('settings.messages.input.show_estimated_tokens')}</SettingRowTitleSmall>
         <Switch
+          size="small"
           checked={showInputEstimatedTokens}
           onChange={(checked) => dispatch(setShowInputEstimatedTokens(checked))}
         />
