@@ -1,6 +1,6 @@
 {
   "name": "cherry-studio",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "A powerful AI assistant for producer.",
   "main": "./out/main/index.js",
   "author": "kangfenmao@qq.com",
@@ -18,7 +18,8 @@
     "build:unpack": "dotenv npm run build && electron-builder --dir",
     "build:win": "dotenv npm run build && electron-builder --win --publish never",
     "build:mac": "dotenv electron-vite build && electron-builder --mac --publish never",
-    "build:linux": "dotenv electron-vite build && electron-builder --linux --publish never"
+    "build:linux": "dotenv electron-vite build && electron-builder --linux --publish never",
+    "release": "node scripts/version.js"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
