@@ -93,7 +93,7 @@ const Tab = styled.div`
   color: #8a8a8a;
   border-bottom: 1px solid transparent;
   &.active {
-    color: #a8a8a8;
+    color: #bbb;
     font-weight: 600;
   }
 `

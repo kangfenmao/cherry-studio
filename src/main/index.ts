@@ -6,6 +6,7 @@ import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import AppUpdater from './updater'
+import { saveFile } from './event'
 
 function createWindow() {
   // Load the previous state with fallback to defaults
@@ -114,6 +115,8 @@ app.whenReady().then(() => {
   ipcMain.handle('set-proxy', (_, proxy: string) => {
     session.defaultSession.setProxy(proxy ? { proxyRules: proxy } : {})
   })
+
+  ipcMain.handle('save-file', saveFile)
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
   ipcMain.handle('check-for-update', async () => {

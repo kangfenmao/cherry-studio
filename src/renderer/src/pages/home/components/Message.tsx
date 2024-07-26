@@ -1,4 +1,4 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined, SyncOutlined } from '@ant-design/icons'
+import { CopyOutlined, DeleteOutlined, EditOutlined, MenuOutlined, SaveOutlined, SyncOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -7,14 +7,15 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import { firstLetter } from '@renderer/utils'
-import { Avatar, Tooltip } from 'antd'
+import { Avatar, Dropdown, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { isEmpty, upperFirst } from 'lodash'
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
 import styled from 'styled-components'
 import CodeBlock from './CodeBlock'
+import { useRuntime } from '@renderer/hooks/useStore'
 
 interface Props {
   message: Message
@@ -29,6 +30,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const { t } = useTranslation()
   const { assistant } = useAssistant(message.assistantId)
   const { userName, showMessageDivider, messageFont } = useSettings()
+  const { generating } = useRuntime()
 
   const isLastMessage = index === 0
   const isUserMessage = message.role === 'user'
@@ -66,7 +68,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     return message.content
   }
 
-  const getUserName = () => {
+  const getUserName = useCallback(() => {
     if (message.id === 'assistant') {
       return assistant.name
     }
@@ -76,7 +78,24 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     }
 
     return userName || t('common.you')
-  }
+  }, [assistant.name, message.id, message.modelId, message.role, t, userName])
+
+  const getDropdownMenus = useCallback(
+    (message: Message) => {
+      return [
+        {
+          label: t('chat.save'),
+          key: 'save',
+          icon: <SaveOutlined />,
+          onClick: () => {
+            const fileName = message.createdAt + '.md'
+            window.api.saveFile(fileName, message.content)
+          }
+        }
+      ]
+    },
+    [t]
+  )
 
   const fontFamily = messageFont === 'serif' ? "Georgia, Cambria, 'Times New Roman', Times, serif" : undefined
   const messageBorder = showMessageDivider ? undefined : 'none'
@@ -109,7 +128,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             {getMessageContent(message)}
           </Markdown>
         )}
-        {message.usage && (
+        {message.usage && !generating && (
           <MessageMetadata>
             Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
           </MessageMetadata>
@@ -139,6 +158,13 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                   <SyncOutlined onClick={onRegenerate} />
                 </ActionButton>
               </Tooltip>
+            )}
+            {!isUserMessage && (
+              <Dropdown menu={{ items: getDropdownMenus(message) }} trigger={['click']} placement="topRight" arrow>
+                <ActionButton>
+                  <MenuOutlined />
+                </ActionButton>
+              </Dropdown>
             )}
           </MenusBar>
         )}

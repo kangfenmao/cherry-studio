@@ -22,3 +22,7 @@ export function useShowAssistants() {
     toggleShowAssistants: () => dispatch(toggleShowAssistants())
   }
 }
+
+export function useRuntime() {
+  return useAppSelector((state) => state.runtime)
+}

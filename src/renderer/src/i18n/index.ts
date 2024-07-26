@@ -24,7 +24,8 @@ const resources = {
         copy: 'Copy',
         regenerate: 'Regenerate',
         provider: 'Provider',
-        you: 'You'
+        you: 'You',
+        save: 'Save'
       },
       button: {
         add: 'Add',
@@ -45,6 +46,9 @@ const resources = {
         'api.connection.success': 'Connection successful',
         'chat.completion.paused': 'Chat completion paused',
         'switch.disabled': 'Switching is disabled while the assistant is generating'
+      },
+      chat: {
+        save: 'Save'
       },
       assistant: {
         'default.name': '😀 Default Assistant',
@@ -196,6 +200,9 @@ const resources = {
         'api.connection.success': '连接成功',
         'chat.completion.paused': '会话已停止',
         'switch.disabled': '模型回复完成后才能切换'
+      },
+      chat: {
+        save: '保存'
       },
       assistant: {
         'default.name': '😃 默认助手 - Assistant',

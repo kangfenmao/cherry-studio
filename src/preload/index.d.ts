@@ -11,6 +11,7 @@ declare global {
       checkForUpdate: () => void
       openWebsite: (url: string) => void
       setProxy: (proxy: string | undefined) => void
+      saveFile: (path: string, content: string) => void
     }
   }
 }
