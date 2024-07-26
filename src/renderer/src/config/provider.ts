@@ -85,6 +85,10 @@ export function getModelLogo(modelId: string) {
 
 export const PROVIDER_CONFIG = {
   openai: {
+    api: {
+      url: 'https://api.openai.com',
+      editable: true
+    },
     websites: {
       official: 'https://openai.com/',
       apiKey: 'https://platform.openai.com/api-keys',
@@ -93,6 +97,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   silicon: {
+    api: {
+      url: 'https://cloud.siliconflow.cn',
+      editable: false
+    },
     websites: {
       official: 'https://www.siliconflow.cn/',
       apiKey: 'https://cloud.siliconflow.cn/account/ak',
@@ -101,6 +109,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   deepseek: {
+    api: {
+      url: 'https://api.deepseek.com',
+      editable: false
+    },
     websites: {
       official: 'https://deepseek.com/',
       apiKey: 'https://platform.deepseek.com/api_keys',
@@ -109,6 +121,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   yi: {
+    api: {
+      url: 'https://api.lingyiwanwu.com',
+      editable: false
+    },
     websites: {
       official: 'https://platform.lingyiwanwu.com/',
       apiKey: 'https://platform.lingyiwanwu.com/apikeys',
@@ -117,6 +133,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   zhipu: {
+    api: {
+      url: 'https://open.bigmodel.cn/api/paas/v4/',
+      editable: false
+    },
     websites: {
       official: 'https://open.bigmodel.cn/',
       apiKey: 'https://open.bigmodel.cn/usercenter/apikeys',
@@ -125,6 +145,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   moonshot: {
+    api: {
+      url: 'https://api.moonshot.cn',
+      editable: false
+    },
     websites: {
       official: 'https://moonshot.ai/',
       apiKey: 'https://platform.moonshot.cn/console/api-keys',
@@ -133,6 +157,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   baichuan: {
+    api: {
+      url: 'https://api.baichuan-ai.com',
+      editable: false
+    },
     websites: {
       official: 'https://www.baichuan-ai.com/',
       apiKey: 'https://platform.baichuan-ai.com/console/apikey',
@@ -141,6 +169,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   dashscope: {
+    api: {
+      url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',
+      editable: false
+    },
     websites: {
       official: 'https://dashscope.aliyun.com/',
       apiKey: 'https://help.aliyun.com/zh/dashscope/developer-reference/acquisition-and-configuration-of-api-key',
@@ -149,6 +181,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   openrouter: {
+    api: {
+      url: 'https://openrouter.ai/api/v1/',
+      editable: false
+    },
     websites: {
       official: 'https://openrouter.ai/',
       apiKey: 'https://openrouter.ai/settings/keys',
@@ -157,6 +193,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   groq: {
+    api: {
+      url: 'https://api.groq.com/openai',
+      editable: false
+    },
     websites: {
       official: 'https://groq.com/',
       apiKey: 'https://console.groq.com/keys',
@@ -165,6 +205,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   ollama: {
+    api: {
+      url: 'http://localhost:11434/v1/',
+      editable: true
+    },
     websites: {
       official: 'https://ollama.com/',
       docs: 'https://github.com/ollama/ollama/tree/main/docs',
@@ -172,6 +216,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   anthropic: {
+    api: {
+      url: 'https://api.anthropic.com/',
+      editable: false
+    },
     websites: {
       official: 'https://anthropic.com/',
       apiKey: 'https://console.anthropic.com/settings/keys',
@@ -180,6 +228,10 @@ export const PROVIDER_CONFIG = {
     }
   },
   aihubmix: {
+    api: {
+      url: 'https://aihubmix.com',
+      editable: false
+    },
     websites: {
       official: 'https://aihubmix.com/',
       apiKey: 'https://aihubmix.com/token',

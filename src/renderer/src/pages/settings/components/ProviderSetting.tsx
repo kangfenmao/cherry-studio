@@ -52,8 +52,13 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const apiKeyWebsite = providerConfig?.websites?.apiKey
   const docsWebsite = providerConfig?.websites?.docs
   const modelsWebsite = providerConfig?.websites?.models
+  const configedApiHost = providerConfig?.api?.url
+  const apiEditable = provider.isSystem ? providerConfig?.api?.editable : true
 
-  const apiKeyDisabled = provider.id === 'ollama'
+  const onReset = () => {
+    setApiHost(configedApiHost)
+    updateProvider({ ...provider, apiHost: configedApiHost })
+  }
 
   return (
     <SettingContainer>
@@ -81,15 +86,12 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           onChange={(e) => setApiKey(e.target.value)}
           onBlur={onUpdateApiKey}
           spellCheck={false}
-          disabled={apiKeyDisabled}
           type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
-        {!apiKeyDisabled && (
-          <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi}>
-            {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : t('settings.provider.check')}
-          </Button>
-        )}
+        <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi}>
+          {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : t('settings.provider.check')}
+        </Button>
       </Space.Compact>
       {apiKeyWebsite && (
         <HelpTextRow>
@@ -99,13 +101,16 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         </HelpTextRow>
       )}
       <SettingSubtitle>{t('settings.provider.api_host')}</SettingSubtitle>
-      <Input
-        value={apiHost}
-        placeholder={t('settings.provider.api_host')}
-        disabled={provider.isSystem}
-        onChange={(e) => setApiHost(e.target.value)}
-        onBlur={onUpdateApiHost}
-      />
+      <Space.Compact style={{ width: '100%' }}>
+        <Input
+          value={apiHost}
+          placeholder={t('settings.provider.api_host')}
+          onChange={(e) => setApiHost(e.target.value)}
+          onBlur={onUpdateApiHost}
+          disabled={!apiEditable}
+        />
+        {apiEditable && <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>}
+      </Space.Compact>
       <SettingSubtitle>{t('common.models')}</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
