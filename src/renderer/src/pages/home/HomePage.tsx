@@ -8,13 +8,18 @@ import { uuid } from '@renderer/utils'
 import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
 import Navigation from './components/NavigationCenter'
 import { isMac, isWindows } from '@renderer/config/constant'
+import { Assistant } from '@renderer/types'
+
+let _activeAssistant: Assistant
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
-  const [activeAssistant, setActiveAssistant] = useState(assistants[0])
+  const [activeAssistant, setActiveAssistant] = useState(_activeAssistant || assistants[0])
   const { rightSidebarShown, toggleRightSidebar } = useShowRightSidebar()
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { defaultAssistant } = useDefaultAssistant()
+
+  _activeAssistant = activeAssistant
 
   const onCreateAssistant = () => {
     const assistant = { ...defaultAssistant, id: uuid() }

@@ -1,9 +1,13 @@
-import { Assistant } from '@renderer/types'
+import { Assistant, Topic } from '@renderer/types'
 import { find } from 'lodash'
 import { useEffect, useState } from 'react'
 
+let _activeTopic: Topic
+
 export function useActiveTopic(assistant: Assistant) {
-  const [activeTopic, setActiveTopic] = useState(assistant?.topics[0])
+  const [activeTopic, setActiveTopic] = useState(_activeTopic || assistant?.topics[0])
+
+  _activeTopic = activeTopic
 
   useEffect(() => {
     // activeTopic not in assistant.topics
