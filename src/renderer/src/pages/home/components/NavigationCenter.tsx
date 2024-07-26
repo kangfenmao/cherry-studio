@@ -1,16 +1,17 @@
+import { CodeSandboxOutlined } from '@ant-design/icons'
 import { NavbarCenter } from '@renderer/components/app/Navbar'
 import { colorPrimary } from '@renderer/config/antd'
+import { isMac } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
+import { useShowAssistants } from '@renderer/hooks/useStore'
 import { Assistant } from '@renderer/types'
 import { Button, Dropdown, MenuProps } from 'antd'
+import { upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { NewButton } from '../HomePage'
-import { useShowAssistants } from '@renderer/hooks/useStore'
-import { isMac } from '@renderer/config/constant'
-import { upperFirst } from 'lodash'
 
 interface Props {
   activeAssistant: Assistant
@@ -47,7 +48,8 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
       <AssistantName>{assistant?.name || t('assistant.default.name')}</AssistantName>
       <DropdownMenu menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }} trigger={['click']}>
         <DropdownButton size="small" type="primary" ghost>
-          {model ? upperFirst(model.name) : t('button.select_model')}
+          <CodeSandboxOutlined />
+          <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
         </DropdownButton>
       </DropdownMenu>
     </NavbarCenter>
@@ -68,6 +70,10 @@ const DropdownButton = styled(Button)`
   font-size: 10px;
   border-radius: 15px;
   padding: 0 8px;
+`
+
+const ModelName = styled.span`
+  margin-left: -2px;
 `
 
 export default NavigationCenter
