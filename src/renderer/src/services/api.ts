@@ -67,7 +67,7 @@ export async function fetchMessagesSummary({ messages, assistant }: { messages: 
   const model = getTopNamingModel() || assistant.model || getDefaultModel()
   const provider = getProviderByModel(model)
 
-  if (!provider.apiKey) {
+  if (provider.id !== 'ollama' && !provider.apiKey) {
     return null
   }
 
