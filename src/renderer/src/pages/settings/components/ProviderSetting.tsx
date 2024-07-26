@@ -6,7 +6,14 @@ import { useProvider } from '@renderer/hooks/useProvider'
 import { groupBy } from 'lodash'
 import { SettingContainer, SettingSubtitle, SettingTitle } from '.'
 import { getModelLogo } from '@renderer/config/provider'
-import { CheckOutlined, EditOutlined, ExportOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import {
+  CheckOutlined,
+  EditOutlined,
+  ExportOutlined,
+  LoadingOutlined,
+  MinusCircleOutlined,
+  PlusOutlined
+} from '@ant-design/icons'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
 import Link from 'antd/es/typography/Link'
@@ -24,7 +31,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const [apiHost, setApiHost] = useState(provider.apiHost)
   const [apiValid, setApiValid] = useState(false)
   const [apiChecking, setApiChecking] = useState(false)
-  const { updateProvider, models } = useProvider(provider.id)
+  const { updateProvider, models, removeModel } = useProvider(provider.id)
   const { t } = useTranslation()
 
   const modelGroups = groupBy(models, 'group')
@@ -116,10 +123,13 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
           {modelGroups[group].map((model) => (
             <ModelListItem key={model.id}>
-              <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
-                {model.name[0].toUpperCase()}
-              </Avatar>
-              {model.name}
+              <ModelListHeader>
+                <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
+                  {model.name[0].toUpperCase()}
+                </Avatar>
+                {model.name}
+              </ModelListHeader>
+              <RemoveIcon onClick={() => removeModel(model)} />
             </ModelListItem>
           ))}
         </Card>
@@ -154,8 +164,14 @@ const ModelListItem = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 5px 0;
+`
+
+const ModelListHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 const HelpTextRow = styled.div`
@@ -173,6 +189,17 @@ const HelpText = styled.div`
 const HelpLink = styled(Link)`
   font-size: 11px;
   padding: 0 5px;
+`
+
+const RemoveIcon = styled(MinusCircleOutlined)`
+  margin-left: 10px;
+  color: var(--color-error);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  opacity: 0.75;
+  &:hover {
+    opacity: 1;
+  }
 `
 
 export default ProviderSetting
