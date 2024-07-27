@@ -293,6 +293,9 @@ const OutputText = styled.div`
   padding: 5px 10px;
   max-height: calc(100vh - var(--navbar-height) - 120px);
   overflow: auto;
+  .markdown {
+    white-space: pre-wrap;
+  }
 `
 
 const TranslateButton = styled(Button)`

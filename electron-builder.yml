@@ -56,8 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    1. 保存聊天页面状态，切换页面后恢复
-    2. 修复默认助手名称为空时候的显示问题
-    3. 简化系统内置智能体提示词长度
-    4. 增加单个聊天内容保存到本地功能
-    5. 系统内置提供商支持修改 API 地址
+    新增翻译模块
+    修复了一些问题
