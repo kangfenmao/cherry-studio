@@ -17,10 +17,8 @@ import TextArea from 'antd/es/input/TextArea'
 import { isEmpty } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Markdown from 'react-markdown'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import CodeBlock from '../home/components/CodeBlock'
 
 let _text = ''
 let _result = ''
@@ -209,11 +207,7 @@ const TranslatePage: FC = () => {
             </TranslateButton>
           </InputContainer>
           <OutputContainer>
-            <OutputText>
-              <Markdown className="markdown" components={{ code: CodeBlock as any }}>
-                {result || t('translate.output.placeholder')}
-              </Markdown>
-            </OutputText>
+            <OutputText>{result || t('translate.output.placeholder')}</OutputText>
             <CopyButton
               onClick={onCopy}
               disabled={!result}
@@ -293,9 +287,7 @@ const OutputText = styled.div`
   padding: 5px 10px;
   max-height: calc(100vh - var(--navbar-height) - 120px);
   overflow: auto;
-  .markdown {
-    white-space: pre-wrap;
-  }
+  white-space: pre-wrap;
 `
 
 const TranslateButton = styled(Button)`
