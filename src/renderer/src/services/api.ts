@@ -4,9 +4,16 @@ import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Provider, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
-import { getAssistantProvider, getDefaultModel, getProviderByModel, getTopNamingModel } from './assistant'
+import {
+  getAssistantProvider,
+  getDefaultModel,
+  getProviderByModel,
+  getTopNamingModel,
+  getTranslateModel
+} from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
 import ProviderSDK from './ProviderSDK'
+import { isEmpty } from 'lodash'
 
 export async function fetchChatCompletion({
   messages,
@@ -63,11 +70,33 @@ export async function fetchChatCompletion({
   return message
 }
 
+export async function fetchTranslate({ message, assistant }: { message: Message; assistant: Assistant }) {
+  const model = getTranslateModel()
+
+  if (!model) {
+    return ''
+  }
+
+  const provider = getProviderByModel(model)
+
+  if (!hasApiKey(provider)) {
+    return ''
+  }
+
+  const providerSdk = new ProviderSDK(provider)
+
+  try {
+    return await providerSdk.translate(message, assistant)
+  } catch (error: any) {
+    return ''
+  }
+}
+
 export async function fetchMessagesSummary({ messages, assistant }: { messages: Message[]; assistant: Assistant }) {
   const model = getTopNamingModel() || assistant.model || getDefaultModel()
   const provider = getProviderByModel(model)
 
-  if (provider.id !== 'ollama' && !provider.apiKey) {
+  if (!hasApiKey(provider)) {
     return null
   }
 
@@ -112,6 +141,12 @@ export async function checkApi(provider: Provider) {
   })
 
   return valid
+}
+
+function hasApiKey(provider: Provider) {
+  if (!provider) return false
+  if (provider.id === 'ollama') return true
+  return !isEmpty(provider.apiKey)
 }
 
 export async function fetchModels(provider: Provider) {

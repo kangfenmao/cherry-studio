@@ -73,6 +73,30 @@ export default class ProviderSDK {
     }
   }
 
+  public async translate(message: Message, assistant: Assistant) {
+    const defaultModel = getDefaultModel()
+    const model = assistant.model || defaultModel
+    const messages = [{ role: 'system', content: assistant.prompt }, message]
+
+    if (this.isAnthropic) {
+      const response = await this.anthropicSdk.messages.create({
+        model: model.id,
+        messages: messages as MessageParam[],
+        max_tokens: 4096,
+        temperature: assistant?.settings?.temperature,
+        stream: false
+      })
+      return response.content[0].type === 'text' ? response.content[0].text : ''
+    } else {
+      const response = await this.openaiSdk.chat.completions.create({
+        model: model.id,
+        messages: messages as ChatCompletionMessageParam[],
+        stream: false
+      })
+      return response.choices[0].message?.content || ''
+    }
+  }
+
   public async summaries(messages: Message[], assistant: Assistant): Promise<string | null> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 

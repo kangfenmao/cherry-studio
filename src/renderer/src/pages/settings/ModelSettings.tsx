@@ -6,9 +6,11 @@ import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { find } from 'lodash'
 import { Model } from '@renderer/types'
 import { useTranslation } from 'react-i18next'
+import { EditOutlined, MessageOutlined, TranslationOutlined } from '@ant-design/icons'
 
 const ModelSettings: FC = () => {
-  const { defaultModel, topicNamingModel, setDefaultModel, setTopicNamingModel } = useDefaultModel()
+  const { defaultModel, topicNamingModel, translateModel, setDefaultModel, setTopicNamingModel, setTranslateModel } =
+    useDefaultModel()
   const { providers } = useProviders()
   const allModels = providers.map((p) => p.models).flat()
   const { t } = useTranslation()
@@ -24,9 +26,16 @@ const ModelSettings: FC = () => {
       }))
     }))
 
+  const iconStyle = { fontSize: 16, marginRight: 8 }
+
   return (
     <SettingContainer>
-      <SettingTitle>{t('settings.models.default_assistant_model')}</SettingTitle>
+      <SettingTitle>
+        <div>
+          <MessageOutlined style={iconStyle} />
+          {t('settings.models.default_assistant_model')}
+        </div>
+      </SettingTitle>
       <SettingDivider />
       <Select
         defaultValue={defaultModel.id}
@@ -35,13 +44,33 @@ const ModelSettings: FC = () => {
         options={selectOptions}
       />
       <div style={{ height: 30 }} />
-      <SettingTitle>{t('settings.models.topic_naming_model')}</SettingTitle>
+      <SettingTitle>
+        <div>
+          <EditOutlined style={iconStyle} />
+          {t('settings.models.topic_naming_model')}
+        </div>
+      </SettingTitle>
       <SettingDivider />
       <Select
         defaultValue={topicNamingModel.id}
         style={{ width: 200 }}
         onChange={(id) => setTopicNamingModel(find(allModels, { id }) as Model)}
         options={selectOptions}
+      />
+      <div style={{ height: 30 }} />
+      <SettingTitle>
+        <div>
+          <TranslationOutlined style={iconStyle} />
+          {t('settings.models.translate_model')}
+        </div>
+      </SettingTitle>
+      <SettingDivider />
+      <Select
+        defaultValue={translateModel?.id}
+        style={{ width: 200 }}
+        onChange={(id) => setTranslateModel(find(allModels, { id }) as Model)}
+        options={selectOptions}
+        placeholder={t('settings.models.empty')}
       />
     </SettingContainer>
   )

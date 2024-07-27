@@ -7,11 +7,13 @@ export interface LlmState {
   providers: Provider[]
   defaultModel: Model
   topicNamingModel: Model
+  translateModel: Model
 }
 
 const initialState: LlmState = {
   defaultModel: SYSTEM_MODELS.openai[0],
   topicNamingModel: SYSTEM_MODELS.openai[0],
+  translateModel: SYSTEM_MODELS.openai[0],
   providers: [
     {
       id: 'openai',
@@ -174,6 +176,9 @@ const settingsSlice = createSlice({
     },
     setTopicNamingModel: (state, action: PayloadAction<{ model: Model }>) => {
       state.topicNamingModel = action.payload.model
+    },
+    setTranslateModel: (state, action: PayloadAction<{ model: Model }>) => {
+      state.translateModel = action.payload.model
     }
   }
 })
@@ -186,7 +191,8 @@ export const {
   addModel,
   removeModel,
   setDefaultModel,
-  setTopicNamingModel
+  setTopicNamingModel,
+  setTranslateModel
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

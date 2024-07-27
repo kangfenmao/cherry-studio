@@ -102,7 +102,7 @@ const resources = {
         title: 'Settings',
         general: 'General Settings',
         provider: 'Model Provider',
-        model: 'Model Settings',
+        model: 'Default Model',
         assistant: 'Default Assistant',
         about: 'About & Feedback',
         'messages.model.title': 'Model Settings',
@@ -124,6 +124,7 @@ const resources = {
         'provider.api.url.reset': 'Reset',
         'models.default_assistant_model': 'Default Assistant Model',
         'models.topic_naming_model': 'Topic Naming Model',
+        'models.translate_model': 'Translate Model',
         'models.add.add_model': 'Add Model',
         'models.add.model_id.placeholder': 'Required e.g. gpt-3.5-turbo',
         'models.add.model_id': 'Model ID',
@@ -156,6 +157,27 @@ const resources = {
         'about.contact.title': '📧 Contact',
         'about.contact.button': 'Email',
         'proxy.title': 'Proxy Address'
+      },
+      translate: {
+        title: 'Translation',
+        'any.language': 'Any language',
+        'button.translate': 'Translate',
+        'error.not_configured': 'Translation model is not configured',
+        'input.placeholder': 'Enter text to translate',
+        'output.placeholder': 'Translation'
+      },
+      languages: {
+        english: 'English',
+        chinese: 'Chinese',
+        'chinese-traditional': 'Traditional Chinese',
+        japanese: 'Japanese',
+        korean: 'Korean',
+        russian: 'Russian',
+        spanish: 'Spanish',
+        french: 'French',
+        italian: 'Italian',
+        portuguese: 'Portuguese',
+        arabic: 'Arabic'
       }
     }
   },
@@ -258,7 +280,7 @@ const resources = {
         title: '设置',
         general: '常规设置',
         provider: '模型提供商',
-        model: '模型设置',
+        model: '默认模型',
         assistant: '默认助手',
         about: '关于我们',
         'messages.model.title': '模型设置',
@@ -280,6 +302,7 @@ const resources = {
         'provider.api.url.reset': '重置',
         'models.default_assistant_model': '默认助手模型',
         'models.topic_naming_model': '话题命名模型',
+        'models.translate_model': '翻译模型',
         'models.add.add_model': '添加模型',
         'models.add.model_id.placeholder': '必填 例如 gpt-3.5-turbo',
         'models.add.model_id': '模型 ID',
@@ -312,6 +335,27 @@ const resources = {
         'about.contact.title': '📧 邮件联系',
         'about.contact.button': '邮件',
         'proxy.title': '代理地址'
+      },
+      translate: {
+        title: '翻译',
+        'any.language': '任意语言',
+        'button.translate': '翻译',
+        'error.not_configured': '翻译模型未配置',
+        'input.placeholder': '输入文本进行翻译',
+        'output.placeholder': '翻译'
+      },
+      languages: {
+        english: '英文',
+        chinese: '简体中文',
+        'chinese-traditional': '繁体中文',
+        japanese: '日文',
+        korean: '韩文',
+        russian: '俄文',
+        spanish: '西班牙文',
+        french: '法文',
+        italian: '意大利文',
+        portuguese: '葡萄牙文',
+        arabic: '阿拉伯文'
       }
     }
   }

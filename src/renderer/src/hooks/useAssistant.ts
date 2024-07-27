@@ -14,7 +14,7 @@ import {
   updateTopic,
   updateTopics
 } from '@renderer/store/assistants'
-import { setDefaultModel as _setDefaultModel, setTopicNamingModel as _setTopicNamingModel } from '@renderer/store/llm'
+import { setDefaultModel, setTopicNamingModel, setTranslateModel } from '@renderer/store/llm'
 import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
 import localforage from 'localforage'
 
@@ -71,13 +71,15 @@ export function useDefaultAssistant() {
 }
 
 export function useDefaultModel() {
-  const { defaultModel, topicNamingModel } = useAppSelector((state) => state.llm)
+  const { defaultModel, topicNamingModel, translateModel } = useAppSelector((state) => state.llm)
   const dispatch = useAppDispatch()
 
   return {
     defaultModel,
     topicNamingModel,
-    setDefaultModel: (model: Model) => dispatch(_setDefaultModel({ model })),
-    setTopicNamingModel: (model: Model) => dispatch(_setTopicNamingModel({ model }))
+    translateModel,
+    setDefaultModel: (model: Model) => dispatch(setDefaultModel({ model })),
+    setTopicNamingModel: (model: Model) => dispatch(setTopicNamingModel({ model })),
+    setTranslateModel: (model: Model) => dispatch(setTranslateModel({ model }))
   }
 }

@@ -1,0 +1,311 @@
+import {
+  CheckOutlined,
+  CopyOutlined,
+  SendOutlined,
+  SettingOutlined,
+  SwapOutlined,
+  WarningOutlined
+} from '@ant-design/icons'
+import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
+import { useDefaultModel } from '@renderer/hooks/useAssistant'
+import { fetchTranslate } from '@renderer/services/api'
+import { getDefaultAssistant } from '@renderer/services/assistant'
+import { Assistant, Message } from '@renderer/types'
+import { uuid } from '@renderer/utils'
+import { Button, Select, Space } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
+import { isEmpty } from 'lodash'
+import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import Markdown from 'react-markdown'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import CodeBlock from '../home/components/CodeBlock'
+
+let _text = ''
+let _result = ''
+let _targetLanguage = 'english'
+
+const TranslatePage: FC = () => {
+  const { t } = useTranslation()
+  const [targetLanguage, setTargetLanguage] = useState(_targetLanguage)
+  const [text, setText] = useState(_text)
+  const [result, setResult] = useState(_result)
+  const { translateModel } = useDefaultModel()
+  const [loading, setLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  _text = text
+  _result = result
+  _targetLanguage = targetLanguage
+
+  const languageOptions = [
+    {
+      value: 'english',
+      label: t('languages.english'),
+      emoji: '🇬🇧'
+    },
+    {
+      value: 'chinese',
+      label: t('languages.chinese'),
+      emoji: '🇨🇳'
+    },
+    {
+      value: 'chinese-traditional',
+      label: t('languages.chinese-traditional'),
+      emoji: '🇭🇰'
+    },
+    {
+      value: 'japanese',
+      label: t('languages.japanese'),
+      emoji: '🇯🇵'
+    },
+    {
+      value: 'korean',
+      label: t('languages.korean'),
+      emoji: '🇰🇷'
+    },
+    {
+      value: 'russian',
+      label: t('languages.russian'),
+      emoji: '🇷🇺'
+    },
+    {
+      value: 'spanish',
+      label: t('languages.spanish'),
+      emoji: '🇪🇸'
+    },
+    {
+      value: 'french',
+      label: t('languages.french'),
+      emoji: '🇫🇷'
+    },
+    {
+      value: 'italian',
+      label: t('languages.italian'),
+      emoji: '🇮🇹'
+    },
+    {
+      value: 'portuguese',
+      label: t('languages.portuguese'),
+      emoji: '🇵🇹'
+    },
+    {
+      value: 'arabic',
+      label: t('languages.arabic'),
+      emoji: '🇸🇦'
+    }
+  ]
+
+  const onTranslate = async () => {
+    if (!text.trim()) {
+      return
+    }
+
+    if (!translateModel) {
+      window.message.error({
+        content: t('translate.error.not_configured'),
+        key: 'translate-message'
+      })
+      return
+    }
+
+    const assistant: Assistant = getDefaultAssistant()
+    assistant.model = translateModel
+    assistant.prompt = `Translate from input language to ${targetLanguage}, provide the translation result directly without any explanation, keep original format. If the target language is the same as the source language, do not translate. The text to be translated is as follows:\n\n ${text}`
+
+    const message: Message = {
+      id: uuid(),
+      role: 'user',
+      content: text,
+      assistantId: assistant.id,
+      topicId: uuid(),
+      modelId: translateModel.id,
+      createdAt: new Date().toISOString(),
+      status: 'sending'
+    }
+
+    setLoading(true)
+    const translateText = await fetchTranslate({ message, assistant })
+    setResult(translateText)
+    setLoading(false)
+  }
+
+  const onCopy = () => {
+    navigator.clipboard.writeText(result)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  useEffect(() => {
+    isEmpty(text) && setResult('')
+  }, [text])
+
+  return (
+    <Container>
+      <Navbar>
+        <NavbarCenter style={{ borderRight: 'none' }}>{t('translate.title')}</NavbarCenter>
+      </Navbar>
+      <ContentContainer>
+        <MenuContainer>
+          <Select
+            showSearch
+            value="any"
+            style={{ width: 180 }}
+            optionFilterProp="label"
+            disabled
+            options={[{ label: t('translate.any.language'), value: 'any' }]}
+          />
+          <SwapOutlined />
+          <Select
+            showSearch
+            value={targetLanguage}
+            style={{ width: 180 }}
+            optionFilterProp="label"
+            options={languageOptions}
+            onChange={(value) => setTargetLanguage(value)}
+            optionRender={(option) => (
+              <Space>
+                <span role="img" aria-label={option.data.label}>
+                  {option.data.emoji}
+                </span>
+                {option.label}
+              </Space>
+            )}
+          />
+          {translateModel && (
+            <Link to="/settings/model" style={{ color: 'var(--color-text-2)' }}>
+              <SettingOutlined />
+            </Link>
+          )}
+          {!translateModel && (
+            <Link to="/settings/model" style={{ marginLeft: -10 }}>
+              <Button
+                type="link"
+                style={{ color: 'var(--color-error)', textDecoration: 'underline' }}
+                icon={<WarningOutlined />}>
+                {t('translate.error.not_configured')}
+              </Button>
+            </Link>
+          )}
+        </MenuContainer>
+        <TranslateInputWrapper>
+          <InputContainer>
+            <Textarea
+              variant="borderless"
+              placeholder={t('translate.input.placeholder')}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              disabled={loading}
+              allowClear
+            />
+            <TranslateButton
+              type="primary"
+              loading={loading}
+              onClick={onTranslate}
+              disabled={!text.trim()}
+              icon={<SendOutlined />}>
+              {t('translate.button.translate')}
+            </TranslateButton>
+          </InputContainer>
+          <OutputContainer>
+            <OutputText>
+              <Markdown className="markdown" components={{ code: CodeBlock as any }}>
+                {result || t('translate.output.placeholder')}
+              </Markdown>
+            </OutputText>
+            <CopyButton
+              onClick={onCopy}
+              disabled={!result}
+              icon={copied ? <CheckOutlined style={{ color: 'var(--color-primary)' }} /> : <CopyOutlined />}
+            />
+          </OutputContainer>
+        </TranslateInputWrapper>
+      </ContentContainer>
+    </Container>
+  )
+}
+
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+`
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+`
+
+const MenuContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 20px;
+`
+
+const TranslateInputWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  min-height: 350px;
+  gap: 20px;
+`
+
+const InputContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+`
+
+const Textarea = styled(TextArea)`
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  font-size: 16px;
+  overflow: auto;
+  .ant-input {
+    resize: none;
+    padding: 15px 20px;
+  }
+`
+
+const OutputContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px;
+  background-color: var(--color-background-soft);
+  border-radius: 10px;
+`
+
+const OutputText = styled.div`
+  padding: 5px 10px;
+  max-height: calc(100vh - var(--navbar-height) - 120px);
+  overflow: auto;
+`
+
+const TranslateButton = styled(Button)`
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  z-index: 10;
+`
+
+const CopyButton = styled(Button)`
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+`
+
+export default TranslatePage

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { isMac, isWindows } from '@renderer/config/constant'
+import { TranslationOutlined } from '@ant-design/icons'
 
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
@@ -27,6 +28,11 @@ const Sidebar: FC = () => {
           <StyledLink to="/apps">
             <Icon className={isRoute('/apps')}>
               <i className="iconfont icon-appstore"></i>
+            </Icon>
+          </StyledLink>
+          <StyledLink to="/translate">
+            <Icon className={isRoute('/translate')}>
+              <TranslationOutlined />
             </Icon>
           </StyledLink>
         </Menus>
@@ -85,22 +91,28 @@ const Icon = styled.div`
   margin-bottom: 5px;
   transition: background-color 0.2s ease;
   -webkit-app-region: none;
-  .iconfont {
+  .iconfont,
+  .anticon {
     color: var(--color-icon);
     font-size: 20px;
     transition: color 0.2s ease;
     text-decoration: none;
   }
+  .anticon {
+    font-size: 17px;
+  }
   &:hover {
     background-color: #ffffff30;
     cursor: pointer;
-    .iconfont {
+    .iconfont,
+    .anticon {
       color: var(--color-icon-white);
     }
   }
   &.active {
     background-color: #ffffff20;
-    .iconfont {
+    .iconfont,
+    .anticon {
       color: var(--color-icon-white);
     }
   }
