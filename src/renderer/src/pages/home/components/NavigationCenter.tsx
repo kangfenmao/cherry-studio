@@ -6,12 +6,13 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { Assistant } from '@renderer/types'
-import { Button, Dropdown, MenuProps } from 'antd'
+import { Avatar, Button, Dropdown, MenuProps } from 'antd'
 import { upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { NewButton } from '../HomePage'
+import { getModelLogo } from '@renderer/config/provider'
 
 interface Props {
   activeAssistant: Assistant
@@ -34,6 +35,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
         key: m.id,
         label: upperFirst(m.name),
         style: m.id === model?.id ? { color: colorPrimary } : undefined,
+        icon: <Avatar src={getModelLogo(m.id)} size={24} />,
         onClick: () => setModel(m)
       }))
     }))
