@@ -70,7 +70,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   const getUserName = useCallback(() => {
     if (message.id === 'assistant') {
-      return assistant.name
+      return assistant?.name
     }
 
     if (message.role === 'assistant') {
@@ -78,7 +78,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     }
 
     return userName || t('common.you')
-  }, [assistant.name, message.id, message.modelId, message.role, t, userName])
+  }, [assistant?.name, message.id, message.modelId, message.role, t, userName])
 
   const getDropdownMenus = useCallback(
     (message: Message) => {
