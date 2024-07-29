@@ -178,7 +178,7 @@ const ListHeader = styled.div`
   justify-content: space-between;
   background-color: var(--color-background-soft);
   padding: 8px 22px;
-  color: var(--color-white);
+  color: var(--color-text);
   opacity: 0.4;
 `
 
@@ -200,14 +200,14 @@ const ListItemHeader = styled.div`
 `
 
 const ListItemName = styled.div`
-  color: var(--color-white);
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 600;
   margin-left: 6px;
 `
 
 const ModelHeaderTitle = styled.div`
-  color: var(--color-white);
+  color: var(--color-text);
   font-size: 18px;
   font-weight: 600;
   margin-right: 10px;

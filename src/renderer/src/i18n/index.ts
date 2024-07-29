@@ -215,7 +215,7 @@ const resources = {
         select_model: '选择模型'
       },
       message: {
-        copied: '已复制!',
+        copied: '已复制',
         'assistant.added.content': '智能体添加成功',
         'message.delete.title': '删除消息',
         'message.delete.content': '确定要删除此消息吗?',
