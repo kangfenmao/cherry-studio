@@ -76,7 +76,10 @@ export default class ProviderSDK {
   public async translate(message: Message, assistant: Assistant) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
-    const messages = [{ role: 'system', content: assistant.prompt }, message]
+    const messages = [
+      { role: 'system', content: assistant.prompt },
+      { role: 'user', content: message.content }
+    ]
 
     if (this.isAnthropic) {
       const response = await this.anthropicSdk.messages.create({
