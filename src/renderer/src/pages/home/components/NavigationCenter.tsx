@@ -1,6 +1,5 @@
 import { CodeSandboxOutlined } from '@ant-design/icons'
 import { NavbarCenter } from '@renderer/components/app/Navbar'
-import { colorPrimary } from '@renderer/config/antd'
 import { isMac } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
@@ -13,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { NewButton } from '../HomePage'
 import { getModelLogo } from '@renderer/config/provider'
+import { removeLeadingEmoji } from '@renderer/utils'
 
 interface Props {
   activeAssistant: Assistant
@@ -34,7 +34,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
       children: p.models.map((m) => ({
         key: m.id,
         label: upperFirst(m.name),
-        style: m.id === model?.id ? { color: colorPrimary } : undefined,
+        style: m.id === model?.id ? { color: 'var(--color-primary)' } : undefined,
         icon: <Avatar src={getModelLogo(m.id)} size={24} />,
         onClick: () => setModel(m)
       }))
@@ -47,8 +47,11 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
           <i className="iconfont icon-showsidebarhoriz" />
         </NewButton>
       )}
-      <AssistantName>{assistant?.name || t('assistant.default.name')}</AssistantName>
-      <DropdownMenu menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }} trigger={['click']}>
+      <AssistantName>{removeLeadingEmoji(assistant?.name) || t('assistant.default.name')}</AssistantName>
+      <DropdownMenu
+        menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }}
+        trigger={['click']}
+        overlayClassName="chat-nav-dropdown">
         <DropdownButton size="small" type="primary" ghost>
           <CodeSandboxOutlined />
           <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
@@ -69,13 +72,14 @@ const AssistantName = styled.span`
 `
 
 const DropdownButton = styled(Button)`
-  font-size: 10px;
+  font-size: 11px;
   border-radius: 15px;
   padding: 0 8px;
 `
 
 const ModelName = styled.span`
   margin-left: -2px;
+  font-weight: bolder;
 `
 
 export default NavigationCenter

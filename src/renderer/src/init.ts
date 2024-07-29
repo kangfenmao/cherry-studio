@@ -2,6 +2,7 @@ import localforage from 'localforage'
 import KeyvStorage from '@kangfenmao/keyv-storage'
 import * as Sentry from '@sentry/electron/renderer'
 import { isProduction, loadScript } from './utils'
+import { ThemeMode } from './store/settings'
 
 async function initSentry() {
   if (await isProduction()) {
@@ -21,12 +22,12 @@ async function initSentry() {
   }
 }
 
-export async function initMermaid() {
+export async function initMermaid(theme: ThemeMode) {
   if (!window.mermaid) {
     await loadScript('https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js')
     window.mermaid.initialize({
       startOnLoad: true,
-      theme: 'dark',
+      theme: theme === ThemeMode.dark ? 'dark' : 'default',
       securityLevel: 'loose'
     })
     window.mermaid.contentLoaded()

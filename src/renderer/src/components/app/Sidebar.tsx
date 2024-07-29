@@ -56,7 +56,7 @@ const Container = styled.div`
   min-width: var(--sidebar-width);
   min-height: 100%;
   -webkit-app-region: drag !important;
-  background-color: #1f1f1f;
+  background-color: var(--sidebar-background);
   border-right: 0.5px solid var(--color-border);
   padding-top: var(--navbar-height);
   position: relative;
@@ -68,7 +68,7 @@ const AvatarImg = styled.img`
   height: 28px;
   background-color: var(--color-background-soft);
   margin: 5px 0;
-  margin-top: ${isMac ? '16px' : '7px'};
+  margin-top: ${isMac ? '16px' : '9px'};
 `
 const MainMenus = styled.div`
   display: flex;
@@ -102,7 +102,7 @@ const Icon = styled.div`
     font-size: 17px;
   }
   &:hover {
-    background-color: #ffffff30;
+    background-color: var(--color-background-soft);
     cursor: pointer;
     .iconfont,
     .anticon {
@@ -110,7 +110,7 @@ const Icon = styled.div`
     }
   }
   &.active {
-    background-color: #ffffff20;
+    background-color: var(--color-background-mute);
     .iconfont,
     .anticon {
       color: var(--color-icon-white);

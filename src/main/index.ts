@@ -5,8 +5,9 @@ import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
-import AppUpdater from './updater'
+import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import { saveFile } from './event'
+import AppUpdater from './updater'
 
 function createWindow() {
   // Load the previous state with fallback to defaults
@@ -14,6 +15,8 @@ function createWindow() {
     defaultWidth: 1080,
     defaultHeight: 670
   })
+
+  const theme = appConfig.get('theme') || 'light'
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -26,11 +29,7 @@ function createWindow() {
     show: true,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      height: 41,
-      color: '#1f1f1f',
-      symbolColor: '#eee'
-    },
+    titleBarOverlay: theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight,
     trafficLightPosition: { x: 8, y: 12 },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -117,6 +116,12 @@ app.whenReady().then(() => {
   })
 
   ipcMain.handle('save-file', saveFile)
+
+  ipcMain.handle('set-theme', (_, theme: 'light' | 'dark') => {
+    appConfig.set('theme', theme)
+    mainWindow?.setTitleBarOverlay &&
+      mainWindow.setTitleBarOverlay(theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight)
+  })
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
   ipcMain.handle('check-for-update', async () => {

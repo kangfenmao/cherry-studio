@@ -93,9 +93,14 @@ export function droppableReorder<T>(list: T[], startIndex: number, endIndex: num
   return result
 }
 
-// firstLetter
-export const firstLetter = (str?: string) => {
-  return str ? str[0] : ''
+export function firstLetter(str: string): string {
+  const match = str.match(/\p{L}\p{M}*|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/u)
+  return match ? match[0] : ''
+}
+
+export function removeLeadingEmoji(str: string): string {
+  const emojiRegex = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)+/u
+  return str.replace(emojiRegex, '')
 }
 
 export function isFreeModel(model: Model) {

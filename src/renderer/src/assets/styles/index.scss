@@ -2,11 +2,6 @@
 @import './markdown.scss';
 @import './scrollbar.scss';
 
-// @font-face {
-//   font-family: 'Playwrite';
-//   src: url(../fonts/Playwrite.ttf) format('truetype');
-// }
-
 :root {
   --color-white: #ffffff;
   --color-white-soft: #f8f8f8;
@@ -28,17 +23,22 @@
   --color-background-soft: var(--color-black-soft);
   --color-background-mute: var(--color-black-mute);
 
-  --color-primary: #00b96b;
-  --color-primary-soft: #00b96b99;
-  --color-primary-mute: #00b96b33;
+  --color-primary: #135200;
+  --color-primary-soft: #13520099;
+  --color-primary-mute: #13520033;
 
   --color-text: var(--color-text-1);
   --color-icon: #ffffff99;
   --color-icon-white: #ffffff;
   --color-border: #ffffff20;
   --color-error: #f44336;
+  --color-code-background: #323232;
+  --color-scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 
   --navbar-background: #1f1f1f;
+  --sidebar-background: #1f1f1f;
+
   --navbar-height: 42px;
   --sidebar-width: 55px;
   --assistants-width: 245px;
@@ -46,6 +46,44 @@
   --settings-width: var(--assistants-width);
   --status-bar-height: 40px;
   --input-bar-height: 125px;
+}
+
+body[theme-mode='light'] {
+  --color-white: #ffffff;
+  --color-white-soft: #f8f8f8;
+  --color-white-mute: #efefef;
+
+  --color-black: #1b1b1f;
+  --color-black-soft: #262626;
+  --color-black-mute: #363636;
+
+  --color-gray-1: #8e8e93;
+  --color-gray-2: #aeaeb2;
+  --color-gray-3: #c7c7cc;
+
+  --color-text-1: rgba(0, 0, 0, 1);
+  --color-text-2: rgba(0, 0, 0, 0.6);
+  --color-text-3: rgba(0, 0, 0, 0.38);
+
+  --color-background: #ffffff;
+  --color-background-soft: var(--color-white-soft);
+  --color-background-mute: var(--color-white-mute);
+
+  --color-primary: #00b96b;
+  --color-primary-soft: #00b96b99;
+  --color-primary-mute: #00b96b33;
+
+  --color-text: var(--color-text-1);
+  --color-icon: #00000099;
+  --color-icon-white: #000000;
+  --color-border: #00000028;
+  --color-error: #f44336;
+  --color-code-background: #e3e3e3;
+  --color-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+  --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
+
+  --navbar-background: #f8f8f8;
+  --sidebar-background: #f8f8f8;
 }
 
 *,
@@ -68,8 +106,18 @@ body {
   line-height: 1.6;
   overflow: hidden;
   background-size: cover;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Microsoft YaHei',
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue' sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -96,4 +144,10 @@ body,
 
 #inputbar .ant-input {
   resize: none;
+}
+
+.chat-nav-dropdown {
+  .ant-dropdown-menu {
+    padding-bottom: 12px;
+  }
 }

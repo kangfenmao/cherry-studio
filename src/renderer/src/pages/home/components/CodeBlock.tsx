@@ -1,11 +1,13 @@
-import React from 'react'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import styled from 'styled-components'
-import { CopyOutlined } from '@ant-design/icons'
-import { useTranslation } from 'react-i18next'
-import Mermaid from './Mermaid'
+import { CheckOutlined, CopyOutlined } from '@ant-design/icons'
 import { initMermaid } from '@renderer/init'
+import { useTheme } from '@renderer/providers/ThemeProvider'
+import { ThemeMode } from '@renderer/store/settings'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { atomDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import styled from 'styled-components'
+import Mermaid from './Mermaid'
 
 interface CodeBlockProps {
   children: string
@@ -15,16 +17,20 @@ interface CodeBlockProps {
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) => {
   const match = /language-(\w+)/.exec(className || '')
+  const [copied, setCopied] = useState(false)
+  const { theme } = useTheme()
 
   const { t } = useTranslation()
 
   const onCopy = () => {
     navigator.clipboard.writeText(children)
     window.message.success({ content: t('message.copied'), key: 'copy-code' })
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   if (match && match[1] === 'mermaid') {
-    initMermaid()
+    initMermaid(theme)
     return <Mermaid chart={children} />
   }
 
@@ -32,12 +38,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
     <div>
       <CodeHeader>
         <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
-        <CopyOutlined className="copy" onClick={onCopy} />
+        {!copied && <CopyOutlined className="copy" onClick={onCopy} />}
+        {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
       </CodeHeader>
       <SyntaxHighlighter
         {...rest}
         language={match[1]}
-        style={atomDark}
+        style={theme === ThemeMode.dark ? atomDark : oneLight}
         wrapLongLines={true}
         customStyle={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}>
         {String(children).replace(/\n$/, '')}
@@ -54,10 +61,10 @@ const CodeHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #fff;
+  color: var(--color-text);
   font-size: 14px;
   font-weight: bold;
-  background-color: #323232;
+  background-color: var(--color-code-background);
   height: 40px;
   padding: 0 10px;
   border-top-left-radius: 8px;

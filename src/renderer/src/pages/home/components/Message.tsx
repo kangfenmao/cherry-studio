@@ -1,16 +1,23 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined, MenuOutlined, SaveOutlined, SyncOutlined } from '@ant-design/icons'
-import Logo from '@renderer/assets/images/logo.png'
+import {
+  CheckOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  MenuOutlined,
+  SaveOutlined,
+  SyncOutlined
+} from '@ant-design/icons'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
-import { firstLetter } from '@renderer/utils'
+import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar, Dropdown, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { isEmpty, upperFirst } from 'lodash'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
 import styled from 'styled-components'
@@ -31,6 +38,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const { assistant } = useAssistant(message.assistantId)
   const { userName, showMessageDivider, messageFont } = useSettings()
   const { generating } = useRuntime()
+  const [copied, setCopied] = useState(false)
 
   const isLastMessage = index === 0
   const isUserMessage = message.role === 'user'
@@ -39,6 +47,8 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const onCopy = () => {
     navigator.clipboard.writeText(message.content)
     window.message.success({ content: t('message.copied'), key: 'copy-message' })
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const onDelete = async () => {
@@ -105,14 +115,14 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       <MessageHeader>
         <AvatarWrapper>
           {message.role === 'assistant' ? (
-            <Avatar src={message.modelId ? getModelLogo(message.modelId) : Logo} size={35}>
-              {firstLetter(message.modelId).toUpperCase()}
+            <Avatar src={message.modelId ? getModelLogo(message.modelId) : undefined} size={35}>
+              {firstLetter(assistant?.name).toUpperCase()}
             </Avatar>
           ) : (
             <Avatar src={avatar} size={35} />
           )}
           <UserWrap>
-            <UserName>{getUserName()}</UserName>
+            <UserName>{removeLeadingEmoji(getUserName())}</UserName>
             <MessageTime>{dayjs(message.createdAt).format('MM/DD HH:mm')}</MessageTime>
           </UserWrap>
         </AvatarWrapper>
@@ -137,25 +147,26 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
           <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
             {message.role === 'user' && (
               <Tooltip title="Edit" mouseEnterDelay={0.8}>
-                <ActionButton>
-                  <EditOutlined onClick={onEdit} />
+                <ActionButton onClick={onEdit}>
+                  <EditOutlined />
                 </ActionButton>
               </Tooltip>
             )}
             <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
-              <ActionButton>
-                <CopyOutlined onClick={onCopy} />
+              <ActionButton onClick={onCopy}>
+                {!copied && <CopyOutlined />}
+                {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
               </ActionButton>
             </Tooltip>
             <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
-              <ActionButton>
-                <DeleteOutlined onClick={onDelete} />
+              <ActionButton onClick={onDelete}>
+                <DeleteOutlined />
               </ActionButton>
             </Tooltip>
             {canRegenerate && (
               <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-                <ActionButton>
-                  <SyncOutlined onClick={onRegenerate} />
+                <ActionButton onClick={onRegenerate}>
+                  <SyncOutlined />
                 </ActionButton>
               </Tooltip>
             )}

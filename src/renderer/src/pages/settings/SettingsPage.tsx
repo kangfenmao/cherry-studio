@@ -68,7 +68,7 @@ const SettingMenus = styled.ul`
   display: flex;
   flex-direction: column;
   min-width: var(--assistants-width);
-  border-right: 1px solid var(--color-border);
+  border-right: 0.5px solid var(--color-border);
   padding: 10px;
 `
 
@@ -84,13 +84,14 @@ const MenuItem = styled.li`
   cursor: pointer;
   border-radius: 5px;
   font-size: 14px;
+  font-weight: 500;
   transition: all 0.2s ease-in-out;
   &:hover {
-    background: #135200;
+    background: var(--color-primary-soft);
   }
   &.active {
-    background: #135200;
-    font-weight: bold;
+    background: var(--color-primary);
+    color: var(--color-white);
   }
 `
 

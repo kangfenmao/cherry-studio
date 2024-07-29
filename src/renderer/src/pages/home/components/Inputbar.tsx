@@ -248,7 +248,7 @@ const ToolbarButton = styled(Button)`
   &:hover {
     background-color: var(--color-background-soft);
     .anticon {
-      color: white;
+      color: var(--color-text-1);
     }
   }
 `
@@ -260,7 +260,7 @@ const TextCount = styled.div`
   font-size: 11px;
   color: var(--color-text-3);
   z-index: 10;
-  background-color: #121212;
+  background-color: var(--color-background-soft);
   padding: 2px 8px;
   border-top-left-radius: 7px;
   user-select: none;

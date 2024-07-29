@@ -96,7 +96,9 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
                         <AssistantItem
                           onClick={() => onSwitchAssistant(assistant)}
                           className={assistant.id === activeAssistant?.id ? 'active' : ''}>
-                          <AssistantName>{assistant.name || t('assistant.default.name')}</AssistantName>
+                          <AssistantName className="name">
+                            {assistant.name || t('assistant.default.name')}
+                          </AssistantName>
                         </AssistantItem>
                       </Dropdown>
                     </div>
@@ -143,13 +145,15 @@ const AssistantItem = styled.div`
   &.active {
     background-color: var(--color-background-mute);
     cursor: pointer;
+    .name {
+      font-weight: bolder;
+    }
   }
 `
 
 const AssistantName = styled.div`
   font-size: 14px;
-  color: var(--color-text-1);
-  font-weight: 500;
+  color: var(--color-text);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;

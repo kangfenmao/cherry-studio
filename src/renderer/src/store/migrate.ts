@@ -261,6 +261,15 @@ const migrateConfig = {
         showInputEstimatedTokens: false
       }
     }
+  },
+  '17': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        theme: 'auto'
+      }
+    }
   }
 }
 

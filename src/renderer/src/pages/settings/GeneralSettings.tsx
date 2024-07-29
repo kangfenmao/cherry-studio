@@ -8,14 +8,14 @@ import useAvatar from '@renderer/hooks/useAvatar'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { setLanguage, setUserName } from '@renderer/store/settings'
+import { setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
 import { useTranslation } from 'react-i18next'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import i18n from '@renderer/i18n'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const { language, proxyUrl: storeProxyUrl, userName } = useSettings()
+  const { language, proxyUrl: storeProxyUrl, userName, theme, setTheme } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -49,6 +49,20 @@ const GeneralSettings: FC = () => {
           options={[
             { value: 'zh-CN', label: '中文' },
             { value: 'en-US', label: 'English' }
+          ]}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.theme.title')}</SettingRowTitle>
+        <Select
+          defaultValue={theme}
+          style={{ width: 120 }}
+          onChange={setTheme}
+          options={[
+            { value: ThemeMode.light, label: t('settings.theme.light') },
+            { value: ThemeMode.dark, label: t('settings.theme.dark') },
+            { value: ThemeMode.auto, label: t('settings.theme.auto') }
           ]}
         />
       </SettingRow>

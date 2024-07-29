@@ -100,11 +100,11 @@ const ProviderSettings: FC = () => {
                               key={JSON.stringify(provider)}
                               className={provider.id === selectedProvider?.id ? 'active' : ''}
                               onClick={() => setSelectedProvider(provider)}>
-                              {provider.isSystem && <Avatar src={getProviderLogo(provider.id)} size={28} />}
+                              {provider.isSystem && <Avatar src={getProviderLogo(provider.id)} size={25} />}
                               {!provider.isSystem && (
                                 <Avatar
-                                  size={28}
-                                  style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 28 }}>
+                                  size={25}
+                                  style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 25 }}>
                                   {getFirstCharacter(provider.name)}
                                 </Avatar>
                               )}
@@ -151,7 +151,7 @@ const ProviderListContainer = styled.div`
   width: var(--assistants-width);
   height: calc(100vh - var(--navbar-height));
   border-right: 0.5px solid var(--color-border);
-  padding: 10px 8px;
+  padding: 8px;
   overflow-y: auto;
 `
 
@@ -173,20 +173,21 @@ const ProviderListItem = styled.div`
   font-size: 14px;
   transition: all 0.2s ease-in-out;
   &:hover {
-    background: #135200;
+    background: var(--color-primary-mute);
   }
   &.active {
-    background: #135200;
-    font-weight: bold;
+    background: var(--color-primary);
+    color: var(--color-white);
+    font-weight: bold !important;
   }
 `
 
 const ProviderItemName = styled.div`
   margin-left: 10px;
-  font-weight: bold;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-weight: 500;
 `
 
 const AddButtonWrapper = styled.div`

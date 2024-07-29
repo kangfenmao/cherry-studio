@@ -12,6 +12,7 @@ declare global {
       openWebsite: (url: string) => void
       setProxy: (proxy: string | undefined) => void
       saveFile: (path: string, content: string) => void
+      setTheme: (theme: 'light' | 'dark') => void
     }
   }
 }

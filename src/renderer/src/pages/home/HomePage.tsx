@@ -9,6 +9,8 @@ import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore
 import Navigation from './components/NavigationCenter'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { Assistant } from '@renderer/types'
+import { useTheme } from '@renderer/providers/ThemeProvider'
+import { Switch } from 'antd'
 
 let _activeAssistant: Assistant
 
@@ -18,6 +20,7 @@ const HomePage: FC = () => {
   const { rightSidebarShown, toggleRightSidebar } = useShowRightSidebar()
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { defaultAssistant } = useDefaultAssistant()
+  const { theme, toggleTheme } = useTheme()
 
   _activeAssistant = activeAssistant
 
@@ -42,6 +45,12 @@ const HomePage: FC = () => {
         )}
         <Navigation activeAssistant={activeAssistant} />
         <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 8 }}>
+          <ThemeSwitch
+            checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
+            unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}
+            defaultChecked={theme === 'dark'}
+            onChange={toggleTheme}
+          />
           <NewButton onClick={toggleRightSidebar}>
             <i className={`iconfont ${rightSidebarShown ? 'icon-showsidebarhoriz' : 'icon-hidesidebarhoriz'}`} />
           </NewButton>
@@ -98,6 +107,14 @@ export const NewButton = styled.div`
     background-color: var(--color-background-soft);
     cursor: pointer;
     color: var(--color-icon-white);
+  }
+`
+
+const ThemeSwitch = styled(Switch)`
+  -webkit-app-region: none;
+  margin-right: 8px;
+  .icon-theme {
+    font-size: 14px;
   }
 `
 

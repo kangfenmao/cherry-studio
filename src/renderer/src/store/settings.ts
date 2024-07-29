@@ -2,6 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export type SendMessageShortcut = 'Enter' | 'Shift+Enter'
 
+export enum ThemeMode {
+  light = 'light',
+  dark = 'dark',
+  auto = 'auto'
+}
+
 export interface SettingsState {
   showRightSidebar: boolean
   showAssistants: boolean
@@ -12,6 +18,7 @@ export interface SettingsState {
   showMessageDivider: boolean
   messageFont: 'system' | 'serif'
   showInputEstimatedTokens: boolean
+  theme: ThemeMode
 }
 
 const initialState: SettingsState = {
@@ -23,7 +30,8 @@ const initialState: SettingsState = {
   userName: '',
   showMessageDivider: true,
   messageFont: 'system',
-  showInputEstimatedTokens: false
+  showInputEstimatedTokens: false,
+  theme: ThemeMode.light
 }
 
 const settingsSlice = createSlice({
@@ -59,6 +67,9 @@ const settingsSlice = createSlice({
     },
     setShowInputEstimatedTokens: (state, action: PayloadAction<boolean>) => {
       state.showInputEstimatedTokens = action.payload
+    },
+    setTheme: (state, action: PayloadAction<ThemeMode>) => {
+      state.theme = action.payload
     }
   }
 })
@@ -73,7 +84,8 @@ export const {
   setUserName,
   setShowMessageDivider,
   setMessageFont,
-  setShowInputEstimatedTokens
+  setShowInputEstimatedTokens,
+  setTheme
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

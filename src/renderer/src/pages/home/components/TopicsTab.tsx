@@ -130,7 +130,7 @@ const TopicListItem = styled.div`
   margin-bottom: 5px;
   cursor: pointer;
   border-radius: 5px;
-  font-size: 13px;
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -138,7 +138,8 @@ const TopicListItem = styled.div`
     background-color: var(--color-background-soft);
   }
   &.active {
-    background-color: var(--color-background-soft);
+    background-color: var(--color-background-mute);
+    font-weight: bolder;
   }
 `
 

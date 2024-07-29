@@ -90,10 +90,10 @@ const Tab = styled.div`
   align-items: center;
   font-size: 13px;
   cursor: pointer;
-  color: #8a8a8a;
+  color: var(--color-text-3);
   border-bottom: 1px solid transparent;
   &.active {
-    color: #bbb;
+    color: var(--color-text-2);
     font-weight: 600;
   }
 `

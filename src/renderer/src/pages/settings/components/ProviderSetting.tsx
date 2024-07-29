@@ -20,6 +20,7 @@ import Link from 'antd/es/typography/Link'
 import { checkApi } from '@renderer/services/api'
 import { useTranslation } from 'react-i18next'
 import { PROVIDER_CONFIG } from '@renderer/config/provider'
+import { useTheme } from '@renderer/providers/ThemeProvider'
 
 interface Props {
   provider: Provider
@@ -33,6 +34,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const [apiChecking, setApiChecking] = useState(false)
   const { updateProvider, models, removeModel } = useProvider(provider.id)
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const modelGroups = groupBy(models, 'group')
 
@@ -68,13 +70,18 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   }
 
   return (
-    <SettingContainer>
+    <SettingContainer
+      style={
+        theme === 'dark'
+          ? { backgroundColor: 'var(--color-background)' }
+          : { backgroundColor: 'var(--color-background-mute)' }
+      }>
       <SettingTitle>
         <Flex align="center">
           <span>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</span>
           {officialWebsite! && (
             <Link target="_blank" href={providerConfig.websites.official}>
-              <ExportOutlined style={{ marginLeft: '8px', color: 'white', fontSize: '12px' }} />
+              <ExportOutlined style={{ marginLeft: '8px', color: 'var(--color-text)', fontSize: '12px' }} />
             </Link>
           )}
         </Flex>
@@ -183,7 +190,8 @@ const HelpTextRow = styled.div`
 
 const HelpText = styled.div`
   font-size: 11px;
-  color: #ffffff50;
+  color: var(--color-text);
+  opacity: 0.4;
 `
 
 const HelpLink = styled(Link)`

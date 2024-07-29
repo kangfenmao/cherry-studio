@@ -156,7 +156,11 @@ const resources = {
         'about.feedback.button': 'Feedback',
         'about.contact.title': '📧 Contact',
         'about.contact.button': 'Email',
-        'proxy.title': 'Proxy Address'
+        'proxy.title': 'Proxy Address',
+        'theme.title': 'Theme',
+        'theme.dark': 'Dark',
+        'theme.light': 'Light',
+        'theme.auto': 'Auto'
       },
       translate: {
         title: 'Translation',
@@ -334,7 +338,11 @@ const resources = {
         'about.feedback.button': '反馈',
         'about.contact.title': '📧 邮件联系',
         'about.contact.button': '邮件',
-        'proxy.title': '代理地址'
+        'proxy.title': '代理地址',
+        'theme.title': '主题',
+        'theme.dark': '深色主题',
+        'theme.light': '浅色主题',
+        'theme.auto': '跟随系统'
       },
       translate: {
         title: '翻译',

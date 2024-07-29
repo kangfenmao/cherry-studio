@@ -7,7 +7,8 @@ const api = {
   checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
   openWebsite: (url: string) => ipcRenderer.invoke('open-website', url),
   setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy),
-  saveFile: (path: string, content: string) => ipcRenderer.invoke('save-file', path, content)
+  saveFile: (path: string, content: string) => ipcRenderer.invoke('save-file', path, content),
+  setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
