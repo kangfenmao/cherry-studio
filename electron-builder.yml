@@ -56,5 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    新增翻译模块
-    修复了一些问题
+    支持主题切换
+    修复一些问题

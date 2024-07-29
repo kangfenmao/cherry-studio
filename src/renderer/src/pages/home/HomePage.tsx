@@ -30,6 +30,8 @@ const HomePage: FC = () => {
     setActiveAssistant(assistant)
   }
 
+  console.debug('theme', theme)
+
   return (
     <Container>
       <Navbar>
@@ -48,7 +50,7 @@ const HomePage: FC = () => {
           <ThemeSwitch
             checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
             unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}
-            defaultChecked={theme === 'dark'}
+            checked={theme === 'dark'}
             onChange={toggleTheme}
           />
           <NewButton onClick={toggleRightSidebar}>
