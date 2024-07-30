@@ -94,7 +94,7 @@ export function droppableReorder<T>(list: T[], startIndex: number, endIndex: num
 }
 
 export function firstLetter(str: string): string {
-  const match = str.match(/\p{L}\p{M}*|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/u)
+  const match = str?.match(/\p{L}\p{M}*|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/u)
   return match ? match[0] : ''
 }
 

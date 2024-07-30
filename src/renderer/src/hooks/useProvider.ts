@@ -47,7 +47,7 @@ export function useProvider(id: string) {
 
   return {
     provider,
-    models: provider.models,
+    models: provider?.models || [],
     updateProvider: (provider: Provider) => dispatch(updateProvider(provider)),
     addModel: (model: Model) => dispatch(addModel({ providerId: id, model })),
     removeModel: (model: Model) => dispatch(removeModel({ providerId: id, model }))
