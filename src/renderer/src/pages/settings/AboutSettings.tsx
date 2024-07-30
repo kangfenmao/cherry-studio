@@ -39,6 +39,10 @@ const AboutSettings: FC = () => {
     onOpenWebsite(url)
   }
 
+  const showLicense = () => {
+    window.api.openWebsite('https://raw.githubusercontent.com/kangfenmao/cherry-studio/main/LICENSE')
+  }
+
   useEffect(() => {
     runAsyncFunction(async () => {
       const appInfo = await window.api.getAppInfo()
@@ -129,6 +133,11 @@ const AboutSettings: FC = () => {
         <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues')}>
           {t('settings.about.feedback.button')}
         </Button>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.about.license.title')}</SettingRowTitle>
+        <Button onClick={showLicense}>{t('settings.about.license.button')}</Button>
       </SettingRow>
       <SettingDivider />
       <SettingRow>
