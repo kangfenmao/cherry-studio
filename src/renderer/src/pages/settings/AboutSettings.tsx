@@ -121,9 +121,7 @@ const AboutSettings: FC = () => {
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.about.website.title')}</SettingRowTitle>
-        <Button onClick={() => onOpenWebsite('https://easys.run/cherry-studio')}>
-          {t('settings.about.website.button')}
-        </Button>
+        <Button onClick={() => onOpenWebsite('https://cherry-ai.com')}>{t('settings.about.website.button')}</Button>
       </SettingRow>
       <SettingDivider />
       <SettingRow>
