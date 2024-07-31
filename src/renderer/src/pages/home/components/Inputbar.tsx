@@ -141,7 +141,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   return (
     <Container id="inputbar" style={{ minHeight: expended ? '100%' : 'var(--input-bar-height)' }}>
-      <Toolbar>
+      <Toolbar onDoubleClick={() => setExpend(!expended)}>
         <ToolbarMenu>
           <Tooltip placement="top" title={t('assistant.input.new_chat')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
@@ -171,6 +171,17 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
+          <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
+            <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
+              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            </ToolbarButton>
+          </Tooltip>
+          {showInputEstimatedTokens && (
+            <TextCount>
+              <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} | T↑
+              {`${inputTokenCount}/${estimateTokenCount}`}
+            </TextCount>
+          )}
         </ToolbarMenu>
         <ToolbarMenu>
           {generating && (
@@ -180,11 +191,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Tooltip>
           )}
-          <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
-            <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
-              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-            </ToolbarButton>
-          </Tooltip>
+          <SendMessageButton sendMessage={sendMessage} />
         </ToolbarMenu>
       </Toolbar>
       <Textarea
@@ -198,15 +205,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         ref={inputRef}
         styles={{ textarea: { paddingLeft: 0 } }}
       />
-      <Footer>
-        {showInputEstimatedTokens && (
-          <TextCount>
-            <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} | T↑
-            {`${inputTokenCount}/${estimateTokenCount}`}
-          </TextCount>
-        )}
-        <SendMessageButton sendMessage={sendMessage} />
-      </Footer>
     </Container>
   )
 }
@@ -215,9 +213,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: var(--input-bar-height);
   border-top: 0.5px solid var(--color-border);
-  padding: 5px 10px;
   transition: all 0.3s ease;
   position: relative;
 `
@@ -227,14 +223,14 @@ const Textarea = styled(TextArea)`
   border-radius: 0;
   display: flex;
   flex: 1;
-  margin-left: 6px;
+  margin: 0 15px 5px 15px;
 `
 
 const Toolbar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 5px;
+  padding: 3px 10px;
 `
 
 const ToolbarMenu = styled.div`
@@ -263,19 +259,11 @@ const ToolbarButton = styled(Button)`
   }
 `
 
-const Footer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 5px;
-`
-
 const TextCount = styled.div`
   font-size: 11px;
   color: var(--color-text-3);
   z-index: 10;
-  padding: 2px 8px;
+  padding: 2px;
   border-top-left-radius: 7px;
   user-select: none;
   margin-right: 10px;

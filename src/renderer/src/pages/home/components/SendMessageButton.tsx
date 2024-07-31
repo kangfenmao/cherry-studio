@@ -3,7 +3,7 @@ import { Dropdown, MenuProps } from 'antd'
 import { FC } from 'react'
 import { ArrowUpOutlined, EnterOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
-import { DownOutlined } from '@ant-design/icons'
+import { SendOutlined } from '@ant-design/icons'
 
 interface Props {
   sendMessage: () => void
@@ -30,12 +30,15 @@ const SendMessageButton: FC<Props> = ({ sendMessage }) => {
 
   return (
     <Dropdown.Button
+      size="small"
       onClick={sendMessage}
       trigger={['click']}
+      placement="topLeft"
+      arrow
       menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
-      icon={<DownOutlined />}
       style={{ width: 'auto' }}>
       {t('assistant.input.send')}
+      <SendOutlined />
     </Dropdown.Button>
   )
 }
