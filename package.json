@@ -19,7 +19,8 @@
     "build:win": "dotenv npm run build && electron-builder --win --publish never",
     "build:mac": "dotenv electron-vite build && electron-builder --mac --publish never",
     "build:linux": "dotenv electron-vite build && electron-builder --linux --publish never",
-    "release": "node scripts/version.js"
+    "release": "node scripts/version.js",
+    "publish": "yarn release patch push"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
