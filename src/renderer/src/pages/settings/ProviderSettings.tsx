@@ -42,7 +42,7 @@ const ProviderSettings: FC = () => {
       apiKey: '',
       apiHost: '',
       models: [],
-      enabled: false,
+      enabled: true,
       isSystem: false
     } as Provider
     addProvider(provider)
