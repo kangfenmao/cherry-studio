@@ -1,7 +1,7 @@
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
-import { Assistant, Message, Provider, Topic } from '@renderer/types'
+import { Assistant, Message, Provider, Suggestion, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
 import {
@@ -106,6 +106,34 @@ export async function fetchMessagesSummary({ messages, assistant }: { messages: 
     return await providerSdk.summaries(messages, assistant)
   } catch (error: any) {
     return null
+  }
+}
+
+export async function fetchSuggestions({
+  messages,
+  assistant
+}: {
+  messages: Message[]
+  assistant: Assistant
+}): Promise<Suggestion[]> {
+  console.debug('fetchSuggestions', messages, assistant)
+  const provider = getAssistantProvider(assistant)
+  const providerSdk = new ProviderSDK(provider)
+  console.debug('fetchSuggestions', provider)
+  const model = assistant.model
+
+  if (!model) {
+    return []
+  }
+
+  if (model.owned_by !== 'graphrag') {
+    return []
+  }
+
+  try {
+    return await providerSdk.suggestions(messages, assistant)
+  } catch (error: any) {
+    return []
   }
 }
 

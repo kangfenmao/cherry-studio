@@ -70,6 +70,7 @@
     "react-redux": "^9.1.2",
     "react-router": "6",
     "react-router-dom": "6",
+    "react-spinners": "^0.14.1",
     "react-syntax-highlighter": "^15.5.0",
     "redux-persist": "^6.0.0",
     "sass": "^1.77.2",

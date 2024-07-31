@@ -78,7 +78,8 @@ const resources = {
         'settings.conext_count.tip': 'The number of previous messages to keep in the context.',
         'settings.reset': 'Reset',
         'settings.set_as_default': 'Apply to default assistant',
-        'settings.max': 'Max'
+        'settings.max': 'Max',
+        'suggestions.title': 'Suggested Questions'
       },
       apps: {
         title: 'Agents'
@@ -262,7 +263,8 @@ const resources = {
           '要保留在上下文中的消息数量，数值越大，上下文越长，消耗的 token 越多。普通聊天建议 5-10，代码生成建议 5-10',
         'settings.reset': '重置',
         'settings.set_as_default': '应用到默认助手',
-        'settings.max': '不限'
+        'settings.max': '不限',
+        'suggestions.title': '建议的问题'
       },
       apps: {
         title: '智能体'

@@ -3479,6 +3479,7 @@ __metadata:
     react-redux: "npm:^9.1.2"
     react-router: "npm:6"
     react-router-dom: "npm:6"
+    react-spinners: "npm:^0.14.1"
     react-syntax-highlighter: "npm:^15.5.0"
     redux-persist: "npm:^6.0.0"
     sass: "npm:^1.77.2"
@@ -8598,6 +8599,16 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/091949805745136350ab049b2a96281bf38742c9d3651019fb48ea79c5eafbfb0379f1d3e636602dd56b0ef278389e8fd25be983dc2c0ffd1103d06dfa8019f3
+  languageName: node
+  linkType: hard
+
+"react-spinners@npm:^0.14.1":
+  version: 0.14.1
+  resolution: "react-spinners@npm:0.14.1"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/5b3c101f789716331a0b6afad156293fb9aa05620e65494753001afcdb611788057f379b5979b34d570d527fa978003293266b59db505bf2d243ebab899ceeda
   languageName: node
   linkType: hard
 

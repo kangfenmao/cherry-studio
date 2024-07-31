@@ -4,13 +4,14 @@ import localforage from 'localforage'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
-import { reverse } from 'lodash'
+import { debounce, reverse } from 'lodash'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { estimateHistoryTokenCount, runAsyncFunction } from '@renderer/utils'
 import LocalStorage from '@renderer/services/storage'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { t } from 'i18next'
+import Suggestions from './Suggestions'
 
 interface Props {
   assistant: Assistant
@@ -93,9 +94,18 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     })
   }, [topic.id])
 
+  const scrollTop = useCallback(
+    debounce(() => containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' }), 500, {
+      leading: true,
+      trailing: false
+    }),
+    []
+  )
+
   useEffect(() => {
-    containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' })
-  }, [messages])
+    setTimeout(scrollTop, 100)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, lastMessage])
 
   useEffect(() => {
     EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, estimateHistoryTokenCount(assistant, messages))
@@ -103,6 +113,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
 
   return (
     <Container id="messages" key={assistant.id} ref={containerRef}>
+      <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
       {lastMessage && <MessageItem message={lastMessage} />}
       {reverse([...messages]).map((message, index) => (
         <MessageItem key={message.id} message={message} showMenu index={index} onDeleteMessage={onDeleteMessage} />

@@ -1,4 +1,4 @@
-import { Assistant, Message, Provider } from '@renderer/types'
+import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import OpenAI from 'openai'
 import Anthropic from '@anthropic-ai/sdk'
 import { getDefaultModel, getTopNamingModel } from './assistant'
@@ -132,6 +132,28 @@ export default class ProviderSDK {
 
       return removeQuotes(response.choices[0].message?.content || '')
     }
+  }
+
+  public async suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]> {
+    const model = assistant.model
+
+    if (!model) {
+      return []
+    }
+
+    const response: any = await this.openaiSdk.request({
+      method: 'post',
+      path: '/advice_questions',
+      body: {
+        messages: messages.filter((m) => m.role === 'user').map((m) => ({ role: m.role, content: m.content })),
+        model: model.id,
+        max_tokens: 0,
+        temperature: 0,
+        n: 0
+      }
+    })
+
+    return response?.questions?.map((q: any) => ({ content: q })) || []
   }
 
   public async check(): Promise<{ valid: boolean; error: Error | null }> {

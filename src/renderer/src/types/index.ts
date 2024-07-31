@@ -55,6 +55,7 @@ export type Model = {
   provider: string
   name: string
   group: string
+  owned_by?: string
   description?: string
 }
 
@@ -65,4 +66,8 @@ export type SystemAssistant = {
   description?: string
   prompt: string
   group: string
+}
+
+export type Suggestion = {
+  content: string
 }
