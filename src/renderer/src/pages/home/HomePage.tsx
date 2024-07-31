@@ -30,8 +30,6 @@ const HomePage: FC = () => {
     setActiveAssistant(assistant)
   }
 
-  console.debug('theme', theme)
-
   return (
     <Container>
       <Navbar>
@@ -82,6 +80,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  background-color: var(--color-background);
 `
 
 export const NewButton = styled.div`

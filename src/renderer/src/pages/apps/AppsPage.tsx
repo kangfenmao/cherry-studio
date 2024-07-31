@@ -101,6 +101,7 @@ const ContentContainer = styled.div`
   justify-content: center;
   height: 100%;
   overflow-y: scroll;
+  background-color: var(--color-background);
 `
 
 const AssistantsContainer = styled.div`

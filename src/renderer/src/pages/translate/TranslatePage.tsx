@@ -233,6 +233,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   height: 100%;
   padding: 20px;
+  background-color: var(--color-background);
 `
 
 const MenuContainer = styled.div`

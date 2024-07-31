@@ -1,3 +1,4 @@
+import { isMac } from '@renderer/config/constant'
 import { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 
@@ -26,14 +27,14 @@ const NavbarContainer = styled.div`
   min-height: var(--navbar-height);
   max-height: var(--navbar-height);
   -webkit-app-region: drag;
-  background-color: var(--navbar-background);
   margin-left: calc(var(--sidebar-width) * -1);
-  padding-left: var(--sidebar-width);
+  padding-left: ${isMac ? 'var(--sidebar-width)' : 0};
   border-bottom: 0.5px solid var(--color-border);
+  background-color: var(--navbar-background);
 `
 
 const NavbarLeftContainer = styled.div`
-  min-width: var(--assistants-width);
+  min-width: ${isMac ? 'var(--assistants-width)' : 'calc(var(--sidebar-width) + var(--assistants-width))'};
   padding: 0 10px;
   display: flex;
   flex-direction: row;
@@ -47,7 +48,7 @@ const NavbarCenterContainer = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 ${isMac ? '20px' : '15px'};
   font-size: 14px;
   font-weight: bold;
   color: var(--color-text-1);

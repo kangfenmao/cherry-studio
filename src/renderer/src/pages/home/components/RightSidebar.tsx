@@ -91,7 +91,6 @@ const Tab = styled.div`
   font-size: 13px;
   cursor: pointer;
   color: var(--color-text-3);
-  border-bottom: 1px solid transparent;
   &.active {
     color: var(--color-text-2);
     font-weight: 600;

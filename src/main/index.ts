@@ -28,6 +28,8 @@ function createWindow() {
     minHeight: 500,
     show: true,
     autoHideMenuBar: true,
+    transparent: process.platform === 'darwin',
+    vibrancy: 'fullscreen-ui',
     titleBarStyle: 'hidden',
     titleBarOverlay: theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight,
     trafficLightPosition: { x: 8, y: 12 },

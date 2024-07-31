@@ -4,12 +4,12 @@ export const appConfig = new Store()
 
 export const titleBarOverlayDark = {
   height: 41,
-  color: '#1f1f1f',
+  color: '#00000000',
   symbolColor: '#ffffff'
 }
 
 export const titleBarOverlayLight = {
   height: 41,
-  color: '#f8f8f8',
+  color: '#00000000',
   symbolColor: '#000000'
 }

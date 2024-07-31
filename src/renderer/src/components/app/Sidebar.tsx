@@ -14,7 +14,6 @@ const Sidebar: FC = () => {
 
   return (
     <Container style={isWindows ? { paddingTop: 0 } : {}}>
-      {isMac ? <PlaceholderBorderMac /> : <PlaceholderBorderWin />}
       <StyledLink to="/">
         <AvatarImg src={avatar || Logo} draggable={false} />
       </StyledLink>
@@ -53,13 +52,13 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 8px 0;
-  min-width: var(--sidebar-width);
-  min-height: 100%;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--navbar-height));
   -webkit-app-region: drag !important;
-  background-color: var(--sidebar-background);
   border-right: 0.5px solid var(--color-border);
-  padding-top: var(--navbar-height);
-  position: relative;
+  margin-top: var(--navbar-height);
+  margin-bottom: var(--navbar-height);
+  background-color: var(--sidebar-background);
 `
 
 const AvatarImg = styled.img`
@@ -124,26 +123,6 @@ const StyledLink = styled(Link)`
   &* {
     user-select: none;
   }
-`
-
-const PlaceholderBorderMac = styled.div`
-  width: var(--sidebar-width);
-  height: var(--navbar-height);
-  background: var(--navbar-background);
-  border-right: 1px solid var(--navbar-background);
-  border-bottom: 0.5px solid var(--color-border);
-  position: absolute;
-  top: 0;
-  left: 0;
-`
-
-const PlaceholderBorderWin = styled.div`
-  width: var(--sidebar-width);
-  height: var(--navbar-height);
-  position: absolute;
-  border-right: 1px solid var(--navbar-background);
-  top: -1px;
-  right: -1px;
 `
 
 export default Sidebar

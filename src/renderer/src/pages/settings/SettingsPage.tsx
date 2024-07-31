@@ -62,6 +62,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  background-color: var(--color-background);
 `
 
 const SettingMenus = styled.ul`

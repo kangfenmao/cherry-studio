@@ -36,8 +36,8 @@
   --color-scrollbar-thumb: rgba(255, 255, 255, 0.15);
   --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 
-  --navbar-background: #1f1f1f;
-  --sidebar-background: #1f1f1f;
+  --navbar-background: rgba(0, 0, 0, 0.8);
+  --sidebar-background: rgba(0, 0, 0, 0.8);
 
   --navbar-height: 42px;
   --sidebar-width: 55px;
@@ -82,8 +82,8 @@ body[theme-mode='light'] {
   --color-scrollbar-thumb: rgba(0, 0, 0, 0.15);
   --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
 
-  --navbar-background: #f8f8f8;
-  --sidebar-background: #f8f8f8;
+  --navbar-background: rgba(255, 255, 255, 0.6);
+  --sidebar-background: rgba(255, 255, 255, 0.6);
 }
 
 *,
@@ -102,10 +102,9 @@ body {
   display: flex;
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
   line-height: 1.6;
   overflow: hidden;
-  background-size: cover;
+  background: transparent !important;
   font-family:
     -apple-system,
     BlinkMacSystemFont,

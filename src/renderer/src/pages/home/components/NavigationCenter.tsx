@@ -43,7 +43,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
   return (
     <NavbarCenter style={{ paddingLeft: isMac ? 16 : 8 }}>
       {!showAssistants && (
-        <NewButton onClick={toggleShowAssistants} style={{ marginRight: 8 }}>
+        <NewButton onClick={toggleShowAssistants} style={{ marginRight: isMac ? 8 : 25 }}>
           <i className="iconfont icon-showsidebarhoriz" />
         </NewButton>
       )}
