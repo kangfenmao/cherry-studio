@@ -56,5 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    支持主题切换
-    修复一些问题
+    新增发送按钮
+    输入区域展开可以全屏显示
