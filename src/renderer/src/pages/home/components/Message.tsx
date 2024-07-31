@@ -189,7 +189,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 10px 20px;
   position: relative;
   border-bottom: 0.5px dotted var(--color-border);
   .menubar {
