@@ -18,10 +18,10 @@ const Chat: FC<Props> = (props) => {
 
   return (
     <Container id="chat">
-      <Flex vertical flex={1} justify="space-between">
+      <Main vertical flex={1} justify="space-between">
         <Messages assistant={assistant} topic={activeTopic} />
         <Inputbar assistant={assistant} setActiveTopic={setActiveTopic} />
-      </Flex>
+      </Main>
       <RightSidebar assistant={assistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
     </Container>
   )
@@ -33,6 +33,10 @@ const Container = styled.div`
   height: 100%;
   flex: 1;
   justify-content: space-between;
+`
+
+const Main = styled(Flex)`
+  height: calc(100vh - var(--navbar-height));
 `
 
 export default Chat

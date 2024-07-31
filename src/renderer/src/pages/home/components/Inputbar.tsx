@@ -215,7 +215,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: var(--input-bar-height);
+  height: var(--input-bar-height);
   border-top: 0.5px solid var(--color-border);
   padding: 5px 15px;
   transition: all 0.3s ease;
