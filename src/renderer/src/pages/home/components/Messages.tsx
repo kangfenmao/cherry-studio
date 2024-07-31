@@ -129,9 +129,6 @@ const Container = styled.div`
   overflow-y: auto;
   flex-direction: column-reverse;
   max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
-  .message:first-child {
-    border: none;
-  }
 `
 
 export default Messages

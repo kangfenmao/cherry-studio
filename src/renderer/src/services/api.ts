@@ -130,6 +130,10 @@ export async function fetchSuggestions({
     return []
   }
 
+  if (model.id.endsWith('global')) {
+    return []
+  }
+
   try {
     return await providerSdk.suggestions(messages, assistant)
   } catch (error: any) {

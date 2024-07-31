@@ -217,7 +217,7 @@ const Container = styled.div`
   width: 100%;
   height: var(--input-bar-height);
   border-top: 0.5px solid var(--color-border);
-  padding: 5px 15px;
+  padding: 5px 10px;
   transition: all 0.3s ease;
   position: relative;
 `
@@ -227,21 +227,21 @@ const Textarea = styled(TextArea)`
   border-radius: 0;
   display: flex;
   flex: 1;
+  margin-left: 6px;
 `
 
 const Toolbar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 0 -5px;
   margin-bottom: 5px;
-  margin-right: -8px;
 `
 
 const ToolbarMenu = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 6px;
 `
 
 const ToolbarButton = styled(Button)`
@@ -250,7 +250,6 @@ const ToolbarButton = styled(Button)`
   font-size: 18px;
   border-radius: 50%;
   transition: all 0.3s ease;
-  margin-right: 6px;
   color: var(--color-icon);
   &.anticon {
     transition: all 0.3s ease;
@@ -269,7 +268,7 @@ const Footer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 `
 
 const TextCount = styled.div`

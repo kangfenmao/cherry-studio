@@ -2,11 +2,11 @@ import { Assistant } from '@renderer/types'
 import styled from 'styled-components'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { Button, Col, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
+import { Col, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
 import { debounce } from 'lodash'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings/components'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
@@ -78,11 +78,11 @@ const SettingsTab: FC<Props> = (props) => {
 
   return (
     <Container>
-      <SettingSubtitle style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <SettingSubtitle>
         {t('settings.messages.model.title')}{' '}
-        <Button size="small" onClick={onReset}>
-          {t('assistant.settings.reset')}
-        </Button>
+        <Tooltip title={t('assistant.settings.reset')}>
+          <ReloadOutlined onClick={onReset} style={{ cursor: 'pointer', fontSize: 13, padding: '0 3px' }} />
+        </Tooltip>
       </SettingSubtitle>
       <SettingDivider />
       <Row align="middle">

@@ -83,4 +83,14 @@
   code {
     white-space: pre-wrap;
   }
+
+  p code {
+    background: var(--color-background-mute);
+    padding: 3px 5px;
+    border-radius: 5px;
+  }
+
+  pre pre {
+    margin: 0 !important;
+  }
 }

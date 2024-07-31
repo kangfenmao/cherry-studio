@@ -129,9 +129,10 @@ const AssistantItem = styled.div`
   flex-direction: column;
   padding: 7px 10px;
   position: relative;
-  border-radius: 5px;
+  border-radius: 3px;
   margin-bottom: 5px;
   cursor: pointer;
+  font-family: Poppins;
   .anticon {
     display: none;
   }
@@ -146,7 +147,7 @@ const AssistantItem = styled.div`
     background-color: var(--color-background-mute);
     cursor: pointer;
     .name {
-      font-weight: bolder;
+      font-weight: 500;
     }
   }
 `

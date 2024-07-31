@@ -6,7 +6,7 @@ import { Assistant, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
 import { FC } from 'react'
 import styled from 'styled-components'
-import { DeleteOutlined, EditOutlined, SignatureOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
 import LocalStorage from '@renderer/services/storage'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import { droppableReorder } from '@renderer/utils'
@@ -30,7 +30,7 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
       {
         label: t('assistant.topics.auto_rename'),
         key: 'auto-rename',
-        icon: <SignatureOutlined />,
+        icon: <OpenAIOutlined />,
         async onClick() {
           const messages = await LocalStorage.getTopicMessages(topic.id)
           if (messages.length >= 2) {
@@ -42,13 +42,13 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
         }
       },
       {
-        label: t('common.rename'),
+        label: t('assistant.topics.edit.title'),
         key: 'rename',
         icon: <EditOutlined />,
         async onClick() {
           const name = await PromptPopup.show({
             title: t('assistant.topics.edit.title'),
-            message: t('assistant.topics.edit.placeholder'),
+            message: '',
             defaultValue: topic?.name || ''
           })
           if (name && topic?.name !== name) {
@@ -129,7 +129,7 @@ const TopicListItem = styled.div`
   padding: 8px 10px;
   margin-bottom: 5px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 3px;
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
@@ -139,7 +139,6 @@ const TopicListItem = styled.div`
   }
   &.active {
     background-color: var(--color-background-mute);
-    font-weight: bolder;
   }
 `
 

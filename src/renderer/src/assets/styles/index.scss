@@ -1,6 +1,7 @@
 @import '../fonts/icon-fonts/iconfont.css';
 @import './markdown.scss';
 @import './scrollbar.scss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
   --color-white: #ffffff;
@@ -45,7 +46,7 @@
   --topic-list-width: 260px;
   --settings-width: var(--assistants-width);
   --status-bar-height: 40px;
-  --input-bar-height: 135px;
+  --input-bar-height: 130px;
 }
 
 body[theme-mode='light'] {

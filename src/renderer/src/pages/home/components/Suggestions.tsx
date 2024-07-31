@@ -67,7 +67,7 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
   }
 
   if (suggestions.length === 0) {
-    return null
+    return <Container style={{ paddingBottom: 10 }} />
   }
 
   return (
@@ -86,28 +86,28 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 10px 10px 20px 55px;
   display: flex;
   width: 100%;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 15px;
-  padding-left: 55px;
 `
 
 const SuggestionsContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
 `
 
 const SuggestionItem = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
-  padding: 7px 15px;
+  padding: 5px 10px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--color-text);
   background: var(--color-background-mute);
   cursor: pointer;

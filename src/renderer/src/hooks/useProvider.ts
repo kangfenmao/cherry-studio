@@ -17,7 +17,7 @@ const selectEnabledProviders = createSelector(
 )
 
 export function useProviders() {
-  const providers = useAppSelector(selectEnabledProviders)
+  const providers: Provider[] = useAppSelector(selectEnabledProviders)
   const dispatch = useAppDispatch()
 
   return {

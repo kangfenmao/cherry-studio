@@ -15,7 +15,7 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
         algorithm: [_theme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm],
         token: {
           colorPrimary: '#00b96b',
-          borderRadius: 5
+          borderRadius: 3
         }
       }}>
       {children}

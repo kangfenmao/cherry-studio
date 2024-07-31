@@ -3,7 +3,7 @@ import Logo from '@renderer/assets/images/logo.png'
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 import useAvatar from '@renderer/hooks/useAvatar'
-import { isMac, isWindows } from '@renderer/config/constant'
+import { isWindows } from '@renderer/config/constant'
 import { TranslationOutlined } from '@ant-design/icons'
 
 const Sidebar: FC = () => {
@@ -67,7 +67,7 @@ const AvatarImg = styled.img`
   height: 28px;
   background-color: var(--color-background-soft);
   margin: 5px 0;
-  margin-top: ${isMac ? '16px' : '9px'};
+  margin-top: 5px;
 `
 const MainMenus = styled.div`
   display: flex;

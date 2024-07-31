@@ -107,7 +107,9 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     [t]
   )
 
-  const fontFamily = messageFont === 'serif' ? "Georgia, Cambria, 'Times New Roman', Times, serif" : undefined
+  const fontFamily =
+    messageFont === 'serif' ? "Georgia, Cambria, 'Times New Roman', Times, serif" : 'Poppins, -apple-system, sans-serif'
+
   const messageBorder = showMessageDivider ? undefined : 'none'
 
   return (

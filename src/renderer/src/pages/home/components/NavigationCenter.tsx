@@ -6,7 +6,7 @@ import { useProviders } from '@renderer/hooks/useProvider'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { Assistant } from '@renderer/types'
 import { Avatar, Button, Dropdown, MenuProps } from 'antd'
-import { upperFirst } from 'lodash'
+import { first, upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -32,11 +32,15 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       type: 'group',
       children: p.models.map((m) => ({
-        key: m.id,
-        label: upperFirst(m.name),
-        style: m.id === model?.id ? { color: 'var(--color-primary)' } : undefined,
-        icon: <Avatar src={getModelLogo(m.id)} size={24} />,
-        onClick: () => setModel(m)
+        key: m?.id,
+        label: upperFirst(m?.name),
+        style: m?.id === model?.id ? { color: 'var(--color-primary)' } : undefined,
+        icon: (
+          <Avatar src={getModelLogo(m?.id || '')} size={24}>
+            {first(m?.name)}
+          </Avatar>
+        ),
+        onClick: () => m && setModel(m)
       }))
     }))
 

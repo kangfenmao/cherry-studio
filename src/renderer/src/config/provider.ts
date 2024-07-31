@@ -58,6 +58,10 @@ export function getProviderLogo(providerId: string) {
 }
 
 export function getModelLogo(modelId: string) {
+  if (!modelId) {
+    return undefined
+  }
+
   const logoMap = {
     gpt: ChatGPTModelLogo,
     glm: ChatGLMModelLogo,

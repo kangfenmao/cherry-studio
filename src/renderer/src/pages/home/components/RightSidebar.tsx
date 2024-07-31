@@ -65,7 +65,7 @@ const RightSidebar: FC<Props> = (props) => {
 
 const Container = styled.div`
   width: var(--topic-list-width);
-  height: 100%;
+  height: calc(100vh - var(--navbar-height));
   border-left: 0.5px solid var(--color-border);
   overflow-y: auto;
   .collapsed {
