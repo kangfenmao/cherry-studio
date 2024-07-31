@@ -153,7 +153,7 @@ export default class ProviderSDK {
       }
     })
 
-    return response?.questions?.map((q: any) => ({ content: q })) || []
+    return response?.questions?.filter(Boolean)?.map((q: any) => ({ content: q })) || []
   }
 
   public async check(): Promise<{ valid: boolean; error: Error | null }> {

@@ -4,10 +4,10 @@ import {
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
-  MoreOutlined,
   PauseCircleOutlined,
   PlusCircleOutlined
 } from '@ant-design/icons'
+import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { getDefaultTopic } from '@renderer/services/assistant'
@@ -23,8 +23,7 @@ import { debounce, isEmpty } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import SendMessageSetting from './SendMessageSetting'
-import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
+import SendMessageButton from './SendMessageButton'
 
 interface Props {
   assistant: Assistant
@@ -63,11 +62,25 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
 
     setText('')
+
+    setExpend(false)
   }
 
   const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (expended) {
+      if (event.key === 'Escape') {
+        setExpend(false)
+        return
+      }
+      if (event.key === 'Enter' && event.shiftKey) {
+        sendMessage()
+        return
+      }
+      return
+    }
+
     if (sendMessageShortcut === 'Enter' && event.key === 'Enter') {
       if (event.shiftKey) {
         return
@@ -127,7 +140,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container id="inputbar" style={{ minHeight: expended ? '35%' : 'var(--input-bar-height)' }}>
+    <Container id="inputbar" style={{ minHeight: expended ? '100%' : 'var(--input-bar-height)' }}>
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title={t('assistant.input.new_chat')} arrow>
@@ -158,11 +171,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
-            <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
-              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-            </ToolbarButton>
-          </Tooltip>
         </ToolbarMenu>
         <ToolbarMenu>
           {generating && (
@@ -172,11 +180,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Tooltip>
           )}
-          <SendMessageSetting>
-            <ToolbarButton type="text" style={{ marginRight: 0 }}>
-              <MoreOutlined />
+          <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
+            <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
+              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             </ToolbarButton>
-          </SendMessageSetting>
+          </Tooltip>
         </ToolbarMenu>
       </Toolbar>
       <Textarea
@@ -187,16 +195,18 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         autoFocus
         contextMenu="true"
         variant="borderless"
-        showCount
         ref={inputRef}
         styles={{ textarea: { paddingLeft: 0 } }}
       />
-      {showInputEstimatedTokens && (
-        <TextCount>
-          <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} | T↑
-          {`${inputTokenCount}/${estimateTokenCount}`}
-        </TextCount>
-      )}
+      <Footer>
+        {showInputEstimatedTokens && (
+          <TextCount>
+            <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} | T↑
+            {`${inputTokenCount}/${estimateTokenCount}`}
+          </TextCount>
+        )}
+        <SendMessageButton sendMessage={sendMessage} />
+      </Footer>
     </Container>
   )
 }
@@ -225,6 +235,7 @@ const Toolbar = styled.div`
   justify-content: space-between;
   margin: 0 -5px;
   margin-bottom: 5px;
+  margin-right: -8px;
 `
 
 const ToolbarMenu = styled.div`
@@ -253,17 +264,22 @@ const ToolbarButton = styled(Button)`
   }
 `
 
+const Footer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 8px;
+`
+
 const TextCount = styled.div`
-  position: absolute;
-  right: 0;
-  bottom: 0;
   font-size: 11px;
   color: var(--color-text-3);
   z-index: 10;
-  background-color: var(--color-background-soft);
   padding: 2px 8px;
   border-top-left-radius: 7px;
   user-select: none;
+  margin-right: 10px;
 `
 
 export default Inputbar

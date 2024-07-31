@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     document.body.setAttribute('theme-mode', _theme)
-    window.api.setTheme(_theme === ThemeMode.dark ? 'dark' : 'light')
+    window.api?.setTheme(_theme === ThemeMode.dark ? 'dark' : 'light')
   }, [_theme])
 
   return <ThemeContext.Provider value={{ theme: _theme, toggleTheme }}>{children}</ThemeContext.Provider>

@@ -1,12 +1,15 @@
 import { useSettings } from '@renderer/hooks/useSettings'
 import { Dropdown, MenuProps } from 'antd'
-import { FC, PropsWithChildren } from 'react'
+import { FC } from 'react'
 import { ArrowUpOutlined, EnterOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import { DownOutlined } from '@ant-design/icons'
 
-interface Props extends PropsWithChildren {}
+interface Props {
+  sendMessage: () => void
+}
 
-const SendMessageSetting: FC<Props> = ({ children }) => {
+const SendMessageButton: FC<Props> = ({ sendMessage }) => {
   const { sendMessageShortcut, setSendMessageShortcut } = useSettings()
   const { t } = useTranslation()
 
@@ -26,14 +29,15 @@ const SendMessageSetting: FC<Props> = ({ children }) => {
   ]
 
   return (
-    <Dropdown
-      menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
-      placement="topRight"
+    <Dropdown.Button
+      onClick={sendMessage}
       trigger={['click']}
-      arrow>
-      {children}
-    </Dropdown>
+      menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
+      icon={<DownOutlined />}
+      style={{ width: 'auto' }}>
+      {t('assistant.input.send')}
+    </Dropdown.Button>
   )
 }
 
-export default SendMessageSetting
+export default SendMessageButton
