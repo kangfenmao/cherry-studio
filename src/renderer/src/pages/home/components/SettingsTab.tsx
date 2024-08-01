@@ -86,7 +86,7 @@ const SettingsTab: FC<Props> = (props) => {
       </SettingSubtitle>
       <SettingDivider />
       <Row align="middle">
-        <Label>{t('assistant.settings.conext_count')}</Label>
+        <Label>{t('assistant.settings.temperature')}</Label>
         <Tooltip title={t('assistant.settings.temperature.tip')}>
           <QuestionIcon />
         </Tooltip>
