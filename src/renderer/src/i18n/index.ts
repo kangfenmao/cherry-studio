@@ -25,7 +25,8 @@ const resources = {
         regenerate: 'Regenerate',
         provider: 'Provider',
         you: 'You',
-        save: 'Save'
+        save: 'Save',
+        footnotes: 'Footnotes'
       },
       button: {
         add: 'Add',
@@ -209,7 +210,8 @@ const resources = {
         copy: '复制',
         regenerate: '重新生成',
         provider: '提供商',
-        you: '用户'
+        you: '用户',
+        footnote: '引用内容'
       },
       button: {
         add: '添加',

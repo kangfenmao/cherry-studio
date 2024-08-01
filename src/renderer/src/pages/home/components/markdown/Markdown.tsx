@@ -31,12 +31,13 @@ const Markdown: FC<Props> = ({ message }) => {
       <ReactMarkdown
         className="markdown"
         remarkPlugins={[remarkGfm, remarkMath]}
+        remarkRehypeOptions={{ footnoteLabel: t('common.footnote'), footnoteLabelTagName: 'h4' }}
         rehypePlugins={[rehypeKatex]}
         components={{ code: CodeBlock as any, a: Link as any }}>
         {getMessageContent(message)}
       </ReactMarkdown>
     )
-  }, [getMessageContent, message])
+  }, [getMessageContent, message, t])
 }
 
 export default Markdown
