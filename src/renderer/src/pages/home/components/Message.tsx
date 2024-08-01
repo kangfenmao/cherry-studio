@@ -17,8 +17,8 @@ import { Message } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar, Dropdown, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { isEmpty, upperFirst } from 'lodash'
-import { FC, useCallback, useState } from 'react'
+import { upperFirst } from 'lodash'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import Markdown from './markdown/Markdown'
@@ -43,14 +43,14 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const isUserMessage = message.role === 'user'
   const canRegenerate = isLastMessage && message.role === 'assistant'
 
-  const onCopy = () => {
+  const onCopy = useCallback(() => {
     navigator.clipboard.writeText(message.content)
     window.message.success({ content: t('message.copied'), key: 'copy-message' })
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }
+  }, [message.content, t])
 
-  const onDelete = async () => {
+  const onDelete = useCallback(async () => {
     const confirmed = await window.modal.confirm({
       icon: null,
       title: t('message.message.delete.title'),
@@ -59,23 +59,14 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       okType: 'danger'
     })
     confirmed && onDeleteMessage?.(message)
-  }
+  }, [message, onDeleteMessage, t])
 
-  const onEdit = () => {
-    EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message)
-  }
+  const onEdit = useCallback(() => EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message), [message])
 
-  const onRegenerate = () => {
+  const onRegenerate = useCallback(() => {
     onDeleteMessage?.(message)
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE), 100)
-  }
-
-  const getMessageContent = (message: Message) => {
-    if (isEmpty(message.content) && message.status === 'paused') {
-      return t('message.chat.completion.paused')
-    }
-    return message.content
-  }
+  }, [message, onDeleteMessage])
 
   const getUserName = useCallback(() => {
     if (message.id === 'assistant') {
@@ -111,73 +102,95 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   const messageBorder = showMessageDivider ? undefined : 'none'
 
-  return (
-    <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
-      <MessageHeader>
-        <AvatarWrapper>
-          {message.role === 'assistant' ? (
-            <Avatar src={message.modelId ? getModelLogo(message.modelId) : undefined} size={35}>
-              {firstLetter(assistant?.name).toUpperCase()}
-            </Avatar>
-          ) : (
-            <Avatar src={avatar} size={35} />
+  return useMemo(
+    () => (
+      <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
+        <MessageHeader>
+          <AvatarWrapper>
+            {message.role === 'assistant' ? (
+              <Avatar src={message.modelId ? getModelLogo(message.modelId) : undefined} size={35}>
+                {firstLetter(assistant?.name).toUpperCase()}
+              </Avatar>
+            ) : (
+              <Avatar src={avatar} size={35} />
+            )}
+            <UserWrap>
+              <UserName>{removeLeadingEmoji(getUserName())}</UserName>
+              <MessageTime>{dayjs(message.createdAt).format('MM/DD HH:mm')}</MessageTime>
+            </UserWrap>
+          </AvatarWrapper>
+        </MessageHeader>
+        <MessageContent style={{ fontFamily }}>
+          {message.status === 'sending' && (
+            <MessageContentLoading>
+              <SyncOutlined spin size={24} />
+            </MessageContentLoading>
           )}
-          <UserWrap>
-            <UserName>{removeLeadingEmoji(getUserName())}</UserName>
-            <MessageTime>{dayjs(message.createdAt).format('MM/DD HH:mm')}</MessageTime>
-          </UserWrap>
-        </AvatarWrapper>
-      </MessageHeader>
-      <MessageContent style={{ fontFamily }}>
-        {message.status === 'sending' && (
-          <MessageContentLoading>
-            <SyncOutlined spin size={24} />
-          </MessageContentLoading>
-        )}
-        {message.status !== 'sending' && <Markdown message={message} />}
-        {message.usage && !generating && (
-          <MessageMetadata>
-            Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
-          </MessageMetadata>
-        )}
-        {showMenu && (
-          <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
-            {message.role === 'user' && (
-              <Tooltip title="Edit" mouseEnterDelay={0.8}>
-                <ActionButton onClick={onEdit}>
-                  <EditOutlined />
+          {message.status !== 'sending' && <Markdown message={message} />}
+          {message.usage && !generating && (
+            <MessageMetadata>
+              Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
+            </MessageMetadata>
+          )}
+          {showMenu && (
+            <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
+              {message.role === 'user' && (
+                <Tooltip title="Edit" mouseEnterDelay={0.8}>
+                  <ActionButton onClick={onEdit}>
+                    <EditOutlined />
+                  </ActionButton>
+                </Tooltip>
+              )}
+              <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
+                <ActionButton onClick={onCopy}>
+                  {!copied && <CopyOutlined />}
+                  {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
                 </ActionButton>
               </Tooltip>
-            )}
-            <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
-              <ActionButton onClick={onCopy}>
-                {!copied && <CopyOutlined />}
-                {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
-              </ActionButton>
-            </Tooltip>
-            <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
-              <ActionButton onClick={onDelete}>
-                <DeleteOutlined />
-              </ActionButton>
-            </Tooltip>
-            {canRegenerate && (
-              <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-                <ActionButton onClick={onRegenerate}>
-                  <SyncOutlined />
+              <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
+                <ActionButton onClick={onDelete}>
+                  <DeleteOutlined />
                 </ActionButton>
               </Tooltip>
-            )}
-            {!isUserMessage && (
-              <Dropdown menu={{ items: getDropdownMenus(message) }} trigger={['click']} placement="topRight" arrow>
-                <ActionButton>
-                  <MenuOutlined />
-                </ActionButton>
-              </Dropdown>
-            )}
-          </MenusBar>
-        )}
-      </MessageContent>
-    </MessageContainer>
+              {canRegenerate && (
+                <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+                  <ActionButton onClick={onRegenerate}>
+                    <SyncOutlined />
+                  </ActionButton>
+                </Tooltip>
+              )}
+              {!isUserMessage && (
+                <Dropdown menu={{ items: getDropdownMenus(message) }} trigger={['click']} placement="topRight" arrow>
+                  <ActionButton>
+                    <MenuOutlined />
+                  </ActionButton>
+                </Dropdown>
+              )}
+            </MenusBar>
+          )}
+        </MessageContent>
+      </MessageContainer>
+    ),
+    [
+      assistant?.name,
+      avatar,
+      canRegenerate,
+      copied,
+      fontFamily,
+      generating,
+      getDropdownMenus,
+      getUserName,
+      isLastMessage,
+      isUserMessage,
+      message,
+      messageBorder,
+      onCopy,
+      onDelete,
+      onEdit,
+      onRegenerate,
+      showMenu,
+      t
+    ]
   )
 }
 
