@@ -33,7 +33,6 @@ const SendMessageButton: FC<Props> = ({ sendMessage }) => {
       size="small"
       onClick={sendMessage}
       trigger={['click']}
-      placement="topLeft"
       arrow
       menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
       style={{ width: 'auto' }}>
