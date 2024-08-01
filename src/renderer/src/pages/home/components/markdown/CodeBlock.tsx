@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import styled from 'styled-components'
-import Mermaid from '../Mermaid'
+import Mermaid from './Mermaid'
 
 interface CodeBlockProps {
   children: string

@@ -4,7 +4,7 @@ import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import { Assistant, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
 import LocalStorage from '@renderer/services/storage'
@@ -25,72 +25,81 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
-  const getTopicMenuItems = (topic: Topic) => {
-    const menus: MenuProps['items'] = [
-      {
-        label: t('assistant.topics.auto_rename'),
-        key: 'auto-rename',
-        icon: <OpenAIOutlined />,
-        async onClick() {
-          const messages = await LocalStorage.getTopicMessages(topic.id)
-          if (messages.length >= 2) {
-            const summaryText = await fetchMessagesSummary({ messages, assistant })
-            if (summaryText) {
-              updateTopic({ ...topic, name: summaryText })
+  const getTopicMenuItems = useCallback(
+    (topic: Topic) => {
+      const menus: MenuProps['items'] = [
+        {
+          label: t('assistant.topics.auto_rename'),
+          key: 'auto-rename',
+          icon: <OpenAIOutlined />,
+          async onClick() {
+            const messages = await LocalStorage.getTopicMessages(topic.id)
+            if (messages.length >= 2) {
+              const summaryText = await fetchMessagesSummary({ messages, assistant })
+              if (summaryText) {
+                updateTopic({ ...topic, name: summaryText })
+              }
+            }
+          }
+        },
+        {
+          label: t('assistant.topics.edit.title'),
+          key: 'rename',
+          icon: <EditOutlined />,
+          async onClick() {
+            const name = await PromptPopup.show({
+              title: t('assistant.topics.edit.title'),
+              message: '',
+              defaultValue: topic?.name || ''
+            })
+            if (name && topic?.name !== name) {
+              updateTopic({ ...topic, name })
             }
           }
         }
-      },
-      {
-        label: t('assistant.topics.edit.title'),
-        key: 'rename',
-        icon: <EditOutlined />,
-        async onClick() {
-          const name = await PromptPopup.show({
-            title: t('assistant.topics.edit.title'),
-            message: '',
-            defaultValue: topic?.name || ''
-          })
-          if (name && topic?.name !== name) {
-            updateTopic({ ...topic, name })
+      ]
+
+      if (assistant.topics.length > 1) {
+        menus.push({ type: 'divider' })
+        menus.push({
+          label: t('common.delete'),
+          danger: true,
+          key: 'delete',
+          icon: <DeleteOutlined />,
+          onClick() {
+            if (assistant.topics.length === 1) return
+            removeTopic(topic)
+            setActiveTopic(assistant.topics[0])
           }
-        }
+        })
       }
-    ]
 
-    if (assistant.topics.length > 1) {
-      menus.push({ type: 'divider' })
-      menus.push({
-        label: t('common.delete'),
-        danger: true,
-        key: 'delete',
-        icon: <DeleteOutlined />,
-        onClick() {
-          if (assistant.topics.length === 1) return
-          removeTopic(topic)
-          setActiveTopic(assistant.topics[0])
-        }
-      })
-    }
+      return menus
+    },
+    [assistant, removeTopic, setActiveTopic, t, updateTopic]
+  )
 
-    return menus
-  }
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      if (result.destination) {
+        const sourceIndex = result.source.index
+        const destIndex = result.destination.index
+        updateTopics(droppableReorder(assistant.topics, sourceIndex, destIndex))
+      }
+    },
+    [assistant.topics, updateTopics]
+  )
 
-  const onDragEnd = (result: DropResult) => {
-    if (result.destination) {
-      const sourceIndex = result.source.index
-      const destIndex = result.destination.index
-      updateTopics(droppableReorder(assistant.topics, sourceIndex, destIndex))
-    }
-  }
-
-  const onSwitchTopic = (topic: Topic) => {
-    if (generating) {
-      window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
-      return
-    }
-    setActiveTopic(topic)
-  }
+  const onSwitchTopic = useCallback(
+    (topic: Topic) => {
+      if (generating) {
+        window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
+        return
+      }
+      setActiveTopic(topic)
+    },
+    [generating, setActiveTopic, t]
+  )
 
   return (
     <Container style={{ display: rightSidebarShown ? 'block' : 'none' }}>

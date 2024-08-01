@@ -18,7 +18,7 @@ import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar, Dropdown, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
-import { FC, useCallback, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import Markdown from './markdown/Markdown'
@@ -41,7 +41,8 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   const isLastMessage = index === 0
   const isUserMessage = message.role === 'user'
-  const canRegenerate = isLastMessage && message.role === 'assistant'
+  const isAssistantMessage = message.role === 'assistant'
+  const canRegenerate = isLastMessage && isAssistantMessage
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(message.content)
@@ -69,128 +70,100 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   }, [message, onDeleteMessage])
 
   const getUserName = useCallback(() => {
-    if (message.id === 'assistant') {
-      return assistant?.name
-    }
-
-    if (message.role === 'assistant') {
-      return upperFirst(message.modelId)
-    }
-
+    if (message.id === 'assistant') return assistant?.name
+    if (message.role === 'assistant') return upperFirst(message.modelId)
     return userName || t('common.you')
   }, [assistant?.name, message.id, message.modelId, message.role, t, userName])
 
-  const getDropdownMenus = useCallback(
-    (message: Message) => {
-      return [
-        {
-          label: t('chat.save'),
-          key: 'save',
-          icon: <SaveOutlined />,
-          onClick: () => {
-            const fileName = message.createdAt + '.md'
-            window.api.saveFile(fileName, message.content)
-          }
+  const serifFonts = "Georgia, Cambria, 'Times New Roman', Times, serif"
+  const fontFamily = messageFont === 'serif' ? serifFonts : 'Poppins, -apple-system, sans-serif'
+  const messageBorder = showMessageDivider ? undefined : 'none'
+  const avatarSource = useMemo(() => (message.modelId ? getModelLogo(message.modelId) : undefined), [message.modelId])
+  const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])
+  const username = useMemo(() => removeLeadingEmoji(getUserName()), [getUserName])
+
+  const dropdownItems = useMemo(
+    () => [
+      {
+        label: t('chat.save'),
+        key: 'save',
+        icon: <SaveOutlined />,
+        onClick: () => {
+          const fileName = message.createdAt + '.md'
+          window.api.saveFile(fileName, message.content)
         }
-      ]
-    },
-    [t]
+      }
+    ],
+    [t, message]
   )
 
-  const fontFamily =
-    messageFont === 'serif' ? "Georgia, Cambria, 'Times New Roman', Times, serif" : 'Poppins, -apple-system, sans-serif'
-
-  const messageBorder = showMessageDivider ? undefined : 'none'
-
-  return useMemo(
-    () => (
-      <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
-        <MessageHeader>
-          <AvatarWrapper>
-            {message.role === 'assistant' ? (
-              <Avatar src={message.modelId ? getModelLogo(message.modelId) : undefined} size={35}>
-                {firstLetter(assistant?.name).toUpperCase()}
-              </Avatar>
-            ) : (
-              <Avatar src={avatar} size={35} />
+  return (
+    <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
+      <MessageHeader>
+        <AvatarWrapper>
+          {isAssistantMessage ? (
+            <Avatar src={avatarSource} size={35}>
+              {avatarName}
+            </Avatar>
+          ) : (
+            <Avatar src={avatar} size={35} />
+          )}
+          <UserWrap>
+            <UserName>{username}</UserName>
+            <MessageTime>{dayjs(message.createdAt).format('MM/DD HH:mm')}</MessageTime>
+          </UserWrap>
+        </AvatarWrapper>
+      </MessageHeader>
+      <MessageContent style={{ fontFamily }}>
+        {message.status === 'sending' && (
+          <MessageContentLoading>
+            <SyncOutlined spin size={24} />
+          </MessageContentLoading>
+        )}
+        {message.status !== 'sending' && <Markdown message={message} />}
+        {message.usage && !generating && (
+          <MessageMetadata>
+            Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
+          </MessageMetadata>
+        )}
+        {showMenu && (
+          <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
+            {message.role === 'user' && (
+              <Tooltip title="Edit" mouseEnterDelay={0.8}>
+                <ActionButton onClick={onEdit}>
+                  <EditOutlined />
+                </ActionButton>
+              </Tooltip>
             )}
-            <UserWrap>
-              <UserName>{removeLeadingEmoji(getUserName())}</UserName>
-              <MessageTime>{dayjs(message.createdAt).format('MM/DD HH:mm')}</MessageTime>
-            </UserWrap>
-          </AvatarWrapper>
-        </MessageHeader>
-        <MessageContent style={{ fontFamily }}>
-          {message.status === 'sending' && (
-            <MessageContentLoading>
-              <SyncOutlined spin size={24} />
-            </MessageContentLoading>
-          )}
-          {message.status !== 'sending' && <Markdown message={message} />}
-          {message.usage && !generating && (
-            <MessageMetadata>
-              Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
-            </MessageMetadata>
-          )}
-          {showMenu && (
-            <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
-              {message.role === 'user' && (
-                <Tooltip title="Edit" mouseEnterDelay={0.8}>
-                  <ActionButton onClick={onEdit}>
-                    <EditOutlined />
-                  </ActionButton>
-                </Tooltip>
-              )}
-              <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
-                <ActionButton onClick={onCopy}>
-                  {!copied && <CopyOutlined />}
-                  {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
+            <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
+              <ActionButton onClick={onCopy}>
+                {!copied && <CopyOutlined />}
+                {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
+              </ActionButton>
+            </Tooltip>
+            <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
+              <ActionButton onClick={onDelete}>
+                <DeleteOutlined />
+              </ActionButton>
+            </Tooltip>
+            {canRegenerate && (
+              <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+                <ActionButton onClick={onRegenerate}>
+                  <SyncOutlined />
                 </ActionButton>
               </Tooltip>
-              <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
-                <ActionButton onClick={onDelete}>
-                  <DeleteOutlined />
+            )}
+            {!isUserMessage && (
+              <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement="topRight" arrow>
+                <ActionButton>
+                  <MenuOutlined />
                 </ActionButton>
-              </Tooltip>
-              {canRegenerate && (
-                <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-                  <ActionButton onClick={onRegenerate}>
-                    <SyncOutlined />
-                  </ActionButton>
-                </Tooltip>
-              )}
-              {!isUserMessage && (
-                <Dropdown menu={{ items: getDropdownMenus(message) }} trigger={['click']} placement="topRight" arrow>
-                  <ActionButton>
-                    <MenuOutlined />
-                  </ActionButton>
-                </Dropdown>
-              )}
-            </MenusBar>
-          )}
-        </MessageContent>
-      </MessageContainer>
-    ),
-    [
-      assistant?.name,
-      avatar,
-      canRegenerate,
-      copied,
-      fontFamily,
-      generating,
-      getDropdownMenus,
-      getUserName,
-      isLastMessage,
-      isUserMessage,
-      message,
-      messageBorder,
-      onCopy,
-      onDelete,
-      onEdit,
-      onRegenerate,
-      showMenu,
-      t
-    ]
+              </Dropdown>
+            )}
+          </MenusBar>
+        )}
+      </MessageContent>
+    </MessageContainer>
   )
 }
 
@@ -301,4 +274,4 @@ const ActionButton = styled.div`
   }
 `
 
-export default MessageItem
+export default memo(MessageItem)

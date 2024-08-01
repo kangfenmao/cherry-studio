@@ -40,7 +40,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const inputRef = useRef<TextAreaRef>(null)
   const { t } = useTranslation()
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(() => {
     if (generating) {
       return
     }
@@ -64,19 +64,17 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setText('')
 
     setExpend(false)
-  }
+  }, [assistant.id, assistant.topics, generating, text])
 
   const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (expended) {
       if (event.key === 'Escape') {
-        setExpend(false)
-        return
+        return setExpend(false)
       }
       if (event.key === 'Enter' && event.shiftKey) {
-        sendMessage()
-        return
+        return sendMessage()
       }
       return
     }

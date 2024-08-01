@@ -1,7 +1,7 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Topic } from '@renderer/types'
 import localforage from 'localforage'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import MessageItem from './Message'
 import { debounce, reverse } from 'lodash'
@@ -21,28 +21,28 @@ interface Props {
 const Messages: FC<Props> = ({ assistant, topic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
-  const { updateTopic } = useAssistant(assistant.id)
   const provider = useProviderByAssistant(assistant)
   const containerRef = useRef<HTMLDivElement>(null)
+  const { updateTopic } = useAssistant(assistant.id)
 
-  const assistantDefaultMessage: Message = {
-    id: 'assistant',
-    role: 'assistant',
-    content: assistant.description || assistant.prompt || t('assistant.default.description'),
-    assistantId: assistant.id,
-    topicId: topic.id,
-    status: 'pending',
-    createdAt: new Date().toISOString()
-  }
+  const assistantDefaultMessage: Message = useMemo(
+    () => ({
+      id: 'assistant',
+      role: 'assistant',
+      content: assistant.description || assistant.prompt || t('assistant.default.description'),
+      assistantId: assistant.id,
+      topicId: topic.id,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    }),
+    [assistant.description, assistant.id, assistant.prompt, topic.id]
+  )
 
   const onSendMessage = useCallback(
     (message: Message) => {
       const _messages = [...messages, message]
       setMessages(_messages)
-      localforage.setItem(`topic:${topic.id}`, {
-        ...topic,
-        messages: _messages
-      })
+      localforage.setItem(`topic:${topic.id}`, { ...topic, messages: _messages })
     },
     [messages, topic]
   )
@@ -54,14 +54,14 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     }
   }, [assistant, messages, topic, updateTopic])
 
-  const onDeleteMessage = (message: Message) => {
-    const _messages = messages.filter((m) => m.id !== message.id)
-    setMessages(_messages)
-    localforage.setItem(`topic:${topic.id}`, {
-      id: topic.id,
-      messages: _messages
-    })
-  }
+  const onDeleteMessage = useCallback(
+    (message: Message) => {
+      const _messages = messages.filter((m) => m.id !== message.id)
+      setMessages(_messages)
+      localforage.setItem(`topic:${topic.id}`, { id: topic.id, messages: _messages })
+    },
+    [messages, topic.id]
+  )
 
   useEffect(() => {
     const unsubscribes = [
@@ -85,13 +85,10 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [assistant, autoRenameTopic, messages, onSendMessage, provider, topic, updateTopic])
+  }, [assistant, messages, provider, topic, autoRenameTopic, updateTopic, onSendMessage])
 
   useEffect(() => {
-    runAsyncFunction(async () => {
-      const messages = await LocalStorage.getTopicMessages(topic.id)
-      setMessages(messages || [])
-    })
+    runAsyncFunction(async () => setMessages((await LocalStorage.getTopicMessages(topic.id)) || []))
   }, [topic.id])
 
   const scrollTop = useCallback(
@@ -103,9 +100,8 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   )
 
   useEffect(() => {
-    setTimeout(scrollTop, 100)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages, lastMessage])
+    scrollTop()
+  }, [messages, lastMessage, scrollTop])
 
   useEffect(() => {
     EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, estimateHistoryTokenCount(assistant, messages))
