@@ -11,6 +11,7 @@ import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
@@ -22,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
 import styled from 'styled-components'
 import CodeBlock from './CodeBlock'
-import { useRuntime } from '@renderer/hooks/useStore'
+import Link from './Link'
 
 interface Props {
   message: Message
@@ -136,7 +137,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
           </MessageContentLoading>
         )}
         {message.status !== 'sending' && (
-          <Markdown className="markdown" components={{ code: CodeBlock as any }}>
+          <Markdown className="markdown" components={{ code: CodeBlock as any, a: Link as any }}>
             {getMessageContent(message)}
           </Markdown>
         )}
