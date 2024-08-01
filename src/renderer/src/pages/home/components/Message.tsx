@@ -20,10 +20,8 @@ import dayjs from 'dayjs'
 import { isEmpty, upperFirst } from 'lodash'
 import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Markdown from 'react-markdown'
 import styled from 'styled-components'
-import CodeBlock from './CodeBlock'
-import Link from './Link'
+import Markdown from './markdown/Markdown'
 
 interface Props {
   message: Message
@@ -136,11 +134,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             <SyncOutlined spin size={24} />
           </MessageContentLoading>
         )}
-        {message.status !== 'sending' && (
-          <Markdown className="markdown" components={{ code: CodeBlock as any, a: Link as any }}>
-            {getMessageContent(message)}
-          </Markdown>
-        )}
+        {message.status !== 'sending' && <Markdown message={message} />}
         {message.usage && !generating && (
           <MessageMetadata>
             Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
