@@ -5,10 +5,17 @@ type SystemModel = Model & { enabled: boolean }
 export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
   openai: [
     {
-      id: 'gpt-3.5-turbo',
+      id: 'gpt-4o',
       provider: 'openai',
-      name: 'GPT-3.5 Turbo',
-      group: 'GPT 3.5',
+      name: ' GPT-4o',
+      group: 'GPT 4o',
+      enabled: true
+    },
+    {
+      id: 'gpt-4o-mini',
+      provider: 'openai',
+      name: ' GPT-4o-mini',
+      group: 'GPT 4o',
       enabled: true
     },
     {
@@ -23,13 +30,6 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       provider: 'openai',
       name: ' GPT-4',
       group: 'GPT 4',
-      enabled: true
-    },
-    {
-      id: 'gpt-4o',
-      provider: 'openai',
-      name: ' GPT-4o',
-      group: 'GPT 4o',
       enabled: true
     }
   ],
