@@ -1,16 +1,16 @@
-import { Assistant } from '@renderer/types'
-import styled from 'styled-components'
+import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
+import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings/components'
+import { useAppDispatch } from '@renderer/store'
+import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
+import { Assistant } from '@renderer/types'
 import { Col, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
 import { debounce } from 'lodash'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
-import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings/components'
-import { useSettings } from '@renderer/hooks/useSettings'
-import { useAppDispatch } from '@renderer/store'
-import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
+import styled from 'styled-components'
 
 interface Props {
   assistant: Assistant
@@ -81,7 +81,7 @@ const SettingsTab: FC<Props> = (props) => {
       <SettingSubtitle>
         {t('settings.messages.model.title')}{' '}
         <Tooltip title={t('assistant.settings.reset')}>
-          <ReloadOutlined onClick={onReset} style={{ cursor: 'pointer', fontSize: 13, padding: '0 3px' }} />
+          <ReloadOutlined onClick={onReset} style={{ cursor: 'pointer', fontSize: 12, padding: '0 3px' }} />
         </Tooltip>
       </SettingSubtitle>
       <SettingDivider />
@@ -177,6 +177,9 @@ const SettingsTab: FC<Props> = (props) => {
 }
 
 const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 0 15px;
 `
 

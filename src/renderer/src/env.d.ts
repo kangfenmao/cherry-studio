@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 
+import type KeyvStorage from '@kangfenmao/keyv-storage'
 import { MessageInstance } from 'antd/es/message/interface'
 import { HookAPI } from 'antd/es/modal/useModal'
-import type KeyvStorage from '@kangfenmao/keyv-storage'
 
 declare global {
   interface Window {

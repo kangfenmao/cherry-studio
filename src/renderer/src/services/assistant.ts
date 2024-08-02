@@ -1,7 +1,7 @@
-import { Assistant, Model, Provider, Topic } from '@renderer/types'
-import store from '@renderer/store'
-import { uuid } from '@renderer/utils'
 import i18n from '@renderer/i18n'
+import store from '@renderer/store'
+import { Assistant, Model, Provider, Topic } from '@renderer/types'
+import { uuid } from '@renderer/utils'
 
 export function getDefaultAssistant(): Assistant {
   return {

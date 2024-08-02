@@ -1,17 +1,17 @@
-import { FC, useState } from 'react'
-import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
-import { Avatar, Input, Select, Upload } from 'antd'
-import styled from 'styled-components'
-import LocalStorage from '@renderer/services/storage'
-import { compressImage, isValidProxyUrl } from '@renderer/utils'
 import useAvatar from '@renderer/hooks/useAvatar'
+import { useSettings } from '@renderer/hooks/useSettings'
+import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
-import { useSettings } from '@renderer/hooks/useSettings'
 import { setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
-import { useTranslation } from 'react-i18next'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
-import i18n from '@renderer/i18n'
+import { compressImage, isValidProxyUrl } from '@renderer/utils'
+import { Avatar, Input, Select, Upload } from 'antd'
+import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
@@ -22,7 +22,6 @@ const GeneralSettings: FC = () => {
 
   const onSelectLanguage = (value: string) => {
     dispatch(setLanguage(value))
-    i18n.changeLanguage(value)
     localStorage.setItem('language', value)
   }
 

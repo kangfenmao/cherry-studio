@@ -1,10 +1,10 @@
-import { FC } from 'react'
-import Logo from '@renderer/assets/images/logo.png'
-import styled from 'styled-components'
-import { Link, useLocation } from 'react-router-dom'
-import useAvatar from '@renderer/hooks/useAvatar'
-import { isWindows } from '@renderer/config/constant'
 import { TranslationOutlined } from '@ant-design/icons'
+import Logo from '@renderer/assets/images/logo.png'
+import { isWindows } from '@renderer/config/constant'
+import useAvatar from '@renderer/hooks/useAvatar'
+import { FC } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import styled from 'styled-components'
 
 const Sidebar: FC = () => {
   const { pathname } = useLocation()

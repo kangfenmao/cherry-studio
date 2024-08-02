@@ -1,11 +1,3 @@
-import { Provider } from '@renderer/types'
-import { FC, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
-import { useProvider } from '@renderer/hooks/useProvider'
-import { groupBy } from 'lodash'
-import { SettingContainer, SettingSubtitle, SettingTitle } from '.'
-import { getModelLogo } from '@renderer/config/provider'
 import {
   CheckOutlined,
   EditOutlined,
@@ -14,13 +6,22 @@ import {
   MinusCircleOutlined,
   PlusOutlined
 } from '@ant-design/icons'
+import { getModelLogo } from '@renderer/config/provider'
+import { PROVIDER_CONFIG } from '@renderer/config/provider'
+import { useProvider } from '@renderer/hooks/useProvider'
+import { useTheme } from '@renderer/providers/ThemeProvider'
+import { checkApi } from '@renderer/services/api'
+import { Provider } from '@renderer/types'
+import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
+import Link from 'antd/es/typography/Link'
+import { groupBy } from 'lodash'
+import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { SettingContainer, SettingSubtitle, SettingTitle } from '.'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
-import Link from 'antd/es/typography/Link'
-import { checkApi } from '@renderer/services/api'
-import { useTranslation } from 'react-i18next'
-import { PROVIDER_CONFIG } from '@renderer/config/provider'
-import { useTheme } from '@renderer/providers/ThemeProvider'
 
 interface Props {
   provider: Provider

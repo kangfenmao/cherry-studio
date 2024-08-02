@@ -1,14 +1,16 @@
-import { FC, useCallback, useMemo } from 'react'
-import ReactMarkdown from 'react-markdown'
+import 'katex/dist/katex.min.css'
+
 import { Message } from '@renderer/types'
 import { isEmpty } from 'lodash'
+import { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import CodeBlock from './CodeBlock'
-import Link from './Link'
+import ReactMarkdown from 'react-markdown'
+import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
-import 'katex/dist/katex.min.css'
+
+import CodeBlock from './CodeBlock'
+import Link from './Link'
 
 interface Props {
   message: Message

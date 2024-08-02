@@ -1,9 +1,9 @@
-import { v4 as uuidv4 } from 'uuid'
-import imageCompression from 'browser-image-compression'
-import { Assistant, AssistantSettings, Message, Model } from '@renderer/types'
-import { GPTTokens } from 'gpt-tokens'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { Assistant, AssistantSettings, Message, Model } from '@renderer/types'
+import imageCompression from 'browser-image-compression'
+import { GPTTokens } from 'gpt-tokens'
 import { takeRight } from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 
 export const runAsyncFunction = async (fn: () => void) => {
   await fn()

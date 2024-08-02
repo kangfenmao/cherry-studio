@@ -1,12 +1,13 @@
-import { FC } from 'react'
-import { SettingContainer, SettingDivider, SettingTitle } from './components'
-import { Select } from 'antd'
-import { useProviders } from '@renderer/hooks/useProvider'
-import { useDefaultModel } from '@renderer/hooks/useAssistant'
-import { find } from 'lodash'
-import { Model } from '@renderer/types'
-import { useTranslation } from 'react-i18next'
 import { EditOutlined, MessageOutlined, TranslationOutlined } from '@ant-design/icons'
+import { useDefaultModel } from '@renderer/hooks/useAssistant'
+import { useProviders } from '@renderer/hooks/useProvider'
+import { Model } from '@renderer/types'
+import { Select } from 'antd'
+import { find } from 'lodash'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { SettingContainer, SettingDivider, SettingTitle } from './components'
 
 const ModelSettings: FC = () => {
   const { defaultModel, topicNamingModel, translateModel, setDefaultModel, setTopicNamingModel, setTranslateModel } =

@@ -10,7 +10,7 @@ import { droppableReorder, uuid } from '@renderer/utils'
 import { Dropdown } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { last } from 'lodash'
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -22,65 +22,78 @@ interface Props {
 
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
-  const { updateAssistant } = useAssistant(activeAssistant.id)
   const generating = useAppSelector((state) => state.runtime.generating)
-
+  const { updateAssistant } = useAssistant(activeAssistant.id)
   const { t } = useTranslation()
 
-  const onDelete = (assistant: Assistant) => {
-    const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
-    _assistant ? setActiveAssistant(_assistant) : onCreateAssistant()
-    removeAssistant(assistant.id)
-  }
+  const onDelete = useCallback(
+    (assistant: Assistant) => {
+      const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
+      _assistant ? setActiveAssistant(_assistant) : onCreateAssistant()
+      removeAssistant(assistant.id)
+    },
+    [assistants, onCreateAssistant, removeAssistant, setActiveAssistant]
+  )
 
-  const getMenuItems = (assistant: Assistant) =>
-    [
-      {
-        label: t('common.edit'),
-        key: 'edit',
-        icon: <EditOutlined />,
-        async onClick() {
-          const _assistant = await AssistantSettingPopup.show({ assistant })
-          updateAssistant(_assistant)
+  const getMenuItems = useCallback(
+    (assistant: Assistant) =>
+      [
+        {
+          label: t('common.edit'),
+          key: 'edit',
+          icon: <EditOutlined />,
+          async onClick() {
+            const _assistant = await AssistantSettingPopup.show({ assistant })
+            updateAssistant(_assistant)
+          }
+        },
+        {
+          label: t('common.duplicate'),
+          key: 'duplicate',
+          icon: <CopyOutlined />,
+          onClick: async () => {
+            const _assistant: Assistant = { ...assistant, id: uuid(), topics: [getDefaultTopic()] }
+            addAssistant(_assistant)
+            setActiveAssistant(_assistant)
+          }
+        },
+        { type: 'divider' },
+        {
+          label: t('common.delete'),
+          key: 'delete',
+          icon: <DeleteOutlined />,
+          danger: true,
+          onClick: () => onDelete(assistant)
         }
-      },
-      {
-        label: t('common.duplicate'),
-        key: 'duplicate',
-        icon: <CopyOutlined />,
-        onClick: async () => {
-          const _assistant: Assistant = { ...assistant, id: uuid(), topics: [getDefaultTopic()] }
-          addAssistant(_assistant)
-          setActiveAssistant(_assistant)
-        }
-      },
-      { type: 'divider' },
-      {
-        label: t('common.delete'),
-        key: 'delete',
-        icon: <DeleteOutlined />,
-        danger: true,
-        onClick: () => onDelete(assistant)
+      ] as ItemType[],
+    [addAssistant, onDelete, setActiveAssistant, t, updateAssistant]
+  )
+
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      if (result.destination) {
+        const sourceIndex = result.source.index
+        const destIndex = result.destination.index
+        const reorderAssistants = droppableReorder<Assistant>(assistants, sourceIndex, destIndex)
+        updateAssistants(reorderAssistants)
       }
-    ] as ItemType[]
+    },
+    [assistants, updateAssistants]
+  )
 
-  const onDragEnd = (result: DropResult) => {
-    if (result.destination) {
-      const sourceIndex = result.source.index
-      const destIndex = result.destination.index
-      const reorderAssistants = droppableReorder<Assistant>(assistants, sourceIndex, destIndex)
-      updateAssistants(reorderAssistants)
-    }
-  }
-
-  const onSwitchAssistant = (assistant: Assistant) => {
-    if (generating) {
-      window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
-      return
-    }
-    EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
-    setActiveAssistant(assistant)
-  }
+  const onSwitchAssistant = useCallback(
+    (assistant: Assistant): any => {
+      if (generating) {
+        return window.message.warning({
+          content: t('message.switch.disabled'),
+          key: 'switch-assistant'
+        })
+      }
+      EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
+      setActiveAssistant(assistant)
+    },
+    [generating, setActiveAssistant, t]
+  )
 
   return (
     <Container>
@@ -91,7 +104,11 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
               {assistants.map((assistant, index) => (
                 <Draggable key={`draggable_${assistant.id}_${index}`} draggableId={assistant.id} index={index}>
                   {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
                       <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
                         <AssistantItem
                           onClick={() => onSwitchAssistant(assistant)}
@@ -130,7 +147,6 @@ const AssistantItem = styled.div`
   padding: 7px 10px;
   position: relative;
   border-radius: 3px;
-  margin-bottom: 5px;
   cursor: pointer;
   font-family: Poppins;
   .anticon {

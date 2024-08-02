@@ -1,16 +1,17 @@
+import { PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
-import { useAllProviders, useProviders } from '@renderer/hooks/useProvider'
 import { getProviderLogo } from '@renderer/config/provider'
+import { useAllProviders, useProviders } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
 import { droppableReorder, generateColorFromChar, getFirstCharacter, uuid } from '@renderer/utils'
 import { Avatar, Button, Dropdown, MenuProps, Tag } from 'antd'
 import { FC, useState } from 'react'
-import styled from 'styled-components'
-import ProviderSetting from './components/ProviderSetting'
 import { useTranslation } from 'react-i18next'
-import { PlusOutlined } from '@ant-design/icons'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import styled from 'styled-components'
+
 import AddProviderPopup from './components/AddProviderPopup'
+import ProviderSetting from './components/ProviderSetting'
 
 const ProviderSettings: FC = () => {
   const providers = useAllProviders()
@@ -92,7 +93,11 @@ const ProviderSettings: FC = () => {
                   {providers.map((provider, index) => (
                     <Draggable key={`draggable_${provider.id}_${index}`} draggableId={provider.id} index={index}>
                       {(provided) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
                           <Dropdown
                             menu={{ items: provider.isSystem ? [] : getDropdownMenus(provider) }}
                             trigger={['contextMenu']}>
@@ -166,7 +171,6 @@ const ProviderListItem = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 5px 8px;
-  margin-bottom: 5px;
   width: 100%;
   cursor: pointer;
   border-radius: 5px;

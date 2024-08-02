@@ -2,11 +2,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+
 import assistants from './assistants'
-import settings from './settings'
 import llm from './llm'
-import runtime from './runtime'
 import migrate from './migrate'
+import runtime from './runtime'
+import settings from './settings'
 
 const rootReducer = combineReducers({
   assistants,

@@ -1,6 +1,6 @@
 import { dialog, SaveDialogOptions, SaveDialogReturnValue } from 'electron'
-import { writeFile } from 'fs'
 import logger from 'electron-log'
+import { writeFile } from 'fs'
 
 export async function saveFile(_: Electron.IpcMainInvokeEvent, fileName: string, content: string): Promise<void> {
   try {

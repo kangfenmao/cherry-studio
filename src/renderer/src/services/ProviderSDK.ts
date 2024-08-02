@@ -1,12 +1,13 @@
-import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
-import OpenAI from 'openai'
 import Anthropic from '@anthropic-ai/sdk'
-import { getDefaultModel, getTopNamingModel } from './assistant'
-import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } from 'openai/resources'
-import { sum, takeRight } from 'lodash'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
-import { EVENT_NAMES } from './event'
+import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { getAssistantSettings, removeQuotes } from '@renderer/utils'
+import { sum, takeRight } from 'lodash'
+import OpenAI from 'openai'
+import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } from 'openai/resources'
+
+import { getDefaultModel, getTopNamingModel } from './assistant'
+import { EVENT_NAMES } from './event'
 
 export default class ProviderSDK {
   provider: Provider

@@ -1,16 +1,17 @@
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import { isMac, isWindows } from '@renderer/config/constant'
 import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
+import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
+import { useTheme } from '@renderer/providers/ThemeProvider'
+import { Assistant } from '@renderer/types'
+import { uuid } from '@renderer/utils'
+import { Switch } from 'antd'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
-import Chat from './components/Chat'
+
 import Assistants from './components/Assistants'
-import { uuid } from '@renderer/utils'
-import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
+import Chat from './components/Chat'
 import Navigation from './components/NavigationCenter'
-import { isMac, isWindows } from '@renderer/config/constant'
-import { Assistant } from '@renderer/types'
-import { useTheme } from '@renderer/providers/ThemeProvider'
-import { Switch } from 'antd'
 
 let _activeAssistant: Assistant
 

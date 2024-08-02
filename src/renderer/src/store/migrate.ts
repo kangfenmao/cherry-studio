@@ -1,9 +1,10 @@
-import { createMigrate } from 'redux-persist'
-import { RootState } from '.'
 import { SYSTEM_MODELS } from '@renderer/config/models'
-import { isEmpty } from 'lodash'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
+import { isEmpty } from 'lodash'
+import { createMigrate } from 'redux-persist'
+
+import { RootState } from '.'
 
 const migrateConfig = {
   '2': (state: RootState) => {

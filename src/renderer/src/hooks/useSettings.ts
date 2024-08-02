@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
-  setSendMessageShortcut as _setSendMessageShortcut,
   SendMessageShortcut,
+  setSendMessageShortcut as _setSendMessageShortcut,
   setTheme,
   ThemeMode
 } from '@renderer/store/settings'

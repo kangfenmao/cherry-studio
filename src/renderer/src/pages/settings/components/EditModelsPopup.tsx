@@ -1,17 +1,18 @@
 import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { SYSTEM_MODELS } from '@renderer/config/models'
+import { getModelLogo } from '@renderer/config/provider'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/api'
-import { getModelLogo } from '@renderer/config/provider'
 import { Model, Provider } from '@renderer/types'
 import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Empty, Flex, Modal, Tag } from 'antd'
 import Search from 'antd/es/input/Search'
 import { groupBy, isEmpty, uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { TopView } from '../../../components/TopView'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { TopView } from '../../../components/TopView'
 
 interface ShowParams {
   provider: Provider

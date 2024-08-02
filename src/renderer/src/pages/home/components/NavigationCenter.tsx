@@ -1,18 +1,19 @@
 import { CodeSandboxOutlined } from '@ant-design/icons'
 import { NavbarCenter } from '@renderer/components/app/Navbar'
 import { isMac } from '@renderer/config/constant'
+import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { Assistant } from '@renderer/types'
+import { removeLeadingEmoji } from '@renderer/utils'
 import { Avatar, Button, Dropdown, MenuProps } from 'antd'
 import { first, upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
 import { NewButton } from '../HomePage'
-import { getModelLogo } from '@renderer/config/provider'
-import { removeLeadingEmoji } from '@renderer/utils'
 
 interface Props {
   activeAssistant: Assistant

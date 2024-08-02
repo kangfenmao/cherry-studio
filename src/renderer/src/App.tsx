@@ -2,6 +2,7 @@ import store, { persistor } from '@renderer/store'
 import { Provider } from 'react-redux'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
+
 import Sidebar from './components/app/Sidebar'
 import TopViewContainer from './components/TopView'
 import AppsPage from './pages/apps/AppsPage'

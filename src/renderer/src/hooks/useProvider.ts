@@ -1,3 +1,4 @@
+import { createSelector } from '@reduxjs/toolkit'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addModel,
@@ -8,8 +9,8 @@ import {
   updateProviders
 } from '@renderer/store/llm'
 import { Assistant, Model, Provider } from '@renderer/types'
+
 import { useDefaultModel } from './useAssistant'
-import { createSelector } from '@reduxjs/toolkit'
 
 const selectEnabledProviders = createSelector(
   (state) => state.llm.providers,

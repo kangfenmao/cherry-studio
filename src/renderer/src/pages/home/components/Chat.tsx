@@ -1,12 +1,13 @@
-import { Assistant } from '@renderer/types'
-import { FC } from 'react'
-import styled from 'styled-components'
-import Inputbar from './Inputbar'
-import Messages from './Messages'
-import { Flex } from 'antd'
-import RightSidebar from './RightSidebar'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
+import { Assistant } from '@renderer/types'
+import { Flex } from 'antd'
+import { FC } from 'react'
+import styled from 'styled-components'
+
+import Inputbar from './input/Inputbar'
+import Messages from './Messages'
+import RightSidebar from './sidebar/RightSidebar'
 
 interface Props {
   assistant: Assistant

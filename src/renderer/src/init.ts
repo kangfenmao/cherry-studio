@@ -1,8 +1,9 @@
-import localforage from 'localforage'
 import KeyvStorage from '@kangfenmao/keyv-storage'
 import * as Sentry from '@sentry/electron/renderer'
-import { isProduction, loadScript } from './utils'
+import localforage from 'localforage'
+
 import { ThemeMode } from './store/settings'
+import { isProduction, loadScript } from './utils'
 
 async function initSentry() {
   if (await isProduction()) {

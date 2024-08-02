@@ -1,11 +1,12 @@
-import { Avatar, Button, Progress, Row, Tag } from 'antd'
-import { FC, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import Logo from '@renderer/assets/images/logo.png'
 import { runAsyncFunction } from '@renderer/utils'
-import { useTranslation } from 'react-i18next'
-import { debounce } from 'lodash'
+import { Avatar, Button, Progress, Row, Tag } from 'antd'
 import { ProgressInfo } from 'electron-updater'
+import { debounce } from 'lodash'
+import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
 
 const AboutSettings: FC = () => {

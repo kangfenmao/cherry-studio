@@ -1,7 +1,8 @@
 import { Input, InputProps, Modal } from 'antd'
 import { useState } from 'react'
-import { TopView } from '../TopView'
+
 import { Box } from '../Layout'
+import { TopView } from '../TopView'
 
 interface PromptPopupShowParams {
   title: string

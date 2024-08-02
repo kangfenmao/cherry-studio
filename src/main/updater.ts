@@ -1,6 +1,6 @@
-import { AppUpdater as _AppUpdater, autoUpdater, UpdateInfo } from 'electron-updater'
-import logger from 'electron-log'
 import { BrowserWindow, dialog } from 'electron'
+import logger from 'electron-log'
+import { AppUpdater as _AppUpdater, autoUpdater, UpdateInfo } from 'electron-updater'
 
 export default class AppUpdater {
   autoUpdater: _AppUpdater = autoUpdater

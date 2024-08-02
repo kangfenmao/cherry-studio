@@ -3,11 +3,12 @@ import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/const
 import { useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { Button, Col, Input, InputNumber, Row, Slider, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
+import { debounce } from 'lodash'
 import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
 import { SettingContainer, SettingDivider, SettingSubtitle, SettingTitle } from './components'
-import { debounce } from 'lodash'
 
 const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()

@@ -1,11 +1,12 @@
+import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
 import { FC, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import TopicsTab from './TopicsTab'
-import SettingsTab from './SettingsTab'
 import { useTranslation } from 'react-i18next'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import styled from 'styled-components'
+
+import SettingsTab from './SettingsTab'
+import TopicsTab from './TopicsTab'
 
 interface Props {
   assistant: Assistant
@@ -47,8 +48,12 @@ const RightSidebar: FC<Props> = (props) => {
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [hideRightSidebar, isSettingsTab, isTopicTab, rightSidebarShown, showRightSidebar])
 
+  if (!rightSidebarShown) {
+    return null
+  }
+
   return (
-    <Container style={{ display: rightSidebarShown ? 'block' : 'none' }}>
+    <Container>
       <Tabs>
         <Tab className={tab === 'topic' ? 'active' : ''} onClick={() => setTab('topic')}>
           {t('common.topics')}
@@ -57,17 +62,20 @@ const RightSidebar: FC<Props> = (props) => {
           {t('settings.title')}
         </Tab>
       </Tabs>
-      {tab === 'topic' && <TopicsTab {...props} />}
-      {tab === 'settings' && <SettingsTab assistant={props.assistant} />}
+      <TabContent>
+        {tab === 'topic' && <TopicsTab {...props} />}
+        {tab === 'settings' && <SettingsTab assistant={props.assistant} />}
+      </TabContent>
     </Container>
   )
 }
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   width: var(--topic-list-width);
   height: calc(100vh - var(--navbar-height));
   border-left: 0.5px solid var(--color-border);
-  overflow-y: auto;
   .collapsed {
     width: 0;
     border-left: none;
@@ -95,6 +103,12 @@ const Tab = styled.div`
     color: var(--color-text-2);
     font-weight: 600;
   }
+`
+
+const TabContent = styled.div`
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
 `
 
 export default RightSidebar

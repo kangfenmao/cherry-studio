@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['unused-imports'],
+  plugins: ['unused-imports', 'simple-import-sort'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -14,12 +14,7 @@ module.exports = {
     'unused-imports/no-unused-imports': 'error',
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
     'react/prop-types': 'off',
-    'sort-imports': [
-      'error',
-      {
-        ignoreCase: true,
-        ignoreDeclarationSort: true
-      }
-    ]
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error'
   }
 }

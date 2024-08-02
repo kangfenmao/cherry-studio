@@ -4,6 +4,8 @@ import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Provider, Suggestion, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
+
 import {
   getAssistantProvider,
   getDefaultModel,
@@ -13,7 +15,6 @@ import {
 } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
 import ProviderSDK from './ProviderSDK'
-import { isEmpty } from 'lodash'
 
 export async function fetchChatCompletion({
   messages,

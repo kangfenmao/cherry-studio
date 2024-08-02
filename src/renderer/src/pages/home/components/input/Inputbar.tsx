@@ -23,6 +23,7 @@ import { debounce, isEmpty } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
 import SendMessageButton from './SendMessageButton'
 
 interface Props {

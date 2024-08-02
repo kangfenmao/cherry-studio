@@ -4,6 +4,7 @@ import { app, BrowserWindow, ipcMain, Menu, MenuItem, session, shell } from 'ele
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
+
 import icon from '../../resources/icon.png?asset'
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import { saveFile } from './event'

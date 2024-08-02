@@ -1,10 +1,11 @@
-import { Input, Modal } from 'antd'
-import { useState } from 'react'
-import { TopView } from '../TopView'
-import { Box } from '../Layout'
 import { Assistant } from '@renderer/types'
+import { Input, Modal } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { Box } from '../Layout'
+import { TopView } from '../TopView'
 
 interface AssistantSettingPopupShowParams {
   assistant: Assistant

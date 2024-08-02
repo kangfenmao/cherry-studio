@@ -1,13 +1,13 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
+import SYSTEM_ASSISTANTS from '@renderer/config/assistants.json'
+import { useAssistants } from '@renderer/hooks/useAssistant'
+import { getDefaultAssistant } from '@renderer/services/assistant'
+import { SystemAssistant } from '@renderer/types'
 import { Col, Row, Typography } from 'antd'
 import { find, groupBy } from 'lodash'
 import { FC } from 'react'
-import styled from 'styled-components'
-import { SystemAssistant } from '@renderer/types'
-import { getDefaultAssistant } from '@renderer/services/assistant'
-import { useAssistants } from '@renderer/hooks/useAssistant'
 import { useTranslation } from 'react-i18next'
-import SYSTEM_ASSISTANTS from '@renderer/config/assistants.json'
+import styled from 'styled-components'
 
 const { Title } = Typography
 

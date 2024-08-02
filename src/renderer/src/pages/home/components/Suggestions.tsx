@@ -1,11 +1,11 @@
+import { fetchSuggestions } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Suggestion } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
 import { FC, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import BeatLoader from 'react-spinners/BeatLoader'
-import { fetchSuggestions } from '@renderer/services/api'
+import styled from 'styled-components'
 
 interface Props {
   assistant: Assistant

@@ -1,9 +1,9 @@
+import { ArrowUpOutlined, EnterOutlined } from '@ant-design/icons'
+import { SendOutlined } from '@ant-design/icons'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { Dropdown, MenuProps } from 'antd'
 import { FC } from 'react'
-import { ArrowUpOutlined, EnterOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
-import { SendOutlined } from '@ant-design/icons'
 
 interface Props {
   sendMessage: () => void

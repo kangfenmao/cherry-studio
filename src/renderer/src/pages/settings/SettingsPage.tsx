@@ -1,13 +1,14 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import GeneralSettings from './GeneralSettings'
+
 import AboutSettings from './AboutSettings'
 import AssistantSettings from './AssistantSettings'
+import GeneralSettings from './GeneralSettings'
 import ModelSettings from './ModelSettings'
 import ProviderSettings from './ProviderSettings'
-import { useTranslation } from 'react-i18next'
 
 const SettingsPage: FC = () => {
   const { pathname } = useLocation()

@@ -26,7 +26,7 @@ export const SettingTitle = styled.div`
 export const SettingSubtitle = styled.div`
   font-size: 14px;
   color: var(--color-text-2);
-  margin: 15px 0 10px 0;
+  margin: 15px 0 0 0;
   user-select: none;
 `
 

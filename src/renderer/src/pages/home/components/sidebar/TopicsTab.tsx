@@ -1,17 +1,16 @@
+import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { fetchMessagesSummary } from '@renderer/services/api'
+import LocalStorage from '@renderer/services/storage'
+import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
+import { droppableReorder } from '@renderer/utils'
 import { Dropdown, MenuProps } from 'antd'
 import { FC, useCallback } from 'react'
-import styled from 'styled-components'
-import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
-import LocalStorage from '@renderer/services/storage'
-import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
-import { droppableReorder } from '@renderer/utils'
 import { useTranslation } from 'react-i18next'
-import { useAppSelector } from '@renderer/store'
+import styled from 'styled-components'
 
 interface Props {
   assistant: Assistant
@@ -20,7 +19,6 @@ interface Props {
 }
 
 const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
-  const { rightSidebarShown } = useShowRightSidebar()
   const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
@@ -102,7 +100,7 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
   )
 
   return (
-    <Container style={{ display: rightSidebarShown ? 'block' : 'none' }}>
+    <Container>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
@@ -110,7 +108,11 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
               {assistant.topics.map((topic, index) => (
                 <Draggable key={`draggable_${topic.id}_${index}`} draggableId={topic.id} index={index}>
                   {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
                       <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
                         <TopicListItem
                           className={topic.id === activeTopic?.id ? 'active' : ''}
@@ -131,12 +133,14 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
 }
 
 const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 15px 10px;
 `
 
 const TopicListItem = styled.div`
   padding: 8px 10px;
-  margin-bottom: 5px;
   cursor: pointer;
   border-radius: 3px;
   font-size: 14px;
