@@ -146,7 +146,7 @@ const AssistantItem = styled.div`
   flex-direction: column;
   padding: 7px 10px;
   position: relative;
-  border-radius: 3px;
+  border-radius: 8px;
   cursor: pointer;
   font-family: Poppins;
   .anticon {

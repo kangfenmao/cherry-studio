@@ -108,6 +108,7 @@ const Tab = styled.div`
 const TabContent = styled.div`
   display: flex;
   flex: 1;
+  flex-direction: column;
   overflow-y: auto;
 `
 

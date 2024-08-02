@@ -4,6 +4,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   MenuOutlined,
+  QuestionCircleOutlined,
   SaveOutlined,
   SyncOutlined
 } from '@ant-design/icons'
@@ -15,7 +16,7 @@ import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
-import { Avatar, Dropdown, Tooltip } from 'antd'
+import { Avatar, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
@@ -51,17 +52,6 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }, [message.content, t])
-
-  const onDelete = useCallback(async () => {
-    const confirmed = await window.modal.confirm({
-      icon: null,
-      title: t('message.message.delete.title'),
-      content: t('message.message.delete.content'),
-      okText: t('common.delete'),
-      okType: 'danger'
-    })
-    confirmed && onDeleteMessage?.(message)
-  }, [message, onDeleteMessage, t])
 
   const onEdit = useCallback(() => EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message), [message])
 
@@ -142,11 +132,17 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                 {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
               </ActionButton>
             </Tooltip>
-            <Tooltip title={t('common.delete')} mouseEnterDelay={0.8}>
-              <ActionButton onClick={onDelete}>
-                <DeleteOutlined />
-              </ActionButton>
-            </Tooltip>
+            <Popconfirm
+              title={t('message.message.delete.content')}
+              okButtonProps={{ danger: true }}
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              onConfirm={() => onDeleteMessage?.(message)}>
+              <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
+                <ActionButton>
+                  <DeleteOutlined />
+                </ActionButton>
+              </Tooltip>
+            </Popconfirm>
             {canRegenerate && (
               <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
                 <ActionButton onClick={onRegenerate}>

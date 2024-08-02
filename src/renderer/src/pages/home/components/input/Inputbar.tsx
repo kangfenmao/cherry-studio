@@ -5,7 +5,8 @@ import {
   FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
-  PlusCircleOutlined
+  PlusCircleOutlined,
+  QuestionCircleOutlined
 } from '@ant-design/icons'
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -149,11 +150,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           </Tooltip>
           <Tooltip placement="top" title={t('assistant.input.clear')} arrow>
             <Popconfirm
-              icon={false}
-              title={t('assistant.input.clear.title')}
-              description={t('assistant.input.clear.content')}
+              title={t('assistant.input.clear.content')}
               placement="top"
               onConfirm={clearTopic}
+              okButtonProps={{ danger: true }}
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               okText={t('assistant.input.clear')}>
               <ToolbarButton type="text">
                 <ClearOutlined />

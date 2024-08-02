@@ -142,7 +142,7 @@ const Container = styled.div`
 const TopicListItem = styled.div`
   padding: 8px 10px;
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: 8px;
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
