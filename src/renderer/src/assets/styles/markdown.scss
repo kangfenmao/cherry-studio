@@ -180,4 +180,51 @@
   sub {
     bottom: -0.25em;
   }
+
+  .footnote-ref {
+    font-size: 0.8em;
+    vertical-align: super;
+    line-height: 0;
+    margin: 0 2px;
+    color: var(--color-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .footnotes {
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: 1px solid var(--color-border);
+
+    ol {
+      padding-left: 1em;
+    }
+
+    li {
+      font-size: 0.9em;
+      margin-bottom: 0.5em;
+      color: var(--color-text-light);
+
+      p {
+        display: inline;
+        margin: 0;
+      }
+    }
+
+    .footnote-backref {
+      font-size: 0.8em;
+      vertical-align: super;
+      line-height: 0;
+      margin-left: 5px;
+      color: var(--color-primary);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }

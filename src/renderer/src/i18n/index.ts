@@ -25,7 +25,7 @@ const resources = {
         provider: 'Provider',
         you: 'You',
         save: 'Save',
-        footnotes: 'Footnotes'
+        footnotes: 'References'
       },
       button: {
         add: 'Add',

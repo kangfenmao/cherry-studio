@@ -86,7 +86,7 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 10px 20px 55px;
+  padding: 10px 10px 20px 65px;
   display: flex;
   width: 100%;
   flex-direction: row;
