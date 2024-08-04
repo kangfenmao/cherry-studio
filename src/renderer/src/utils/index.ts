@@ -225,3 +225,8 @@ export function loadScript(url: string) {
     document.head.appendChild(script)
   })
 }
+
+export function convertMathFormula(input) {
+  // 使用正则表达式匹配并替换公式格式
+  return input.replaceAll(/\\\[/g, '$$$$').replaceAll(/\\\]/g, '$$$$')
+}
