@@ -14,7 +14,7 @@ import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { Message } from '@renderer/types'
+import { Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import Markdown from './markdown/Markdown'
+import SelectModelDropdown from './SelectModelDropdown'
 
 interface Props {
   message: Message
@@ -36,7 +37,7 @@ interface Props {
 const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) => {
   const avatar = useAvatar()
   const { t } = useTranslation()
-  const { assistant } = useAssistant(message.assistantId)
+  const { assistant, model, setModel } = useAssistant(message.assistantId)
   const { userName, showMessageDivider, messageFont } = useSettings()
   const { generating } = useRuntime()
   const [copied, setCopied] = useState(false)
@@ -55,10 +56,14 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   const onEdit = useCallback(() => EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message), [message])
 
-  const onRegenerate = useCallback(() => {
-    onDeleteMessage?.(message)
-    setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE), 100)
-  }, [message, onDeleteMessage])
+  const onRegenerate = useCallback(
+    (model: Model) => {
+      setModel(model)
+      onDeleteMessage?.(message)
+      setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE), 100)
+    },
+    [message, onDeleteMessage, setModel]
+  )
 
   const getUserName = useCallback(() => {
     if (message.id === 'assistant') return assistant?.name
@@ -144,11 +149,13 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
               </Tooltip>
             </Popconfirm>
             {canRegenerate && (
-              <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-                <ActionButton onClick={onRegenerate}>
-                  <SyncOutlined />
-                </ActionButton>
-              </Tooltip>
+              <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topRight">
+                <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+                  <ActionButton>
+                    <SyncOutlined />
+                  </ActionButton>
+                </Tooltip>
+              </SelectModelDropdown>
             )}
             {!isUserMessage && (
               <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement="topRight" arrow>

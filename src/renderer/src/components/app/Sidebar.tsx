@@ -1,6 +1,5 @@
 import { TranslationOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
-import { isWindows } from '@renderer/config/constant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -13,7 +12,7 @@ const Sidebar: FC = () => {
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
   return (
-    <Container style={isWindows ? { paddingTop: 0 } : {}}>
+    <Container>
       <StyledLink to="/">
         <AvatarImg src={avatar || Logo} draggable={false} />
       </StyledLink>
