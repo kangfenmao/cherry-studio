@@ -56,5 +56,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    新增发送按钮
-    输入区域展开可以全屏显示
+    支持切换模型重新生成答案
+    修复数学公式渲染问题
+    输入状态提示样式更新
