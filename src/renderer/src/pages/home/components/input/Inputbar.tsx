@@ -17,7 +17,7 @@ import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { estimateInputTokenCount, uuid } from '@renderer/utils'
-import { Button, Popconfirm, Tooltip } from 'antd'
+import { Button, Popconfirm, Tag, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
@@ -178,8 +178,12 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           </Tooltip>
           {showInputEstimatedTokens && (
             <TextCount>
-              <HistoryOutlined /> {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT} | T↑
-              {`${inputTokenCount}/${estimateTokenCount}`}
+              <Tooltip title={t('assistant.input.context_count.tip')}>
+                <Tag style={{ cursor: 'pointer' }}>{assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}</Tag>
+              </Tooltip>
+              <Tooltip title={t('assistant.input.estimated_tokens.tip')}>
+                <Tag style={{ cursor: 'pointer' }}>↑{`${inputTokenCount} / ${estimateTokenCount}`}</Tag>
+              </Tooltip>
             </TextCount>
           )}
         </ToolbarMenu>

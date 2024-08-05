@@ -71,6 +71,8 @@ const resources = {
         'input.send': 'Send',
         'input.pause': 'Pause',
         'input.settings': 'Settings',
+        'input.context_count.tip': 'Context Count',
+        'input.estimated_tokens.tip': 'Estimated tokens',
         'settings.temperature': 'Temperature',
         'settings.temperature.tip':
           'Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.',
@@ -256,6 +258,8 @@ const resources = {
         'input.send': '发送',
         'input.pause': '暂停',
         'input.settings': '设置',
+        'input.context_count.tip': '上下文数',
+        'input.estimated_tokens.tip': '预估 token 数',
         'settings.temperature': '模型温度',
         'settings.temperature.tip':
           '模型生成文本的随机程度。值越大，回复内容越赋有多样性、创造性、随机性；设为 0 根据事实回答。日常聊天建议设置为 0.7',
