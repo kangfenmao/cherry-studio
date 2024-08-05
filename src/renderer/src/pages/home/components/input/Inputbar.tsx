@@ -148,9 +148,19 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     <Container id="inputbar" style={{ minHeight: expended ? '100%' : 'var(--input-bar-height)' }}>
       <Toolbar onDoubleClick={() => setExpend(!expended)}>
         <ToolbarMenu>
-          <Tooltip placement="top" title={t('assistant.input.new_chat')} arrow>
+          <Tooltip placement="top" title={t('assistant.input.new_topic')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
               <PlusCircleOutlined />
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
+              <HistoryOutlined />
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip placement="top" title={t('assistant.input.settings')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
+              <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('assistant.input.clear')} arrow>
@@ -165,16 +175,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                 <ClearOutlined />
               </ToolbarButton>
             </Popconfirm>
-          </Tooltip>
-          <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
-              <HistoryOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <Tooltip placement="top" title={t('assistant.input.settings')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
-              <ControlOutlined />
-            </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
