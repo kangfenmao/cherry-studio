@@ -20,7 +20,13 @@ const AboutSettings: FC = () => {
     async () => {
       if (checkUpdateLoading || downloading) return
       setCheckUpdateLoading(true)
-      await window.api.checkForUpdate()
+
+      try {
+        await window.api.checkForUpdate()
+      } catch (error) {
+        setCheckUpdateLoading(false)
+      }
+
       setCheckUpdateLoading(false)
     },
     2000,
