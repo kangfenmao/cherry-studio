@@ -1,8 +1,6 @@
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
-import { Assistant, AssistantSettings, Message, Model } from '@renderer/types'
+import { Assistant, AssistantSettings, Model } from '@renderer/types'
 import imageCompression from 'browser-image-compression'
-import { GPTTokens } from 'gpt-tokens'
-import { takeRight } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 
 export const runAsyncFunction = async (fn: () => void) => {
@@ -179,29 +177,6 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
     contextCount: contextCount === 20 ? 100000 : contextCount,
     temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE
   }
-}
-
-export function estimateInputTokenCount(text: string) {
-  const input = new GPTTokens({
-    model: 'gpt-4o',
-    messages: [{ role: 'user', content: text }]
-  })
-
-  return input.usedTokens - 7
-}
-
-export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[]) {
-  const { contextCount } = getAssistantSettings(assistant)
-
-  const all = new GPTTokens({
-    model: 'gpt-4o',
-    messages: [
-      { role: 'system', content: assistant.prompt },
-      ...takeRight(msgs, contextCount).map((message) => ({ role: message.role, content: message.content }))
-    ]
-  })
-
-  return all.usedTokens - 7
 }
 
 /**

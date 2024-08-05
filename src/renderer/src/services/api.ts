@@ -14,7 +14,7 @@ import {
   getTranslateModel
 } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
-import { filterAtMessages } from './message'
+import { filterAtMessages } from './messages'
 import ProviderSDK from './ProviderSDK'
 
 export async function fetchChatCompletion({

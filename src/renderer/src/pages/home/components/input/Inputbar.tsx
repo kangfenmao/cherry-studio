@@ -13,10 +13,11 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { estimateInputTokenCount } from '@renderer/services/messages'
 import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
-import { estimateInputTokenCount, uuid } from '@renderer/utils'
+import { uuid } from '@renderer/utils'
 import { Button, Popconfirm, Tag, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
@@ -32,8 +33,10 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
+let _text = ''
+
 const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
-  const [text, setText] = useState('')
+  const [text, setText] = useState(_text)
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut, showInputEstimatedTokens } = useSettings()
   const [expended, setExpend] = useState(false)
@@ -41,6 +44,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const generating = useAppSelector((state) => state.runtime.generating)
   const inputRef = useRef<TextAreaRef>(null)
   const { t } = useTranslation()
+
+  _text = text
 
   const sendMessage = useCallback(() => {
     if (generating) {
