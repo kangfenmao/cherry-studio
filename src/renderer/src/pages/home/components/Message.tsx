@@ -59,10 +59,9 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const onRegenerate = useCallback(
     (model: Model) => {
       setModel(model)
-      onDeleteMessage?.(message)
-      setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE), 100)
+      setTimeout(() => EventEmitter.emit(EVENT_NAMES.REGENERATE_MESSAGE, model), 100)
     },
-    [message, onDeleteMessage, setModel]
+    [setModel]
   )
 
   const getUserName = useCallback(() => {
@@ -137,6 +136,15 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                 {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
               </ActionButton>
             </Tooltip>
+            {canRegenerate && (
+              <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topRight">
+                <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+                  <ActionButton>
+                    <SyncOutlined />
+                  </ActionButton>
+                </Tooltip>
+              </SelectModelDropdown>
+            )}
             <Popconfirm
               title={t('message.message.delete.content')}
               okButtonProps={{ danger: true }}
@@ -148,15 +156,6 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                 </ActionButton>
               </Tooltip>
             </Popconfirm>
-            {canRegenerate && (
-              <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topRight">
-                <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-                  <ActionButton>
-                    <SyncOutlined />
-                  </ActionButton>
-                </Tooltip>
-              </SelectModelDropdown>
-            )}
             {!isUserMessage && (
               <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement="topRight" arrow>
                 <ActionButton>

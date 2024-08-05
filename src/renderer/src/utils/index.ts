@@ -230,3 +230,24 @@ export function convertMathFormula(input) {
   // 使用正则表达式匹配并替换公式格式
   return input.replaceAll(/\\\[/g, '$$$$').replaceAll(/\\\]/g, '$$$$')
 }
+
+export function getBriefInfo(text: string, maxLength: number = 50): string {
+  // 去除空行
+  const noEmptyLinesText = text.replace(/\n\s*\n/g, '\n')
+
+  // 检查文本是否超过最大长度
+  if (noEmptyLinesText.length <= maxLength) {
+    return noEmptyLinesText
+  }
+
+  // 找到最近的单词边界
+  let truncatedText = noEmptyLinesText.slice(0, maxLength)
+  const lastSpaceIndex = truncatedText.lastIndexOf(' ')
+
+  if (lastSpaceIndex !== -1) {
+    truncatedText = truncatedText.slice(0, lastSpaceIndex)
+  }
+
+  // 截取前面的内容，并在末尾添加 "..."
+  return truncatedText + '...'
+}

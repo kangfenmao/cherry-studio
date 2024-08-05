@@ -2,12 +2,13 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { filterAtMessages } from '@renderer/services/message'
 import LocalStorage from '@renderer/services/storage'
-import { Assistant, Message, Topic } from '@renderer/types'
-import { estimateHistoryTokenCount, runAsyncFunction } from '@renderer/utils'
+import { Assistant, Message, Model, Topic } from '@renderer/types'
+import { estimateHistoryTokenCount, getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import localforage from 'localforage'
-import { debounce, reverse } from 'lodash'
+import { debounce, last, reverse } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -75,8 +76,18 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
         onSendMessage(msg)
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
       }),
-      EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async () => {
-        fetchChatCompletion({ assistant, messages: messages, topic, onResponse: setLastMessage })
+      EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async (model: Model) => {
+        const lastUserMessage = last(filterAtMessages(messages).filter((m) => m.role === 'user'))
+        if (lastUserMessage) {
+          const content = `[@${model.name}](#)  ${getBriefInfo(lastUserMessage.content)}`
+          onSendMessage({ ...lastUserMessage, id: uuid(), type: '@', content })
+          fetchChatCompletion({
+            assistant,
+            topic,
+            messages: [...messages, lastUserMessage],
+            onResponse: setLastMessage
+          })
+        }
       }),
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {

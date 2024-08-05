@@ -144,9 +144,11 @@
     height: auto;
   }
 
-  a {
+  a,
+  .link {
     color: var(--color-link);
     text-decoration: none;
+    cursor: pointer;
 
     &:hover {
       text-decoration: underline;

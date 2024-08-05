@@ -25,6 +25,7 @@ export type Message = {
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'paused' | 'error'
   usage?: OpenAI.Completions.CompletionUsage
+  type?: 'text' | '@'
 }
 
 export type Topic = {
