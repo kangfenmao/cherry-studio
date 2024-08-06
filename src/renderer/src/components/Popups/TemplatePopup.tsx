@@ -37,18 +37,19 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
 export default class TemplatePopup {
   static topviewId = 0
   static hide() {
-    TopView.hide(this.topviewId)
+    TopView.hide('TemplatePopup')
   }
   static show(props: ShowParams) {
     return new Promise<any>((resolve) => {
-      this.topviewId = TopView.show(
+      TopView.show(
         <PopupContainer
           {...props}
           resolve={(v) => {
             resolve(v)
             this.hide()
           }}
-        />
+        />,
+        'TemplatePopup'
       )
     })
   }

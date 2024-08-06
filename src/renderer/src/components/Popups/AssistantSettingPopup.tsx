@@ -57,18 +57,19 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
 export default class AssistantSettingPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide(this.topviewId)
+    TopView.hide('AssistantSettingPopup')
   }
   static show(props: AssistantSettingPopupShowParams) {
     return new Promise<Assistant>((resolve) => {
-      this.topviewId = TopView.show(
+      TopView.show(
         <AssistantSettingPopupContainer
           {...props}
           resolve={(v) => {
             resolve(v)
             this.hide()
           }}
-        />
+        />,
+        'AssistantSettingPopup'
       )
     })
   }

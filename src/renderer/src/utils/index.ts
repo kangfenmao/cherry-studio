@@ -101,6 +101,12 @@ export function removeLeadingEmoji(str: string): string {
   return str.replace(emojiRegex, '')
 }
 
+export function getLeadingEmoji(str: string): string {
+  const emojiRegex = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)+/u
+  const match = str.match(emojiRegex)
+  return match ? match[0] : ''
+}
+
 export function isFreeModel(model: Model) {
   return (model.id + model.name).toLocaleLowerCase().includes('free')
 }

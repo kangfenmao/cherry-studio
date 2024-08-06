@@ -27,7 +27,7 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
     (topic: Topic) => {
       const menus: MenuProps['items'] = [
         {
-          label: t('assistant.topics.auto_rename'),
+          label: t('chat.topics.auto_rename'),
           key: 'auto-rename',
           icon: <OpenAIOutlined />,
           async onClick() {
@@ -41,12 +41,12 @@ const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTop
           }
         },
         {
-          label: t('assistant.topics.edit.title'),
+          label: t('chat.topics.edit.title'),
           key: 'rename',
           icon: <EditOutlined />,
           async onClick() {
             const name = await PromptPopup.show({
-              title: t('assistant.topics.edit.title'),
+              title: t('chat.topics.edit.title'),
               message: '',
               defaultValue: topic?.name || ''
             })

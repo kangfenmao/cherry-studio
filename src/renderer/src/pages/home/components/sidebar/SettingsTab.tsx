@@ -80,14 +80,14 @@ const SettingsTab: FC<Props> = (props) => {
     <Container>
       <SettingSubtitle>
         {t('settings.messages.model.title')}{' '}
-        <Tooltip title={t('assistant.settings.reset')}>
+        <Tooltip title={t('chat.settings.reset')}>
           <ReloadOutlined onClick={onReset} style={{ cursor: 'pointer', fontSize: 12, padding: '0 3px' }} />
         </Tooltip>
       </SettingSubtitle>
       <SettingDivider />
       <Row align="middle">
-        <Label>{t('assistant.settings.temperature')}</Label>
-        <Tooltip title={t('assistant.settings.temperature.tip')}>
+        <Label>{t('chat.settings.temperature')}</Label>
+        <Tooltip title={t('chat.settings.temperature.tip')}>
           <QuestionIcon />
         </Tooltip>
       </Row>
@@ -114,8 +114,8 @@ const SettingsTab: FC<Props> = (props) => {
         </Col>
       </Row>
       <Row align="middle">
-        <Label>{t('assistant.settings.conext_count')}</Label>
-        <Tooltip title={t('assistant.settings.conext_count.tip')}>
+        <Label>{t('chat.settings.conext_count')}</Label>
+        <Tooltip title={t('chat.settings.conext_count.tip')}>
           <QuestionIcon />
         </Tooltip>
       </Row>
@@ -124,7 +124,7 @@ const SettingsTab: FC<Props> = (props) => {
           <Slider
             min={0}
             max={20}
-            marks={{ 0: '0', 10: '10', 20: t('assistant.settings.max') }}
+            marks={{ 0: '0', 10: '10', 20: t('chat.settings.max') }}
             onChange={onConextCountChange}
             value={typeof contextCount === 'number' ? contextCount : 0}
             step={1}

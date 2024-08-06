@@ -3469,6 +3469,7 @@ __metadata:
     electron-vite: "npm:^2.0.0"
     electron-window-state: "npm:^5.0.3"
     emittery: "npm:^1.0.3"
+    emoji-picker-element: "npm:^1.22.1"
     eslint: "npm:^8.56.0"
     eslint-plugin-react: "npm:^7.34.3"
     eslint-plugin-react-hooks: "npm:^4.6.2"
@@ -4248,6 +4249,13 @@ __metadata:
   version: 1.0.3
   resolution: "emittery@npm:1.0.3"
   checksum: 10c0/91605d044f3891dd1f8ab731aeb94b520488b21e707f7064dcbcf5303bac3b4e7133dfa23c343ede1fc970340bd78a9b1aed522b805bc15104606bba630dd71e
+  languageName: node
+  linkType: hard
+
+"emoji-picker-element@npm:^1.22.1":
+  version: 1.22.1
+  resolution: "emoji-picker-element@npm:1.22.1"
+  checksum: 10c0/3fbd6b5498796b4d46cc641a0276e934c683f2c0a63a00aef0082e7b2acc6711b4acab49c0cf38aaa12bf3bcd126aad1355afbf4580917f7aad5f2fb2ffa0d9c
   languageName: node
   linkType: hard
 

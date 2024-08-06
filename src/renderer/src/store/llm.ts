@@ -136,7 +136,7 @@ const initialState: LlmState = {
 }
 
 const settingsSlice = createSlice({
-  name: 'settings',
+  name: 'llm',
   initialState,
   reducers: {
     updateProvider: (state, action: PayloadAction<Provider>) => {

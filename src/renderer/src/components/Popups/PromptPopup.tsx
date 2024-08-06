@@ -58,18 +58,19 @@ const PromptPopupContainer: React.FC<Props> = ({
 export default class PromptPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide(this.topviewId)
+    TopView.hide('PromptPopup')
   }
   static show(props: PromptPopupShowParams) {
     return new Promise<string>((resolve) => {
-      this.topviewId = TopView.show(
+      TopView.show(
         <PromptPopupContainer
           {...props}
           resolve={(v) => {
             resolve(v)
             this.hide()
           }}
-        />
+        />,
+        'PromptPopup'
       )
     })
   }

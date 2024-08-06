@@ -31,7 +31,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     () => ({
       id: 'assistant',
       role: 'assistant',
-      content: assistant.description || assistant.prompt || t('assistant.default.description'),
+      content: assistant.description || assistant.prompt || t('chat.default.description'),
       assistantId: assistant.id,
       topicId: topic.id,
       status: 'pending',
@@ -50,7 +50,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   )
 
   const autoRenameTopic = useCallback(async () => {
-    if (topic.name === t('assistant.default.topic.name') && messages.length >= 2) {
+    if (topic.name === t('chat.default.topic.name') && messages.length >= 2) {
       const summaryText = await fetchMessagesSummary({ messages, assistant })
       summaryText && updateTopic({ ...topic, name: summaryText })
     }

@@ -271,6 +271,14 @@ const migrateConfig = {
         theme: 'auto'
       }
     }
+  },
+  '18': (state: RootState) => {
+    return {
+      ...state,
+      agents: {
+        agents: []
+      }
+    }
   }
 }
 

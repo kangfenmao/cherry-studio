@@ -82,8 +82,8 @@ const AssistantSettings: FC = () => {
       <SettingDivider />
       <SettingSubtitle style={{ marginTop: 0 }}>{t('settings.assistant.model_params')}</SettingSubtitle>
       <Row align="middle">
-        <Label>{t('assistant.settings.temperature')}</Label>
-        <Tooltip title={t('assistant.settings.temperature.tip')}>
+        <Label>{t('chat.settings.temperature')}</Label>
+        <Tooltip title={t('chat.settings.temperature.tip')}>
           <QuestionIcon />
         </Tooltip>
       </Row>
@@ -110,8 +110,8 @@ const AssistantSettings: FC = () => {
         </Col>
       </Row>
       <Row align="middle">
-        <Label>{t('assistant.settings.conext_count')}</Label>
-        <Tooltip title={t('assistant.settings.conext_count.tip')}>
+        <Label>{t('chat.settings.conext_count')}</Label>
+        <Tooltip title={t('chat.settings.conext_count.tip')}>
           <QuestionIcon />
         </Tooltip>
       </Row>
@@ -120,7 +120,7 @@ const AssistantSettings: FC = () => {
           <Slider
             min={0}
             max={20}
-            marks={{ 0: '0', 5: '5', 10: '10', 15: '15', 20: t('assistant.settings.max') }}
+            marks={{ 0: '0', 5: '5', 10: '10', 15: '15', 20: t('chat.settings.max') }}
             onChange={onConextCountChange}
             value={typeof contextCount === 'number' ? contextCount : 0}
             step={1}
@@ -138,7 +138,7 @@ const AssistantSettings: FC = () => {
         </Col>
       </Row>
       <Button onClick={onReset} style={{ width: 100 }}>
-        {t('assistant.settings.reset')}
+        {t('chat.settings.reset')}
       </Button>
     </SettingContainer>
   )

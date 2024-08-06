@@ -1,87 +1,101 @@
-import { useAppInit } from '@renderer/hooks/useAppInit'
 import { message, Modal } from 'antd'
-import { findIndex, pullAt } from 'lodash'
-import React, { useEffect, useState } from 'react'
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 
-let id = 0
+import { Box } from '../Layout'
+
 let onPop = () => {}
-
-let onShow = ({ element, key }: { element: React.FC | React.ReactNode; key: number }) => {
+let onShow = ({ element, id }: { element: React.FC | React.ReactNode; id: string }) => {
   element
-  key
+  id
 }
-
-let onHide = ({ key }: { key: number }) => {
-  key
+let onHide = (id: string) => {
+  id
 }
+let onHideAll = () => {}
 
 interface Props {
   children?: React.ReactNode
 }
 
 type ElementItem = {
-  key: number
+  id: string
   element: React.FC | React.ReactNode
 }
 
 const TopViewContainer: React.FC<Props> = ({ children }) => {
   const [elements, setElements] = useState<ElementItem[]>([])
+  const elementsRef = useRef<ElementItem[]>([])
+  elementsRef.current = elements
+
   const [messageApi, messageContextHolder] = message.useMessage()
   const [modal, modalContextHolder] = Modal.useModal()
-
-  useAppInit()
-
-  onPop = () => {
-    const views = [...elements]
-    views.pop()
-    setElements(views)
-  }
-
-  onShow = ({ element, key }: { element: React.FC | React.ReactNode; key: number }) => {
-    setElements(elements.concat([{ element, key }]))
-  }
-
-  onHide = ({ key }: { key: number }) => {
-    const views = [...elements]
-    pullAt(views, findIndex(views, { key }))
-    setElements(views)
-  }
 
   useEffect(() => {
     window.message = messageApi
     window.modal = modal
   }, [messageApi, modal])
 
+  onPop = () => {
+    console.debug('[TopView] onPop')
+    const views = [...elementsRef.current]
+    views.pop()
+    elementsRef.current = views
+    setElements(elementsRef.current)
+  }
+
+  onShow = ({ element, id }: ElementItem) => {
+    console.debug('[TopView] onShow', id)
+
+    if (!elementsRef.current.find((el) => el.id === id)) {
+      elementsRef.current = elementsRef.current.concat([{ element, id }])
+      setElements(elementsRef.current)
+    }
+  }
+
+  onHide = (id: string) => {
+    console.debug('[TopView] onHide', id, elementsRef.current)
+    elementsRef.current = elementsRef.current.filter((el) => el.id !== id)
+    setElements(elementsRef.current)
+  }
+
+  onHideAll = () => {
+    console.debug('[TopView] onHideAll')
+    setElements([])
+    elementsRef.current = []
+  }
+
+  const FullScreenContainer: React.FC<PropsWithChildren> = useCallback(({ children }) => {
+    return (
+      <Box flex={1} position="absolute" w="100%" h="100%">
+        <Box position="absolute" w="100%" h="100%" onClick={onPop} />
+        {children}
+      </Box>
+    )
+  }, [])
+
+  console.debug(
+    '[TopView]',
+    elements.map((el) => [el.id, el.element])
+  )
+
   return (
     <>
       {children}
       {messageContextHolder}
       {modalContextHolder}
-      {elements.length > 0 && (
-        <div style={{ display: 'flex', flex: 1, position: 'absolute', width: '100%', height: '100%' }}>
-          <div style={{ position: 'absolute', width: '100%', height: '100%' }} onClick={onPop} />
-          {elements.map(({ element: Element, key }) =>
-            typeof Element === 'function' ? (
-              <Element key={`TOPVIEW_${key}`} />
-            ) : (
-              <div key={`TOPVIEW_${key}`}>{Element}</div>
-            )
-          )}
-        </div>
-      )}
+      {elements.map(({ element: Element, id }) => (
+        <FullScreenContainer key={`TOPVIEW_${id}`}>
+          {typeof Element === 'function' ? <Element /> : Element}
+        </FullScreenContainer>
+      ))}
     </>
   )
 }
 
 export const TopView = {
-  show: (element: React.FC | React.ReactNode) => {
-    id = id + 1
-    onShow({ element, key: id })
-    return id
-  },
-  hide: (key: number) => {
-    onHide({ key })
-  },
+  show: (element: React.FC | React.ReactNode, id: string) => onShow({ element, id }),
+  hide: (id: string) => onHide(id),
+  clear: () => onHideAll(),
   pop: onPop
 }
 

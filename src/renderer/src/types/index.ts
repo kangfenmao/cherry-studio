@@ -3,9 +3,10 @@ import OpenAI from 'openai'
 export type Assistant = {
   id: string
   name: string
-  description?: string
   prompt: string
   topics: Topic[]
+  emoji?: string
+  description?: string
   model?: Model
   settings?: AssistantSettings
 }
@@ -60,7 +61,7 @@ export type Model = {
   description?: string
 }
 
-export type SystemAssistant = {
+export type Agent = {
   id: string
   name: string
   emoji: string

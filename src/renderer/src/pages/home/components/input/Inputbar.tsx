@@ -148,45 +148,45 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     <Container id="inputbar" style={{ minHeight: expended ? '100%' : 'var(--input-bar-height)' }}>
       <Toolbar onDoubleClick={() => setExpend(!expended)}>
         <ToolbarMenu>
-          <Tooltip placement="top" title={t('assistant.input.new_topic')} arrow>
+          <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
               <PlusCircleOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={t('assistant.input.topics')} arrow>
+          <Tooltip placement="top" title={t('chat.input.topics')} arrow>
             <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
               <HistoryOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={t('assistant.input.settings')} arrow>
+          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
             <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={t('assistant.input.clear')} arrow>
+          <Tooltip placement="top" title={t('chat.input.clear')} arrow>
             <Popconfirm
-              title={t('assistant.input.clear.content')}
+              title={t('chat.input.clear.content')}
               placement="top"
               onConfirm={clearTopic}
               okButtonProps={{ danger: true }}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              okText={t('assistant.input.clear')}>
+              okText={t('chat.input.clear')}>
               <ToolbarButton type="text">
                 <ClearOutlined />
               </ToolbarButton>
             </Popconfirm>
           </Tooltip>
-          <Tooltip placement="top" title={expended ? t('assistant.input.collapse') : t('assistant.input.expand')} arrow>
+          <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             </ToolbarButton>
           </Tooltip>
           {showInputEstimatedTokens && (
             <TextCount>
-              <Tooltip title={t('assistant.input.context_count.tip')}>
+              <Tooltip title={t('chat.input.context_count.tip')}>
                 <Tag style={{ cursor: 'pointer' }}>{assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}</Tag>
               </Tooltip>
-              <Tooltip title={t('assistant.input.estimated_tokens.tip')}>
+              <Tooltip title={t('chat.input.estimated_tokens.tip')}>
                 <Tag style={{ cursor: 'pointer' }}>↑{`${inputTokenCount} / ${estimateTokenCount}`}</Tag>
               </Tooltip>
             </TextCount>
@@ -194,7 +194,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         </ToolbarMenu>
         <ToolbarMenu>
           {generating && (
-            <Tooltip placement="top" title={t('assistant.input.pause')} arrow>
+            <Tooltip placement="top" title={t('chat.input.pause')} arrow>
               <ToolbarButton type="text" onClick={onPause}>
                 <PauseCircleOutlined style={{ color: 'var(--color-error)' }} />
               </ToolbarButton>
@@ -207,7 +207,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={t('assistant.input.placeholder')}
+        placeholder={t('chat.input.placeholder')}
         autoFocus
         contextMenu="true"
         variant="borderless"

@@ -15,13 +15,13 @@ const SendMessageButton: FC<Props> = ({ sendMessage }) => {
 
   const sendSettingItems: MenuProps['items'] = [
     {
-      label: `Enter ${t('assistant.input.send')}`,
+      label: `Enter ${t('chat.input.send')}`,
       key: 'Enter',
       icon: <EnterOutlined />,
       onClick: () => setSendMessageShortcut('Enter')
     },
     {
-      label: `Shift+Enter ${t('assistant.input.send')}`,
+      label: `Shift+Enter ${t('chat.input.send')}`,
       key: 'Shift+Enter',
       icon: <ArrowUpOutlined />,
       onClick: () => setSendMessageShortcut('Shift+Enter')
@@ -36,7 +36,7 @@ const SendMessageButton: FC<Props> = ({ sendMessage }) => {
       arrow
       menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
       style={{ width: 'auto' }}>
-      {t('assistant.input.send')}
+      {t('chat.input.send')}
       <SendOutlined />
     </Dropdown.Button>
   )

@@ -1,5 +1,6 @@
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
+import i18n from '@renderer/i18n'
 import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
@@ -23,6 +24,7 @@ const GeneralSettings: FC = () => {
   const onSelectLanguage = (value: string) => {
     dispatch(setLanguage(value))
     localStorage.setItem('language', value)
+    i18n.changeLanguage(value)
   }
 
   const onSetProxyUrl = () => {

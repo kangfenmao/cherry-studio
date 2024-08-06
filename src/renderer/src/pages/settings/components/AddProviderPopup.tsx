@@ -54,18 +54,19 @@ const PopupContainer: React.FC<Props> = ({ provider, resolve }) => {
 export default class AddProviderPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide(this.topviewId)
+    TopView.hide('AddProviderPopup')
   }
   static show(provider?: Provider) {
     return new Promise<string>((resolve) => {
-      this.topviewId = TopView.show(
+      TopView.show(
         <PopupContainer
           provider={provider}
           resolve={(v) => {
             resolve(v)
             this.hide()
           }}
-        />
+        />,
+        'AddProviderPopup'
       )
     })
   }

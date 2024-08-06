@@ -224,18 +224,19 @@ const Question = styled(QuestionCircleOutlined)`
 export default class EditModelsPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide(this.topviewId)
+    TopView.hide('EditModelsPopup')
   }
   static show(props: ShowParams) {
     return new Promise<any>((resolve) => {
-      this.topviewId = TopView.show(
+      TopView.show(
         <PopupContainer
           {...props}
           resolve={(v) => {
             resolve(v)
             this.hide()
           }}
-        />
+        />,
+        'EditModelsPopup'
       )
     })
   }

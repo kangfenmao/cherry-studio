@@ -3,6 +3,7 @@ import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
+import agents from './agents'
 import assistants from './assistants'
 import llm from './llm'
 import migrate from './migrate'
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   assistants,
   settings,
   llm,
+  agents,
   runtime
 })
 
@@ -20,7 +22,7 @@ const persistedReducer = persistReducer(
   {
     key: 'cherry-studio',
     storage,
-    version: 17,
+    version: 18,
     blacklist: ['runtime'],
     migrate
   },

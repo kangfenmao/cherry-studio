@@ -25,7 +25,8 @@ const resources = {
         provider: 'Provider',
         you: 'You',
         save: 'Save',
-        footnotes: 'References'
+        footnotes: 'References',
+        select: 'Select'
       },
       button: {
         add: 'Add',
@@ -48,9 +49,7 @@ const resources = {
         'switch.disabled': 'Switching is disabled while the assistant is generating'
       },
       chat: {
-        save: 'Save'
-      },
-      assistant: {
+        save: 'Save',
         'default.name': '😀 Default Assistant',
         'default.description': "Hello, I'm Default Assistant. You can start chatting with me right away",
         'default.topic.name': 'Default Topic',
@@ -83,8 +82,18 @@ const resources = {
         'settings.max': 'Max',
         'suggestions.title': 'Suggested Questions'
       },
-      apps: {
-        title: 'Agents'
+      agents: {
+        title: 'Agents',
+        my_agents: 'My Agents',
+        'add.title': 'Add Agent',
+        'edit.title': 'Edit Agent',
+        'add.name': 'Name',
+        'add.name.placeholder': 'Enter name',
+        'add.prompt': 'Prompt',
+        'add.prompt.placeholder': 'Enter prompt',
+        'add.button': 'Add',
+        'manage.title': 'Manage Agents',
+        'delete.popup.content': 'Are you sure you want to delete this agent?'
       },
       provider: {
         openai: 'OpenAI',
@@ -212,7 +221,8 @@ const resources = {
         regenerate: '重新生成',
         provider: '提供商',
         you: '用户',
-        footnote: '引用内容'
+        footnote: '引用内容',
+        select: '选择'
       },
       button: {
         add: '添加',
@@ -235,9 +245,7 @@ const resources = {
         'switch.disabled': '模型回复完成后才能切换'
       },
       chat: {
-        save: '保存'
-      },
-      assistant: {
+        save: '保存',
         'default.name': '😃 默认助手 - Assistant',
         'default.description': '你好，我是默认助手。你可以立刻开始跟我聊天。',
         'default.topic.name': '默认话题',
@@ -271,8 +279,18 @@ const resources = {
         'settings.max': '不限',
         'suggestions.title': '建议的问题'
       },
-      apps: {
-        title: '智能体'
+      agents: {
+        title: '智能体',
+        my_agents: '我的智能体',
+        'add.title': '添加智能体',
+        'edit.title': '编辑智能体',
+        'add.name': '名称',
+        'add.name.placeholder': '输入名称',
+        'add.prompt': '提示词',
+        'add.prompt.placeholder': '输入提示词',
+        'add.button': '添加',
+        'manage.title': '管理智能体',
+        'delete.popup.content': '确定要删除此智能体吗？'
       },
       provider: {
         openai: 'OpenAI',

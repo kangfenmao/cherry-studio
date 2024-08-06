@@ -6,7 +6,7 @@ import { uuid } from '@renderer/utils'
 export function getDefaultAssistant(): Assistant {
   return {
     id: 'default',
-    name: i18n.t('assistant.default.name'),
+    name: i18n.t('chat.default.name'),
     prompt: '',
     topics: [getDefaultTopic()]
   }
@@ -15,7 +15,7 @@ export function getDefaultAssistant(): Assistant {
 export function getDefaultTopic(): Topic {
   return {
     id: uuid(),
-    name: i18n.t('assistant.default.topic.name'),
+    name: i18n.t('chat.default.topic.name'),
     messages: []
   }
 }

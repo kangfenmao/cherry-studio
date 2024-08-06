@@ -5,7 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 import Sidebar from './components/app/Sidebar'
 import TopViewContainer from './components/TopView'
-import AppsPage from './pages/apps/AppsPage'
+import AgentsPage from './pages/agents/AgentsPage'
 import HomePage from './pages/home/HomePage'
 import SettingsPage from './pages/settings/SettingsPage'
 import TranslatePage from './pages/translate/TranslatePage'
@@ -23,7 +23,7 @@ function App(): JSX.Element {
                 <Sidebar />
                 <Routes>
                   <Route path="/" element={<HomePage />} />
-                  <Route path="/apps" element={<AppsPage />} />
+                  <Route path="/apps" element={<AgentsPage />} />
                   <Route path="/translate" element={<TranslatePage />} />
                   <Route path="/settings/*" element={<SettingsPage />} />
                 </Routes>

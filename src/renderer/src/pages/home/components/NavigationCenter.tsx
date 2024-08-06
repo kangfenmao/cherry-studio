@@ -27,7 +27,7 @@ const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
           <i className="iconfont icon-showsidebarhoriz" />
         </NewButton>
       )}
-      <AssistantName>{removeLeadingEmoji(assistant?.name) || t('assistant.default.name')}</AssistantName>
+      <AssistantName>{removeLeadingEmoji(assistant?.name) || t('chat.default.name')}</AssistantName>
       <SelectModelButton assistant={assistant} />
     </NavbarCenter>
   )

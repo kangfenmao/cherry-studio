@@ -12,7 +12,7 @@ const initialState: RuntimeState = {
 }
 
 const runtimeSlice = createSlice({
-  name: 'settings',
+  name: 'runtime',
   initialState,
   reducers: {
     setAvatar: (state, action: PayloadAction<string | null>) => {
