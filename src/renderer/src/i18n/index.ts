@@ -196,6 +196,12 @@ const resources = {
         italian: 'Italian',
         portuguese: 'Portuguese',
         arabic: 'Arabic'
+      },
+      ollama: {
+        title: 'Ollama',
+        'keep_alive_time.title': 'Keep Alive Time',
+        'keep_alive_time.placeholder': 'Minutes',
+        'keep_alive_time.description': 'The time in minutes to keep the connection alive, default is 5 minutes.'
       }
     }
   },
@@ -393,6 +399,12 @@ const resources = {
         italian: '意大利文',
         portuguese: '葡萄牙文',
         arabic: '阿拉伯文'
+      },
+      ollama: {
+        title: 'Ollama',
+        'keep_alive_time.title': '保持活跃时间',
+        'keep_alive_time.placeholder': '分钟',
+        'keep_alive_time.description': '对话后模型在内存中保持的时间（默认：5分钟）'
       }
     }
   }

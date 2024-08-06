@@ -19,6 +19,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import OllamSettings from '../providers/OllamaSettings'
 import { SettingContainer, SettingSubtitle, SettingTitle } from '.'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
@@ -126,6 +127,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         />
         {apiEditable && <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>}
       </Space.Compact>
+      {provider.id === 'ollama' && <OllamSettings />}
       <SettingSubtitle>{t('common.models')}</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
@@ -182,14 +184,14 @@ const ModelListHeader = styled.div`
   align-items: center;
 `
 
-const HelpTextRow = styled.div`
+export const HelpTextRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 5px 0;
 `
 
-const HelpText = styled.div`
+export const HelpText = styled.div`
   font-size: 11px;
   color: var(--color-text);
   opacity: 0.4;

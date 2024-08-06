@@ -2,12 +2,10 @@ import { Assistant, Topic } from '@renderer/types'
 import { find } from 'lodash'
 import { useEffect, useState } from 'react'
 
-const activeTopicsMap = new Map<string, Topic>()
+let _activeTopic: Topic
 
 export function useActiveTopic(assistant: Assistant) {
-  const [activeTopic, setActiveTopic] = useState(activeTopicsMap.get(assistant.id) || assistant?.topics[0])
-
-  activeTopicsMap.set(assistant.id, activeTopic)
+  const [activeTopic, setActiveTopic] = useState(_activeTopic || assistant?.topics[0])
 
   useEffect(() => {
     // activeTopic not in assistant.topics

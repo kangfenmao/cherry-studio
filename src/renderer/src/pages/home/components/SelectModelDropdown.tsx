@@ -40,7 +40,7 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
       menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }}
       trigger={['click']}
       arrow
-      placement="bottomCenter"
+      placement="bottom"
       overlayClassName="chat-nav-dropdown"
       {...props}>
       {children}

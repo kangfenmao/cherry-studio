@@ -187,7 +187,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                 <Tag style={{ cursor: 'pointer' }}>{assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}</Tag>
               </Tooltip>
               <Tooltip title={t('chat.input.estimated_tokens.tip')}>
-                <Tag style={{ cursor: 'pointer' }}>↑{`${inputTokenCount} / ${estimateTokenCount}`}</Tag>
+                <Tag style={{ cursor: 'pointer' }}>↑ {`${inputTokenCount} / ${estimateTokenCount}`}</Tag>
               </Tooltip>
             </TextCount>
           )}

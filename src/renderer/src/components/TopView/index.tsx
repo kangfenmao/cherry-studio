@@ -1,3 +1,4 @@
+import { useAppInit } from '@renderer/hooks/useAppInit'
 import { message, Modal } from 'antd'
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -29,6 +30,8 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
 
   const [messageApi, messageContextHolder] = message.useMessage()
   const [modal, modalContextHolder] = Modal.useModal()
+
+  useAppInit()
 
   useEffect(() => {
     window.message = messageApi

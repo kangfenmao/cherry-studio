@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
+import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { getAssistantSettings, removeQuotes } from '@renderer/utils'
 import { sum, takeRight } from 'lodash'
@@ -24,6 +25,10 @@ export default class ProviderSDK {
 
   private get isAnthropic() {
     return this.provider.id === 'anthropic'
+  }
+
+  private get keepAliveTime() {
+    return this.provider.id === 'ollama' ? getOllamaKeepAliveTime() : undefined
   }
 
   public async completions(
@@ -61,11 +66,13 @@ export default class ProviderSDK {
           })
         )
     } else {
+      // @ts-ignore key is not typed
       const stream = await this.openaiSdk.chat.completions.create({
         model: model.id,
         messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
         stream: true,
-        temperature: assistant?.settings?.temperature
+        temperature: assistant?.settings?.temperature,
+        keep_alive: this.keepAliveTime
       })
       for await (const chunk of stream) {
         if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break
@@ -92,10 +99,12 @@ export default class ProviderSDK {
       })
       return response.content[0].type === 'text' ? response.content[0].text : ''
     } else {
+      // @ts-ignore key is not typed
       const response = await this.openaiSdk.chat.completions.create({
         model: model.id,
         messages: messages as ChatCompletionMessageParam[],
-        stream: false
+        stream: false,
+        keep_alive: this.keepAliveTime
       })
       return response.choices[0].message?.content || ''
     }
@@ -124,11 +133,13 @@ export default class ProviderSDK {
 
       return message.content[0].type === 'text' ? message.content[0].text : null
     } else {
+      // @ts-ignore key is not typed
       const response = await this.openaiSdk.chat.completions.create({
         model: model.id,
         messages: [systemMessage, ...userMessages] as ChatCompletionMessageParam[],
         stream: false,
-        max_tokens: 50
+        max_tokens: 50,
+        keep_alive: this.keepAliveTime
       })
 
       return removeQuotes(response.choices[0].message?.content || '')

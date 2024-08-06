@@ -3,11 +3,18 @@ import { SYSTEM_MODELS } from '@renderer/config/models'
 import { Model, Provider } from '@renderer/types'
 import { uniqBy } from 'lodash'
 
+type LlmSettings = {
+  ollama: {
+    keepAliveTime: number
+  }
+}
+
 export interface LlmState {
   providers: Provider[]
   defaultModel: Model
   topicNamingModel: Model
   translateModel: Model
+  settings: LlmSettings
 }
 
 const initialState: LlmState = {
@@ -132,7 +139,12 @@ const initialState: LlmState = {
       isSystem: true,
       enabled: false
     }
-  ]
+  ],
+  settings: {
+    ollama: {
+      keepAliveTime: 0
+    }
+  }
 }
 
 const settingsSlice = createSlice({
@@ -179,6 +191,9 @@ const settingsSlice = createSlice({
     },
     setTranslateModel: (state, action: PayloadAction<{ model: Model }>) => {
       state.translateModel = action.payload.model
+    },
+    setOllamaKeepAliveTime: (state, action: PayloadAction<number>) => {
+      state.settings.ollama.keepAliveTime = action.payload
     }
   }
 })
@@ -192,7 +207,8 @@ export const {
   removeModel,
   setDefaultModel,
   setTopicNamingModel,
-  setTranslateModel
+  setTranslateModel,
+  setOllamaKeepAliveTime
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

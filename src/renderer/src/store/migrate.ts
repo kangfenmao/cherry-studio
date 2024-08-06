@@ -272,11 +272,19 @@ const migrateConfig = {
       }
     }
   },
-  '18': (state: RootState) => {
+  '19': (state: RootState) => {
     return {
       ...state,
       agents: {
         agents: []
+      },
+      llm: {
+        ...state.llm,
+        settings: {
+          ollama: {
+            keepAliveTime: 5
+          }
+        }
       }
     }
   }
