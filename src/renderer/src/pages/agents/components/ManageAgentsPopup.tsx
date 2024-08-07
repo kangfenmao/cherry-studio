@@ -71,7 +71,7 @@ const PopupContainer: React.FC = () => {
 }
 
 const Container = styled.div`
-  padding: 16px;
+  padding: 12px 0;
   height: 50vh;
   overflow-y: auto;
   &::-webkit-scrollbar {

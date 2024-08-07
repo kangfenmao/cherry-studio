@@ -2,7 +2,7 @@ import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
-import { getDefaultTopic } from '@renderer/services/assistant'
+import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
 import { Assistant } from '@renderer/types'
@@ -45,6 +45,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
           async onClick() {
             const _assistant = await AssistantSettingPopup.show({ assistant })
             updateAssistant(_assistant)
+            syncAsistantToAgent(_assistant)
           }
         },
         {

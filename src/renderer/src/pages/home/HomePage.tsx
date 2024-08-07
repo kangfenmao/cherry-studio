@@ -9,6 +9,7 @@ import { Switch } from 'antd'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
+import AddAssistantPopup from './components/AddAssistantPopup'
 import Assistants from './components/Assistants'
 import Chat from './components/Chat'
 import Navigation from './components/NavigationCenter'
@@ -25,10 +26,15 @@ const HomePage: FC = () => {
 
   _activeAssistant = activeAssistant
 
-  const onCreateAssistant = () => {
+  const onCreateDefaultAssistant = () => {
     const assistant = { ...defaultAssistant, id: uuid() }
     addAssistant(assistant)
     setActiveAssistant(assistant)
+  }
+
+  const onCreateAssistant = async () => {
+    const assistant = await AddAssistantPopup.show()
+    assistant && setActiveAssistant(assistant)
   }
 
   return (
@@ -62,7 +68,7 @@ const HomePage: FC = () => {
           <Assistants
             activeAssistant={activeAssistant}
             setActiveAssistant={setActiveAssistant}
-            onCreateAssistant={onCreateAssistant}
+            onCreateAssistant={onCreateDefaultAssistant}
           />
         )}
         <Chat assistant={activeAssistant} />

@@ -98,7 +98,7 @@ export function firstLetter(str: string): string {
 
 export function removeLeadingEmoji(str: string): string {
   const emojiRegex = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)+/u
-  return str.replace(emojiRegex, '')
+  return str.replace(emojiRegex, '').trim()
 }
 
 export function getLeadingEmoji(str: string): string {

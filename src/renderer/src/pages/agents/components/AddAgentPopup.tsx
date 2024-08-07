@@ -3,6 +3,7 @@ import 'emoji-picker-element'
 import EmojiPicker from '@renderer/components/EmojiPicker'
 import { TopView } from '@renderer/components/TopView'
 import { useAgents } from '@renderer/hooks/useAgents'
+import { syncAgentToAssistant } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { getLeadingEmoji, uuid } from '@renderer/utils'
 import { Button, Form, FormInstance, Input, Modal, Popover } from 'antd'
@@ -44,6 +45,7 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
         prompt: values.prompt
       }
       updateAgent(_agent)
+      syncAgentToAssistant(_agent)
       resolve(_agent)
       setOpen(false)
       return

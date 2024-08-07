@@ -26,7 +26,8 @@ const resources = {
         you: 'You',
         save: 'Save',
         footnotes: 'References',
-        select: 'Select'
+        select: 'Select',
+        search: 'Search'
       },
       button: {
         add: 'Add',
@@ -80,7 +81,8 @@ const resources = {
         'settings.reset': 'Reset',
         'settings.set_as_default': 'Apply to default assistant',
         'settings.max': 'Max',
-        'suggestions.title': 'Suggested Questions'
+        'suggestions.title': 'Suggested Questions',
+        'add.assistant.title': 'Add Assistant'
       },
       agents: {
         title: 'Agents',
@@ -93,7 +95,10 @@ const resources = {
         'add.prompt.placeholder': 'Enter prompt',
         'add.button': 'Add',
         'manage.title': 'Manage Agents',
-        'delete.popup.content': 'Are you sure you want to delete this agent?'
+        'delete.popup.content': 'Are you sure you want to delete this agent?',
+        'tag.default': 'Default',
+        'tag.system': 'System',
+        'tag.user': 'Mine'
       },
       provider: {
         openai: 'OpenAI',
@@ -228,7 +233,8 @@ const resources = {
         provider: '提供商',
         you: '用户',
         footnote: '引用内容',
-        select: '选择'
+        select: '选择',
+        search: '搜索'
       },
       button: {
         add: '添加',
@@ -283,7 +289,8 @@ const resources = {
         'settings.reset': '重置',
         'settings.set_as_default': '应用到默认助手',
         'settings.max': '不限',
-        'suggestions.title': '建议的问题'
+        'suggestions.title': '建议的问题',
+        'add.assistant.title': '添加智能体'
       },
       agents: {
         title: '智能体',
@@ -296,7 +303,10 @@ const resources = {
         'add.prompt.placeholder': '输入提示词',
         'add.button': '添加',
         'manage.title': '管理智能体',
-        'delete.popup.content': '确定要删除此智能体吗？'
+        'delete.popup.content': '确定要删除此智能体吗？',
+        'tag.default': '默认',
+        'tag.system': '系统',
+        'tag.user': '我的'
       },
       provider: {
         openai: 'OpenAI',

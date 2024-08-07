@@ -4,7 +4,7 @@ import { HStack } from '@renderer/components/Layout'
 import Agents from '@renderer/config/agents.json'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistants } from '@renderer/hooks/useAssistant'
-import { getDefaultAssistant } from '@renderer/services/assistant'
+import { covertAgentToAssistant } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { Col, Row, Typography } from 'antd'
 import { find, groupBy } from 'lodash'
@@ -21,10 +21,7 @@ const { Title } = Typography
 const AppsPage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const { agents } = useAgents()
-  const agentGroups = groupBy(
-    Agents.map((a) => ({ ...a, id: String(a.id) })),
-    'group'
-  )
+  const agentGroups = groupBy(Agents, 'group')
   const { t } = useTranslation()
 
   const onAddAgentConfirm = (agent: Agent) => {
@@ -43,12 +40,7 @@ const AppsPage: FC = () => {
   }
 
   const onAddAgent = (agent: Agent) => {
-    addAssistant({
-      ...getDefaultAssistant(),
-      ...agent,
-      name: agent.emoji ? agent.emoji + ' ' + agent.name : agent.name,
-      id: String(agent.id)
-    })
+    addAssistant(covertAgentToAssistant(agent))
     window.message.success({
       content: t('message.assistant.added.content'),
       key: 'agent-added',
