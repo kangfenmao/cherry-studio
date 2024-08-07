@@ -148,6 +148,7 @@ const TopicListItem = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: Ubuntu;
+  transition: all 0.3s;
   &:hover {
     background-color: var(--color-background-soft);
   }

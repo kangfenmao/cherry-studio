@@ -35,7 +35,9 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const agents = useMemo(() => {
     const allAgents = [defaultAgent, ...userAgents, ...systemAgents] as Agent[]
     const list = allAgents.filter((agent) => !assistants.map((a) => a.id).includes(agent.id))
-    return searchText ? list.filter((agent) => agent.name.includes(searchText)) : list
+    return searchText
+      ? list.filter((agent) => agent.name.toLowerCase().includes(searchText.trim().toLocaleLowerCase()))
+      : list
   }, [assistants, defaultAgent, searchText, userAgents])
 
   const onCreateAssistant = (agent: Agent) => {
