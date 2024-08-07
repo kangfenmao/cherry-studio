@@ -33,7 +33,6 @@ const SettingsTab: FC<Props> = (props) => {
     debounce(
       (settings: Partial<AssistantSettings>) => {
         updateAssistantSettings({
-          ...assistant.settings,
           temperature: settings.temperature ?? temperature,
           contextCount: settings.contextCount ?? contextCount,
           enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
@@ -41,12 +40,9 @@ const SettingsTab: FC<Props> = (props) => {
         })
       },
       1000,
-      {
-        leading: false,
-        trailing: true
-      }
+      { leading: true, trailing: false }
     ),
-    []
+    [temperature, contextCount, enableMaxTokens, maxTokens]
   )
 
   const onTemperatureChange = (value) => {
@@ -255,7 +251,7 @@ const InputNumberic = styled(InputNumber)`
 const Label = styled.p`
   margin: 0;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 600;
   margin-right: 8px;
 `
 

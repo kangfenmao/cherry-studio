@@ -14,7 +14,7 @@ export type Assistant = {
 export type AssistantSettings = {
   contextCount: number
   temperature: number
-  maxTokens: number
+  maxTokens: number | undefined
   enableMaxTokens: boolean
 }
 

@@ -1,7 +1,8 @@
 import { Assistant, Message } from '@renderer/types'
-import { getAssistantSettings } from '@renderer/utils'
 import { GPTTokens } from 'gpt-tokens'
 import { takeRight } from 'lodash'
+
+import { getAssistantSettings } from './assistant'
 
 export const filterAtMessages = (messages: Message[]) => {
   return messages.filter((message) => message.type !== '@')

@@ -26,7 +26,7 @@ function createWindow() {
     width: mainWindowState.width,
     height: mainWindowState.height,
     minWidth: 1080,
-    minHeight: 500,
+    minHeight: 600,
     show: true,
     autoHideMenuBar: true,
     transparent: process.platform === 'darwin',

@@ -1,5 +1,4 @@
-import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
-import { Assistant, AssistantSettings, Model } from '@renderer/types'
+import { Model } from '@renderer/types'
 import imageCompression from 'browser-image-compression'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -174,14 +173,6 @@ export function getFirstCharacter(str) {
   // 使用 for...of 循环来获取第一个字符
   for (const char of str) {
     return char
-  }
-}
-
-export const getAssistantSettings = (assistant: Assistant): AssistantSettings => {
-  const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
-  return {
-    contextCount: contextCount === 20 ? 100000 : contextCount,
-    temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE
   }
 }
 

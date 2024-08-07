@@ -38,7 +38,7 @@ const AssistantSettings: FC = () => {
       1000,
       { leading: false, trailing: true }
     ),
-    []
+    [temperature, contextCount, enableMaxTokens, maxTokens]
   )
 
   const onTemperatureChange = (value) => {

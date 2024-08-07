@@ -1,9 +1,9 @@
-import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { updateAgent } from '@renderer/store/agents'
 import { updateAssistant } from '@renderer/store/assistants'
-import { Agent, Assistant, Model, Provider, Topic } from '@renderer/types'
+import { Agent, Assistant, AssistantSettings, Model, Provider, Topic } from '@renderer/types'
 import { getLeadingEmoji, removeLeadingEmoji, uuid } from '@renderer/utils'
 
 export function getDefaultAssistant(): Assistant {
@@ -57,16 +57,25 @@ export function getProviderByModelId(modelId?: string) {
   return providers.find((p) => p.models.find((m) => m.id === _modelId)) as Provider
 }
 
-export function getAssistantMaxTokens(assistant: Assistant) {
-  if (assistant.settings?.enableMaxTokens) {
-    const maxTokens = assistant.settings.maxTokens
-    if (typeof maxTokens === 'number') {
-      return maxTokens > 100 ? maxTokens : DEFAULT_MAX_TOKENS
+export const getAssistantSettings = (assistant: Assistant): AssistantSettings => {
+  const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
+  const getAssistantMaxTokens = () => {
+    if (assistant.settings?.enableMaxTokens) {
+      const maxTokens = assistant.settings.maxTokens
+      if (typeof maxTokens === 'number') {
+        return maxTokens > 100 ? maxTokens : DEFAULT_MAX_TOKENS
+      }
+      return DEFAULT_MAX_TOKENS
     }
-    return DEFAULT_MAX_TOKENS
+    return undefined
   }
 
-  return undefined
+  return {
+    contextCount: contextCount === 20 ? 100000 : contextCount,
+    temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE,
+    enableMaxTokens: assistant?.settings?.enableMaxTokens ?? false,
+    maxTokens: getAssistantMaxTokens()
+  }
 }
 
 export function covertAgentToAssistant(agent: Agent): Assistant {

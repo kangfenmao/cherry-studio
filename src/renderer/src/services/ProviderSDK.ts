@@ -3,12 +3,12 @@ import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk
 import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
-import { getAssistantSettings, removeQuotes } from '@renderer/utils'
+import { removeQuotes } from '@renderer/utils'
 import { sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } from 'openai/resources'
 
-import { getAssistantMaxTokens, getDefaultModel, getTopNamingModel } from './assistant'
+import { getAssistantSettings, getDefaultModel, getTopNamingModel } from './assistant'
 import { EVENT_NAMES } from './event'
 
 export default class ProviderSDK {
@@ -39,7 +39,7 @@ export default class ProviderSDK {
   ) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
-    const { contextCount } = getAssistantSettings(assistant)
+    const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
 
@@ -53,7 +53,7 @@ export default class ProviderSDK {
         .stream({
           model: model.id,
           messages: [systemMessage, ...userMessages].filter(Boolean) as MessageParam[],
-          max_tokens: getAssistantMaxTokens(assistant) || DEFAULT_MAX_TOKENS,
+          max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
           temperature: assistant?.settings?.temperature
         })
         .on('text', (text) => onChunk({ text: text || '' }))
@@ -73,7 +73,7 @@ export default class ProviderSDK {
         messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
         stream: true,
         temperature: assistant?.settings?.temperature,
-        max_tokens: getAssistantMaxTokens(assistant),
+        max_tokens: maxTokens,
         keep_alive: this.keepAliveTime
       })
       for await (const chunk of stream) {
