@@ -37,6 +37,7 @@ const AssistantName = styled.span`
   font-weight: bold;
   margin-left: 5px;
   margin-right: 10px;
+  font-family: Ubuntu;
 `
 
 export default NavigationCenter

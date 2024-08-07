@@ -8,6 +8,7 @@ export const SettingContainer = styled.div`
   height: calc(100vh - var(--navbar-height));
   padding: 15px;
   overflow-y: scroll;
+  font-family: Ubuntu;
 
   &::-webkit-scrollbar {
     display: none;

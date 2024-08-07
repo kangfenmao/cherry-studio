@@ -100,14 +100,14 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   }, [assistant, messages, provider, topic, autoRenameTopic, updateTopic, onSendMessage])
 
   useEffect(() => {
-    runAsyncFunction(async () => setMessages((await LocalStorage.getTopicMessages(topic.id)) || []))
+    runAsyncFunction(async () => {
+      const messages = (await LocalStorage.getTopicMessages(topic.id)) || []
+      setMessages(messages)
+    })
   }, [topic.id])
 
   const scrollTop = useCallback(
-    debounce(() => containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' }), 500, {
-      leading: true,
-      trailing: false
-    }),
+    debounce(() => containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' }), 500),
     []
   )
 

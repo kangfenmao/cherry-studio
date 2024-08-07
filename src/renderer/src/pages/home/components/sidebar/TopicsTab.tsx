@@ -147,7 +147,7 @@ const TopicListItem = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: Poppins;
+  font-family: Ubuntu;
   &:hover {
     background-color: var(--color-background-soft);
   }

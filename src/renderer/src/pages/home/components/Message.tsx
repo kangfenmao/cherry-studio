@@ -8,6 +8,7 @@ import {
   SaveOutlined,
   SyncOutlined
 } from '@ant-design/icons'
+import { FONT_FAMILY } from '@renderer/config/constant'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
@@ -70,8 +71,10 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     return userName || t('common.you')
   }, [assistant?.name, message.id, message.modelId, message.role, t, userName])
 
-  const serifFonts = "Georgia, Cambria, 'Times New Roman', Times, serif"
-  const fontFamily = messageFont === 'serif' ? serifFonts : 'Poppins, -apple-system, sans-serif'
+  const fontFamily = useMemo(() => {
+    return messageFont === 'serif' ? FONT_FAMILY.replace('sans-serif', 'serif').replace('Ubuntu, ', '') : FONT_FAMILY
+  }, [messageFont])
+
   const messageBorder = showMessageDivider ? undefined : 'none'
   const avatarSource = useMemo(() => (message.modelId ? getModelLogo(message.modelId) : undefined), [message.modelId])
   const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])

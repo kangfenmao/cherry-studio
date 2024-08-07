@@ -150,11 +150,12 @@ export const BaseTypography = styled(Box)<{
 `
 
 export const TypographyNormal = styled(BaseTypography)`
-  font-family: 'Poppins';
+  font-family: 'Ubuntu';
 `
 
 export const TypographyBold = styled(BaseTypography)`
-  font-family: 'Poppins Bold';
+  font-family: 'Ubuntu';
+  font-weight: bold;
 `
 
 export const Container = styled.main<ContainerProps>`

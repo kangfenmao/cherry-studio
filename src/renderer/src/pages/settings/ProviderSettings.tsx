@@ -192,6 +192,7 @@ const ProviderItemName = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   font-weight: 500;
+  font-family: Ubuntu;
 `
 
 const AddButtonWrapper = styled.div`

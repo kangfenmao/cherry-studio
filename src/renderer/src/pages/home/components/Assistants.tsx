@@ -147,7 +147,7 @@ const AssistantItem = styled.div`
   position: relative;
   border-radius: 8px;
   cursor: pointer;
-  font-family: Poppins;
+  font-family: Ubuntu;
   .anticon {
     display: none;
   }
