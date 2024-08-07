@@ -1,3 +1,4 @@
+import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { updateAgent } from '@renderer/store/agents'
@@ -54,6 +55,18 @@ export function getProviderByModelId(modelId?: string) {
   const providers = store.getState().llm.providers
   const _modelId = modelId || getDefaultModel().id
   return providers.find((p) => p.models.find((m) => m.id === _modelId)) as Provider
+}
+
+export function getAssistantMaxTokens(assistant: Assistant) {
+  if (assistant.settings?.enableMaxTokens) {
+    const maxTokens = assistant.settings.maxTokens
+    if (typeof maxTokens === 'number') {
+      return maxTokens > 100 ? maxTokens : DEFAULT_MAX_TOKENS
+    }
+    return DEFAULT_MAX_TOKENS
+  }
+
+  return undefined
 }
 
 export function covertAgentToAssistant(agent: Agent): Assistant {

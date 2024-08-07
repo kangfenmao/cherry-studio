@@ -78,6 +78,9 @@ const resources = {
           'Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.',
         'settings.conext_count': 'Context',
         'settings.conext_count.tip': 'The number of previous messages to keep in the context.',
+        'settings.max_tokens': 'Enable Max Tokens Limit',
+        'settings.max_tokens.tip':
+          'The maximum number of tokens the model can generate. Normal chat suggests 500-800. Short text generation suggests 800-2000. Code generation suggests 2000-3600. Long text generation suggests above 4000.',
         'settings.reset': 'Reset',
         'settings.set_as_default': 'Apply to default assistant',
         'settings.max': 'Max',
@@ -285,7 +288,10 @@ const resources = {
           '模型生成文本的随机程度。值越大，回复内容越赋有多样性、创造性、随机性；设为 0 根据事实回答。日常聊天建议设置为 0.7',
         'settings.conext_count': '上下文数',
         'settings.conext_count.tip':
-          '要保留在上下文中的消息数量，数值越大，上下文越长，消耗的 token 越多。普通聊天建议 5-10，代码生成建议 5-10',
+          '要保留在上下文中的消息数量，数值越大，上下文越长，消耗的 token 越多。普通聊天建议 5-10',
+        'settings.max_tokens': '开启消息长度限制',
+        'settings.max_tokens.tip':
+          '单次交互所用的最大 Token 数, 会影响返回结果的长度。普通聊天建议 500-800；短文生成建议 800-2000；代码生成建议 2000-3600；长文生成建议切换模型到 4000 左右',
         'settings.reset': '重置',
         'settings.set_as_default': '应用到默认助手',
         'settings.max': '不限',

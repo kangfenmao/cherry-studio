@@ -1,11 +1,12 @@
 import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
-import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { HStack } from '@renderer/components/Layout'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings/components'
 import { useAppDispatch } from '@renderer/store'
 import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
-import { Assistant } from '@renderer/types'
+import { Assistant, AssistantSettings } from '@renderer/types'
 import { Col, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
 import { debounce } from 'lodash'
 import { FC, useCallback, useEffect, useState } from 'react'
@@ -20,6 +21,8 @@ const SettingsTab: FC<Props> = (props) => {
   const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setConextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
+  const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
+  const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
   const { t } = useTranslation()
 
   const dispatch = useAppDispatch()
@@ -28,11 +31,13 @@ const SettingsTab: FC<Props> = (props) => {
 
   const onUpdateAssistantSettings = useCallback(
     debounce(
-      ({ _temperature, _contextCount }: { _temperature?: number; _contextCount?: number }) => {
+      (settings: Partial<AssistantSettings>) => {
         updateAssistantSettings({
           ...assistant.settings,
-          temperature: _temperature ?? temperature,
-          contextCount: _contextCount ?? contextCount
+          temperature: settings.temperature ?? temperature,
+          contextCount: settings.contextCount ?? contextCount,
+          enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
+          maxTokens: settings.maxTokens ?? maxTokens
         })
       },
       1000,
@@ -47,14 +52,21 @@ const SettingsTab: FC<Props> = (props) => {
   const onTemperatureChange = (value) => {
     if (!isNaN(value as number)) {
       setTemperature(value)
-      onUpdateAssistantSettings({ _temperature: value })
+      onUpdateAssistantSettings({ temperature: value })
     }
   }
 
   const onConextCountChange = (value) => {
     if (!isNaN(value as number)) {
       setConextCount(value)
-      onUpdateAssistantSettings({ _contextCount: value })
+      onUpdateAssistantSettings({ contextCount: value })
+    }
+  }
+
+  const onMaxTokensChange = (value) => {
+    if (!isNaN(value as number)) {
+      setMaxTokens(value)
+      onUpdateAssistantSettings({ maxTokens: value })
     }
   }
 
@@ -66,7 +78,9 @@ const SettingsTab: FC<Props> = (props) => {
       settings: {
         ...assistant.settings,
         temperature: DEFAULT_TEMPERATURE,
-        contextCount: DEFAULT_CONEXTCOUNT
+        contextCount: DEFAULT_CONEXTCOUNT,
+        enableMaxTokens: false,
+        maxTokens: DEFAULT_MAX_TOKENS
       }
     })
   }
@@ -74,6 +88,8 @@ const SettingsTab: FC<Props> = (props) => {
   useEffect(() => {
     setTemperature(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
     setConextCount(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
+    setEnableMaxTokens(assistant?.settings?.enableMaxTokens ?? false)
+    setMaxTokens(assistant?.settings?.maxTokens ?? DEFAULT_MAX_TOKENS)
   }, [assistant])
 
   return (
@@ -110,6 +126,7 @@ const SettingsTab: FC<Props> = (props) => {
             value={temperature}
             onChange={onTemperatureChange}
             controls={false}
+            size="small"
           />
         </Col>
       </Row>
@@ -138,9 +155,51 @@ const SettingsTab: FC<Props> = (props) => {
             value={contextCount}
             onChange={onConextCountChange}
             controls={false}
+            size="small"
           />
         </Col>
       </Row>
+      <Row align="middle" justify="space-between" style={{ marginBottom: 8 }}>
+        <HStack alignItems="center">
+          <Label>{t('chat.settings.max_tokens')}</Label>
+          <Tooltip title={t('chat.settings.max_tokens.tip')}>
+            <QuestionIcon />
+          </Tooltip>
+        </HStack>
+        <Switch
+          size="small"
+          checked={enableMaxTokens}
+          onChange={(enabled) => {
+            setEnableMaxTokens(enabled)
+            onUpdateAssistantSettings({ enableMaxTokens: enabled })
+          }}
+        />
+      </Row>
+      {enableMaxTokens && (
+        <Row align="middle" gutter={10}>
+          <Col span={16}>
+            <Slider
+              min={0}
+              max={32000}
+              onChange={onMaxTokensChange}
+              value={typeof maxTokens === 'number' ? maxTokens : 0}
+              step={100}
+            />
+          </Col>
+          <Col span={8}>
+            <InputNumberic
+              min={0}
+              max={32000}
+              step={100}
+              value={maxTokens}
+              onChange={onMaxTokensChange}
+              controls={true}
+              style={{ width: '100%' }}
+              size="small"
+            />
+          </Col>
+        </Row>
+      )}
       <SettingSubtitle>{t('settings.messages.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>

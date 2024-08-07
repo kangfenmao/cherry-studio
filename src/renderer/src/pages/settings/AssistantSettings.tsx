@@ -1,7 +1,9 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { HStack } from '@renderer/components/Layout'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useDefaultAssistant } from '@renderer/hooks/useAssistant'
-import { Button, Col, Input, InputNumber, Row, Slider, Tooltip } from 'antd'
+import { AssistantSettings as AssistantSettingsType } from '@renderer/types'
+import { Button, Col, Input, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { debounce } from 'lodash'
 import { FC, useCallback, useState } from 'react'
@@ -14,18 +16,22 @@ const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()
   const [temperature, setTemperature] = useState(defaultAssistant.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setConextCount] = useState(defaultAssistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
+  const [enableMaxTokens, setEnableMaxTokens] = useState(defaultAssistant?.settings?.enableMaxTokens ?? false)
+  const [maxTokens, setMaxTokens] = useState(defaultAssistant?.settings?.maxTokens ?? 0)
 
   const { t } = useTranslation()
 
   const onUpdateAssistantSettings = useCallback(
     debounce(
-      ({ _temperature, _contextCount }: { _temperature?: number; _contextCount?: number }) => {
+      (settings: Partial<AssistantSettingsType>) => {
         updateDefaultAssistant({
           ...defaultAssistant,
           settings: {
             ...defaultAssistant.settings,
-            temperature: _temperature ?? temperature,
-            contextCount: _contextCount ?? contextCount
+            temperature: settings.temperature ?? temperature,
+            contextCount: settings.contextCount ?? contextCount,
+            enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
+            maxTokens: settings.maxTokens ?? maxTokens
           }
         })
       },
@@ -38,14 +44,21 @@ const AssistantSettings: FC = () => {
   const onTemperatureChange = (value) => {
     if (!isNaN(value as number)) {
       setTemperature(value)
-      onUpdateAssistantSettings({ _temperature: value })
+      onUpdateAssistantSettings({ temperature: value })
     }
   }
 
   const onConextCountChange = (value) => {
     if (!isNaN(value as number)) {
       setConextCount(value)
-      onUpdateAssistantSettings({ _contextCount: value })
+      onUpdateAssistantSettings({ contextCount: value })
+    }
+  }
+
+  const onMaxTokensChange = (value) => {
+    if (!isNaN(value as number)) {
+      setMaxTokens(value)
+      onUpdateAssistantSettings({ maxTokens: value })
     }
   }
 
@@ -57,7 +70,9 @@ const AssistantSettings: FC = () => {
       settings: {
         ...defaultAssistant.settings,
         temperature: DEFAULT_TEMPERATURE,
-        contextCount: DEFAULT_CONEXTCOUNT
+        contextCount: DEFAULT_CONEXTCOUNT,
+        enableMaxTokens: false,
+        maxTokens: DEFAULT_MAX_TOKENS
       }
     })
   }
@@ -80,7 +95,19 @@ const AssistantSettings: FC = () => {
         onChange={(e) => updateDefaultAssistant({ ...defaultAssistant, prompt: e.target.value })}
       />
       <SettingDivider />
-      <SettingSubtitle style={{ marginTop: 0 }}>{t('settings.assistant.model_params')}</SettingSubtitle>
+      <SettingSubtitle
+        style={{
+          marginTop: 0,
+          marginBottom: 20,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}>
+        <span>{t('settings.assistant.model_params')}</span>
+        <Button onClick={onReset} style={{ width: 90 }}>
+          {t('chat.settings.reset')}
+        </Button>
+      </SettingSubtitle>
       <Row align="middle">
         <Label>{t('chat.settings.temperature')}</Label>
         <Tooltip title={t('chat.settings.temperature.tip')}>
@@ -137,9 +164,46 @@ const AssistantSettings: FC = () => {
           />
         </Col>
       </Row>
-      <Button onClick={onReset} style={{ width: 100 }}>
-        {t('chat.settings.reset')}
-      </Button>
+      <Row align="middle">
+        <HStack alignItems="center">
+          <Label>{t('chat.settings.max_tokens')}</Label>
+          <Tooltip title={t('chat.settings.max_tokens.tip')}>
+            <QuestionIcon />
+          </Tooltip>
+        </HStack>
+        <Switch
+          style={{ marginLeft: 10 }}
+          checked={enableMaxTokens}
+          onChange={(enabled) => {
+            setEnableMaxTokens(enabled)
+            onUpdateAssistantSettings({ enableMaxTokens: enabled })
+          }}
+        />
+      </Row>
+      {enableMaxTokens && (
+        <Row align="middle" gutter={20}>
+          <Col span={22}>
+            <Slider
+              min={0}
+              max={32000}
+              onChange={onMaxTokensChange}
+              value={typeof maxTokens === 'number' ? maxTokens : 0}
+              step={100}
+            />
+          </Col>
+          <Col span={2}>
+            <InputNumber
+              min={0}
+              max={32000}
+              step={100}
+              value={maxTokens}
+              onChange={onMaxTokensChange}
+              controls={true}
+              style={{ width: '100%' }}
+            />
+          </Col>
+        </Row>
+      )}
     </SettingContainer>
   )
 }

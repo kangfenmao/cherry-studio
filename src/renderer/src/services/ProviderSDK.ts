@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
+import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { getAssistantSettings, removeQuotes } from '@renderer/utils'
@@ -7,7 +8,7 @@ import { sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } from 'openai/resources'
 
-import { getDefaultModel, getTopNamingModel } from './assistant'
+import { getAssistantMaxTokens, getDefaultModel, getTopNamingModel } from './assistant'
 import { EVENT_NAMES } from './event'
 
 export default class ProviderSDK {
@@ -52,7 +53,7 @@ export default class ProviderSDK {
         .stream({
           model: model.id,
           messages: [systemMessage, ...userMessages].filter(Boolean) as MessageParam[],
-          max_tokens: 4096,
+          max_tokens: getAssistantMaxTokens(assistant) || DEFAULT_MAX_TOKENS,
           temperature: assistant?.settings?.temperature
         })
         .on('text', (text) => onChunk({ text: text || '' }))
@@ -72,6 +73,7 @@ export default class ProviderSDK {
         messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
         stream: true,
         temperature: assistant?.settings?.temperature,
+        max_tokens: getAssistantMaxTokens(assistant),
         keep_alive: this.keepAliveTime
       })
       for await (const chunk of stream) {
