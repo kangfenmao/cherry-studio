@@ -1,11 +1,11 @@
 import { Assistant, Message } from '@renderer/types'
 import { GPTTokens } from 'gpt-tokens'
-import { takeRight } from 'lodash'
+import { isEmpty, takeRight } from 'lodash'
 
 import { getAssistantSettings } from './assistant'
 
-export const filterAtMessages = (messages: Message[]) => {
-  return messages.filter((message) => message.type !== '@')
+export const filterMessages = (messages: Message[]) => {
+  return messages.filter((message) => message.type !== '@').filter((message) => !isEmpty(message.content.trim()))
 }
 
 export function estimateInputTokenCount(text: string) {
@@ -24,7 +24,7 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
     model: 'gpt-4o',
     messages: [
       { role: 'system', content: assistant.prompt },
-      ...filterAtMessages(takeRight(msgs, contextCount)).map((message) => ({
+      ...filterMessages(takeRight(msgs, contextCount)).map((message) => ({
         role: message.role,
         content: message.content
       }))

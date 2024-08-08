@@ -56,5 +56,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    支持保存自定义智能体
-    修复话题重命名的问题
+    错误修复，优化体验

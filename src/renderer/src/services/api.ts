@@ -14,7 +14,7 @@ import {
   getTranslateModel
 } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
-import { filterAtMessages } from './messages'
+import { filterMessages } from './messages'
 import ProviderSDK from './ProviderSDK'
 
 export async function fetchChatCompletion({
@@ -61,11 +61,12 @@ export async function fetchChatCompletion({
   }, 1000)
 
   try {
-    await providerSdk.completions(filterAtMessages(messages), assistant, ({ text, usage }) => {
+    await providerSdk.completions(filterMessages(messages), assistant, ({ text, usage }) => {
       message.content = message.content + text || ''
       message.usage = usage
       onResponse({ ...message, status: 'pending' })
     })
+    message.status = 'success'
   } catch (error: any) {
     message.content = `Error: ${error.message}`
     message.status = 'error'

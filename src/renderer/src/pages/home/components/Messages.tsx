@@ -2,7 +2,7 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { estimateHistoryTokenCount, filterAtMessages } from '@renderer/services/messages'
+import { estimateHistoryTokenCount, filterMessages } from '@renderer/services/messages'
 import LocalStorage from '@renderer/services/storage'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
@@ -77,7 +77,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
       }),
       EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async (model: Model) => {
-        const lastUserMessage = last(filterAtMessages(messages).filter((m) => m.role === 'user'))
+        const lastUserMessage = last(filterMessages(messages).filter((m) => m.role === 'user'))
         if (lastUserMessage) {
           const content = `[@${model.name}](#)  ${getBriefInfo(lastUserMessage.content)}`
           onSendMessage({ ...lastUserMessage, id: uuid(), type: '@', content })
