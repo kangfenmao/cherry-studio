@@ -5,7 +5,7 @@ import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 
-import icon from '../../resources/icon.png?asset'
+import icon from '../../build/icon.png?asset'
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import { saveFile } from './event'
 import AppUpdater from './updater'
