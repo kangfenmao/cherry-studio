@@ -4,7 +4,7 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 
 # 🌠 Screenshot
 
-![](https://github.com/user-attachments/assets/ca57086e-d2c7-40ea-a63a-2c7f9b3a05ea)
+![](https://github.com/user-attachments/assets/e24d1e7d-126a-4647-bd98-f470bfe26fde)
 
 ![](https://github.com/user-attachments/assets/3f3f0bfa-cb88-4abf-923a-a0859fa3c912)
 
@@ -53,10 +53,10 @@ $ yarn build:mac
 $ yarn build:linux
 ```
 
-## Star History
+# ⭐️ Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
 
-## License
+# 📃 License
 
 [LICENSE](./LICENSE)
