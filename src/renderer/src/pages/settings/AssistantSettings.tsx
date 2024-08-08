@@ -65,6 +65,8 @@ const AssistantSettings: FC = () => {
   const onReset = () => {
     setTemperature(DEFAULT_TEMPERATURE)
     setConextCount(DEFAULT_CONEXTCOUNT)
+    setEnableMaxTokens(false)
+    setMaxTokens(0)
     updateDefaultAssistant({
       ...defaultAssistant,
       settings: {
@@ -115,7 +117,7 @@ const AssistantSettings: FC = () => {
         </Tooltip>
       </Row>
       <Row align="middle" style={{ marginBottom: 10 }} gutter={20}>
-        <Col span={22}>
+        <Col span={21}>
           <Slider
             min={0}
             max={1.2}
@@ -125,7 +127,7 @@ const AssistantSettings: FC = () => {
             step={0.1}
           />
         </Col>
-        <Col span={2}>
+        <Col span={3}>
           <InputNumber
             min={0}
             max={1.2}
@@ -143,7 +145,7 @@ const AssistantSettings: FC = () => {
         </Tooltip>
       </Row>
       <Row align="middle" style={{ marginBottom: 10 }} gutter={20}>
-        <Col span={22}>
+        <Col span={21}>
           <Slider
             min={0}
             max={20}
@@ -153,7 +155,7 @@ const AssistantSettings: FC = () => {
             step={1}
           />
         </Col>
-        <Col span={2}>
+        <Col span={3}>
           <InputNumber
             min={0}
             max={20}
@@ -182,16 +184,20 @@ const AssistantSettings: FC = () => {
       </Row>
       {enableMaxTokens && (
         <Row align="middle" gutter={20}>
-          <Col span={22}>
+          <Col span={21}>
             <Slider
               min={0}
               max={32000}
               onChange={onMaxTokensChange}
               value={typeof maxTokens === 'number' ? maxTokens : 0}
               step={100}
+              marks={{
+                0: '0',
+                32000: t('chat.settings.max')
+              }}
             />
           </Col>
-          <Col span={2}>
+          <Col span={3}>
             <InputNumber
               min={0}
               max={32000}
