@@ -3,7 +3,7 @@ import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { Model } from '@renderer/types'
 import { Select } from 'antd'
-import { find } from 'lodash'
+import { find, upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,10 +21,12 @@ const ModelSettings: FC = () => {
     .map((p) => ({
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       title: p.name,
-      options: p.models.map((m) => ({
-        label: m.name,
-        value: m.id
-      }))
+      options: p.models
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((m) => ({
+          label: upperFirst(m.name),
+          value: m.id
+        }))
     }))
 
   const iconStyle = { fontSize: 16, marginRight: 8 }
@@ -40,7 +42,7 @@ const ModelSettings: FC = () => {
       <SettingDivider />
       <Select
         defaultValue={defaultModel.id}
-        style={{ width: 200 }}
+        style={{ width: 360 }}
         onChange={(id) => setDefaultModel(find(allModels, { id }) as Model)}
         options={selectOptions}
       />
@@ -54,7 +56,7 @@ const ModelSettings: FC = () => {
       <SettingDivider />
       <Select
         defaultValue={topicNamingModel.id}
-        style={{ width: 200 }}
+        style={{ width: 360 }}
         onChange={(id) => setTopicNamingModel(find(allModels, { id }) as Model)}
         options={selectOptions}
       />
@@ -68,7 +70,7 @@ const ModelSettings: FC = () => {
       <SettingDivider />
       <Select
         defaultValue={translateModel?.id}
-        style={{ width: 200 }}
+        style={{ width: 360 }}
         onChange={(id) => setTranslateModel(find(allModels, { id }) as Model)}
         options={selectOptions}
         placeholder={t('settings.models.empty')}
