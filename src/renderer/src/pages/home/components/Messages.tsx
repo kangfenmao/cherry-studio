@@ -8,7 +8,7 @@ import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import localforage from 'localforage'
-import { debounce, last, reverse } from 'lodash'
+import { last, reverse } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -106,14 +106,9 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     })
   }, [topic.id])
 
-  const scrollTop = useCallback(
-    debounce(() => containerRef.current?.scrollTo({ top: 100000, behavior: 'auto' }), 500),
-    []
-  )
-
   useEffect(() => {
-    scrollTop()
-  }, [messages, lastMessage, scrollTop])
+    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 0)
+  }, [messages])
 
   useEffect(() => {
     EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, estimateHistoryTokenCount(assistant, messages))

@@ -28,7 +28,7 @@ const initialState: SettingsState = {
   language: navigator.language,
   proxyUrl: undefined,
   userName: '',
-  showMessageDivider: true,
+  showMessageDivider: false,
   messageFont: 'system',
   showInputEstimatedTokens: false,
   theme: ThemeMode.light
