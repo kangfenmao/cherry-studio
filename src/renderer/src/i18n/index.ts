@@ -210,6 +210,10 @@ const resources = {
         'keep_alive_time.title': 'Keep Alive Time',
         'keep_alive_time.placeholder': 'Minutes',
         'keep_alive_time.description': 'The time in minutes to keep the connection alive, default is 5 minutes.'
+      },
+      error: {
+        'chat.response':
+          'Something went wrong. Please check your API key in settings > providers, or check your proxy in Settings > General > Proxy'
       }
     }
   },
@@ -421,6 +425,9 @@ const resources = {
         'keep_alive_time.title': '保持活跃时间',
         'keep_alive_time.placeholder': '分钟',
         'keep_alive_time.description': '对话后模型在内存中保持的时间（默认：5分钟）'
+      },
+      error: {
+        'chat.response': '出错了，这通常是由于没有正确配置 API 密钥或代理导致的, 请前往设置 > 模型提供商中配置 API 密钥'
       }
     }
   }

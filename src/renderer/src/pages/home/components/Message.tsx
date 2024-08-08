@@ -17,7 +17,7 @@ import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
-import { Avatar, Dropdown, Popconfirm, Tooltip } from 'antd'
+import { Alert, Avatar, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
@@ -95,6 +95,29 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     [t, message]
   )
 
+  const MessageItem = useCallback(() => {
+    if (message.status === 'sending') {
+      return (
+        <MessageContentLoading>
+          <SyncOutlined spin size={24} />
+        </MessageContentLoading>
+      )
+    }
+
+    if (message.status === 'error') {
+      return (
+        <Alert
+          message={t('error.chat.response')}
+          description={<Markdown message={message} />}
+          type="error"
+          style={{ marginBottom: 15 }}
+        />
+      )
+    }
+
+    return <Markdown message={message} />
+  }, [message])
+
   return (
     <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
       <MessageHeader>
@@ -113,12 +136,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
         </AvatarWrapper>
       </MessageHeader>
       <MessageContent style={{ fontFamily }}>
-        {message.status === 'sending' && (
-          <MessageContentLoading>
-            <SyncOutlined spin size={24} />
-          </MessageContentLoading>
-        )}
-        {message.status !== 'sending' && <Markdown message={message} />}
+        <MessageItem />
         {message.usage && !generating && (
           <MessageMetadata>
             Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}

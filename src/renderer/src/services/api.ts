@@ -50,6 +50,16 @@ export async function fetchChatCompletion({
 
   onResponse({ ...message })
 
+  // Handle paused state
+  let paused = false
+  const timer = setInterval(() => {
+    if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
+      paused = true
+      onResponse({ ...message, status: 'paused' })
+      clearInterval(timer)
+    }
+  }, 1000)
+
   try {
     await providerSdk.completions(filterAtMessages(messages), assistant, ({ text, usage }) => {
       message.content = message.content + text || ''
@@ -58,10 +68,17 @@ export async function fetchChatCompletion({
     })
   } catch (error: any) {
     message.content = `Error: ${error.message}`
+    message.status = 'error'
+  }
+
+  timer && clearInterval(timer)
+
+  if (paused) {
+    return message
   }
 
   // Update message status
-  message.status = window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED) ? 'paused' : 'success'
+  message.status = window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED) ? 'paused' : message.status
 
   // Emit chat completion event
   EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, message)
