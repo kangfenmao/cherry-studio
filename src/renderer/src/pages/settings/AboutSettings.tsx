@@ -1,10 +1,13 @@
+import { GithubOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
+import { HStack } from '@renderer/components/Layout'
 import { runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Progress, Row, Tag } from 'antd'
 import { ProgressInfo } from 'electron-updater'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
@@ -90,7 +93,14 @@ const AboutSettings: FC = () => {
 
   return (
     <SettingContainer>
-      <SettingTitle>{t('settings.about.title')}</SettingTitle>
+      <SettingTitle>
+        {t('settings.about.title')}
+        <HStack alignItems="center">
+          <Link to="https://github.com/kangfenmao/cherry-studio">
+            <GithubOutlined style={{ marginRight: 4, color: 'var(--color-text)', fontSize: 20 }} />
+          </Link>
+        </HStack>
+      </SettingTitle>
       <SettingDivider />
       <AboutHeader>
         <Row align="middle">
