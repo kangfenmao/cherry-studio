@@ -91,7 +91,7 @@
   }
 
   code {
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
     font-family: 'Courier New', Courier, monospace;
   }
 
@@ -102,7 +102,7 @@
   }
 
   pre {
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
     padding: 1em;
     border-radius: 5px;
     overflow-x: auto;
