@@ -3,7 +3,7 @@ import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { Model } from '@renderer/types'
 import { Select } from 'antd'
-import { find, upperFirst } from 'lodash'
+import { find, sortBy, upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,12 +21,10 @@ const ModelSettings: FC = () => {
     .map((p) => ({
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       title: p.name,
-      options: p.models
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((m) => ({
-          label: upperFirst(m.name),
-          value: m.id
-        }))
+      options: sortBy(p.models, 'name').map((m) => ({
+        label: upperFirst(m.name),
+        value: m.id
+      }))
     }))
 
   const iconStyle = { fontSize: 16, marginRight: 8 }

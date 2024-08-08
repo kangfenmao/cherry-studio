@@ -203,14 +203,11 @@ const HelpLink = styled(Link)`
 `
 
 const RemoveIcon = styled(MinusCircleOutlined)`
+  font-size: 18px;
   margin-left: 10px;
   color: var(--color-error);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  opacity: 0.75;
-  &:hover {
-    opacity: 1;
-  }
 `
 
 export default ProviderSetting

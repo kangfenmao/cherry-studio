@@ -25,7 +25,7 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
       children: p.models.map((m) => ({
         key: m?.id,
         label: upperFirst(m?.name),
-        style: m?.id === model?.id ? { color: 'var(--color-primary)' } : undefined,
+        defaultSelectedKeys: [model?.id],
         icon: (
           <Avatar src={getModelLogo(m?.id || '')} size={24}>
             {first(m?.name)}
@@ -37,7 +37,7 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
 
   return (
     <DropdownMenu
-      menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' } }}
+      menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' }, selectedKeys: [model?.id] }}
       trigger={['click']}
       arrow
       placement="bottom"
