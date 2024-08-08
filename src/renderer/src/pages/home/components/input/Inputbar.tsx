@@ -80,10 +80,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       if (event.key === 'Escape') {
         return setExpend(false)
       }
-      if (event.key === 'Enter' && event.shiftKey) {
-        return sendMessage()
-      }
-      return
     }
 
     if (sendMessageShortcut === 'Enter' && event.key === 'Enter') {
@@ -145,8 +141,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container id="inputbar" style={{ minHeight: expended ? '100%' : 'var(--input-bar-height)' }}>
-      <Toolbar onDoubleClick={() => setExpend(!expended)}>
+    <Container id="inputbar" style={{ minHeight: expended ? '80%' : 'var(--input-bar-height)' }}>
+      <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
