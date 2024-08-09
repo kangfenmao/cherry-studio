@@ -1,44 +1,22 @@
-import { ArrowUpOutlined, EnterOutlined } from '@ant-design/icons'
-import { SendOutlined } from '@ant-design/icons'
-import { useSettings } from '@renderer/hooks/useSettings'
-import { Dropdown, MenuProps } from 'antd'
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
 
 interface Props {
+  disabled: boolean
   sendMessage: () => void
 }
 
-const SendMessageButton: FC<Props> = ({ sendMessage }) => {
-  const { sendMessageShortcut, setSendMessageShortcut } = useSettings()
-  const { t } = useTranslation()
-
-  const sendSettingItems: MenuProps['items'] = [
-    {
-      label: `Enter ${t('chat.input.send')}`,
-      key: 'Enter',
-      icon: <EnterOutlined />,
-      onClick: () => setSendMessageShortcut('Enter')
-    },
-    {
-      label: `Shift+Enter ${t('chat.input.send')}`,
-      key: 'Shift+Enter',
-      icon: <ArrowUpOutlined />,
-      onClick: () => setSendMessageShortcut('Shift+Enter')
-    }
-  ]
-
+const SendMessageButton: FC<Props> = ({ disabled, sendMessage }) => {
   return (
-    <Dropdown.Button
-      size="small"
+    <i
+      className="iconfont icon-ic_send"
       onClick={sendMessage}
-      trigger={['click']}
-      arrow
-      menu={{ items: sendSettingItems, selectable: true, defaultSelectedKeys: [sendMessageShortcut] }}
-      style={{ width: 'auto' }}>
-      {t('chat.input.send')}
-      <SendOutlined />
-    </Dropdown.Button>
+      style={{
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        color: disabled ? 'var(--color-text-3)' : 'var(--color-primary)',
+        fontSize: 22,
+        transition: 'all 0.2s'
+      }}
+    />
   )
 }
 

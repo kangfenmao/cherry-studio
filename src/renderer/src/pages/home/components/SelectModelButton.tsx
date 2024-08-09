@@ -1,7 +1,7 @@
-import { getModelLogo } from '@renderer/config/provider'
+import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
-import { Avatar, Button } from 'antd'
+import { Button } from 'antd'
 import { upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,7 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
   return (
     <SelectModelDropdown model={model} onSelect={setModel}>
       <DropdownButton size="small" type="default">
-        <Avatar src={getModelLogo(model?.id || '')} style={{ width: 20, height: 20 }} />
+        <ModelAvatar model={model} size={20} />
         <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
       </DropdownButton>
     </SelectModelDropdown>

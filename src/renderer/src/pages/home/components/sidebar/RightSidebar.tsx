@@ -1,6 +1,8 @@
+import { BarsOutlined, SettingOutlined } from '@ant-design/icons'
 import { useShowRightSidebar } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
+import { Segmented } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -54,14 +56,16 @@ const RightSidebar: FC<Props> = (props) => {
 
   return (
     <Container>
-      <Tabs>
-        <Tab className={tab === 'topic' ? 'active' : ''} onClick={() => setTab('topic')}>
-          {t('common.topics')}
-        </Tab>
-        <Tab className={tab === 'settings' ? 'active' : ''} onClick={() => setTab('settings')}>
-          {t('settings.title')}
-        </Tab>
-      </Tabs>
+      <Segmented
+        value={tab}
+        style={{ borderRadius: 0, padding: '10px', gap: 5, borderBottom: '0.5px solid var(--color-border)' }}
+        options={[
+          { label: t('common.topics'), value: 'topic', icon: <BarsOutlined /> },
+          { label: t('settings.title'), value: 'settings', icon: <SettingOutlined /> }
+        ]}
+        block
+        onChange={(value) => setTab(value as 'topic' | 'settings')}
+      />
       <TabContent>
         {tab === 'topic' && <TopicsTab {...props} />}
         {tab === 'settings' && <SettingsTab assistant={props.assistant} />}
@@ -79,29 +83,6 @@ const Container = styled.div`
   .collapsed {
     width: 0;
     border-left: none;
-  }
-`
-
-const Tabs = styled.div`
-  display: flex;
-  flex-direction: row;
-  border-bottom: 0.5px solid var(--color-border);
-  padding: 0 10px;
-`
-
-const Tab = styled.div`
-  padding: 8px 0;
-  font-weight: 500;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  font-size: 13px;
-  cursor: pointer;
-  color: var(--color-text-3);
-  &.active {
-    color: var(--color-text-2);
-    font-weight: 600;
   }
 `
 

@@ -39,7 +39,6 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
   }, [messageApi, modal])
 
   onPop = () => {
-    console.debug('[TopView] onPop')
     const views = [...elementsRef.current]
     views.pop()
     elementsRef.current = views
@@ -47,8 +46,6 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
   }
 
   onShow = ({ element, id }: ElementItem) => {
-    console.debug('[TopView] onShow', id)
-
     if (!elementsRef.current.find((el) => el.id === id)) {
       elementsRef.current = elementsRef.current.concat([{ element, id }])
       setElements(elementsRef.current)
@@ -56,13 +53,11 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
   }
 
   onHide = (id: string) => {
-    console.debug('[TopView] onHide', id, elementsRef.current)
     elementsRef.current = elementsRef.current.filter((el) => el.id !== id)
     setElements(elementsRef.current)
   }
 
   onHideAll = () => {
-    console.debug('[TopView] onHideAll')
     setElements([])
     elementsRef.current = []
   }
@@ -75,11 +70,6 @@ const TopViewContainer: React.FC<Props> = ({ children }) => {
       </Box>
     )
   }, [])
-
-  console.debug(
-    '[TopView]',
-    elements.map((el) => [el.id, el.element])
-  )
 
   return (
     <>

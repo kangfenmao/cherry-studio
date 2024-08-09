@@ -18,7 +18,7 @@ import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Button, Popconfirm, Tag, Tooltip } from 'antd'
+import { Button, Divider, Popconfirm, Tag, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
@@ -37,6 +37,7 @@ let _text = ''
 
 const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
+  const [inputFocus, setInputFocus] = useState(false)
   const { addTopic } = useAssistant(assistant.id)
   const { sendMessageShortcut, showInputEstimatedTokens } = useSettings()
   const [expended, setExpend] = useState(false)
@@ -141,7 +142,10 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container id="inputbar" style={{ minHeight: expended ? '80%' : 'var(--input-bar-height)' }}>
+    <Container
+      id="inputbar"
+      style={{ minHeight: expended ? '60%' : 'var(--input-bar-height)' }}
+      className={inputFocus ? 'focus' : ''}>
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
@@ -179,11 +183,20 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           </Tooltip>
           {showInputEstimatedTokens && (
             <TextCount>
-              <Tooltip title={t('chat.input.context_count.tip')}>
-                <Tag style={{ cursor: 'pointer' }}>{assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}</Tag>
-              </Tooltip>
-              <Tooltip title={t('chat.input.estimated_tokens.tip')}>
-                <Tag style={{ cursor: 'pointer' }}>↑ {`${inputTokenCount} / ${estimateTokenCount}`}</Tag>
+              <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
+                <Tag
+                  style={{
+                    cursor: 'pointer',
+                    borderRadius: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '2px 8px'
+                  }}>
+                  <i className="iconfont icon-history" style={{ marginRight: '3px' }} />
+                  {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}
+                  <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑
+                  {`${inputTokenCount} / ${estimateTokenCount}`}
+                </Tag>
               </Tooltip>
             </TextCount>
           )}
@@ -196,7 +209,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Tooltip>
           )}
-          <SendMessageButton sendMessage={sendMessage} />
+          <SendMessageButton sendMessage={sendMessage} disabled={generating || !text} />
         </ToolbarMenu>
       </Toolbar>
       <Textarea
@@ -209,6 +222,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         variant="borderless"
         ref={inputRef}
         styles={{ textarea: { paddingLeft: 0 } }}
+        onFocus={() => setInputFocus(true)}
+        onBlur={() => setInputFocus(false)}
       />
     </Container>
   )
@@ -217,10 +232,14 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  border-top: 0.5px solid var(--color-border);
+  height: var(--input-bar-height);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
+  margin: 0 20px 15px 20px;
+  border-radius: 10px;
+  &.focus {
+  }
 `
 
 const Textarea = styled(TextArea)`
@@ -229,13 +248,16 @@ const Textarea = styled(TextArea)`
   display: flex;
   flex: 1;
   margin: 0 15px 5px 15px;
+  font-family: Ubuntu;
+  resize: vertical;
+  overflow: auto;
 `
 
 const Toolbar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 3px 10px;
+  padding: 0 10px;
 `
 
 const ToolbarMenu = styled.div`

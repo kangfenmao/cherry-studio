@@ -1,4 +1,4 @@
-import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
+import { CheckOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -7,7 +7,7 @@ import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@r
 import { useAppDispatch } from '@renderer/store'
 import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
 import { Assistant, AssistantSettings } from '@renderer/types'
-import { Col, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
+import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
 import { debounce } from 'lodash'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,8 @@ const SettingsTab: FC<Props> = (props) => {
 
   const dispatch = useAppDispatch()
 
-  const { showMessageDivider, messageFont, showInputEstimatedTokens } = useSettings()
+  const { showMessageDivider, messageFont, showInputEstimatedTokens, sendMessageShortcut, setSendMessageShortcut } =
+    useSettings()
 
   const onUpdateAssistantSettings = useCallback(
     debounce(
@@ -104,25 +105,13 @@ const SettingsTab: FC<Props> = (props) => {
         </Tooltip>
       </Row>
       <Row align="middle" gutter={10}>
-        <Col span={18}>
+        <Col span={24}>
           <Slider
             min={0}
             max={1.2}
             onChange={onTemperatureChange}
             value={typeof temperature === 'number' ? temperature : 0}
-            marks={{ 0: '0', 0.7: '0.7', 1.2: '1.2' }}
             step={0.1}
-          />
-        </Col>
-        <Col span={6}>
-          <InputNumberic
-            min={0}
-            max={1.2}
-            step={0.1}
-            value={temperature}
-            onChange={onTemperatureChange}
-            controls={false}
-            size="small"
           />
         </Col>
       </Row>
@@ -133,25 +122,13 @@ const SettingsTab: FC<Props> = (props) => {
         </Tooltip>
       </Row>
       <Row align="middle" gutter={10}>
-        <Col span={18}>
+        <Col span={24}>
           <Slider
             min={0}
             max={20}
-            marks={{ 0: '0', 10: '10', 20: t('chat.settings.max') }}
             onChange={onConextCountChange}
             value={typeof contextCount === 'number' ? contextCount : 0}
             step={1}
-          />
-        </Col>
-        <Col span={6}>
-          <InputNumberic
-            min={0}
-            max={20}
-            step={1}
-            value={contextCount}
-            onChange={onConextCountChange}
-            controls={false}
-            size="small"
           />
         </Col>
       </Row>
@@ -173,25 +150,13 @@ const SettingsTab: FC<Props> = (props) => {
       </Row>
       {enableMaxTokens && (
         <Row align="middle" gutter={10}>
-          <Col span={16}>
+          <Col span={24}>
             <Slider
               min={0}
               max={32000}
               onChange={onMaxTokensChange}
               value={typeof maxTokens === 'number' ? maxTokens : 0}
               step={100}
-            />
-          </Col>
-          <Col span={8}>
-            <InputNumberic
-              min={0}
-              max={32000}
-              step={100}
-              value={maxTokens}
-              onChange={onMaxTokensChange}
-              controls={true}
-              style={{ width: '100%' }}
-              size="small"
             />
           </Col>
         </Row>
@@ -227,6 +192,19 @@ const SettingsTab: FC<Props> = (props) => {
         />
       </SettingRow>
       <SettingDivider />
+      <SettingRow>
+        <SettingRowTitleSmall>{t('settings.messages.input.send_shortcuts')}</SettingRowTitleSmall>
+      </SettingRow>
+      <Select
+        value={sendMessageShortcut}
+        menuItemSelectedIcon={<CheckOutlined />}
+        options={[
+          { value: 'Enter', label: `Enter ${t('chat.input.send')}` },
+          { value: 'Shift+Enter', label: `Shift + Enter ${t('chat.input.send')}` }
+        ]}
+        onChange={(value) => setSendMessageShortcut(value)}
+        style={{ width: '100%', marginTop: 10 }}
+      />
     </Container>
   )
 }
@@ -236,16 +214,6 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   padding: 0 15px;
-`
-
-const InputNumberic = styled(InputNumber)`
-  width: 45px;
-  padding: 0;
-  margin-left: 5px;
-  text-align: center;
-  .ant-input-number-input {
-    text-align: center;
-  }
 `
 
 const Label = styled.p`

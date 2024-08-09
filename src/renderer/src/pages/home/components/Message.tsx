@@ -1,6 +1,5 @@
 import {
   CheckOutlined,
-  CopyOutlined,
   DeleteOutlined,
   EditOutlined,
   MenuOutlined,
@@ -47,6 +46,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const isUserMessage = message.role === 'user'
   const isAssistantMessage = message.role === 'assistant'
   const canRegenerate = isLastMessage && isAssistantMessage
+  const showMetadata = Boolean(message.usage) && !generating
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(message.content)
@@ -119,15 +119,15 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   }, [message])
 
   return (
-    <MessageContainer key={message.id} className="message" style={{ border: messageBorder }}>
+    <MessageContainer key={message.id} className="message">
       <MessageHeader>
         <AvatarWrapper>
           {isAssistantMessage ? (
-            <Avatar src={avatarSource} size={35}>
+            <Avatar src={avatarSource} size={35} style={{ borderRadius: '20%' }}>
               {avatarName}
             </Avatar>
           ) : (
-            <Avatar src={avatar} size={35} />
+            <Avatar src={avatar} size={35} style={{ borderRadius: '20%' }} />
           )}
           <UserWrap>
             <UserName>{username}</UserName>
@@ -137,55 +137,58 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       </MessageHeader>
       <MessageContent style={{ fontFamily }}>
         <MessageItem />
-        {message.usage && !generating && (
-          <MessageMetadata>
-            Tokens: {message.usage.total_tokens} | ↑{message.usage.prompt_tokens}↓{message.usage.completion_tokens}
-          </MessageMetadata>
-        )}
-        {showMenu && (
-          <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
-            {message.role === 'user' && (
-              <Tooltip title="Edit" mouseEnterDelay={0.8}>
-                <ActionButton onClick={onEdit}>
-                  <EditOutlined />
-                </ActionButton>
-              </Tooltip>
-            )}
-            <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
-              <ActionButton onClick={onCopy}>
-                {!copied && <CopyOutlined />}
-                {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
-              </ActionButton>
-            </Tooltip>
-            {canRegenerate && (
-              <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topRight">
-                <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-                  <ActionButton>
-                    <SyncOutlined />
+        <MessageFooter style={{ border: messageBorder }}>
+          {showMenu && (
+            <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
+              {message.role === 'user' && (
+                <Tooltip title="Edit" mouseEnterDelay={0.8}>
+                  <ActionButton onClick={onEdit}>
+                    <EditOutlined />
                   </ActionButton>
                 </Tooltip>
-              </SelectModelDropdown>
-            )}
-            <Popconfirm
-              title={t('message.message.delete.content')}
-              okButtonProps={{ danger: true }}
-              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              onConfirm={() => onDeleteMessage?.(message)}>
-              <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
-                <ActionButton>
-                  <DeleteOutlined />
+              )}
+              <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
+                <ActionButton onClick={onCopy}>
+                  {!copied && <i className="iconfont icon-copy"></i>}
+                  {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
                 </ActionButton>
               </Tooltip>
-            </Popconfirm>
-            {!isUserMessage && (
-              <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement="topRight" arrow>
-                <ActionButton>
-                  <MenuOutlined />
-                </ActionButton>
-              </Dropdown>
-            )}
-          </MenusBar>
-        )}
+              {canRegenerate && (
+                <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topRight">
+                  <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+                    <ActionButton>
+                      <SyncOutlined />
+                    </ActionButton>
+                  </Tooltip>
+                </SelectModelDropdown>
+              )}
+              <Popconfirm
+                title={t('message.message.delete.content')}
+                okButtonProps={{ danger: true }}
+                icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                onConfirm={() => onDeleteMessage?.(message)}>
+                <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
+                  <ActionButton>
+                    <DeleteOutlined />
+                  </ActionButton>
+                </Tooltip>
+              </Popconfirm>
+              {!isUserMessage && (
+                <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement="topRight" arrow>
+                  <ActionButton>
+                    <MenuOutlined />
+                  </ActionButton>
+                </Dropdown>
+              )}
+            </MenusBar>
+          )}
+          {showMetadata && (
+            <MessageMetadata>
+              Tokens: {message?.usage?.total_tokens} | ↑{message?.usage?.prompt_tokens} | ↓
+              {message?.usage?.completion_tokens}
+            </MessageMetadata>
+          )}
+        </MessageFooter>
       </MessageContent>
     </MessageContainer>
   )
@@ -194,9 +197,8 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px 20px;
+  padding: 0 20px;
   position: relative;
-  border-bottom: 0.5px dotted var(--color-border);
   .menubar {
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -205,7 +207,7 @@ const MessageContainer = styled.div`
     }
     &.user {
       position: absolute;
-      top: 15px;
+      top: 10px;
       right: 10px;
     }
   }
@@ -257,6 +259,16 @@ const MessageContent = styled.div`
   margin-top: 5px;
 `
 
+const MessageFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  margin: 2px 0 8px 0;
+  border-top: 0.5px dashed var(--color-border);
+`
+
 const MessageContentLoading = styled.div`
   display: flex;
   flex-direction: row;
@@ -270,17 +282,18 @@ const MenusBar = styled.div`
   justify-content: flex-end;
   align-items: center;
   gap: 6px;
+  margin-left: -5px;
 `
 
 const MessageMetadata = styled.div`
   font-size: 12px;
   color: var(--color-text-2);
   user-select: text;
+  margin: 2px 0;
 `
 
 const ActionButton = styled.div`
   cursor: pointer;
-  border: 1px solid var(--color-border);
   border-radius: 8px;
   display: flex;
   flex-direction: row;
@@ -288,7 +301,15 @@ const ActionButton = styled.div`
   align-items: center;
   width: 30px;
   height: 30px;
-  .anticon {
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: var(--color-background-mute);
+    .anticon {
+      color: var(--color-text-1);
+    }
+  }
+  .anticon,
+  .iconfont {
     cursor: pointer;
     font-size: 14px;
     color: var(--color-icon);

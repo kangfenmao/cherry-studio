@@ -40,6 +40,7 @@
 
   --navbar-background: rgba(0, 0, 0, 0.8);
   --sidebar-background: rgba(0, 0, 0, 0.8);
+  --input-bar-background: rgba(255, 255, 255, 0.02);
 
   --navbar-height: 42px;
   --sidebar-width: 55px;
@@ -47,7 +48,7 @@
   --topic-list-width: 260px;
   --settings-width: var(--assistants-width);
   --status-bar-height: 40px;
-  --input-bar-height: 115px;
+  --input-bar-height: 85px;
 }
 
 body[theme-mode='light'] {
@@ -87,6 +88,7 @@ body[theme-mode='light'] {
 
   --navbar-background: rgba(255, 255, 255, 0.8);
   --sidebar-background: rgba(255, 255, 255, 0.8);
+  --input-bar-background: rgba(0, 0, 0, 0.02);
 }
 
 *,
@@ -154,4 +156,8 @@ body,
     -32px 0 #000;
   position: relative;
   animation: flash 0.5s ease-out infinite alternate;
+}
+
+.ant-segmented-group {
+  gap: 4px;
 }

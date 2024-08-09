@@ -136,7 +136,7 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 15px 10px;
+  padding: 10px 10px;
 `
 
 const TopicListItem = styled.div`
