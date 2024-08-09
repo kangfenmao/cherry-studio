@@ -20,11 +20,11 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 6. Code highlighting.
 7. Mermaid chart
 
+# 👥 Community
+
+Join our Telegram group to discuss Cherry Studio's latest developments and features! [Telegram community](https://t.me/CherryStudioAI)
+
 # 🖥️ Develop
-
-## Recommended IDE Setup
-
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ## Project Setup
 
