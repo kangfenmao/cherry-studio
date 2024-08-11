@@ -1,6 +1,8 @@
 import { Divider } from 'antd'
 import styled from 'styled-components'
 
+import SettingsPage from './SettingsPage'
+
 export const SettingContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -47,3 +49,5 @@ export const SettingRowTitle = styled.div`
   line-height: 18px;
   color: var(--color-text-1);
 `
+
+export default SettingsPage

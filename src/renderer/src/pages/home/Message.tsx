@@ -23,8 +23,8 @@ import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import Markdown from './markdown/Markdown'
-import SelectModelDropdown from './SelectModelDropdown'
+import SelectModelDropdown from './components/SelectModelDropdown'
+import Markdown from './Markdown/Markdown'
 
 interface Props {
   message: Message

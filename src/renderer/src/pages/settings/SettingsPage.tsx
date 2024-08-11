@@ -8,7 +8,7 @@ import AboutSettings from './AboutSettings'
 import AssistantSettings from './AssistantSettings'
 import GeneralSettings from './GeneralSettings'
 import ModelSettings from './ModelSettings'
-import ProviderSettings from './ProviderSettings'
+import ProvidersList from './ProviderSettings'
 
 const SettingsPage: FC = () => {
   const { pathname } = useLocation()
@@ -41,7 +41,7 @@ const SettingsPage: FC = () => {
         </SettingMenus>
         <SettingContent>
           <Routes>
-            <Route path="provider" element={<ProviderSettings />} />
+            <Route path="provider" element={<ProvidersList />} />
             <Route path="model" element={<ModelSettings />} />
             <Route path="assistant" element={<AssistantSettings />} />
             <Route path="general" element={<GeneralSettings />} />

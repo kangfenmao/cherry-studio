@@ -60,7 +60,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     const message: Message = {
       id: uuid(),
       role: 'user',
-      content: text,
+      content: text.replace(/\n/g, '  \n'),
       assistantId: assistant.id,
       topicId: assistant.topics[0].id || uuid(),
       createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),

@@ -4,8 +4,8 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingSubtitle } from '../components'
-import { HelpText, HelpTextRow } from '../components/ProviderSetting'
+import { SettingSubtitle } from '..'
+import { HelpText, HelpTextRow } from '../ProviderSettings/ProviderSetting'
 
 const OllamSettings: FC = () => {
   const { keepAliveTime, setKeepAliveTime } = useOllamaSettings()

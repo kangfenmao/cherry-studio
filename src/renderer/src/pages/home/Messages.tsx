@@ -12,8 +12,8 @@ import { last, reverse } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import Suggestions from './components/Suggestions'
 import MessageItem from './Message'
-import Suggestions from './Suggestions'
 
 interface Props {
   assistant: Assistant

@@ -10,10 +10,10 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import AddProviderPopup from './components/AddProviderPopup'
-import ProviderSetting from './components/ProviderSetting'
+import AddProviderPopup from './AddProviderPopup'
+import ProviderSetting from './ProviderSetting'
 
-const ProviderSettings: FC = () => {
+const ProvidersList: FC = () => {
   const providers = useAllProviders()
   const { updateProviders, addProvider, removeProvider, updateProvider } = useProviders()
   const [selectedProvider, setSelectedProvider] = useState<Provider>(providers[0])
@@ -203,4 +203,4 @@ const AddButtonWrapper = styled.div`
   padding: 10px 0;
 `
 
-export default ProviderSettings
+export default ProvidersList

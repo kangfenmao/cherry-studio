@@ -19,10 +19,10 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import OllamSettings from '../providers/OllamaSettings'
-import { SettingContainer, SettingSubtitle, SettingTitle } from '.'
+import { SettingContainer, SettingSubtitle, SettingTitle } from '..'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
+import OllamSettings from './OllamaSettings'
 
 interface Props {
   provider: Provider

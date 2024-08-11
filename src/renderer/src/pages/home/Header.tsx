@@ -8,14 +8,14 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { NewButton } from '../HomePage'
-import SelectModelButton from './SelectModelButton'
+import SelectModelButton from './components/SelectModelButton'
+import { NewButton } from './HomePage'
 
 interface Props {
   activeAssistant: Assistant
 }
 
-const NavigationCenter: FC<Props> = ({ activeAssistant }) => {
+const HomeHeader: FC<Props> = ({ activeAssistant }) => {
   const { assistant } = useAssistant(activeAssistant.id)
   const { t } = useTranslation()
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
@@ -40,4 +40,4 @@ const AssistantName = styled.span`
   font-family: Ubuntu;
 `
 
-export default NavigationCenter
+export default HomeHeader

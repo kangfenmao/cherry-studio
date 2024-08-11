@@ -5,9 +5,9 @@ import { Flex } from 'antd'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-import Inputbar from './input/Inputbar'
+import Inputbar from './Inputbar/Inputbar'
 import Messages from './Messages'
-import RightSidebar from './sidebar/RightSidebar'
+import RightSidebar from './RightSidebar'
 
 interface Props {
   assistant: Assistant

@@ -7,7 +7,7 @@ import { find, sortBy, upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SettingContainer, SettingDivider, SettingTitle } from './components'
+import { SettingContainer, SettingDivider, SettingTitle } from '.'
 
 const ModelSettings: FC = () => {
   const { defaultModel, topicNamingModel, translateModel, setDefaultModel, setTopicNamingModel, setTranslateModel } =

@@ -10,7 +10,7 @@ import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingSubtitle, SettingTitle } from './components'
+import { SettingContainer, SettingDivider, SettingSubtitle, SettingTitle } from '.'
 
 const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()

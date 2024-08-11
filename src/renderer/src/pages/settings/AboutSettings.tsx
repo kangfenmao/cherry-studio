@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from './components'
+import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '.'
 
 const AboutSettings: FC = () => {
   const [version, setVersion] = useState('')
