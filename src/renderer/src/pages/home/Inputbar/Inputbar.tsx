@@ -17,7 +17,7 @@ import { estimateInputTokenCount } from '@renderer/services/messages'
 import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { delay, uuid } from '@renderer/utils'
 import { Button, Divider, Popconfirm, Tag, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
@@ -103,7 +103,13 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setActiveTopic(topic)
   }, [addTopic, setActiveTopic])
 
-  const clearTopic = () => EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
+  const clearTopic = async () => {
+    if (generating) {
+      onPause()
+      await delay(1)
+    }
+    EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
+  }
 
   const onPause = () => {
     window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
@@ -153,16 +159,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <PlusCircleOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
-              <HistoryOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
-              <ControlOutlined />
-            </ToolbarButton>
-          </Tooltip>
           <Tooltip placement="top" title={t('chat.input.clear')} arrow>
             <Popconfirm
               title={t('chat.input.clear.content')}
@@ -175,6 +171,16 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                 <ClearOutlined />
               </ToolbarButton>
             </Popconfirm>
+          </Tooltip>
+          <Tooltip placement="top" title={t('chat.input.topics')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
+              <HistoryOutlined />
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
+              <ControlOutlined />
+            </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
@@ -204,12 +210,12 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         <ToolbarMenu>
           {generating && (
             <Tooltip placement="top" title={t('chat.input.pause')} arrow>
-              <ToolbarButton type="text" onClick={onPause}>
-                <PauseCircleOutlined style={{ color: 'var(--color-error)' }} />
+              <ToolbarButton type="text" onClick={onPause} style={{ marginRight: -2, marginTop: 1 }}>
+                <PauseCircleOutlined style={{ color: 'var(--color-error)', fontSize: 20 }} />
               </ToolbarButton>
             </Tooltip>
           )}
-          <SendMessageButton sendMessage={sendMessage} disabled={generating || !text} />
+          {!generating && <SendMessageButton sendMessage={sendMessage} disabled={generating || !text} />}
         </ToolbarMenu>
       </Toolbar>
       <Textarea
@@ -257,7 +263,9 @@ const Toolbar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 0 8px;
+  padding-top: 3px;
+  padding-bottom: 0;
 `
 
 const ToolbarMenu = styled.div`

@@ -14,7 +14,8 @@ const SendMessageButton: FC<Props> = ({ disabled, sendMessage }) => {
         cursor: disabled ? 'not-allowed' : 'pointer',
         color: disabled ? 'var(--color-text-3)' : 'var(--color-primary)',
         fontSize: 22,
-        transition: 'all 0.2s'
+        transition: 'all 0.2s',
+        marginRight: 2
       }}
     />
   )
