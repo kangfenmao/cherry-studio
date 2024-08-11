@@ -257,6 +257,7 @@ const Textarea = styled(TextArea)`
   font-family: Ubuntu;
   resize: vertical;
   overflow: auto;
+  width: auto;
 `
 
 const Toolbar = styled.div`
