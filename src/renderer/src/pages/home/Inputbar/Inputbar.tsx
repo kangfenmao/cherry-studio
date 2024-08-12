@@ -39,7 +39,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic } = useAssistant(assistant.id)
-  const { sendMessageShortcut, showInputEstimatedTokens } = useSettings()
+  const { sendMessageShortcut, showInputEstimatedTokens, fontSize } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
@@ -230,6 +230,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         styles={{ textarea: { paddingLeft: 0 } }}
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
+        style={{ fontSize }}
       />
     </Container>
   )

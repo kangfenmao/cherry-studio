@@ -143,7 +143,6 @@ const TopicListItem = styled.div`
   padding: 7px 10px;
   cursor: pointer;
   border-radius: 8px;
-  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -19,6 +19,7 @@ export interface SettingsState {
   messageFont: 'system' | 'serif'
   showInputEstimatedTokens: boolean
   theme: ThemeMode
+  fontSize: number
 }
 
 const initialState: SettingsState = {
@@ -31,7 +32,8 @@ const initialState: SettingsState = {
   showMessageDivider: false,
   messageFont: 'system',
   showInputEstimatedTokens: false,
-  theme: ThemeMode.light
+  theme: ThemeMode.light,
+  fontSize: 14
 }
 
 const settingsSlice = createSlice({
@@ -70,6 +72,9 @@ const settingsSlice = createSlice({
     },
     setTheme: (state, action: PayloadAction<ThemeMode>) => {
       state.theme = action.payload
+    },
+    setFontSize: (state, action: PayloadAction<number>) => {
+      state.fontSize = action.payload
     }
   }
 })
@@ -85,7 +90,8 @@ export const {
   setShowMessageDivider,
   setMessageFont,
   setShowInputEstimatedTokens,
-  setTheme
+  setTheme,
+  setFontSize
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

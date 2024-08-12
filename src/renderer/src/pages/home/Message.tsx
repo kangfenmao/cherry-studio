@@ -38,7 +38,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const avatar = useAvatar()
   const { t } = useTranslation()
   const { assistant, model, setModel } = useAssistant(message.assistantId)
-  const { userName, showMessageDivider, messageFont } = useSettings()
+  const { userName, showMessageDivider, messageFont, fontSize } = useSettings()
   const { generating } = useRuntime()
   const [copied, setCopied] = useState(false)
 
@@ -135,7 +135,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
           </UserWrap>
         </AvatarWrapper>
       </MessageHeader>
-      <MessageContent style={{ fontFamily }}>
+      <MessageContent style={{ fontFamily, fontSize }}>
         <MessageItem />
         <MessageFooter style={{ border: messageBorder }}>
           {showMenu && (

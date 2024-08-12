@@ -16,6 +16,8 @@ export default defineConfig({
       }
     },
     plugins: [react()],
-    assetsInclude: ['**/*.md']
+    server: {
+      hmr: false
+    }
   }
 })

@@ -4,10 +4,10 @@ import i18n from '@renderer/i18n'
 import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
-import { setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
+import { setFontSize, setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { compressImage, isValidProxyUrl } from '@renderer/utils'
-import { Avatar, Input, Select, Upload } from 'antd'
+import { Avatar, Input, Select, Slider, Upload } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -16,7 +16,8 @@ import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingT
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const { language, proxyUrl: storeProxyUrl, userName, theme, setTheme } = useSettings()
+  const { language, proxyUrl: storeProxyUrl, userName, theme, setTheme, fontSize } = useSettings()
+  const [fontSizeValue, setFontSizeValue] = useState(fontSize)
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -97,6 +98,27 @@ const GeneralSettings: FC = () => {
           onChange={(e) => dispatch(setUserName(e.target.value))}
           style={{ width: 150 }}
           maxLength={30}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.font_size.title')}</SettingRowTitle>
+        <Slider
+          style={{ width: 290 }}
+          value={fontSizeValue}
+          onChange={(value) => setFontSizeValue(value)}
+          onChangeComplete={(value) => {
+            dispatch(setFontSize(value))
+            console.debug('set font size', value)
+          }}
+          min={12}
+          max={18}
+          step={1}
+          marks={{
+            12: <span style={{ fontSize: '12px' }}>A</span>,
+            14: <span style={{ fontSize: '14px' }}>{t('common.default')}</span>,
+            18: <span style={{ fontSize: '18px' }}>A</span>
+          }}
         />
       </SettingRow>
       <SettingDivider />

@@ -1,3 +1,10 @@
+import {
+  CloudOutlined,
+  CodeSandboxOutlined,
+  InfoCircleOutlined,
+  MessageOutlined,
+  SettingOutlined
+} from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,19 +31,34 @@ const SettingsPage: FC = () => {
       <ContentContainer>
         <SettingMenus>
           <MenuItemLink to="/settings/provider">
-            <MenuItem className={isRoute('/settings/provider')}>{t('settings.provider')}</MenuItem>
+            <MenuItem className={isRoute('/settings/provider')}>
+              <CloudOutlined />
+              {t('settings.provider')}
+            </MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/model">
-            <MenuItem className={isRoute('/settings/model')}>{t('settings.model')}</MenuItem>
+            <MenuItem className={isRoute('/settings/model')}>
+              <CodeSandboxOutlined />
+              {t('settings.model')}
+            </MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/assistant">
-            <MenuItem className={isRoute('/settings/assistant')}>{t('settings.assistant')}</MenuItem>
+            <MenuItem className={isRoute('/settings/assistant')}>
+              <MessageOutlined />
+              {t('settings.assistant')}
+            </MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/general">
-            <MenuItem className={isRoute('/settings/general')}>{t('settings.general')}</MenuItem>
+            <MenuItem className={isRoute('/settings/general')}>
+              <SettingOutlined />
+              {t('settings.general')}
+            </MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/about">
-            <MenuItem className={isRoute('/settings/about')}>{t('settings.about')}</MenuItem>
+            <MenuItem className={isRoute('/settings/about')}>
+              <InfoCircleOutlined />
+              {t('settings.about')}
+            </MenuItem>
           </MenuItemLink>
         </SettingMenus>
         <SettingContent>
@@ -81,13 +103,20 @@ const MenuItemLink = styled(Link)`
 `
 
 const MenuItem = styled.li`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   padding: 6px 10px;
   width: 100%;
   cursor: pointer;
   border-radius: 5px;
-  font-size: 14px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
+  .anticon {
+    font-size: 16px;
+    opacity: 0.8;
+  }
   &:hover {
     background: var(--color-primary-soft);
   }

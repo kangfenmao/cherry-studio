@@ -39,7 +39,6 @@ const NavbarLeftContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 14px;
   font-weight: bold;
   color: var(--color-text-1);
 `
@@ -49,7 +48,6 @@ const NavbarCenterContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 0 ${isMac ? '20px' : '15px'};
-  font-size: 14px;
   font-weight: bold;
   color: var(--color-text-1);
 `

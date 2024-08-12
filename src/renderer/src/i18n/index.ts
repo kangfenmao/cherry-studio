@@ -27,7 +27,8 @@ const resources = {
         save: 'Save',
         footnotes: 'References',
         select: 'Select',
-        search: 'Search'
+        search: 'Search',
+        default: 'Default'
       },
       button: {
         add: 'Add',
@@ -183,7 +184,8 @@ const resources = {
         'theme.title': 'Theme',
         'theme.dark': 'Dark',
         'theme.light': 'Light',
-        'theme.auto': 'Auto'
+        'theme.auto': 'Auto',
+        'font_size.title': 'Message Font Size'
       },
       translate: {
         title: 'Translation',
@@ -241,7 +243,8 @@ const resources = {
         you: '用户',
         footnote: '引用内容',
         select: '选择',
-        search: '搜索'
+        search: '搜索',
+        default: '默认'
       },
       button: {
         add: '添加',
@@ -336,7 +339,7 @@ const resources = {
       settings: {
         title: '设置',
         general: '常规设置',
-        provider: '模型提供商',
+        provider: '模型服务',
         model: '默认模型',
         assistant: '默认助手',
         about: '关于我们',
@@ -398,7 +401,8 @@ const resources = {
         'theme.title': '主题',
         'theme.dark': '深色主题',
         'theme.light': '浅色主题',
-        'theme.auto': '跟随系统'
+        'theme.auto': '跟随系统',
+        'font_size.title': '消息字体大小'
       },
       translate: {
         title: '翻译',

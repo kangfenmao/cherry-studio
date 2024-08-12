@@ -287,6 +287,15 @@ const migrateConfig = {
         }
       }
     }
+  },
+  '20': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        fontSize: 14
+      }
+    }
   }
 }
 
