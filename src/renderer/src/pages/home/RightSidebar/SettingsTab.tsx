@@ -8,8 +8,7 @@ import { useAppDispatch } from '@renderer/store'
 import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
 import { Assistant, AssistantSettings } from '@renderer/types'
 import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
-import { debounce } from 'lodash'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -30,39 +29,29 @@ const SettingsTab: FC<Props> = (props) => {
   const { showMessageDivider, messageFont, showInputEstimatedTokens, sendMessageShortcut, setSendMessageShortcut } =
     useSettings()
 
-  const onUpdateAssistantSettings = useCallback(
-    debounce(
-      (settings: Partial<AssistantSettings>) => {
-        updateAssistantSettings({
-          temperature: settings.temperature ?? temperature,
-          contextCount: settings.contextCount ?? contextCount,
-          enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
-          maxTokens: settings.maxTokens ?? maxTokens
-        })
-      },
-      1000,
-      { leading: true, trailing: false }
-    ),
-    [temperature, contextCount, enableMaxTokens, maxTokens]
-  )
+  const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
+    updateAssistantSettings({
+      temperature: settings.temperature ?? temperature,
+      contextCount: settings.contextCount ?? contextCount,
+      enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
+      maxTokens: settings.maxTokens ?? maxTokens
+    })
+  }
 
   const onTemperatureChange = (value) => {
     if (!isNaN(value as number)) {
-      setTemperature(value)
       onUpdateAssistantSettings({ temperature: value })
     }
   }
 
   const onConextCountChange = (value) => {
     if (!isNaN(value as number)) {
-      setConextCount(value)
       onUpdateAssistantSettings({ contextCount: value })
     }
   }
 
   const onMaxTokensChange = (value) => {
     if (!isNaN(value as number)) {
-      setMaxTokens(value)
       onUpdateAssistantSettings({ maxTokens: value })
     }
   }
@@ -109,7 +98,8 @@ const SettingsTab: FC<Props> = (props) => {
           <Slider
             min={0}
             max={1.2}
-            onChange={onTemperatureChange}
+            onChange={setTemperature}
+            onChangeComplete={onTemperatureChange}
             value={typeof temperature === 'number' ? temperature : 0}
             step={0.1}
           />
@@ -126,7 +116,8 @@ const SettingsTab: FC<Props> = (props) => {
           <Slider
             min={0}
             max={20}
-            onChange={onConextCountChange}
+            onChange={setConextCount}
+            onChangeComplete={onConextCountChange}
             value={typeof contextCount === 'number' ? contextCount : 0}
             step={1}
           />
@@ -154,7 +145,8 @@ const SettingsTab: FC<Props> = (props) => {
             <Slider
               min={0}
               max={32000}
-              onChange={onMaxTokensChange}
+              onChange={setMaxTokens}
+              onChangeComplete={onMaxTokensChange}
               value={typeof maxTokens === 'number' ? maxTokens : 0}
               step={100}
             />
