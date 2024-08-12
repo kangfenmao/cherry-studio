@@ -222,7 +222,7 @@ export const PROVIDER_CONFIG = {
   anthropic: {
     api: {
       url: 'https://api.anthropic.com/',
-      editable: false
+      editable: true
     },
     websites: {
       official: 'https://anthropic.com/',
