@@ -15,9 +15,6 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [react()],
-    server: {
-      hmr: false
-    }
+    plugins: [react()]
   }
 })

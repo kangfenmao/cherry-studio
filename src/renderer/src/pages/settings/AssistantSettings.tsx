@@ -209,7 +209,6 @@ const AssistantSettings: FC = () => {
 const Label = styled.p`
   margin: 0;
   font-size: 14px;
-  font-weight: bold;
   margin-right: 5px;
 `
 

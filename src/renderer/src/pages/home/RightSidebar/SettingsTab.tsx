@@ -5,7 +5,12 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings'
 import { useAppDispatch } from '@renderer/store'
-import { setMessageFont, setShowInputEstimatedTokens, setShowMessageDivider } from '@renderer/store/settings'
+import {
+  setFontSize,
+  setMessageFont,
+  setShowInputEstimatedTokens,
+  setShowMessageDivider
+} from '@renderer/store/settings'
 import { Assistant, AssistantSettings } from '@renderer/types'
 import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
 import { FC, useEffect, useState } from 'react'
@@ -18,10 +23,12 @@ interface Props {
 
 const SettingsTab: FC<Props> = (props) => {
   const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
+  const { fontSize } = useSettings()
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setConextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
+  const [fontSizeValue, setFontSizeValue] = useState(fontSize)
   const { t } = useTranslation()
 
   const dispatch = useAppDispatch()
@@ -123,7 +130,7 @@ const SettingsTab: FC<Props> = (props) => {
           />
         </Col>
       </Row>
-      <Row align="middle" justify="space-between" style={{ marginBottom: 8 }}>
+      <Row align="middle" justify="space-between">
         <HStack alignItems="center">
           <Label>{t('chat.settings.max_tokens')}</Label>
           <Tooltip title={t('chat.settings.max_tokens.tip')}>
@@ -139,20 +146,19 @@ const SettingsTab: FC<Props> = (props) => {
           }}
         />
       </Row>
-      {enableMaxTokens && (
-        <Row align="middle" gutter={10}>
-          <Col span={24}>
-            <Slider
-              min={0}
-              max={32000}
-              onChange={setMaxTokens}
-              onChangeComplete={onMaxTokensChange}
-              value={typeof maxTokens === 'number' ? maxTokens : 0}
-              step={100}
-            />
-          </Col>
-        </Row>
-      )}
+      <Row align="middle" gutter={10}>
+        <Col span={24}>
+          <Slider
+            disabled={!enableMaxTokens}
+            min={0}
+            max={32000}
+            onChange={setMaxTokens}
+            onChangeComplete={onMaxTokensChange}
+            value={typeof maxTokens === 'number' ? maxTokens : 0}
+            step={100}
+          />
+        </Col>
+      </Row>
       <SettingSubtitle>{t('settings.messages.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>
@@ -173,7 +179,30 @@ const SettingsTab: FC<Props> = (props) => {
         />
       </SettingRow>
       <SettingDivider />
-      <SettingSubtitle style={{ marginTop: 20 }}>{t('settings.messages.input.title')}</SettingSubtitle>
+      <SettingRow>
+        <SettingRowTitleSmall>{t('settings.font_size.title')}</SettingRowTitleSmall>
+      </SettingRow>
+      <Row align="middle" gutter={10}>
+        <Col span={24}>
+          <Slider
+            value={fontSizeValue}
+            onChange={(value) => setFontSizeValue(value)}
+            onChangeComplete={(value) => {
+              dispatch(setFontSize(value))
+              console.debug('set font size', value)
+            }}
+            min={12}
+            max={18}
+            step={1}
+            marks={{
+              12: <span style={{ fontSize: '12px' }}>A</span>,
+              14: <span style={{ fontSize: '14px' }}>{t('common.default')}</span>,
+              18: <span style={{ fontSize: '18px' }}>A</span>
+            }}
+          />
+        </Col>
+      </Row>
+      <SettingSubtitle>{t('settings.messages.input.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>
         <SettingRowTitleSmall>{t('settings.messages.input.show_estimated_tokens')}</SettingRowTitleSmall>
@@ -211,8 +240,7 @@ const Container = styled.div`
 const Label = styled.p`
   margin: 0;
   font-size: 12px;
-  font-weight: 600;
-  margin-right: 8px;
+  margin-right: 5px;
 `
 
 const QuestionIcon = styled(QuestionCircleOutlined)`
