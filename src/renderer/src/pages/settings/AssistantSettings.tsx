@@ -77,6 +77,7 @@ const AssistantSettings: FC = () => {
         placeholder={t('common.assistant') + t('common.name')}
         value={defaultAssistant.name}
         onChange={(e) => updateDefaultAssistant({ ...defaultAssistant, name: e.target.value })}
+        style={{ margin: '10px 0' }}
       />
       <SettingSubtitle>{t('common.prompt')}</SettingSubtitle>
       <TextArea
@@ -84,17 +85,15 @@ const AssistantSettings: FC = () => {
         placeholder={t('common.assistant') + t('common.prompt')}
         value={defaultAssistant.prompt}
         onChange={(e) => updateDefaultAssistant({ ...defaultAssistant, prompt: e.target.value })}
+        style={{ margin: '10px 0' }}
       />
-      <SettingDivider />
       <SettingSubtitle
         style={{
-          marginTop: 0,
-          marginBottom: 20,
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between'
         }}>
-        <span>{t('settings.assistant.model_params')}</span>
+        {t('settings.assistant.model_params')}
         <Button onClick={onReset} style={{ width: 90 }}>
           {t('chat.settings.reset')}
         </Button>
@@ -173,35 +172,34 @@ const AssistantSettings: FC = () => {
           }}
         />
       </Row>
-      {enableMaxTokens && (
-        <Row align="middle" gutter={20}>
-          <Col span={21}>
-            <Slider
-              min={0}
-              max={32000}
-              onChange={setMaxTokens}
-              onChangeComplete={onMaxTokensChange}
-              value={typeof maxTokens === 'number' ? maxTokens : 0}
-              step={100}
-              marks={{
-                0: '0',
-                32000: t('chat.settings.max')
-              }}
-            />
-          </Col>
-          <Col span={3}>
-            <InputNumber
-              min={0}
-              max={32000}
-              step={100}
-              value={maxTokens}
-              onChange={onMaxTokensChange}
-              controls={true}
-              style={{ width: '100%' }}
-            />
-          </Col>
-        </Row>
-      )}
+      <Row align="middle" gutter={20}>
+        <Col span={21}>
+          <Slider
+            disabled={!enableMaxTokens}
+            min={0}
+            max={32000}
+            onChange={setMaxTokens}
+            onChangeComplete={onMaxTokensChange}
+            value={typeof maxTokens === 'number' ? maxTokens : 0}
+            step={100}
+            marks={{
+              0: '0',
+              32000: t('chat.settings.max')
+            }}
+          />
+        </Col>
+        <Col span={3}>
+          <InputNumber
+            min={0}
+            max={32000}
+            step={100}
+            value={maxTokens}
+            onChange={onMaxTokensChange}
+            controls={true}
+            style={{ width: '100%' }}
+          />
+        </Col>
+      </Row>
     </SettingContainer>
   )
 }
