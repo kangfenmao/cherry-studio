@@ -1,4 +1,5 @@
 import { GithubOutlined } from '@ant-design/icons'
+import { FileProtectOutlined, GlobalOutlined, MailOutlined, SoundOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
 import { HStack } from '@renderer/components/Layout'
 import { runAsyncFunction } from '@renderer/utils'
@@ -10,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '.'
+import { SettingContainer, SettingDivider, SettingRow, SettingTitle } from '.'
 
 const AboutSettings: FC = () => {
   const [version, setVersion] = useState('')
@@ -134,31 +135,45 @@ const AboutSettings: FC = () => {
       </AboutHeader>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.about.releases.title')}</SettingRowTitle>
+        <SettingRowTitle>
+          <SoundOutlined />
+          {t('settings.about.releases.title')}
+        </SettingRowTitle>
         <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}>
           {t('settings.about.releases.button')}
         </Button>
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.about.website.title')}</SettingRowTitle>
+        <SettingRowTitle>
+          <GlobalOutlined />
+          {t('settings.about.website.title')}
+        </SettingRowTitle>
         <Button onClick={() => onOpenWebsite('https://cherry-ai.com')}>{t('settings.about.website.button')}</Button>
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.about.feedback.title')}</SettingRowTitle>
-        <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues')}>
+        <SettingRowTitle>
+          <GithubOutlined />
+          {t('settings.about.feedback.title')}
+        </SettingRowTitle>
+        <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues/new')}>
           {t('settings.about.feedback.button')}
         </Button>
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.about.license.title')}</SettingRowTitle>
+        <SettingRowTitle>
+          <FileProtectOutlined />
+          {t('settings.about.license.title')}
+        </SettingRowTitle>
         <Button onClick={showLicense}>{t('settings.about.license.button')}</Button>
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.about.contact.title')}</SettingRowTitle>
+        <SettingRowTitle>
+          <MailOutlined /> {t('settings.about.contact.title')}
+        </SettingRowTitle>
         <Button onClick={mailto}>{t('settings.about.contact.button')}</Button>
       </SettingRow>
       <SettingDivider />
@@ -208,6 +223,20 @@ const ProgressCircle = styled(Progress)`
   position: absolute;
   top: -2px;
   left: -2px;
+`
+
+export const SettingRowTitle = styled.div`
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--color-text-1);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  .anticon {
+    font-size: 16px;
+    color: var(--color-text-1);
+  }
 `
 
 export default AboutSettings
