@@ -247,7 +247,7 @@ const MenuContainer = styled.div`
 const TranslateInputWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  min-height: 350px;
+  height: 100%;
   gap: 20px;
 `
 
@@ -279,14 +279,13 @@ const OutputContainer = styled.div`
   flex: 1;
   flex-direction: column;
   height: 100%;
-  padding: 10px;
   background-color: var(--color-background-soft);
   border-radius: 10px;
 `
 
 const OutputText = styled.div`
-  padding: 5px 10px;
-  max-height: calc(100vh - var(--navbar-height) - 120px);
+  padding: 20px;
+  max-height: calc(100vh - var(--navbar-height) - 90px);
   overflow: auto;
   white-space: pre-wrap;
 `
