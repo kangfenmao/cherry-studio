@@ -56,4 +56,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    错误修复，优化体验
+    增加 Gemini、豆包、阶跃星辰等服务商支持
