@@ -119,7 +119,8 @@ const resources = {
         dashscope: 'DashScope',
         anthropic: 'Anthropic',
         aihubmix: 'AiHubMix',
-        stepfun: 'StepFun'
+        stepfun: 'StepFun',
+        doubao: 'Doubao'
       },
       settings: {
         title: 'Settings',
@@ -338,7 +339,8 @@ const resources = {
         dashscope: '阿里云灵积',
         anthropic: 'Anthropic',
         aihubmix: 'AiHubMix',
-        stepfun: '阶跃星辰'
+        stepfun: '阶跃星辰',
+        doubao: '豆包'
       },
       settings: {
         title: '设置',

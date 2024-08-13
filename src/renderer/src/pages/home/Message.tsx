@@ -67,9 +67,9 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   const getUserName = useCallback(() => {
     if (message.id === 'assistant') return assistant?.name
-    if (message.role === 'assistant') return upperFirst(message.modelId)
+    if (message.role === 'assistant') return upperFirst(model.name || model.id)
     return userName || t('common.you')
-  }, [assistant?.name, message.id, message.modelId, message.role, t, userName])
+  }, [assistant?.name, message.id, message.role, model.id, model.name, t, userName])
 
   const fontFamily = useMemo(() => {
     return messageFont === 'serif' ? FONT_FAMILY.replace('sans-serif', 'serif').replace('Ubuntu, ', '') : FONT_FAMILY

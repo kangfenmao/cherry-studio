@@ -352,6 +352,7 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       enabled: true
     }
   ],
+  doubao: [],
   aihubmix: [
     {
       id: 'gpt-4o-mini',

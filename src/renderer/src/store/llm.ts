@@ -113,6 +113,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'doubao',
+      name: 'doubao',
+      apiKey: '',
+      apiHost: 'https://ark.cn-beijing.volces.com/api/v3/',
+      models: SYSTEM_MODELS.doubao.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'aihubmix',
       name: 'AiHubMix',
       apiKey: '',

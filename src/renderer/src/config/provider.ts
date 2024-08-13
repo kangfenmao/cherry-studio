@@ -3,6 +3,7 @@ import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ClaudeModelLogo from '@renderer/assets/images/models/claude.png'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
+import DoubaoModelLogo from '@renderer/assets/images/models/doubao.png'
 import EmbeddingModelLogo from '@renderer/assets/images/models/embedding.png'
 import GeminiModelLogo from '@renderer/assets/images/models/gemini.png'
 import GemmaModelLogo from '@renderer/assets/images/models/gemma.jpeg'
@@ -18,6 +19,7 @@ import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.j
 import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
 import DashScopeProviderLogo from '@renderer/assets/images/providers/dashscope.png'
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
+import DoubaoProviderLogo from '@renderer/assets/images/providers/doubao.png'
 import GeminiProviderLogo from '@renderer/assets/images/providers/gemini.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.jpeg'
@@ -62,6 +64,8 @@ export function getProviderLogo(providerId: string) {
       return GeminiProviderLogo
     case 'stepfun':
       return StepFunProviderLogo
+    case 'doubao':
+      return DoubaoProviderLogo
     default:
       return undefined
   }
@@ -90,7 +94,8 @@ export function getModelLogo(modelId: string) {
     embedding: EmbeddingModelLogo,
     bison: PalmModelLogo,
     palm: PalmModelLogo,
-    step: StepModelLogo
+    step: StepModelLogo,
+    'ep-202': DoubaoModelLogo
   }
 
   for (const key in logoMap) {
@@ -113,6 +118,18 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.openai.com/api-keys',
       docs: 'https://platform.openai.com/docs',
       models: 'https://platform.openai.com/docs/models'
+    }
+  },
+  gemini: {
+    api: {
+      url: 'https://generativelanguage.googleapis.com',
+      editable: false
+    },
+    websites: {
+      official: 'https://gemini.google.com/',
+      apiKey: 'https://aistudio.google.com/app/apikey',
+      docs: 'https://ai.google.dev/gemini-api/docs',
+      models: 'https://ai.google.dev/gemini-api/docs/models/gemini'
     }
   },
   silicon: {
@@ -199,6 +216,30 @@ export const PROVIDER_CONFIG = {
       models: 'https://dashscope.console.aliyun.com/model'
     }
   },
+  stepfun: {
+    api: {
+      url: 'https://api.stepfun.com',
+      editable: false
+    },
+    websites: {
+      official: 'https://platform.stepfun.com/',
+      apiKey: 'https://platform.stepfun.com/interface-key',
+      docs: 'https://platform.stepfun.com/docs/overview/concept',
+      models: 'https://platform.stepfun.com/docs/llm/text'
+    }
+  },
+  doubao: {
+    api: {
+      url: 'https://ark.cn-beijing.volces.com/api/v3/',
+      editable: true
+    },
+    websites: {
+      official: 'https://console.volcengine.com/ark/',
+      apiKey: 'https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey',
+      docs: 'https://www.volcengine.com/docs/82379/1182403',
+      models: 'https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint'
+    }
+  },
   openrouter: {
     api: {
       url: 'https://openrouter.ai/api/v1/',
@@ -256,30 +297,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://aihubmix.com/token',
       docs: 'https://doc.aihubmix.com/',
       models: 'https://aihubmix.com/models'
-    }
-  },
-  gemini: {
-    api: {
-      url: 'https://generativelanguage.googleapis.com',
-      editable: false
-    },
-    websites: {
-      official: 'https://gemini.google.com/',
-      apiKey: 'https://aistudio.google.com/app/apikey',
-      docs: 'https://ai.google.dev/gemini-api/docs',
-      models: 'https://ai.google.dev/gemini-api/docs/models/gemini'
-    }
-  },
-  stepfun: {
-    api: {
-      url: 'https://api.stepfun.com',
-      editable: false
-    },
-    websites: {
-      official: 'https://platform.stepfun.com/',
-      apiKey: 'https://platform.stepfun.com/interface-key',
-      docs: 'https://platform.stepfun.com/docs/overview/concept',
-      models: 'https://platform.stepfun.com/docs/llm/text'
     }
   }
 }
