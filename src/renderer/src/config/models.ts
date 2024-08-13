@@ -336,6 +336,22 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       enabled: true
     }
   ],
+  stepfun: [
+    {
+      id: 'step-1-8k',
+      provider: 'stepfun',
+      name: 'Step 1 8K',
+      group: 'Step 1',
+      enabled: true
+    },
+    {
+      id: 'step-1-flash',
+      provider: 'stepfun',
+      name: 'Step 1 Flash',
+      group: 'Step 1',
+      enabled: true
+    }
+  ],
   aihubmix: [
     {
       id: 'gpt-4o-mini',

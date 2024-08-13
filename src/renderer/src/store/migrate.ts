@@ -312,6 +312,15 @@ const migrateConfig = {
             models: SYSTEM_MODELS.gemini.filter((m) => m.enabled),
             isSystem: true,
             enabled: false
+          },
+          {
+            id: 'stepfun',
+            name: 'StepFun',
+            apiKey: '',
+            apiHost: 'https://api.stepfun.com',
+            models: SYSTEM_MODELS.stepfun.filter((m) => m.enabled),
+            isSystem: true,
+            enabled: false
           }
         ]
       }

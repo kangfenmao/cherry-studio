@@ -11,6 +11,7 @@ import MicrosoftModelLogo from '@renderer/assets/images/models/microsoft.png'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
 import PalmModelLogo from '@renderer/assets/images/models/palm.svg'
 import QwenModelLogo from '@renderer/assets/images/models/qwen.png'
+import StepModelLogo from '@renderer/assets/images/models/step.jpg'
 import YiModelLogo from '@renderer/assets/images/models/yi.svg'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.jpeg'
@@ -25,6 +26,7 @@ import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
 import OpenAiProviderLogo from '@renderer/assets/images/providers/openai.jpeg'
 import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter.png'
 import SiliconFlowProviderLogo from '@renderer/assets/images/providers/silicon.png'
+import StepFunProviderLogo from '@renderer/assets/images/providers/stepfun.png'
 import YiProviderLogo from '@renderer/assets/images/providers/yi.svg'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
 
@@ -58,6 +60,8 @@ export function getProviderLogo(providerId: string) {
       return AiHubMixProviderLogo
     case 'gemini':
       return GeminiProviderLogo
+    case 'stepfun':
+      return StepFunProviderLogo
     default:
       return undefined
   }
@@ -85,7 +89,8 @@ export function getModelLogo(modelId: string) {
     gemini: GeminiModelLogo,
     embedding: EmbeddingModelLogo,
     bison: PalmModelLogo,
-    palm: PalmModelLogo
+    palm: PalmModelLogo,
+    step: StepModelLogo
   }
 
   for (const key in logoMap) {
@@ -263,6 +268,18 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://aistudio.google.com/app/apikey',
       docs: 'https://ai.google.dev/gemini-api/docs',
       models: 'https://ai.google.dev/gemini-api/docs/models/gemini'
+    }
+  },
+  stepfun: {
+    api: {
+      url: 'https://api.stepfun.com',
+      editable: false
+    },
+    websites: {
+      official: 'https://platform.stepfun.com/',
+      apiKey: 'https://platform.stepfun.com/interface-key',
+      docs: 'https://platform.stepfun.com/docs/overview/concept',
+      models: 'https://platform.stepfun.com/docs/llm/text'
     }
   }
 }

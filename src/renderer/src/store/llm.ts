@@ -104,11 +104,11 @@ const initialState: LlmState = {
       enabled: false
     },
     {
-      id: 'anthropic',
-      name: 'Anthropic',
+      id: 'stepfun',
+      name: 'StepFun',
       apiKey: '',
-      apiHost: 'https://api.anthropic.com/',
-      models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
+      apiHost: 'https://api.stepfun.com',
+      models: SYSTEM_MODELS.stepfun.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -136,6 +136,15 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
       models: SYSTEM_MODELS.groq.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'anthropic',
+      name: 'Anthropic',
+      apiKey: '',
+      apiHost: 'https://api.anthropic.com/',
+      models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },

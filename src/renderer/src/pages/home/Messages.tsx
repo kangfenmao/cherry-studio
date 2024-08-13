@@ -1,5 +1,6 @@
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
+import { getTopic } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { estimateHistoryTokenCount, filterMessages } from '@renderer/services/messages'
@@ -50,9 +51,10 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   )
 
   const autoRenameTopic = useCallback(async () => {
-    if (topic.name === t('chat.default.topic.name') && messages.length >= 2) {
+    const _topic = getTopic(assistant, topic.id)
+    if (_topic && _topic.name === t('chat.default.topic.name') && messages.length >= 2) {
       const summaryText = await fetchMessagesSummary({ messages, assistant })
-      summaryText && updateTopic({ ...topic, name: summaryText })
+      summaryText && updateTopic({ ..._topic, name: summaryText })
     }
   }, [assistant, messages, topic, updateTopic])
 

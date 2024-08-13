@@ -118,7 +118,8 @@ const resources = {
         baichuan: 'Baichuan',
         dashscope: 'DashScope',
         anthropic: 'Anthropic',
-        aihubmix: 'AiHubMix'
+        aihubmix: 'AiHubMix',
+        stepfun: 'StepFun'
       },
       settings: {
         title: 'Settings',
@@ -336,7 +337,8 @@ const resources = {
         baichuan: '百川',
         dashscope: '阿里云灵积',
         anthropic: 'Anthropic',
-        aihubmix: 'AiHubMix'
+        aihubmix: 'AiHubMix',
+        stepfun: '阶跃星辰'
       },
       settings: {
         title: '设置',
