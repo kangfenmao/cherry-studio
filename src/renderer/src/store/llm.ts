@@ -32,6 +32,15 @@ const initialState: LlmState = {
       enabled: true
     },
     {
+      id: 'gemini',
+      name: 'Gemini',
+      apiKey: '',
+      apiHost: 'https://generativelanguage.googleapis.com',
+      models: SYSTEM_MODELS.gemini.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'silicon',
       name: 'Silicon',
       apiKey: '',

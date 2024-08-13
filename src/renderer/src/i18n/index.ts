@@ -106,6 +106,7 @@ const resources = {
       },
       provider: {
         openai: 'OpenAI',
+        gemini: 'Gemini',
         deepseek: 'DeepSeek',
         moonshot: 'Moonshot',
         silicon: 'SiliconFlow',
@@ -323,6 +324,7 @@ const resources = {
       },
       provider: {
         openai: 'OpenAI',
+        gemini: 'Gemini',
         deepseek: '深度求索',
         moonshot: '月之暗面',
         silicon: '硅基流动',

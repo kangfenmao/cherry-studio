@@ -3,10 +3,13 @@ import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.jpeg'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ClaudeModelLogo from '@renderer/assets/images/models/claude.png'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
+import EmbeddingModelLogo from '@renderer/assets/images/models/embedding.png'
+import GeminiModelLogo from '@renderer/assets/images/models/gemini.png'
 import GemmaModelLogo from '@renderer/assets/images/models/gemma.jpeg'
 import LlamaModelLogo from '@renderer/assets/images/models/llama.jpeg'
 import MicrosoftModelLogo from '@renderer/assets/images/models/microsoft.png'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
+import PalmModelLogo from '@renderer/assets/images/models/palm.svg'
 import QwenModelLogo from '@renderer/assets/images/models/qwen.png'
 import YiModelLogo from '@renderer/assets/images/models/yi.svg'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
@@ -14,6 +17,7 @@ import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.j
 import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
 import DashScopeProviderLogo from '@renderer/assets/images/providers/dashscope.png'
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
+import GeminiProviderLogo from '@renderer/assets/images/providers/gemini.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import MoonshotModelLogo from '@renderer/assets/images/providers/moonshot.jpeg'
@@ -52,6 +56,8 @@ export function getProviderLogo(providerId: string) {
       return AnthropicProviderLogo
     case 'aihubmix':
       return AiHubMixProviderLogo
+    case 'gemini':
+      return GeminiProviderLogo
     default:
       return undefined
   }
@@ -75,7 +81,11 @@ export function getModelLogo(modelId: string) {
     moonshot: MoonshotModelLogo,
     phi: MicrosoftModelLogo,
     baichuan: BaichuanModelLogo,
-    claude: ClaudeModelLogo
+    claude: ClaudeModelLogo,
+    gemini: GeminiModelLogo,
+    embedding: EmbeddingModelLogo,
+    bison: PalmModelLogo,
+    palm: PalmModelLogo
   }
 
   for (const key in logoMap) {
@@ -241,6 +251,18 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://aihubmix.com/token',
       docs: 'https://doc.aihubmix.com/',
       models: 'https://aihubmix.com/models'
+    }
+  },
+  gemini: {
+    api: {
+      url: 'https://generativelanguage.googleapis.com',
+      editable: false
+    },
+    websites: {
+      official: 'https://gemini.google.com/',
+      apiKey: 'https://aistudio.google.com/app/apikey',
+      docs: 'https://ai.google.dev/gemini-api/docs',
+      models: 'https://ai.google.dev/gemini-api/docs/models/gemini'
     }
   }
 }

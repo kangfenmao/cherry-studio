@@ -33,6 +33,22 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       enabled: true
     }
   ],
+  gemini: [
+    {
+      id: 'gemini-1.5-flash',
+      provider: 'gemini',
+      name: 'Gemini 1.5 Flash',
+      group: 'Gemini 1.5',
+      enabled: true
+    },
+    {
+      id: 'gemini-1.5-pro-exp-0801',
+      provider: 'gemini',
+      name: 'Gemini 1.5 Pro Experimental 0801',
+      group: 'Gemini 1.5',
+      enabled: true
+    }
+  ],
   silicon: [
     {
       id: 'Qwen/Qwen2-7B-Instruct',

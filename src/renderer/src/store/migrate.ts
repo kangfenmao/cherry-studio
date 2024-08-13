@@ -296,6 +296,26 @@ const migrateConfig = {
         fontSize: 14
       }
     }
+  },
+  '21': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'gemini',
+            name: 'Gemini',
+            apiKey: '',
+            apiHost: 'https://generativelanguage.googleapis.com',
+            models: SYSTEM_MODELS.gemini.filter((m) => m.enabled),
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 }
 
