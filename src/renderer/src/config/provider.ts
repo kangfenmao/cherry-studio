@@ -21,11 +21,12 @@ import DashScopeProviderLogo from '@renderer/assets/images/providers/dashscope.p
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
 import DoubaoProviderLogo from '@renderer/assets/images/providers/doubao.png'
 import GeminiProviderLogo from '@renderer/assets/images/providers/gemini.png'
+import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import MoonshotModelLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
-import OpenAiProviderLogo from '@renderer/assets/images/providers/openai.jpeg'
+import OpenAiProviderLogo from '@renderer/assets/images/providers/openai.png'
 import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter.png'
 import SiliconFlowProviderLogo from '@renderer/assets/images/providers/silicon.png'
 import StepFunProviderLogo from '@renderer/assets/images/providers/stepfun.png'
@@ -66,6 +67,8 @@ export function getProviderLogo(providerId: string) {
       return StepFunProviderLogo
     case 'doubao':
       return DoubaoProviderLogo
+    case 'graphrag-kylin-mountain':
+      return GraphRagProviderLogo
     default:
       return undefined
   }
@@ -238,6 +241,12 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey',
       docs: 'https://www.volcengine.com/docs/82379/1182403',
       models: 'https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint'
+    }
+  },
+  'graphrag-kylin-mountain': {
+    api: {
+      url: '',
+      editable: true
     }
   },
   openrouter: {

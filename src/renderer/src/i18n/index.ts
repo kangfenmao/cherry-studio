@@ -120,7 +120,8 @@ const resources = {
         anthropic: 'Anthropic',
         aihubmix: 'AiHubMix',
         stepfun: 'StepFun',
-        doubao: 'Doubao'
+        doubao: 'Doubao',
+        'graphrag-kylin-mountain': 'GraphRAG'
       },
       settings: {
         title: 'Settings',
@@ -340,7 +341,8 @@ const resources = {
         anthropic: 'Anthropic',
         aihubmix: 'AiHubMix',
         stepfun: '阶跃星辰',
-        doubao: '豆包'
+        doubao: '豆包',
+        'graphrag-kylin-mountain': 'GraphRAG'
       },
       settings: {
         title: '设置',

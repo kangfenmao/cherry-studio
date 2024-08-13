@@ -330,6 +330,15 @@ const migrateConfig = {
             models: SYSTEM_MODELS.doubao.filter((m) => m.enabled),
             isSystem: true,
             enabled: false
+          },
+          {
+            id: 'graphrag-kylin-mountain',
+            name: 'GraphRAG',
+            apiKey: '',
+            apiHost: '',
+            models: [],
+            isSystem: true,
+            enabled: false
           }
         ]
       }

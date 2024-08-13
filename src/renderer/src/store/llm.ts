@@ -131,6 +131,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'graphrag-kylin-mountain',
+      name: 'GraphRAG',
+      apiKey: '',
+      apiHost: '',
+      models: [],
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'openrouter',
       name: 'OpenRouter',
       apiKey: '',

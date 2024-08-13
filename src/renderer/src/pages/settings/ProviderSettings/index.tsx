@@ -105,10 +105,13 @@ const ProvidersList: FC = () => {
                               key={JSON.stringify(provider)}
                               className={provider.id === selectedProvider?.id ? 'active' : ''}
                               onClick={() => setSelectedProvider(provider)}>
-                              {provider.isSystem && <Avatar src={getProviderLogo(provider.id)} size={25} />}
+                              {provider.isSystem && (
+                                <Avatar shape="square" src={getProviderLogo(provider.id)} size={25} />
+                              )}
                               {!provider.isSystem && (
                                 <Avatar
                                   size={25}
+                                  shape="square"
                                   style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 25 }}>
                                   {getFirstCharacter(provider.name)}
                                 </Avatar>
