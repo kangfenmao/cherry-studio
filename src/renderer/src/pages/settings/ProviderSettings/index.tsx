@@ -159,7 +159,6 @@ const ProviderListContainer = styled.div`
   width: var(--assistants-width);
   height: calc(100vh - var(--navbar-height));
   border-right: 0.5px solid var(--color-border);
-  padding: 8px;
   overflow-y: auto;
 `
 
@@ -167,6 +166,9 @@ const ProviderList = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  height: calc(100vh - var(--navbar-height));
+  overflow: scroll;
+  padding: 8px;
 `
 
 const ProviderListItem = styled.div`
@@ -203,7 +205,7 @@ const AddButtonWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 8px;
 `
 
 export default ProvidersList
