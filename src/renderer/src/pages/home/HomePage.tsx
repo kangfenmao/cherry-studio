@@ -120,7 +120,7 @@ export const NewButton = styled.div`
 
 const ThemeSwitch = styled(Switch)`
   -webkit-app-region: none;
-  margin-right: 8px;
+  margin-right: 10px;
   .icon-theme {
     font-size: 14px;
   }

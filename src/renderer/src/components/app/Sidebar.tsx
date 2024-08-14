@@ -1,7 +1,9 @@
 import { TranslationOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
+import { isMac } from '@renderer/config/constant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime } from '@renderer/hooks/useStore'
+import { Avatar } from 'antd'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
@@ -54,22 +56,21 @@ const Container = styled.div`
   align-items: center;
   padding: 8px 0;
   width: var(--sidebar-width);
-  height: calc(100vh - var(--navbar-height));
+  height: ${isMac ? 'calc(100vh - var(--navbar-height))' : '100vh'};
   -webkit-app-region: drag !important;
   border-right: 0.5px solid var(--color-border);
-  margin-top: var(--navbar-height);
-  margin-bottom: var(--navbar-height);
+  margin-top: ${isMac ? 'var(--navbar-height)' : 0};
   background-color: var(--sidebar-background);
   transition: background-color 0.3s ease;
 `
 
-const AvatarImg = styled.img`
-  border-radius: 50%;
+const AvatarImg = styled(Avatar)`
   width: 28px;
   height: 28px;
   background-color: var(--color-background-soft);
-  margin: 5px 0;
-  margin-top: 5px;
+  margin-bottom: ${isMac ? '12px' : '12px'};
+  margin-top: ${isMac ? '5px' : '2px'};
+  border: none;
 `
 const MainMenus = styled.div`
   display: flex;

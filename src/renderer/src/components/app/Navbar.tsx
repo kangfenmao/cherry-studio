@@ -34,7 +34,7 @@ const NavbarContainer = styled.div`
   flex-direction: row;
   min-height: var(--navbar-height);
   max-height: var(--navbar-height);
-  margin-left: calc(var(--sidebar-width) * -1);
+  margin-left: ${isMac ? 'calc(var(--sidebar-width) * -1)' : 0};
   padding-left: ${isMac ? 'var(--sidebar-width)' : 0};
   border-bottom: 0.5px solid var(--color-border);
   background-color: var(--navbar-background);
@@ -43,7 +43,7 @@ const NavbarContainer = styled.div`
 `
 
 const NavbarLeftContainer = styled.div`
-  min-width: ${isMac ? 'var(--assistants-width)' : 'calc(var(--sidebar-width) + var(--assistants-width))'};
+  min-width: var(--assistants-width);
   padding: 0 10px;
   display: flex;
   flex-direction: row;
