@@ -56,24 +56,36 @@ export default class ProviderSDK {
     }))
 
     if (this.isAnthropic) {
-      await this.anthropicSdk.messages
-        .stream({
-          model: model.id,
-          messages: [systemMessage, ...userMessages].filter(Boolean) as MessageParam[],
-          max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
-          temperature: assistant?.settings?.temperature
-        })
-        .on('text', (text) => onChunk({ text: text || '' }))
-        .on('finalMessage', (message) =>
-          onChunk({
-            usage: {
-              prompt_tokens: message.usage.input_tokens,
-              completion_tokens: message.usage.output_tokens,
-              total_tokens: sum(Object.values(message.usage))
-            }
+      return new Promise<void>((resolve, reject) => {
+        const stream = this.anthropicSdk.messages
+          .stream({
+            model: model.id,
+            messages: userMessages.filter(Boolean) as MessageParam[],
+            max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
+            temperature: assistant?.settings?.temperature,
+            system: assistant.prompt,
+            stream: true
           })
-        )
-      return
+          .on('text', (text) => {
+            if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
+              resolve()
+              return stream.controller.abort()
+            }
+            onChunk({ text })
+          })
+          .on('finalMessage', (message) => {
+            onChunk({
+              text: '',
+              usage: {
+                prompt_tokens: message.usage.input_tokens,
+                completion_tokens: message.usage.output_tokens,
+                total_tokens: sum(Object.values(message.usage))
+              }
+            })
+            resolve()
+          })
+          .on('error', (error) => reject(error))
+      })
     }
 
     if (this.isGemini) {
@@ -140,9 +152,10 @@ export default class ProviderSDK {
     if (this.isAnthropic) {
       const response = await this.anthropicSdk.messages.create({
         model: model.id,
-        messages: messages as MessageParam[],
+        messages: messages.filter((m) => m.role === 'user') as MessageParam[],
         max_tokens: 4096,
         temperature: assistant?.settings?.temperature,
+        system: assistant.prompt,
         stream: false
       })
 
@@ -179,7 +192,7 @@ export default class ProviderSDK {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
     const userMessages = takeRight(messages, 5).map((message) => ({
-      role: 'user',
+      role: message.role,
       content: message.content
     }))
 
@@ -190,10 +203,11 @@ export default class ProviderSDK {
 
     if (this.isAnthropic) {
       const message = await this.anthropicSdk.messages.create({
-        messages: [systemMessage, ...userMessages] as Anthropic.Messages.MessageParam[],
+        messages: userMessages as Anthropic.Messages.MessageParam[],
         model: model.id,
+        system: systemMessage.content,
         stream: false,
-        max_tokens: 50
+        max_tokens: 4096
       })
 
       return message.content[0].type === 'text' ? message.content[0].text : null
