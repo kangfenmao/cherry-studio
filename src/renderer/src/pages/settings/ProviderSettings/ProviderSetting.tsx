@@ -148,7 +148,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <HelpTextRow>
           <HelpText>{t('settings.provider.docs_check')} </HelpText>
           <HelpLink target="_blank" href={docsWebsite}>
-            {t(`provider.${provider.id}`)}
+            {t(`provider.${provider.id}`) + ' '}
             {t('common.docs')}
           </HelpLink>
           <HelpText>{t('common.and')}</HelpText>

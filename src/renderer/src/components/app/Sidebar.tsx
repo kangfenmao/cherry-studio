@@ -1,6 +1,7 @@
 import { TranslationOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
 import useAvatar from '@renderer/hooks/useAvatar'
+import { useRuntime } from '@renderer/hooks/useStore'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
@@ -8,11 +9,12 @@ import styled from 'styled-components'
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
+  const { minappShow } = useRuntime()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
   return (
-    <Container>
+    <Container style={{ backgroundColor: minappShow ? 'var(--color-background)' : 'var(--sidebar-background)' }}>
       <StyledLink to="/">
         <AvatarImg src={avatar || Logo} draggable={false} />
       </StyledLink>
@@ -58,6 +60,7 @@ const Container = styled.div`
   margin-top: var(--navbar-height);
   margin-bottom: var(--navbar-height);
   background-color: var(--sidebar-background);
+  transition: background-color 0.3s ease;
 `
 
 const AvatarImg = styled.img`

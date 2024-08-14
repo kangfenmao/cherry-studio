@@ -167,7 +167,7 @@ const ProviderList = styled.div`
   flex: 1;
   flex-direction: column;
   height: calc(100vh - var(--navbar-height));
-  overflow: scroll;
+  overflow: auto;
   padding: 8px;
 `
 

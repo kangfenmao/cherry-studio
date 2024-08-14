@@ -51,7 +51,7 @@ const HomePage: FC = () => {
           </NavbarLeft>
         )}
         <Navigation activeAssistant={activeAssistant} />
-        <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 8 }}>
+        <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 12 }}>
           <ThemeSwitch
             checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
             unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}

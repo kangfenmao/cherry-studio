@@ -1,11 +1,19 @@
 import { isMac } from '@renderer/config/constant'
+import { useRuntime } from '@renderer/hooks/useStore'
 import { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 
 type Props = PropsWithChildren & JSX.IntrinsicElements['div']
 
 export const Navbar: FC<Props> = ({ children, ...props }) => {
-  return <NavbarContainer {...props}>{children}</NavbarContainer>
+  const { minappShow } = useRuntime()
+  const backgroundColor = minappShow ? 'var(--color-background)' : 'var(--navbar-background)'
+
+  return (
+    <NavbarContainer {...props} style={{ backgroundColor }}>
+      {children}
+    </NavbarContainer>
+  )
 }
 
 export const NavbarLeft: FC<Props> = ({ children, ...props }) => {
@@ -26,11 +34,12 @@ const NavbarContainer = styled.div`
   flex-direction: row;
   min-height: var(--navbar-height);
   max-height: var(--navbar-height);
-  -webkit-app-region: drag;
   margin-left: calc(var(--sidebar-width) * -1);
   padding-left: ${isMac ? 'var(--sidebar-width)' : 0};
   border-bottom: 0.5px solid var(--color-border);
   background-color: var(--navbar-background);
+  transition: background-color 0.3s ease;
+  -webkit-app-region: drag;
 `
 
 const NavbarLeftContainer = styled.div`
@@ -56,5 +65,5 @@ const NavbarRightContainer = styled.div`
   min-width: var(--settings-width);
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 12px;
 `
