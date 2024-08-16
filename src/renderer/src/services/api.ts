@@ -123,7 +123,7 @@ export async function fetchMessagesSummary({ messages, assistant }: { messages: 
   const providerSdk = new ProviderSDK(provider)
 
   try {
-    return await providerSdk.summaries(messages, assistant)
+    return await providerSdk.summaries(filterMessages(messages), assistant)
   } catch (error: any) {
     return null
   }

@@ -240,7 +240,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: var(--input-bar-height);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   transition: all 0.3s ease;
   position: relative;
   margin: 0 20px 15px 20px;

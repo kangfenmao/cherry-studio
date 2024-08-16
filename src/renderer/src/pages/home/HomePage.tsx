@@ -9,9 +9,9 @@ import { Switch } from 'antd'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
+import AddAssistantPopup from '../../components/Popups/AddAssistantPopup'
 import Assistants from './Assistants'
 import Chat from './Chat'
-import AddAssistantPopup from './components/AddAssistantPopup'
 import Navigation from './Header'
 
 let _activeAssistant: Assistant

@@ -41,10 +41,10 @@ const AssistantCardContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px;
-  border: 1px dashed var(--color-border);
+  border: 1px dashed var(--color-border-soft);
   border-radius: 10px;
   cursor: pointer;
-  min-height: 84px;
+  min-height: 72px;
   .anticon {
     font-size: 16px;
     color: var(--color-icon);

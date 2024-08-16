@@ -56,13 +56,13 @@ const AppsPage: FC = () => {
       <ContentContainer>
         <AssistantsContainer>
           <HStack alignItems="center" style={{ marginBottom: 16 }}>
-            <Title level={3}>{t('agents.my_agents')}</Title>
+            <Title level={4}>{t('agents.my_agents')}</Title>
             {agents.length > 0 && <ManageIcon onClick={ManageAgentsPopup.show} />}
           </HStack>
           <UserAgents onAdd={onAddAgentConfirm} />
           {Object.keys(agentGroups).map((group) => (
             <div key={group}>
-              <Title level={3} key={group} style={{ marginBottom: 16 }}>
+              <Title level={4} key={group} style={{ marginBottom: 16 }}>
                 {group}
               </Title>
               <Row gutter={16}>

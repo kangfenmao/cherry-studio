@@ -6,7 +6,7 @@ import { FC } from 'react'
 import styled from 'styled-components'
 
 import Inputbar from './Inputbar/Inputbar'
-import Messages from './Messages'
+import Messages from './Messages/Messages'
 import RightSidebar from './RightSidebar'
 
 interface Props {

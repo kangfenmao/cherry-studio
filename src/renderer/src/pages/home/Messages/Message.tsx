@@ -23,8 +23,8 @@ import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import SelectModelDropdown from './components/SelectModelDropdown'
-import Markdown from './Markdown/Markdown'
+import SelectModelDropdown from '../components/SelectModelDropdown'
+import Markdown from '../Markdown/Markdown'
 
 interface Props {
   message: Message
@@ -208,7 +208,7 @@ const MessageContainer = styled.div`
     &.user {
       position: absolute;
       top: 10px;
-      right: 10px;
+      right: 15px;
     }
   }
   &:hover {

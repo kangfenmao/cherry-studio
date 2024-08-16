@@ -257,7 +257,7 @@ const InputContainer = styled.div`
   flex: 1;
   flex-direction: column;
   height: 100%;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   border-radius: 10px;
 `
 

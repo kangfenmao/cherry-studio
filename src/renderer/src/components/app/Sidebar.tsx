@@ -8,6 +8,8 @@ import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
+import UserPopup from '../Popups/UserPopup'
+
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
@@ -15,11 +17,13 @@ const Sidebar: FC = () => {
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
+  const onEditUser = () => {
+    UserPopup.show()
+  }
+
   return (
     <Container style={{ backgroundColor: minappShow ? 'var(--color-background)' : 'var(--sidebar-background)' }}>
-      <StyledLink to="/">
-        <AvatarImg src={avatar || Logo} draggable={false} />
-      </StyledLink>
+      <AvatarImg src={avatar || Logo} draggable={false} className="dragdisable" onClick={onEditUser} />
       <MainMenus>
         <Menus>
           <StyledLink to="/">
@@ -71,6 +75,7 @@ const AvatarImg = styled(Avatar)`
   margin-bottom: ${isMac ? '12px' : '12px'};
   margin-top: ${isMac ? '5px' : '2px'};
   border: none;
+  cursor: pointer;
 `
 const MainMenus = styled.div`
   display: flex;

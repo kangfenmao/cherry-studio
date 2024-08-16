@@ -95,7 +95,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       </SettingTitle>
       <Divider style={{ width: '100%', margin: '10px 0' }} />
       <SettingSubtitle style={{ marginTop: 5 }}>{t('settings.provider.api_key')}</SettingSubtitle>
-      <Space.Compact style={{ width: '100%' }}>
+      <Space.Compact style={{ width: '100%', marginTop: 5 }}>
         <Input.Password
           value={apiKey}
           placeholder={t('settings.provider.api_key')}
@@ -117,7 +117,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         </HelpTextRow>
       )}
       <SettingSubtitle>{t('settings.provider.api_host')}</SettingSubtitle>
-      <Space.Compact style={{ width: '100%' }}>
+      <Space.Compact style={{ width: '100%', marginTop: 5 }}>
         <Input
           value={apiHost}
           placeholder={t('settings.provider.api_host')}
@@ -128,7 +128,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         {apiEditable && <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>}
       </Space.Compact>
       {provider.id === 'ollama' && <OllamSettings />}
-      <SettingSubtitle>{t('common.models')}</SettingSubtitle>
+      <SettingSubtitle style={{ marginBottom: 5 }}>{t('common.models')}</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
           {modelGroups[group].map((model) => (

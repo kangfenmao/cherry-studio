@@ -23,8 +23,7 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
           }
         },
         token: {
-          colorPrimary: '#00b96b',
-          borderRadius: 8
+          colorPrimary: '#00b96b'
         }
       }}>
       {children}

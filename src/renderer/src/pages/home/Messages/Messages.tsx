@@ -10,11 +10,12 @@ import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import localforage from 'localforage'
 import { last, reverse } from 'lodash'
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import Suggestions from './components/Suggestions'
+import Suggestions from '../components/Suggestions'
 import MessageItem from './Message'
+import Prompt from './Prompt'
 
 interface Props {
   assistant: Assistant
@@ -27,19 +28,6 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
   const provider = useProviderByAssistant(assistant)
   const containerRef = useRef<HTMLDivElement>(null)
   const { updateTopic } = useAssistant(assistant.id)
-
-  const assistantDefaultMessage: Message = useMemo(
-    () => ({
-      id: 'assistant',
-      role: 'assistant',
-      content: assistant.description || assistant.prompt || t('chat.default.description'),
-      assistantId: assistant.id,
-      topicId: topic.id,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    }),
-    [assistant.description, assistant.id, assistant.prompt, topic.id]
-  )
 
   const onSendMessage = useCallback(
     (message: Message) => {
@@ -123,7 +111,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
       {reverse([...messages]).map((message, index) => (
         <MessageItem key={message.id} message={message} showMenu index={index} onDeleteMessage={onDeleteMessage} />
       ))}
-      <MessageItem message={assistantDefaultMessage} />
+      <Prompt assistant={assistant} key={assistant.prompt} />
     </Container>
   )
 }
