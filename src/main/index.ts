@@ -107,7 +107,8 @@ app.whenReady().then(() => {
   // IPC
   ipcMain.handle('get-app-info', () => ({
     version: app.getVersion(),
-    isPackaged: app.isPackaged
+    isPackaged: app.isPackaged,
+    appPath: app.getAppPath()
   }))
 
   ipcMain.handle('open-website', (_, url: string) => {

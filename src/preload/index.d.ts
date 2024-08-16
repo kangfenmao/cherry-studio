@@ -7,6 +7,7 @@ declare global {
       getAppInfo: () => Promise<{
         version: string
         isPackaged: boolean
+        appPath: string
       }>
       checkForUpdate: () => void
       openWebsite: (url: string) => void
