@@ -39,8 +39,8 @@
   --color-scrollbar-thumb: rgba(255, 255, 255, 0.15);
   --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
 
-  --navbar-background: rgba(30, 30, 30, 0.75);
-  --sidebar-background: rgba(30, 30, 30, 0.75);
+  --navbar-background-mac: rgba(30, 30, 30, 0.8);
+  --navbar-background: rgba(30, 30, 30);
   --input-bar-background: rgba(255, 255, 255, 0.02);
 
   --navbar-height: 42px;
@@ -88,8 +88,8 @@ body[theme-mode='light'] {
   --color-scrollbar-thumb: rgba(0, 0, 0, 0.15);
   --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
 
-  --navbar-background: rgba(255, 255, 255, 0.8);
-  --sidebar-background: rgba(255, 255, 255, 0.8);
+  --navbar-background-mac: rgba(255, 255, 255, 0.75);
+  --navbar-background: rgba(255, 255, 255);
   --input-bar-background: rgba(0, 0, 0, 0.02);
 }
 

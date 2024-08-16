@@ -10,6 +10,8 @@ import styled from 'styled-components'
 
 import UserPopup from '../Popups/UserPopup'
 
+const sidebarBackgroundColor = isMac ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
+
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
@@ -22,7 +24,7 @@ const Sidebar: FC = () => {
   }
 
   return (
-    <Container style={{ backgroundColor: minappShow ? 'var(--color-background)' : 'var(--sidebar-background)' }}>
+    <Container style={{ backgroundColor: minappShow ? 'var(--color-background)' : sidebarBackgroundColor }}>
       <AvatarImg src={avatar || Logo} draggable={false} className="dragdisable" onClick={onEditUser} />
       <MainMenus>
         <Menus>
@@ -64,7 +66,7 @@ const Container = styled.div`
   -webkit-app-region: drag !important;
   border-right: 0.5px solid var(--color-border);
   margin-top: ${isMac ? 'var(--navbar-height)' : 0};
-  background-color: var(--sidebar-background);
+  background-color: ${sidebarBackgroundColor};
   transition: background-color 0.3s ease;
 `
 

@@ -43,7 +43,7 @@ const Container = styled.div`
 `
 
 const Text = styled.div`
-  color: var(--color-text-3);
+  color: var(--color-text-2);
   font-size: 12px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
