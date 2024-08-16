@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { TopView } from '../TopView'
 
 interface ShowParams {
-  title: string
+  title?: string
   url: string
 }
 
@@ -19,6 +19,8 @@ interface Props extends ShowParams {
 const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
   const [open, setOpen] = useState(true)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  const canOpenExternalLink = url.startsWith('http://') || url.startsWith('https://')
 
   const onClose = () => {
     setOpen(false)
@@ -37,7 +39,7 @@ const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
 
   return (
     <Drawer
-      title={title}
+      title={title || <Title />}
       placement="bottom"
       onClose={onClose}
       open={open}
@@ -53,9 +55,11 @@ const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
         <Button onClick={onReload}>
           <ReloadOutlined />
         </Button>
-        <Button onClick={onOpenLink}>
-          <ExportOutlined />
-        </Button>
+        {canOpenExternalLink && (
+          <Button onClick={onOpenLink}>
+            <ExportOutlined />
+          </Button>
+        )}
         <Button onClick={onClose}>
           <CloseOutlined />
         </Button>
@@ -68,6 +72,10 @@ const Frame = styled.iframe`
   width: calc(100vw - var(--sidebar-width));
   height: calc(100vh - var(--navbar-height));
   border: none;
+`
+
+const Title = styled.div`
+  min-height: var(--navbar-height);
 `
 
 const ButtonsGroup = styled.div`
