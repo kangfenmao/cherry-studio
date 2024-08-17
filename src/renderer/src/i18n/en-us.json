@@ -137,6 +137,25 @@
       "stream_output": "Stream Output",
       "search": "Search models..."
     },
+    "images": {
+      "title": "Images",
+      "image.size": "Image Size",
+      "button.new.image": "New Image",
+      "button.delete.image": "Delete Image",
+      "button.delete.image.confirm": "Are you sure you want to delete this image?",
+      "number_images": "Number Images",
+      "number_images_tip": "Number of images to generate (1-4)",
+      "seed": "Seed",
+      "seed_tip": "The same seed and prompt can produce similar images",
+      "inference_steps": "Inference Steps",
+      "inference_steps_tip": "The number of inference steps to perform. More steps produce higher quality but take longer",
+      "guidance_scale": "Guidance Scale",
+      "guidance_scale_tip": "Classifier Free Guidance. How close you want the model to stick to your prompt when looking for a related image to show you",
+      "negative_prompt": "Negative Prompt",
+      "negative_prompt_tip": "Describe what you don't want included in the image",
+      "prompt_placeholder": "Describe the image you want to create, e.g. 'A serene lake at sunset with mountains in the background'",
+      "regenerate.confirm": "This will replace your existing generated images. Do you want to continue?"
+    },
     "files": {
       "title": "Files",
       "file": "File",

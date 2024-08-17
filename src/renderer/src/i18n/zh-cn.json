@@ -60,7 +60,7 @@
       "reset.double.confirm.title": "数据丢失！！！",
       "reset.double.confirm.content": "你的全部数据都会丢失，如果没有备份数据，将无法恢复，确定要继续吗？",
       "upgrade.success.title": "升级成功",
-      "upgrade.success.content": "重启应用以完成升级",
+      "upgrade.success.content": "重启用以完成升级",
       "upgrade.success.button": "重启",
       "topic.added": "话题添加成功",
       "save.success.title": "保存成功"
@@ -136,6 +136,25 @@
     "model": {
       "stream_output": "流式输出",
       "search": "搜索模型..."
+    },
+    "images": {
+      "title": "图片",
+      "image.size": "图片尺寸",
+      "button.new.image": "新建图片",
+      "button.delete.image": "删除图片",
+      "button.delete.image.confirm": "确定要删除此图片吗?",
+      "number_images": "生成数量",
+      "number_images_tip": "一次生成的图片数量 (1-4)",
+      "seed": "随机种子",
+      "seed_tip": "相同的种子和提示词可以生成相似的图片",
+      "inference_steps": "推理步数",
+      "inference_steps_tip": "要执行的推理步数。步数越多，质量越高但耗时越长",
+      "guidance_scale": "引导比例",
+      "guidance_scale_tip": "无分类器指导。控制模型在寻找相关图像时对提示词的遵循程度",
+      "negative_prompt": "反向提示词",
+      "negative_prompt_tip": "描述你不想在图片中出现的内容",
+      "prompt_placeholder": "描述你想创建的图片，例如：'一个宁静的湖泊，夕阳西下，远处是群山'",
+      "regenerate.confirm": "这将覆盖已生成的图片，是否继续？"
     },
     "files": {
       "title": "文件",
@@ -317,7 +336,7 @@
         "new_topic": "新建话题",
         "zoom_in": "放大界面",
         "zoom_out": "缩小界面",
-        "zoom_reset": "重置缩放"
+        "zoom_reset": "���置缩放"
       }
     },
     "translate": {

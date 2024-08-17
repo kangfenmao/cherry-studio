@@ -1,0 +1,112 @@
+import { DeleteOutlined } from '@ant-design/icons'
+import DragableList from '@renderer/components/DragableList'
+import { usePaintings } from '@renderer/hooks/usePaintings'
+import { Painting } from '@renderer/types'
+import { classNames } from '@renderer/utils'
+import { Popconfirm } from 'antd'
+import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+interface PaintingsListProps {
+  paintings: Painting[]
+  selectedPainting: Painting
+  onSelectPainting: (painting: Painting) => void
+  onDeletePainting: (painting: Painting) => void
+}
+
+const PaintingsList: FC<PaintingsListProps> = ({ paintings, selectedPainting, onSelectPainting, onDeletePainting }) => {
+  const { t } = useTranslation()
+  const [dragging, setDragging] = useState(false)
+  const { updatePaintings } = usePaintings()
+
+  return (
+    <Container style={{ paddingBottom: dragging ? 30 : 0 }}>
+      <DragableList
+        list={paintings}
+        onUpdate={updatePaintings}
+        onDragStart={() => setDragging(true)}
+        onDragEnd={() => setDragging(false)}>
+        {(item: Painting) => (
+          <CanvasWrapper key={item.id}>
+            <Canvas
+              className={classNames(selectedPainting.id === item.id && 'selected')}
+              onClick={() => onSelectPainting(item)}
+              thumbnail={item.urls[0]}
+            />
+            <DeleteButton>
+              <Popconfirm
+                title={t('images.button.delete.image.confirm')}
+                onConfirm={() => onDeletePainting(item)}
+                okButtonProps={{ danger: true }}
+                placement="left">
+                <DeleteOutlined />
+              </Popconfirm>
+            </DeleteButton>
+          </CanvasWrapper>
+        )}
+      </DragableList>
+    </Container>
+  )
+}
+
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: 10px;
+  padding: 10px 0;
+  background-color: var(--color-background);
+  max-width: 100px;
+  border-left: 0.5px solid var(--color-border);
+`
+
+const CanvasWrapper = styled.div`
+  position: relative;
+
+  &:hover {
+    .delete-button {
+      opacity: 1;
+    }
+  }
+`
+
+const Canvas = styled.div<{ thumbnail?: string }>`
+  width: 80px;
+  height: 80px;
+  background-color: var(--color-background-soft);
+  background-image: ${(props) => (props.thumbnail ? `url(${props.thumbnail})` : 'none')};
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 1px solid var(--color-background-soft);
+
+  &.selected {
+    border: 1px solid var(--color-primary);
+  }
+
+  &:hover {
+    background-color: var(--color-background-mute);
+  }
+`
+
+const DeleteButton = styled.div.attrs({ className: 'delete-button' })`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 50%;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-error);
+  background-color: var(--color-background-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+export default PaintingsList

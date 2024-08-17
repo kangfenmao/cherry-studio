@@ -350,4 +350,48 @@ export default class OpenAIProvider extends BaseProvider {
       return []
     }
   }
+
+  public async generateImage({
+    prompt,
+    negativePrompt,
+    imageSize,
+    batchSize,
+    seed,
+    numInferenceSteps,
+    guidanceScale,
+    signal
+  }: {
+    prompt: string
+    negativePrompt?: string
+    imageSize: string
+    batchSize: number
+    seed?: string
+    numInferenceSteps: number
+    guidanceScale: number
+    signal?: AbortSignal
+  }): Promise<string[]> {
+    try {
+      const response = (await this.sdk.request({
+        method: 'post',
+        path: '/images/generations',
+        headers: this.getHeaders(),
+        signal,
+        body: {
+          model: 'stabilityai/stable-diffusion-3-5-large',
+          prompt,
+          negative_prompt: negativePrompt,
+          image_size: imageSize,
+          batch_size: batchSize,
+          seed: seed ? parseInt(seed) : undefined,
+          num_inference_steps: numInferenceSteps,
+          guidance_scale: guidanceScale
+        }
+      })) as { data: Array<{ url: string }> }
+
+      return response.data.map((item) => item.url)
+    } catch (error) {
+      console.error('Image generation error:', error)
+      return []
+    }
+  }
 }

@@ -87,6 +87,20 @@ export type Suggestion = {
   content: string
 }
 
+export interface Painting {
+  id: string
+  urls: string[]
+  files: FileType[]
+  prompt?: string
+  negativePrompt?: string
+  imageSize?: string
+  numImages?: number
+  seed?: string
+  steps?: number
+  guidanceScale?: number
+  model?: string
+}
+
 export type MinAppType = {
   id?: string | number
   name: string

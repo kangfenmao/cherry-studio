@@ -41,4 +41,17 @@ export default class AiProvider {
   public async models(): Promise<OpenAI.Models.Model[]> {
     return this.sdk.models()
   }
+
+  public async generateImage(params: {
+    prompt: string
+    negativePrompt: string
+    imageSize: string
+    batchSize: number
+    seed?: string
+    numInferenceSteps: number
+    guidanceScale: number
+    signal?: AbortSignal
+  }): Promise<string[]> {
+    return this.sdk.generateImage(params)
+  }
 }

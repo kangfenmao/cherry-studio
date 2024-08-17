@@ -394,7 +394,7 @@ const Textarea = styled(TextArea)`
   display: flex;
   flex: 1;
   font-family: Ubuntu;
-  resize: vertical;
+  resize: none !important;
   overflow: auto;
   width: 100%;
   box-sizing: border-box;

@@ -41,4 +41,14 @@ export default abstract class BaseProvider {
   abstract generateText({ prompt, content }: { prompt: string; content: string }): Promise<string>
   abstract check(): Promise<{ valid: boolean; error: Error | null }>
   abstract models(): Promise<OpenAI.Models.Model[]>
+  abstract generateImage(_params: {
+    prompt: string
+    negativePrompt: string
+    imageSize: string
+    batchSize: number
+    seed?: string
+    numInferenceSteps: number
+    guidanceScale: number
+    signal?: AbortSignal
+  }): Promise<string[]>
 }

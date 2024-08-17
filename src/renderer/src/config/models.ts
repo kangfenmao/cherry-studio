@@ -930,6 +930,51 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   ]
 }
 
+export const TEXT_TO_IMAGES_MODELS = [
+  {
+    id: 'black-forest-labs/FLUX.1-dev',
+    provider: 'silicon',
+    name: 'FLUX.1-dev',
+    group: 'FLUX'
+  },
+  {
+    id: 'black-forest-labs/FLUX.1-schnell',
+    provider: 'silicon',
+    name: 'FLUX.1-schnell',
+    group: 'FLUX'
+  },
+  {
+    id: 'Pro/black-forest-labs/FLUX.1-schnell',
+    provider: 'silicon',
+    name: 'FLUX.1-schnell Pro',
+    group: 'FLUX'
+  },
+  {
+    id: 'stabilityai/stable-diffusion-3-5-large',
+    provider: 'silicon',
+    name: 'Stable Diffusion 3.5 Large',
+    group: 'Stable Diffusion'
+  },
+  {
+    id: 'stabilityai/stable-diffusion-3-medium',
+    provider: 'silicon',
+    name: 'Stable Diffusion 3 Medium',
+    group: 'Stable Diffusion'
+  },
+  {
+    id: 'stabilityai/stable-diffusion-2-1',
+    provider: 'silicon',
+    name: 'Stable Diffusion 2.1',
+    group: 'Stable Diffusion'
+  },
+  {
+    id: 'stabilityai/stable-diffusion-xl-base-1.0',
+    provider: 'silicon',
+    name: 'Stable Diffusion XL Base 1.0',
+    group: 'Stable Diffusion'
+  }
+]
+
 export function isTextToImageModel(model: Model): boolean {
   return TEXT_TO_IMAGE_REGEX.test(model.id)
 }

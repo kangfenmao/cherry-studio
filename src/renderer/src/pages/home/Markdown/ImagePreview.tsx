@@ -8,19 +8,21 @@ import {
   ZoomOutOutlined
 } from '@ant-design/icons'
 import { download } from '@renderer/utils/download'
-import { Image, Space } from 'antd'
+import { Image as AntImage, ImageProps as AntImageProps, Space } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 
-interface ImagePreviewProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface ImagePreviewProps extends AntImageProps {
   src: string
 }
 
-const ImagePreview: React.FC<ImagePreviewProps> = ({ src }) => {
+const ImagePreview: React.FC<ImagePreviewProps> = ({ src, ...props }) => {
   return (
-    <Image
+    <AntImage
       src={src}
+      {...props}
       preview={{
+        mask: typeof props.preview === 'object' ? props.preview.mask : false,
         toolbarRender: (
           _,
           {
