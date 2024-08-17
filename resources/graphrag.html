@@ -54,7 +54,7 @@
         }
       })
       .onNodeClick((node) => {
-        const url = `${apiUrl}/v1/references/${modelId}/relationships/${node.properties.human_readable_id}`
+        const url = `${apiUrl}/v1/references/${modelId}/entities/${node.properties.human_readable_id}`
         window.api.minApp({
           url,
           windowOptions: {
