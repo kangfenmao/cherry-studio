@@ -8,7 +8,8 @@ const api = {
   openWebsite: (url: string) => ipcRenderer.invoke('open-website', url),
   setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy),
   saveFile: (path: string, content: string) => ipcRenderer.invoke('save-file', path, content),
-  setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme)
+  setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme),
+  minApp: (url: string) => ipcRenderer.invoke('minapp', url)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
