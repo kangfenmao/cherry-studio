@@ -14,7 +14,7 @@ const OllamSettings: FC = () => {
 
   return (
     <Container>
-      <SettingSubtitle>{t('ollama.keep_alive_time.title')}</SettingSubtitle>
+      <SettingSubtitle style={{ marginBottom: 5 }}>{t('ollama.keep_alive_time.title')}</SettingSubtitle>
       <InputNumber
         style={{ width: '100%' }}
         value={keepAliveMinutes}

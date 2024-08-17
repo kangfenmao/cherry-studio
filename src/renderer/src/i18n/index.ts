@@ -220,6 +220,10 @@ const resources = {
       },
       error: {
         'chat.response': 'Something went wrong. Please check if you have set your API key in the Settings > Providers'
+      },
+      words: {
+        knowledgeGraph: 'Knowledge Graph',
+        visualization: 'Visualization'
       }
     }
   },
@@ -441,6 +445,10 @@ const resources = {
       },
       error: {
         'chat.response': '出错了，如果没有配置 API 密钥，请前往设置 > 模型提供商中配置密钥'
+      },
+      words: {
+        knowledgeGraph: '知识图谱',
+        visualization: '可视化'
       }
     }
   }

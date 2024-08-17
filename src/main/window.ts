@@ -5,6 +5,7 @@ import { join } from 'path'
 
 import icon from '../../build/icon.png?asset'
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
+import { objectToQueryParams } from './utils'
 
 export function createMainWindow() {
   // Load the previous state with fallback to defaults
@@ -76,7 +77,13 @@ export function createMainWindow() {
   return mainWindow
 }
 
-export function createMinappWindow(url) {
+export function createMinappWindow({
+  url,
+  windowOptions
+}: {
+  url: string
+  windowOptions?: Electron.BrowserWindowConstructorOptions
+}) {
   const width = 500
   const height = 800
   const headerHeight = 40
@@ -88,20 +95,26 @@ export function createMinappWindow(url) {
     alwaysOnTop: true,
     titleBarOverlay: titleBarOverlayDark,
     titleBarStyle: 'hidden',
+    ...windowOptions,
     webPreferences: {
       preload: join(__dirname, '../preload/minapp.js'),
       sandbox: false
     }
   })
 
-  minappWindow.loadFile(app.getAppPath() + '/resources/minapp.html')
-
   const view = new BrowserView()
-
-  minappWindow.setBrowserView(view)
   view.setBounds({ x: 0, y: headerHeight, width, height: height - headerHeight })
   view.webContents.loadURL(url)
 
+  const minappWindowParams = {
+    title: windowOptions?.title || 'CherryStudio'
+  }
+
+  const appPath = app.getAppPath()
+  const minappHtmlPath = appPath + '/resources/minapp.html'
+
+  minappWindow.loadURL('file://' + minappHtmlPath + '?' + objectToQueryParams(minappWindowParams))
+  minappWindow.setBrowserView(view)
   minappWindow.on('resize', () => {
     view.setBounds({
       x: 0,

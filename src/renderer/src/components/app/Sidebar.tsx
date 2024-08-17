@@ -24,7 +24,7 @@ const Sidebar: FC = () => {
   }
 
   return (
-    <Container style={{ backgroundColor: minappShow ? 'var(--color-background)' : sidebarBackgroundColor }}>
+    <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBackgroundColor }}>
       <AvatarImg src={avatar || Logo} draggable={false} className="dragdisable" onClick={onEditUser} />
       <MainMenus>
         <Menus>

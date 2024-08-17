@@ -22,6 +22,7 @@ import styled from 'styled-components'
 import { SettingContainer, SettingSubtitle, SettingTitle } from '..'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
+import GraphRAGSettings from './GraphRAGSettings'
 import OllamSettings from './OllamaSettings'
 
 interface Props {
@@ -128,6 +129,9 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         {apiEditable && <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>}
       </Space.Compact>
       {provider.id === 'ollama' && <OllamSettings />}
+      {provider.id === 'graphrag-kylin-mountain' && provider.models.length > 0 && (
+        <GraphRAGSettings provider={provider} />
+      )}
       <SettingSubtitle style={{ marginBottom: 5 }}>{t('common.models')}</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
         <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">

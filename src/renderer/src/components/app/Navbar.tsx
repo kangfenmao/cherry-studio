@@ -9,7 +9,7 @@ const navbarBackgroundColor = isMac ? 'var(--navbar-background-mac)' : 'var(--na
 
 export const Navbar: FC<Props> = ({ children, ...props }) => {
   const { minappShow } = useRuntime()
-  const backgroundColor = minappShow ? 'var(--color-background)' : navbarBackgroundColor
+  const backgroundColor = minappShow ? 'var(--navbar-background)' : navbarBackgroundColor
 
   return (
     <NavbarContainer {...props} style={{ backgroundColor }}>

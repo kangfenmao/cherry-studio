@@ -19,21 +19,21 @@
         justify-content: space-between;
         -webkit-app-region: drag;
       }
-      .header-right {
+      #header-left {
+        margin-left: 10px;
+        margin-right: auto;
+      }
+      #header-center {
+        color: #fff;
+        font-size: 14px;
+        margin-left: 10px;
+      }
+      #header-right {
         margin-left: auto;
         margin-right: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
-      }
-      .header-left {
-        margin-left: 10px;
-        margin-right: auto;
-      }
-      .header-center {
-        color: #fff;
-        font-size: 14px;
-        margin-left: 10px;
       }
       button {
         background: none;
@@ -57,9 +57,14 @@
   </head>
   <body>
     <header>
-      <div class="header-left"></div>
-      <div class="header-center">MinApp</div>
-      <div class="header-right"></div>
+      <div id="header-left"></div>
+      <div id="header-center"></div>
+      <div id="header-right"></div>
     </header>
+    <script type="module">
+      import { getQueryParam } from './js/utils.js'
+      const title = getQueryParam('title')
+      document.getElementById('header-center').innerHTML = title
+    </script>
   </body>
 </html>

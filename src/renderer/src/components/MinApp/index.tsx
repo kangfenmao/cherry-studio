@@ -1,4 +1,5 @@
 import { CloseOutlined, ExportOutlined, ReloadOutlined } from '@ant-design/icons'
+import { useBridge } from '@renderer/hooks/useBridge'
 import store from '@renderer/store'
 import { setMinappShow } from '@renderer/store/runtime'
 import { Drawer } from 'antd'
@@ -19,6 +20,8 @@ interface Props extends ShowParams {
 const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
   const [open, setOpen] = useState(true)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  useBridge()
 
   const canOpenExternalLink = url.startsWith('http://') || url.startsWith('https://')
 
