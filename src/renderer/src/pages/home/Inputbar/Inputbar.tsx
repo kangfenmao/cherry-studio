@@ -70,6 +70,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
 
     setText('')
+    setTimeout(() => setText(''), 500)
 
     setExpend(false)
   }, [assistant.id, assistant.topics, generating, text])
