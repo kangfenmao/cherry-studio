@@ -13,13 +13,17 @@ interface Props {
 
 const GraphRAGSettings: FC<Props> = ({ provider }) => {
   const apiUrl = provider.apiHost
-  const modalId = provider.models[0].id
+  const modalId = provider.models.filter((model) => model.id.includes('global'))[0]?.id
   const { t } = useTranslation()
 
   const onShowGraphRAG = async () => {
     const { appPath } = await window.api.getAppInfo()
     const url = `file://${appPath}/resources/graphrag.html?apiUrl=${apiUrl}&modelId=${modalId}`
     MinApp.start({ url, title: t('words.knowledgeGraph') })
+  }
+
+  if (!modalId) {
+    return null
   }
 
   return (
