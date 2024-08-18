@@ -44,7 +44,7 @@
   --input-bar-background: rgba(255, 255, 255, 0.02);
 
   --navbar-height: 42px;
-  --sidebar-width: 50px;
+  --sidebar-width: 52px;
   --status-bar-height: 40px;
   --input-bar-height: 85px;
 
@@ -166,37 +166,28 @@ body,
   gap: 4px;
 }
 
-.dragable {
+.drag {
   -webkit-app-region: drag;
 }
 
-.dragdisable {
+.nodrag {
   -webkit-app-region: no-drag;
 }
 
 .minapp-drawer {
-  .ant-drawer-header-title {
-    flex-direction: row-reverse;
-  }
-  .ant-drawer-close {
-    position: absolute;
-    top: 6px;
-    right: 15px;
-    padding: 15px;
-    margin-right: -5px;
-    -webkit-app-region: no-drag;
-    z-index: 100000;
-  }
   .ant-drawer-header {
-    height: calc(var(--navbar-height) + 0.5px);
+    position: absolute;
+    -webkit-app-region: drag;
+    min-height: calc(var(--navbar-height) + 0.5px);
     background: var(--navbar-background);
     width: calc(100vw - var(--sidebar-width));
-    padding-right: 10px !important;
     border-bottom: 0.5px solid var(--color-border);
     margin-top: -0.5px;
   }
   .ant-drawer-body {
     padding: 0;
+    margin-top: var(--navbar-height);
+    overflow: hidden;
   }
   .minapp-mask {
     background-color: transparent !important;

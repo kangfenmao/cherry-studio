@@ -1,4 +1,5 @@
 import { CloseOutlined, ExportOutlined, ReloadOutlined } from '@ant-design/icons'
+import { isMac, isWindows } from '@renderer/config/constant'
 import { useBridge } from '@renderer/hooks/useBridge'
 import store from '@renderer/store'
 import { setMinappShow } from '@renderer/store/runtime'
@@ -40,9 +41,30 @@ const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
     window.api.openWebsite(url)
   }
 
+  const Title = () => {
+    return (
+      <TitleContainer style={{ justifyContent: isWindows ? 'flex-start' : 'space-between' }}>
+        <TitleText>{title}</TitleText>
+        <ButtonsGroup>
+          <Button onClick={onReload}>
+            <ReloadOutlined />
+          </Button>
+          {canOpenExternalLink && (
+            <Button onClick={onOpenLink}>
+              <ExportOutlined />
+            </Button>
+          )}
+          <Button onClick={onClose}>
+            <CloseOutlined />
+          </Button>
+        </ButtonsGroup>
+      </TitleContainer>
+    )
+  }
+
   return (
     <Drawer
-      title={title || <Title />}
+      title={<Title />}
       placement="bottom"
       onClose={onClose}
       open={open}
@@ -54,19 +76,6 @@ const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
       closeIcon={null}
       style={{ marginLeft: 'var(--sidebar-width)' }}>
       <Frame src={url} ref={iframeRef} />
-      <ButtonsGroup>
-        <Button onClick={onReload}>
-          <ReloadOutlined />
-        </Button>
-        {canOpenExternalLink && (
-          <Button onClick={onOpenLink}>
-            <ExportOutlined />
-          </Button>
-        )}
-        <Button onClick={onClose}>
-          <CloseOutlined />
-        </Button>
-      </ButtonsGroup>
     </Drawer>
   )
 }
@@ -77,24 +86,36 @@ const Frame = styled.iframe`
   border: none;
 `
 
-const Title = styled.div`
-  min-height: var(--navbar-height);
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: ${isMac ? '20px' : '15px'};
+  padding-right: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`
+
+const TitleText = styled.div`
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--color-text-1);
+  margin-right: 10px;
+  user-select: none;
 `
 
 const ButtonsGroup = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: var(--navbar-height);
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 5px;
-  padding: 0 10px;
+  -webkit-app-region: no-drag;
 `
 
 const Button = styled.div`
-  -webkit-app-region: no-drag;
   cursor: pointer;
   width: 30px;
   height: 30px;
