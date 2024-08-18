@@ -44,12 +44,13 @@
   --input-bar-background: rgba(255, 255, 255, 0.02);
 
   --navbar-height: 42px;
-  --sidebar-width: 55px;
+  --sidebar-width: 50px;
+  --status-bar-height: 40px;
+  --input-bar-height: 85px;
+
   --assistants-width: 245px;
   --topic-list-width: 260px;
   --settings-width: var(--assistants-width);
-  --status-bar-height: 40px;
-  --input-bar-height: 85px;
 }
 
 body[theme-mode='light'] {
