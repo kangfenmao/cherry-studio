@@ -353,6 +353,36 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
     }
   ],
   doubao: [],
+  minimax: [
+    {
+      id: 'abab6.5s-chat',
+      provider: 'minimax',
+      name: 'abab6.5s',
+      group: 'abab6',
+      enabled: true
+    },
+    {
+      id: 'abab6.5g-chat',
+      provider: 'minimax',
+      name: 'abab6.5g',
+      group: 'abab6',
+      enabled: true
+    },
+    {
+      id: 'abab6.5t-chat',
+      provider: 'minimax',
+      name: 'abab6.5t',
+      group: 'abab6',
+      enabled: true
+    },
+    {
+      id: 'abab5.5s-chat',
+      provider: 'minimax',
+      name: 'abab5.5s',
+      group: 'abab5',
+      enabled: true
+    }
+  ],
   aihubmix: [
     {
       id: 'gpt-4o-mini',

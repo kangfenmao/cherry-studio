@@ -19,7 +19,14 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingSubtitle, SettingTitle } from '..'
+import {
+  SettingContainer,
+  SettingHelpLink,
+  SettingHelpText,
+  SettingHelpTextRow,
+  SettingSubtitle,
+  SettingTitle
+} from '..'
 import AddModelPopup from './AddModelPopup'
 import EditModelsPopup from './EditModelsPopup'
 import GraphRAGSettings from './GraphRAGSettings'
@@ -111,11 +118,11 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         </Button>
       </Space.Compact>
       {apiKeyWebsite && (
-        <HelpTextRow>
-          <HelpLink target="_blank" href={apiKeyWebsite}>
+        <SettingHelpTextRow>
+          <SettingHelpLink target="_blank" href={apiKeyWebsite}>
             {t('settings.provider.get_api_key')}
-          </HelpLink>
-        </HelpTextRow>
+          </SettingHelpLink>
+        </SettingHelpTextRow>
       )}
       <SettingSubtitle>{t('settings.provider.api_host')}</SettingSubtitle>
       <Space.Compact style={{ width: '100%', marginTop: 5 }}>
@@ -149,18 +156,18 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         </Card>
       ))}
       {docsWebsite && (
-        <HelpTextRow>
-          <HelpText>{t('settings.provider.docs_check')} </HelpText>
-          <HelpLink target="_blank" href={docsWebsite}>
+        <SettingHelpTextRow>
+          <SettingHelpText>{t('settings.provider.docs_check')} </SettingHelpText>
+          <SettingHelpLink target="_blank" href={docsWebsite}>
             {t(`provider.${provider.id}`) + ' '}
             {t('common.docs')}
-          </HelpLink>
-          <HelpText>{t('common.and')}</HelpText>
-          <HelpLink target="_blank" href={modelsWebsite}>
+          </SettingHelpLink>
+          <SettingHelpText>{t('common.and')}</SettingHelpText>
+          <SettingHelpLink target="_blank" href={modelsWebsite}>
             {t('common.models')}
-          </HelpLink>
-          <HelpText>{t('settings.provider.docs_more_details')}</HelpText>
-        </HelpTextRow>
+          </SettingHelpLink>
+          <SettingHelpText>{t('settings.provider.docs_more_details')}</SettingHelpText>
+        </SettingHelpTextRow>
       )}
       <Flex gap={10} style={{ marginTop: '10px' }}>
         <Button type="primary" onClick={onManageModel} icon={<EditOutlined />}>
@@ -186,24 +193,6 @@ const ModelListHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-`
-
-export const HelpTextRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 5px 0;
-`
-
-export const HelpText = styled.div`
-  font-size: 11px;
-  color: var(--color-text);
-  opacity: 0.4;
-`
-
-const HelpLink = styled(Link)`
-  font-size: 11px;
-  padding: 0 5px;
 `
 
 const RemoveIcon = styled(MinusCircleOutlined)`

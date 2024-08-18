@@ -121,6 +121,7 @@ const resources = {
         aihubmix: 'AiHubMix',
         stepfun: 'StepFun',
         doubao: 'Doubao',
+        minimax: 'MiniMax',
         'graphrag-kylin-mountain': 'GraphRAG'
       },
       settings: {
@@ -346,6 +347,7 @@ const resources = {
         aihubmix: 'AiHubMix',
         stepfun: '阶跃星辰',
         doubao: '豆包',
+        minimax: 'MiniMax',
         'graphrag-kylin-mountain': 'GraphRAG'
       },
       settings: {

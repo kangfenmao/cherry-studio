@@ -4,8 +4,7 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingSubtitle } from '..'
-import { HelpText, HelpTextRow } from '../ProviderSettings/ProviderSetting'
+import { SettingHelpText, SettingHelpTextRow, SettingSubtitle } from '..'
 
 const OllamSettings: FC = () => {
   const { keepAliveTime, setKeepAliveTime } = useOllamaSettings()
@@ -23,9 +22,9 @@ const OllamSettings: FC = () => {
         suffix={t('ollama.keep_alive_time.placeholder')}
         step={5}
       />
-      <HelpTextRow>
-        <HelpText>{t('ollama.keep_alive_time.description')}</HelpText>
-      </HelpTextRow>
+      <SettingHelpTextRow>
+        <SettingHelpText>{t('ollama.keep_alive_time.description')}</SettingHelpText>
+      </SettingHelpTextRow>
     </Container>
   )
 }

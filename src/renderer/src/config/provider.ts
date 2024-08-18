@@ -7,6 +7,7 @@ import DoubaoModelLogo from '@renderer/assets/images/models/doubao.png'
 import EmbeddingModelLogo from '@renderer/assets/images/models/embedding.png'
 import GeminiModelLogo from '@renderer/assets/images/models/gemini.png'
 import GemmaModelLogo from '@renderer/assets/images/models/gemma.jpeg'
+import HailuoModelLogo from '@renderer/assets/images/models/hailuo.png'
 import LlamaModelLogo from '@renderer/assets/images/models/llama.jpeg'
 import MicrosoftModelLogo from '@renderer/assets/images/models/microsoft.png'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
@@ -23,6 +24,7 @@ import DoubaoProviderLogo from '@renderer/assets/images/providers/doubao.png'
 import GeminiProviderLogo from '@renderer/assets/images/providers/gemini.png'
 import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
+import MinimaxProviderLogo from '@renderer/assets/images/providers/minimax.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import MoonshotModelLogo from '@renderer/assets/images/providers/moonshot.jpeg'
 import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
@@ -69,6 +71,8 @@ export function getProviderLogo(providerId: string) {
       return DoubaoProviderLogo
     case 'graphrag-kylin-mountain':
       return GraphRagProviderLogo
+    case 'minimax':
+      return MinimaxProviderLogo
     default:
       return undefined
   }
@@ -98,6 +102,7 @@ export function getModelLogo(modelId: string) {
     bison: PalmModelLogo,
     palm: PalmModelLogo,
     step: StepModelLogo,
+    abab: HailuoModelLogo,
     'ep-202': DoubaoModelLogo
   }
 
@@ -241,6 +246,18 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey',
       docs: 'https://www.volcengine.com/docs/82379/1182403',
       models: 'https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint'
+    }
+  },
+  minimax: {
+    api: {
+      url: 'https://api.minimax.chat/v1/',
+      editable: true
+    },
+    websites: {
+      official: 'https://platform.minimaxi.com/',
+      apiKey: 'https://platform.minimaxi.com/user-center/basic-information/interface-key',
+      docs: 'https://platform.minimaxi.com/document/Announcement',
+      models: 'https://platform.minimaxi.com/document/Models'
     }
   },
   'graphrag-kylin-mountain': {

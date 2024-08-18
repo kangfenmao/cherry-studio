@@ -1,4 +1,5 @@
 import { Divider } from 'antd'
+import Link from 'antd/es/typography/Link'
 import styled from 'styled-components'
 
 import SettingsPage from './SettingsPage'
@@ -49,6 +50,24 @@ export const SettingRowTitle = styled.div`
   font-size: 14px;
   line-height: 18px;
   color: var(--color-text-1);
+`
+
+export const SettingHelpTextRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 0;
+`
+
+export const SettingHelpText = styled.div`
+  font-size: 11px;
+  color: var(--color-text);
+  opacity: 0.4;
+`
+
+export const SettingHelpLink = styled(Link)`
+  font-size: 11px;
+  padding: 0 5px;
 `
 
 export default SettingsPage

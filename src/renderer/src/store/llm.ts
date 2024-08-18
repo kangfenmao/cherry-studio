@@ -122,6 +122,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'minimax',
+      name: 'MiniMax',
+      apiKey: '',
+      apiHost: 'https://api.minimax.chat/v1/',
+      models: SYSTEM_MODELS.minimax.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'aihubmix',
       name: 'AiHubMix',
       apiKey: '',

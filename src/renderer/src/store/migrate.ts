@@ -343,6 +343,26 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '22': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'minimax',
+            name: 'MiniMax',
+            apiKey: '',
+            apiHost: 'https://api.minimax.chat/v1/',
+            models: SYSTEM_MODELS.minimax.filter((m) => m.enabled),
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 }
 

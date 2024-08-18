@@ -2,7 +2,7 @@ import { getModelLogo } from '@renderer/config/provider'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { Model } from '@renderer/types'
 import { Avatar, Dropdown, DropdownProps, MenuProps } from 'antd'
-import { first, sortBy, upperFirst } from 'lodash'
+import { first, reverse, sortBy, upperFirst } from 'lodash'
 import { FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -22,7 +22,7 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
       key: p.id,
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       type: 'group',
-      children: sortBy(p.models, 'name').map((m) => ({
+      children: reverse(sortBy(p.models, 'name')).map((m) => ({
         key: m?.id,
         label: upperFirst(m?.name),
         defaultSelectedKeys: [model?.id],

@@ -56,6 +56,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    增加 Gemini、豆包、阶跃星辰等服务商支持
-    修复 Anthropic 回复问题
-    新的 Windows, Linux 侧边栏样式
+    添加 MiniMax 服务商
