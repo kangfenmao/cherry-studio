@@ -194,15 +194,17 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                 <Tag
                   style={{
                     cursor: 'pointer',
-                    borderRadius: '20px',
+                    borderRadius: '6px',
                     display: 'flex',
                     alignItems: 'center',
-                    padding: '2px 8px'
+                    padding: '2px 8px',
+                    borderWidth: 0.5
                   }}>
                   <i className="iconfont icon-history" style={{ marginRight: '3px' }} />
                   {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}
-                  <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑
-                  {`${inputTokenCount} / ${estimateTokenCount}`}
+                  <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
+                  <span style={{ margin: '0 2px' }}>/</span>
+                  {estimateTokenCount}
                 </Tag>
               </Tooltip>
             </TextCount>
@@ -304,7 +306,6 @@ const TextCount = styled.div`
   padding: 2px;
   border-top-left-radius: 7px;
   user-select: none;
-  margin-right: 10px;
 `
 
 export default Inputbar
