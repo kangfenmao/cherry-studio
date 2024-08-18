@@ -1,6 +1,6 @@
 {
   "name": "cherry-studio",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "A powerful AI assistant for producer.",
   "main": "./out/main/index.js",
   "author": "kangfenmao@qq.com",
