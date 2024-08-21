@@ -1,4 +1,5 @@
-import { CheckOutlined, CopyOutlined } from '@ant-design/icons'
+import { CheckOutlined } from '@ant-design/icons'
+import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { initMermaid } from '@renderer/init'
 import { useTheme } from '@renderer/providers/ThemeProvider'
 import { ThemeMode } from '@renderer/store/settings'
@@ -39,7 +40,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
     <div>
       <CodeHeader>
         <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
-        {!copied && <CopyOutlined className="copy" onClick={onCopy} />}
+        {!copied && <CopyIcon className="copy" onClick={onCopy} />}
         {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
       </CodeHeader>
       <SyntaxHighlighter
