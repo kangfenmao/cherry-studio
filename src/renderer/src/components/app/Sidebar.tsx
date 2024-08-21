@@ -33,14 +33,19 @@ const Sidebar: FC = () => {
               <i className="iconfont icon-chat"></i>
             </Icon>
           </StyledLink>
-          <StyledLink to="/apps">
-            <Icon className={isRoute('/apps')}>
-              <i className="iconfont icon-appstore"></i>
+          <StyledLink to="/agents">
+            <Icon className={isRoute('/agents')}>
+              <i className="iconfont icon-business-smart-assistant"></i>
             </Icon>
           </StyledLink>
           <StyledLink to="/translate">
             <Icon className={isRoute('/translate')}>
               <TranslationOutlined />
+            </Icon>
+          </StyledLink>
+          <StyledLink to="/apps">
+            <Icon className={isRoute('/apps')}>
+              <i className="iconfont icon-appstore"></i>
             </Icon>
           </StyledLink>
         </Menus>
@@ -62,6 +67,7 @@ const Container = styled.div`
   align-items: center;
   padding: 8px 0;
   width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   height: ${isMac ? 'calc(100vh - var(--navbar-height))' : '100vh'};
   -webkit-app-region: drag !important;
   border-right: 0.5px solid var(--color-border);

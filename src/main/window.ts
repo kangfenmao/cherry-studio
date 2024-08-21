@@ -62,8 +62,31 @@ export function createMainWindow() {
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    const websiteReg = /accounts.google.com/i
+
+    if (websiteReg.test(details.url)) {
+      createMinappWindow({ url: details.url, windowOptions: { width: 1000, height: 680 } })
+    } else {
+      shell.openExternal(details.url)
+    }
+
     return { action: 'deny' }
+  })
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived({ urls: ['*://*/*'] }, (details, callback) => {
+    if (details.responseHeaders?.['X-Frame-Options']) {
+      delete details.responseHeaders['X-Frame-Options']
+    }
+    if (details.responseHeaders?.['x-frame-options']) {
+      delete details.responseHeaders['x-frame-options']
+    }
+    if (details.responseHeaders?.['Content-Security-Policy']) {
+      delete details.responseHeaders['Content-Security-Policy']
+    }
+    if (details.responseHeaders?.['content-security-policy']) {
+      delete details.responseHeaders['content-security-policy']
+    }
+    callback({ cancel: false, responseHeaders: details.responseHeaders })
   })
 
   // HMR for renderer base on electron-vite cli.
@@ -84,8 +107,8 @@ export function createMinappWindow({
   url: string
   windowOptions?: Electron.BrowserWindowConstructorOptions
 }) {
-  const width = 500
-  const height = 800
+  const width = 1000
+  const height = 680
   const headerHeight = 40
 
   const minappWindow = new BrowserWindow({

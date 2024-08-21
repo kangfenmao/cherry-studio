@@ -1,7 +1,7 @@
 @import './markdown.scss';
 @import './scrollbar.scss';
 @import '../fonts/icon-fonts/iconfont.css';
-@import '../fonts/Ubuntu/Ubuntu.css';
+@import '../fonts/ubuntu/ubuntu.css';
 
 :root {
   --color-white: #ffffff;
@@ -102,6 +102,14 @@ body[theme-mode='light'] {
   font-weight: normal;
 }
 
+*:focus {
+  outline: none;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 ul {
   list-style: none;
 }
@@ -175,6 +183,9 @@ body,
 }
 
 .minapp-drawer {
+  .ant-drawer-content-wrapper {
+    box-shadow: none;
+  }
   .ant-drawer-header {
     position: absolute;
     -webkit-app-region: drag;

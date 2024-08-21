@@ -1,63 +1,64 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 4563475 */
-  src: url('iconfont.woff2?t=1723186111414') format('woff2'),
-       url('iconfont.woff?t=1723186111414') format('woff'),
-       url('iconfont.ttf?t=1723186111414') format('truetype');
+  font-family: 'iconfont'; /* Project id 4563475 */
+  src: url('iconfont.woff2?t=1724204739157') format('woff2');
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
+  font-family: 'iconfont' !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-business-smart-assistant:before {
+  content: '\e601';
+}
+
 .icon-copy:before {
-  content: "\e6ae";
+  content: '\e6ae';
 }
 
 .icon-ic_send:before {
-  content: "\e795";
+  content: '\e795';
 }
 
 .icon-dark1:before {
-  content: "\e72f";
+  content: '\e72f';
 }
 
 .icon-theme-light:before {
-  content: "\e6b7";
+  content: '\e6b7';
 }
 
 .icon-translate_line:before {
-  content: "\e7de";
+  content: '\e7de';
 }
 
 .icon-history:before {
-  content: "\e758";
+  content: '\e758';
 }
 
 .icon-hidesidebarhoriz:before {
-  content: "\e8eb";
+  content: '\e8eb';
 }
 
 .icon-showsidebarhoriz:before {
-  content: "\e944";
+  content: '\e944';
 }
 
 .icon-a-addchat:before {
-  content: "\e658";
+  content: '\e658';
 }
 
 .icon-appstore:before {
-  content: "\e792";
+  content: '\e792';
 }
 
 .icon-chat:before {
-  content: "\e615";
+  content: '\e615';
 }
 
 .icon-setting:before {
-  content: "\e78e";
+  content: '\e78e';
 }
-

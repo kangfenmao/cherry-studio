@@ -1,12 +1,6 @@
-import {
-  CheckOutlined,
-  CopyOutlined,
-  SendOutlined,
-  SettingOutlined,
-  SwapOutlined,
-  WarningOutlined
-} from '@ant-design/icons'
+import { CheckOutlined, SendOutlined, SettingOutlined, SwapOutlined, WarningOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
+import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { fetchTranslate } from '@renderer/services/api'
 import { getDefaultAssistant } from '@renderer/services/assistant'
@@ -211,7 +205,7 @@ const TranslatePage: FC = () => {
             <CopyButton
               onClick={onCopy}
               disabled={!result}
-              icon={copied ? <CheckOutlined style={{ color: 'var(--color-primary)' }} /> : <CopyOutlined />}
+              icon={copied ? <CheckOutlined style={{ color: 'var(--color-primary)' }} /> : <CopyIcon />}
             />
           </OutputContainer>
         </TranslateInputWrapper>

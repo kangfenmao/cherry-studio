@@ -75,3 +75,9 @@ export type Agent = {
 export type Suggestion = {
   content: string
 }
+
+export type MinAppType = {
+  name: string
+  logo: string
+  url: string
+}

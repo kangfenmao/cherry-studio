@@ -3,28 +3,25 @@ import { isMac, isWindows } from '@renderer/config/constant'
 import { useBridge } from '@renderer/hooks/useBridge'
 import store from '@renderer/store'
 import { setMinappShow } from '@renderer/store/runtime'
+import { MinAppType } from '@renderer/types'
 import { Drawer } from 'antd'
 import { useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { TopView } from '../TopView'
 
-interface ShowParams {
-  title?: string
-  url: string
-}
-
-interface Props extends ShowParams {
+interface Props {
+  app: MinAppType
   resolve: (data: any) => void
 }
 
-const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
+const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
   const [open, setOpen] = useState(true)
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useBridge()
 
-  const canOpenExternalLink = url.startsWith('http://') || url.startsWith('https://')
+  const canOpenExternalLink = app.url.startsWith('http://') || app.url.startsWith('https://')
 
   const onClose = () => {
     setOpen(false)
@@ -33,19 +30,19 @@ const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
 
   const onReload = () => {
     if (iframeRef.current) {
-      iframeRef.current.src = url
+      iframeRef.current.src = app.url
     }
   }
 
   const onOpenLink = () => {
-    window.api.openWebsite(url)
+    window.api.openWebsite(app.url)
   }
 
   const Title = () => {
     return (
-      <TitleContainer style={{ justifyContent: isWindows ? 'flex-start' : 'space-between' }}>
-        <TitleText>{title}</TitleText>
-        <ButtonsGroup>
+      <TitleContainer style={{ justifyContent: 'space-between' }}>
+        <TitleText>{app.name}</TitleText>
+        <ButtonsGroup className={isWindows ? 'windows' : ''}>
           <Button onClick={onReload}>
             <ReloadOutlined />
           </Button>
@@ -75,7 +72,7 @@ const PopupContainer: React.FC<Props> = ({ title, url, resolve }) => {
       maskClosable={false}
       closeIcon={null}
       style={{ marginLeft: 'var(--sidebar-width)' }}>
-      <Frame src={url} ref={iframeRef} />
+      <Frame src={app.url} ref={iframeRef} />
     </Drawer>
   )
 }
@@ -84,6 +81,7 @@ const Frame = styled.iframe`
   width: calc(100vw - var(--sidebar-width));
   height: calc(100vh - var(--navbar-height));
   border: none;
+  background-color: white;
 `
 
 const TitleContainer = styled.div`
@@ -113,6 +111,13 @@ const ButtonsGroup = styled.div`
   align-items: center;
   gap: 5px;
   -webkit-app-region: no-drag;
+  &.windows {
+    margin-right: ${isWindows ? '130px' : 0};
+    background-color: var(--color-background-mute);
+    border-radius: 50px;
+    padding: 0 3px;
+    overflow: hidden;
+  }
 `
 
 const Button = styled.div`
@@ -139,12 +144,12 @@ export default class MinApp {
     TopView.hide('MinApp')
     store.dispatch(setMinappShow(false))
   }
-  static start(props: ShowParams) {
+  static start(app: MinAppType) {
     store.dispatch(setMinappShow(true))
     return new Promise<any>((resolve) => {
       TopView.show(
         <PopupContainer
-          {...props}
+          app={app}
           resolve={(v) => {
             resolve(v)
             this.close()

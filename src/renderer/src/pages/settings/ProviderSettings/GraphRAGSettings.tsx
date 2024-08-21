@@ -1,5 +1,5 @@
 import MinApp from '@renderer/components/MinApp'
-import { Provider } from '@renderer/types'
+import { MinAppType, Provider } from '@renderer/types'
 import { Button } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +19,14 @@ const GraphRAGSettings: FC<Props> = ({ provider }) => {
   const onShowGraphRAG = async () => {
     const { appPath } = await window.api.getAppInfo()
     const url = `file://${appPath}/resources/graphrag.html?apiUrl=${apiUrl}&modelId=${modalId}`
-    MinApp.start({ url, title: t('words.knowledgeGraph') })
+
+    const app: MinAppType = {
+      name: t('words.knowledgeGraph'),
+      logo: '',
+      url
+    }
+
+    MinApp.start(app)
   }
 
   if (!modalId) {

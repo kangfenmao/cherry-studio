@@ -56,4 +56,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    添加 MiniMax 服务商
+    新增AI小程序模块
