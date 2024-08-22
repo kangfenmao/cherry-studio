@@ -50,7 +50,13 @@ app.whenReady().then(() => {
   ipcMain.handle('save-file', saveFile)
 
   ipcMain.handle('minapp', (_, args) => {
-    createMinappWindow(args)
+    createMinappWindow({
+      url: args.url,
+      windowOptions: {
+        ...mainWindow.getBounds(),
+        ...args.windowOptions
+      }
+    })
   })
 
   ipcMain.handle('set-theme', (_, theme: 'light' | 'dark') => {

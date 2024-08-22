@@ -354,7 +354,7 @@ export const PROVIDER_CONFIG = {
     },
     app: {
       name: 'Groq',
-      url: 'https://groq.com/',
+      url: 'https://chat.groq.com/',
       logo: GroqProviderLogo
     }
   },

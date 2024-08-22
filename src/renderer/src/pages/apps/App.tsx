@@ -12,6 +12,13 @@ const App: FC<Props> = ({ app }) => {
   const { theme } = useTheme()
 
   const onClick = () => {
+    const websiteReg = /claude|chatgpt|groq/i
+
+    if (websiteReg.test(app.url)) {
+      window.api.minApp({ url: app.url, windowOptions: { title: app.name } })
+      return
+    }
+
     MinApp.start(app)
   }
 

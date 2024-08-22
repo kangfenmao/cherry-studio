@@ -14,7 +14,7 @@ declare global {
       setProxy: (proxy: string | undefined) => void
       saveFile: (path: string, content: string) => void
       setTheme: (theme: 'light' | 'dark') => void
-      minApp: (url: string) => void
+      minApp: (options: { url: string; windowOptions?: Electron.BrowserWindowConstructorOptions }) => void
     }
   }
 }

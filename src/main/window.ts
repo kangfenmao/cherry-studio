@@ -1,11 +1,10 @@
 import { is } from '@electron-toolkit/utils'
-import { app, BrowserView, BrowserWindow, Menu, MenuItem, shell } from 'electron'
+import { BrowserWindow, Menu, MenuItem, shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 
 import icon from '../../build/icon.png?asset'
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
-import { objectToQueryParams } from './utils'
 
 export function createMainWindow() {
   // Load the previous state with fallback to defaults
@@ -62,14 +61,7 @@ export function createMainWindow() {
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    const websiteReg = /accounts.google.com/i
-
-    if (websiteReg.test(details.url)) {
-      createMinappWindow({ url: details.url, windowOptions: { width: 1000, height: 680 } })
-    } else {
-      shell.openExternal(details.url)
-    }
-
+    shell.openExternal(details.url)
     return { action: 'deny' }
   })
 
@@ -107,45 +99,23 @@ export function createMinappWindow({
   url: string
   windowOptions?: Electron.BrowserWindowConstructorOptions
 }) {
-  const width = 1000
-  const height = 680
-  const headerHeight = 40
+  const width = windowOptions?.width || 1000
+  const height = windowOptions?.height || 680
 
   const minappWindow = new BrowserWindow({
     width,
     height,
     autoHideMenuBar: true,
-    alwaysOnTop: true,
-    titleBarOverlay: titleBarOverlayDark,
-    titleBarStyle: 'hidden',
+    title: 'Cherry Studio',
     ...windowOptions,
     webPreferences: {
       preload: join(__dirname, '../preload/minapp.js'),
-      sandbox: false
+      sandbox: false,
+      contextIsolation: false
     }
   })
 
-  const view = new BrowserView()
-  view.setBounds({ x: 0, y: headerHeight, width, height: height - headerHeight })
-  view.webContents.loadURL(url)
-
-  const minappWindowParams = {
-    title: windowOptions?.title || 'CherryStudio'
-  }
-
-  const appPath = app.getAppPath()
-  const minappHtmlPath = appPath + '/resources/minapp.html'
-
-  minappWindow.loadURL('file://' + minappHtmlPath + '?' + objectToQueryParams(minappWindowParams))
-  minappWindow.setBrowserView(view)
-  minappWindow.on('resize', () => {
-    view.setBounds({
-      x: 0,
-      y: headerHeight,
-      width: minappWindow.getBounds().width,
-      height: minappWindow.getBounds().height - headerHeight
-    })
-  })
+  minappWindow.loadURL(url)
 
   return minappWindow
 }
