@@ -1,13 +1,15 @@
+import { HStack } from '@renderer/components/Layout'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
+import { backup, reset, restore } from '@renderer/services/backup'
 import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
-import { setFontSize, setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
+import { setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { compressImage, isValidProxyUrl } from '@renderer/utils'
-import { Avatar, Input, Select, Slider, Upload } from 'antd'
+import { Avatar, Button, Input, Select, Upload } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -16,8 +18,7 @@ import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingT
 
 const GeneralSettings: FC = () => {
   const avatar = useAvatar()
-  const { language, proxyUrl: storeProxyUrl, userName, theme, setTheme, fontSize } = useSettings()
-  const [fontSizeValue, setFontSizeValue] = useState(fontSize)
+  const { language, proxyUrl: storeProxyUrl, userName, theme, setTheme } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -102,27 +103,6 @@ const GeneralSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.font_size.title')}</SettingRowTitle>
-        <Slider
-          style={{ width: 290 }}
-          value={fontSizeValue}
-          onChange={(value) => setFontSizeValue(value)}
-          onChangeComplete={(value) => {
-            dispatch(setFontSize(value))
-            console.debug('set font size', value)
-          }}
-          min={12}
-          max={18}
-          step={1}
-          marks={{
-            12: <span style={{ fontSize: '12px' }}>A</span>,
-            14: <span style={{ fontSize: '14px' }}>{t('common.default')}</span>,
-            18: <span style={{ fontSize: '18px' }}>A</span>
-          }}
-        />
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
         <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
         <Input
           placeholder="socks5://127.0.0.1:6153"
@@ -132,6 +112,23 @@ const GeneralSettings: FC = () => {
           onBlur={() => onSetProxyUrl()}
           type="url"
         />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
+        <HStack gap="5px">
+          <Button onClick={backup}>备份</Button>
+          <Button onClick={restore}>恢复</Button>
+        </HStack>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.general.reset.title')}</SettingRowTitle>
+        <HStack gap="5px">
+          <Button onClick={reset} danger>
+            {t('settings.general.reset.button')}
+          </Button>
+        </HStack>
       </SettingRow>
       <SettingDivider />
     </SettingContainer>

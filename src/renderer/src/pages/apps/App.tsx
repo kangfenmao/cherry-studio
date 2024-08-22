@@ -51,6 +51,7 @@ const AppTitle = styled.div`
   margin-top: 5px;
   color: var(--color-text-soft);
   text-align: center;
+  user-select: none;
 `
 
 export default App

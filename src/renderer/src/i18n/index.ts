@@ -28,7 +28,8 @@ const resources = {
         footnotes: 'References',
         select: 'Select',
         search: 'Search',
-        default: 'Default'
+        default: 'Default',
+        warning: 'Warning'
       },
       button: {
         add: 'Add',
@@ -48,7 +49,11 @@ const resources = {
         'api.connection.failed': 'Connection failed',
         'api.connection.success': 'Connection successful',
         'chat.completion.paused': 'Chat completion paused',
-        'switch.disabled': 'Switching is disabled while the assistant is generating'
+        'switch.disabled': 'Switching is disabled while the assistant is generating',
+        'restore.success': 'Restored successfully',
+        'reset.confirm.content': 'Are you sure you want to clear all data?',
+        'reset.double.confirm.title': 'DATA LOST !!!',
+        'reset.double.confirm.content': 'All data will be lost, do you want to continue?'
       },
       chat: {
         save: 'Save',
@@ -141,6 +146,9 @@ const resources = {
         'general.title': 'General Settings',
         'general.user_name': 'User Name',
         'general.user_name.placeholder': 'Enter your name',
+        'general.backup.title': 'Data Backup and Recovery',
+        'general.reset.title': 'Data Reset',
+        'general.reset.button': 'Reset',
         'provider.api_key': 'API Key',
         'provider.check': 'Check',
         'provider.get_api_key': 'Get API Key',
@@ -220,7 +228,8 @@ const resources = {
         'keep_alive_time.description': 'The time in minutes to keep the connection alive, default is 5 minutes.'
       },
       error: {
-        'chat.response': 'Something went wrong. Please check if you have set your API key in the Settings > Providers'
+        'chat.response': 'Something went wrong. Please check if you have set your API key in the Settings > Providers',
+        'backup.file_format': 'Backup file format error'
       },
       words: {
         knowledgeGraph: 'Knowledge Graph',
@@ -253,7 +262,8 @@ const resources = {
         footnote: '引用内容',
         select: '选择',
         search: '搜索',
-        default: '默认'
+        default: '默认',
+        warning: '警告'
       },
       button: {
         add: '添加',
@@ -273,7 +283,11 @@ const resources = {
         'api.connection.failed': '连接失败',
         'api.connection.success': '连接成功',
         'chat.completion.paused': '会话已停止',
-        'switch.disabled': '模型回复完成后才能切换'
+        'switch.disabled': '模型回复完成后才能切换',
+        'restore.success': '恢复成功',
+        'reset.confirm.content': '确定要重置所有数据吗？',
+        'reset.double.confirm.title': '数据丢失！！！',
+        'reset.double.confirm.content': '你的全部数据都会丢失，如果没有备份数据，将无法恢复，确定要继续吗？'
       },
       chat: {
         save: '保存',
@@ -367,6 +381,9 @@ const resources = {
         'general.title': '常规设置',
         'general.user_name': '用户名',
         'general.user_name.placeholder': '请输入用户名',
+        'general.backup.title': '数据备份与恢复',
+        'general.reset.title': '重置数据',
+        'general.reset.button': '重置',
         'provider.api_key': 'API 密钥',
         'provider.check': '检查',
         'provider.get_api_key': '点击这里获取密钥',
@@ -446,7 +463,8 @@ const resources = {
         'keep_alive_time.description': '对话后模型在内存中保持的时间（默认：5分钟）'
       },
       error: {
-        'chat.response': '出错了，如果没有配置 API 密钥，请前往设置 > 模型提供商中配置密钥'
+        'chat.response': '出错了，如果没有配置 API 密钥，请前往设置 > 模型提供商中配置密钥',
+        'backup.file_format': '备份文件格式错误'
       },
       words: {
         knowledgeGraph: '知识图谱',

@@ -94,9 +94,11 @@ export function createMainWindow() {
 
 export function createMinappWindow({
   url,
+  parent,
   windowOptions
 }: {
   url: string
+  parent?: BrowserWindow
   windowOptions?: Electron.BrowserWindowConstructorOptions
 }) {
   const width = windowOptions?.width || 1000
@@ -108,6 +110,7 @@ export function createMinappWindow({
     autoHideMenuBar: true,
     title: 'Cherry Studio',
     ...windowOptions,
+    parent,
     webPreferences: {
       preload: join(__dirname, '../preload/minapp.js'),
       sandbox: false,

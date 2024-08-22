@@ -7,9 +7,15 @@ const api = {
   checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
   openWebsite: (url: string) => ipcRenderer.invoke('open-website', url),
   setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy),
-  saveFile: (path: string, content: string) => ipcRenderer.invoke('save-file', path, content),
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme),
-  minApp: (url: string) => ipcRenderer.invoke('minapp', url)
+  minApp: (url: string) => ipcRenderer.invoke('minapp', url),
+  openFile: (options?: { decompress: boolean }) => ipcRenderer.invoke('open-file', options),
+  reload: () => ipcRenderer.invoke('reload'),
+  saveFile: (path: string, content: string, options?: { compress: boolean }) => {
+    ipcRenderer.invoke('save-file', path, content, options)
+  },
+  compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
+  decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
