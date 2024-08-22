@@ -118,11 +118,10 @@ const MenuItem = styled.li`
     opacity: 0.8;
   }
   &:hover {
-    background: var(--color-primary-soft);
+    background: var(--color-background-soft);
   }
   &.active {
-    background: var(--color-primary);
-    color: var(--color-white);
+    background: var(--color-background-mute);
   }
 `
 

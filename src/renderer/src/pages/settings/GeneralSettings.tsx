@@ -1,3 +1,4 @@
+import { FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -117,8 +118,12 @@ const GeneralSettings: FC = () => {
       <SettingRow>
         <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
         <HStack gap="5px">
-          <Button onClick={backup}>备份</Button>
-          <Button onClick={restore}>恢复</Button>
+          <Button onClick={backup} icon={<SaveOutlined />}>
+            备份
+          </Button>
+          <Button onClick={restore} icon={<FolderOpenOutlined />}>
+            恢复
+          </Button>
         </HStack>
       </SettingRow>
       <SettingDivider />

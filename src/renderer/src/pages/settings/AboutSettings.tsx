@@ -2,6 +2,7 @@ import { GithubOutlined } from '@ant-design/icons'
 import { FileProtectOutlined, GlobalOutlined, MailOutlined, SoundOutlined } from '@ant-design/icons'
 import Logo from '@renderer/assets/images/logo.png'
 import { HStack } from '@renderer/components/Layout'
+import MinApp from '@renderer/components/MinApp'
 import { runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Progress, Row, Tag } from 'antd'
 import { ProgressInfo } from 'electron-updater'
@@ -139,7 +140,14 @@ const AboutSettings: FC = () => {
           <SoundOutlined />
           {t('settings.about.releases.title')}
         </SettingRowTitle>
-        <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}>
+        <Button
+          onClick={() =>
+            MinApp.start({
+              name: t('settings.about.releases.title'),
+              url: 'https://github.com/kangfenmao/cherry-studio/releases',
+              logo: ''
+            })
+          }>
           {t('settings.about.releases.button')}
         </Button>
       </SettingRow>

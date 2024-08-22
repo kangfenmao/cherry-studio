@@ -227,6 +227,9 @@ const resources = {
         'keep_alive_time.placeholder': 'Minutes',
         'keep_alive_time.description': 'The time in minutes to keep the connection alive, default is 5 minutes.'
       },
+      minapp: {
+        title: 'MinApp'
+      },
       error: {
         'chat.response': 'Something went wrong. Please check if you have set your API key in the Settings > Providers',
         'backup.file_format': 'Backup file format error'
@@ -461,6 +464,9 @@ const resources = {
         'keep_alive_time.title': '保持活跃时间',
         'keep_alive_time.placeholder': '分钟',
         'keep_alive_time.description': '对话后模型在内存中保持的时间（默认：5分钟）'
+      },
+      minapp: {
+        title: '小程序'
       },
       error: {
         'chat.response': '出错了，如果没有配置 API 密钥，请前往设置 > 模型提供商中配置密钥',

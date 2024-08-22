@@ -182,11 +182,10 @@ const ProviderListItem = styled.div`
   font-size: 14px;
   transition: all 0.2s ease-in-out;
   &:hover {
-    background: var(--color-primary-mute);
+    background: var(--color-background-soft);
   }
   &.active {
-    background: var(--color-primary);
-    color: var(--color-white);
+    background: var(--color-background-mute);
     font-weight: bold !important;
   }
 `

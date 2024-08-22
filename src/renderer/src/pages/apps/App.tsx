@@ -24,7 +24,7 @@ const App: FC<Props> = ({ app }) => {
 
   return (
     <Container onClick={onClick}>
-      <AppIcon src={app.logo} style={{ border: theme === 'dark' ? 'none' : '1px solid var(--color-border' }} />
+      <AppIcon src={app.logo} style={{ border: theme === 'dark' ? 'none' : '0.5px solid var(--color-border' }} />
       <AppTitle>{app.name}</AppTitle>
     </Container>
   )
@@ -36,6 +36,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 65px;
 `
 
 const AppIcon = styled.img`
