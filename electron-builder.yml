@@ -56,4 +56,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    新增AI小程序模块
+    增加应用备份和恢复功能
+    增加更多AI小程序
