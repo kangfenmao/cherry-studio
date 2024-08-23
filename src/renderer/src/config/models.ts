@@ -3,6 +3,15 @@ import { Model } from '@renderer/types'
 type SystemModel = Model & { enabled: boolean }
 
 export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
+  ollama: [
+    {
+      id: 'qwen2:0.5b',
+      provider: 'ollama',
+      name: ' Qwen2 0.5b',
+      group: 'Qwen2',
+      enabled: true
+    }
+  ],
   openai: [
     {
       id: 'gpt-4o',
@@ -46,6 +55,36 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       provider: 'gemini',
       name: 'Gemini 1.5 Pro Experimental 0801',
       group: 'Gemini 1.5',
+      enabled: true
+    }
+  ],
+  anthropic: [
+    {
+      id: 'claude-3-5-sonnet-20240620',
+      provider: 'anthropic',
+      name: 'Claude 3.5 Sonnet',
+      group: 'Claude 3.5',
+      enabled: true
+    },
+    {
+      id: 'claude-3-opus-20240229',
+      provider: 'anthropic',
+      name: 'Claude 3 Opus',
+      group: 'Claude 3',
+      enabled: true
+    },
+    {
+      id: 'claude-3-sonnet-20240229',
+      provider: 'anthropic',
+      name: 'Claude 3 Sonnet',
+      group: 'Claude 3',
+      enabled: true
+    },
+    {
+      id: 'claude-3-haiku-20240307',
+      provider: 'anthropic',
+      name: 'Claude 3 Haiku',
+      group: 'Claude 3',
       enabled: true
     }
   ],
@@ -464,36 +503,6 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
       name: 'Gemma 7B',
       group: 'Gemma',
       enabled: false
-    }
-  ],
-  anthropic: [
-    {
-      id: 'claude-3-5-sonnet-20240620',
-      provider: 'anthropic',
-      name: 'Claude 3.5 Sonnet',
-      group: 'Claude 3.5',
-      enabled: true
-    },
-    {
-      id: 'claude-3-opus-20240229',
-      provider: 'anthropic',
-      name: 'Claude 3 Opus',
-      group: 'Claude 3',
-      enabled: true
-    },
-    {
-      id: 'claude-3-sonnet-20240229',
-      provider: 'anthropic',
-      name: 'Claude 3 Sonnet',
-      group: 'Claude 3',
-      enabled: true
-    },
-    {
-      id: 'claude-3-haiku-20240307',
-      provider: 'anthropic',
-      name: 'Claude 3 Haiku',
-      group: 'Claude 3',
-      enabled: true
     }
   ]
 }

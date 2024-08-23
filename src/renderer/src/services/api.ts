@@ -166,9 +166,11 @@ export async function checkApi(provider: Provider) {
   const key = 'api-check'
   const style = { marginTop: '3vh' }
 
-  if (!provider.apiKey) {
-    window.message.error({ content: i18n.t('message.error.enter.api.key'), key, style })
-    return false
+  if (provider.id !== 'ollama') {
+    if (!provider.apiKey) {
+      window.message.error({ content: i18n.t('message.error.enter.api.key'), key, style })
+      return false
+    }
   }
 
   if (!provider.apiHost) {

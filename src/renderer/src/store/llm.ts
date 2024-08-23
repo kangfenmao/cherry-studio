@@ -18,10 +18,19 @@ export interface LlmState {
 }
 
 const initialState: LlmState = {
-  defaultModel: SYSTEM_MODELS.openai[0],
-  topicNamingModel: SYSTEM_MODELS.openai[0],
-  translateModel: SYSTEM_MODELS.openai[0],
+  defaultModel: SYSTEM_MODELS.ollama[0],
+  topicNamingModel: SYSTEM_MODELS.ollama[0],
+  translateModel: SYSTEM_MODELS.ollama[0],
   providers: [
+    {
+      id: 'ollama',
+      name: 'Ollama',
+      apiKey: '',
+      apiHost: 'http://localhost:11434/v1/',
+      models: SYSTEM_MODELS.ollama.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: true
+    },
     {
       id: 'openai',
       name: 'OpenAI',
@@ -29,7 +38,7 @@ const initialState: LlmState = {
       apiHost: 'https://api.openai.com',
       models: SYSTEM_MODELS.openai.filter((m) => m.enabled),
       isSystem: true,
-      enabled: true
+      enabled: false
     },
     {
       id: 'gemini',
@@ -37,6 +46,15 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://generativelanguage.googleapis.com',
       models: SYSTEM_MODELS.gemini.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'anthropic',
+      name: 'Anthropic',
+      apiKey: '',
+      apiHost: 'https://api.anthropic.com/',
+      models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -163,24 +181,6 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
       models: SYSTEM_MODELS.groq.filter((m) => m.enabled),
-      isSystem: true,
-      enabled: false
-    },
-    {
-      id: 'anthropic',
-      name: 'Anthropic',
-      apiKey: '',
-      apiHost: 'https://api.anthropic.com/',
-      models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
-      isSystem: true,
-      enabled: false
-    },
-    {
-      id: 'ollama',
-      name: 'Ollama',
-      apiKey: '',
-      apiHost: 'http://localhost:11434/v1/',
-      models: [],
       isSystem: true,
       enabled: false
     }
