@@ -1,6 +1,8 @@
 import util from 'node:util'
 import zlib from 'node:zlib'
 
+import logger from 'electron-log'
+
 // 将 zlib 的 gzip 和 gunzip 方法转换为 Promise 版本
 const gzipPromise = util.promisify(zlib.gzip)
 const gunzipPromise = util.promisify(zlib.gunzip)
@@ -16,7 +18,7 @@ export async function compress(str) {
     const compressedBuffer = await gzipPromise(buffer)
     return compressedBuffer
   } catch (error) {
-    console.error('Compression failed:', error)
+    logger.error('Compression failed:', error)
     throw error
   }
 }
@@ -31,7 +33,7 @@ export async function decompress(compressedBuffer) {
     const buffer = await gunzipPromise(compressedBuffer)
     return buffer.toString('utf-8')
   } catch (error) {
-    console.error('Decompression failed:', error)
+    logger.error('Decompression failed:', error)
     throw error
   }
 }
