@@ -4,6 +4,7 @@
     "electron.vite.config.*",
     "src/main/**/*",
     "src/preload/**/*",
+    "src/ollma/**/*",
     "src/main/env.d.ts"
   ],
   "compilerOptions": {

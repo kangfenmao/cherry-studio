@@ -2631,13 +2631,11 @@ __metadata:
     "@kangfenmao/keyv-storage": "npm:^0.1.0"
     "@reduxjs/toolkit": "npm:^2.2.5"
     "@sentry/electron": "npm:^5.2.0"
-    "@types/adm-zip": "npm:^0"
     "@types/lodash": "npm:^4.17.5"
     "@types/node": "npm:^18.19.9"
     "@types/react": "npm:^18.2.48"
     "@types/react-dom": "npm:^18.2.18"
     "@vitejs/plugin-react": "npm:^4.2.1"
-    adm-zip: "npm:^0.5.15"
     antd: "npm:^5.18.3"
     axios: "npm:^1.7.3"
     browser-image-compression: "npm:^2.0.2"
@@ -7736,6 +7734,15 @@ __metadata:
   checksum: 10c0/520aaac7ea701618eacf000fc96ae458e20e13b0569845800fc582f81b386731ab22d55354b4915d58171db00e79cfcd09c1638c02f89577ef092b38c65b7d81
   languageName: node
   linkType: hard
+
+"ollama@workspace:ollama":
+  version: 0.0.0-use.local
+  resolution: "ollama@workspace:ollama"
+  dependencies:
+    "@types/adm-zip": "npm:^0"
+    adm-zip: "npm:^0.5.15"
+  languageName: unknown
+  linkType: soft
 
 "once@npm:^1.3.0, once@npm:^1.3.1, once@npm:^1.4.0":
   version: 1.4.0

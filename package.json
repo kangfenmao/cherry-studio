@@ -6,6 +6,14 @@
   "main": "./out/main/index.js",
   "author": "kangfenmao@qq.com",
   "homepage": "https://github.com/kangfenmao/cherry-studio",
+  "workspaces": {
+    "packages": [
+      "ollama"
+    ],
+    "nohoist": [
+      "ollama"
+    ]
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -27,7 +35,6 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@sentry/electron": "^5.2.0",
-    "adm-zip": "^0.5.15",
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^5.1.5",
     "electron-store": "^8.2.0",
@@ -44,7 +51,6 @@
     "@hello-pangea/dnd": "^16.6.0",
     "@kangfenmao/keyv-storage": "^0.1.0",
     "@reduxjs/toolkit": "^2.2.5",
-    "@types/adm-zip": "^0",
     "@types/lodash": "^4.17.5",
     "@types/node": "^18.19.9",
     "@types/react": "^18.2.48",

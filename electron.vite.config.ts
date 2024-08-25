@@ -4,7 +4,12 @@ import { resolve } from 'path'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        ollama: resolve('ollama/src')
+      }
+    }
   },
   preload: {
     plugins: [externalizeDepsPlugin()]
