@@ -11,6 +11,15 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
+extraResources:
+  - from: './ollama/bin'
+    to: 'ollama/bin'
+    filter:
+      - 'ollama-${os}.zip'
+  - from: './ollama/models'
+    to: 'ollama/models'
+    filter:
+      - '**/*'
 win:
   executableName: Cherry Studio
 nsis:
