@@ -9,7 +9,7 @@ export async function updateUserDataPath() {
   const oldPath = currentPath.replace('CherryStudio', 'cherry-studio')
 
   if (fs.existsSync(oldPath)) {
-    Logger.log('更新 userData 路径')
+    Logger.log('Update userData path')
 
     try {
       if (process.platform === 'win32') {
@@ -20,15 +20,15 @@ export async function updateUserDataPath() {
         // 其他系统：直接更新
         fs.rmSync(currentPath, { recursive: true, force: true })
         fs.renameSync(oldPath, currentPath)
-        Logger.log(`目录已重命名: ${currentPath}`)
+        Logger.log(`Directory renamed: ${currentPath}`)
         await promptRestart()
       }
     } catch (error: any) {
-      Logger.error('更新 userData 路径时出错:', error)
+      Logger.error('Error updating userData path:', error)
       dialog.showErrorBox('错误', `更新用户数据目录时发生错误: ${error.message}`)
     }
   } else {
-    Logger.log('userData 路径不需要更新')
+    Logger.log('userData path does not need to be updated')
   }
 }
 

@@ -50,7 +50,6 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
   ipcMain.handle('check-for-update', async () => {
-    autoUpdater.logger?.info('触发检查更新')
     return {
       currentVersion: autoUpdater.currentVersion,
       update: await autoUpdater.checkForUpdates()

@@ -17,11 +17,6 @@ export default class AppUpdater {
       mainWindow.webContents.send('update-error', error)
     })
 
-    // 检测是否需要更新
-    autoUpdater.on('checking-for-update', () => {
-      logger.info('正在检查更新……')
-    })
-
     autoUpdater.on('update-available', (releaseInfo: UpdateInfo) => {
       autoUpdater.logger?.info('检测到新版本，确认是否下载')
       mainWindow.webContents.send('update-available', releaseInfo)
@@ -59,7 +54,6 @@ export default class AppUpdater {
 
     // 检测到不需要更新时
     autoUpdater.on('update-not-available', () => {
-      logger.info('现在使用的就是最新版本，不用更新')
       mainWindow.webContents.send('update-not-available')
     })
 
