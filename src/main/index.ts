@@ -1,5 +1,4 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import * as Sentry from '@sentry/electron/main'
 import { app, BrowserWindow } from 'electron'
 
 import { registerIpc } from './ipc'
@@ -44,6 +43,3 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
-Sentry.init({
-  dsn: 'https://f0e972deff79c2df3e887e232d8a46a3@o4507610668007424.ingest.us.sentry.io/4507610670563328'
-})
