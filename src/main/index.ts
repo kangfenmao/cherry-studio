@@ -1,7 +1,6 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import * as Sentry from '@sentry/electron/main'
 import { app, BrowserWindow } from 'electron'
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import { registerIpc } from './ipc'
 import { updateUserDataPath } from './utils/upgrade'
@@ -32,8 +31,6 @@ app.whenReady().then(async () => {
   const mainWindow = createMainWindow()
 
   registerIpc(mainWindow, app)
-
-  installExtension(REDUX_DEVTOOLS)
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
