@@ -9,9 +9,6 @@
   "workspaces": {
     "packages": [
       "ollama"
-    ],
-    "nohoist": [
-      "ollama"
     ]
   },
   "scripts": {
@@ -61,7 +58,7 @@
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.11",
     "dotenv-cli": "^7.4.2",
-    "electron": "^28.2.0",
+    "electron": "^28.3.3",
     "electron-builder": "^24.9.1",
     "electron-vite": "^2.0.0",
     "emittery": "^1.0.3",

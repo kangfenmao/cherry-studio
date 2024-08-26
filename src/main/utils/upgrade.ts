@@ -8,7 +8,7 @@ export async function updateUserDataPath() {
   const currentPath = app.getPath('userData')
   const oldPath = currentPath.replace('CherryStudio', 'cherry-studio')
 
-  if (fs.existsSync(oldPath)) {
+  if (currentPath !== oldPath && fs.existsSync(oldPath)) {
     Logger.log('Update userData path')
 
     try {
