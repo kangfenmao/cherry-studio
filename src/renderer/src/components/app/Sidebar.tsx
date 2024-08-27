@@ -1,6 +1,6 @@
 import { TranslationOutlined } from '@ant-design/icons'
-import { AppLogo } from '@renderer/config/app'
 import { isMac } from '@renderer/config/constant'
+import { AppLogo } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'

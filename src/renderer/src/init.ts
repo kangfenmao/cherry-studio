@@ -1,7 +1,7 @@
 import KeyvStorage from '@kangfenmao/keyv-storage'
 import localforage from 'localforage'
 
-import { APP_NAME } from './config/app'
+import { APP_NAME } from './config/env'
 import { ThemeMode } from './store/settings'
 import { loadScript } from './utils'
 
