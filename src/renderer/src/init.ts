@@ -1,6 +1,7 @@
 import KeyvStorage from '@kangfenmao/keyv-storage'
 import localforage from 'localforage'
 
+import { APP_NAME } from './config/app'
 import { ThemeMode } from './store/settings'
 import { loadScript } from './utils'
 
@@ -22,7 +23,7 @@ function init() {
     name: 'CherryAI',
     version: 1.0,
     storeName: 'cherryai',
-    description: 'Cherry Studio Storage'
+    description: `${APP_NAME} Storage`
   })
 
   window.keyv = new KeyvStorage()

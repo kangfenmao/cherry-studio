@@ -1,5 +1,5 @@
 import { TranslationOutlined } from '@ant-design/icons'
-import Logo from '@renderer/assets/images/logo.png'
+import { AppLogo } from '@renderer/config/app'
 import { isMac } from '@renderer/config/constant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime } from '@renderer/hooks/useStore'
@@ -25,7 +25,7 @@ const Sidebar: FC = () => {
 
   return (
     <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBackgroundColor }}>
-      <AvatarImg src={avatar || Logo} draggable={false} className="nodrag" onClick={onEditUser} />
+      <AvatarImg src={avatar || AppLogo} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus>
           <StyledLink to="/">

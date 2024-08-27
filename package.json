@@ -8,7 +8,7 @@
   "homepage": "https://github.com/kangfenmao/cherry-studio",
   "workspaces": {
     "packages": [
-      "ollama"
+      "local"
     ]
   },
   "scripts": {

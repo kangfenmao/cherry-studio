@@ -5,6 +5,26 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"700AI@workspace:local":
+  version: 0.0.0-use.local
+  resolution: "700AI@workspace:local"
+  dependencies:
+    "@electron-toolkit/preload": "npm:^3.0.0"
+    "@electron-toolkit/utils": "npm:^3.0.0"
+    "@types/adm-zip": "npm:^0"
+    adm-zip: "npm:^0.5.15"
+    dotenv-cli: "npm:^7.4.2"
+    electron: "npm:^28.3.3"
+    electron-builder: "npm:^24.9.1"
+    electron-log: "npm:^5.1.5"
+    electron-store: "npm:^8.2.0"
+    electron-updater: "npm:^6.1.7"
+    electron-vite: "npm:^2.0.0"
+    electron-window-state: "npm:^5.0.3"
+    eslint-plugin-simple-import-sort: "npm:^12.1.1"
+  languageName: unknown
+  linkType: soft
+
 "7zip-bin@npm:~5.2.0":
   version: 5.2.0
   resolution: "7zip-bin@npm:5.2.0"
@@ -1946,26 +1966,6 @@ __metadata:
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
-  languageName: unknown
-  linkType: soft
-
-"SevenAI@workspace:ollama":
-  version: 0.0.0-use.local
-  resolution: "SevenAI@workspace:ollama"
-  dependencies:
-    "@electron-toolkit/preload": "npm:^3.0.0"
-    "@electron-toolkit/utils": "npm:^3.0.0"
-    "@types/adm-zip": "npm:^0"
-    adm-zip: "npm:^0.5.15"
-    dotenv-cli: "npm:^7.4.2"
-    electron: "npm:^28.3.3"
-    electron-builder: "npm:^24.9.1"
-    electron-log: "npm:^5.1.5"
-    electron-store: "npm:^8.2.0"
-    electron-updater: "npm:^6.1.7"
-    electron-vite: "npm:^2.0.0"
-    electron-window-state: "npm:^5.0.3"
-    eslint-plugin-simple-import-sort: "npm:^12.1.1"
   languageName: unknown
   linkType: soft
 

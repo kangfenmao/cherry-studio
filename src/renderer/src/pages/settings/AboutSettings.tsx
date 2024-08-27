@@ -1,8 +1,8 @@
 import { GithubOutlined } from '@ant-design/icons'
 import { FileProtectOutlined, GlobalOutlined, MailOutlined, SoundOutlined } from '@ant-design/icons'
-import Logo from '@renderer/assets/images/logo.png'
 import { HStack } from '@renderer/components/Layout'
 import MinApp from '@renderer/components/MinApp'
+import { APP_NAME, AppLogo } from '@renderer/config/app'
 import { runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Progress, Row, Tag } from 'antd'
 import { ProgressInfo } from 'electron-updater'
@@ -44,7 +44,7 @@ const AboutSettings: FC = () => {
 
   const mailto = async () => {
     const email = 'kangfenmao@qq.com'
-    const subject = 'Cherry Studio Feedback'
+    const subject = `${APP_NAME} Feedback`
     const version = (await window.api.getAppInfo()).version
     const platform = window.electron.process.platform
     const url = `mailto:${email}?subject=${subject}&body=%0A%0AVersion: ${version} | Platform: ${platform}`
@@ -117,10 +117,10 @@ const AboutSettings: FC = () => {
                 strokeColor="#67ad5b"
               />
             )}
-            <Avatar src={Logo} size={80} style={{ minHeight: 80 }} />
+            <Avatar src={AppLogo} size={80} style={{ minHeight: 80 }} />
           </AvatarWrapper>
           <VersionWrapper>
-            <Title>Cherry Studio</Title>
+            <Title>{APP_NAME}</Title>
             <Description>{t('settings.about.description')}</Description>
             <Tag
               onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}
