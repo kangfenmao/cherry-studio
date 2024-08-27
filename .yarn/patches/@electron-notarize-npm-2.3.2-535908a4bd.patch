@@ -1,0 +1,53 @@
+diff --git a/lib/check-signature.js b/lib/check-signature.js
+index 324568af71bcc4372c9f959131ecd24122848c86..677348e0a138ff608b2ac41f592d813b15ee4956 100644
+--- a/lib/check-signature.js
++++ b/lib/check-signature.js
+@@ -41,16 +41,12 @@ const spawn_1 = require("./spawn");
+ const debug_1 = __importDefault(require("debug"));
+ const d = (0, debug_1.default)('electron-notarize');
+ const codesignDisplay = (opts) => __awaiter(void 0, void 0, void 0, function* () {
+-    const result = yield (0, spawn_1.spawn)('codesign', ['-dv', '-vvvv', '--deep', path.basename(opts.appPath)], {
+-        cwd: path.dirname(opts.appPath),
+-    });
++    const result = yield (0, spawn_1.spawn)('codesign', ['-dv', '-vvvv', '--deep', opts.appPath]);
+     return result;
+ });
+ const codesign = (opts) => __awaiter(void 0, void 0, void 0, function* () {
+     d('attempting to check codesign of app:', opts.appPath);
+-    const result = yield (0, spawn_1.spawn)('codesign', ['-vvv', '--deep', '--strict', path.basename(opts.appPath)], {
+-        cwd: path.dirname(opts.appPath),
+-    });
++    const result = yield (0, spawn_1.spawn)('codesign', ['-vvv', '--deep', '--strict', opts.appPath]);
+     return result;
+ });
+ function checkSignatures(opts) {
+diff --git a/lib/notarytool.js b/lib/notarytool.js
+index 1ab090efb2101fc8bee5553445e0349c54474421..a5ddfd922197449fc56078e4a7e9a2ee5d8d207d 100644
+--- a/lib/notarytool.js
++++ b/lib/notarytool.js
+@@ -92,9 +92,7 @@ function notarizeAndWaitForNotaryTool(opts) {
+             else {
+                 filePath = path.resolve(dir, `${path.parse(opts.appPath).name}.zip`);
+                 d('zipping application to:', filePath);
+-                const zipResult = yield (0, spawn_1.spawn)('ditto', ['-c', '-k', '--sequesterRsrc', '--keepParent', path.basename(opts.appPath), filePath], {
+-                    cwd: path.dirname(opts.appPath),
+-                });
++                const zipResult = yield (0, spawn_1.spawn)('ditto', ['-c', '-k', '--sequesterRsrc', '--keepParent', opts.appPath, filePath]);
+                 if (zipResult.code !== 0) {
+                     throw new Error(`Failed to zip application, exited with code: ${zipResult.code}\n\n${zipResult.output}`);
+                 }
+diff --git a/lib/staple.js b/lib/staple.js
+index 47dbd85b2fc279d999b57f47fb8171e1cc674436..f8829e6ac54fcd630a730d12d75acc1591b953b6 100644
+--- a/lib/staple.js
++++ b/lib/staple.js
+@@ -43,9 +43,7 @@ const d = (0, debug_1.default)('electron-notarize:staple');
+ function stapleApp(opts) {
+     return __awaiter(this, void 0, void 0, function* () {
+         d('attempting to staple app:', opts.appPath);
+-        const result = yield (0, spawn_1.spawn)('xcrun', ['stapler', 'staple', '-v', path.basename(opts.appPath)], {
+-            cwd: path.dirname(opts.appPath),
+-        });
++        const result = yield (0, spawn_1.spawn)('xcrun', ['stapler', 'staple', '-v', opts.appPath]);
+         if (result.code !== 0) {
+             throw new Error(`Failed to staple your application with code: ${result.code}\n\n${result.output}`);
+         }

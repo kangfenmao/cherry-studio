@@ -11,6 +11,7 @@ __metadata:
   dependencies:
     "@electron-toolkit/preload": "npm:^3.0.0"
     "@electron-toolkit/utils": "npm:^3.0.0"
+    "@electron/notarize": "patch:@electron/notarize@npm%3A2.3.2#~/.yarn/patches/@electron-notarize-npm-2.3.2-535908a4bd.patch"
     "@types/adm-zip": "npm:^0"
     adm-zip: "npm:^0.5.15"
     dotenv-cli: "npm:^7.4.2"
