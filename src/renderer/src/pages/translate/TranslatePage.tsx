@@ -1,6 +1,7 @@
 import { CheckOutlined, SendOutlined, SettingOutlined, SwapOutlined, WarningOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
+import { isLocalAi } from '@renderer/config/env'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { fetchTranslate } from '@renderer/services/api'
 import { getDefaultAssistant } from '@renderer/services/assistant'
@@ -133,6 +134,31 @@ const TranslatePage: FC = () => {
     isEmpty(text) && setResult('')
   }, [text])
 
+  const SettingButton = () => {
+    if (isLocalAi) {
+      return null
+    }
+
+    if (translateModel) {
+      return (
+        <Link to="/settings/model" style={{ color: 'var(--color-text-2)' }}>
+          <SettingOutlined />
+        </Link>
+      )
+    }
+
+    return (
+      <Link to="/settings/model" style={{ marginLeft: -10 }}>
+        <Button
+          type="link"
+          style={{ color: 'var(--color-error)', textDecoration: 'underline' }}
+          icon={<WarningOutlined />}>
+          {t('translate.error.not_configured')}
+        </Button>
+      </Link>
+    )
+  }
+
   return (
     <Container>
       <Navbar>
@@ -165,21 +191,7 @@ const TranslatePage: FC = () => {
               </Space>
             )}
           />
-          {translateModel && (
-            <Link to="/settings/model" style={{ color: 'var(--color-text-2)' }}>
-              <SettingOutlined />
-            </Link>
-          )}
-          {!translateModel && (
-            <Link to="/settings/model" style={{ marginLeft: -10 }}>
-              <Button
-                type="link"
-                style={{ color: 'var(--color-error)', textDecoration: 'underline' }}
-                icon={<WarningOutlined />}>
-                {t('translate.error.not_configured')}
-              </Button>
-            </Link>
-          )}
+          <SettingButton />
         </MenuContainer>
         <TranslateInputWrapper>
           <InputContainer>

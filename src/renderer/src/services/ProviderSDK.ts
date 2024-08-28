@@ -2,11 +2,12 @@ import Anthropic from '@anthropic-ai/sdk'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
+import { isLocalAi } from '@renderer/config/env'
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
 import axios from 'axios'
-import { isEmpty, sum, takeRight } from 'lodash'
+import { first, isEmpty, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } from 'openai/resources'
 
@@ -239,13 +240,13 @@ export default class ProviderSDK {
     // @ts-ignore key is not typed
     const response = await this.openaiSdk.chat.completions.create({
       model: model.id,
-      messages: [systemMessage, ...userMessages] as ChatCompletionMessageParam[],
+      messages: [systemMessage, ...(isLocalAi ? [first(userMessages)] : userMessages)] as ChatCompletionMessageParam[],
       stream: false,
       max_tokens: 50,
       keep_alive: this.keepAliveTime
     })
 
-    return removeQuotes(response.choices[0].message?.content || '')
+    return removeQuotes(response.choices[0].message?.content?.substring(0, 50) || '')
   }
 
   public async suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]> {

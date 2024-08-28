@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { isLocalAi } from '@renderer/config/env'
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import { Model, Provider } from '@renderer/types'
 import { uniqBy } from 'lodash'
@@ -18,19 +19,10 @@ export interface LlmState {
 }
 
 const initialState: LlmState = {
-  defaultModel: SYSTEM_MODELS.ollama[0],
-  topicNamingModel: SYSTEM_MODELS.ollama[0],
-  translateModel: SYSTEM_MODELS.ollama[0],
+  defaultModel: SYSTEM_MODELS.openai[0],
+  topicNamingModel: SYSTEM_MODELS.openai[0],
+  translateModel: SYSTEM_MODELS.openai[0],
   providers: [
-    {
-      id: 'ollama',
-      name: 'Ollama',
-      apiKey: '',
-      apiHost: 'http://localhost:11434/v1/',
-      models: SYSTEM_MODELS.ollama.filter((m) => m.enabled),
-      isSystem: true,
-      enabled: true
-    },
     {
       id: 'openai',
       name: 'OpenAI',
@@ -38,7 +30,7 @@ const initialState: LlmState = {
       apiHost: 'https://api.openai.com',
       models: SYSTEM_MODELS.openai.filter((m) => m.enabled),
       isSystem: true,
-      enabled: false
+      enabled: true
     },
     {
       id: 'gemini',
@@ -55,6 +47,15 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://api.anthropic.com/',
       models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'ollama',
+      name: 'Ollama',
+      apiKey: '',
+      apiHost: 'http://localhost:11434/v1/',
+      models: SYSTEM_MODELS.ollama.filter((m) => m.enabled),
       isSystem: true,
       enabled: false
     },
@@ -192,9 +193,35 @@ const initialState: LlmState = {
   }
 }
 
+const getIntegratedInitialState = () => {
+  const model = JSON.parse(import.meta.env.VITE_RENDERER_INTEGRATED_MODEL)
+
+  return {
+    defaultModel: model,
+    topicNamingModel: model,
+    translateModel: model,
+    providers: [
+      {
+        id: 'ollama',
+        name: 'Ollama',
+        apiKey: 'ollama',
+        apiHost: 'http://localhost:15537/v1/',
+        models: [model],
+        isSystem: true,
+        enabled: true
+      }
+    ],
+    settings: {
+      ollama: {
+        keepAliveTime: 3600
+      }
+    }
+  } as LlmState
+}
+
 const settingsSlice = createSlice({
   name: 'llm',
-  initialState,
+  initialState: isLocalAi ? getIntegratedInitialState() : initialState,
   reducers: {
     updateProvider: (state, action: PayloadAction<Provider>) => {
       state.providers = state.providers.map((p) => (p.id === action.payload.id ? { ...p, ...action.payload } : p))

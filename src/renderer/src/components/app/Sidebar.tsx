@@ -1,6 +1,6 @@
 import { TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
-import { AppLogo } from '@renderer/config/env'
+import { AppLogo, isLocalAi } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'
@@ -51,7 +51,7 @@ const Sidebar: FC = () => {
         </Menus>
       </MainMenus>
       <Menus>
-        <StyledLink to="/settings/provider">
+        <StyledLink to={isLocalAi ? '/settings/assistant' : '/settings/provider'}>
           <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
             <i className="iconfont icon-setting"></i>
           </Icon>

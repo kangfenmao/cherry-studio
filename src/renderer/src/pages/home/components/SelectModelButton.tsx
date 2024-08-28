@@ -1,4 +1,5 @@
 import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
+import { isLocalAi } from '@renderer/config/env'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
 import { Button } from 'antd'
@@ -16,6 +17,10 @@ interface Props {
 const SelectModelButton: FC<Props> = ({ assistant }) => {
   const { model, setModel } = useAssistant(assistant.id)
   const { t } = useTranslation()
+
+  if (isLocalAi) {
+    return null
+  }
 
   return (
     <SelectModelDropdown model={model} onSelect={setModel}>

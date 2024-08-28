@@ -6,6 +6,7 @@ import {
   SettingOutlined
 } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
+import { isLocalAi } from '@renderer/config/env'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
@@ -30,18 +31,22 @@ const SettingsPage: FC = () => {
       </Navbar>
       <ContentContainer>
         <SettingMenus>
-          <MenuItemLink to="/settings/provider">
-            <MenuItem className={isRoute('/settings/provider')}>
-              <CloudOutlined />
-              {t('settings.provider')}
-            </MenuItem>
-          </MenuItemLink>
-          <MenuItemLink to="/settings/model">
-            <MenuItem className={isRoute('/settings/model')}>
-              <CodeSandboxOutlined />
-              {t('settings.model')}
-            </MenuItem>
-          </MenuItemLink>
+          {!isLocalAi && (
+            <>
+              <MenuItemLink to="/settings/provider">
+                <MenuItem className={isRoute('/settings/provider')}>
+                  <CloudOutlined />
+                  {t('settings.provider')}
+                </MenuItem>
+              </MenuItemLink>
+              <MenuItemLink to="/settings/model">
+                <MenuItem className={isRoute('/settings/model')}>
+                  <CodeSandboxOutlined />
+                  {t('settings.model')}
+                </MenuItem>
+              </MenuItemLink>
+            </>
+          )}
           <MenuItemLink to="/settings/assistant">
             <MenuItem className={isRoute('/settings/assistant')}>
               <MessageOutlined />

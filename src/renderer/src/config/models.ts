@@ -3,15 +3,7 @@ import { Model } from '@renderer/types'
 type SystemModel = Model & { enabled: boolean }
 
 export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
-  ollama: [
-    {
-      id: 'qwen2:0.5b',
-      provider: 'ollama',
-      name: ' Qwen2 0.5b',
-      group: 'Qwen2',
-      enabled: true
-    }
-  ],
+  ollama: [],
   openai: [
     {
       id: 'gpt-4o',
