@@ -11,6 +11,7 @@ import { FONT_FAMILY } from '@renderer/config/constant'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
+import { useModel } from '@renderer/hooks/useModel'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
@@ -25,6 +26,7 @@ import styled from 'styled-components'
 
 import SelectModelDropdown from '../components/SelectModelDropdown'
 import Markdown from '../Markdown/Markdown'
+import MessageAttachments from './MessageAttachments'
 
 interface Props {
   message: Message
@@ -37,7 +39,8 @@ interface Props {
 const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) => {
   const avatar = useAvatar()
   const { t } = useTranslation()
-  const { assistant, model, setModel } = useAssistant(message.assistantId)
+  const { assistant, setModel } = useAssistant(message.assistantId)
+  const model = useModel(message.modelId)
   const { userName, showMessageDivider, messageFont, fontSize } = useSettings()
   const { generating } = useRuntime()
   const [copied, setCopied] = useState(false)
@@ -67,9 +70,9 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   const getUserName = useCallback(() => {
     if (message.id === 'assistant') return assistant?.name
-    if (message.role === 'assistant') return upperFirst(model.name || model.id)
+    if (message.role === 'assistant') return upperFirst(model?.name || model?.id)
     return userName || t('common.you')
-  }, [assistant?.name, message.id, message.role, model.id, model.name, t, userName])
+  }, [assistant?.name, message.id, message.role, model?.id, model?.name, t, userName])
 
   const fontFamily = useMemo(() => {
     return messageFont === 'serif' ? FONT_FAMILY.replace('sans-serif', 'serif').replace('Ubuntu, ', '') : FONT_FAMILY
@@ -115,8 +118,13 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       )
     }
 
-    return <Markdown message={message} />
-  }, [message])
+    return (
+      <>
+        <Markdown message={message} />
+        <MessageAttachments message={message} />
+      </>
+    )
+  }, [message, t])
 
   return (
     <MessageContainer key={message.id} className="message">

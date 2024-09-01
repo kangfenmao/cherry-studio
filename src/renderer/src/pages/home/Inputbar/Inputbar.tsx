@@ -26,6 +26,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import AttachmentButton from './AttachmentButton'
 import SendMessageButton from './SendMessageButton'
 
 interface Props {
@@ -44,6 +45,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const inputRef = useRef<TextAreaRef>(null)
+  const [images, setImages] = useState<string[]>([])
   const { t } = useTranslation()
 
   _text = text
@@ -67,13 +69,18 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       status: 'success'
     }
 
+    if (images.length > 0) {
+      message.images = images
+    }
+
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
 
     setText('')
+    setImages([])
     setTimeout(() => setText(''), 500)
 
     setExpend(false)
-  }, [assistant.id, assistant.topics, generating, text])
+  }, [assistant.id, assistant.topics, generating, images, text])
 
   const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
 
@@ -153,6 +160,20 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       id="inputbar"
       style={{ minHeight: expended ? '60%' : 'var(--input-bar-height)' }}
       className={inputFocus ? 'focus' : ''}>
+      <Textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={t('chat.input.placeholder')}
+        autoFocus
+        contextMenu="true"
+        variant="borderless"
+        ref={inputRef}
+        styles={{ textarea: { paddingLeft: 0 } }}
+        onFocus={() => setInputFocus(true)}
+        onBlur={() => setInputFocus(false)}
+        style={{ fontSize }}
+      />
       <Toolbar>
         <ToolbarMenu>
           <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
@@ -183,6 +204,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
+          <AttachmentButton images={images} setImages={setImages} ToolbarButton={ToolbarButton} />
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
@@ -221,20 +243,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           {!generating && <SendMessageButton sendMessage={sendMessage} disabled={generating || !text} />}
         </ToolbarMenu>
       </Toolbar>
-      <Textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder={t('chat.input.placeholder')}
-        autoFocus
-        contextMenu="true"
-        variant="borderless"
-        ref={inputRef}
-        styles={{ textarea: { paddingLeft: 0 } }}
-        onFocus={() => setInputFocus(true)}
-        onBlur={() => setInputFocus(false)}
-        style={{ fontSize }}
-      />
     </Container>
   )
 }
@@ -257,7 +265,7 @@ const Textarea = styled(TextArea)`
   border-radius: 0;
   display: flex;
   flex: 1;
-  margin: 0 15px 5px 15px;
+  margin: 10px 15px 0 15px;
   font-family: Ubuntu;
   resize: vertical;
   overflow: auto;
@@ -269,8 +277,8 @@ const Toolbar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   padding: 0 8px;
-  padding-top: 3px;
   padding-bottom: 0;
+  margin: 3px 0;
 `
 
 const ToolbarMenu = styled.div`
@@ -291,7 +299,8 @@ const ToolbarButton = styled(Button)`
     transition: all 0.3s ease;
     color: var(--color-icon);
   }
-  &:hover {
+  &:hover,
+  &.active {
     background-color: var(--color-background-soft);
     .anticon {
       color: var(--color-text-1);

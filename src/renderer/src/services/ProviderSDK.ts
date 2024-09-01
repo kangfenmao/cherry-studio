@@ -51,10 +51,17 @@ export default class ProviderSDK {
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
-    const userMessages = takeRight(messages, contextCount + 1).map((message) => ({
-      role: message.role,
-      content: message.content
-    }))
+    const userMessages = takeRight(messages, contextCount + 1).map((message) => {
+      return {
+        role: message.role,
+        content: message.images
+          ? [
+              { type: 'text', text: message.content },
+              ...message.images!.map((image) => ({ type: 'image_url', image_url: image }))
+            ]
+          : message.content
+      }
+    })
 
     if (this.isAnthropic) {
       return new Promise<void>((resolve, reject) => {

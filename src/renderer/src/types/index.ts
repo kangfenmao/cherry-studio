@@ -22,6 +22,7 @@ export type Message = {
   id: string
   role: 'user' | 'assistant'
   content: string
+  images?: string[]
   assistantId: string
   topicId: string
   modelId?: string

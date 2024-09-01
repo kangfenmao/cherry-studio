@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 interface Props extends DropdownProps {
-  model: Model
+  model?: Model
   onSelect: (model: Model) => void
 }
 
@@ -37,7 +37,7 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
 
   return (
     <DropdownMenu
-      menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' }, selectedKeys: [model?.id] }}
+      menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' }, selectedKeys: model ? [model.id] : [] }}
       trigger={['click']}
       arrow
       placement="bottom"
