@@ -1,8 +1,6 @@
 import {
   ClearOutlined,
   ControlOutlined,
-  FullscreenExitOutlined,
-  FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
   PlusCircleOutlined,
@@ -44,9 +42,10 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
-  const inputRef = useRef<TextAreaRef>(null)
+  const textareaRef = useRef<TextAreaRef>(null)
   const [images, setImages] = useState<string[]>([])
   const { t } = useTranslation()
+  const containerRef = useRef(null)
 
   _text = text
 
@@ -131,7 +130,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
           addNewTopic()
           EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)
-          inputRef.current?.focus()
+          textareaRef.current?.focus()
         }
       }
     }
@@ -144,7 +143,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.EDIT_MESSAGE, (message: Message) => {
         setText(message.content)
-        inputRef.current?.focus()
+        textareaRef.current?.focus()
       }),
       EventEmitter.on(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, _setEstimateTokenCount)
     ]
@@ -152,14 +151,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [])
 
   useEffect(() => {
-    inputRef.current?.focus()
+    textareaRef.current?.focus()
   }, [assistant])
 
   return (
-    <Container
-      id="inputbar"
-      style={{ minHeight: expended ? '60%' : 'var(--input-bar-height)' }}
-      className={inputFocus ? 'focus' : ''}>
+    <Container id="inputbar" className={inputFocus ? 'focus' : ''} ref={containerRef}>
       <Textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -168,11 +164,19 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         autoFocus
         contextMenu="true"
         variant="borderless"
-        ref={inputRef}
-        styles={{ textarea: { paddingLeft: 0 } }}
+        rows={1}
+        ref={textareaRef}
+        style={{ fontSize }}
+        styles={{ textarea: { paddingLeft: 0, boxSizing: 'border-box', padding: '10px 15px 5px' } }}
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
-        style={{ fontSize }}
+        onInput={() => {
+          const textArea = textareaRef.current?.resizableTextArea?.textArea
+          if (textArea) {
+            textArea.style.height = 'auto'
+            textArea.style.height = textArea?.scrollHeight > 400 ? '400px' : `${textArea?.scrollHeight}px`
+          }
+        }}
       />
       <Toolbar>
         <ToolbarMenu>
@@ -205,11 +209,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             </ToolbarButton>
           </Tooltip>
           <AttachmentButton images={images} setImages={setImages} ToolbarButton={ToolbarButton} />
-          <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
-            <ToolbarButton type="text" onClick={() => setExpend(!expended)}>
-              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-            </ToolbarButton>
-          </Tooltip>
           {showInputEstimatedTokens && (
             <TextCount>
               <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
@@ -248,9 +247,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: var(--input-bar-height);
   border: 1px solid var(--color-border-soft);
   transition: all 0.3s ease;
   position: relative;
@@ -265,11 +261,11 @@ const Textarea = styled(TextArea)`
   border-radius: 0;
   display: flex;
   flex: 1;
-  margin: 10px 15px 0 15px;
   font-family: Ubuntu;
   resize: vertical;
   overflow: auto;
-  width: auto;
+  width: 100%;
+  box-sizing: border-box;
 `
 
 const Toolbar = styled.div`
@@ -278,7 +274,7 @@ const Toolbar = styled.div`
   justify-content: space-between;
   padding: 0 8px;
   padding-bottom: 0;
-  margin: 3px 0;
+  margin-bottom: 4px;
 `
 
 const ToolbarMenu = styled.div`
