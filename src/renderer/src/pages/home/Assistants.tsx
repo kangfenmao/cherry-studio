@@ -1,12 +1,12 @@
 import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import DragableList from '@renderer/components/DragableList'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
 import { Assistant } from '@renderer/types'
-import { droppableReorder, uuid } from '@renderer/utils'
+import { uuid } from '@renderer/utils'
 import { Dropdown } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { last } from 'lodash'
@@ -70,18 +70,6 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
     [addAssistant, onDelete, setActiveAssistant, t, updateAssistant]
   )
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      if (result.destination) {
-        const sourceIndex = result.source.index
-        const destIndex = result.destination.index
-        const reorderAssistants = droppableReorder<Assistant>(assistants, sourceIndex, destIndex)
-        updateAssistants(reorderAssistants)
-      }
-    },
-    [assistants, updateAssistants]
-  )
-
   const onSwitchAssistant = useCallback(
     (assistant: Assistant): any => {
       if (generating) {
@@ -98,33 +86,17 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
 
   return (
     <Container>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {assistants.map((assistant, index) => (
-                <Draggable key={`draggable_${assistant.id}_${index}`} draggableId={assistant.id} index={index}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
-                      <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
-                        <AssistantItem
-                          onClick={() => onSwitchAssistant(assistant)}
-                          className={assistant.id === activeAssistant?.id ? 'active' : ''}>
-                          <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-                        </AssistantItem>
-                      </Dropdown>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <DragableList list={assistants} onUpdate={updateAssistants}>
+        {(assistant) => (
+          <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
+            <AssistantItem
+              onClick={() => onSwitchAssistant(assistant)}
+              className={assistant.id === activeAssistant?.id ? 'active' : ''}>
+              <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
+            </AssistantItem>
+          </Dropdown>
+        )}
+      </DragableList>
     </Container>
   )
 }
