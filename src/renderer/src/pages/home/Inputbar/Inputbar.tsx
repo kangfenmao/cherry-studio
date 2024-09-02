@@ -1,6 +1,8 @@
 import {
   ClearOutlined,
   ControlOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
   PlusCircleOutlined,
@@ -20,7 +22,7 @@ import { Button, Divider, Popconfirm, Tag, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -123,6 +125,32 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     store.dispatch(setGenerating(false))
   }
 
+  const resizeTextArea = () => {
+    const textArea = textareaRef.current?.resizableTextArea?.textArea
+    if (textArea) {
+      textArea.style.height = 'auto'
+      textArea.style.height = textArea?.scrollHeight > 400 ? '400px' : `${textArea?.scrollHeight}px`
+    }
+  }
+
+  const onToggleExpended = () => {
+    const isExpended = !expended
+    setExpend(isExpended)
+    const textArea = textareaRef.current?.resizableTextArea?.textArea
+
+    if (textArea) {
+      if (isExpended) {
+        textArea.style.height = '70vh'
+      } else {
+        resizeTextArea()
+      }
+    }
+
+    textareaRef.current?.focus()
+  }
+
+  const onInput = () => !expended && resizeTextArea()
+
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -166,17 +194,10 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         variant="borderless"
         rows={1}
         ref={textareaRef}
-        style={{ fontSize }}
-        styles={{ textarea: { paddingLeft: 0, boxSizing: 'border-box', padding: '10px 15px 5px' } }}
+        styles={{ textarea: TextareaStyle }}
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
-        onInput={() => {
-          const textArea = textareaRef.current?.resizableTextArea?.textArea
-          if (textArea) {
-            textArea.style.height = 'auto'
-            textArea.style.height = textArea?.scrollHeight > 400 ? '400px' : `${textArea?.scrollHeight}px`
-          }
-        }}
+        onInput={onInput}
       />
       <Toolbar>
         <ToolbarMenu>
@@ -209,24 +230,21 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             </ToolbarButton>
           </Tooltip>
           <AttachmentButton images={images} setImages={setImages} ToolbarButton={ToolbarButton} />
+          <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
+            <ToolbarButton type="text" onClick={onToggleExpended}>
+              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+            </ToolbarButton>
+          </Tooltip>
           {showInputEstimatedTokens && (
             <TextCount>
               <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
-                <Tag
-                  style={{
-                    cursor: 'pointer',
-                    borderRadius: '6px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '2px 8px',
-                    borderWidth: 0.5
-                  }}>
+                <StyledTag>
                   <i className="iconfont icon-history" style={{ marginRight: '3px' }} />
                   {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}
                   <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
                   <span style={{ margin: '0 2px' }}>/</span>
                   {estimateTokenCount}
-                </Tag>
+                </StyledTag>
               </Tooltip>
             </TextCount>
           )}
@@ -244,6 +262,12 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       </Toolbar>
     </Container>
   )
+}
+
+const TextareaStyle: CSSProperties = {
+  paddingLeft: 0,
+  padding: '10px 15px 8px',
+  transition: 'all 0.3s ease'
 }
 
 const Container = styled.div`
@@ -285,12 +309,17 @@ const ToolbarMenu = styled.div`
 `
 
 const ToolbarButton = styled(Button)`
-  width: 32px;
-  height: 32px;
-  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  font-size: 17px;
   border-radius: 50%;
   transition: all 0.3s ease;
   color: var(--color-icon);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
   &.anticon {
     transition: all 0.3s ease;
     color: var(--color-icon);
@@ -311,6 +340,15 @@ const TextCount = styled.div`
   padding: 2px;
   border-top-left-radius: 7px;
   user-select: none;
+`
+
+const StyledTag = styled(Tag)`
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-width: 0.5;
 `
 
 export default Inputbar
