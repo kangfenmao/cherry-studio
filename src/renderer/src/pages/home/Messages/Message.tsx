@@ -7,6 +7,7 @@ import {
   SaveOutlined,
   SyncOutlined
 } from '@ant-design/icons'
+import UserPopup from '@renderer/components/Popups/UserPopup'
 import { FONT_FAMILY } from '@renderer/config/constant'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -135,7 +136,12 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
               {avatarName}
             </Avatar>
           ) : (
-            <Avatar src={avatar} size={35} style={{ borderRadius: '20%' }} />
+            <Avatar
+              src={avatar}
+              size={35}
+              style={{ borderRadius: '20%', cursor: 'pointer' }}
+              onClick={() => UserPopup.show()}
+            />
           )}
           <UserWrap>
             <UserName>{username}</UserName>

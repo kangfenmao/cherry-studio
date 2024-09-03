@@ -66,7 +66,7 @@ const HomePage: FC = () => {
             style={{ justifyContent: 'space-between', alignItems: 'center', borderRight: 'none', padding: '0 8px' }}>
             <NavigtaionBack onClick={() => setShowTopics(false)} style={{ opacity: showTopics ? 1 : 0 }}>
               <ArrowLeftOutlined />
-              {t('common.back')}
+              <NavigationBackTitle>{t('common.back')}</NavigationBackTitle>
             </NavigtaionBack>
             <NewButton onClick={onCreate}>
               <i className="iconfont icon-a-addchat"></i>
@@ -130,8 +130,13 @@ const NavigtaionBack = styled.div`
   color: var(--color-icon);
   transition: opacity 0.2s ease-in-out;
   &:hover {
-    color: var(--color-text);
+    color: var(--color-text-2);
   }
+`
+
+const NavigationBackTitle = styled.div`
+  font-size: 13px;
+  font-weight: 500;
 `
 
 const AssistantName = styled.span`

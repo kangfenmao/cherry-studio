@@ -253,7 +253,7 @@ const resources = {
         topics: '话题',
         docs: '文档',
         and: '和',
-        assistant: '智能体',
+        assistant: '助手',
         name: '名称',
         description: '描述',
         prompt: '提示词',

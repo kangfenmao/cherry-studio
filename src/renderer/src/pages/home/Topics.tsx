@@ -153,6 +153,7 @@ const TopicListItem = styled.div`
   }
   &.active {
     background-color: var(--color-background-mute);
+    font-weight: 500;
   }
 `
 

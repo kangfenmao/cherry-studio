@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppLogo } from '@renderer/config/env'
+import { AppLogo, UserAvatar } from '@renderer/config/env'
 
 export interface RuntimeState {
   avatar: string
@@ -8,7 +8,7 @@ export interface RuntimeState {
 }
 
 const initialState: RuntimeState = {
-  avatar: AppLogo,
+  avatar: UserAvatar,
   generating: false,
   minappShow: false
 }

@@ -1,6 +1,6 @@
 import { TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
-import { AppLogo, isLocalAi } from '@renderer/config/env'
+import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime, useShowAssistants } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'
@@ -40,7 +40,7 @@ const Sidebar: FC = () => {
 
   return (
     <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBackgroundColor }}>
-      <AvatarImg src={avatar || AppLogo} draggable={false} className="nodrag" onClick={onEditUser} />
+      <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus>
           <StyledLink onClick={onToggleShowAssistants}>
