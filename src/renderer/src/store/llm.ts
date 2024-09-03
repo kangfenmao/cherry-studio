@@ -28,7 +28,7 @@ const initialState: LlmState = {
       name: 'OpenAI',
       apiKey: '',
       apiHost: 'https://api.openai.com',
-      models: SYSTEM_MODELS.openai.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.openai,
       isSystem: true,
       enabled: true
     },
@@ -37,7 +37,7 @@ const initialState: LlmState = {
       name: 'Gemini',
       apiKey: '',
       apiHost: 'https://generativelanguage.googleapis.com',
-      models: SYSTEM_MODELS.gemini.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.gemini,
       isSystem: true,
       enabled: false
     },
@@ -46,7 +46,7 @@ const initialState: LlmState = {
       name: 'Anthropic',
       apiKey: '',
       apiHost: 'https://api.anthropic.com/',
-      models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.anthropic,
       isSystem: true,
       enabled: false
     },
@@ -55,7 +55,7 @@ const initialState: LlmState = {
       name: 'Ollama',
       apiKey: '',
       apiHost: 'http://localhost:11434/v1/',
-      models: SYSTEM_MODELS.ollama.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.ollama,
       isSystem: true,
       enabled: false
     },
@@ -64,7 +64,7 @@ const initialState: LlmState = {
       name: 'Silicon',
       apiKey: '',
       apiHost: 'https://api.siliconflow.cn',
-      models: SYSTEM_MODELS.silicon.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.silicon,
       isSystem: true,
       enabled: false
     },
@@ -73,7 +73,7 @@ const initialState: LlmState = {
       name: 'deepseek',
       apiKey: '',
       apiHost: 'https://api.deepseek.com',
-      models: SYSTEM_MODELS.deepseek.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.deepseek,
       isSystem: true,
       enabled: false
     },
@@ -82,7 +82,7 @@ const initialState: LlmState = {
       name: 'Yi',
       apiKey: '',
       apiHost: 'https://api.lingyiwanwu.com',
-      models: SYSTEM_MODELS.yi.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.yi,
       isSystem: true,
       enabled: false
     },
@@ -91,7 +91,7 @@ const initialState: LlmState = {
       name: 'ZhiPu',
       apiKey: '',
       apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
-      models: SYSTEM_MODELS.zhipu.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.zhipu,
       isSystem: true,
       enabled: false
     },
@@ -100,7 +100,7 @@ const initialState: LlmState = {
       name: 'Moonshot AI',
       apiKey: '',
       apiHost: 'https://api.moonshot.cn',
-      models: SYSTEM_MODELS.moonshot.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.moonshot,
       isSystem: true,
       enabled: false
     },
@@ -109,7 +109,7 @@ const initialState: LlmState = {
       name: 'BAICHUAN AI',
       apiKey: '',
       apiHost: 'https://api.baichuan-ai.com',
-      models: SYSTEM_MODELS.baichuan.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.baichuan,
       isSystem: true,
       enabled: false
     },
@@ -118,7 +118,7 @@ const initialState: LlmState = {
       name: 'DashScope',
       apiKey: '',
       apiHost: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',
-      models: SYSTEM_MODELS.dashscope.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.dashscope,
       isSystem: true,
       enabled: false
     },
@@ -127,7 +127,7 @@ const initialState: LlmState = {
       name: 'StepFun',
       apiKey: '',
       apiHost: 'https://api.stepfun.com',
-      models: SYSTEM_MODELS.stepfun.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.stepfun,
       isSystem: true,
       enabled: false
     },
@@ -136,7 +136,7 @@ const initialState: LlmState = {
       name: 'doubao',
       apiKey: '',
       apiHost: 'https://ark.cn-beijing.volces.com/api/v3/',
-      models: SYSTEM_MODELS.doubao.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.doubao,
       isSystem: true,
       enabled: false
     },
@@ -145,7 +145,7 @@ const initialState: LlmState = {
       name: 'MiniMax',
       apiKey: '',
       apiHost: 'https://api.minimax.chat/v1/',
-      models: SYSTEM_MODELS.minimax.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.minimax,
       isSystem: true,
       enabled: false
     },
@@ -154,7 +154,7 @@ const initialState: LlmState = {
       name: 'AiHubMix',
       apiKey: '',
       apiHost: 'https://aihubmix.com',
-      models: SYSTEM_MODELS.aihubmix.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.aihubmix,
       isSystem: true,
       enabled: false
     },
@@ -172,7 +172,7 @@ const initialState: LlmState = {
       name: 'OpenRouter',
       apiKey: '',
       apiHost: 'https://openrouter.ai/api/v1/',
-      models: SYSTEM_MODELS.openrouter.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.openrouter,
       isSystem: true,
       enabled: false
     },
@@ -181,7 +181,7 @@ const initialState: LlmState = {
       name: 'Groq',
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
-      models: SYSTEM_MODELS.groq.filter((m) => m.enabled),
+      models: SYSTEM_MODELS.groq,
       isSystem: true,
       enabled: false
     }
