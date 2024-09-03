@@ -1,9 +1,11 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import { isMac, isWindows } from '@renderer/config/constant'
-import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
+import { useTheme } from '@renderer/context/ThemeProvider'
+import { useAssistant, useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
-import { useTheme } from '@renderer/providers/ThemeProvider'
+import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Switch } from 'antd'
@@ -29,6 +31,7 @@ const HomePage: FC = () => {
   const { t } = useTranslation()
 
   const { activeTopic, setActiveTopic } = useActiveTopic(activeAssistant)
+  const { addTopic } = useAssistant(activeAssistant.id)
 
   _activeAssistant = activeAssistant
   _showTopics = showTopics
@@ -39,9 +42,15 @@ const HomePage: FC = () => {
     setActiveAssistant(assistant)
   }
 
-  const onCreateAssistant = async () => {
-    const assistant = await AddAssistantPopup.show()
-    assistant && setActiveAssistant(assistant)
+  const onCreate = async () => {
+    if (showTopics) {
+      const topic = getDefaultTopic()
+      addTopic(topic)
+      setActiveTopic(topic)
+    } else {
+      const assistant = await AddAssistantPopup.show()
+      assistant && setActiveAssistant(assistant)
+    }
   }
 
   const onSetActiveTopic = (topic: Topic) => {
@@ -53,8 +62,13 @@ const HomePage: FC = () => {
     <Container>
       <Navbar>
         {showAssistants && (
-          <NavbarLeft style={{ justifyContent: 'flex-end', borderRight: 'none', padding: '0 8px' }}>
-            <NewButton onClick={onCreateAssistant}>
+          <NavbarLeft
+            style={{ justifyContent: 'space-between', alignItems: 'center', borderRight: 'none', padding: '0 8px' }}>
+            <NavigtaionBack onClick={() => setShowTopics(false)} style={{ opacity: showTopics ? 1 : 0 }}>
+              <ArrowLeftOutlined />
+              {t('common.back')}
+            </NavigtaionBack>
+            <NewButton onClick={onCreate}>
               <i className="iconfont icon-a-addchat"></i>
             </NewButton>
           </NavbarLeft>
@@ -101,6 +115,23 @@ const ContentContainer = styled.div`
   flex: 1;
   flex-direction: row;
   background-color: var(--color-background);
+`
+
+const NavigtaionBack = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  margin-left: ${isMac ? '16px' : 0};
+  -webkit-app-region: none;
+  transition: all 0.2s ease-in-out;
+  color: var(--color-icon);
+  transition: opacity 0.2s ease-in-out;
+  &:hover {
+    color: var(--color-text);
+  }
 `
 
 const AssistantName = styled.span`

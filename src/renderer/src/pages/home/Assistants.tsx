@@ -1,5 +1,4 @@
 import { ArrowRightOutlined, CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { ArrowLeftOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import { HStack } from '@renderer/components/Layout'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
@@ -104,10 +103,6 @@ const Assistants: FC<Props> = ({
   if (showTopics) {
     return (
       <Container>
-        <NavigtaionHeader onClick={() => setShowTopics(false)}>
-          <ArrowLeftOutlined />
-          {t('common.back')}
-        </NavigtaionHeader>
         <Topics assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
       </Container>
     )
@@ -142,6 +137,7 @@ const Container = styled.div`
   height: calc(100vh - var(--navbar-height));
   overflow-y: auto;
   padding: 10px 0;
+  padding-bottom: 0;
 `
 
 const AssistantItem = styled.div`
@@ -155,38 +151,22 @@ const AssistantItem = styled.div`
   cursor: pointer;
   font-family: Ubuntu;
   .anticon {
-    display: none;
+    opacity: 0;
     color: var(--color-text-3);
+    transition: opacity 0.2s ease-in-out;
   }
   &:hover {
     background-color: var(--color-background-soft);
-    .count {
-      display: none;
-    }
     .anticon {
-      display: block;
+      opacity: 1;
     }
   }
   &.active {
     background-color: var(--color-background-mute);
-    cursor: pointer;
     .name {
       font-weight: 500;
     }
   }
-`
-
-const NavigtaionHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  padding: 0 5px;
-  cursor: pointer;
-  color: var(--color-text-3);
-  margin: 10px;
-  margin-top: 0;
 `
 
 const AssistantName = styled.div`

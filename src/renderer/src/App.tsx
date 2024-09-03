@@ -5,13 +5,13 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 import Sidebar from './components/app/Sidebar'
 import TopViewContainer from './components/TopView'
+import AntdProvider from './context/AntdProvider'
+import { ThemeProvider } from './context/ThemeProvider'
 import AgentsPage from './pages/agents/AgentsPage'
 import AppsPage from './pages/apps/AppsPage'
 import HomePage from './pages/home/HomePage'
 import SettingsPage from './pages/settings/SettingsPage'
 import TranslatePage from './pages/translate/TranslatePage'
-import AntdProvider from './providers/AntdProvider'
-import { ThemeProvider } from './providers/ThemeProvider'
 
 function App(): JSX.Element {
   return (

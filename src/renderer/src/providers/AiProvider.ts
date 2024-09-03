@@ -1,0 +1,40 @@
+import BaseProvider from '@renderer/providers/BaseProvider'
+import ProviderFactory from '@renderer/providers/ProviderFactory'
+import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
+import OpenAI from 'openai'
+
+export default class AiProvider {
+  private sdk: BaseProvider
+
+  constructor(provider: Provider) {
+    this.sdk = ProviderFactory.create(provider)
+  }
+
+  public async completions(
+    messages: Message[],
+    assistant: Assistant,
+    onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
+  ): Promise<void> {
+    return this.sdk.completions(messages, assistant, onChunk)
+  }
+
+  public async translate(message: Message, assistant: Assistant): Promise<string> {
+    return this.sdk.translate(message, assistant)
+  }
+
+  public async summaries(messages: Message[], assistant: Assistant): Promise<string | null> {
+    return this.sdk.summaries(messages, assistant)
+  }
+
+  public async suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]> {
+    return this.sdk.suggestions(messages, assistant)
+  }
+
+  public async check(): Promise<{ valid: boolean; error: Error | null }> {
+    return this.sdk.check()
+  }
+
+  public async models(): Promise<OpenAI.Models.Model[]> {
+    return this.sdk.models()
+  }
+}

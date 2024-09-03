@@ -6,6 +6,7 @@ import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 
+import AiProvider from '../providers/AiProvider'
 import {
   getAssistantProvider,
   getDefaultModel,
@@ -15,7 +16,6 @@ import {
 } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
 import { filterMessages } from './messages'
-import ProviderSDK from './ProviderSDK'
 
 export async function fetchChatCompletion({
   messages,
@@ -33,7 +33,7 @@ export async function fetchChatCompletion({
   const provider = getAssistantProvider(assistant)
   const defaultModel = getDefaultModel()
   const model = assistant.model || defaultModel
-  const providerSdk = new ProviderSDK(provider)
+  const AI = new AiProvider(provider)
 
   store.dispatch(setGenerating(true))
 
@@ -61,7 +61,7 @@ export async function fetchChatCompletion({
   }, 1000)
 
   try {
-    await providerSdk.completions(filterMessages(messages), assistant, ({ text, usage }) => {
+    await AI.completions(filterMessages(messages), assistant, ({ text, usage }) => {
       message.content = message.content + text || ''
       message.usage = usage
       onResponse({ ...message, status: 'pending' })
@@ -103,10 +103,10 @@ export async function fetchTranslate({ message, assistant }: { message: Message;
     return ''
   }
 
-  const providerSdk = new ProviderSDK(provider)
+  const AI = new AiProvider(provider)
 
   try {
-    return await providerSdk.translate(message, assistant)
+    return await AI.translate(message, assistant)
   } catch (error: any) {
     return ''
   }
@@ -120,10 +120,10 @@ export async function fetchMessagesSummary({ messages, assistant }: { messages: 
     return null
   }
 
-  const providerSdk = new ProviderSDK(provider)
+  const AI = new AiProvider(provider)
 
   try {
-    return await providerSdk.summaries(filterMessages(messages), assistant)
+    return await AI.summaries(filterMessages(messages), assistant)
   } catch (error: any) {
     return null
   }
@@ -136,10 +136,8 @@ export async function fetchSuggestions({
   messages: Message[]
   assistant: Assistant
 }): Promise<Suggestion[]> {
-  console.debug('fetchSuggestions', messages, assistant)
   const provider = getAssistantProvider(assistant)
-  const providerSdk = new ProviderSDK(provider)
-  console.debug('fetchSuggestions', provider)
+  const AI = new AiProvider(provider)
   const model = assistant.model
 
   if (!model) {
@@ -155,7 +153,7 @@ export async function fetchSuggestions({
   }
 
   try {
-    return await providerSdk.suggestions(messages, assistant)
+    return await AI.suggestions(messages, assistant)
   } catch (error: any) {
     return []
   }
@@ -183,9 +181,9 @@ export async function checkApi(provider: Provider) {
     return false
   }
 
-  const providerSdk = new ProviderSDK(provider)
+  const AI = new AiProvider(provider)
 
-  const { valid } = await providerSdk.check()
+  const { valid } = await AI.check()
 
   window.message[valid ? 'success' : 'error']({
     key: 'api-check',
@@ -204,10 +202,10 @@ function hasApiKey(provider: Provider) {
 }
 
 export async function fetchModels(provider: Provider) {
-  const providerSdk = new ProviderSDK(provider)
+  const AI = new AiProvider(provider)
 
   try {
-    return await providerSdk.models()
+    return await AI.models()
   } catch (error) {
     return []
   }

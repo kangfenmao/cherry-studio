@@ -1,7 +1,7 @@
 import { CheckOutlined } from '@ant-design/icons'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { initMermaid } from '@renderer/init'
-import { useTheme } from '@renderer/providers/ThemeProvider'
 import { ThemeMode } from '@renderer/store/settings'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'

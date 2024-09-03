@@ -29,7 +29,7 @@ const Chat: FC<Props> = (props) => {
           setShowSetting={setShowSetting}
         />
       </Main>
-      {showSetting && <Settings assistant={assistant} />}
+      {showSetting && <Settings assistant={assistant} onClose={() => setShowSetting(false)} />}
     </Container>
   )
 }

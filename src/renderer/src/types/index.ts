@@ -20,14 +20,15 @@ export type AssistantSettings = {
 
 export type Message = {
   id: string
+  assistantId: string
   role: 'user' | 'assistant'
   content: string
-  images?: string[]
-  assistantId: string
   topicId: string
-  modelId?: string
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'paused' | 'error'
+  modelId?: string
+  files?: File[]
+  images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
   type?: 'text' | '@'
 }

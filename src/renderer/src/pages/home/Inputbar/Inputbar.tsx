@@ -25,7 +25,6 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } 
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import AttachmentButton from './AttachmentButton'
 import SendMessageButton from './SendMessageButton'
 
 interface Props {
@@ -46,7 +45,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSe
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const textareaRef = useRef<TextAreaRef>(null)
-  const [images, setImages] = useState<string[]>([])
+  const [files, setFiles] = useState<File[]>([])
   const { t } = useTranslation()
   const containerRef = useRef(null)
 
@@ -71,18 +70,19 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSe
       status: 'success'
     }
 
-    if (images.length > 0) {
-      message.images = images
+    if (files.length > 0) {
+      message.files = files
     }
 
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
 
     setText('')
-    setImages([])
+    setFiles([])
     setTimeout(() => setText(''), 500)
+    setTimeout(() => resizeTextArea(), 0)
 
     setExpend(false)
-  }, [assistant.id, assistant.topics, generating, images, text])
+  }, [assistant.id, assistant.topics, generating, files, text])
 
   const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
 
@@ -226,7 +226,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSe
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
-          <AttachmentButton images={images} setImages={setImages} ToolbarButton={ToolbarButton} />
+          {/* <AttachmentButton files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} /> */}
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={onToggleExpended}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}

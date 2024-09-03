@@ -1,5 +1,5 @@
 import MinApp from '@renderer/components/MinApp'
-import { useTheme } from '@renderer/providers/ThemeProvider'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { MinAppType } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'

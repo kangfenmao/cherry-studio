@@ -95,7 +95,7 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
       maskClosable={false}
       closeIcon={null}
       style={{ marginLeft: 'var(--sidebar-width)' }}>
-      <webview src={app.url} ref={webviewRef} style={WebviewStyle} allowpopups={true} />
+      <webview src={app.url} ref={webviewRef} style={WebviewStyle} allowpopups={'true' as any} />
     </Drawer>
   )
 }

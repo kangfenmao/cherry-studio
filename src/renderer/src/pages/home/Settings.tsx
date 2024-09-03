@@ -1,4 +1,4 @@
-import { CheckOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
+import { CheckOutlined, CloseOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -19,6 +19,7 @@ import styled from 'styled-components'
 
 interface Props {
   assistant: Assistant
+  onClose: () => void
 }
 
 const SettingsTab: FC<Props> = (props) => {
@@ -87,6 +88,10 @@ const SettingsTab: FC<Props> = (props) => {
 
   return (
     <Container>
+      <SettingsHeader>
+        {t('settings.title')}
+        <CloseIcon onClick={props.onClose} />
+      </SettingsHeader>
       <SettingSubtitle>
         {t('settings.messages.model.title')}{' '}
         <Tooltip title={t('chat.settings.reset')}>
@@ -257,6 +262,23 @@ const QuestionIcon = styled(QuestionCircleOutlined)`
 
 const SettingRowTitleSmall = styled(SettingRowTitle)`
   font-size: 13px;
+`
+
+const SettingsHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 0.5px solid var(--color-border);
+  margin-left: -15px;
+  margin-right: -15px;
+`
+
+const CloseIcon = styled(CloseOutlined)`
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--color-text-3);
 `
 
 export default SettingsTab

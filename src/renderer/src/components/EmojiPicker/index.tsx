@@ -1,4 +1,4 @@
-import { useTheme } from '@renderer/providers/ThemeProvider'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { FC, useEffect, useRef } from 'react'
 
 interface Props {

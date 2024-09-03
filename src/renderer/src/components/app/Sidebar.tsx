@@ -6,7 +6,7 @@ import { useRuntime, useShowAssistants } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import UserPopup from '../Popups/UserPopup'
@@ -20,6 +20,7 @@ const Sidebar: FC = () => {
   const { toggleShowAssistants } = useShowAssistants()
   const { generating } = useRuntime()
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
@@ -28,15 +29,13 @@ const Sidebar: FC = () => {
   const to = (path: string) => {
     if (generating) {
       window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
-      return '/'
+      return
     }
-    return path
+    navigate(path)
   }
 
   const onToggleShowAssistants = () => {
-    if (pathname === '/') {
-      toggleShowAssistants()
-    }
+    pathname === '/' ? toggleShowAssistants() : navigate('/')
   }
 
   return (
@@ -44,22 +43,22 @@ const Sidebar: FC = () => {
       <AvatarImg src={avatar || AppLogo} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus>
-          <StyledLink to={to('/')} onClick={onToggleShowAssistants}>
+          <StyledLink onClick={onToggleShowAssistants}>
             <Icon className={isRoute('/')}>
               <i className="iconfont icon-chat"></i>
             </Icon>
           </StyledLink>
-          <StyledLink to={to('/agents')}>
+          <StyledLink onClick={() => to('/agents')}>
             <Icon className={isRoute('/agents')}>
               <i className="iconfont icon-business-smart-assistant"></i>
             </Icon>
           </StyledLink>
-          <StyledLink to={to('/translate')}>
+          <StyledLink onClick={() => to('/translate')}>
             <Icon className={isRoute('/translate')}>
               <TranslationOutlined />
             </Icon>
           </StyledLink>
-          <StyledLink to={to('/apps')}>
+          <StyledLink onClick={() => to('/apps')}>
             <Icon className={isRoute('/apps')}>
               <i className="iconfont icon-appstore"></i>
             </Icon>
@@ -67,7 +66,7 @@ const Sidebar: FC = () => {
         </Menus>
       </MainMenus>
       <Menus>
-        <StyledLink to={to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
+        <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
           <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
             <i className="iconfont icon-setting"></i>
           </Icon>
@@ -149,7 +148,7 @@ const Icon = styled.div`
   }
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.div`
   text-decoration: none;
   -webkit-app-region: none;
   &* {
