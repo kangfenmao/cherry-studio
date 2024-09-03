@@ -19,25 +19,25 @@ export interface LlmState {
 }
 
 const initialState: LlmState = {
-  defaultModel: SYSTEM_MODELS.openai[0],
-  topicNamingModel: SYSTEM_MODELS.openai[0],
-  translateModel: SYSTEM_MODELS.openai[0],
+  defaultModel: SYSTEM_MODELS.silicon[0],
+  topicNamingModel: SYSTEM_MODELS.silicon[0],
+  translateModel: SYSTEM_MODELS.silicon[0],
   providers: [
     {
-      id: 'openai',
-      name: 'OpenAI',
+      id: 'silicon',
+      name: 'Silicon',
       apiKey: '',
-      apiHost: 'https://api.openai.com',
-      models: SYSTEM_MODELS.openai,
+      apiHost: 'https://api.siliconflow.cn',
+      models: SYSTEM_MODELS.silicon,
       isSystem: true,
       enabled: true
     },
     {
-      id: 'gemini',
-      name: 'Gemini',
+      id: 'ollama',
+      name: 'Ollama',
       apiKey: '',
-      apiHost: 'https://generativelanguage.googleapis.com',
-      models: SYSTEM_MODELS.gemini,
+      apiHost: 'http://localhost:11434/v1/',
+      models: SYSTEM_MODELS.ollama,
       isSystem: true,
       enabled: false
     },
@@ -51,20 +51,20 @@ const initialState: LlmState = {
       enabled: false
     },
     {
-      id: 'ollama',
-      name: 'Ollama',
+      id: 'openai',
+      name: 'OpenAI',
       apiKey: '',
-      apiHost: 'http://localhost:11434/v1/',
-      models: SYSTEM_MODELS.ollama,
+      apiHost: 'https://api.openai.com',
+      models: SYSTEM_MODELS.openai,
       isSystem: true,
       enabled: false
     },
     {
-      id: 'silicon',
-      name: 'Silicon',
+      id: 'gemini',
+      name: 'Gemini',
       apiKey: '',
-      apiHost: 'https://api.siliconflow.cn',
-      models: SYSTEM_MODELS.silicon,
+      apiHost: 'https://generativelanguage.googleapis.com',
+      models: SYSTEM_MODELS.gemini,
       isSystem: true,
       enabled: false
     },
@@ -150,15 +150,6 @@ const initialState: LlmState = {
       enabled: false
     },
     {
-      id: 'aihubmix',
-      name: 'AiHubMix',
-      apiKey: '',
-      apiHost: 'https://aihubmix.com',
-      models: SYSTEM_MODELS.aihubmix,
-      isSystem: true,
-      enabled: false
-    },
-    {
       id: 'graphrag-kylin-mountain',
       name: 'GraphRAG',
       apiKey: '',
@@ -182,6 +173,15 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
       models: SYSTEM_MODELS.groq,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'aihubmix',
+      name: 'AiHubMix',
+      apiKey: '',
+      apiHost: 'https://aihubmix.com',
+      models: SYSTEM_MODELS.aihubmix,
       isSystem: true,
       enabled: false
     }

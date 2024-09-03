@@ -110,10 +110,10 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     if (message.status === 'error') {
       return (
         <Alert
-          message={t('error.chat.response')}
+          message={<div style={{ fontSize: 14 }}>{t('error.chat.response')}</div>}
           description={<Markdown message={message} />}
           type="error"
-          style={{ marginBottom: 15 }}
+          style={{ marginBottom: 15, padding: 10, fontSize: 12 }}
         />
       )
     }

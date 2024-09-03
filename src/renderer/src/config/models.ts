@@ -5,6 +5,38 @@ const EMBEDDING_REGEX = /embedding/i
 
 export const SYSTEM_MODELS: Record<string, Model[]> = {
   ollama: [],
+  silicon: [
+    {
+      id: 'Qwen/Qwen2-7B-Instruct',
+      provider: 'silicon',
+      name: 'Qwen2-7B-Instruct',
+      group: 'Qwen2'
+    },
+    {
+      id: 'Qwen/Qwen2-72B-Instruct',
+      provider: 'silicon',
+      name: 'Qwen2-72B-Instruct',
+      group: 'Qwen2'
+    },
+    {
+      id: 'THUDM/glm-4-9b-chat',
+      provider: 'silicon',
+      name: 'GLM-4-9B-Chat',
+      group: 'GLM'
+    },
+    {
+      id: 'deepseek-ai/DeepSeek-V2-Chat',
+      provider: 'silicon',
+      name: 'DeepSeek-V2-Chat',
+      group: 'DeepSeek'
+    },
+    {
+      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
+      provider: 'silicon',
+      name: 'DeepSeek-Coder-V2-Instruct',
+      group: 'DeepSeek'
+    }
+  ],
   openai: [
     {
       id: 'gpt-4o',
@@ -69,38 +101,6 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       provider: 'anthropic',
       name: 'Claude 3 Haiku',
       group: 'Claude 3'
-    }
-  ],
-  silicon: [
-    {
-      id: 'Qwen/Qwen2-7B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2-7B-Instruct',
-      group: 'Qwen2'
-    },
-    {
-      id: 'Qwen/Qwen2-72B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2-72B-Instruct',
-      group: 'Qwen2'
-    },
-    {
-      id: 'THUDM/glm-4-9b-chat',
-      provider: 'silicon',
-      name: 'GLM-4-9B-Chat',
-      group: 'GLM'
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-V2-Chat',
-      provider: 'silicon',
-      name: 'DeepSeek-V2-Chat',
-      group: 'DeepSeek'
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
-      provider: 'silicon',
-      name: 'DeepSeek-Coder-V2-Instruct',
-      group: 'DeepSeek'
     }
   ],
   deepseek: [
