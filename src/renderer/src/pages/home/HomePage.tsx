@@ -1,5 +1,6 @@
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import { Navbar, NavbarCenter, NavbarLeft } from '@renderer/components/app/Navbar'
+import { HStack } from '@renderer/components/Layout'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAssistant, useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
@@ -63,27 +64,28 @@ const HomePage: FC = () => {
         {showAssistants && (
           <NavbarLeft
             style={{ justifyContent: 'space-between', alignItems: 'center', borderRight: 'none', padding: '0 8px' }}>
-            <NavigtaionBack onClick={() => setShowTopics(false)} style={{ opacity: showTopics ? 1 : 0 }}>
-              <ArrowLeftOutlined />
-              <NavigationBackTitle>{t('common.back')}</NavigationBackTitle>
+            <NavigtaionBack onClick={() => setShowTopics(false)}>
+              {showTopics && <ArrowLeftOutlined />}
+              <NavigationBackTitle>{showTopics ? t('common.back') : t('common.chat')}</NavigationBackTitle>
             </NavigtaionBack>
             <NewButton onClick={onCreate}>
               <i className="iconfont icon-a-addchat"></i>
             </NewButton>
           </NavbarLeft>
         )}
-        <NavbarCenter style={{ paddingLeft: isMac ? 16 : 8 }}>
-          <AssistantName>{activeAssistant?.name || t('chat.default.name')}</AssistantName>
-          <SelectModelButton assistant={activeAssistant} />
-        </NavbarCenter>
-        <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 12 }}>
+        <NavbarCenter
+          style={{ paddingLeft: isMac ? 16 : 8, justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12 }}>
+          <HStack alignItems="center">
+            <AssistantName>{activeAssistant?.name || t('chat.default.name')}</AssistantName>
+            <SelectModelButton assistant={activeAssistant} />
+          </HStack>
           <ThemeSwitch
             checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
             unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}
             checked={theme === 'dark'}
             onChange={toggleTheme}
           />
-        </NavbarRight>
+        </NavbarCenter>
       </Navbar>
       <ContentContainer>
         {showAssistants && (
@@ -123,25 +125,29 @@ const NavigtaionBack = styled.div`
   justify-content: flex-start;
   gap: 10px;
   cursor: pointer;
-  margin-left: ${isMac ? '16px' : '4px'};
+  margin-left: ${isMac ? '14px' : '2px'};
   -webkit-app-region: none;
   transition: all 0.2s ease-in-out;
-  color: var(--color-icon);
   transition: opacity 0.2s ease-in-out;
+  padding: 2px 8px;
+  border-radius: 6px;
   &:hover {
-    color: var(--color-text-2);
+    background-color: var(--color-background-mute);
+    color: var(--color-text-1);
   }
 `
 
 const NavigationBackTitle = styled.div`
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: Ubuntu;
 `
 
 const AssistantName = styled.span`
   margin-left: 5px;
   margin-right: 10px;
   font-family: Ubuntu;
+  font-weight: 800;
 `
 
 export const NewButton = styled.div`

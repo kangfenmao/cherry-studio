@@ -30,7 +30,8 @@ const resources = {
         search: 'Search',
         default: 'Default',
         warning: 'Warning',
-        back: 'Back'
+        back: 'Back',
+        chat: 'Chat'
       },
       button: {
         add: 'Add',
@@ -253,7 +254,7 @@ const resources = {
         topics: '话题',
         docs: '文档',
         and: '和',
-        assistant: '助手',
+        assistant: '智能体',
         name: '名称',
         description: '描述',
         prompt: '提示词',
@@ -270,7 +271,8 @@ const resources = {
         search: '搜索',
         default: '默认',
         warning: '警告',
-        back: '返回'
+        back: '返回',
+        chat: '聊天'
       },
       button: {
         add: '添加',
