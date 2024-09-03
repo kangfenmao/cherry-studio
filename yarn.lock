@@ -15,7 +15,7 @@ __metadata:
     "@types/adm-zip": "npm:^0"
     adm-zip: "npm:^0.5.15"
     dotenv-cli: "npm:^7.4.2"
-    electron: "npm:^28.3.3"
+    electron: "npm:28.3.3"
     electron-builder: "npm:^24.9.1"
     electron-log: "npm:^5.1.5"
     electron-store: "npm:^8.2.0"
@@ -3472,7 +3472,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^28.3.3":
+"electron@npm:28.3.3, electron@npm:^28.3.3":
   version: 28.3.3
   resolution: "electron@npm:28.3.3"
   dependencies:
