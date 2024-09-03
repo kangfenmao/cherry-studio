@@ -1,6 +1,5 @@
 import { ArrowRightOutlined, CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
-import { HStack } from '@renderer/components/Layout'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
@@ -8,7 +7,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Dropdown } from 'antd'
+import { Dropdown, Tooltip } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { last } from 'lodash'
 import { FC, useCallback } from 'react'
@@ -93,11 +92,16 @@ const Assistants: FC<Props> = ({
           key: 'switch-assistant'
         })
       }
+
+      if (assistant.id === activeAssistant?.id) {
+        setShowTopics(true)
+        return
+      }
+
       EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
       setActiveAssistant(assistant)
-      setShowTopics(true)
     },
-    [generating, setActiveAssistant, setShowTopics, t]
+    [activeAssistant?.id, generating, setActiveAssistant, setShowTopics, t]
   )
 
   if (showTopics) {
@@ -117,9 +121,12 @@ const Assistants: FC<Props> = ({
               onClick={() => onSwitchAssistant(assistant)}
               className={assistant.id === activeAssistant?.id ? 'active' : ''}>
               <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-              <HStack alignItems="center">
-                <ArrowRightOutlined />
-              </HStack>
+              <Tooltip arrow title="话题列表" placement="bottom" mouseEnterDelay={0.5}>
+                <ArrowRightButton className="arrow-button" onClick={() => setShowTopics(true)}>
+                  <ArrowRightOutlined />
+                </ArrowRightButton>
+              </Tooltip>
+              {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
             </AssistantItem>
           </Dropdown>
         )}
@@ -153,18 +160,24 @@ const AssistantItem = styled.div`
   .anticon {
     opacity: 0;
     color: var(--color-text-3);
-    transition: opacity 0.2s ease-in-out;
   }
   &:hover {
     background-color: var(--color-background-soft);
+    .topics-count {
+      display: none;
+    }
     .anticon {
       opacity: 1;
     }
   }
   &.active {
     background-color: var(--color-background-mute);
+    .topics-count {
+      display: none;
+    }
     .anticon {
       opacity: 1;
+      color: var(--color-text-2);
     }
     .name {
       font-weight: 500;
@@ -178,6 +191,39 @@ const AssistantName = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+`
+
+const ArrowRightButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 4px;
+  position: absolute;
+  right: 10px;
+  &:hover {
+    background-color: var(--color-background);
+  }
+`
+
+const TopicCount = styled.div`
+  color: var(--color-text-3);
+  font-size: 12px;
+  margin-right: 3px;
+  background-color: var(--color-background-mute);
+  opacity: 0.8;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `
 
 export default Assistants

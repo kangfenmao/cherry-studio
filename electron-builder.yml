@@ -57,5 +57,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    增加应用备份和恢复功能
-    增加更多AI小程序
+    智能助理和消息列表合并
+    优化输入框样式
+    提升小程序稳定性

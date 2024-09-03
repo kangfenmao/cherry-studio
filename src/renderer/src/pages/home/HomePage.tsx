@@ -55,7 +55,6 @@ const HomePage: FC = () => {
 
   const onSetActiveTopic = (topic: Topic) => {
     setActiveTopic(topic)
-    setShowTopics(true)
   }
 
   return (
