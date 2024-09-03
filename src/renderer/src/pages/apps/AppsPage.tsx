@@ -64,7 +64,7 @@ const _apps: MinAppType[] = [
   {
     name: 'DEVV_',
     logo: DevvAppLogo,
-    url: 'https://devv.ai/referral?code=dvl5am34asqo'
+    url: 'https://devv.ai/'
   }
 ]
 

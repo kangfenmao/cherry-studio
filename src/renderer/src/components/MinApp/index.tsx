@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { CloseOutlined, ExportOutlined, ReloadOutlined } from '@ant-design/icons'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useBridge } from '@renderer/hooks/useBridge'
@@ -5,7 +6,8 @@ import store from '@renderer/store'
 import { setMinappShow } from '@renderer/store/runtime'
 import { MinAppType } from '@renderer/types'
 import { Drawer } from 'antd'
-import { useRef, useState } from 'react'
+import { WebviewTag } from 'electron'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { TopView } from '../TopView'
@@ -17,7 +19,7 @@ interface Props {
 
 const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
   const [open, setOpen] = useState(true)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const webviewRef = useRef<WebviewTag | null>(null)
 
   useBridge()
 
@@ -29,8 +31,8 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
   }
 
   const onReload = () => {
-    if (iframeRef.current) {
-      iframeRef.current.src = app.url
+    if (webviewRef.current) {
+      webviewRef.current.src = app.url
     }
   }
 
@@ -59,6 +61,27 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
     )
   }
 
+  useEffect(() => {
+    const webview = webviewRef.current
+
+    if (webview) {
+      const handleNewWindow = (event: any) => {
+        event.preventDefault()
+        if (webview.loadURL) {
+          webview.loadURL(event.url)
+        }
+      }
+
+      webview.addEventListener('new-window', handleNewWindow)
+
+      return () => {
+        webview.removeEventListener('new-window', handleNewWindow)
+      }
+    }
+
+    return () => {}
+  }, [])
+
   return (
     <Drawer
       title={<Title />}
@@ -72,17 +95,17 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
       maskClosable={false}
       closeIcon={null}
       style={{ marginLeft: 'var(--sidebar-width)' }}>
-      <Frame src={app.url} ref={iframeRef} />
+      <webview src={app.url} ref={webviewRef} style={WebviewStyle} allowpopups={true} />
     </Drawer>
   )
 }
 
-const Frame = styled.iframe`
-  width: calc(100vw - var(--sidebar-width));
-  height: calc(100vh - var(--navbar-height));
-  border: none;
-  background-color: white;
-`
+const WebviewStyle: React.CSSProperties = {
+  width: 'calc(100vw - var(--sidebar-width))',
+  height: 'calc(100vh - var(--navbar-height))',
+  backgroundColor: 'white',
+  display: 'inline-flex'
+}
 
 const TitleContainer = styled.div`
   display: flex;
