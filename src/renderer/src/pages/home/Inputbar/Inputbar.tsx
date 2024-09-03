@@ -296,6 +296,7 @@ const Toolbar = styled.div`
   padding: 0 8px;
   padding-bottom: 0;
   margin-bottom: 4px;
+  height: 36px;
 `
 
 const ToolbarMenu = styled.div`
