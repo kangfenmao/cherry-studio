@@ -4,6 +4,7 @@ import AiSearchAppLogo from '@renderer/assets/images/apps/ai-search.png'
 import BaiduAiAppLogo from '@renderer/assets/images/apps/baidu-ai.png'
 import DevvAppLogo from '@renderer/assets/images/apps/devv.png'
 import MetasoAppLogo from '@renderer/assets/images/apps/metaso.webp'
+import PerplexityAppLogo from '@renderer/assets/images/apps/perplexity.webp'
 import SensetimeAppLogo from '@renderer/assets/images/apps/sensetime.png'
 import SparkDeskAppLogo from '@renderer/assets/images/apps/sparkdesk.png'
 import TiangongAiLogo from '@renderer/assets/images/apps/tiangong.png'
@@ -65,6 +66,11 @@ const _apps: MinAppType[] = [
     name: 'DEVV_',
     logo: DevvAppLogo,
     url: 'https://devv.ai/'
+  },
+  {
+    name: 'perplexity',
+    logo: PerplexityAppLogo,
+    url: 'https://www.perplexity.ai/'
   }
 ]
 

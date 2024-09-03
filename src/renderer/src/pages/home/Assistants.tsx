@@ -163,6 +163,9 @@ const AssistantItem = styled.div`
   }
   &.active {
     background-color: var(--color-background-mute);
+    .anticon {
+      opacity: 1;
+    }
     .name {
       font-weight: 500;
     }

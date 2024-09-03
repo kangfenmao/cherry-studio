@@ -119,10 +119,10 @@ const GeneralSettings: FC = () => {
         <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
         <HStack gap="5px">
           <Button onClick={backup} icon={<SaveOutlined />}>
-            备份
+            {t('settings.general.backup.button')}
           </Button>
           <Button onClick={restore} icon={<FolderOpenOutlined />}>
-            恢复
+            {t('settings.general.restore.button')}
           </Button>
         </HStack>
       </SettingRow>
