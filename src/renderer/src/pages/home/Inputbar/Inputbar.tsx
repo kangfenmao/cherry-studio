@@ -3,7 +3,6 @@ import {
   ControlOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
-  HistoryOutlined,
   PauseCircleOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined
@@ -32,11 +31,13 @@ import SendMessageButton from './SendMessageButton'
 interface Props {
   assistant: Assistant
   setActiveTopic: (topic: Topic) => void
+  showSetting: boolean
+  setShowSetting: (show: boolean) => void
 }
 
 let _text = ''
 
-const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
+const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSetting }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic } = useAssistant(assistant.id)
@@ -194,6 +195,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         variant="borderless"
         rows={1}
         ref={textareaRef}
+        style={{ fontSize }}
         styles={{ textarea: TextareaStyle }}
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
@@ -219,13 +221,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Popconfirm>
           </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
-              <HistoryOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
+          <Tooltip placement="top" title={t('chat.input.settings')} arrow className={showSetting ? 'active' : ''}>
+            <ToolbarButton type="text" onClick={() => setShowSetting(!showSetting)}>
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>

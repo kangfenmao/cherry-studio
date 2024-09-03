@@ -2,9 +2,10 @@ import { TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { AppLogo, isLocalAi } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
-import { useRuntime } from '@renderer/hooks/useStore'
+import { useRuntime, useShowAssistants } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -16,11 +17,26 @@ const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
   const { minappShow } = useRuntime()
+  const { toggleShowAssistants } = useShowAssistants()
+  const { generating } = useRuntime()
+  const { t } = useTranslation()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
-  const onEditUser = () => {
-    UserPopup.show()
+  const onEditUser = () => UserPopup.show()
+
+  const to = (path: string) => {
+    if (generating) {
+      window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
+      return '/'
+    }
+    return path
+  }
+
+  const onToggleShowAssistants = () => {
+    if (pathname === '/') {
+      toggleShowAssistants()
+    }
   }
 
   return (
@@ -28,22 +44,22 @@ const Sidebar: FC = () => {
       <AvatarImg src={avatar || AppLogo} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus>
-          <StyledLink to="/">
+          <StyledLink to={to('/')} onClick={onToggleShowAssistants}>
             <Icon className={isRoute('/')}>
               <i className="iconfont icon-chat"></i>
             </Icon>
           </StyledLink>
-          <StyledLink to="/agents">
+          <StyledLink to={to('/agents')}>
             <Icon className={isRoute('/agents')}>
               <i className="iconfont icon-business-smart-assistant"></i>
             </Icon>
           </StyledLink>
-          <StyledLink to="/translate">
+          <StyledLink to={to('/translate')}>
             <Icon className={isRoute('/translate')}>
               <TranslationOutlined />
             </Icon>
           </StyledLink>
-          <StyledLink to="/apps">
+          <StyledLink to={to('/apps')}>
             <Icon className={isRoute('/apps')}>
               <i className="iconfont icon-appstore"></i>
             </Icon>
@@ -51,7 +67,7 @@ const Sidebar: FC = () => {
         </Menus>
       </MainMenus>
       <Menus>
-        <StyledLink to={isLocalAi ? '/settings/assistant' : '/settings/provider'}>
+        <StyledLink to={to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
           <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
             <i className="iconfont icon-setting"></i>
           </Icon>

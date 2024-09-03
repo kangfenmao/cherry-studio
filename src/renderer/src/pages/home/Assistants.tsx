@@ -1,11 +1,13 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { ArrowRightOutlined, CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
+import { HStack } from '@renderer/components/Layout'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
-import { Assistant } from '@renderer/types'
+import { Assistant, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Dropdown } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
@@ -14,13 +16,27 @@ import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import Topics from './Topics'
+
 interface Props {
   activeAssistant: Assistant
   setActiveAssistant: (assistant: Assistant) => void
+  activeTopic: Topic
+  setActiveTopic: (topic: Topic) => void
+  showTopics: boolean
+  setShowTopics: (showTopics: boolean) => void
   onCreateAssistant: () => void
 }
 
-const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
+const Assistants: FC<Props> = ({
+  activeAssistant,
+  setActiveAssistant,
+  activeTopic,
+  setActiveTopic,
+  showTopics,
+  setShowTopics,
+  onCreateAssistant
+}) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
   const { updateAssistant } = useAssistant(activeAssistant.id)
@@ -80,9 +96,22 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
       }
       EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
       setActiveAssistant(assistant)
+      setShowTopics(true)
     },
-    [generating, setActiveAssistant, t]
+    [generating, setActiveAssistant, setShowTopics, t]
   )
+
+  if (showTopics) {
+    return (
+      <Container>
+        <NavigtaionHeader onClick={() => setShowTopics(false)}>
+          <ArrowLeftOutlined />
+          {t('common.back')}
+        </NavigtaionHeader>
+        <Topics assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
+      </Container>
+    )
+  }
 
   return (
     <Container>
@@ -93,6 +122,9 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
               onClick={() => onSwitchAssistant(assistant)}
               className={assistant.id === activeAssistant?.id ? 'active' : ''}>
               <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
+              <HStack alignItems="center">
+                <ArrowRightOutlined />
+              </HStack>
             </AssistantItem>
           </Dropdown>
         )}
@@ -108,26 +140,31 @@ const Container = styled.div`
   max-width: var(--assistants-width);
   border-right: 0.5px solid var(--color-border);
   height: calc(100vh - var(--navbar-height));
-  padding: 10px;
   overflow-y: auto;
+  padding: 10px 0;
 `
 
 const AssistantItem = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   padding: 7px 10px;
   position: relative;
   border-radius: 4px;
+  margin: 0 10px;
   cursor: pointer;
   font-family: Ubuntu;
   .anticon {
     display: none;
+    color: var(--color-text-3);
   }
   &:hover {
     background-color: var(--color-background-soft);
+    .count {
+      display: none;
+    }
     .anticon {
       display: block;
-      color: var(--color-text-1);
     }
   }
   &.active {
@@ -137,6 +174,19 @@ const AssistantItem = styled.div`
       font-weight: 500;
     }
   }
+`
+
+const NavigtaionHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0 5px;
+  cursor: pointer;
+  color: var(--color-text-3);
+  margin: 10px;
+  margin-top: 0;
 `
 
 const AssistantName = styled.div`

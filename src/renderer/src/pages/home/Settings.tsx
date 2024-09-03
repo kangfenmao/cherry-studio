@@ -234,7 +234,13 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  width: var(--topic-list-width);
+  max-width: var(--topic-list-width);
+  height: calc(100vh - var(--navbar-height));
+  border-left: 0.5px solid var(--color-border);
   padding: 0 15px;
+  padding-bottom: 20px;
+  overflow-y: auto;
 `
 
 const Label = styled.p`

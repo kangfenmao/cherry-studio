@@ -54,12 +54,7 @@ export default class ProviderSDK {
     const userMessages = takeRight(messages, contextCount + 1).map((message) => {
       return {
         role: message.role,
-        content: message.images
-          ? [
-              { type: 'text', text: message.content },
-              ...message.images!.map((image) => ({ type: 'image_url', image_url: image }))
-            ]
-          : message.content
+        content: message.content
       }
     })
 
@@ -132,10 +127,22 @@ export default class ProviderSDK {
       return
     }
 
+    const _userMessages = takeRight(messages, contextCount + 1).map((message) => {
+      return {
+        role: message.role,
+        content: message.images
+          ? [
+              { type: 'text', text: message.content },
+              ...message.images!.map((image) => ({ type: 'image_url', image_url: image }))
+            ]
+          : message.content
+      }
+    })
+
     // @ts-ignore key is not typed
     const stream = await this.openaiSdk.chat.completions.create({
       model: model.id,
-      messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
+      messages: [systemMessage, ..._userMessages].filter(Boolean) as ChatCompletionMessageParam[],
       stream: true,
       temperature: assistant?.settings?.temperature,
       max_tokens: maxTokens,

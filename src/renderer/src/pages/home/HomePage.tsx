@@ -1,30 +1,37 @@
-import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
-import { useShowAssistants, useShowRightSidebar } from '@renderer/hooks/useStore'
+import { useShowAssistants } from '@renderer/hooks/useStore'
+import { useActiveTopic } from '@renderer/hooks/useTopic'
 import { useTheme } from '@renderer/providers/ThemeProvider'
-import { Assistant } from '@renderer/types'
+import { Assistant, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Switch } from 'antd'
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import AddAssistantPopup from '../../components/Popups/AddAssistantPopup'
 import Assistants from './Assistants'
 import Chat from './Chat'
-import Navigation from './Header'
+import SelectModelButton from './components/SelectModelButton'
 
 let _activeAssistant: Assistant
+let _showTopics = false
 
 const HomePage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
   const [activeAssistant, setActiveAssistant] = useState(_activeAssistant || assistants[0])
-  const { rightSidebarShown, toggleRightSidebar } = useShowRightSidebar()
-  const { showAssistants, toggleShowAssistants } = useShowAssistants()
+  const { showAssistants } = useShowAssistants()
   const { defaultAssistant } = useDefaultAssistant()
   const { theme, toggleTheme } = useTheme()
+  const [showTopics, setShowTopics] = useState(_showTopics)
+  const { t } = useTranslation()
+
+  const { activeTopic, setActiveTopic } = useActiveTopic(activeAssistant)
 
   _activeAssistant = activeAssistant
+  _showTopics = showTopics
 
   const onCreateDefaultAssistant = () => {
     const assistant = { ...defaultAssistant, id: uuid() }
@@ -37,20 +44,25 @@ const HomePage: FC = () => {
     assistant && setActiveAssistant(assistant)
   }
 
+  const onSetActiveTopic = (topic: Topic) => {
+    setActiveTopic(topic)
+    setShowTopics(true)
+  }
+
   return (
     <Container>
       <Navbar>
         {showAssistants && (
-          <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
-            <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
-              <i className="iconfont icon-hidesidebarhoriz" />
-            </NewButton>
+          <NavbarLeft style={{ justifyContent: 'flex-end', borderRight: 'none', padding: '0 8px' }}>
             <NewButton onClick={onCreateAssistant}>
               <i className="iconfont icon-a-addchat"></i>
             </NewButton>
           </NavbarLeft>
         )}
-        <Navigation activeAssistant={activeAssistant} />
+        <NavbarCenter style={{ paddingLeft: isMac ? 16 : 8 }}>
+          <AssistantName>{activeAssistant?.name || t('chat.default.name')}</AssistantName>
+          <SelectModelButton assistant={activeAssistant} />
+        </NavbarCenter>
         <NavbarRight style={{ justifyContent: 'flex-end', paddingRight: isWindows ? 140 : 12 }}>
           <ThemeSwitch
             checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
@@ -58,9 +70,6 @@ const HomePage: FC = () => {
             checked={theme === 'dark'}
             onChange={toggleTheme}
           />
-          <NewButton onClick={toggleRightSidebar}>
-            <i className={`iconfont ${rightSidebarShown ? 'icon-showsidebarhoriz' : 'icon-hidesidebarhoriz'}`} />
-          </NewButton>
         </NavbarRight>
       </Navbar>
       <ContentContainer>
@@ -68,10 +77,14 @@ const HomePage: FC = () => {
           <Assistants
             activeAssistant={activeAssistant}
             setActiveAssistant={setActiveAssistant}
+            activeTopic={activeTopic}
+            setActiveTopic={setActiveTopic}
+            showTopics={showTopics}
+            setShowTopics={setShowTopics}
             onCreateAssistant={onCreateDefaultAssistant}
           />
         )}
-        <Chat assistant={activeAssistant} />
+        <Chat assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={onSetActiveTopic} />
       </ContentContainer>
     </Container>
   )
@@ -88,6 +101,12 @@ const ContentContainer = styled.div`
   flex: 1;
   flex-direction: row;
   background-color: var(--color-background);
+`
+
+const AssistantName = styled.span`
+  margin-left: 5px;
+  margin-right: 10px;
+  font-family: Ubuntu;
 `
 
 export const NewButton = styled.div`

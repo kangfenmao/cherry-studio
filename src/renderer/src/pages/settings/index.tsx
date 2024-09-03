@@ -2,8 +2,6 @@ import { Divider } from 'antd'
 import Link from 'antd/es/typography/Link'
 import styled from 'styled-components'
 
-import SettingsPage from './SettingsPage'
-
 export const SettingContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -69,5 +67,3 @@ export const SettingHelpLink = styled(Link)`
   font-size: 11px;
   padding: 0 5px;
 `
-
-export default SettingsPage

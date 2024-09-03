@@ -162,7 +162,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                 </ActionButton>
               </Tooltip>
               {canRegenerate && (
-                <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topRight">
+                <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topLeft">
                   <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
                     <ActionButton>
                       <SyncOutlined />

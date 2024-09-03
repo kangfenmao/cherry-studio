@@ -256,45 +256,59 @@ export const SYSTEM_MODELS: Record<string, SystemModel[]> = {
   ],
   zhipu: [
     {
-      id: 'glm-4-0520',
-      provider: 'zhipu',
-      name: 'GLM-4-0520',
-      group: 'GLM',
-      enabled: true
-    },
-    {
       id: 'glm-4',
       provider: 'zhipu',
       name: 'GLM-4',
-      group: 'GLM',
+      group: 'GLM-4',
       enabled: false
     },
     {
-      id: 'glm-4-airx',
+      id: 'glm-4-plus',
       provider: 'zhipu',
-      name: 'GLM-4-AirX',
-      group: 'GLM',
+      name: 'GLM-4-Plus',
+      group: 'GLM-4',
       enabled: false
     },
     {
       id: 'glm-4-air',
       provider: 'zhipu',
       name: 'GLM-4-Air',
-      group: 'GLM',
+      group: 'GLM-4',
       enabled: true
+    },
+    {
+      id: 'glm-4-airx',
+      provider: 'zhipu',
+      name: 'GLM-4-AirX',
+      group: 'GLM-4',
+      enabled: false
+    },
+    {
+      id: 'glm-4-flash',
+      provider: 'zhipu',
+      name: 'GLM-4-Flash',
+      group: 'GLM-4',
+      enabled: false
     },
     {
       id: 'glm-4v',
       provider: 'zhipu',
-      name: 'GLM-4V',
-      group: 'GLM',
+      name: 'GLM 4V',
+      group: 'GLM-4v',
+      enabled: false
+    },
+    {
+      id: 'glm-4v-plus',
+      provider: 'zhipu',
+      name: 'GLM-4V-Plus',
+      group: 'GLM-4v',
       enabled: false
     },
     {
       id: 'glm-4-alltools',
       provider: 'zhipu',
       name: 'GLM-4-AllTools',
-      group: 'GLM',
+      group: 'GLM-4-AllTools',
       enabled: false
     }
   ],

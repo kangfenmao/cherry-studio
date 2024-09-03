@@ -18,7 +18,7 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-const TopicsTab: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
+const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
   const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
@@ -136,11 +136,12 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 10px 10px;
+  overflow-y: scroll;
 `
 
 const TopicListItem = styled.div`
   padding: 7px 10px;
+  margin: 0 10px;
   cursor: pointer;
   border-radius: 4px;
   white-space: nowrap;
@@ -155,4 +156,4 @@ const TopicListItem = styled.div`
   }
 `
 
-export default TopicsTab
+export default Topics

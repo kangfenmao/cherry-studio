@@ -29,7 +29,8 @@ const resources = {
         select: 'Select',
         search: 'Search',
         default: 'Default',
-        warning: 'Warning'
+        warning: 'Warning',
+        back: 'Back'
       },
       button: {
         add: 'Add',
@@ -67,7 +68,6 @@ const resources = {
         'topics.delete.all.title': 'Delete all topics',
         'topics.delete.all.content': 'Are you sure you want to delete all topics?',
         'input.new_topic': 'New Topic',
-        'input.topics': ' Topics ',
         'input.clear': 'Clear',
         'input.expand': 'Expand',
         'input.collapse': 'Collapse',
@@ -267,7 +267,8 @@ const resources = {
         select: '选择',
         search: '搜索',
         default: '默认',
-        warning: '警告'
+        warning: '警告',
+        back: '返回'
       },
       button: {
         add: '添加',
@@ -305,7 +306,6 @@ const resources = {
         'topics.delete.all.title': '删除所有话题',
         'topics.delete.all.content': '确定要删除所有话题吗?',
         'input.new_topic': '新话题',
-        'input.topics': ' 话题 ',
         'input.clear': '清除',
         'input.expand': '展开',
         'input.collapse': '收起',

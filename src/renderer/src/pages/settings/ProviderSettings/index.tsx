@@ -1,5 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import { getProviderLogo } from '@renderer/config/provider'
 import { useAllProviders, useProviders } from '@renderer/hooks/useProvider'

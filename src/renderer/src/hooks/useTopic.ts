@@ -2,9 +2,12 @@ import { Assistant, Topic } from '@renderer/types'
 import { find } from 'lodash'
 import { useEffect, useState } from 'react'
 
+import { useAssistant } from './useAssistant'
+
 let _activeTopic: Topic
 
-export function useActiveTopic(assistant: Assistant) {
+export function useActiveTopic(_assistant: Assistant) {
+  const { assistant } = useAssistant(_assistant.id)
   const [activeTopic, setActiveTopic] = useState(_activeTopic || assistant?.topics[0])
 
   useEffect(() => {
