@@ -79,73 +79,10 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'Qwen2'
     },
     {
-      id: 'Qwen/Qwen2-1.5B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2-1.5B-Instruct',
-      group: 'Qwen2',
-      enabled: false
-    },
-    {
-      id: 'Qwen/Qwen1.5-7B-Chat',
-      provider: 'silicon',
-      name: 'Qwen1.5-7B-Chat',
-      group: 'Qwen1.5',
-      enabled: false
-    },
-    {
       id: 'Qwen/Qwen2-72B-Instruct',
       provider: 'silicon',
       name: 'Qwen2-72B-Instruct',
       group: 'Qwen2'
-    },
-    {
-      id: 'Qwen/Qwen2-57B-A14B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2-57B-A14B-Instruct',
-      group: 'Qwen2',
-      enabled: false
-    },
-    {
-      id: 'Qwen/Qwen1.5-110B-Chat',
-      provider: 'silicon',
-      name: 'Qwen1.5-110B-Chat',
-      group: 'Qwen1.5',
-      enabled: false
-    },
-    {
-      id: 'Qwen/Qwen1.5-32B-Chat',
-      provider: 'silicon',
-      name: 'Qwen1.5-32B-Chat',
-      group: 'Qwen1.5',
-      enabled: false
-    },
-    {
-      id: 'Qwen/Qwen1.5-14B-Chat',
-      provider: 'silicon',
-      name: 'Qwen1.5-14B-Chat',
-      group: 'Qwen1.5',
-      enabled: false
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-V2-Chat',
-      provider: 'silicon',
-      name: 'DeepSeek-V2-Chat',
-      group: 'DeepSeek',
-      enabled: false
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
-      provider: 'silicon',
-      name: 'DeepSeek-Coder-V2-Instruct',
-      group: 'DeepSeek',
-      enabled: false
-    },
-    {
-      id: 'deepseek-ai/deepseek-llm-67b-chat',
-      provider: 'silicon',
-      name: 'Deepseek-LLM-67B-Chat',
-      group: 'DeepSeek',
-      enabled: false
     },
     {
       id: 'THUDM/glm-4-9b-chat',
@@ -154,32 +91,16 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'GLM'
     },
     {
-      id: 'THUDM/chatglm3-6b',
+      id: 'deepseek-ai/DeepSeek-V2-Chat',
       provider: 'silicon',
-      name: 'GhatGLM3-6B',
-      group: 'GLM',
-      enabled: false
+      name: 'DeepSeek-V2-Chat',
+      group: 'DeepSeek'
     },
     {
-      id: '01-ai/Yi-1.5-9B-Chat-16K',
+      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
       provider: 'silicon',
-      name: 'Yi-1.5-9B-Chat-16K',
-      group: 'Yi',
-      enabled: false
-    },
-    {
-      id: '01-ai/Yi-1.5-6B-Chat',
-      provider: 'silicon',
-      name: 'Yi-1.5-6B-Chat',
-      group: 'Yi',
-      enabled: false
-    },
-    {
-      id: '01-ai/Yi-1.5-34B-Chat-16K',
-      provider: 'silicon',
-      name: 'Yi-1.5-34B-Chat-16K',
-      group: 'Yi',
-      enabled: false
+      name: 'DeepSeek-Coder-V2-Instruct',
+      group: 'DeepSeek'
     }
   ],
   deepseek: [
@@ -201,8 +122,7 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'yi-large',
       provider: 'yi',
       name: 'Yi-Large',
-      group: 'Yi',
-      enabled: false
+      group: 'Yi'
     },
     {
       id: 'yi-large-turbo',
@@ -214,8 +134,7 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'yi-large-rag',
       provider: 'yi',
       name: 'Yi-Large-Rag',
-      group: 'Yi',
-      enabled: false
+      group: 'Yi'
     },
     {
       id: 'yi-medium',
@@ -227,15 +146,13 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'yi-medium-200k',
       provider: 'yi',
       name: 'Yi-Medium-200k',
-      group: 'Yi',
-      enabled: false
+      group: 'Yi'
     },
     {
       id: 'yi-spark',
       provider: 'yi',
       name: 'Yi-Spark',
-      group: 'Yi',
-      enabled: false
+      group: 'Yi'
     }
   ],
   zhipu: [
@@ -243,15 +160,13 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'glm-4',
       provider: 'zhipu',
       name: 'GLM-4',
-      group: 'GLM-4',
-      enabled: false
+      group: 'GLM-4'
     },
     {
       id: 'glm-4-plus',
       provider: 'zhipu',
       name: 'GLM-4-Plus',
-      group: 'GLM-4',
-      enabled: false
+      group: 'GLM-4'
     },
     {
       id: 'glm-4-air',
@@ -263,36 +178,31 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'glm-4-airx',
       provider: 'zhipu',
       name: 'GLM-4-AirX',
-      group: 'GLM-4',
-      enabled: false
+      group: 'GLM-4'
     },
     {
       id: 'glm-4-flash',
       provider: 'zhipu',
       name: 'GLM-4-Flash',
-      group: 'GLM-4',
-      enabled: false
+      group: 'GLM-4'
     },
     {
       id: 'glm-4v',
       provider: 'zhipu',
       name: 'GLM 4V',
-      group: 'GLM-4v',
-      enabled: false
+      group: 'GLM-4v'
     },
     {
       id: 'glm-4v-plus',
       provider: 'zhipu',
       name: 'GLM-4V-Plus',
-      group: 'GLM-4v',
-      enabled: false
+      group: 'GLM-4v'
     },
     {
       id: 'glm-4-alltools',
       provider: 'zhipu',
       name: 'GLM-4-AllTools',
-      group: 'GLM-4-AllTools',
-      enabled: false
+      group: 'GLM-4-AllTools'
     }
   ],
   moonshot: [
@@ -447,8 +357,7 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'llama3-8b-8192',
       provider: 'groq',
       name: 'LLaMA3 8B',
-      group: 'Llama3',
-      enabled: false
+      group: 'Llama3'
     },
     {
       id: 'llama3-70b-8192',
@@ -460,15 +369,13 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'mixtral-8x7b-32768',
       provider: 'groq',
       name: 'Mixtral 8x7B',
-      group: 'Mixtral',
-      enabled: false
+      group: 'Mixtral'
     },
     {
       id: 'gemma-7b-it',
       provider: 'groq',
       name: 'Gemma 7B',
-      group: 'Gemma',
-      enabled: false
+      group: 'Gemma'
     }
   ]
 }

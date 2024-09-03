@@ -20,7 +20,7 @@ const migrateConfig = {
             apiKey: '',
             apiHost: 'https://api.lingyiwanwu.com',
             isSystem: true,
-            models: SYSTEM_MODELS.yi.filter((m) => m.enabled)
+            models: SYSTEM_MODELS.yi
           }
         ]
       }
@@ -39,7 +39,7 @@ const migrateConfig = {
             apiKey: '',
             apiHost: 'https://open.bigmodel.cn/api/paas/v4/',
             isSystem: true,
-            models: SYSTEM_MODELS.zhipu.filter((m) => m.enabled)
+            models: SYSTEM_MODELS.zhipu
           }
         ]
       }
@@ -77,7 +77,7 @@ const migrateConfig = {
             apiKey: '',
             apiHost: 'https://api.moonshot.cn',
             isSystem: true,
-            models: SYSTEM_MODELS.moonshot.filter((m) => m.enabled)
+            models: SYSTEM_MODELS.moonshot
           }
         ]
       }
@@ -95,7 +95,7 @@ const migrateConfig = {
             name: 'OpenRouter',
             apiKey: '',
             apiHost: 'https://openrouter.ai/api/v1/',
-            models: SYSTEM_MODELS.openrouter.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.openrouter,
             isSystem: true
           }
         ]
@@ -143,7 +143,7 @@ const migrateConfig = {
         ...state.llm,
         providers: state.llm.providers.map((provider) => {
           if (provider.id === 'zhipu' && provider.models[0] && provider.models[0].id === 'llama3-70b-8192') {
-            provider.models = SYSTEM_MODELS.zhipu.filter((m) => m.enabled)
+            provider.models = SYSTEM_MODELS.zhipu
           }
           return provider
         })
@@ -162,7 +162,7 @@ const migrateConfig = {
             name: 'BAICHUAN AI',
             apiKey: '',
             apiHost: 'https://api.baichuan-ai.com',
-            models: SYSTEM_MODELS.baichuan.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.baichuan,
             isSystem: true,
             enabled: false
           }
@@ -182,7 +182,7 @@ const migrateConfig = {
             name: 'DashScope',
             apiKey: '',
             apiHost: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',
-            models: SYSTEM_MODELS.dashscope.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.dashscope,
             isSystem: true,
             enabled: false
           },
@@ -191,7 +191,7 @@ const migrateConfig = {
             name: 'Anthropic',
             apiKey: '',
             apiHost: 'https://api.anthropic.com/',
-            models: SYSTEM_MODELS.anthropic.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.anthropic,
             isSystem: true,
             enabled: false
           }
@@ -211,7 +211,7 @@ const migrateConfig = {
             name: 'AiHubMix',
             apiKey: '',
             apiHost: 'https://aihubmix.com',
-            models: SYSTEM_MODELS.aihubmix.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.aihubmix,
             isSystem: true,
             enabled: false
           }
@@ -309,7 +309,7 @@ const migrateConfig = {
             name: 'Gemini',
             apiKey: '',
             apiHost: 'https://generativelanguage.googleapis.com',
-            models: SYSTEM_MODELS.gemini.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.gemini,
             isSystem: true,
             enabled: false
           },
@@ -318,7 +318,7 @@ const migrateConfig = {
             name: 'StepFun',
             apiKey: '',
             apiHost: 'https://api.stepfun.com',
-            models: SYSTEM_MODELS.stepfun.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.stepfun,
             isSystem: true,
             enabled: false
           },
@@ -327,7 +327,7 @@ const migrateConfig = {
             name: 'doubao',
             apiKey: '',
             apiHost: 'https://ark.cn-beijing.volces.com/api/v3/',
-            models: SYSTEM_MODELS.doubao.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.doubao,
             isSystem: true,
             enabled: false
           },
@@ -356,7 +356,7 @@ const migrateConfig = {
             name: 'MiniMax',
             apiKey: '',
             apiHost: 'https://api.minimax.chat/v1/',
-            models: SYSTEM_MODELS.minimax.filter((m) => m.enabled),
+            models: SYSTEM_MODELS.minimax,
             isSystem: true,
             enabled: false
           }
