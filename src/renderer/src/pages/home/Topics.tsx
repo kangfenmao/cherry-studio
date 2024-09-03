@@ -137,6 +137,9 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   overflow-y: scroll;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: -10px;
 `
 
 const TopicListItem = styled.div`

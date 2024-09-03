@@ -136,7 +136,7 @@ const Container = styled.div`
   border-right: 0.5px solid var(--color-border);
   height: calc(100vh - var(--navbar-height));
   overflow-y: auto;
-  padding: 10px 0;
+  padding-top: 10px;
   padding-bottom: 0;
 `
 

@@ -124,7 +124,7 @@ const NavigtaionBack = styled.div`
   justify-content: flex-start;
   gap: 10px;
   cursor: pointer;
-  margin-left: ${isMac ? '16px' : 0};
+  margin-left: ${isMac ? '16px' : '4px'};
   -webkit-app-region: none;
   transition: all 0.2s ease-in-out;
   color: var(--color-icon);
