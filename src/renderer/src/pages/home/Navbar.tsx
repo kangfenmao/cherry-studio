@@ -20,11 +20,11 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-const HeaderNavbar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant, setActiveTopic }) => {
+const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiveTopic }) => {
   const { assistant, addTopic } = useAssistant(activeAssistant.id)
   const { t } = useTranslation()
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
-  const { showTopics, toggleShowTopics } = useShowTopics()
+  const { showTopics } = useShowTopics()
   const { theme, toggleTheme } = useTheme()
 
   const onCreateAssistant = async () => {
@@ -83,7 +83,8 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
             </NewButton>
           )}
           <TitleText>
-            {assistant.name} {!showTopics && <HashTag onClick={() => toggleShowTopics()}>#{activeTopic.name}#</HashTag>}
+            {assistant.name}
+            {/* {!showTopics && <HashTag onClick={() => toggleShowTopics()}>#{activeTopic.name}#</HashTag>} */}
           </TitleText>
         </HStack>
         <HStack alignItems="center">
@@ -141,15 +142,15 @@ const ThemeSwitch = styled(Switch)`
   }
 `
 
-const HashTag = styled.span`
-  -webkit-app-region: no-drag;
-  color: var(--color-primary);
-  margin-left: 5px;
-  user-select: none;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`
+// const HashTag = styled.span`
+//   -webkit-app-region: no-drag;
+//   color: var(--color-primary);
+//   margin-left: 5px;
+//   user-select: none;
+//   cursor: pointer;
+//   &:hover {
+//     text-decoration: underline;
+//   }
+// `
 
 export default HeaderNavbar
