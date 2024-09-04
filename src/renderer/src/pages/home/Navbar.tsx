@@ -13,6 +13,8 @@ import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import SelectModelButton from './components/SelectModelButton'
+
 interface Props {
   activeAssistant: Assistant
   activeTopic: Topic
@@ -84,10 +86,8 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
               <i className="iconfont icon-sidebar-left" />
             </NewButton>
           )}
-          <TitleText>
-            {assistant.name}
-            {/* {!showTopics && <HashTag onClick={() => toggleShowTopics()}>#{activeTopic.name}#</HashTag>} */}
-          </TitleText>
+          <TitleText style={{ marginRight: 10 }}>{assistant.name}</TitleText>
+          <SelectModelButton assistant={assistant} />
         </HStack>
         <HStack alignItems="center">
           <ThemeSwitch
@@ -134,6 +134,7 @@ const TitleText = styled.span`
   margin-left: 5px;
   font-family: Ubuntu;
   font-size: 13px;
+  font-weight: 500;
 `
 
 const ThemeSwitch = styled(Switch)`
@@ -143,16 +144,5 @@ const ThemeSwitch = styled(Switch)`
     font-size: 14px;
   }
 `
-
-// const HashTag = styled.span`
-//   -webkit-app-region: no-drag;
-//   color: var(--color-primary);
-//   margin-left: 5px;
-//   user-select: none;
-//   cursor: pointer;
-//   &:hover {
-//     text-decoration: underline;
-//   }
-// `
 
 export default HeaderNavbar

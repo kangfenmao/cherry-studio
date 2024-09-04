@@ -27,7 +27,6 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } 
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import SelectModelButton from '../components/SelectModelButton'
 import SettingsTab from '../Settings'
 import SendMessageButton from './SendMessageButton'
 
@@ -256,7 +255,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           )}
         </ToolbarMenu>
         <ToolbarMenu>
-          <SelectModelButton assistant={assistant} />
           {generating && (
             <Tooltip placement="top" title={t('chat.input.pause')} arrow>
               <ToolbarButton type="text" onClick={onPause} style={{ marginRight: -2, marginTop: 1 }}>

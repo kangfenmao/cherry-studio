@@ -1,4 +1,4 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { CopyOutlined, DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
@@ -24,7 +24,7 @@ interface Props {
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
-  const { updateAssistant } = useAssistant(activeAssistant.id)
+  const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
   const { toggleShowTopics } = useShowTopics()
   const { t } = useTranslation()
 
@@ -65,6 +65,19 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
             setActiveAssistant(_assistant)
           }
         },
+        {
+          label: t('chat.topics.delete.all.title'),
+          key: 'delete-all',
+          icon: <MinusCircleOutlined />,
+          onClick: () => {
+            window.modal.confirm({
+              title: t('chat.topics.delete.all.title'),
+              content: t('chat.topics.delete.all.content'),
+              okButtonProps: { danger: true },
+              onOk: removeAllTopics
+            })
+          }
+        },
         { type: 'divider' },
         {
           label: t('common.delete'),
@@ -74,7 +87,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
           onClick: () => onDelete(assistant)
         }
       ] as ItemType[],
-    [addAssistant, onDelete, onEditAssistant, setActiveAssistant, t]
+    [addAssistant, onDelete, onEditAssistant, removeAllTopics, setActiveAssistant, t]
   )
 
   const onSwitchAssistant = useCallback(
@@ -146,17 +159,11 @@ const AssistantItem = styled.div`
     opacity: 0;
     color: var(--color-text-3);
   }
-  /* &:hover {
-    background-color: var(--color-background-soft);
-    .topics-count {
-      display: none;
-    }
-    .iconfont {
-      opacity: 1;
-    }
-  } */
   &.active {
     background-color: var(--color-background-mute);
+    .name {
+      font-weight: 500;
+    }
     .topics-count {
       display: none;
     }

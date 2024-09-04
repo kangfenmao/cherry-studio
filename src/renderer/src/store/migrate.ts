@@ -370,7 +370,7 @@ const migrateConfig = {
       settings: {
         ...state.settings,
         showTopics: true,
-        windowStyle: 'opaque'
+        windowStyle: 'transparent'
       }
     }
   }

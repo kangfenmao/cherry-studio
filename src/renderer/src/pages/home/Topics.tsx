@@ -6,7 +6,7 @@ import { fetchMessagesSummary } from '@renderer/services/api'
 import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
-import { Button, Dropdown, MenuProps } from 'antd'
+import { Dropdown, MenuProps } from 'antd'
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
-  const { assistant, removeTopic, updateTopic, updateTopics, removeAllTopics } = useAssistant(_assistant.id)
+  const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
@@ -87,15 +87,6 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
     [generating, setActiveTopic, t]
   )
 
-  const onDeleteAll = () => {
-    window.modal.confirm({
-      title: t('chat.topics.delete.all.title'),
-      content: t('chat.topics.delete.all.content'),
-      okButtonProps: { danger: true },
-      onOk: removeAllTopics
-    })
-  }
-
   return (
     <Container>
       <DragableList list={assistant.topics} onUpdate={updateTopics}>
@@ -109,13 +100,6 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           </Dropdown>
         )}
       </DragableList>
-      {assistant.topics.length > 10 && (
-        <Footer>
-          <Button style={{ width: '100%' }} onClick={onDeleteAll}>
-            {t('chat.topics.delete.all.title')}
-          </Button>
-        </Footer>
-      )}
     </Container>
   )
 }
@@ -148,13 +132,8 @@ const TopicListItem = styled.div`
   &.active {
     background-color: var(--color-primary);
     color: white;
+    font-weight: 500;
   }
-`
-
-const Footer = styled.div`
-  padding: 0 10px;
-  padding-bottom: 10px;
-  width: 100%;
 `
 
 export default Topics
