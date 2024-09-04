@@ -11,6 +11,7 @@ export enum ThemeMode {
 export interface SettingsState {
   showRightSidebar: boolean
   showAssistants: boolean
+  showTopics: boolean
   sendMessageShortcut: SendMessageShortcut
   language: string
   proxyUrl?: string
@@ -26,6 +27,7 @@ export interface SettingsState {
 const initialState: SettingsState = {
   showRightSidebar: true,
   showAssistants: true,
+  showTopics: true,
   sendMessageShortcut: 'Enter',
   language: navigator.language,
   proxyUrl: undefined,
@@ -34,7 +36,7 @@ const initialState: SettingsState = {
   messageFont: 'system',
   showInputEstimatedTokens: false,
   theme: ThemeMode.light,
-  windowStyle: 'transparent',
+  windowStyle: 'opaque',
   fontSize: 14
 }
 
@@ -48,8 +50,17 @@ const settingsSlice = createSlice({
     setShowRightSidebar: (state, action: PayloadAction<boolean>) => {
       state.showRightSidebar = action.payload
     },
+    setShowAssistants: (state, action: PayloadAction<boolean>) => {
+      state.showAssistants = action.payload
+    },
     toggleShowAssistants: (state) => {
       state.showAssistants = !state.showAssistants
+    },
+    setShowTopics: (state, action: PayloadAction<boolean>) => {
+      state.showTopics = action.payload
+    },
+    toggleShowTopics: (state) => {
+      state.showTopics = !state.showTopics
     },
     setSendMessageShortcut: (state, action: PayloadAction<SendMessageShortcut>) => {
       state.sendMessageShortcut = action.payload
@@ -88,7 +99,10 @@ const settingsSlice = createSlice({
 export const {
   setShowRightSidebar,
   toggleRightSidebar,
+  setShowAssistants,
   toggleShowAssistants,
+  setShowTopics,
+  toggleShowTopics,
   setSendMessageShortcut,
   setLanguage,
   setProxyUrl,

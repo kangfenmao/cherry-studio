@@ -43,7 +43,7 @@ const GeneralSettings: FC = () => {
         <SettingRowTitle>{t('common.language')}</SettingRowTitle>
         <Select
           defaultValue={language || 'en-US'}
-          style={{ width: 120 }}
+          style={{ width: 180 }}
           onChange={onSelectLanguage}
           options={[
             { value: 'zh-CN', label: '中文' },
@@ -56,7 +56,7 @@ const GeneralSettings: FC = () => {
         <SettingRowTitle>{t('settings.theme.title')}</SettingRowTitle>
         <Select
           defaultValue={theme}
-          style={{ width: 120 }}
+          style={{ width: 180 }}
           onChange={setTheme}
           options={[
             { value: ThemeMode.light, label: t('settings.theme.light') },
@@ -70,7 +70,7 @@ const GeneralSettings: FC = () => {
         <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
         <Select
           defaultValue={windowStyle || 'opaque'}
-          style={{ width: 120 }}
+          style={{ width: 180 }}
           onChange={setWindowStyle}
           options={[
             { value: 'transparent', label: t('settings.theme.window.style.transparent') },
@@ -85,7 +85,7 @@ const GeneralSettings: FC = () => {
           placeholder={t('settings.general.user_name.placeholder')}
           value={userName}
           onChange={(e) => dispatch(setUserName(e.target.value))}
-          style={{ width: 170 }}
+          style={{ width: 180 }}
           maxLength={30}
         />
       </SettingRow>
@@ -96,7 +96,7 @@ const GeneralSettings: FC = () => {
           placeholder="socks5://127.0.0.1:6153"
           value={proxyUrl}
           onChange={(e) => setProxyUrl(e.target.value)}
-          style={{ width: 170 }}
+          style={{ width: 180 }}
           onBlur={() => onSetProxyUrl()}
           type="url"
         />
@@ -104,7 +104,7 @@ const GeneralSettings: FC = () => {
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
-        <HStack gap="5px" w="170px" justifyContent="space-between">
+        <HStack gap="5px" justifyContent="space-between">
           <Button onClick={backup} icon={<SaveOutlined />}>
             {t('settings.general.backup.button')}
           </Button>

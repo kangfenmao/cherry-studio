@@ -1,7 +1,8 @@
-import { ArrowRightOutlined, CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
+import { useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
@@ -24,6 +25,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
   const { updateAssistant } = useAssistant(activeAssistant.id)
+  const { toggleShowTopics } = useShowTopics()
   const { t } = useTranslation()
 
   const onDelete = useCallback(
@@ -84,10 +86,14 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
         })
       }
 
+      if (assistant.id === activeAssistant?.id) {
+        toggleShowTopics()
+      }
+
       EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
       setActiveAssistant(assistant)
     },
-    [generating, setActiveAssistant, t]
+    [activeAssistant?.id, generating, setActiveAssistant, t, toggleShowTopics]
   )
 
   return (
@@ -99,8 +105,8 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
               onClick={() => onSwitchAssistant(assistant)}
               className={assistant.id === activeAssistant?.id ? 'active' : ''}>
               <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-              <ArrowRightButton className="arrow-button" onClick={() => onEditAssistant(assistant)}>
-                <ArrowRightOutlined />
+              <ArrowRightButton className="arrow-button">
+                <i className="iconfont icon-gridlines" />
               </ArrowRightButton>
               {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
             </AssistantItem>
@@ -120,7 +126,7 @@ const Container = styled.div`
   height: calc(100vh - var(--navbar-height));
   overflow-y: auto;
   padding-top: 10px;
-  padding-bottom: 0;
+  padding-bottom: 10px;
 `
 
 const AssistantItem = styled.div`
@@ -134,7 +140,7 @@ const AssistantItem = styled.div`
   padding-right: 35px;
   cursor: pointer;
   font-family: Ubuntu;
-  .anticon {
+  .iconfont {
     opacity: 0;
     color: var(--color-text-3);
   }
@@ -143,7 +149,7 @@ const AssistantItem = styled.div`
     .topics-count {
       display: none;
     }
-    .anticon {
+    .iconfont {
       opacity: 1;
     }
   }
@@ -152,7 +158,7 @@ const AssistantItem = styled.div`
     .topics-count {
       display: none;
     }
-    .anticon {
+    .iconfont {
       opacity: 1;
       color: var(--color-text-2);
     }
@@ -182,6 +188,9 @@ const ArrowRightButton = styled.div`
   position: absolute;
   right: 10px;
   top: 5px;
+  .anticon {
+    font-size: 14px;
+  }
   &:hover {
     background-color: var(--color-background);
   }

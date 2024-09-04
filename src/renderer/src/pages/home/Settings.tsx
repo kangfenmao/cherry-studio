@@ -87,7 +87,7 @@ const SettingsTab: FC<Props> = (props) => {
 
   return (
     <Container>
-      <SettingSubtitle>
+      <SettingSubtitle style={{ marginTop: 5 }}>
         {t('settings.messages.model.title')}{' '}
         <Tooltip title={t('chat.settings.reset')}>
           <ReloadOutlined onClick={onReset} style={{ cursor: 'pointer', fontSize: 12, padding: '0 3px' }} />
@@ -234,13 +234,9 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  width: var(--topic-list-width);
-  max-width: var(--topic-list-width);
-  height: calc(100vh - var(--navbar-height));
-  border-left: 0.5px solid var(--color-border);
-  padding: 0 15px;
-  padding-bottom: 20px;
-  overflow-y: auto;
+  overflow: hidden;
+  min-width: 300px;
+  padding-bottom: 10px;
 `
 
 const Label = styled.p`

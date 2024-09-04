@@ -23,7 +23,7 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
   }
 
   return (
-    <SelectModelDropdown model={model} onSelect={setModel}>
+    <SelectModelDropdown model={model} onSelect={setModel} placement="topLeft">
       <DropdownButton size="small" type="default">
         <ModelAvatar model={model} size={20} />
         <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>

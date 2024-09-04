@@ -127,7 +127,7 @@ const Container = styled.div`
   padding-top: 10px;
   min-width: var(--topic-list-width);
   max-width: var(--topic-list-width);
-  border-left: 0.5px solid var(--color-border);
+  border-right: 0.5px solid var(--color-border);
   overflow-y: scroll;
   height: calc(100vh - var(--navbar-height));
 `
@@ -146,7 +146,8 @@ const TopicListItem = styled.div`
     background-color: var(--color-background-soft);
   }
   &.active {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-primary);
+    color: white;
   }
 `
 

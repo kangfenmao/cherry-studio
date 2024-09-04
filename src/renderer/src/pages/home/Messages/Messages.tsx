@@ -20,9 +20,10 @@ import Prompt from './Prompt'
 interface Props {
   assistant: Assistant
   topic: Topic
+  setActiveTopic: (topic: Topic) => void
 }
 
-const Messages: FC<Props> = ({ assistant, topic }) => {
+const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const provider = useProviderByAssistant(assistant)
@@ -42,9 +43,13 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
     const _topic = getTopic(assistant, topic.id)
     if (_topic && _topic.name === t('chat.default.topic.name') && messages.length >= 2) {
       const summaryText = await fetchMessagesSummary({ messages, assistant })
-      summaryText && updateTopic({ ..._topic, name: summaryText })
+      if (summaryText) {
+        const data = { ..._topic, name: summaryText }
+        setActiveTopic(data)
+        updateTopic(data)
+      }
     }
-  }, [assistant, messages, topic, updateTopic])
+  }, [assistant, messages, setActiveTopic, topic.id, updateTopic])
 
   const onDeleteMessage = useCallback(
     (message: Message) => {
@@ -117,6 +122,7 @@ const Messages: FC<Props> = ({ assistant, topic }) => {
 }
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow-y: auto;

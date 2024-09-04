@@ -1,5 +1,11 @@
 import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { setShowRightSidebar, toggleRightSidebar, toggleShowAssistants } from '@renderer/store/settings'
+import {
+  setShowRightSidebar,
+  setShowTopics,
+  toggleRightSidebar,
+  toggleShowAssistants,
+  toggleShowTopics
+} from '@renderer/store/settings'
 
 export function useShowRightSidebar() {
   const showRightSidebar = useAppSelector((state) => state.settings.showRightSidebar)
@@ -20,6 +26,17 @@ export function useShowAssistants() {
   return {
     showAssistants,
     toggleShowAssistants: () => dispatch(toggleShowAssistants())
+  }
+}
+
+export function useShowTopics() {
+  const showTopics = useAppSelector((state) => state.settings.showTopics)
+  const dispatch = useAppDispatch()
+
+  return {
+    showTopics,
+    setShowTopics: (show: boolean) => dispatch(setShowTopics(show)),
+    toggleShowTopics: () => dispatch(toggleShowTopics())
   }
 }
 

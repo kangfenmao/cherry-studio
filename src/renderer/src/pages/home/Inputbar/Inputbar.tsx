@@ -1,16 +1,17 @@
 import {
   ClearOutlined,
   ControlOutlined,
+  FormOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
-  PlusCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { estimateInputTokenCount } from '@renderer/services/messages'
@@ -18,7 +19,7 @@ import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { delay, uuid } from '@renderer/utils'
-import { Button, Divider, Popconfirm, Tag, Tooltip } from 'antd'
+import { Button, Divider, Popconfirm, Popover, Tag, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
@@ -26,6 +27,8 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } 
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import SelectModelButton from '../components/SelectModelButton'
+import SettingsTab from '../Settings'
 import SendMessageButton from './SendMessageButton'
 
 interface Props {
@@ -47,6 +50,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [files, setFiles] = useState<File[]>([])
   const { t } = useTranslation()
   const containerRef = useRef(null)
+  const { toggleShowTopics } = useShowTopics()
 
   _text = text
 
@@ -204,7 +208,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         <ToolbarMenu>
           <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
-              <PlusCircleOutlined />
+              <FormOutlined />
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.clear')} arrow>
@@ -221,15 +225,17 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             </Popconfirm>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
+            <ToolbarButton type="text" onClick={toggleShowTopics}>
               <HistoryOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
-              <ControlOutlined />
-            </ToolbarButton>
-          </Tooltip>
+          <Popover content={<SettingsTab assistant={assistant} />} trigger="click" placement="topRight">
+            <Tooltip placement="top" title={t('chat.input.settings')} arrow>
+              <ToolbarButton type="text">
+                <ControlOutlined />
+              </ToolbarButton>
+            </Tooltip>
+          </Popover>
           {/* <AttachmentButton files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} /> */}
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={onToggleExpended}>
@@ -250,6 +256,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           )}
         </ToolbarMenu>
         <ToolbarMenu>
+          <SelectModelButton assistant={assistant} />
           {generating && (
             <Tooltip placement="top" title={t('chat.input.pause')} arrow>
               <ToolbarButton type="text" onClick={onPause} style={{ marginRight: -2, marginTop: 1 }}>

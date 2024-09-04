@@ -363,6 +363,16 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '23': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        showTopics: true,
+        windowStyle: 'opaque'
+      }
+    }
   }
 }
 

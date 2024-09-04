@@ -79,6 +79,7 @@ export type Suggestion = {
 }
 
 export type MinAppType = {
+  id?: string | number
   name: string
   logo: string
   url: string

@@ -48,8 +48,8 @@
   --status-bar-height: 40px;
   --input-bar-height: 85px;
 
-  --assistants-width: 250px;
-  --topic-list-width: 250px;
+  --assistants-width: 240px;
+  --topic-list-width: 270px;
   --settings-width: var(--assistants-width);
 }
 
@@ -203,4 +203,8 @@ body,
   .minapp-mask {
     background-color: transparent !important;
   }
+}
+
+.ant-drawer-header {
+  -webkit-app-region: no-drag;
 }

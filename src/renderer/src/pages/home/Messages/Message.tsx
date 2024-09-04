@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'
 import UserPopup from '@renderer/components/Popups/UserPopup'
 import { FONT_FAMILY } from '@renderer/config/constant'
+import { startMinAppById } from '@renderer/config/minapp'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
@@ -127,12 +128,18 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     )
   }, [message, t])
 
+  const showMiniApp = () => model?.provider && startMinAppById(model?.provider)
+
   return (
     <MessageContainer key={message.id} className="message">
       <MessageHeader>
         <AvatarWrapper>
           {isAssistantMessage ? (
-            <Avatar src={avatarSource} size={35} style={{ borderRadius: '20%' }}>
+            <Avatar
+              src={avatarSource}
+              size={35}
+              style={{ borderRadius: '20%', cursor: 'pointer' }}
+              onClick={showMiniApp}>
               {avatarName}
             </Avatar>
           ) : (
