@@ -202,6 +202,9 @@ const resources = {
         'theme.dark': 'Dark',
         'theme.light': 'Light',
         'theme.auto': 'Auto',
+        'theme.window.style.title': 'Window Style',
+        'theme.window.style.transparent': 'Transparent Window',
+        'theme.window.style.opaque': 'Opaque Window',
         'font_size.title': 'Message Font Size'
       },
       translate: {
@@ -444,6 +447,9 @@ const resources = {
         'theme.dark': '深色主题',
         'theme.light': '浅色主题',
         'theme.auto': '跟随系统',
+        'theme.window.style.title': '窗口样式',
+        'theme.window.style.transparent': '透明窗口',
+        'theme.window.style.opaque': '不透明窗口',
         'font_size.title': '消息字体大小'
       },
       translate: {

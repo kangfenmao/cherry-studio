@@ -2,6 +2,7 @@ import { TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime, useShowAssistants } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'
 import { FC } from 'react'
@@ -11,8 +12,6 @@ import styled from 'styled-components'
 
 import UserPopup from '../Popups/UserPopup'
 
-const sidebarBackgroundColor = isMac ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
-
 const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
@@ -21,10 +20,14 @@ const Sidebar: FC = () => {
   const { generating } = useRuntime()
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { windowStyle } = useSettings()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
 
   const onEditUser = () => UserPopup.show()
+
+  const macTransparentWindow = isMac && windowStyle === 'transparent'
+  const sidebarBgColor = macTransparentWindow ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
 
   const to = (path: string) => {
     if (generating) {
@@ -39,7 +42,7 @@ const Sidebar: FC = () => {
   }
 
   return (
-    <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBackgroundColor }}>
+    <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBgColor }}>
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus>
@@ -87,7 +90,6 @@ const Container = styled.div`
   -webkit-app-region: drag !important;
   border-right: 0.5px solid var(--color-border);
   margin-top: ${isMac ? 'var(--navbar-height)' : 0};
-  background-color: ${sidebarBackgroundColor};
   transition: background-color 0.3s ease;
 `
 

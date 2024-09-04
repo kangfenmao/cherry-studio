@@ -64,7 +64,7 @@ const HomePage: FC = () => {
         {showAssistants && (
           <NavbarLeft
             style={{ justifyContent: 'space-between', alignItems: 'center', borderRight: 'none', padding: '0 8px' }}>
-            <NavigtaionBack onClick={() => setShowTopics(false)}>
+            <NavigtaionBack className={showTopics ? 'back' : ''} onClick={() => setShowTopics(false)}>
               {showTopics && <ArrowLeftOutlined />}
               <NavigationBackTitle>{showTopics ? t('common.back') : t('common.chat')}</NavigationBackTitle>
             </NavigtaionBack>
@@ -124,16 +124,18 @@ const NavigtaionBack = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  cursor: pointer;
-  margin-left: ${isMac ? '14px' : '2px'};
+  margin-left: ${isMac ? '10px' : 0};
   -webkit-app-region: none;
   transition: all 0.2s ease-in-out;
   transition: opacity 0.2s ease-in-out;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 6px;
-  &:hover {
-    background-color: var(--color-background-mute);
-    color: var(--color-text-1);
+  &.back {
+    cursor: pointer;
+    &:hover {
+      background-color: var(--color-background-mute);
+      color: var(--color-text-1);
+    }
   }
 `
 
@@ -172,7 +174,7 @@ export const NewButton = styled.div`
     font-size: 17px;
   }
   &:hover {
-    background-color: var(--color-background-soft);
+    background-color: var(--color-background-mute);
     cursor: pointer;
     color: var(--color-icon-white);
   }

@@ -70,8 +70,8 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       open={open}
       onCancel={onCancel}
       afterClose={onClose}
-      transitionName=""
-      maskTransitionName=""
+      transitionName="ant-move-down"
+      maskTransitionName="ant-fade"
       footer={null}>
       <Input
         placeholder={t('common.search')}

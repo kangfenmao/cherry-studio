@@ -106,7 +106,7 @@ const Assistants: FC<Props> = ({
 
   if (showTopics) {
     return (
-      <Container>
+      <Container style={{ padding: 0 }}>
         <Topics assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
       </Container>
     )
@@ -155,6 +155,7 @@ const AssistantItem = styled.div`
   position: relative;
   border-radius: 4px;
   margin: 0 10px;
+  padding-right: 35px;
   cursor: pointer;
   font-family: Ubuntu;
   .anticon {

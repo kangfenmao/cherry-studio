@@ -1,15 +1,18 @@
 import { isMac } from '@renderer/config/constant'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime } from '@renderer/hooks/useStore'
 import { FC, PropsWithChildren } from 'react'
 import styled from 'styled-components'
 
 type Props = PropsWithChildren & JSX.IntrinsicElements['div']
 
-const navbarBackgroundColor = isMac ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
-
 export const Navbar: FC<Props> = ({ children, ...props }) => {
   const { minappShow } = useRuntime()
-  const backgroundColor = minappShow ? 'var(--navbar-background)' : navbarBackgroundColor
+  const { windowStyle } = useSettings()
+
+  const macTransparentWindow = isMac && windowStyle === 'transparent'
+  const navbarBgColor = macTransparentWindow ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
+  const backgroundColor = minappShow ? 'var(--navbar-background)' : navbarBgColor
 
   return (
     <NavbarContainer {...props} style={{ backgroundColor }}>
@@ -39,7 +42,6 @@ const NavbarContainer = styled.div`
   margin-left: ${isMac ? 'calc(var(--sidebar-width) * -1)' : 0};
   padding-left: ${isMac ? 'var(--sidebar-width)' : 0};
   border-bottom: 0.5px solid var(--color-border);
-  background-color: ${navbarBackgroundColor};
   transition: background-color 0.3s ease;
   -webkit-app-region: drag;
 `

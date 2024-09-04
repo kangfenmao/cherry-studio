@@ -1,16 +1,13 @@
 import { FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
-import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { backup, reset, restore } from '@renderer/services/backup'
-import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
-import { setAvatar } from '@renderer/store/runtime'
 import { setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
-import { compressImage, isValidProxyUrl } from '@renderer/utils'
-import { Avatar, Button, Input, Select, Upload } from 'antd'
+import { isValidProxyUrl } from '@renderer/utils'
+import { Avatar, Button, Input, Select } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -18,8 +15,7 @@ import styled from 'styled-components'
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '.'
 
 const GeneralSettings: FC = () => {
-  const avatar = useAvatar()
-  const { language, proxyUrl: storeProxyUrl, userName, theme, setTheme } = useSettings()
+  const { language, proxyUrl: storeProxyUrl, userName, theme, windowStyle, setTheme, setWindowStyle } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -72,24 +68,16 @@ const GeneralSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('common.avatar')}</SettingRowTitle>
-        <Upload
-          customRequest={() => {}}
-          accept="image/png, image/jpeg"
-          itemRender={() => null}
-          maxCount={1}
-          onChange={async ({ file }) => {
-            try {
-              const _file = file.originFileObj as File
-              const compressedFile = await compressImage(_file)
-              await LocalStorage.storeImage('avatar', compressedFile)
-              dispatch(setAvatar(await LocalStorage.getImage('avatar')))
-            } catch (error: any) {
-              window.message.error(error.message)
-            }
-          }}>
-          <UserAvatar src={avatar} size="large" />
-        </Upload>
+        <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
+        <Select
+          defaultValue={windowStyle || 'opaque'}
+          style={{ width: 120 }}
+          onChange={setWindowStyle}
+          options={[
+            { value: 'transparent', label: t('settings.theme.window.style.transparent') },
+            { value: 'opaque', label: t('settings.theme.window.style.opaque') }
+          ]}
+        />
       </SettingRow>
       <SettingDivider />
       <SettingRow>
@@ -98,7 +86,7 @@ const GeneralSettings: FC = () => {
           placeholder={t('settings.general.user_name.placeholder')}
           value={userName}
           onChange={(e) => dispatch(setUserName(e.target.value))}
-          style={{ width: 150 }}
+          style={{ width: 170 }}
           maxLength={30}
         />
       </SettingRow>
@@ -109,7 +97,7 @@ const GeneralSettings: FC = () => {
           placeholder="socks5://127.0.0.1:6153"
           value={proxyUrl}
           onChange={(e) => setProxyUrl(e.target.value)}
-          style={{ width: 300 }}
+          style={{ width: 170 }}
           onBlur={() => onSetProxyUrl()}
           type="url"
         />
@@ -117,7 +105,7 @@ const GeneralSettings: FC = () => {
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
-        <HStack gap="5px">
+        <HStack gap="5px" w="170px" justifyContent="space-between">
           <Button onClick={backup} icon={<SaveOutlined />}>
             {t('settings.general.backup.button')}
           </Button>

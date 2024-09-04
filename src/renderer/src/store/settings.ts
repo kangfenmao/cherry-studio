@@ -18,6 +18,7 @@ export interface SettingsState {
   messageFont: 'system' | 'serif'
   showInputEstimatedTokens: boolean
   theme: ThemeMode
+  windowStyle: 'transparent' | 'opaque'
   fontSize: number
 }
 
@@ -31,6 +32,7 @@ const initialState: SettingsState = {
   messageFont: 'system',
   showInputEstimatedTokens: false,
   theme: ThemeMode.light,
+  windowStyle: 'opaque',
   fontSize: 14
 }
 
@@ -67,6 +69,10 @@ const settingsSlice = createSlice({
     },
     setFontSize: (state, action: PayloadAction<number>) => {
       state.fontSize = action.payload
+    },
+    setWindowStyle: (state, action: PayloadAction<'transparent' | 'opaque'>) => {
+      state.windowStyle = action.payload
+      console.log(state.windowStyle)
     }
   }
 })
@@ -81,7 +87,8 @@ export const {
   setMessageFont,
   setShowInputEstimatedTokens,
   setTheme,
-  setFontSize
+  setFontSize,
+  setWindowStyle
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

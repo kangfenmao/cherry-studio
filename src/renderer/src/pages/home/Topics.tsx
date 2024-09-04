@@ -1,13 +1,12 @@
 import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
-import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
-import { droppableReorder } from '@renderer/utils'
-import { Dropdown, MenuProps } from 'antd'
+import { Button, Dropdown, MenuProps } from 'antd'
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -19,7 +18,7 @@ interface Props {
 }
 
 const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
-  const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
+  const { assistant, removeTopic, updateTopic, updateTopics, removeAllTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
@@ -77,17 +76,6 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
     [assistant, removeTopic, setActiveTopic, t, updateTopic]
   )
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      if (result.destination) {
-        const sourceIndex = result.source.index
-        const destIndex = result.destination.index
-        updateTopics(droppableReorder(assistant.topics, sourceIndex, destIndex))
-      }
-    },
-    [assistant.topics, updateTopics]
-  )
-
   const onSwitchTopic = useCallback(
     (topic: Topic) => {
       if (generating) {
@@ -99,35 +87,35 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
     [generating, setActiveTopic, t]
   )
 
+  const onDeleteAll = () => {
+    window.modal.confirm({
+      title: t('chat.topics.delete.all.title'),
+      content: t('chat.topics.delete.all.content'),
+      okButtonProps: { danger: true },
+      onOk: removeAllTopics
+    })
+  }
+
   return (
     <Container>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {assistant.topics.map((topic, index) => (
-                <Draggable key={`draggable_${topic.id}_${index}`} draggableId={topic.id} index={index}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
-                      <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
-                        <TopicListItem
-                          className={topic.id === activeTopic?.id ? 'active' : ''}
-                          onClick={() => onSwitchTopic(topic)}>
-                          {topic.name}
-                        </TopicListItem>
-                      </Dropdown>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <DragableList list={assistant.topics} onUpdate={updateTopics}>
+        {(topic) => (
+          <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
+            <TopicListItem
+              className={topic.id === activeTopic?.id ? 'active' : ''}
+              onClick={() => onSwitchTopic(topic)}>
+              {topic.name}
+            </TopicListItem>
+          </Dropdown>
+        )}
+      </DragableList>
+      {assistant.topics.length > 20 && (
+        <Footer>
+          <Button style={{ width: '100%' }} onClick={onDeleteAll}>
+            {t('chat.topics.delete.all.title')}
+          </Button>
+        </Footer>
+      )}
     </Container>
   )
 }
@@ -136,14 +124,11 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  overflow-y: scroll;
   padding-top: 10px;
-  padding-bottom: 10px;
-  margin-top: -10px;
 `
 
 const TopicListItem = styled.div`
-  padding: 7px 10px;
+  padding: 6px 10px;
   margin: 0 10px;
   cursor: pointer;
   border-radius: 4px;
@@ -151,6 +136,7 @@ const TopicListItem = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: Ubuntu;
+  font-size: 13px;
   &:hover {
     background-color: var(--color-background-soft);
   }
@@ -158,6 +144,12 @@ const TopicListItem = styled.div`
     background-color: var(--color-background-mute);
     font-weight: 500;
   }
+`
+
+const Footer = styled.div`
+  padding: 0 10px;
+  padding-bottom: 10px;
+  width: 100%;
 `
 
 export default Topics
