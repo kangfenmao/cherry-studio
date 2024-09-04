@@ -43,7 +43,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
       {showAssistants && (
         <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
           <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
-            <i className="iconfont icon-sidebar-left" />
+            <i className="iconfont icon-sidebar-right" />
           </NewButton>
           <NewButton onClick={onCreateAssistant} style={{ marginRight: 6 }}>
             <i className="iconfont icon-a-addchat" />
@@ -61,7 +61,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           <HStack alignItems="center">
             {!showAssistants && (
               <NewButton onClick={toggleShowAssistants} style={{ marginRight: isMac ? 8 : 25 }}>
-                <i className="iconfont icon-sidebar-right" />
+                <i className="iconfont icon-sidebar-left" />
               </NewButton>
             )}
             {showAssistants && (
@@ -78,8 +78,10 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
       <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 130 : 12, flex: 1 }}>
         <HStack alignItems="center">
           {!showAssistants && !showTopics && (
-            <NewButton onClick={() => toggleShowAssistants()} style={{ marginRight: isMac ? 8 : 25 }}>
-              <i className="iconfont icon-sidebar-right" />
+            <NewButton
+              onClick={() => toggleShowAssistants()}
+              style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 8 : 0 }}>
+              <i className="iconfont icon-sidebar-left" />
             </NewButton>
           )}
           <TitleText>

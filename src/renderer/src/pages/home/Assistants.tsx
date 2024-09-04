@@ -86,14 +86,10 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
         })
       }
 
-      if (assistant.id === activeAssistant?.id) {
-        toggleShowTopics()
-      }
-
       EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
       setActiveAssistant(assistant)
     },
-    [activeAssistant?.id, generating, setActiveAssistant, t, toggleShowTopics]
+    [generating, setActiveAssistant, t]
   )
 
   return (
@@ -105,7 +101,13 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
               onClick={() => onSwitchAssistant(assistant)}
               className={assistant.id === activeAssistant?.id ? 'active' : ''}>
               <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-              <ArrowRightButton className="arrow-button">
+              <ArrowRightButton
+                className="arrow-button"
+                onClick={() => {
+                  if (assistant.id === activeAssistant?.id) {
+                    toggleShowTopics()
+                  }
+                }}>
                 <i className="iconfont icon-gridlines" />
               </ArrowRightButton>
               {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
@@ -144,7 +146,7 @@ const AssistantItem = styled.div`
     opacity: 0;
     color: var(--color-text-3);
   }
-  &:hover {
+  /* &:hover {
     background-color: var(--color-background-soft);
     .topics-count {
       display: none;
@@ -152,7 +154,7 @@ const AssistantItem = styled.div`
     .iconfont {
       opacity: 1;
     }
-  }
+  } */
   &.active {
     background-color: var(--color-background-mute);
     .topics-count {
