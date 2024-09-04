@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, UnorderedListOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter, NavbarLeft } from '@renderer/components/app/Navbar'
 import { HStack } from '@renderer/components/Layout'
 import { isMac, isWindows } from '@renderer/config/constant'
@@ -64,17 +64,17 @@ const HomePage: FC = () => {
         {showAssistants && (
           <NavbarLeft
             style={{ justifyContent: 'space-between', alignItems: 'center', borderRight: 'none', padding: '0 8px' }}>
-            <NavigtaionBack className={showTopics ? 'back' : ''} onClick={() => setShowTopics(false)}>
-              {showTopics && <ArrowLeftOutlined />}
-              <NavigationBackTitle>{showTopics ? t('common.back') : t('common.chat')}</NavigationBackTitle>
-            </NavigtaionBack>
+            <NewButton onClick={() => setShowTopics(!showTopics)} className="back-button">
+              {showTopics ? <ArrowLeftOutlined /> : <UnorderedListOutlined />}
+              <BackText>{showTopics ? t('common.assistant') : t('chat.topics.title')}</BackText>
+            </NewButton>
             <NewButton onClick={onCreate}>
               <i className="iconfont icon-a-addchat"></i>
             </NewButton>
           </NavbarLeft>
         )}
         <NavbarCenter
-          style={{ paddingLeft: isMac ? 16 : 8, justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12 }}>
+          style={{ justifyContent: 'space-between', paddingLeft: isMac ? 16 : 8, paddingRight: isWindows ? 135 : 12 }}>
           <HStack alignItems="center">
             <AssistantName>{activeAssistant?.name || t('chat.default.name')}</AssistantName>
             <SelectModelButton assistant={activeAssistant} />
@@ -118,45 +118,20 @@ const ContentContainer = styled.div`
   background-color: var(--color-background);
 `
 
-const NavigtaionBack = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  margin-left: ${isMac ? '10px' : 0};
-  -webkit-app-region: none;
-  transition: all 0.2s ease-in-out;
-  transition: opacity 0.2s ease-in-out;
-  padding: 3px 8px;
-  border-radius: 6px;
-  &.back {
-    cursor: pointer;
-    &:hover {
-      background-color: var(--color-background-mute);
-      color: var(--color-text-1);
-    }
-  }
-`
-
-const NavigationBackTitle = styled.div`
-  font-size: 14px;
-  font-weight: 800;
-  font-family: Ubuntu;
-`
-
 const AssistantName = styled.span`
   margin-left: 5px;
   margin-right: 10px;
   font-family: Ubuntu;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 500;
 `
 
 export const NewButton = styled.div`
   -webkit-app-region: none;
   border-radius: 4px;
-  width: 30px;
+  padding: 0 5px;
   height: 30px;
+  gap: 5px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -173,11 +148,29 @@ export const NewButton = styled.div`
   .icon-hidesidebarhoriz {
     font-size: 17px;
   }
+  &.back-button {
+    margin-left: ${isMac ? '8px' : 0};
+    .anticon {
+      font-size: 16px;
+    }
+    .anticon-arrow-left {
+      font-size: 14px;
+    }
+    &:hover {
+      background-color: var(--color-background-mute);
+      color: var(--color-icon-white);
+    }
+  }
   &:hover {
     background-color: var(--color-background-mute);
     cursor: pointer;
     color: var(--color-icon-white);
   }
+`
+
+const BackText = styled.span`
+  font-size: 12px;
+  font-weight: 400;
 `
 
 const ThemeSwitch = styled(Switch)`

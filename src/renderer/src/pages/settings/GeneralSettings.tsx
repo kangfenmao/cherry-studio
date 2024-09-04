@@ -7,10 +7,9 @@ import { useAppDispatch } from '@renderer/store'
 import { setLanguage, setUserName, ThemeMode } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { isValidProxyUrl } from '@renderer/utils'
-import { Avatar, Button, Input, Select } from 'antd'
+import { Button, Input, Select } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '.'
 
@@ -127,9 +126,5 @@ const GeneralSettings: FC = () => {
     </SettingContainer>
   )
 }
-
-const UserAvatar = styled(Avatar)`
-  cursor: pointer;
-`
 
 export default GeneralSettings

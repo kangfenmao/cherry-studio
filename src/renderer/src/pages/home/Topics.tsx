@@ -109,7 +109,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           </Dropdown>
         )}
       </DragableList>
-      {assistant.topics.length > 20 && (
+      {assistant.topics.length > 10 && (
         <Footer>
           <Button style={{ width: '100%' }} onClick={onDeleteAll}>
             {t('chat.topics.delete.all.title')}
@@ -128,7 +128,7 @@ const Container = styled.div`
 `
 
 const TopicListItem = styled.div`
-  padding: 6px 10px;
+  padding: 5px 10px;
   margin: 0 10px;
   cursor: pointer;
   border-radius: 4px;
@@ -142,7 +142,6 @@ const TopicListItem = styled.div`
   }
   &.active {
     background-color: var(--color-background-mute);
-    font-weight: 500;
   }
 `
 

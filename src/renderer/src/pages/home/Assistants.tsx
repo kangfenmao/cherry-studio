@@ -121,7 +121,7 @@ const Assistants: FC<Props> = ({
               onClick={() => onSwitchAssistant(assistant)}
               className={assistant.id === activeAssistant?.id ? 'active' : ''}>
               <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-              <Tooltip arrow title="话题列表" placement="bottom" mouseEnterDelay={0.5}>
+              <Tooltip arrow title={t('chat.topics.list')} placement="bottom" mouseEnterDelay={0.5}>
                 <ArrowRightButton className="arrow-button" onClick={() => setShowTopics(true)}>
                   <ArrowRightOutlined />
                 </ArrowRightButton>
@@ -180,9 +180,6 @@ const AssistantItem = styled.div`
       opacity: 1;
       color: var(--color-text-2);
     }
-    .name {
-      font-weight: 500;
-    }
   }
 `
 
@@ -192,6 +189,7 @@ const AssistantName = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-size: 13px;
 `
 
 const ArrowRightButton = styled.div`
