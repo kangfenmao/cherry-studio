@@ -34,7 +34,14 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
   }
 
   return (
-    <Modal title={assistant.name} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
+    <Modal
+      title={assistant.name}
+      open={open}
+      onOk={onOk}
+      onCancel={handleCancel}
+      afterClose={onClose}
+      transitionName="ant-move-down"
+      maskTransitionName="ant-fade">
       <Box mb={8}>{t('common.name')}</Box>
       <Input
         placeholder={t('common.assistant') + t('common.name')}

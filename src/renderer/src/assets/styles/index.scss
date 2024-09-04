@@ -36,8 +36,8 @@
   --color-error: #f44336;
   --color-link: #1677ff;
   --color-code-background: #323232;
-  --color-scrollbar-thumb: rgba(255, 255, 255, 0.15);
-  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+  --color-scrollbar-thumb: rgba(255, 255, 255, 0.08);
+  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.15);
 
   --navbar-background-mac: rgba(30, 30, 30, 0.8);
   --navbar-background: rgba(30, 30, 30);
@@ -48,8 +48,8 @@
   --status-bar-height: 40px;
   --input-bar-height: 85px;
 
-  --assistants-width: 280px;
-  --topic-list-width: 280px;
+  --assistants-width: 250px;
+  --topic-list-width: 250px;
   --settings-width: var(--assistants-width);
 }
 
@@ -86,8 +86,8 @@ body[theme-mode='light'] {
   --color-error: #f44336;
   --color-link: #1677ff;
   --color-code-background: #e3e3e3;
-  --color-scrollbar-thumb: rgba(0, 0, 0, 0.15);
-  --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
+  --color-scrollbar-thumb: rgba(0, 0, 0, 0.08);
+  --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.15);
 
   --navbar-background-mac: rgba(255, 255, 255, 0.75);
   --navbar-background: rgba(255, 255, 255);

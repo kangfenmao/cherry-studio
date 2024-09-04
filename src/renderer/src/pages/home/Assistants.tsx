@@ -5,36 +5,22 @@ import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
-import { Assistant, Topic } from '@renderer/types'
+import { Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Dropdown, Tooltip } from 'antd'
+import { Dropdown } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { last } from 'lodash'
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import Topics from './Topics'
-
 interface Props {
   activeAssistant: Assistant
   setActiveAssistant: (assistant: Assistant) => void
-  activeTopic: Topic
-  setActiveTopic: (topic: Topic) => void
-  showTopics: boolean
-  setShowTopics: (showTopics: boolean) => void
   onCreateAssistant: () => void
 }
 
-const Assistants: FC<Props> = ({
-  activeAssistant,
-  setActiveAssistant,
-  activeTopic,
-  setActiveTopic,
-  showTopics,
-  setShowTopics,
-  onCreateAssistant
-}) => {
+const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
   const { updateAssistant } = useAssistant(activeAssistant.id)
@@ -49,6 +35,15 @@ const Assistants: FC<Props> = ({
     [assistants, onCreateAssistant, removeAssistant, setActiveAssistant]
   )
 
+  const onEditAssistant = useCallback(
+    async (assistant: Assistant) => {
+      const _assistant = await AssistantSettingPopup.show({ assistant })
+      updateAssistant(_assistant)
+      syncAsistantToAgent(_assistant)
+    },
+    [updateAssistant]
+  )
+
   const getMenuItems = useCallback(
     (assistant: Assistant) =>
       [
@@ -56,11 +51,7 @@ const Assistants: FC<Props> = ({
           label: t('common.edit'),
           key: 'edit',
           icon: <EditOutlined />,
-          async onClick() {
-            const _assistant = await AssistantSettingPopup.show({ assistant })
-            updateAssistant(_assistant)
-            syncAsistantToAgent(_assistant)
-          }
+          onClick: () => onEditAssistant(assistant)
         },
         {
           label: t('common.duplicate'),
@@ -81,7 +72,7 @@ const Assistants: FC<Props> = ({
           onClick: () => onDelete(assistant)
         }
       ] as ItemType[],
-    [addAssistant, onDelete, setActiveAssistant, t, updateAssistant]
+    [addAssistant, onDelete, onEditAssistant, setActiveAssistant, t]
   )
 
   const onSwitchAssistant = useCallback(
@@ -93,24 +84,11 @@ const Assistants: FC<Props> = ({
         })
       }
 
-      if (assistant.id === activeAssistant?.id) {
-        setShowTopics(true)
-        return
-      }
-
       EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
       setActiveAssistant(assistant)
     },
-    [activeAssistant?.id, generating, setActiveAssistant, setShowTopics, t]
+    [generating, setActiveAssistant, t]
   )
-
-  if (showTopics) {
-    return (
-      <Container style={{ padding: 0 }}>
-        <Topics assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
-      </Container>
-    )
-  }
 
   return (
     <Container>
@@ -121,11 +99,9 @@ const Assistants: FC<Props> = ({
               onClick={() => onSwitchAssistant(assistant)}
               className={assistant.id === activeAssistant?.id ? 'active' : ''}>
               <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-              <Tooltip arrow title={t('chat.topics.list')} placement="bottom" mouseEnterDelay={0.5}>
-                <ArrowRightButton className="arrow-button" onClick={() => setShowTopics(true)}>
-                  <ArrowRightOutlined />
-                </ArrowRightButton>
-              </Tooltip>
+              <ArrowRightButton className="arrow-button" onClick={() => onEditAssistant(assistant)}>
+                <ArrowRightOutlined />
+              </ArrowRightButton>
               {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
             </AssistantItem>
           </Dropdown>
@@ -205,6 +181,7 @@ const ArrowRightButton = styled.div`
   border-radius: 4px;
   position: absolute;
   right: 10px;
+  top: 5px;
   &:hover {
     background-color: var(--color-background);
   }

@@ -1,7 +1,7 @@
 /* 全局初始化滚动条样式 */
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
+  width: 2px;
+  height: 2px;
 }
 
 ::-webkit-scrollbar-track {
@@ -10,7 +10,6 @@
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-scrollbar-thumb);
-  border-radius: 5px;
   &:hover {
     background: var(--color-scrollbar-thumb-hover);
   }

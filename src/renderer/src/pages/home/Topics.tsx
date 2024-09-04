@@ -125,10 +125,15 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   padding-top: 10px;
+  min-width: var(--topic-list-width);
+  max-width: var(--topic-list-width);
+  border-left: 0.5px solid var(--color-border);
+  overflow-y: scroll;
+  height: calc(100vh - var(--navbar-height));
 `
 
 const TopicListItem = styled.div`
-  padding: 5px 10px;
+  padding: 7px 10px;
   margin: 0 10px;
   cursor: pointer;
   border-radius: 4px;

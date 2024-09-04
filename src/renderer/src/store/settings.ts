@@ -9,6 +9,7 @@ export enum ThemeMode {
 }
 
 export interface SettingsState {
+  showRightSidebar: boolean
   showAssistants: boolean
   sendMessageShortcut: SendMessageShortcut
   language: string
@@ -23,6 +24,7 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
+  showRightSidebar: true,
   showAssistants: true,
   sendMessageShortcut: 'Enter',
   language: navigator.language,
@@ -32,7 +34,7 @@ const initialState: SettingsState = {
   messageFont: 'system',
   showInputEstimatedTokens: false,
   theme: ThemeMode.light,
-  windowStyle: 'opaque',
+  windowStyle: 'transparent',
   fontSize: 14
 }
 
@@ -40,6 +42,12 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
+    toggleRightSidebar: (state) => {
+      state.showRightSidebar = !state.showRightSidebar
+    },
+    setShowRightSidebar: (state, action: PayloadAction<boolean>) => {
+      state.showRightSidebar = action.payload
+    },
     toggleShowAssistants: (state) => {
       state.showAssistants = !state.showAssistants
     },
@@ -78,6 +86,8 @@ const settingsSlice = createSlice({
 })
 
 export const {
+  setShowRightSidebar,
+  toggleRightSidebar,
   toggleShowAssistants,
   setSendMessageShortcut,
   setLanguage,

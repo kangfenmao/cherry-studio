@@ -3,6 +3,7 @@ import {
   ControlOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
+  HistoryOutlined,
   PauseCircleOutlined,
   PlusCircleOutlined,
   QuestionCircleOutlined
@@ -30,13 +31,11 @@ import SendMessageButton from './SendMessageButton'
 interface Props {
   assistant: Assistant
   setActiveTopic: (topic: Topic) => void
-  showSetting: boolean
-  setShowSetting: (show: boolean) => void
 }
 
 let _text = ''
 
-const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSetting }) => {
+const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic } = useAssistant(assistant.id)
@@ -221,8 +220,13 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSe
               </ToolbarButton>
             </Popconfirm>
           </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.settings')} arrow className={showSetting ? 'active' : ''}>
-            <ToolbarButton type="text" onClick={() => setShowSetting(!showSetting)}>
+          <Tooltip placement="top" title={t('chat.input.topics')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
+              <HistoryOutlined />
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
@@ -236,7 +240,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic, showSetting, setShowSe
             <TextCount>
               <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
                 <StyledTag>
-                  <i className="iconfont icon-history" style={{ marginRight: '3px' }} />
                   {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}
                   <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
                   <span style={{ margin: '0 2px' }}>/</span>
@@ -342,11 +345,12 @@ const TextCount = styled.div`
 
 const StyledTag = styled(Tag)`
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   padding: 2px 8px;
   border-width: 0.5;
+  margin: 0;
 `
 
 export default Inputbar

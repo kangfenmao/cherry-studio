@@ -4,13 +4,14 @@ import { FC } from 'react'
 
 interface Props<T> {
   list: T[]
+  style?: React.CSSProperties
   children: (item: T, index: number) => React.ReactNode
   onUpdate: (list: T[]) => void
   onDragStart?: () => void
   onDragEnd?: () => void
 }
 
-const DragableList: FC<Props<any>> = ({ children, list, onDragStart, onUpdate, onDragEnd }) => {
+const DragableList: FC<Props<any>> = ({ children, list, style, onDragStart, onUpdate, onDragEnd }) => {
   const _onDragEnd = (result: DropResult) => {
     onDragEnd?.()
     if (result.destination) {
@@ -33,7 +34,7 @@ const DragableList: FC<Props<any>> = ({ children, list, onDragStart, onUpdate, o
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    style={{ ...provided.draggableProps.style, marginBottom: 8 }}>
+                    style={{ ...provided.draggableProps.style, marginBottom: 8, ...style }}>
                     {children(item, index)}
                   </div>
                 )}
