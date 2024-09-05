@@ -34,7 +34,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     (message: Message) => {
       const _messages = [...messages, message]
       setMessages(_messages)
-      localforage.setItem(`topic:${topic.id}`, { ...topic, messages: _messages })
+      localforage.setItem(`topic:${topic.id}`, { id: topic.id, messages: _messages })
     },
     [messages, topic]
   )

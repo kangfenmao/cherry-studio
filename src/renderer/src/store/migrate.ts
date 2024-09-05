@@ -1,7 +1,8 @@
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
-import { isEmpty } from 'lodash'
+import localforage from 'localforage'
+import { isEmpty, pick } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
 import { RootState } from '.'
@@ -371,6 +372,27 @@ const migrateConfig = {
         ...state.settings,
         showTopics: true,
         windowStyle: 'transparent'
+      }
+    }
+  },
+  '24': async (state: RootState) => {
+    for (const key of await localforage.keys()) {
+      if (key.startsWith('topic:')) {
+        localforage.getItem(key).then((topic) => localforage.setItem(key, pick(topic, ['id', 'messages'])))
+      }
+    }
+    return {
+      ...state,
+      assistants: {
+        ...state.assistants,
+        assistants: state.assistants.assistants.map((assistant) => ({
+          ...assistant,
+          topics: assistant.topics.map((topic) => ({
+            ...topic,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }))
+        }))
       }
     }
   }

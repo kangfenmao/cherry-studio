@@ -44,11 +44,14 @@ const assistantsSlice = createSlice({
       )
     },
     addTopic: (state, action: PayloadAction<{ assistantId: string; topic: Topic }>) => {
+      const topic = action.payload.topic
+      topic.createdAt = new Date().toISOString()
+      topic.updatedAt = new Date().toISOString()
       state.assistants = state.assistants.map((assistant) =>
         assistant.id === action.payload.assistantId
           ? {
               ...assistant,
-              topics: uniqBy([action.payload.topic, ...assistant.topics], 'id')
+              topics: uniqBy([topic, ...assistant.topics], 'id')
             }
           : assistant
       )
@@ -64,13 +67,13 @@ const assistantsSlice = createSlice({
       )
     },
     updateTopic: (state, action: PayloadAction<{ assistantId: string; topic: Topic }>) => {
+      const newTopic = action.payload.topic
+      newTopic.updatedAt = new Date().toISOString()
       state.assistants = state.assistants.map((assistant) =>
         assistant.id === action.payload.assistantId
           ? {
               ...assistant,
-              topics: assistant.topics.map((topic) =>
-                topic.id === action.payload.topic.id ? action.payload.topic : topic
-              )
+              topics: assistant.topics.map((topic) => (topic.id === newTopic.id ? newTopic : topic))
             }
           : assistant
       )
