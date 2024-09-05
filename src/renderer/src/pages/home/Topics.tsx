@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
@@ -21,6 +22,9 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
+  const { topicPosition } = useSettings()
+
+  const borderStyle = '0.5px solid var(--color-border)'
 
   const getTopicMenuItems = useCallback(
     (topic: Topic) => {
@@ -88,17 +92,19 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   )
 
   return (
-    <Container>
+    <Container style={topicPosition === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }}>
       <DragableList list={assistant.topics} onUpdate={updateTopics}>
-        {(topic) => (
-          <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
-            <TopicListItem
-              className={topic.id === activeTopic?.id ? 'active' : ''}
-              onClick={() => onSwitchTopic(topic)}>
-              {topic.name}
-            </TopicListItem>
-          </Dropdown>
-        )}
+        {(topic) => {
+          const isActive = topic.id === activeTopic?.id
+          const activeClass = topicPosition === 'left' ? 'active-left' : 'active-right'
+          return (
+            <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
+              <TopicListItem className={isActive ? activeClass : ''} onClick={() => onSwitchTopic(topic)}>
+                {topic.name}
+              </TopicListItem>
+            </Dropdown>
+          )
+        }}
       </DragableList>
     </Container>
   )
@@ -112,6 +118,7 @@ const Container = styled.div`
   min-width: var(--topic-list-width);
   max-width: var(--topic-list-width);
   border-right: 0.5px solid var(--color-border);
+  border-left: 0.5px solid var(--color-border);
   overflow-y: scroll;
   height: calc(100vh - var(--navbar-height));
 `
@@ -129,9 +136,13 @@ const TopicListItem = styled.div`
   &:hover {
     background-color: var(--color-background-soft);
   }
-  &.active {
+  &.active-left {
     background-color: var(--color-primary);
     color: white;
+    font-weight: 500;
+  }
+  &.active-right {
+    background-color: var(--color-background-mute);
     font-weight: 500;
   }
 `

@@ -393,6 +393,10 @@ const migrateConfig = {
             updatedAt: new Date().toISOString()
           }))
         }))
+      },
+      settings: {
+        ...state.settings,
+        topicPosition: 'right'
       }
     }
   }

@@ -3,6 +3,7 @@ import {
   SendMessageShortcut,
   setSendMessageShortcut as _setSendMessageShortcut,
   setTheme,
+  setTopicPosition,
   setWindowStyle,
   ThemeMode
 } from '@renderer/store/settings'
@@ -21,6 +22,9 @@ export function useSettings() {
     },
     setWindowStyle(windowStyle: 'transparent' | 'opaque') {
       dispatch(setWindowStyle(windowStyle))
+    },
+    setTopicPosition(topicPosition: 'left' | 'right') {
+      dispatch(setTopicPosition(topicPosition))
     }
   }
 }

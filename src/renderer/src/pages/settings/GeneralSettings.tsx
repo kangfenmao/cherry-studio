@@ -14,7 +14,17 @@ import { useTranslation } from 'react-i18next'
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '.'
 
 const GeneralSettings: FC = () => {
-  const { language, proxyUrl: storeProxyUrl, userName, theme, windowStyle, setTheme, setWindowStyle } = useSettings()
+  const {
+    language,
+    proxyUrl: storeProxyUrl,
+    userName,
+    theme,
+    windowStyle,
+    topicPosition,
+    setTheme,
+    setWindowStyle,
+    setTopicPosition
+  } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -75,6 +85,19 @@ const GeneralSettings: FC = () => {
           options={[
             { value: 'transparent', label: t('settings.theme.window.style.transparent') },
             { value: 'opaque', label: t('settings.theme.window.style.opaque') }
+          ]}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
+        <Select
+          defaultValue={topicPosition || 'right'}
+          style={{ width: 180 }}
+          onChange={setTopicPosition}
+          options={[
+            { value: 'left', label: t('settings.topic.position.left') },
+            { value: 'right', label: t('settings.topic.position.right') }
           ]}
         />
       </SettingRow>

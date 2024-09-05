@@ -207,7 +207,10 @@ const resources = {
         'theme.window.style.title': 'Window Style',
         'theme.window.style.transparent': 'Transparent Window',
         'theme.window.style.opaque': 'Opaque Window',
-        'font_size.title': 'Message Font Size'
+        'font_size.title': 'Message Font Size',
+        'topic.position': 'Topic Position',
+        'topic.position.left': 'Left',
+        'topic.position.right': 'Right'
       },
       translate: {
         title: 'Translation',
@@ -454,7 +457,10 @@ const resources = {
         'theme.window.style.title': '窗口样式',
         'theme.window.style.transparent': '透明窗口',
         'theme.window.style.opaque': '不透明窗口',
-        'font_size.title': '消息字体大小'
+        'font_size.title': '消息字体大小',
+        'topic.position': '话题位置',
+        'topic.position.left': '左侧',
+        'topic.position.right': '右侧'
       },
       translate: {
         title: '翻译',

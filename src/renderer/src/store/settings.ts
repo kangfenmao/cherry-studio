@@ -9,7 +9,6 @@ export enum ThemeMode {
 }
 
 export interface SettingsState {
-  showRightSidebar: boolean
   showAssistants: boolean
   showTopics: boolean
   sendMessageShortcut: SendMessageShortcut
@@ -22,10 +21,10 @@ export interface SettingsState {
   theme: ThemeMode
   windowStyle: 'transparent' | 'opaque'
   fontSize: number
+  topicPosition: 'left' | 'right'
 }
 
 const initialState: SettingsState = {
-  showRightSidebar: true,
   showAssistants: true,
   showTopics: true,
   sendMessageShortcut: 'Enter',
@@ -37,19 +36,14 @@ const initialState: SettingsState = {
   showInputEstimatedTokens: false,
   theme: ThemeMode.light,
   windowStyle: 'opaque',
-  fontSize: 14
+  fontSize: 14,
+  topicPosition: 'right'
 }
 
 const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    toggleRightSidebar: (state) => {
-      state.showRightSidebar = !state.showRightSidebar
-    },
-    setShowRightSidebar: (state, action: PayloadAction<boolean>) => {
-      state.showRightSidebar = action.payload
-    },
     setShowAssistants: (state, action: PayloadAction<boolean>) => {
       state.showAssistants = action.payload
     },
@@ -92,13 +86,14 @@ const settingsSlice = createSlice({
     setWindowStyle: (state, action: PayloadAction<'transparent' | 'opaque'>) => {
       state.windowStyle = action.payload
       console.log(state.windowStyle)
+    },
+    setTopicPosition: (state, action: PayloadAction<'left' | 'right'>) => {
+      state.topicPosition = action.payload
     }
   }
 })
 
 export const {
-  setShowRightSidebar,
-  toggleRightSidebar,
   setShowAssistants,
   toggleShowAssistants,
   setShowTopics,
@@ -112,7 +107,8 @@ export const {
   setShowInputEstimatedTokens,
   setTheme,
   setFontSize,
-  setWindowStyle
+  setWindowStyle,
+  setTopicPosition
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

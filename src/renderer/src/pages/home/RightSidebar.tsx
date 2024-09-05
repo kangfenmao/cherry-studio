@@ -1,5 +1,5 @@
 import { BarsOutlined, SettingOutlined } from '@ant-design/icons'
-import { useShowRightSidebar } from '@renderer/hooks/useStore'
+import { useShowTopics } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
 import { Segmented } from 'antd'
@@ -18,7 +18,7 @@ interface Props {
 
 const RightSidebar: FC<Props> = (props) => {
   const [tab, setTab] = useState<'topic' | 'settings'>('topic')
-  const { rightSidebarShown, showRightSidebar, hideRightSidebar } = useShowRightSidebar()
+  const { showTopics, setShowTopics } = useShowTopics()
   const { t } = useTranslation()
   const isTopicTab = tab === 'topic'
   const isSettingsTab = tab === 'settings'
@@ -26,31 +26,31 @@ const RightSidebar: FC<Props> = (props) => {
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SHOW_TOPIC_SIDEBAR, (): any => {
-        if (rightSidebarShown && isTopicTab) {
-          return hideRightSidebar()
+        if (showTopics && isTopicTab) {
+          return setShowTopics(false)
         }
-        if (rightSidebarShown) {
+        if (showTopics) {
           return setTab('topic')
         }
-        showRightSidebar()
+        setShowTopics(true)
         setTab('topic')
       }),
       EventEmitter.on(EVENT_NAMES.SHOW_CHAT_SETTINGS, (): any => {
-        if (rightSidebarShown && isSettingsTab) {
-          return hideRightSidebar()
+        if (showTopics && isSettingsTab) {
+          return setShowTopics(false)
         }
-        if (rightSidebarShown) {
+        if (showTopics) {
           return setTab('settings')
         }
-        showRightSidebar()
+        setShowTopics(true)
         setTab('settings')
       }),
       EventEmitter.on(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR, () => setTab('topic'))
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [hideRightSidebar, isSettingsTab, isTopicTab, rightSidebarShown, showRightSidebar])
+  }, [isSettingsTab, isTopicTab, showTopics, setShowTopics])
 
-  if (!rightSidebarShown) {
+  if (!showTopics) {
     return null
   }
 

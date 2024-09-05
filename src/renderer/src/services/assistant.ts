@@ -18,6 +18,8 @@ export function getDefaultAssistant(): Assistant {
 export function getDefaultTopic(): Topic {
   return {
     id: uuid(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: i18n.t('chat.default.topic.name'),
     messages: []
   }

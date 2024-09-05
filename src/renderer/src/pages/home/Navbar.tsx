@@ -6,6 +6,7 @@ import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingP
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant, Topic } from '@renderer/types'
@@ -27,8 +28,9 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
   const { assistant, addTopic } = useAssistant(activeAssistant.id)
   const { t } = useTranslation()
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
-  const { showTopics } = useShowTopics()
+  const { showTopics, toggleShowTopics } = useShowTopics()
   const { theme, toggleTheme } = useTheme()
+  const { topicPosition } = useSettings()
 
   const onCreateAssistant = async () => {
     const assistant = await AddAssistantPopup.show()
@@ -53,7 +55,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           </NewButton>
         </NavbarLeft>
       )}
-      {showTopics && (
+      {showTopics && topicPosition === 'left' && (
         <NavbarCenter
           style={{
             paddingLeft: isMac && !showAssistants ? 16 : 8,
@@ -80,7 +82,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
       )}
       <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 130 : 12, flex: 1 }}>
         <HStack alignItems="center">
-          {!showAssistants && !showTopics && (
+          {!showAssistants && (topicPosition === 'left' ? !showTopics : true) && (
             <NewButton
               onClick={() => toggleShowAssistants()}
               style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 8 : 0 }}>
@@ -102,6 +104,11 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
             checked={theme === 'dark'}
             onChange={toggleTheme}
           />
+          {topicPosition === 'right' && (
+            <NewButton onClick={toggleShowTopics}>
+              <i className={`iconfont icon-sidebar-${showTopics ? 'left' : 'right'}`} />
+            </NewButton>
+          )}
         </HStack>
       </NavbarRight>
     </Navbar>
