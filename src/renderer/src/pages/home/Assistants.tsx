@@ -25,7 +25,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
-  const { toggleShowTopics } = useShowTopics()
+  const { showTopics, toggleShowTopics } = useShowTopics()
   const { t } = useTranslation()
 
   const onDelete = useCallback(
@@ -108,25 +108,22 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   return (
     <Container>
       <DragableList list={assistants} onUpdate={updateAssistants}>
-        {(assistant) => (
-          <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
-            <AssistantItem
-              onClick={() => onSwitchAssistant(assistant)}
-              className={assistant.id === activeAssistant?.id ? 'active' : ''}>
-              <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-              <ArrowRightButton
-                className="arrow-button"
-                onClick={() => {
-                  if (assistant.id === activeAssistant?.id) {
-                    toggleShowTopics()
-                  }
-                }}>
-                <i className="iconfont icon-gridlines" />
-              </ArrowRightButton>
-              {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
-            </AssistantItem>
-          </Dropdown>
-        )}
+        {(assistant) => {
+          const isCurrent = assistant.id === activeAssistant?.id
+          return (
+            <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
+              <AssistantItem onClick={() => onSwitchAssistant(assistant)} className={isCurrent ? 'active' : ''}>
+                <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
+                <ArrowRightButton
+                  className={`arrow-button ${isCurrent && showTopics ? 'active' : ''}`}
+                  onClick={() => isCurrent && toggleShowTopics()}>
+                  <i className="iconfont icon-gridlines" />
+                </ArrowRightButton>
+                {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
+              </AssistantItem>
+            </Dropdown>
+          )
+        }}
       </DragableList>
     </Container>
   )
@@ -188,7 +185,6 @@ const ArrowRightButton = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  transition: all 0.2s ease;
   width: 24px;
   height: 24px;
   min-width: 24px;
@@ -201,6 +197,9 @@ const ArrowRightButton = styled.div`
     font-size: 14px;
   }
   &:hover {
+    background-color: var(--color-background);
+  }
+  &.active {
     background-color: var(--color-background);
   }
 `
