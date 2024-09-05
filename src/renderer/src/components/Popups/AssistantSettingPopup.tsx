@@ -52,7 +52,7 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
         {t('common.prompt')}
       </Box>
       <TextArea
-        rows={4}
+        rows={10}
         placeholder={t('common.assistant') + t('common.prompt')}
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
