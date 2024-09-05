@@ -1,4 +1,12 @@
-import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+  OnDragEndResponder,
+  OnDragStartResponder,
+  ResponderProvided
+} from '@hello-pangea/dnd'
 import { droppableReorder } from '@renderer/utils'
 import { FC } from 'react'
 
@@ -7,13 +15,13 @@ interface Props<T> {
   style?: React.CSSProperties
   children: (item: T, index: number) => React.ReactNode
   onUpdate: (list: T[]) => void
-  onDragStart?: () => void
-  onDragEnd?: () => void
+  onDragStart?: OnDragStartResponder
+  onDragEnd?: OnDragEndResponder
 }
 
 const DragableList: FC<Props<any>> = ({ children, list, style, onDragStart, onUpdate, onDragEnd }) => {
-  const _onDragEnd = (result: DropResult) => {
-    onDragEnd?.()
+  const _onDragEnd = (result: DropResult, provided: ResponderProvided) => {
+    onDragEnd?.(result, provided)
     if (result.destination) {
       const sourceIndex = result.source.index
       const destIndex = result.destination.index
