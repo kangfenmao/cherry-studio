@@ -4,7 +4,7 @@ import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
-import { sum, takeRight } from 'lodash'
+import { first, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import BaseProvider from './BaseProvider'
@@ -26,12 +26,16 @@ export default class AnthropicProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    const userMessages = takeRight(messages, contextCount + 1).map((message) => {
+    const userMessages = takeRight(messages, contextCount + 2).map((message) => {
       return {
         role: message.role,
         content: message.content
       }
     })
+
+    if (first(userMessages)?.role === 'assistant') {
+      userMessages.shift()
+    }
 
     return new Promise<void>((resolve, reject) => {
       const stream = this.sdk.messages
@@ -92,6 +96,10 @@ export default class AnthropicProvider extends BaseProvider {
       role: message.role,
       content: message.content
     }))
+
+    if (first(userMessages)?.role === 'assistant') {
+      userMessages.shift()
+    }
 
     const systemMessage = {
       role: 'system',
