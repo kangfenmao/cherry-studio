@@ -101,7 +101,8 @@
     font-family: 'Courier New', Courier, monospace;
   }
 
-  p code {
+  p code,
+  li code {
     background: var(--color-background-mute);
     padding: 3px 5px;
     border-radius: 5px;
@@ -112,13 +113,20 @@
     border-radius: 5px;
     overflow-x: auto;
     font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    background-color: var(--color-background-mute);
+    &:not(pre pre) {
+      > code:not(pre pre > code) {
+        padding: 15px;
+        display: block;
+      }
+    }
     pre {
       margin: 0 !important;
-    }
-    code {
-      background: none;
-      padding: 0;
-      border-radius: 0;
+      code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+      }
     }
   }
 

@@ -49,23 +49,18 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
         style={theme === ThemeMode.dark ? atomDark : oneLight}
         wrapLongLines={true}
         customStyle={{
+          border: '0.5px solid var(--color-code-background)',
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-          marginTop: 0,
-          border: '0.5px solid var(--color-code-background)',
-          borderTop: 'none'
+          marginTop: 0
         }}>
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>
     </>
   ) : (
-    <SyntaxHighlighter
-      {...rest}
-      style={theme === ThemeMode.dark ? atomDark : oneLight}
-      wrapLongLines={true}
-      customStyle={{ border: '0.5px solid var(--color-code-background)', padding: '8px 12px' }}>
-      {String(children).replace(/\n$/, '')}
-    </SyntaxHighlighter>
+    <code {...rest} className={className}>
+      {children}
+    </code>
   )
 }
 
