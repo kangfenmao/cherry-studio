@@ -344,14 +344,19 @@ const ToolbarButton = styled(Button)`
   justify-content: center;
   align-items: center;
   padding: 0;
-  &.anticon {
+  .iconfont {
+    font-size: 17px;
+  }
+  &.anticon,
+  &.iconfont {
     transition: all 0.3s ease;
     color: var(--color-icon);
   }
   &:hover,
   &.active {
     background-color: var(--color-background-soft);
-    .anticon {
+    .anticon,
+    .iconfont {
       color: var(--color-text-1);
     }
   }
