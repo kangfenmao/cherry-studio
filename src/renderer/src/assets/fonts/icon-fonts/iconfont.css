@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 4563475 */
-  src: url('iconfont.woff2?t=1725587595482') format('woff2');
+  src: url('iconfont.woff2?t=1725606177995') format('woff2');
 }
 
 .iconfont {
@@ -9,6 +9,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-a-darkmode:before {
+  content: '\e6cd';
 }
 
 .icon-ai-model:before {

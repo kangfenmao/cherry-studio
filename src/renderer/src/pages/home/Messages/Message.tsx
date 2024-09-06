@@ -132,7 +132,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
 
   if (message.type === 'clear') {
     return (
-      <Divider dashed style={{ padding: '0 20px' }}>
+      <Divider dashed style={{ padding: '0 20px' }} plain>
         {t('chat.message.new.context')}
       </Divider>
     )

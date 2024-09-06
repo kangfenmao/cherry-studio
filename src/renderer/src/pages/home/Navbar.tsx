@@ -10,7 +10,6 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant, Topic } from '@renderer/types'
-import { Switch } from 'antd'
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -80,7 +79,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           </NewButton>
         </NavbarCenter>
       )}
-      <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 136 : 12, flex: 1 }}>
+      <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12, flex: 1 }}>
         <HStack alignItems="center">
           {!showAssistants && (topicPosition === 'left' ? !showTopics : true) && (
             <NewButton
@@ -98,12 +97,13 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           <SelectModelButton assistant={assistant} />
         </HStack>
         <HStack alignItems="center">
-          <ThemeSwitch
-            checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
-            unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}
-            checked={theme === 'dark'}
-            onChange={toggleTheme}
-          />
+          <NewButton onClick={toggleTheme} style={{ marginRight: 3 }}>
+            {theme === 'dark' ? (
+              <i className="iconfont icon-theme icon-theme-light" />
+            ) : (
+              <i className="iconfont icon-a-darkmode" />
+            )}
+          </NewButton>
           {topicPosition === 'right' && (
             <NewButton onClick={toggleShowTopics}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
@@ -119,7 +119,7 @@ export const NewButton = styled.div`
   -webkit-app-region: none;
   border-radius: 4px;
   height: 30px;
-  padding: 0 8px;
+  padding: 0 7px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -129,9 +129,12 @@ export const NewButton = styled.div`
   .iconfont {
     font-size: 19px;
     color: var(--color-icon);
-  }
-  .icon-a-addchat {
-    font-size: 20px;
+    &.icon-a-addchat {
+      font-size: 20px;
+    }
+    &.icon-a-darkmode {
+      font-size: 20px;
+    }
   }
   .anticon {
     color: var(--color-icon);
@@ -148,14 +151,6 @@ const TitleText = styled.span`
   font-family: Ubuntu;
   font-size: 13px;
   font-weight: 500;
-`
-
-const ThemeSwitch = styled(Switch)`
-  -webkit-app-region: no-drag;
-  margin-right: 10px;
-  .icon-theme {
-    font-size: 14px;
-  }
 `
 
 export default HeaderNavbar

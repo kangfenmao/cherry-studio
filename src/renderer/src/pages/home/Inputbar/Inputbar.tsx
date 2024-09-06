@@ -8,6 +8,7 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
+import { isWindows } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowTopics } from '@renderer/hooks/useStore'
@@ -263,7 +264,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             <TextCount>
               <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
                 <StyledTag>
-                  ⊙ {contextCount}
+                  <span style={isWindows ? { fontFamily: 'serif', marginRight: 2 } : { marginRight: 3 }}>⊙</span>
+                  {contextCount}
                   <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
                   <span style={{ margin: '0 2px', fontSize: 10 }}>/</span>
                   {estimateTokenCount}
@@ -379,6 +381,9 @@ const StyledTag = styled(Tag)`
   padding: 2px 8px;
   border-width: 0.5;
   margin: 0;
+  height: 25px;
+  font-size: 12px;
+  line-height: 16px;
 `
 
 export default Inputbar

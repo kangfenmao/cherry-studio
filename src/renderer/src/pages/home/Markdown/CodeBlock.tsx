@@ -37,7 +37,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
   }
 
   return match ? (
-    <div>
+    <>
       <CodeHeader>
         <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
         {!copied && <CopyIcon className="copy" onClick={onCopy} />}
@@ -51,11 +51,15 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
         customStyle={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}>
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>
-    </div>
+    </>
   ) : (
-    <code {...rest} className={className}>
-      {children}
-    </code>
+    <SyntaxHighlighter
+      {...rest}
+      style={theme === ThemeMode.dark ? atomDark : oneLight}
+      wrapLongLines={true}
+      customStyle={{ border: '0.5px solid var(--color-border)', padding: '8px 12px' }}>
+      {String(children).replace(/\n$/, '')}
+    </SyntaxHighlighter>
   )
 }
 
