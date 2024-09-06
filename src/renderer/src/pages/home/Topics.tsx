@@ -96,10 +96,9 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
       <DragableList list={assistant.topics} onUpdate={updateTopics}>
         {(topic) => {
           const isActive = topic.id === activeTopic?.id
-          const activeClass = topicPosition === 'left' ? 'active-left' : 'active-right'
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
-              <TopicListItem className={isActive ? activeClass : ''} onClick={() => onSwitchTopic(topic)}>
+              <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
                 {topic.name}
               </TopicListItem>
             </Dropdown>
@@ -134,12 +133,7 @@ const TopicListItem = styled.div`
   &:hover {
     background-color: var(--color-background-soft);
   }
-  &.active-left {
-    background-color: var(--color-primary);
-    color: white;
-    font-weight: 500;
-  }
-  &.active-right {
+  &.active {
     background-color: var(--color-background-mute);
     font-weight: 500;
   }

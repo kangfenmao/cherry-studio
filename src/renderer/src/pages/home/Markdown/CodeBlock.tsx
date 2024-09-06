@@ -48,7 +48,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
         language={match[1]}
         style={theme === ThemeMode.dark ? atomDark : oneLight}
         wrapLongLines={true}
-        customStyle={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, marginTop: 0 }}>
+        customStyle={{
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          marginTop: 0,
+          border: '0.5px solid var(--color-code-background)',
+          borderTop: 'none'
+        }}>
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>
     </>
@@ -57,7 +63,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
       {...rest}
       style={theme === ThemeMode.dark ? atomDark : oneLight}
       wrapLongLines={true}
-      customStyle={{ border: '0.5px solid var(--color-border)', padding: '8px 12px' }}>
+      customStyle={{ border: '0.5px solid var(--color-code-background)', padding: '8px 12px' }}>
       {String(children).replace(/\n$/, '')}
     </SyntaxHighlighter>
   )
