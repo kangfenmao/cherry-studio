@@ -48,9 +48,9 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
       {showAssistants && (
         <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
           <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
-            <i className="iconfont icon-sidebar-right" />
+            <i className="iconfont icon-hide-sidebar" />
           </NewButton>
-          <NewButton onClick={onCreateAssistant} style={{ marginRight: 6 }}>
+          <NewButton onClick={onCreateAssistant}>
             <i className="iconfont icon-a-addchat" />
           </NewButton>
         </NavbarLeft>
@@ -66,7 +66,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           <HStack alignItems="center">
             {!showAssistants && (
               <NewButton onClick={toggleShowAssistants} style={{ marginRight: isMac ? 8 : 25 }}>
-                <i className="iconfont icon-sidebar-left" />
+                <i className="iconfont icon-show-sidebar" />
               </NewButton>
             )}
             {showAssistants && (
@@ -80,13 +80,13 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           </NewButton>
         </NavbarCenter>
       )}
-      <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 130 : 12, flex: 1 }}>
+      <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 136 : 12, flex: 1 }}>
         <HStack alignItems="center">
           {!showAssistants && (topicPosition === 'left' ? !showTopics : true) && (
             <NewButton
               onClick={() => toggleShowAssistants()}
-              style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 8 : 0 }}>
-              <i className="iconfont icon-sidebar-left" />
+              style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 4 : 0 }}>
+              <i className="iconfont icon-show-sidebar" />
             </NewButton>
           )}
           <TitleText
@@ -106,7 +106,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           />
           {topicPosition === 'right' && (
             <NewButton onClick={toggleShowTopics}>
-              <i className={`iconfont icon-sidebar-${showTopics ? 'left' : 'right'}`} />
+              <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
             </NewButton>
           )}
         </HStack>
@@ -127,7 +127,7 @@ export const NewButton = styled.div`
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   .iconfont {
-    font-size: 18px;
+    font-size: 19px;
     color: var(--color-icon);
   }
   .icon-a-addchat {

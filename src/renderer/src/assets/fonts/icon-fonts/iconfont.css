@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 4563475 */
-  src: url('iconfont.woff2?t=1725450669049') format('woff2');
+  src: url('iconfont.woff2?t=1725587595482') format('woff2');
 }
 
 .iconfont {
@@ -11,24 +11,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-ai-model:before {
+  content: '\e827';
+}
+
+.icon-ai-model1:before {
+  content: '\ec09';
+}
+
 .icon-gridlines:before {
   content: '\e942';
 }
 
-.icon-grid-frame:before {
-  content: '\e680';
-}
-
 .icon-grid-row-2copy:before {
   content: '\e681';
-}
-
-.icon-sidebar-left:before {
-  content: '\e6ab';
-}
-
-.icon-sidebar-right:before {
-  content: '\e6ac';
 }
 
 .icon-inbox:before {
@@ -61,6 +57,14 @@
 
 .icon-history:before {
   content: '\e758';
+}
+
+.icon-hide-sidebar:before {
+  content: '\e8eb';
+}
+
+.icon-show-sidebar:before {
+  content: '\e944';
 }
 
 .icon-a-addchat:before {

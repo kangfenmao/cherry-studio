@@ -1,10 +1,4 @@
-import {
-  CloudOutlined,
-  CodeSandboxOutlined,
-  InfoCircleOutlined,
-  MessageOutlined,
-  SettingOutlined
-} from '@ant-design/icons'
+import { CloudOutlined, InfoCircleOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { isLocalAi } from '@renderer/config/env'
 import { FC } from 'react'
@@ -41,7 +35,7 @@ const SettingsPage: FC = () => {
               </MenuItemLink>
               <MenuItemLink to="/settings/model">
                 <MenuItem className={isRoute('/settings/model')}>
-                  <CodeSandboxOutlined />
+                  <i className="iconfont icon-ai-model" />
                   {t('settings.model')}
                 </MenuItem>
               </MenuItemLink>
@@ -121,6 +115,11 @@ const MenuItem = styled.li`
   .anticon {
     font-size: 16px;
     opacity: 0.8;
+  }
+  .iconfont {
+    font-size: 18px;
+    opacity: 0.7;
+    margin-left: -1px;
   }
   &:hover {
     background: var(--color-background-soft);

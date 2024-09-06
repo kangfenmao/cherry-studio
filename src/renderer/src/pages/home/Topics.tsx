@@ -117,8 +117,6 @@ const Container = styled.div`
   padding-top: 10px;
   min-width: var(--topic-list-width);
   max-width: var(--topic-list-width);
-  border-right: 0.5px solid var(--color-border);
-  border-left: 0.5px solid var(--color-border);
   overflow-y: scroll;
   height: calc(100vh - var(--navbar-height));
 `
