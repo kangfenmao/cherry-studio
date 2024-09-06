@@ -61,7 +61,7 @@ export async function fetchChatCompletion({
   }, 1000)
 
   try {
-    await AI.completions(filterMessages(messages), assistant, ({ text, usage }) => {
+    await AI.completions(messages, assistant, ({ text, usage }) => {
       message.content = message.content + text || ''
       message.usage = usage
       onResponse({ ...message, status: 'pending' })
@@ -153,7 +153,7 @@ export async function fetchSuggestions({
   }
 
   try {
-    return await AI.suggestions(messages, assistant)
+    return await AI.suggestions(filterMessages(messages), assistant)
   } catch (error: any) {
     return []
   }

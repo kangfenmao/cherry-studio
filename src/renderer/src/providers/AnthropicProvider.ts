@@ -3,6 +3,7 @@ import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk
 import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
+import { filterContextMessages, filterMessages } from '@renderer/services/messages'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { first, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
@@ -26,7 +27,7 @@ export default class AnthropicProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    const userMessages = takeRight(messages, contextCount + 2).map((message) => {
+    const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 2))).map((message) => {
       return {
         role: message.role,
         content: message.content

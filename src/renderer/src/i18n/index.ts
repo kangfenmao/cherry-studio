@@ -71,11 +71,12 @@ const resources = {
         'topics.list': 'Topic List',
         'input.new_topic': 'New Topic',
         'input.topics': ' Topics ',
-        'input.clear': 'Clear',
+        'input.clear': 'Clear Messages',
+        'input.new.context': 'Clear Context',
         'input.expand': 'Expand',
         'input.collapse': 'Collapse',
         'input.clear.title': 'Clear all messages?',
-        'input.clear.content': 'Are you sure to clear all messages?',
+        'input.clear.content': 'Do you want to clear all messages of the current topic?',
         'input.placeholder': 'Type your message here...',
         'input.send': 'Send',
         'input.pause': 'Pause',
@@ -95,7 +96,8 @@ const resources = {
         'settings.set_as_default': 'Apply to default assistant',
         'settings.max': 'Max',
         'suggestions.title': 'Suggested Questions',
-        'add.assistant.title': 'Add Assistant'
+        'add.assistant.title': 'Add Assistant',
+        'message.new.context': 'New Context'
       },
       agents: {
         title: 'Agents',
@@ -320,11 +322,12 @@ const resources = {
         'topics.list': '话题列表',
         'input.new_topic': '新话题',
         'input.topics': ' 话题 ',
-        'input.clear': '清除',
+        'input.clear': '清除会话消息',
+        'input.new.context': '清除上下文',
         'input.expand': '展开',
         'input.collapse': '收起',
-        'input.clear.title': '清除所有消息?',
-        'input.clear.content': '确定要清除所有消息吗?',
+        'input.clear.title': '清除消息?',
+        'input.clear.content': '确定要清除当前会话所有消息吗?',
         'input.placeholder': '在这里输入消息...',
         'input.send': '发送',
         'input.pause': '暂停',
@@ -345,7 +348,8 @@ const resources = {
         'settings.set_as_default': '应用到默认助手',
         'settings.max': '不限',
         'suggestions.title': '建议的问题',
-        'add.assistant.title': '添加智能体'
+        'add.assistant.title': '添加智能体',
+        'message.new.context': '清除上下文'
       },
       agents: {
         title: '智能体',

@@ -3,7 +3,7 @@ import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { getTopic } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { estimateHistoryTokenCount, filterMessages } from '@renderer/services/messages'
+import { estimateHistoryTokenCount, filterMessages, getContextCount } from '@renderer/services/messages'
 import LocalStorage from '@renderer/services/storage'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
@@ -89,6 +89,28 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         setMessages([])
         updateTopic({ ...topic, messages: [] })
         LocalStorage.clearTopicMessages(topic.id)
+      }),
+      EventEmitter.on(EVENT_NAMES.NEW_CONTEXT, () => {
+        const lastMessage = last(messages)
+
+        if (lastMessage && lastMessage.type === 'clear') {
+          return
+        }
+
+        if (messages.length === 0) {
+          return
+        }
+
+        onSendMessage({
+          id: uuid(),
+          assistantId: assistant.id,
+          role: 'user',
+          content: '',
+          topicId: topic.id,
+          createdAt: new Date().toISOString(),
+          status: 'success',
+          type: 'clear'
+        } as Message)
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
@@ -106,7 +128,10 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [messages])
 
   useEffect(() => {
-    EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, estimateHistoryTokenCount(assistant, messages))
+    EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, {
+      tokensCount: estimateHistoryTokenCount(assistant, messages),
+      contextCount: getContextCount(assistant, messages)
+    })
   }, [assistant, messages])
 
   return (

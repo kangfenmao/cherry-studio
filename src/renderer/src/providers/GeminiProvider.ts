@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
+import { filterContextMessages, filterMessages } from '@renderer/services/messages'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import axios from 'axios'
 import { isEmpty, takeRight } from 'lodash'
@@ -25,7 +26,7 @@ export default class GeminiProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    const userMessages = takeRight(messages, contextCount + 1).map((message) => {
+    const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1))).map((message) => {
       return {
         role: message.role,
         content: message.content

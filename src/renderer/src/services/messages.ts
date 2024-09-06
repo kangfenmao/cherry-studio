@@ -1,3 +1,4 @@
+import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { Assistant, Message } from '@renderer/types'
 import { GPTTokens } from 'gpt-tokens'
 import { isEmpty, takeRight } from 'lodash'
@@ -5,7 +6,30 @@ import { isEmpty, takeRight } from 'lodash'
 import { getAssistantSettings } from './assistant'
 
 export const filterMessages = (messages: Message[]) => {
-  return messages.filter((message) => message.type !== '@').filter((message) => !isEmpty(message.content.trim()))
+  return messages
+    .filter((message) => !['@', 'clear'].includes(message.type!))
+    .filter((message) => !isEmpty(message.content.trim()))
+}
+
+export function filterContextMessages(messages: Message[]): Message[] {
+  const clearIndex = messages.findLastIndex((message) => message.type === 'clear')
+
+  if (clearIndex === -1) {
+    return messages
+  }
+
+  return messages.slice(clearIndex + 1)
+}
+
+export function getContextCount(assistant: Assistant, messages: Message[]) {
+  const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
+  const clearIndex = takeRight(messages, contextCount).findLastIndex((message) => message.type === 'clear')
+
+  if (clearIndex === -1) {
+    return contextCount
+  }
+
+  return contextCount - (clearIndex + 1)
 }
 
 export function estimateInputTokenCount(text: string) {
@@ -24,7 +48,7 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
     model: 'gpt-4o',
     messages: [
       { role: 'system', content: assistant.prompt },
-      ...filterMessages(takeRight(msgs, contextCount)).map((message) => ({
+      ...filterMessages(filterContextMessages(takeRight(msgs, contextCount))).map((message) => ({
         role: message.role,
         content: message.content
       }))

@@ -30,7 +30,7 @@ export type Message = {
   files?: File[]
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
-  type?: 'text' | '@'
+  type?: 'text' | '@' | 'clear'
 }
 
 export type Topic = {

@@ -19,7 +19,7 @@ import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
-import { Alert, Avatar, Dropdown, Popconfirm, Tooltip } from 'antd'
+import { Alert, Avatar, Divider, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
@@ -129,6 +129,14 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   }, [message, t])
 
   const showMiniApp = () => model?.provider && startMinAppById(model?.provider)
+
+  if (message.type === 'clear') {
+    return (
+      <Divider dashed style={{ padding: '0 20px' }}>
+        {t('chat.message.new.context')}
+      </Divider>
+    )
+  }
 
   return (
     <MessageContainer key={message.id} className="message">

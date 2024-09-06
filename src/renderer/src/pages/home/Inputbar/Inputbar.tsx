@@ -8,7 +8,6 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
-import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowTopics } from '@renderer/hooks/useStore'
@@ -44,6 +43,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { sendMessageShortcut, showInputEstimatedTokens, fontSize } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
+  const [contextCount, setContextCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const textareaRef = useRef<TextAreaRef>(null)
   const [files, setFiles] = useState<File[]>([])
@@ -130,6 +130,14 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     store.dispatch(setGenerating(false))
   }
 
+  const onNewContext = () => {
+    if (generating) {
+      onPause()
+      return
+    }
+    EventEmitter.emit(EVENT_NAMES.NEW_CONTEXT)
+  }
+
   const resizeTextArea = () => {
     const textArea = textareaRef.current?.resizableTextArea?.textArea
     if (textArea) {
@@ -178,7 +186,10 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         setText(message.content)
         textareaRef.current?.focus()
       }),
-      EventEmitter.on(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, _setEstimateTokenCount)
+      EventEmitter.on(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, ({ tokensCount, contextCount }) => {
+        _setEstimateTokenCount(tokensCount)
+        setContextCount(contextCount)
+      })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [])
@@ -210,6 +221,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
               <FormOutlined />
+            </ToolbarButton>
+          </Tooltip>
+          <Tooltip placement="top" title={t('chat.input.new.context')} arrow>
+            <ToolbarButton type="text" onClick={onNewContext}>
+              <i className="iconfont icon-grid-row-2copy" />
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.clear')} arrow>
@@ -247,7 +263,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             <TextCount>
               <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
                 <StyledTag>
-                  {assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT}
+                  {contextCount}
                   <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
                   <span style={{ margin: '0 2px' }}>/</span>
                   {estimateTokenCount}

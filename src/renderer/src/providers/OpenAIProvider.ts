@@ -1,6 +1,7 @@
 import { isLocalAi } from '@renderer/config/env'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
+import { filterContextMessages, filterMessages } from '@renderer/services/messages'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { fileToBase64, removeQuotes } from '@renderer/utils'
 import { first, takeRight } from 'lodash'
@@ -60,7 +61,7 @@ export default class OpenAIProvider extends BaseProvider {
 
     const userMessages: ChatCompletionMessageParam[] = []
 
-    for (const message of takeRight(messages, contextCount + 1)) {
+    for (const message of filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))) {
       userMessages.push({
         role: message.role,
         content: await this.getMessageContent(message)
