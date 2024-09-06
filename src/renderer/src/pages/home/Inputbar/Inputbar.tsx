@@ -89,13 +89,15 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const isEnterPressed = event.keyCode == 13
+
     if (expended) {
       if (event.key === 'Escape') {
         return setExpend(false)
       }
     }
 
-    if (sendMessageShortcut === 'Enter' && event.key === 'Enter') {
+    if (sendMessageShortcut === 'Enter' && isEnterPressed) {
       if (event.shiftKey) {
         return
       }
@@ -103,7 +105,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       return event.preventDefault()
     }
 
-    if (sendMessageShortcut === 'Shift+Enter' && event.key === 'Enter' && event.shiftKey) {
+    if (sendMessageShortcut === 'Shift+Enter' && isEnterPressed && event.shiftKey) {
       sendMessage()
       return event.preventDefault()
     }
