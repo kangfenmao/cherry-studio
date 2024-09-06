@@ -10,6 +10,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant, Topic } from '@renderer/types'
+import { Switch } from 'antd'
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -97,13 +98,13 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           <SelectModelButton assistant={assistant} />
         </HStack>
         <HStack alignItems="center">
-          <NewButton onClick={toggleTheme} style={{ marginRight: 3 }}>
-            {theme === 'dark' ? (
-              <i className="iconfont icon-theme icon-theme-light" />
-            ) : (
-              <i className="iconfont icon-a-darkmode" />
-            )}
-          </NewButton>
+          <ThemeSwitch
+            checkedChildren={<i className="iconfont icon-theme icon-dark1" />}
+            unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}
+            checked={theme === 'dark'}
+            onChange={toggleTheme}
+            style={{ opacity: theme === 'dark' ? 0.6 : 1 }}
+          />
           {topicPosition === 'right' && (
             <NewButton onClick={toggleShowTopics}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
@@ -151,6 +152,14 @@ const TitleText = styled.span`
   font-family: Ubuntu;
   font-size: 13px;
   font-weight: 500;
+`
+
+const ThemeSwitch = styled(Switch)`
+  -webkit-app-region: no-drag;
+  margin-right: 10px;
+  .icon-theme {
+    font-size: 14px;
+  }
 `
 
 export default HeaderNavbar
