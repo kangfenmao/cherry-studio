@@ -23,13 +23,15 @@ export function filterContextMessages(messages: Message[]): Message[] {
 
 export function getContextCount(assistant: Assistant, messages: Message[]) {
   const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
-  const clearIndex = takeRight(messages, contextCount).findLastIndex((message) => message.type === 'clear')
+  const _messages = takeRight(messages, contextCount)
+  const clearIndex = _messages.findLastIndex((message) => message.type === 'clear')
+  const messagesCount = _messages.length
 
   if (clearIndex === -1) {
     return contextCount
   }
 
-  return contextCount - (clearIndex + 1)
+  return messagesCount - (clearIndex + 1)
 }
 
 export function estimateInputTokenCount(text: string) {
