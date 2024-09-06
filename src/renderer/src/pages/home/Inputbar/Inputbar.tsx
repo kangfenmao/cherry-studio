@@ -263,9 +263,9 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             <TextCount>
               <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
                 <StyledTag>
-                  {contextCount}
+                  ⊙ {contextCount}
                   <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
-                  <span style={{ margin: '0 2px' }}>/</span>
+                  <span style={{ margin: '0 2px', fontSize: 10 }}>/</span>
                   {estimateTokenCount}
                 </StyledTag>
               </Tooltip>
