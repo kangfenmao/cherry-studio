@@ -1,5 +1,6 @@
 import { getModelLogo } from '@renderer/config/provider'
 import { useProviders } from '@renderer/hooks/useProvider'
+import { getModelUniqId } from '@renderer/services/model'
 import { Model } from '@renderer/types'
 import { Avatar, Dropdown, DropdownProps, MenuProps } from 'antd'
 import { first, reverse, sortBy, upperFirst } from 'lodash'
@@ -23,9 +24,9 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       type: 'group',
       children: reverse(sortBy(p.models, 'name')).map((m) => ({
-        key: m?.id,
+        key: getModelUniqId(m),
         label: upperFirst(m?.name),
-        defaultSelectedKeys: [model?.id],
+        defaultSelectedKeys: model ? [getModelUniqId(model)] : [],
         icon: (
           <Avatar src={getModelLogo(m?.id || '')} size={24}>
             {first(m?.name)}
@@ -37,7 +38,11 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
 
   return (
     <DropdownMenu
-      menu={{ items, style: { maxHeight: '80vh', overflow: 'auto' }, selectedKeys: model ? [model.id] : [] }}
+      menu={{
+        items,
+        style: { maxHeight: '80vh', overflow: 'auto' },
+        selectedKeys: model ? [getModelUniqId(model)] : []
+      }}
       trigger={['click']}
       arrow
       placement="bottom"

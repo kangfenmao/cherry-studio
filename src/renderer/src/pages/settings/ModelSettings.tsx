@@ -1,6 +1,7 @@
 import { EditOutlined, MessageOutlined, TranslationOutlined } from '@ant-design/icons'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
+import { getModelUniqId } from '@renderer/services/model'
 import { Model } from '@renderer/types'
 import { Select } from 'antd'
 import { find, sortBy, upperFirst } from 'lodash'
@@ -23,11 +24,9 @@ const ModelSettings: FC = () => {
       title: p.name,
       options: sortBy(p.models, 'name').map((m) => ({
         label: upperFirst(m.name),
-        value: m.id
+        value: getModelUniqId(m)
       }))
     }))
-
-  const iconStyle = { fontSize: 16, marginRight: 8 }
 
   return (
     <SettingContainer>
@@ -39,9 +38,9 @@ const ModelSettings: FC = () => {
       </SettingTitle>
       <SettingDivider />
       <Select
-        defaultValue={defaultModel.id}
+        defaultValue={getModelUniqId(defaultModel)}
         style={{ width: 360 }}
-        onChange={(id) => setDefaultModel(find(allModels, { id }) as Model)}
+        onChange={(value) => setDefaultModel(find(allModels, JSON.parse(value)) as Model)}
         options={selectOptions}
       />
       <div style={{ height: 30 }} />
@@ -76,5 +75,7 @@ const ModelSettings: FC = () => {
     </SettingContainer>
   )
 }
+
+const iconStyle = { fontSize: 16, marginRight: 8 }
 
 export default ModelSettings
