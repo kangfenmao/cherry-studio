@@ -1,4 +1,5 @@
 import { BarsOutlined, SettingOutlined } from '@ant-design/icons'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowTopics } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
@@ -19,9 +20,12 @@ interface Props {
 const RightSidebar: FC<Props> = (props) => {
   const [tab, setTab] = useState<'topic' | 'settings'>('topic')
   const { showTopics, setShowTopics } = useShowTopics()
+  const { topicPosition } = useSettings()
   const { t } = useTranslation()
+
   const isTopicTab = tab === 'topic'
   const isSettingsTab = tab === 'settings'
+  const borderStyle = '0.5px solid var(--color-border)'
 
   useEffect(() => {
     const unsubscribes = [
@@ -55,7 +59,7 @@ const RightSidebar: FC<Props> = (props) => {
   }
 
   return (
-    <Container>
+    <Container style={topicPosition === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }}>
       <Segmented
         value={tab}
         style={{ borderRadius: 0, padding: '10px', gap: 5, borderBottom: '0.5px solid var(--color-border)' }}
@@ -79,7 +83,6 @@ const Container = styled.div`
   flex-direction: column;
   width: var(--topic-list-width);
   height: calc(100vh - var(--navbar-height));
-  border-left: 0.5px solid var(--color-border);
   .collapsed {
     width: 0;
     border-left: none;
@@ -91,6 +94,7 @@ const TabContent = styled.div`
   flex: 1;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;
 `
 
 export default RightSidebar

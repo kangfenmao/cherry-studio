@@ -1,6 +1,5 @@
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useShowTopics } from '@renderer/hooks/useStore'
 import { Assistant, Topic } from '@renderer/types'
 import { Flex } from 'antd'
 import { FC } from 'react'
@@ -8,7 +7,7 @@ import styled from 'styled-components'
 
 import Inputbar from './Inputbar/Inputbar'
 import Messages from './Messages/Messages'
-import Topics from './Topics'
+import RightSidebar from './RightSidebar'
 
 interface Props {
   assistant: Assistant
@@ -18,20 +17,19 @@ interface Props {
 
 const Chat: FC<Props> = (props) => {
   const { assistant } = useAssistant(props.assistant.id)
-  const { showTopics } = useShowTopics()
   const { topicPosition } = useSettings()
 
   return (
     <Container id="chat">
-      {showTopics && topicPosition === 'left' && (
-        <Topics assistant={assistant} activeTopic={props.activeTopic} setActiveTopic={props.setActiveTopic} />
+      {topicPosition === 'left' && (
+        <RightSidebar assistant={assistant} activeTopic={props.activeTopic} setActiveTopic={props.setActiveTopic} />
       )}
       <Main vertical flex={1} justify="space-between">
         <Messages assistant={assistant} topic={props.activeTopic} setActiveTopic={props.setActiveTopic} />
         <Inputbar assistant={assistant} setActiveTopic={props.setActiveTopic} />
       </Main>
-      {showTopics && topicPosition === 'right' && (
-        <Topics assistant={assistant} activeTopic={props.activeTopic} setActiveTopic={props.setActiveTopic} />
+      {topicPosition === 'right' && (
+        <RightSidebar assistant={assistant} activeTopic={props.activeTopic} setActiveTopic={props.setActiveTopic} />
       )}
     </Container>
   )

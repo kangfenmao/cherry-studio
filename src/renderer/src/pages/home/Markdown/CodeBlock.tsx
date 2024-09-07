@@ -72,7 +72,7 @@ const CodeHeader = styled.div`
   font-size: 14px;
   font-weight: bold;
   background-color: var(--color-code-background);
-  height: 40px;
+  height: 36px;
   padding: 0 10px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;

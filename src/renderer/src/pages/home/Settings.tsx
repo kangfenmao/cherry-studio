@@ -235,8 +235,10 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   overflow: hidden;
-  min-width: 300px;
   padding-bottom: 10px;
+  min-width: var(--topic-list-width);
+  max-width: var(--topic-list-width);
+  padding: 10px 15px;
 `
 
 const Label = styled.p`

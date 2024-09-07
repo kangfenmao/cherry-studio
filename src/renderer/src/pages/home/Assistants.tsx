@@ -1,5 +1,6 @@
-import { CopyOutlined, DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
+import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { useShowTopics } from '@renderer/hooks/useStore'
@@ -58,7 +59,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
         {
           label: t('common.duplicate'),
           key: 'duplicate',
-          icon: <CopyOutlined />,
+          icon: <CopyIcon />,
           onClick: async () => {
             const _assistant: Assistant = { ...assistant, id: uuid(), topics: [getDefaultTopic()] }
             addAssistant(_assistant)

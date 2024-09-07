@@ -2,7 +2,6 @@ import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { useSettings } from '@renderer/hooks/useSettings'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
@@ -22,9 +21,6 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
-  const { topicPosition } = useSettings()
-
-  const borderStyle = '0.5px solid var(--color-border)'
 
   const getTopicMenuItems = useCallback(
     (topic: Topic) => {
@@ -92,7 +88,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   )
 
   return (
-    <Container style={topicPosition === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }}>
+    <Container>
       <DragableList list={assistant.topics} onUpdate={updateTopics}>
         {(topic) => {
           const isActive = topic.id === activeTopic?.id

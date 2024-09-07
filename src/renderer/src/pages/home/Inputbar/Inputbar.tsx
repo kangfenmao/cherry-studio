@@ -1,17 +1,15 @@
 import {
   ClearOutlined,
   ControlOutlined,
-  FormOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
+  PlusCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
-import { isWindows } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { estimateInputTokenCount } from '@renderer/services/messages'
@@ -19,7 +17,7 @@ import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { delay, uuid } from '@renderer/utils'
-import { Button, Divider, Popconfirm, Popover, Tag, Tooltip } from 'antd'
+import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
@@ -27,8 +25,8 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } 
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import SettingsTab from '../Settings'
 import SendMessageButton from './SendMessageButton'
+import TokenCount from './TokenCount'
 
 interface Props {
   assistant: Assistant
@@ -41,7 +39,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic } = useAssistant(assistant.id)
-  const { sendMessageShortcut, showInputEstimatedTokens, fontSize } = useSettings()
+  const { sendMessageShortcut, fontSize } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const [contextCount, setContextCount] = useState(0)
@@ -50,7 +48,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [files, setFiles] = useState<File[]>([])
   const { t } = useTranslation()
   const containerRef = useRef(null)
-  const { toggleShowTopics } = useShowTopics()
 
   _text = text
 
@@ -221,12 +218,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         <ToolbarMenu>
           <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
             <ToolbarButton type="text" onClick={addNewTopic}>
-              <FormOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.new.context')} arrow>
-            <ToolbarButton type="text" onClick={onNewContext}>
-              <i className="iconfont icon-grid-row-2copy" />
+              <PlusCircleOutlined />
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.clear')} arrow>
@@ -243,36 +235,28 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             </Popconfirm>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={toggleShowTopics}>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
               <HistoryOutlined />
             </ToolbarButton>
           </Tooltip>
-          <Popover content={<SettingsTab assistant={assistant} />} trigger="click" placement="topRight">
-            <Tooltip placement="top" title={t('chat.input.settings')} arrow>
-              <ToolbarButton type="text">
-                <ControlOutlined />
-              </ToolbarButton>
-            </Tooltip>
-          </Popover>
+          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
+            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
+              <ControlOutlined />
+            </ToolbarButton>
+          </Tooltip>
           {/* <AttachmentButton files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} /> */}
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={onToggleExpended}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
             </ToolbarButton>
           </Tooltip>
-          {showInputEstimatedTokens && (
-            <TextCount>
-              <Tooltip title={t('chat.input.context_count.tip') + ' | ' + t('chat.input.estimated_tokens.tip')}>
-                <StyledTag>
-                  <span style={isWindows ? { fontFamily: 'serif', marginRight: 2 } : { marginRight: 3 }}>⊙</span>
-                  {contextCount}
-                  <Divider type="vertical" style={{ marginTop: 2, marginLeft: 5, marginRight: 5 }} />↑{inputTokenCount}
-                  <span style={{ margin: '0 2px', fontSize: 10 }}>/</span>
-                  {estimateTokenCount}
-                </StyledTag>
-              </Tooltip>
-            </TextCount>
-          )}
+          <TokenCount
+            estimateTokenCount={estimateTokenCount}
+            inputTokenCount={inputTokenCount}
+            contextCount={contextCount}
+            ToolbarButton={ToolbarButton}
+            onClick={onNewContext}
+          />
         </ToolbarMenu>
         <ToolbarMenu>
           {generating && (
@@ -291,8 +275,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
 const TextareaStyle: CSSProperties = {
   paddingLeft: 0,
-  padding: '10px 15px 8px',
-  transition: 'all 0.3s ease'
+  padding: '10px 15px 8px'
 }
 
 const Container = styled.div`
@@ -346,9 +329,6 @@ const ToolbarButton = styled(Button)`
   justify-content: center;
   align-items: center;
   padding: 0;
-  .iconfont {
-    font-size: 17px;
-  }
   &.anticon,
   &.iconfont {
     transition: all 0.3s ease;
@@ -362,28 +342,6 @@ const ToolbarButton = styled(Button)`
       color: var(--color-text-1);
     }
   }
-`
-
-const TextCount = styled.div`
-  font-size: 11px;
-  color: var(--color-text-3);
-  z-index: 10;
-  padding: 2px;
-  border-top-left-radius: 7px;
-  user-select: none;
-`
-
-const StyledTag = styled(Tag)`
-  cursor: pointer;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-width: 0.5;
-  margin: 0;
-  height: 25px;
-  font-size: 12px;
-  line-height: 16px;
 `
 
 export default Inputbar

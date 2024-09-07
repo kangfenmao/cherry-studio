@@ -103,7 +103,6 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
             unCheckedChildren={<i className="iconfont icon-theme icon-theme-light" />}
             checked={theme === 'dark'}
             onChange={toggleTheme}
-            style={{ opacity: theme === 'dark' ? 0.6 : 1 }}
           />
           {topicPosition === 'right' && (
             <NewButton onClick={toggleShowTopics}>
