@@ -33,14 +33,11 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant }) => {
     assistant && setActiveAssistant(assistant)
   }
 
-  const onEditAssistant = useCallback(
-    async (assistant: Assistant) => {
-      const _assistant = await AssistantSettingPopup.show({ assistant })
-      updateAssistant(_assistant)
-      syncAsistantToAgent(_assistant)
-    },
-    [updateAssistant]
-  )
+  const onEditAssistant = useCallback(async () => {
+    const _assistant = await AssistantSettingPopup.show({ assistant })
+    updateAssistant(_assistant)
+    syncAsistantToAgent(_assistant)
+  }, [assistant, updateAssistant])
 
   return (
     <Navbar>
