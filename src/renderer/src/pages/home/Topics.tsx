@@ -6,9 +6,9 @@ import { fetchMessagesSummary } from '@renderer/services/api'
 import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
-import { Button, Dropdown, MenuProps } from 'antd'
-import { findIndex, take } from 'lodash'
-import { FC, useCallback, useState } from 'react'
+import { Dropdown, MenuProps } from 'antd'
+import { findIndex } from 'lodash'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -20,8 +20,6 @@ interface Props {
 
 const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
   const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
-  const [showAll, setShowAll] = useState(false)
-  const [draging, setDraging] = useState(false)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
@@ -99,14 +97,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
   return (
     <Container>
-      <DragableList
-        list={take(assistant.topics, showAll ? assistant.topics.length : 14)}
-        onUpdate={updateTopics}
-        onDragStart={() => {
-          setShowAll(true)
-          setDraging(true)
-        }}
-        onDragEnd={() => setDraging(false)}>
+      <DragableList list={assistant.topics} onUpdate={updateTopics}>
         {(topic) => {
           const isActive = topic.id === activeTopic?.id
           return (
@@ -128,13 +119,6 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           )
         }}
       </DragableList>
-      {!draging && assistant.topics.length > 15 && (
-        <Footer>
-          <Button type="link" onClick={() => setShowAll(!showAll)}>
-            {showAll ? t('button.collapse') : t('button.show.all')}
-          </Button>
-        </Footer>
-      )}
     </Container>
   )
 }
@@ -145,7 +129,7 @@ const Container = styled.div`
   flex-direction: column;
   padding-top: 10px;
   overflow-y: scroll;
-  height: calc(100vh - var(--navbar-height));
+  max-height: calc(100vh - var(--navbar-height) - 140px);
 `
 
 const TopicListItem = styled.div`
@@ -202,11 +186,6 @@ const MenuButton = styled.div`
   .anticon {
     font-size: 12px;
   }
-`
-
-const Footer = styled.div`
-  margin: 0 4px;
-  margin-bottom: 10px;
 `
 
 export default Topics

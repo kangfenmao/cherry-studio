@@ -13,13 +13,14 @@ import { FC } from 'react'
 interface Props<T> {
   list: T[]
   style?: React.CSSProperties
+  listStyle?: React.CSSProperties
   children: (item: T, index: number) => React.ReactNode
   onUpdate: (list: T[]) => void
   onDragStart?: OnDragStartResponder
   onDragEnd?: OnDragEndResponder
 }
 
-const DragableList: FC<Props<any>> = ({ children, list, style, onDragStart, onUpdate, onDragEnd }) => {
+const DragableList: FC<Props<any>> = ({ children, list, style, listStyle, onDragStart, onUpdate, onDragEnd }) => {
   const _onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     onDragEnd?.(result, provided)
     if (result.destination) {
@@ -34,7 +35,7 @@ const DragableList: FC<Props<any>> = ({ children, list, style, onDragStart, onUp
     <DragDropContext onDragStart={onDragStart} onDragEnd={_onDragEnd}>
       <Droppable droppableId="droppable">
         {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
+          <div {...provided.droppableProps} ref={provided.innerRef} style={{ ...style }}>
             {list.map((item, index) => (
               <Draggable key={`draggable_${item.id}_${index}`} draggableId={item.id} index={index}>
                 {(provided) => (
@@ -42,7 +43,7 @@ const DragableList: FC<Props<any>> = ({ children, list, style, onDragStart, onUp
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    style={{ ...provided.draggableProps.style, marginBottom: 8, ...style }}>
+                    style={{ ...provided.draggableProps.style, marginBottom: 8, ...listStyle }}>
                     {children(item, index)}
                   </div>
                 )}
