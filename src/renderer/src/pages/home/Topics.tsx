@@ -100,9 +100,12 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   return (
     <Container>
       <DragableList
-        list={take(assistant.topics, showAll ? assistant.topics.length : 15)}
+        list={take(assistant.topics, showAll ? assistant.topics.length : 14)}
         onUpdate={updateTopics}
-        onDragStart={() => setDraging(true)}
+        onDragStart={() => {
+          setShowAll(true)
+          setDraging(true)
+        }}
         onDragEnd={() => setDraging(false)}>
         {(topic) => {
           const isActive = topic.id === activeTopic?.id
