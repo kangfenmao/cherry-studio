@@ -7,9 +7,10 @@ import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
+import { syncAsistantToAgent } from '@renderer/services/assistant'
 import { Assistant, Topic } from '@renderer/types'
 import { Switch } from 'antd'
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import styled from 'styled-components'
 
 import SelectModelButton from './components/SelectModelButton'
@@ -21,7 +22,7 @@ interface Props {
 }
 
 const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant }) => {
-  const { assistant } = useAssistant(activeAssistant.id)
+  const { assistant, updateAssistant } = useAssistant(activeAssistant.id)
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { theme, toggleTheme } = useTheme()
   const { topicPosition } = useSettings()
@@ -31,6 +32,15 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant }) => {
     const assistant = await AddAssistantPopup.show()
     assistant && setActiveAssistant(assistant)
   }
+
+  const onEditAssistant = useCallback(
+    async (assistant: Assistant) => {
+      const _assistant = await AssistantSettingPopup.show({ assistant })
+      updateAssistant(_assistant)
+      syncAsistantToAgent(_assistant)
+    },
+    [updateAssistant]
+  )
 
   return (
     <Navbar>
@@ -59,10 +69,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant }) => {
               <i className="iconfont icon-show-sidebar" />
             </NewButton>
           )}
-          <TitleText
-            style={{ marginRight: 10, cursor: 'pointer' }}
-            className="nodrag"
-            onClick={() => AssistantSettingPopup.show({ assistant })}>
+          <TitleText style={{ marginRight: 10, cursor: 'pointer' }} className="nodrag" onClick={onEditAssistant}>
             {assistant.name}
           </TitleText>
           <SelectModelButton assistant={assistant} />
