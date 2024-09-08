@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
+import { CloseOutlined, DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -7,7 +7,7 @@ import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
 import { Button, Dropdown, MenuProps } from 'antd'
-import { take } from 'lodash'
+import { findIndex, take } from 'lodash'
 import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -24,6 +24,28 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const [draging, setDraging] = useState(false)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
+
+  const onDeleteTopic = useCallback(
+    (topic: Topic) => {
+      if (assistant.topics.length > 1) {
+        const index = findIndex(assistant.topics, (t) => t.id === topic.id)
+        setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
+        removeTopic(topic)
+      }
+    },
+    [assistant.topics, removeTopic, setActiveTopic]
+  )
+
+  const onSwitchTopic = useCallback(
+    (topic: Topic) => {
+      if (generating) {
+        window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
+        return
+      }
+      setActiveTopic(topic)
+    },
+    [generating, setActiveTopic, t]
+  )
 
   const getTopicMenuItems = useCallback(
     (topic: Topic) => {
@@ -66,28 +88,13 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           danger: true,
           key: 'delete',
           icon: <DeleteOutlined />,
-          onClick() {
-            if (assistant.topics.length === 1) return
-            removeTopic(topic)
-            setActiveTopic(assistant.topics[0])
-          }
+          onClick: () => onDeleteTopic(topic)
         })
       }
 
       return menus
     },
-    [assistant, removeTopic, setActiveTopic, t, updateTopic]
-  )
-
-  const onSwitchTopic = useCallback(
-    (topic: Topic) => {
-      if (generating) {
-        window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
-        return
-      }
-      setActiveTopic(topic)
-    },
-    [generating, setActiveTopic, t]
+    [assistant, onDeleteTopic, t, updateTopic]
   )
 
   return (
@@ -102,7 +109,17 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
               <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
-                {topic.name}
+                <TopicName>{topic.name}</TopicName>
+                {assistant.topics.length > 1 && (
+                  <MenuButton
+                    className="menu"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onDeleteTopic(topic)
+                    }}>
+                    <CloseOutlined />
+                  </MenuButton>
+                )}
               </TopicListItem>
             </Dropdown>
           )
@@ -133,17 +150,54 @@ const TopicListItem = styled.div`
   margin: 0 10px;
   cursor: pointer;
   border-radius: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-family: Ubuntu;
   font-size: 13px;
-  &:hover {
-    background-color: var(--color-background-soft);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  .menu {
+    opacity: 0;
+    color: var(--color-text-3);
   }
   &.active {
     background-color: var(--color-background-mute);
     font-weight: 500;
+    .menu {
+      opacity: 1;
+      background-color: var(--color-background-mute);
+      &:hover {
+        color: var(--color-text-2);
+      }
+    }
+  }
+`
+
+const TopicName = styled.div`
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 13px;
+`
+
+const MenuButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 4px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  .anticon {
+    font-size: 12px;
   }
 `
 

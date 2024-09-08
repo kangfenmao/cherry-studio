@@ -1,7 +1,7 @@
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
-import { Assistant, Topic } from '@renderer/types'
+import { Assistant } from '@renderer/types'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
@@ -15,14 +15,9 @@ const HomePage: FC = () => {
   const { assistants } = useAssistants()
   const [activeAssistant, setActiveAssistant] = useState(_activeAssistant || assistants[0])
   const { showAssistants } = useShowAssistants()
-
   const { activeTopic, setActiveTopic } = useActiveTopic(activeAssistant)
 
   _activeAssistant = activeAssistant
-
-  const onSetActiveTopic = (topic: Topic) => {
-    setActiveTopic(topic)
-  }
 
   return (
     <Container>
@@ -40,7 +35,7 @@ const HomePage: FC = () => {
         <Chat
           assistant={activeAssistant}
           activeTopic={activeTopic}
-          setActiveTopic={onSetActiveTopic}
+          setActiveTopic={setActiveTopic}
           setActiveAssistant={setActiveAssistant}
         />
       </ContentContainer>
