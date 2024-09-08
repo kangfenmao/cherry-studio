@@ -3,6 +3,7 @@ import systemAgents from '@renderer/config/agents.json'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { covertAgentToAssistant } from '@renderer/services/assistant'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Agent, Assistant } from '@renderer/types'
 import { Input, Modal, Tag } from 'antd'
 import { useMemo, useState } from 'react'
@@ -50,6 +51,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
     const assistant = covertAgentToAssistant(agent)
 
     addAssistant(assistant)
+    setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_ASSISTANTS), 0)
     resolve(assistant)
     setOpen(false)
   }

@@ -236,8 +236,6 @@ const Container = styled.div`
   flex-direction: column;
   overflow: hidden;
   padding-bottom: 10px;
-  min-width: var(--topic-list-width);
-  max-width: var(--topic-list-width);
   padding: 10px 15px;
 `
 

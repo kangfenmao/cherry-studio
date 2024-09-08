@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { estimateInputTokenCount } from '@renderer/services/messages'
@@ -48,6 +49,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [files, setFiles] = useState<File[]>([])
   const { t } = useTranslation()
   const containerRef = useRef(null)
+  const { showTopics, toggleShowTopics } = useShowTopics()
 
   _text = text
 
@@ -235,12 +237,22 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             </Popconfirm>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)}>
+            <ToolbarButton
+              type="text"
+              onClick={() => {
+                !showTopics && toggleShowTopics()
+                setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
+              }}>
               <HistoryOutlined />
             </ToolbarButton>
           </Tooltip>
           <Tooltip placement="top" title={t('chat.input.settings')} arrow>
-            <ToolbarButton type="text" onClick={() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS)}>
+            <ToolbarButton
+              type="text"
+              onClick={() => {
+                !showTopics && toggleShowTopics()
+                setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS), 0)
+              }}>
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>

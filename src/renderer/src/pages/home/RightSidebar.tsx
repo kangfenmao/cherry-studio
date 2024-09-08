@@ -1,78 +1,108 @@
 import { BarsOutlined, SettingOutlined } from '@ant-design/icons'
+import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowTopics } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
-import { Segmented } from 'antd'
+import { uuid } from '@renderer/utils'
+import { Segmented, SegmentedProps } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import Assistants from './Assistants'
 import Settings from './Settings'
 import Topics from './Topics'
 
 interface Props {
-  assistant: Assistant
+  activeAssistant: Assistant
   activeTopic: Topic
+  setActiveAssistant: (assistant: Assistant) => void
   setActiveTopic: (topic: Topic) => void
+  position: 'left' | 'right'
 }
 
-const RightSidebar: FC<Props> = (props) => {
-  const [tab, setTab] = useState<'topic' | 'settings'>('topic')
-  const { showTopics, setShowTopics } = useShowTopics()
+const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant, setActiveTopic, position }) => {
+  const { addAssistant } = useAssistants()
+  const [tab, setTab] = useState<'assistants' | 'topic' | 'settings'>(position === 'left' ? 'assistants' : 'topic')
   const { topicPosition } = useSettings()
+  const { defaultAssistant } = useDefaultAssistant()
+  const { toggleShowTopics } = useShowTopics()
+
   const { t } = useTranslation()
 
-  const isTopicTab = tab === 'topic'
-  const isSettingsTab = tab === 'settings'
   const borderStyle = '0.5px solid var(--color-border)'
+  const border = position === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }
+
+  const showTab = !(position === 'left' && topicPosition === 'right')
+  const assistantTab = {
+    label: t('common.assistant'),
+    value: 'assistants',
+    icon: <i className="iconfont icon-business-smart-assistant" />
+  }
+
+  const onCreateDefaultAssistant = () => {
+    const assistant = { ...defaultAssistant, id: uuid() }
+    addAssistant(assistant)
+    setActiveAssistant(assistant)
+  }
 
   useEffect(() => {
     const unsubscribes = [
+      EventEmitter.on(EVENT_NAMES.SHOW_ASSISTANTS, (): any => {
+        showTab && setTab('assistants')
+      }),
       EventEmitter.on(EVENT_NAMES.SHOW_TOPIC_SIDEBAR, (): any => {
-        if (showTopics && isTopicTab) {
-          return setShowTopics(false)
-        }
-        if (showTopics) {
-          return setTab('topic')
-        }
-        setShowTopics(true)
-        setTab('topic')
+        showTab && setTab('topic')
       }),
       EventEmitter.on(EVENT_NAMES.SHOW_CHAT_SETTINGS, (): any => {
-        if (showTopics && isSettingsTab) {
-          return setShowTopics(false)
-        }
-        if (showTopics) {
-          return setTab('settings')
-        }
-        setShowTopics(true)
-        setTab('settings')
+        showTab && setTab('settings')
       }),
-      EventEmitter.on(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR, () => setTab('topic'))
+      EventEmitter.on(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR, () => {
+        showTab && setTab('topic')
+        if (position === 'left' && topicPosition === 'right') {
+          toggleShowTopics()
+        }
+      })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [isSettingsTab, isTopicTab, showTopics, setShowTopics])
-
-  if (!showTopics) {
-    return null
-  }
+  }, [position, showTab, tab, toggleShowTopics, topicPosition])
 
   return (
-    <Container style={topicPosition === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }}>
-      <Segmented
-        value={tab}
-        style={{ borderRadius: 0, padding: '10px', gap: 5, borderBottom: '0.5px solid var(--color-border)' }}
-        options={[
-          { label: t('common.topics'), value: 'topic', icon: <BarsOutlined /> },
-          { label: t('settings.title'), value: 'settings', icon: <SettingOutlined /> }
-        ]}
-        block
-        onChange={(value) => setTab(value as 'topic' | 'settings')}
-      />
+    <Container style={{ ...border, width: topicPosition === 'left' ? '300px' : 'var(--assistants-width)' }}>
+      {showTab && (
+        <Segmented
+          value={tab}
+          className="segmented-tab"
+          style={{
+            borderRadius: 0,
+            padding: '10px',
+            gap: 5,
+            borderBottom: '0.5px solid var(--color-border)'
+          }}
+          options={
+            [
+              position === 'left' && topicPosition === 'left' ? assistantTab : undefined,
+              { label: t('common.topics'), value: 'topic', icon: <BarsOutlined /> },
+              { label: t('settings.title'), value: 'settings', icon: <SettingOutlined /> }
+            ].filter(Boolean) as SegmentedProps['options']
+          }
+          onChange={(value) => setTab(value as 'topic' | 'settings')}
+          block
+        />
+      )}
       <TabContent>
-        {tab === 'topic' && <Topics {...props} />}
-        {tab === 'settings' && <Settings assistant={props.assistant} />}
+        {tab === 'assistants' && (
+          <Assistants
+            activeAssistant={activeAssistant}
+            setActiveAssistant={setActiveAssistant}
+            onCreateAssistant={onCreateDefaultAssistant}
+          />
+        )}
+        {tab === 'topic' && (
+          <Topics assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
+        )}
+        {tab === 'settings' && <Settings assistant={activeAssistant} />}
       </TabContent>
     </Container>
   )

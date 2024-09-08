@@ -3,7 +3,6 @@ import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
-import { useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
@@ -26,7 +25,6 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
-  const { showTopics, toggleShowTopics } = useShowTopics()
   const { t } = useTranslation()
 
   const onDelete = useCallback(
@@ -100,7 +98,6 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
         })
       }
 
-      EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
       setActiveAssistant(assistant)
     },
     [generating, setActiveAssistant, t]
@@ -116,8 +113,8 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
               <AssistantItem onClick={() => onSwitchAssistant(assistant)} className={isCurrent ? 'active' : ''}>
                 <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
                 <ArrowRightButton
-                  className={`arrow-button ${isCurrent && showTopics ? 'active' : ''}`}
-                  onClick={() => isCurrent && toggleShowTopics()}>
+                  className={`arrow-button ${isCurrent ? 'active' : ''}`}
+                  onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
                   <i className="iconfont icon-gridlines" />
                 </ArrowRightButton>
                 {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
@@ -133,9 +130,6 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: var(--assistants-width);
-  max-width: var(--assistants-width);
-  border-right: 0.5px solid var(--color-border);
   height: calc(100vh - var(--navbar-height));
   overflow-y: auto;
   padding-top: 10px;

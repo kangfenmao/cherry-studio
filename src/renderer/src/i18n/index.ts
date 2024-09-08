@@ -37,7 +37,9 @@ const resources = {
         add: 'Add',
         added: 'Added',
         manage: 'Manage',
-        select_model: 'Select Model'
+        select_model: 'Select Model',
+        'show.all': 'Show All',
+        collapse: 'Collapse'
       },
       message: {
         copied: 'Copied!',
@@ -288,7 +290,9 @@ const resources = {
         add: '添加',
         added: '已添加',
         manage: '管理',
-        select_model: '选择模型'
+        select_model: '选择模型',
+        'show.all': '显示全部',
+        collapse: '收起'
       },
       message: {
         copied: '已复制',

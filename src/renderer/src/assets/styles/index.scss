@@ -48,8 +48,8 @@
   --status-bar-height: 40px;
   --input-bar-height: 85px;
 
-  --assistants-width: 240px;
-  --topic-list-width: 270px;
+  --assistants-width: 280px;
+  --topic-list-width: 280px;
   --settings-width: var(--assistants-width);
 }
 
@@ -207,4 +207,24 @@ body,
 
 .ant-drawer-header {
   -webkit-app-region: no-drag;
+}
+
+.segmented-tab {
+  .ant-segmented-item-label {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 13px;
+  }
+  .iconfont {
+    font-size: 13px;
+    margin-left: -2px;
+  }
+  .anticon-setting {
+    font-size: 12px;
+  }
+  .ant-segmented-item-icon + * {
+    margin-left: 4px;
+  }
 }

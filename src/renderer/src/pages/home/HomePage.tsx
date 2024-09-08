@@ -1,32 +1,24 @@
-import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
+import { useAssistants } from '@renderer/hooks/useAssistant'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
 import { Assistant, Topic } from '@renderer/types'
-import { uuid } from '@renderer/utils'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
 
-import Assistants from './Assistants'
 import Chat from './Chat'
 import Navbar from './Navbar'
+import RightSidebar from './RightSidebar'
 
 let _activeAssistant: Assistant
 
 const HomePage: FC = () => {
-  const { assistants, addAssistant } = useAssistants()
+  const { assistants } = useAssistants()
   const [activeAssistant, setActiveAssistant] = useState(_activeAssistant || assistants[0])
   const { showAssistants } = useShowAssistants()
-  const { defaultAssistant } = useDefaultAssistant()
 
   const { activeTopic, setActiveTopic } = useActiveTopic(activeAssistant)
 
   _activeAssistant = activeAssistant
-
-  const onCreateDefaultAssistant = () => {
-    const assistant = { ...defaultAssistant, id: uuid() }
-    addAssistant(assistant)
-    setActiveAssistant(assistant)
-  }
 
   const onSetActiveTopic = (topic: Topic) => {
     setActiveTopic(topic)
@@ -34,21 +26,23 @@ const HomePage: FC = () => {
 
   return (
     <Container>
-      <Navbar
-        activeAssistant={activeAssistant}
-        setActiveAssistant={setActiveAssistant}
-        activeTopic={activeTopic}
-        setActiveTopic={onSetActiveTopic}
-      />
+      <Navbar activeAssistant={activeAssistant} setActiveAssistant={setActiveAssistant} activeTopic={activeTopic} />
       <ContentContainer>
         {showAssistants && (
-          <Assistants
+          <RightSidebar
             activeAssistant={activeAssistant}
+            activeTopic={activeTopic}
             setActiveAssistant={setActiveAssistant}
-            onCreateAssistant={onCreateDefaultAssistant}
+            setActiveTopic={setActiveTopic}
+            position="left"
           />
         )}
-        <Chat assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={onSetActiveTopic} />
+        <Chat
+          assistant={activeAssistant}
+          activeTopic={activeTopic}
+          setActiveTopic={onSetActiveTopic}
+          setActiveAssistant={setActiveAssistant}
+        />
       </ContentContainer>
     </Container>
   )

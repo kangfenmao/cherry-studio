@@ -1,5 +1,4 @@
-import { FormOutlined } from '@ant-design/icons'
-import { Navbar, NavbarCenter, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import { HStack } from '@renderer/components/Layout'
 import AddAssistantPopup from '@renderer/components/Popups/AddAssistantPopup'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
@@ -8,11 +7,9 @@ import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
-import { getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant, Topic } from '@renderer/types'
 import { Switch } from 'antd'
-import { FC, useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
+import { FC } from 'react'
 import styled from 'styled-components'
 
 import SelectModelButton from './components/SelectModelButton'
@@ -21,32 +18,30 @@ interface Props {
   activeAssistant: Assistant
   activeTopic: Topic
   setActiveAssistant: (assistant: Assistant) => void
-  setActiveTopic: (topic: Topic) => void
 }
 
-const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiveTopic }) => {
-  const { assistant, addTopic } = useAssistant(activeAssistant.id)
-  const { t } = useTranslation()
+const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant }) => {
+  const { assistant } = useAssistant(activeAssistant.id)
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
-  const { showTopics, toggleShowTopics } = useShowTopics()
   const { theme, toggleTheme } = useTheme()
   const { topicPosition } = useSettings()
+  const { showTopics, toggleShowTopics } = useShowTopics()
 
   const onCreateAssistant = async () => {
     const assistant = await AddAssistantPopup.show()
     assistant && setActiveAssistant(assistant)
   }
 
-  const addNewTopic = useCallback(() => {
-    const topic = getDefaultTopic()
-    addTopic(topic)
-    setActiveTopic(topic)
-  }, [addTopic, setActiveTopic])
-
   return (
     <Navbar>
       {showAssistants && (
-        <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
+        <NavbarLeft
+          style={{
+            justifyContent: 'space-between',
+            borderRight: 'none',
+            padding: '0 8px',
+            width: topicPosition === 'left' ? '300px' : 'var(--assistants-width)'
+          }}>
           <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
             <i className="iconfont icon-hide-sidebar" />
           </NewButton>
@@ -55,34 +50,9 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, setActiv
           </NewButton>
         </NavbarLeft>
       )}
-      {showTopics && topicPosition === 'left' && (
-        <NavbarCenter
-          style={{
-            paddingLeft: isMac && !showAssistants ? 16 : 8,
-            paddingRight: 8,
-            maxWidth: 'var(--topic-list-width)',
-            justifyContent: 'space-between'
-          }}>
-          <HStack alignItems="center">
-            {!showAssistants && (
-              <NewButton onClick={toggleShowAssistants} style={{ marginRight: isMac ? 8 : 25 }}>
-                <i className="iconfont icon-show-sidebar" />
-              </NewButton>
-            )}
-            {showAssistants && (
-              <TitleText>
-                {t('chat.topics.title')} ({assistant.topics.length})
-              </TitleText>
-            )}
-          </HStack>
-          <NewButton onClick={addNewTopic}>
-            <FormOutlined />
-          </NewButton>
-        </NavbarCenter>
-      )}
       <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12, flex: 1 }}>
         <HStack alignItems="center">
-          {!showAssistants && (topicPosition === 'left' ? !showTopics : true) && (
+          {!showAssistants && (
             <NewButton
               onClick={() => toggleShowAssistants()}
               style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 4 : 0 }}>
