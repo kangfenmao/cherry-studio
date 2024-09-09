@@ -40,7 +40,7 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
     <DropdownMenu
       menu={{
         items,
-        style: { maxHeight: '80vh', overflow: 'auto' },
+        style: { maxHeight: '55vh', overflow: 'auto' },
         selectedKeys: model ? [getModelUniqId(model)] : []
       }}
       trigger={['click']}
