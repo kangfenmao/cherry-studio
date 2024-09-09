@@ -8,6 +8,7 @@ import SensetimeAppLogo from '@renderer/assets/images/apps/sensetime.png'
 import SparkDeskAppLogo from '@renderer/assets/images/apps/sparkdesk.png'
 import TiangongAiLogo from '@renderer/assets/images/apps/tiangong.png'
 import TencentYuanbaoAppLogo from '@renderer/assets/images/apps/yuanbao.png'
+import ZhihuAppLogo from '@renderer/assets/images/apps/zhihu.png'
 import MinApp from '@renderer/components/MinApp'
 import { PROVIDER_CONFIG } from '@renderer/config/provider'
 import { MinAppType } from '@renderer/types'
@@ -62,6 +63,11 @@ const _apps: MinAppType[] = [
     name: 'perplexity',
     logo: PerplexityAppLogo,
     url: 'https://www.perplexity.ai/'
+  },
+  {
+    name: '知乎直答',
+    logo: ZhihuAppLogo,
+    url: 'https://zhida.zhihu.com/'
   }
 ]
 
