@@ -71,6 +71,7 @@ const ProvidersList: FC = () => {
             content: t('settings.provider.delete.content'),
             okButtonProps: { danger: true },
             okText: t('common.delete'),
+            centered: true,
             onOk: () => {
               setSelectedProvider(providers.filter((p) => p.isSystem)[0])
               removeProvider(provider)

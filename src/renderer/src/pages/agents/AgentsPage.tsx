@@ -33,6 +33,7 @@ const AppsPage: FC = () => {
       icon: null,
       closable: true,
       maskClosable: true,
+      centered: true,
       okButtonProps: { type: 'primary', disabled: Boolean(added) },
       okText: added ? t('button.added') : t('button.add'),
       onOk: () => onAddAgent(agent)

@@ -63,6 +63,7 @@ export async function reset() {
       window.modal.confirm({
         title: i18n.t('message.reset.double.confirm.title'),
         content: i18n.t('message.reset.double.confirm.content'),
+        centered: true,
         onOk: async () => {
           await localStorage.clear()
           await localforage.clear()

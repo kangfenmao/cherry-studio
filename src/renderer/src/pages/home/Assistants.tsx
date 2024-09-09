@@ -72,6 +72,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
             window.modal.confirm({
               title: t('chat.topics.delete.all.title'),
               content: t('chat.topics.delete.all.content'),
+              centered: true,
               okButtonProps: { danger: true },
               onOk: removeAllTopics
             })
