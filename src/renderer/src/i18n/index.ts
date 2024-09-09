@@ -102,6 +102,9 @@ const resources = {
         'message.new.context': 'New Context',
         'assistant.search.placeholder': 'Search'
       },
+      files: {
+        title: 'Files'
+      },
       agents: {
         title: 'Assistants',
         my_agents: 'My Assistants',
@@ -357,6 +360,9 @@ const resources = {
         'add.assistant.title': '添加智能体',
         'message.new.context': '清除上下文',
         'assistant.search.placeholder': '搜索'
+      },
+      files: {
+        title: '文件'
       },
       agents: {
         title: '智能体',

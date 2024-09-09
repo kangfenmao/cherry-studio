@@ -26,6 +26,7 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } 
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import AttachmentButton from './AttachmentButton'
 import SendMessageButton from './SendMessageButton'
 import TokenCount from './TokenCount'
 
@@ -260,7 +261,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
-          {/* <AttachmentButton files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} /> */}
+          <AttachmentButton files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={onToggleExpended}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}

@@ -1,4 +1,4 @@
-import { TranslationOutlined } from '@ant-design/icons'
+import { FolderOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
@@ -49,6 +49,11 @@ const Sidebar: FC = () => {
           <StyledLink onClick={onToggleShowAssistants}>
             <Icon className={isRoute('/')}>
               <i className="iconfont icon-chat"></i>
+            </Icon>
+          </StyledLink>
+          <StyledLink onClick={() => to('/files')}>
+            <Icon className={isRoute('/files')}>
+              <FolderOutlined />
             </Icon>
           </StyledLink>
           <StyledLink onClick={() => to('/agents')}>
