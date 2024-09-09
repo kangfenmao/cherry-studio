@@ -57,6 +57,11 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    智能助理和消息列表合并
-    优化输入框样式
-    提升小程序稳定性
+    本次更新：
+      增加知乎直问小程序
+      支持 DeepSeek V2.5
+      各种弹窗居中显示
+    近期更新：
+      智能助理和消息列表合并
+      优化输入框样式
+      提升小程序稳定性
