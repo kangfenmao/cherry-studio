@@ -35,13 +35,13 @@ const PopupContainer: React.FC = () => {
 
   return (
     <Modal
-      style={{ marginTop: '10vh' }}
       title={t('agents.manage.title')}
       open={open}
       onOk={onOk}
       onCancel={onCancel}
       afterClose={onClose}
-      footer={null}>
+      footer={null}
+      centered>
       <Container>
         {agents.length > 0 && (
           <DragableList list={agents} onUpdate={updateAgents}>

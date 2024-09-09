@@ -83,14 +83,14 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
 
   return (
     <Modal
-      style={{ marginTop: '10vh' }}
       title={agent ? t('agents.edit.title') : t('agents.add.title')}
       open={open}
       onOk={() => formRef.current?.submit()}
       onCancel={onCancel}
       maskClosable={false}
       afterClose={onClose}
-      okText={agent ? t('common.save') : t('agents.add.button')}>
+      okText={agent ? t('common.save') : t('agents.add.button')}
+      centered>
       <Form
         ref={formRef}
         form={form}
@@ -108,7 +108,7 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
           <Input placeholder={t('agents.add.name.placeholder')} spellCheck={false} allowClear />
         </Form.Item>
         <Form.Item name="prompt" label={t('agents.add.prompt')} rules={[{ required: true }]}>
-          <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={4} />
+          <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={10} />
         </Form.Item>
       </Form>
     </Modal>

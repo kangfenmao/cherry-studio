@@ -38,6 +38,7 @@ const PopupContainer: React.FC<Props> = ({ provider, resolve }) => {
       afterClose={onClose}
       width={360}
       closable={false}
+      centered
       title={t('settings.provider.edit.name')}
       okButtonProps={{ disabled: buttonDisabled }}>
       <Input

@@ -107,7 +107,8 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
       styles={{
         content: { padding: 0 },
         header: { padding: 22, paddingBottom: 15 }
-      }}>
+      }}
+      centered>
       <SearchContainer>
         <Search placeholder={t('settings.provider.search_placeholder')} allowClear onSearch={setSearchText} />
       </SearchContainer>

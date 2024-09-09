@@ -67,7 +67,8 @@ const PopupContainer: React.FC<Props> = ({ title, provider, resolve }) => {
       onCancel={onCancel}
       maskClosable={false}
       afterClose={onClose}
-      footer={null}>
+      footer={null}
+      centered>
       <Form
         form={form}
         labelCol={{ flex: '110px' }}

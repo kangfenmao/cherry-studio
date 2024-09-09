@@ -67,7 +67,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
 
   return (
     <Modal
-      style={{ marginTop: '5vh' }}
+      centered
       title={t('chat.add.assistant.title')}
       open={open}
       onCancel={onCancel}
