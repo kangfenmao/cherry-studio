@@ -27,6 +27,7 @@ declare global {
       fileDelete: (fileId: string) => Promise<{ success: boolean }>
       fileBatchUpload: (filePaths: string[]) => Promise<FileMetadata[]>
       fileBatchDelete: (fileIds: string[]) => Promise<{ success: boolean }>
+      fileGetAll: () => Promise<FileMetadata[]>
     }
   }
 }

@@ -20,7 +20,8 @@ const api = {
   fileUpload: (filePath: string) => ipcRenderer.invoke('file:upload', filePath),
   fileDelete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
   fileBatchUpload: (filePaths: string[]) => ipcRenderer.invoke('file:batchUpload', filePaths),
-  fileBatchDelete: (fileIds: string[]) => ipcRenderer.invoke('file:batchDelete', fileIds)
+  fileBatchDelete: (fileIds: string[]) => ipcRenderer.invoke('file:batchDelete', fileIds),
+  fileGetAll: () => ipcRenderer.invoke('file:getAll')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -34,27 +34,18 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
   ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
 
-  ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => {
-    return await fileManager.selectFile(options)
-  })
-
-  ipcMain.handle('file:upload', async (_, filePath: string) => {
-    return await fileManager.uploadFile(filePath)
-  })
-
+  ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
+  ipcMain.handle('file:upload', async (_, filePath: string) => await fileManager.uploadFile(filePath))
   ipcMain.handle('file:delete', async (_, fileId: string) => {
     await fileManager.deleteFile(fileId)
     return { success: true }
   })
-
-  ipcMain.handle('file:batchUpload', async (_, filePaths: string[]) => {
-    return await fileManager.batchUploadFiles(filePaths)
-  })
-
+  ipcMain.handle('file:batchUpload', async (_, filePaths: string[]) => await fileManager.batchUploadFiles(filePaths))
   ipcMain.handle('file:batchDelete', async (_, fileIds: string[]) => {
     await fileManager.batchDeleteFiles(fileIds)
     return { success: true }
   })
+  ipcMain.handle('file:getAll', () => fileManager.getAllFiles())
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

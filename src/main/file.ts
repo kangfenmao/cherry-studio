@@ -1,3 +1,4 @@
+import Database from 'better-sqlite3'
 import * as crypto from 'crypto'
 import { app, dialog, OpenDialogOptions } from 'electron'
 import * as fs from 'fs'
@@ -7,25 +8,32 @@ import { v4 as uuidv4 } from 'uuid'
 interface FileMetadata {
   id: string
   name: string
-  fileName: string
+  file_name: string
   path: string
   size: number
   ext: string
-  createdAt: Date
+  created_at: Date
 }
 
 export class File {
   private storageDir: string
+  private db: Database.Database
 
   constructor() {
     this.storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
     this.initStorageDir()
+    this.initDatabase()
   }
 
   private initStorageDir(): void {
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true })
     }
+  }
+
+  private initDatabase(): void {
+    const dbPath = path.join(app.getPath('userData'), 'Data', 'data.db')
+    this.db = new Database(dbPath)
   }
 
   private async getFileHash(filePath: string): Promise<string> {
@@ -55,15 +63,8 @@ export class File {
 
         if (originalHash === storedHash) {
           const ext = path.extname(file)
-          return {
-            id: path.basename(file, ext),
-            name: path.basename(filePath),
-            fileName: file,
-            path: storedFilePath,
-            createdAt: storedStats.birthtime,
-            size: storedStats.size,
-            ext: ext
-          }
+          const id = path.basename(file, ext)
+          return this.getFile(id)
         }
       }
     }
@@ -91,9 +92,9 @@ export class File {
       return {
         id: uuidv4(),
         name: path.basename(filePath),
-        fileName: path.basename(filePath),
+        file_name: path.basename(filePath),
         path: filePath,
-        createdAt: stats.birthtime,
+        created_at: stats.birthtime,
         size: stats.size,
         ext: ext
       }
@@ -117,20 +118,41 @@ export class File {
     await fs.promises.copyFile(filePath, destPath)
     const stats = await fs.promises.stat(destPath)
 
-    return {
+    const fileMetadata: FileMetadata = {
       id: uuid,
       name,
-      fileName: uuid + ext,
+      file_name: uuid + ext,
       path: destPath,
-      createdAt: stats.birthtime,
+      created_at: stats.birthtime,
       size: stats.size,
       ext: ext
     }
+
+    const stmt = this.db.prepare(`
+      INSERT INTO files (id, name, file_name, path, size, ext, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `)
+
+    stmt.run(
+      fileMetadata.id,
+      fileMetadata.name,
+      fileMetadata.file_name,
+      fileMetadata.path,
+      fileMetadata.size,
+      fileMetadata.ext,
+      fileMetadata.created_at.toISOString()
+    )
+
+    return fileMetadata
   }
 
   async deleteFile(fileId: string): Promise<void> {
-    const filePath = path.join(this.storageDir, fileId)
-    await fs.promises.unlink(filePath)
+    const fileMetadata = this.getFile(fileId)
+    if (fileMetadata) {
+      await fs.promises.unlink(fileMetadata.path)
+      const stmt = this.db.prepare('DELETE FROM files WHERE id = ?')
+      stmt.run(fileId)
+    }
   }
 
   async batchUploadFiles(filePaths: string[]): Promise<FileMetadata[]> {
@@ -141,5 +163,26 @@ export class File {
   async batchDeleteFiles(fileIds: string[]): Promise<void> {
     const deletePromises = fileIds.map((fileId) => this.deleteFile(fileId))
     await Promise.all(deletePromises)
+  }
+
+  getFile(id: string): FileMetadata | null {
+    const stmt = this.db.prepare('SELECT * FROM files WHERE id = ?')
+    const row = stmt.get(id) as any
+    if (row) {
+      return {
+        ...row,
+        created_at: new Date(row.created_at)
+      }
+    }
+    return null
+  }
+
+  getAllFiles(): FileMetadata[] {
+    const stmt = this.db.prepare('SELECT * FROM files')
+    const rows = stmt.all() as any[]
+    return rows.map((row) => ({
+      ...row,
+      created_at: new Date(row.created_at)
+    }))
   }
 }

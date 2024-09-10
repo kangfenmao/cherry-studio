@@ -86,3 +86,13 @@ export type MinAppType = {
   logo: string
   url: string
 }
+
+export interface FileMetadata {
+  id: string
+  name: string
+  file_name: string
+  path: string
+  size: number
+  ext: string
+  created_at: Date
+}

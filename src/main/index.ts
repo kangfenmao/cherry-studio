@@ -1,15 +1,30 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow } from 'electron'
+import Logger from 'electron-log'
+import path from 'path'
 
+import { DatabaseMigrator } from './db/DatabaseMigrator'
 import { registerIpc } from './ipc'
+import { getResourcePath } from './utils'
 import { updateUserDataPath } from './utils/upgrade'
 import { createMainWindow } from './window'
+
+async function migrateDatabase() {
+  const migrationsDir = path.join(getResourcePath(), 'migrations')
+  const migrator = new DatabaseMigrator(migrationsDir)
+
+  await migrator.migrate()
+  migrator.close()
+
+  Logger.log('Database migration completed successfully.')
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
   await updateUserDataPath()
+  await migrateDatabase()
 
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.kangfenmao.CherryStudio')
