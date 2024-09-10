@@ -187,10 +187,7 @@ const SettingsTab: FC<Props> = (props) => {
           <Slider
             value={fontSizeValue}
             onChange={(value) => setFontSizeValue(value)}
-            onChangeComplete={(value) => {
-              dispatch(setFontSize(value))
-              console.debug('set font size', value)
-            }}
+            onChangeComplete={(value) => dispatch(setFontSize(value))}
             min={12}
             max={18}
             step={1}

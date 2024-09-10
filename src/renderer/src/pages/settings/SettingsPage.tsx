@@ -90,7 +90,7 @@ const ContentContainer = styled.div`
 const SettingMenus = styled.ul`
   display: flex;
   flex-direction: column;
-  min-width: var(--assistants-width);
+  min-width: var(--settings-width);
   border-right: 0.5px solid var(--color-border);
   padding: 10px;
 `

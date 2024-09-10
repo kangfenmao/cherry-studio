@@ -31,7 +31,7 @@
   --color-text: var(--color-text-1);
   --color-icon: #ffffff99;
   --color-icon-white: #ffffff;
-  --color-border: #ffffff28;
+  --color-border: #ffffff20;
   --color-border-soft: #ffffff20;
   --color-error: #f44336;
   --color-link: #1677ff;
@@ -50,7 +50,7 @@
 
   --assistants-width: 280px;
   --topic-list-width: 280px;
-  --settings-width: var(--assistants-width);
+  --settings-width: 260px;
 }
 
 body[theme-mode='light'] {

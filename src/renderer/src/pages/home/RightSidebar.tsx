@@ -24,11 +24,11 @@ interface Props {
 
 type Tab = 'assistants' | 'topic' | 'settings'
 
-let _tab = ''
+let _tab: any = ''
 
 const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant, setActiveTopic, position }) => {
   const { addAssistant } = useAssistants()
-  const [tab, setTab] = useState<Tab>(_tab || position === 'left' ? 'assistants' : 'topic')
+  const [tab, setTab] = useState<Tab>(position === 'left' ? _tab || 'assistants' : 'topic')
   const { topicPosition } = useSettings()
   const { defaultAssistant } = useDefaultAssistant()
   const { toggleShowTopics } = useShowTopics()
@@ -37,7 +37,10 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
 
   const borderStyle = '0.5px solid var(--color-border)'
   const border = position === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }
-  _tab = tab
+
+  if (position === 'left' && topicPosition === 'left') {
+    _tab = tab
+  }
 
   const showTab = !(position === 'left' && topicPosition === 'right')
   const assistantTab = {
@@ -73,8 +76,17 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [position, showTab, tab, toggleShowTopics, topicPosition])
 
+  useEffect(() => {
+    if (position === 'right' && topicPosition === 'right' && tab === 'assistants') {
+      setTab('topic')
+    }
+    if (position === 'left' && topicPosition === 'right' && tab !== 'assistants') {
+      setTab('assistants')
+    }
+  }, [position, tab, topicPosition])
+
   return (
-    <Container style={{ ...border }}>
+    <Container style={border}>
       {showTab && (
         <Segmented
           value={tab}

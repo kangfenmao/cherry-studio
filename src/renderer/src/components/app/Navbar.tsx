@@ -66,7 +66,7 @@ const NavbarCenterContainer = styled.div`
 `
 
 const NavbarRightContainer = styled.div`
-  min-width: var(--settings-width);
+  min-width: var(--topic-list-width);
   display: flex;
   align-items: center;
   padding: 0 12px;

@@ -10,6 +10,8 @@ export function useActiveTopic(_assistant: Assistant) {
   const { assistant } = useAssistant(_assistant.id)
   const [activeTopic, setActiveTopic] = useState(_activeTopic || assistant?.topics[0])
 
+  _activeTopic = activeTopic
+
   useEffect(() => {
     // activeTopic not in assistant.topics
     if (assistant && !find(assistant.topics, { id: activeTopic?.id })) {
