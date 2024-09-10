@@ -42,13 +42,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant }) => {
   return (
     <Navbar>
       {showAssistants && (
-        <NavbarLeft
-          style={{
-            justifyContent: 'space-between',
-            borderRight: 'none',
-            padding: '0 8px',
-            width: topicPosition === 'left' ? '300px' : 'var(--assistants-width)'
-          }}>
+        <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
           <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
             <i className="iconfont icon-hide-sidebar" />
           </NewButton>

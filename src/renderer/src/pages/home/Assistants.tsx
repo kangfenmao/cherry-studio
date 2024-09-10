@@ -181,14 +181,14 @@ const ArrowRightButton = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  min-height: 24px;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
   border-radius: 4px;
   position: absolute;
-  right: 10px;
-  top: 5px;
+  right: 9px;
+  top: 6px;
   .anticon {
     font-size: 14px;
   }

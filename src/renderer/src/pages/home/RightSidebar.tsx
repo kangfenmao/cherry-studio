@@ -22,9 +22,13 @@ interface Props {
   position: 'left' | 'right'
 }
 
+type Tab = 'assistants' | 'topic' | 'settings'
+
+let _tab = ''
+
 const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant, setActiveTopic, position }) => {
   const { addAssistant } = useAssistants()
-  const [tab, setTab] = useState<'assistants' | 'topic' | 'settings'>(position === 'left' ? 'assistants' : 'topic')
+  const [tab, setTab] = useState<Tab>(_tab || position === 'left' ? 'assistants' : 'topic')
   const { topicPosition } = useSettings()
   const { defaultAssistant } = useDefaultAssistant()
   const { toggleShowTopics } = useShowTopics()
@@ -33,6 +37,7 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
 
   const borderStyle = '0.5px solid var(--color-border)'
   const border = position === 'left' ? { borderRight: borderStyle } : { borderLeft: borderStyle }
+  _tab = tab
 
   const showTab = !(position === 'left' && topicPosition === 'right')
   const assistantTab = {
@@ -74,12 +79,7 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
         <Segmented
           value={tab}
           className="segmented-tab"
-          style={{
-            borderRadius: 0,
-            padding: '10px',
-            gap: 3,
-            borderBottom: '0.5px solid var(--color-border)'
-          }}
+          style={{ borderRadius: 0, padding: '10px', gap: 2, borderBottom: borderStyle }}
           options={
             [
               position === 'left' && topicPosition === 'left' ? assistantTab : undefined,
