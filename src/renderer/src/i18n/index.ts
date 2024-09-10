@@ -102,17 +102,17 @@ const resources = {
         'message.new.context': 'New Context'
       },
       agents: {
-        title: 'Agents',
-        my_agents: 'My Agents',
-        'add.title': 'Add Agent',
-        'edit.title': 'Edit Agent',
+        title: 'Assistants',
+        my_agents: 'My Assistants',
+        'add.title': 'Add Assistant',
+        'edit.title': 'Edit Assistant',
         'add.name': 'Name',
         'add.name.placeholder': 'Enter name',
         'add.prompt': 'Prompt',
         'add.prompt.placeholder': 'Enter prompt',
         'add.button': 'Add',
-        'manage.title': 'Manage Agents',
-        'delete.popup.content': 'Are you sure you want to delete this agent?',
+        'manage.title': 'Manage Assistants',
+        'delete.popup.content': 'Are you sure you want to delete this assistant?',
         'tag.default': 'Default',
         'tag.system': 'System',
         'tag.user': 'Mine'
