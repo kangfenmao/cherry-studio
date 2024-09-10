@@ -69,7 +69,7 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
   }, [position, showTab, tab, toggleShowTopics, topicPosition])
 
   return (
-    <Container style={{ ...border, width: topicPosition === 'left' ? '300px' : 'var(--assistants-width)' }}>
+    <Container style={{ ...border }}>
       {showTab && (
         <Segmented
           value={tab}
@@ -77,7 +77,7 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
           style={{
             borderRadius: 0,
             padding: '10px',
-            gap: 5,
+            gap: 3,
             borderBottom: '0.5px solid var(--color-border)'
           }}
           options={
@@ -111,7 +111,7 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: var(--topic-list-width);
+  width: var(--assistants-width);
   height: calc(100vh - var(--navbar-height));
   .collapsed {
     width: 0;
