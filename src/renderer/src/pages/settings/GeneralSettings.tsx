@@ -1,5 +1,6 @@
 import { FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
+import { isMac } from '@renderer/config/constant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { backup, reset, restore } from '@renderer/services/backup'
@@ -76,18 +77,20 @@ const GeneralSettings: FC = () => {
         />
       </SettingRow>
       <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
-        <Select
-          defaultValue={windowStyle || 'opaque'}
-          style={{ width: 180 }}
-          onChange={setWindowStyle}
-          options={[
-            { value: 'transparent', label: t('settings.theme.window.style.transparent') },
-            { value: 'opaque', label: t('settings.theme.window.style.opaque') }
-          ]}
-        />
-      </SettingRow>
+      {isMac && (
+        <SettingRow>
+          <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
+          <Select
+            defaultValue={windowStyle || 'opaque'}
+            style={{ width: 180 }}
+            onChange={setWindowStyle}
+            options={[
+              { value: 'transparent', label: t('settings.theme.window.style.transparent') },
+              { value: 'opaque', label: t('settings.theme.window.style.opaque') }
+            ]}
+          />
+        </SettingRow>
+      )}
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
