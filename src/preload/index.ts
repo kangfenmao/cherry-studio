@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
 const api = {
@@ -15,7 +15,12 @@ const api = {
     ipcRenderer.invoke('save-file', path, content, options)
   },
   compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
-  decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text)
+  decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text),
+  fileSelect: (options?: OpenDialogOptions) => ipcRenderer.invoke('file:select', options),
+  fileUpload: (filePath: string) => ipcRenderer.invoke('file:upload', filePath),
+  fileDelete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
+  fileBatchUpload: (filePaths: string[]) => ipcRenderer.invoke('file:batchUpload', filePaths),
+  fileBatchDelete: (fileIds: string[]) => ipcRenderer.invoke('file:batchDelete', fileIds)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

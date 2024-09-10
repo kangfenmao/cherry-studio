@@ -7,13 +7,23 @@ import styled from 'styled-components'
 const FilesPage: FC = () => {
   const { t } = useTranslation()
 
+  const handleSelectFile = async () => {
+    const files = await window.api.fileSelect({
+      properties: ['openFile', 'multiSelections']
+    })
+    for (const file of files || []) {
+      const result = await window.api.fileUpload(file.path)
+      console.log('Selected file:', file, result)
+    }
+  }
+
   return (
     <Container>
       <Navbar>
         <NavbarCenter style={{ borderRight: 'none' }}>{t('files.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer>
-        <Button>添加文件</Button>
+        <Button onClick={handleSelectFile}>添加文件</Button>
       </ContentContainer>
     </Container>
   )

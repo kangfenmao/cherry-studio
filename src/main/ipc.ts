@@ -1,10 +1,13 @@
-import { BrowserWindow, ipcMain, session, shell } from 'electron'
+import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'electron'
 
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
+import { File } from './file'
 import AppUpdater from './updater'
 import { openFile, saveFile } from './utils/file'
 import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
+
+const fileManager = new File()
 
 export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   const { autoUpdater } = new AppUpdater(mainWindow)
@@ -30,6 +33,28 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
   ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
+
+  ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => {
+    return await fileManager.selectFile(options)
+  })
+
+  ipcMain.handle('file:upload', async (_, filePath: string) => {
+    return await fileManager.uploadFile(filePath)
+  })
+
+  ipcMain.handle('file:delete', async (_, fileId: string) => {
+    await fileManager.deleteFile(fileId)
+    return { success: true }
+  })
+
+  ipcMain.handle('file:batchUpload', async (_, filePaths: string[]) => {
+    return await fileManager.batchUploadFiles(filePaths)
+  })
+
+  ipcMain.handle('file:batchDelete', async (_, fileIds: string[]) => {
+    await fileManager.batchDeleteFiles(fileIds)
+    return { success: true }
+  })
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

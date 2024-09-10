@@ -1,6 +1,8 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import type { OpenDialogOptions } from 'electron'
 
+import type FileMetadata from '../main/file'
+
 declare global {
   interface Window {
     electron: ElectronAPI
@@ -20,6 +22,11 @@ declare global {
       reload: () => void
       compress: (text: string) => Promise<Buffer>
       decompress: (text: Buffer) => Promise<string>
+      fileSelect: (options?: OpenDialogOptions) => Promise<FileMetadata[] | null>
+      fileUpload: (filePath: string) => Promise<FileMetadata>
+      fileDelete: (fileId: string) => Promise<{ success: boolean }>
+      fileBatchUpload: (filePaths: string[]) => Promise<FileMetadata[]>
+      fileBatchDelete: (fileIds: string[]) => Promise<{ success: boolean }>
     }
   }
 }
