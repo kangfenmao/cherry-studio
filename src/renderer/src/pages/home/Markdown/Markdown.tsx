@@ -31,7 +31,7 @@ const Markdown: FC<Props> = ({ message }) => {
       <ReactMarkdown
         className="markdown"
         rehypePlugins={[rehypeKatex]}
-        remarkPlugins={[[remarkMath, { singleDollarTextMath: false }], remarkGfm]}
+        remarkPlugins={[remarkMath, remarkGfm]}
         remarkRehypeOptions={{
           footnoteLabel: t('common.footnotes'),
           footnoteLabelTagName: 'h4',
