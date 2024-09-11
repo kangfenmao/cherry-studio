@@ -10,12 +10,12 @@ import {
 } from '@ant-design/icons'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useShowTopics } from '@renderer/hooks/useStore'
+import { useRuntime, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { estimateInputTokenCount } from '@renderer/services/messages'
-import store, { useAppSelector } from '@renderer/store'
-import { setGenerating } from '@renderer/store/runtime'
+import store, { useAppDispatch, useAppSelector } from '@renderer/store'
+import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { delay, uuid } from '@renderer/utils'
 import { Button, Popconfirm, Tooltip } from 'antd'
@@ -50,6 +50,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { t } = useTranslation()
   const containerRef = useRef(null)
   const { showTopics, toggleShowTopics } = useShowTopics()
+  const { searching } = useRuntime()
+  const dispatch = useAppDispatch()
 
   _text = text
 
@@ -215,6 +217,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         onFocus={() => setInputFocus(true)}
         onBlur={() => setInputFocus(false)}
         onInput={onInput}
+        disabled={searching}
+        onClick={() => searching && dispatch(setSearching(false))}
       />
       <Toolbar>
         <ToolbarMenu>

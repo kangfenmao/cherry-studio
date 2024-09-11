@@ -3,15 +3,17 @@ import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
+import { useRuntime } from '@renderer/hooks/useStore'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { useAppSelector } from '@renderer/store'
+import { useAppDispatch, useAppSelector } from '@renderer/store'
+import { setSearching } from '@renderer/store/runtime'
 import { Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Dropdown, Input } from 'antd'
+import { Dropdown, Input, InputRef } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { isEmpty, last } from 'lodash'
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -26,7 +28,10 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const generating = useAppSelector((state) => state.runtime.generating)
   const [search, setSearch] = useState('')
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
+  const searchRef = useRef<InputRef>(null)
   const { t } = useTranslation()
+  const { searching } = useRuntime()
+  const dispatch = useAppDispatch()
 
   const onDelete = useCallback(
     (assistant: Assistant) => {
@@ -108,13 +113,42 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const list = assistants.filter((assistant) => assistant.name?.toLowerCase().includes(search.toLowerCase().trim()))
 
   const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (list.length === 1) {
-        onSwitchAssistant(list[0])
-        setSearch('')
+    const isEnterPressed = e.keyCode == 13
+
+    if (e.key === 'Escape') {
+      return searchRef.current?.blur()
+    }
+
+    if (isEnterPressed) {
+      if (list.length > 0) {
+        if (list.length === 1) {
+          onSwitchAssistant(list[0])
+          setSearch('')
+          setTimeout(() => searchRef.current?.blur(), 0)
+          return
+        }
+        const index = list.findIndex((a) => a.id === activeAssistant?.id)
+        onSwitchAssistant(index === list.length - 1 ? list[0] : list[index + 1])
       }
     }
+
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      searchRef.current?.focus()
+      searchRef.current?.select()
+    }
   }
+
+  // Command or Ctrl + K create new topic
+  useEffect(() => {
+    const onKeydown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        searchRef.current?.focus()
+        searchRef.current?.select()
+      }
+    }
+    document.addEventListener('keydown', onKeydown)
+    return () => document.removeEventListener('keydown', onKeydown)
+  }, [activeAssistant?.id, list, onSwitchAssistant])
 
   return (
     <Container>
@@ -129,6 +163,12 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
             onChange={(e) => setSearch(e.target.value)}
             style={{ borderRadius: 4 }}
             onKeyDown={onSearch}
+            ref={searchRef}
+            onFocus={() => dispatch(setSearching(true))}
+            onBlur={() => {
+              dispatch(setSearching(false))
+              setSearch('')
+            }}
             allowClear
           />
         </SearchContainer>

@@ -15,6 +15,10 @@ export function getDefaultAssistant(): Assistant {
   }
 }
 
+export function getDefaultAssistantSettings() {
+  return store.getState().assistants.defaultAssistant.settings
+}
+
 export function getDefaultTopic(): Topic {
   return {
     id: uuid(),
@@ -84,8 +88,9 @@ export function covertAgentToAssistant(agent: Agent): Assistant {
   return {
     ...getDefaultAssistant(),
     ...agent,
+    id: agent.group === 'system' ? uuid() : String(agent.id),
     name: getAssistantNameWithAgent(agent),
-    id: agent.group === 'system' ? uuid() : String(agent.id)
+    settings: getDefaultAssistantSettings()
   }
 }
 
