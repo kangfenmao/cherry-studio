@@ -46,7 +46,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
       return {
         mime,
         base64,
-        data: `data:image/${mime};base64,${base64}`
+        data: `data:${mime};base64,${base64}`
       }
     } catch (error) {
       Logger.error('Error reading file:', error)
