@@ -96,6 +96,7 @@ export interface FileMetadata {
   ext: string
   type: FileType
   created_at: Date
+  count: number
 }
 
 export enum FileType {

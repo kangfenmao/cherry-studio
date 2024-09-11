@@ -2,6 +2,7 @@ import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { VStack } from '@renderer/components/Layout'
 import { FileMetadata } from '@renderer/types'
 import { Image, Table } from 'antd'
+import dayjs from 'dayjs'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -18,7 +19,7 @@ const FilesPage: FC = () => {
     file: <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />,
     name: <a href={'file://' + file.path}>{file.name}</a>,
     size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-    created_at: file.created_at.toISOString().split('T')[0]
+    created_at: dayjs(file.created_at).format('MM-DD HH:mm')
   }))
 
   const columns = [

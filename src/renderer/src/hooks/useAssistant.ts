@@ -29,9 +29,8 @@ export function useAssistants() {
     removeAssistant: (id: string) => {
       dispatch(removeAssistant({ id }))
       const assistant = assistants.find((a) => a.id === id)
-      if (assistant) {
-        assistant.topics.forEach(({ id }) => LocalStorage.removeTopic(id))
-      }
+      const topics = assistant?.topics || []
+      topics.forEach(({ id }) => LocalStorage.removeTopic(id))
     }
   }
 }
@@ -45,7 +44,10 @@ export function useAssistant(id: string) {
     assistant,
     model: assistant?.model ?? defaultModel,
     addTopic: (topic: Topic) => dispatch(addTopic({ assistantId: assistant.id, topic })),
-    removeTopic: (topic: Topic) => dispatch(removeTopic({ assistantId: assistant.id, topic })),
+    removeTopic: (topic: Topic) => {
+      LocalStorage.removeTopic(topic.id)
+      dispatch(removeTopic({ assistantId: assistant.id, topic }))
+    },
     updateTopic: (topic: Topic) => dispatch(updateTopic({ assistantId: assistant.id, topic })),
     updateTopics: (topics: Topic[]) => dispatch(updateTopics({ assistantId: assistant.id, topics })),
     removeAllTopics: () => dispatch(removeAllTopics({ assistantId: assistant.id })),

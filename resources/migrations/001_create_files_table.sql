@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS files (
   size INTEGER NOT NULL,
   ext TEXT NOT NULL,
   type TEXT NOT NULL,
-  created_at TEXT NOT NULL
+  created_at TEXT NOT NULL,
+  count INTEGER DEFAULT 1
 )

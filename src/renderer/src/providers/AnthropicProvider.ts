@@ -18,6 +18,31 @@ export default class AnthropicProvider extends BaseProvider {
     this.sdk = new Anthropic({ apiKey: provider.apiKey, baseURL: this.getBaseURL() })
   }
 
+  private async getMessageContent(message: Message): Promise<MessageParam['content']> {
+    const file = first(message.files)
+
+    if (!file) {
+      return message.content
+    }
+
+    if (file.type === 'image') {
+      const base64Data = await window.api.image.base64(file.path)
+      return [
+        { type: 'text', text: message.content },
+        {
+          type: 'image',
+          source: {
+            data: base64Data.base64,
+            media_type: base64Data.mime.replace('jpg', 'jpeg') as any,
+            type: 'base64'
+          }
+        }
+      ]
+    }
+
+    return message.content
+  }
+
   public async completions(
     messages: Message[],
     assistant: Assistant,
@@ -27,12 +52,14 @@ export default class AnthropicProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 2))).map((message) => {
-      return {
+    const userMessages: MessageParam[] = []
+
+    for (const message of filterMessages(filterContextMessages(takeRight(messages, contextCount + 2)))) {
+      userMessages.push({
         role: message.role,
-        content: message.content
-      }
-    })
+        content: await this.getMessageContent(message)
+      })
+    }
 
     if (first(userMessages)?.role === 'assistant') {
       userMessages.shift()

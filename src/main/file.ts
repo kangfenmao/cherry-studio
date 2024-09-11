@@ -91,7 +91,8 @@ export class File {
         created_at: stats.birthtime,
         size: stats.size,
         ext: ext,
-        type: fileType
+        type: fileType,
+        count: 1
       }
     })
 
@@ -102,7 +103,12 @@ export class File {
     const duplicateFile = await this.findDuplicateFile(file.path)
 
     if (duplicateFile) {
-      return duplicateFile
+      // Increment the count for the duplicate file
+      const updateStmt = this.db.prepare('UPDATE files SET count = count + 1 WHERE id = ?')
+      updateStmt.run(duplicateFile.id)
+
+      // Fetch the updated file metadata
+      return this.getFile(duplicateFile.id)!
     }
 
     const uuid = uuidv4()
@@ -122,12 +128,13 @@ export class File {
       created_at: stats.birthtime,
       size: stats.size,
       ext: ext,
-      type: fileType
+      type: fileType,
+      count: 1
     }
 
     const stmt = this.db.prepare(`
-      INSERT INTO files (id, name, file_name, path, size, ext, type, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO files (id, name, file_name, path, size, ext, type, created_at, count)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
 
     stmt.run(
@@ -138,7 +145,8 @@ export class File {
       fileMetadata.size,
       fileMetadata.ext,
       fileMetadata.type,
-      fileMetadata.created_at.toISOString()
+      fileMetadata.created_at.toISOString(),
+      fileMetadata.count
     )
 
     return fileMetadata
@@ -147,9 +155,16 @@ export class File {
   async deleteFile(fileId: string): Promise<void> {
     const fileMetadata = this.getFile(fileId)
     if (fileMetadata) {
-      await fs.promises.unlink(fileMetadata.path)
-      const stmt = this.db.prepare('DELETE FROM files WHERE id = ?')
-      stmt.run(fileId)
+      if (fileMetadata.count > 1) {
+        // Decrement the count if there are multiple references
+        const updateStmt = this.db.prepare('UPDATE files SET count = count - 1 WHERE id = ?')
+        updateStmt.run(fileId)
+      } else {
+        // Delete the file and database entry if this is the last reference
+        await fs.promises.unlink(fileMetadata.path)
+        const deleteStmt = this.db.prepare('DELETE FROM files WHERE id = ?')
+        deleteStmt.run(fileId)
+      }
     }
   }
 
@@ -166,21 +181,12 @@ export class File {
   getFile(id: string): FileMetadata | null {
     const stmt = this.db.prepare('SELECT * FROM files WHERE id = ?')
     const row = stmt.get(id) as any
-    if (row) {
-      return {
-        ...row,
-        created_at: new Date(row.created_at)
-      }
-    }
-    return null
+    return row ? { ...row, created_at: new Date(row.created_at) } : null
   }
 
   getAllFiles(): FileMetadata[] {
     const stmt = this.db.prepare('SELECT * FROM files')
     const rows = stmt.all() as any[]
-    return rows.map((row) => ({
-      ...row,
-      created_at: new Date(row.created_at)
-    }))
+    return rows.map((row) => ({ ...row, created_at: new Date(row.created_at) }))
   }
 }
