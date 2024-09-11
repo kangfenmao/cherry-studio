@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS files (
   path TEXT NOT NULL,
   size INTEGER NOT NULL,
   ext TEXT NOT NULL,
+  type TEXT NOT NULL,
   created_at TEXT NOT NULL
 )

@@ -3,7 +3,12 @@ import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { getTopic } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { estimateHistoryTokenCount, filterMessages, getContextCount } from '@renderer/services/messages'
+import {
+  deleteMessageFiles,
+  estimateHistoryTokenCount,
+  filterMessages,
+  getContextCount
+} from '@renderer/services/messages'
 import LocalStorage from '@renderer/services/storage'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
@@ -56,6 +61,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       const _messages = messages.filter((m) => m.id !== message.id)
       setMessages(_messages)
       localforage.setItem(`topic:${topic.id}`, { id: topic.id, messages: _messages })
+      deleteMessageFiles(message)
     },
     [messages, topic.id]
   )

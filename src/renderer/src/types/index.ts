@@ -27,7 +27,7 @@ export type Message = {
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'paused' | 'error'
   modelId?: string
-  files?: File[]
+  files?: FileMetadata[]
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
   type?: 'text' | '@' | 'clear'
@@ -94,5 +94,14 @@ export interface FileMetadata {
   path: string
   size: number
   ext: string
+  type: FileType
   created_at: Date
+}
+
+export enum FileType {
+  IMAGE = 'image',
+  VIDEO = 'video',
+  AUDIO = 'audio',
+  DOCUMENT = 'document',
+  OTHER = 'other'
 }

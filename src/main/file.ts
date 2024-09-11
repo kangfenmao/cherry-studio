@@ -5,15 +5,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
-interface FileMetadata {
-  id: string
-  name: string
-  file_name: string
-  path: string
-  size: number
-  ext: string
-  created_at: Date
-}
+import { FileMetadata } from '../renderer/src/types'
+import { getFileType } from './utils/file'
 
 export class File {
   private storageDir: string
@@ -88,6 +81,7 @@ export class File {
     const fileMetadataPromises = result.filePaths.map(async (filePath) => {
       const stats = fs.statSync(filePath)
       const ext = path.extname(filePath)
+      const fileType = getFileType(ext)
 
       return {
         id: uuidv4(),
@@ -96,27 +90,29 @@ export class File {
         path: filePath,
         created_at: stats.birthtime,
         size: stats.size,
-        ext: ext
+        ext: ext,
+        type: fileType
       }
     })
 
     return Promise.all(fileMetadataPromises)
   }
 
-  async uploadFile(filePath: string): Promise<FileMetadata> {
-    const duplicateFile = await this.findDuplicateFile(filePath)
+  async uploadFile(file: FileMetadata): Promise<FileMetadata> {
+    const duplicateFile = await this.findDuplicateFile(file.path)
 
     if (duplicateFile) {
       return duplicateFile
     }
 
     const uuid = uuidv4()
-    const name = path.basename(filePath)
+    const name = path.basename(file.path)
     const ext = path.extname(name)
     const destPath = path.join(this.storageDir, uuid + ext)
 
-    await fs.promises.copyFile(filePath, destPath)
+    await fs.promises.copyFile(file.path, destPath)
     const stats = await fs.promises.stat(destPath)
+    const fileType = getFileType(ext)
 
     const fileMetadata: FileMetadata = {
       id: uuid,
@@ -125,12 +121,13 @@ export class File {
       path: destPath,
       created_at: stats.birthtime,
       size: stats.size,
-      ext: ext
+      ext: ext,
+      type: fileType
     }
 
     const stmt = this.db.prepare(`
-      INSERT INTO files (id, name, file_name, path, size, ext, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO files (id, name, file_name, path, size, ext, type, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `)
 
     stmt.run(
@@ -140,6 +137,7 @@ export class File {
       fileMetadata.path,
       fileMetadata.size,
       fileMetadata.ext,
+      fileMetadata.type,
       fileMetadata.created_at.toISOString()
     )
 
@@ -155,8 +153,8 @@ export class File {
     }
   }
 
-  async batchUploadFiles(filePaths: string[]): Promise<FileMetadata[]> {
-    const uploadPromises = filePaths.map((filePath) => this.uploadFile(filePath))
+  async batchUploadFiles(files: FileMetadata[]): Promise<FileMetadata[]> {
+    const uploadPromises = files.map((file) => this.uploadFile(file))
     return Promise.all(uploadPromises)
   }
 

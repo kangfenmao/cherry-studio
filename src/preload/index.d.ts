@@ -22,12 +22,17 @@ declare global {
       reload: () => void
       compress: (text: string) => Promise<Buffer>
       decompress: (text: Buffer) => Promise<string>
-      fileSelect: (options?: OpenDialogOptions) => Promise<FileMetadata[] | null>
-      fileUpload: (filePath: string) => Promise<FileMetadata>
-      fileDelete: (fileId: string) => Promise<{ success: boolean }>
-      fileBatchUpload: (filePaths: string[]) => Promise<FileMetadata[]>
-      fileBatchDelete: (fileIds: string[]) => Promise<{ success: boolean }>
-      fileGetAll: () => Promise<FileMetadata[]>
+      file: {
+        select: (options?: OpenDialogOptions) => Promise<FileMetadata[] | null>
+        upload: (file: FileMetadata) => Promise<FileMetadata>
+        delete: (fileId: string) => Promise<{ success: boolean }>
+        batchUpload: (files: FileMetadata[]) => Promise<FileMetadata[]>
+        batchDelete: (fileIds: string[]) => Promise<{ success: boolean }>
+        all: () => Promise<FileMetadata[]>
+      }
+      image: {
+        base64: (filePath: string) => Promise<string>
+      }
     }
   }
 }

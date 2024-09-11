@@ -1,4 +1,5 @@
 import { getDefaultTopic } from '@renderer/services/assistant'
+import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addAssistant,
@@ -16,7 +17,6 @@ import {
 } from '@renderer/store/assistants'
 import { setDefaultModel, setTopicNamingModel, setTranslateModel } from '@renderer/store/llm'
 import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
-import localforage from 'localforage'
 
 export function useAssistants() {
   const { assistants } = useAppSelector((state) => state.assistants)
@@ -30,7 +30,7 @@ export function useAssistants() {
       dispatch(removeAssistant({ id }))
       const assistant = assistants.find((a) => a.id === id)
       if (assistant) {
-        assistant.topics.forEach((id) => localforage.removeItem(`topic:${id}`))
+        assistant.topics.forEach(({ id }) => LocalStorage.removeTopic(id))
       }
     }
   }

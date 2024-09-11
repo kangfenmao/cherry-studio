@@ -8,7 +8,11 @@ interface Props {
 }
 
 const MessageAttachments: FC<Props> = ({ message }) => {
-  return <Container>{message.images?.map((image) => <Image src={image} key={image} width="33%" />)}</Container>
+  return (
+    <Container>
+      {message.files?.map((image) => <Image src={'file://' + image.path} key={image.id} width="33%" />)}
+    </Container>
+  )
 }
 
 const Container = styled.div`

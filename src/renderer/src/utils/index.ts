@@ -1,5 +1,6 @@
 import { Model } from '@renderer/types'
 import imageCompression from 'browser-image-compression'
+// @ts-ignore next-line`
 import { v4 as uuidv4 } from 'uuid'
 
 export const runAsyncFunction = async (fn: () => void) => {
@@ -222,19 +223,4 @@ export function getBriefInfo(text: string, maxLength: number = 50): string {
 
   // 截取前面的内容，并在末尾添加 "..."
   return truncatedText + '...'
-}
-
-export async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    try {
-      const reader = new FileReader()
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        const result = e.target?.result
-        resolve(typeof result === 'string' ? result : '')
-      }
-      reader.readAsDataURL(file)
-    } catch (error: any) {
-      reject(error)
-    }
-  })
 }

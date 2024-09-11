@@ -2,6 +2,8 @@ import { Topic } from '@renderer/types'
 import { convertToBase64 } from '@renderer/utils'
 import localforage from 'localforage'
 
+import { deleteMessageFiles } from './messages'
+
 const IMAGE_PREFIX = 'image://'
 
 export default class LocalStorage {
@@ -15,12 +17,23 @@ export default class LocalStorage {
   }
 
   static async removeTopic(id: string) {
+    const messages = await this.getTopicMessages(id)
+
+    for (const message of messages) {
+      await deleteMessageFiles(message)
+    }
+
     localforage.removeItem(`topic:${id}`)
   }
 
   static async clearTopicMessages(id: string) {
     const topic = await this.getTopic(id)
+
     if (topic) {
+      for (const message of topic?.messages ?? []) {
+        await deleteMessageFiles(message)
+      }
+
       topic.messages = []
       await localforage.setItem(`topic:${id}`, topic)
     }

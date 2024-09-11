@@ -11,7 +11,7 @@ const FilesPage: FC = () => {
   const [files, setFiles] = useState<FileMetadata[]>([])
 
   useEffect(() => {
-    window.api.fileGetAll().then(setFiles)
+    window.api.file.all().then(setFiles)
   }, [])
 
   const dataSource = files.map((file) => ({

@@ -59,3 +59,7 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
 
   return all.usedTokens - 7
 }
+
+export function deleteMessageFiles(message: Message) {
+  message.files && window.api.file.batchDelete(message.files.map((f) => f.id))
+}

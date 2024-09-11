@@ -1,5 +1,9 @@
 import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'electron'
+import Logger from 'electron-log'
+import fs from 'fs'
+import path from 'path'
 
+import { FileMetadata } from '../renderer/src/types'
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import { File } from './file'
 import AppUpdater from './updater'
@@ -34,18 +38,28 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
   ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
 
+  ipcMain.handle('image:base64', async (_, filePath) => {
+    try {
+      const data = await fs.promises.readFile(filePath)
+      return `data:image/${path.extname(filePath).slice(1)};base64,${data.toString('base64')}`
+    } catch (error) {
+      Logger.error('Error reading file:', error)
+      return ''
+    }
+  })
+
   ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
-  ipcMain.handle('file:upload', async (_, filePath: string) => await fileManager.uploadFile(filePath))
+  ipcMain.handle('file:upload', async (_, file: FileMetadata) => await fileManager.uploadFile(file))
   ipcMain.handle('file:delete', async (_, fileId: string) => {
     await fileManager.deleteFile(fileId)
     return { success: true }
   })
-  ipcMain.handle('file:batchUpload', async (_, filePaths: string[]) => await fileManager.batchUploadFiles(filePaths))
+  ipcMain.handle('file:batchUpload', async (_, files: FileMetadata[]) => await fileManager.batchUploadFiles(files))
   ipcMain.handle('file:batchDelete', async (_, fileIds: string[]) => {
     await fileManager.batchDeleteFiles(fileIds)
     return { success: true }
   })
-  ipcMain.handle('file:getAll', () => fileManager.getAllFiles())
+  ipcMain.handle('file:all', () => fileManager.getAllFiles())
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

@@ -5,6 +5,7 @@
     "src/main/**/*",
     "src/preload/**/*",
     "src/main/env.d.ts",
+    "src/renderer/src/types/index.ts"
   ],
   "compilerOptions": {
     "composite": true,

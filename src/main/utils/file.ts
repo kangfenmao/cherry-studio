@@ -3,6 +3,8 @@ import logger from 'electron-log'
 import { writeFile } from 'fs'
 import { readFile } from 'fs/promises'
 
+import { FileType } from '../../renderer/src/types'
+
 export async function saveFile(
   _: Electron.IpcMainInvokeEvent,
   fileName: string,
@@ -52,4 +54,18 @@ export async function openFile(
     logger.error('[IPC - Error]', 'An error occurred opening the file:', err)
     return null
   }
+}
+
+export function getFileType(ext: string): FileType {
+  const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
+  const videoExts = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv']
+  const audioExts = ['.mp3', '.wav', '.ogg', '.flac', '.aac']
+  const documentExts = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt']
+
+  ext = ext.toLowerCase()
+  if (imageExts.includes(ext)) return FileType.IMAGE
+  if (videoExts.includes(ext)) return FileType.VIDEO
+  if (audioExts.includes(ext)) return FileType.AUDIO
+  if (documentExts.includes(ext)) return FileType.DOCUMENT
+  return FileType.OTHER
 }

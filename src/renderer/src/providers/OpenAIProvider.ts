@@ -3,7 +3,7 @@ import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@rende
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
-import { fileToBase64, removeQuotes } from '@renderer/utils'
+import { removeQuotes } from '@renderer/utils'
 import { first, takeRight } from 'lodash'
 import OpenAI from 'openai'
 import {
@@ -33,13 +33,13 @@ export default class OpenAIProvider extends BaseProvider {
       return message.content
     }
 
-    if (file.type.includes('image')) {
+    if (file.type === 'image') {
       return [
         { type: 'text', text: message.content },
         {
           type: 'image_url',
           image_url: {
-            url: await fileToBase64(file)
+            url: await window.api.image.base64(file.path)
           }
         }
       ]
@@ -58,7 +58,6 @@ export default class OpenAIProvider extends BaseProvider {
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
-
     const userMessages: ChatCompletionMessageParam[] = []
 
     for (const message of filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))) {

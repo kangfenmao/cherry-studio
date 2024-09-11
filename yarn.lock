@@ -1944,6 +1944,7 @@ __metadata:
     i18next: "npm:^23.11.5"
     localforage: "npm:^1.10.0"
     lodash: "npm:^4.17.21"
+    mime: "npm:^4.0.4"
     openai: "npm:^4.52.1"
     prettier: "npm:^3.2.4"
     react: "npm:^18.2.0"
@@ -6589,6 +6590,15 @@ __metadata:
   bin:
     mime: cli.js
   checksum: 10c0/a7f2589900d9c16e3bdf7672d16a6274df903da958c1643c9c45771f0478f3846dcb1097f31eb9178452570271361e2149310931ec705c037210fc69639c8e6c
+  languageName: node
+  linkType: hard
+
+"mime@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "mime@npm:4.0.4"
+  bin:
+    mime: bin/cli.js
+  checksum: 10c0/3046e425ed616613af8c7f4b268ff33ab564baeb24a117ef00475cbb23fbae91369ff2d9918cc6408162b0016bde34ea8cc4041b830fc2c45a8ecaf5b7e3e26f
   languageName: node
   linkType: hard
 

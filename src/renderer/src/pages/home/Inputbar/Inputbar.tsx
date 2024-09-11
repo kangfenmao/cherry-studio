@@ -16,7 +16,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { estimateInputTokenCount } from '@renderer/services/messages'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
-import { Assistant, Message, Topic } from '@renderer/types'
+import { Assistant, FileMetadata, Message, Topic } from '@renderer/types'
 import { delay, uuid } from '@renderer/utils'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
@@ -47,7 +47,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [contextCount, setContextCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const textareaRef = useRef<TextAreaRef>(null)
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<FileMetadata[]>([])
   const { t } = useTranslation()
   const containerRef = useRef(null)
   const { showTopics, toggleShowTopics } = useShowTopics()
@@ -56,7 +56,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   _text = text
 
-  const sendMessage = useCallback(() => {
+  const sendMessage = useCallback(async () => {
     if (generating) {
       return
     }
@@ -76,7 +76,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     }
 
     if (files.length > 0) {
-      message.files = files
+      message.files = await window.api.file.batchUpload(files)
     }
 
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)
