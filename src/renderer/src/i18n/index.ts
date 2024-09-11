@@ -73,7 +73,7 @@ const resources = {
         'topics.list': 'Topic List',
         'input.new_topic': 'New Topic',
         'input.topics': ' Topics ',
-        'input.clear': 'Clear Messages',
+        'input.clear': 'Clear',
         'input.new.context': 'Clear Context',
         'input.expand': 'Expand',
         'input.collapse': 'Collapse',
@@ -99,7 +99,8 @@ const resources = {
         'settings.max': 'Max',
         'suggestions.title': 'Suggested Questions',
         'add.assistant.title': 'Add Assistant',
-        'message.new.context': 'New Context'
+        'message.new.context': 'New Context',
+        'assistant.search.placeholder': 'Search Assistants'
       },
       agents: {
         title: 'Assistants',
@@ -353,7 +354,8 @@ const resources = {
         'settings.max': '不限',
         'suggestions.title': '建议的问题',
         'add.assistant.title': '添加智能体',
-        'message.new.context': '清除上下文'
+        'message.new.context': '清除上下文',
+        'assistant.search.placeholder': '搜索智能体'
       },
       agents: {
         title: '智能体',

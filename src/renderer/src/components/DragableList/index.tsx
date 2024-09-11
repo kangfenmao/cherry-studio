@@ -2,6 +2,7 @@ import {
   DragDropContext,
   Draggable,
   Droppable,
+  DroppableProps,
   DropResult,
   OnDragEndResponder,
   OnDragStartResponder,
@@ -18,9 +19,19 @@ interface Props<T> {
   onUpdate: (list: T[]) => void
   onDragStart?: OnDragStartResponder
   onDragEnd?: OnDragEndResponder
+  droppableProps?: Partial<DroppableProps>
 }
 
-const DragableList: FC<Props<any>> = ({ children, list, style, listStyle, onDragStart, onUpdate, onDragEnd }) => {
+const DragableList: FC<Props<any>> = ({
+  children,
+  list,
+  style,
+  listStyle,
+  droppableProps,
+  onDragStart,
+  onUpdate,
+  onDragEnd
+}) => {
   const _onDragEnd = (result: DropResult, provided: ResponderProvided) => {
     onDragEnd?.(result, provided)
     if (result.destination) {
@@ -33,11 +44,11 @@ const DragableList: FC<Props<any>> = ({ children, list, style, listStyle, onDrag
 
   return (
     <DragDropContext onDragStart={onDragStart} onDragEnd={_onDragEnd}>
-      <Droppable droppableId="droppable">
+      <Droppable droppableId="droppable" {...droppableProps}>
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef} style={{ ...style }}>
             {list.map((item, index) => (
-              <Draggable key={`draggable_${item.id}_${index}`} draggableId={item.id} index={index}>
+              <Draggable key={`draggable_${item.id}_${index}`} draggableId={item.id} index={index} {...droppableProps}>
                 {(provided) => (
                   <div
                     ref={provided.innerRef}

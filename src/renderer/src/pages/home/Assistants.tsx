@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
@@ -8,10 +8,10 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
 import { Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Dropdown } from 'antd'
+import { Dropdown, Input } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
-import { last } from 'lodash'
-import { FC, useCallback } from 'react'
+import { isEmpty, last } from 'lodash'
+import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -24,6 +24,7 @@ interface Props {
 const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
+  const [search, setSearch] = useState('')
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
   const { t } = useTranslation()
 
@@ -104,9 +105,35 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
     [generating, setActiveAssistant, t]
   )
 
+  const list = assistants.filter((assistant) => assistant.name?.toLowerCase().includes(search.toLowerCase().trim()))
+
+  const onSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (list.length === 1) {
+        onSwitchAssistant(list[0])
+        setSearch('')
+      }
+    }
+  }
+
   return (
     <Container>
-      <DragableList list={assistants} onUpdate={updateAssistants}>
+      {assistants.length >= 10 && (
+        <SearchContainer>
+          <Input
+            placeholder={t('chat.assistant.search.placeholder')}
+            variant="filled"
+            prefix={<SearchOutlined style={{ color: 'var(--color-icon)' }} />}
+            suffix={<CommandKey>⌘+K</CommandKey>}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ borderRadius: 4 }}
+            onKeyDown={onSearch}
+            allowClear
+          />
+        </SearchContainer>
+      )}
+      <DragableList list={list} onUpdate={updateAssistants} droppableProps={{ isDropDisabled: !isEmpty(search) }}>
         {(assistant) => {
           const isCurrent = assistant.id === activeAssistant?.id
           return (
@@ -187,16 +214,11 @@ const ArrowRightButton = styled.div`
   min-height: 22px;
   border-radius: 4px;
   position: absolute;
+  background-color: var(--color-background);
   right: 9px;
   top: 6px;
   .anticon {
     font-size: 14px;
-  }
-  &:hover {
-    background-color: var(--color-background);
-  }
-  &.active {
-    background-color: var(--color-background);
   }
 `
 
@@ -213,6 +235,20 @@ const TopicCount = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+`
+
+const SearchContainer = styled.div`
+  margin: 0 10px;
+  margin-bottom: 10px;
+`
+
+const CommandKey = styled.div`
+  color: var(--color-text-3);
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background-color: var(--color-background-mute);
+  margin-right: -4px;
 `
 
 export default Assistants
