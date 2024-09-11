@@ -198,11 +198,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://github.com/settings/tokens',
       docs: 'https://docs.github.com/en/github-models',
       models: 'https://github.com/marketplace/models'
-    },
-    app: {
-      name: 'Github Models',
-      url: 'https://github.com/marketplace/models/azure-openai/gpt-4o/playground',
-      logo: GithubProviderLogo
     }
   },
   yi: {

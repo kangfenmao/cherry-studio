@@ -4,6 +4,7 @@ import BaiduAiAppLogo from '@renderer/assets/images/apps/baidu-ai.png'
 import DevvAppLogo from '@renderer/assets/images/apps/devv.png'
 import MetasoAppLogo from '@renderer/assets/images/apps/metaso.webp'
 import PerplexityAppLogo from '@renderer/assets/images/apps/perplexity.webp'
+import PoeAppLogo from '@renderer/assets/images/apps/poe.webp'
 import SensetimeAppLogo from '@renderer/assets/images/apps/sensetime.png'
 import SparkDeskAppLogo from '@renderer/assets/images/apps/sparkdesk.png'
 import TiangongAiLogo from '@renderer/assets/images/apps/tiangong.png'
@@ -15,6 +16,11 @@ import { MinAppType } from '@renderer/types'
 
 const _apps: MinAppType[] = [
   {
+    name: '360AI搜索',
+    logo: AiSearchAppLogo,
+    url: 'https://so.360.com/'
+  },
+  {
     name: 'AI 助手',
     logo: AiAssistantAppLogo,
     url: 'https://bot.360.com/'
@@ -23,11 +29,6 @@ const _apps: MinAppType[] = [
     name: '文心一言',
     logo: BaiduAiAppLogo,
     url: 'https://yiyan.baidu.com/'
-  },
-  {
-    name: 'SparkDesk',
-    logo: SparkDeskAppLogo,
-    url: 'https://xinghuo.xfyun.cn/desk'
   },
   {
     name: '腾讯元宝',
@@ -40,9 +41,9 @@ const _apps: MinAppType[] = [
     url: 'https://chat.sensetime.com/wb/chat'
   },
   {
-    name: '360AI搜索',
-    logo: AiSearchAppLogo,
-    url: 'https://so.360.com/'
+    name: 'SparkDesk',
+    logo: SparkDeskAppLogo,
+    url: 'https://xinghuo.xfyun.cn/desk'
   },
   {
     name: '秘塔AI搜索',
@@ -50,9 +51,14 @@ const _apps: MinAppType[] = [
     url: 'https://metaso.cn/'
   },
   {
-    name: '天工AI',
-    logo: TiangongAiLogo,
-    url: 'https://www.tiangong.cn/'
+    name: 'Poe',
+    logo: PoeAppLogo,
+    url: 'https://poe.com'
+  },
+  {
+    name: 'perplexity',
+    logo: PerplexityAppLogo,
+    url: 'https://www.perplexity.ai/'
   },
   {
     name: 'DEVV_',
@@ -60,9 +66,9 @@ const _apps: MinAppType[] = [
     url: 'https://devv.ai/'
   },
   {
-    name: 'perplexity',
-    logo: PerplexityAppLogo,
-    url: 'https://www.perplexity.ai/'
+    name: '天工AI',
+    logo: TiangongAiLogo,
+    url: 'https://www.tiangong.cn/'
   },
   {
     name: '知乎直答',
