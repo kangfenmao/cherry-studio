@@ -34,12 +34,13 @@ export default class OpenAIProvider extends BaseProvider {
     }
 
     if (file.type === 'image') {
+      const base64Data = await window.api.image.base64(file.path)
       return [
         { type: 'text', text: message.content },
         {
           type: 'image_url',
           image_url: {
-            url: await window.api.image.base64(file.path)
+            url: base64Data.data
           }
         }
       ]

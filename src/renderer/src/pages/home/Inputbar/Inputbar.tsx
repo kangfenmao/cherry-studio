@@ -40,7 +40,7 @@ let _text = ''
 const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
-  const { addTopic } = useAssistant(assistant.id)
+  const { addTopic, model } = useAssistant(assistant.id)
   const { sendMessageShortcut, fontSize } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
@@ -261,7 +261,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               <ControlOutlined />
             </ToolbarButton>
           </Tooltip>
-          <AttachmentButton files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
+          <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
           <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
             <ToolbarButton type="text" onClick={onToggleExpended}>
               {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}

@@ -46,16 +46,6 @@ const FilesPage: FC = () => {
     }
   ]
 
-  // const handleSelectFile = async () => {
-  //   const files = await window.api.fileSelect({
-  //     properties: ['openFile', 'multiSelections']
-  //   })
-  //   for (const file of files || []) {
-  //     const result = await window.api.fileUpload(file.path)
-  //     console.log('Selected file:', file, result)
-  //   }
-  // }
-
   return (
     <Container>
       <Navbar>
@@ -63,7 +53,7 @@ const FilesPage: FC = () => {
       </Navbar>
       <ContentContainer>
         <VStack style={{ flex: 1 }}>
-          <Table dataSource={dataSource} columns={columns} style={{ width: '100%', height: '100%' }} />
+          <Table dataSource={dataSource} columns={columns} style={{ width: '100%', height: '100%' }} size="small" />
         </VStack>
       </ContentContainer>
     </Container>

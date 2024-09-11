@@ -41,7 +41,13 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('image:base64', async (_, filePath) => {
     try {
       const data = await fs.promises.readFile(filePath)
-      return `data:image/${path.extname(filePath).slice(1)};base64,${data.toString('base64')}`
+      const base64 = data.toString('base64')
+      const mime = `image/${path.extname(filePath).slice(1)}`
+      return {
+        mime,
+        base64,
+        data: `data:image/${mime};base64,${base64}`
+      }
     } catch (error) {
       Logger.error('Error reading file:', error)
       return ''

@@ -31,7 +31,7 @@ declare global {
         all: () => Promise<FileMetadata[]>
       }
       image: {
-        base64: (filePath: string) => Promise<string>
+        base64: (filePath: string) => Promise<{ mime: string; base64: string; data: string }>
       }
     }
   }
