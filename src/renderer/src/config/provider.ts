@@ -25,6 +25,7 @@ import DashScopeProviderLogo from '@renderer/assets/images/providers/dashscope.p
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
 import DoubaoProviderLogo from '@renderer/assets/images/providers/doubao.png'
 import GeminiProviderLogo from '@renderer/assets/images/providers/gemini.png'
+import GithubProviderLogo from '@renderer/assets/images/providers/github.svg'
 import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import MinimaxProviderLogo from '@renderer/assets/images/providers/minimax.png'
@@ -76,6 +77,8 @@ export function getProviderLogo(providerId: string) {
       return GraphRagProviderLogo
     case 'minimax':
       return MinimaxProviderLogo
+    case 'github':
+      return GithubProviderLogo
     default:
       return undefined
   }
@@ -181,6 +184,22 @@ export const PROVIDER_CONFIG = {
       name: 'DeepSeek',
       url: 'https://chat.deepseek.com/',
       logo: DeepSeekProviderLogo
+    }
+  },
+  github: {
+    api: {
+      url: 'https://models.inference.ai.azure.com/'
+    },
+    websites: {
+      official: 'https://github.com/marketplace/models',
+      apiKey: 'https://github.com/settings/tokens',
+      docs: 'https://docs.github.com/en/github-models',
+      models: 'https://github.com/marketplace/models'
+    },
+    app: {
+      name: 'Github Models',
+      url: 'https://github.com/marketplace/models/azure-openai/gpt-4o/playground',
+      logo: GithubProviderLogo
     }
   },
   yi: {

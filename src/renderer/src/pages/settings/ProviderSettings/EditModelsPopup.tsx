@@ -155,7 +155,8 @@ const onShowModelInfo = (model: Model) => {
     title: model.name,
     content: model?.description,
     icon: null,
-    maskClosable: true
+    maskClosable: true,
+    width: 600
   })
 }
 

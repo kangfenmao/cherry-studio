@@ -78,6 +78,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'github',
+      name: 'Github Models',
+      apiKey: '',
+      apiHost: 'https://models.inference.ai.azure.com/',
+      models: SYSTEM_MODELS.github,
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'yi',
       name: 'Yi',
       apiKey: '',

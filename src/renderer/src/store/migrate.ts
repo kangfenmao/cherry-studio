@@ -399,6 +399,26 @@ const migrateConfig = {
         topicPosition: 'right'
       }
     }
+  },
+  '25': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'github',
+            name: 'Github Models',
+            apiKey: '',
+            apiHost: 'https://models.inference.ai.azure.com/',
+            models: SYSTEM_MODELS.github,
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 }
 

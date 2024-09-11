@@ -136,7 +136,8 @@ const resources = {
         stepfun: 'StepFun',
         doubao: 'Doubao',
         minimax: 'MiniMax',
-        'graphrag-kylin-mountain': 'GraphRAG'
+        'graphrag-kylin-mountain': 'GraphRAG',
+        github: 'GitHub Models'
       },
       settings: {
         title: 'Settings',
@@ -391,7 +392,8 @@ const resources = {
         stepfun: '阶跃星辰',
         doubao: '豆包',
         minimax: 'MiniMax',
-        'graphrag-kylin-mountain': 'GraphRAG'
+        'graphrag-kylin-mountain': 'GraphRAG',
+        github: 'GitHub Models'
       },
       settings: {
         title: '设置',
