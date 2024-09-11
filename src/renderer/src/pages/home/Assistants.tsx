@@ -1,9 +1,8 @@
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined, SearchOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
-import { useRuntime } from '@renderer/hooks/useStore'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
@@ -30,7 +29,6 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
   const searchRef = useRef<InputRef>(null)
   const { t } = useTranslation()
-  const { searching } = useRuntime()
   const dispatch = useAppDispatch()
 
   const onDelete = useCallback(
@@ -156,12 +154,10 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
         <SearchContainer>
           <Input
             placeholder={t('chat.assistant.search.placeholder')}
-            variant="filled"
-            prefix={<SearchOutlined style={{ color: 'var(--color-icon)' }} />}
             suffix={<CommandKey>⌘+K</CommandKey>}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ borderRadius: 4 }}
+            style={{ borderRadius: 4, borderWidth: 0.5 }}
             onKeyDown={onSearch}
             ref={searchRef}
             onFocus={() => dispatch(setSearching(true))}
@@ -257,14 +253,14 @@ const ArrowRightButton = styled.div`
   background-color: var(--color-background);
   right: 9px;
   top: 6px;
-  .anticon {
-    font-size: 14px;
+  .iconfont {
+    font-size: 12px;
   }
 `
 
 const TopicCount = styled.div`
-  color: var(--color-text-3);
-  font-size: 12px;
+  color: var(--color-text-2);
+  font-size: 10px;
   margin-right: 3px;
   background-color: var(--color-background-mute);
   opacity: 0.8;
@@ -283,11 +279,11 @@ const SearchContainer = styled.div`
 `
 
 const CommandKey = styled.div`
-  color: var(--color-text-3);
-  font-size: 11px;
+  color: var(--color-text-2);
+  font-size: 10px;
   padding: 2px 5px;
   border-radius: 4px;
-  background-color: var(--color-background-mute);
+  background-color: var(--color-background);
   margin-right: -4px;
 `
 

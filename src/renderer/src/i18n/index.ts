@@ -100,7 +100,7 @@ const resources = {
         'suggestions.title': 'Suggested Questions',
         'add.assistant.title': 'Add Assistant',
         'message.new.context': 'New Context',
-        'assistant.search.placeholder': 'Search Assistants'
+        'assistant.search.placeholder': 'Search'
       },
       agents: {
         title: 'Assistants',
@@ -356,7 +356,7 @@ const resources = {
         'suggestions.title': '建议的问题',
         'add.assistant.title': '添加智能体',
         'message.new.context': '清除上下文',
-        'assistant.search.placeholder': '搜索智能体'
+        'assistant.search.placeholder': '搜索'
       },
       agents: {
         title: '智能体',
