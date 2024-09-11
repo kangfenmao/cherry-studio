@@ -5,6 +5,7 @@ import BaichuanModelLogo from '@renderer/assets/images/models/baichuan.png'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.png'
 import ChatGPTModelLogo from '@renderer/assets/images/models/chatgpt.jpeg'
 import ClaudeModelLogo from '@renderer/assets/images/models/claude.png'
+import CohereModelLogo from '@renderer/assets/images/models/cohere.webp'
 import DeepSeekModelLogo from '@renderer/assets/images/models/deepseek.png'
 import DoubaoModelLogo from '@renderer/assets/images/models/doubao.png'
 import EmbeddingModelLogo from '@renderer/assets/images/models/embedding.png'
@@ -109,7 +110,9 @@ export function getModelLogo(modelId: string) {
     palm: PalmModelLogo,
     step: StepModelLogo,
     abab: HailuoModelLogo,
-    'ep-202': DoubaoModelLogo
+    'ep-202': DoubaoModelLogo,
+    cohere: CohereModelLogo,
+    command: CohereModelLogo
   }
 
   for (const key in logoMap) {
