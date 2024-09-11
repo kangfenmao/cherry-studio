@@ -121,8 +121,7 @@ export function getModelLogo(modelId: string) {
 export const PROVIDER_CONFIG = {
   openai: {
     api: {
-      url: 'https://api.openai.com',
-      editable: true
+      url: 'https://api.openai.com'
     },
     websites: {
       official: 'https://openai.com/',
@@ -138,8 +137,7 @@ export const PROVIDER_CONFIG = {
   },
   gemini: {
     api: {
-      url: 'https://generativelanguage.googleapis.com',
-      editable: false
+      url: 'https://generativelanguage.googleapis.com'
     },
     websites: {
       official: 'https://gemini.google.com/',
@@ -155,8 +153,7 @@ export const PROVIDER_CONFIG = {
   },
   silicon: {
     api: {
-      url: 'https://cloud.siliconflow.cn',
-      editable: false
+      url: 'https://cloud.siliconflow.cn'
     },
     websites: {
       official: 'https://www.siliconflow.cn/',
@@ -172,8 +169,7 @@ export const PROVIDER_CONFIG = {
   },
   deepseek: {
     api: {
-      url: 'https://api.deepseek.com',
-      editable: false
+      url: 'https://api.deepseek.com'
     },
     websites: {
       official: 'https://deepseek.com/',
@@ -189,8 +185,7 @@ export const PROVIDER_CONFIG = {
   },
   yi: {
     api: {
-      url: 'https://api.lingyiwanwu.com',
-      editable: false
+      url: 'https://api.lingyiwanwu.com'
     },
     websites: {
       official: 'https://platform.lingyiwanwu.com/',
@@ -206,8 +201,7 @@ export const PROVIDER_CONFIG = {
   },
   zhipu: {
     api: {
-      url: 'https://open.bigmodel.cn/api/paas/v4/',
-      editable: false
+      url: 'https://open.bigmodel.cn/api/paas/v4/'
     },
     websites: {
       official: 'https://open.bigmodel.cn/',
@@ -223,8 +217,7 @@ export const PROVIDER_CONFIG = {
   },
   moonshot: {
     api: {
-      url: 'https://api.moonshot.cn',
-      editable: false
+      url: 'https://api.moonshot.cn'
     },
     websites: {
       official: 'https://moonshot.ai/',
@@ -240,8 +233,7 @@ export const PROVIDER_CONFIG = {
   },
   baichuan: {
     api: {
-      url: 'https://api.baichuan-ai.com',
-      editable: false
+      url: 'https://api.baichuan-ai.com'
     },
     websites: {
       official: 'https://www.baichuan-ai.com/',
@@ -257,8 +249,7 @@ export const PROVIDER_CONFIG = {
   },
   dashscope: {
     api: {
-      url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',
-      editable: false
+      url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/'
     },
     websites: {
       official: 'https://dashscope.aliyun.com/',
@@ -274,8 +265,7 @@ export const PROVIDER_CONFIG = {
   },
   stepfun: {
     api: {
-      url: 'https://api.stepfun.com',
-      editable: false
+      url: 'https://api.stepfun.com'
     },
     websites: {
       official: 'https://platform.stepfun.com/',
@@ -291,8 +281,7 @@ export const PROVIDER_CONFIG = {
   },
   doubao: {
     api: {
-      url: 'https://ark.cn-beijing.volces.com/api/v3/',
-      editable: true
+      url: 'https://ark.cn-beijing.volces.com/api/v3/'
     },
     websites: {
       official: 'https://console.volcengine.com/ark/',
@@ -308,8 +297,7 @@ export const PROVIDER_CONFIG = {
   },
   minimax: {
     api: {
-      url: 'https://api.minimax.chat/v1/',
-      editable: true
+      url: 'https://api.minimax.chat/v1/'
     },
     websites: {
       official: 'https://platform.minimaxi.com/',
@@ -325,14 +313,12 @@ export const PROVIDER_CONFIG = {
   },
   'graphrag-kylin-mountain': {
     api: {
-      url: '',
-      editable: true
+      url: ''
     }
   },
   openrouter: {
     api: {
-      url: 'https://openrouter.ai/api/v1/',
-      editable: false
+      url: 'https://openrouter.ai/api/v1/'
     },
     websites: {
       official: 'https://openrouter.ai/',
@@ -343,8 +329,7 @@ export const PROVIDER_CONFIG = {
   },
   groq: {
     api: {
-      url: 'https://api.groq.com/openai',
-      editable: false
+      url: 'https://api.groq.com/openai'
     },
     websites: {
       official: 'https://groq.com/',
@@ -360,8 +345,7 @@ export const PROVIDER_CONFIG = {
   },
   ollama: {
     api: {
-      url: 'http://localhost:11434/v1/',
-      editable: true
+      url: 'http://localhost:11434/v1/'
     },
     websites: {
       official: 'https://ollama.com/',
@@ -371,8 +355,7 @@ export const PROVIDER_CONFIG = {
   },
   anthropic: {
     api: {
-      url: 'https://api.anthropic.com/',
-      editable: true
+      url: 'https://api.anthropic.com/'
     },
     websites: {
       official: 'https://anthropic.com/',
@@ -388,8 +371,7 @@ export const PROVIDER_CONFIG = {
   },
   aihubmix: {
     api: {
-      url: 'https://aihubmix.com',
-      editable: false
+      url: 'https://aihubmix.com'
     },
     websites: {
       official: 'https://aihubmix.com/',

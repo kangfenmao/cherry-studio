@@ -14,7 +14,7 @@ import { checkApi } from '@renderer/services/api'
 import { Provider } from '@renderer/types'
 import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
-import { groupBy } from 'lodash'
+import { groupBy, isEmpty } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -72,7 +72,6 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const docsWebsite = providerConfig?.websites?.docs
   const modelsWebsite = providerConfig?.websites?.models
   const configedApiHost = providerConfig?.api?.url
-  const apiEditable = provider.isSystem ? providerConfig?.api?.editable : true
 
   const onReset = () => {
     setApiHost(configedApiHost)
@@ -131,9 +130,10 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           placeholder={t('settings.provider.api_host')}
           onChange={(e) => setApiHost(e.target.value)}
           onBlur={onUpdateApiHost}
-          disabled={!apiEditable}
         />
-        {apiEditable && <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>}
+        {!isEmpty(configedApiHost) && apiHost !== configedApiHost && (
+          <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>
+        )}
       </Space.Compact>
       {provider.id === 'ollama' && <OllamSettings />}
       {provider.id === 'graphrag-kylin-mountain' && provider.models.length > 0 && (
