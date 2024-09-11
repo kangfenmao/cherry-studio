@@ -108,18 +108,18 @@ const AssistantSettings: FC = () => {
         <Col span={21}>
           <Slider
             min={0}
-            max={1.2}
+            max={2}
             onChange={setTemperature}
             onChangeComplete={onTemperatureChange}
             value={typeof temperature === 'number' ? temperature : 0}
-            marks={{ 0: '0', 0.7: '0.7', 1: '1', 1.2: '1.2' }}
+            marks={{ 0: '0', 0.7: '0.7', 2: '2' }}
             step={0.1}
           />
         </Col>
         <Col span={3}>
           <InputNumber
             min={0}
-            max={1.2}
+            max={2}
             step={0.1}
             value={temperature}
             onChange={onTemperatureChange}

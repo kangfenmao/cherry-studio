@@ -104,7 +104,7 @@ const SettingsTab: FC<Props> = (props) => {
         <Col span={24}>
           <Slider
             min={0}
-            max={1.2}
+            max={2}
             onChange={setTemperature}
             onChangeComplete={onTemperatureChange}
             value={typeof temperature === 'number' ? temperature : 0}
