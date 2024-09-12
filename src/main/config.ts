@@ -1,4 +1,14 @@
+import fs from 'node:fs'
+
+import { app } from 'electron'
 import Store from 'electron-store'
+import path from 'path'
+
+export const DATA_PATH = path.join(app.getPath('userData'), 'Data')
+
+if (!fs.existsSync(DATA_PATH)) {
+  fs.mkdirSync(DATA_PATH, { recursive: true })
+}
 
 export const appConfig = new Store()
 

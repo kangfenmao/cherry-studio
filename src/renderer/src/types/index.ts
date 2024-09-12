@@ -106,3 +106,9 @@ export enum FileType {
   DOCUMENT = 'document',
   OTHER = 'other'
 }
+
+export enum ThemeMode {
+  light = 'light',
+  dark = 'dark',
+  auto = 'auto'
+}

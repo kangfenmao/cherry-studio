@@ -1,7 +1,6 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import { FileMetadata } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
-
-import type FileMetadata from '../main/file'
 
 declare global {
   interface Window {

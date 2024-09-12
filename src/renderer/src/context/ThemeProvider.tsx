@@ -1,5 +1,5 @@
 import { useSettings } from '@renderer/hooks/useSettings'
-import { ThemeMode } from '@renderer/store/settings'
+import { ThemeMode } from '@renderer/types'
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 
 interface ThemeContextType {

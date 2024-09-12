@@ -4,9 +4,9 @@ import {
   setSendMessageShortcut as _setSendMessageShortcut,
   setTheme,
   setTopicPosition,
-  setWindowStyle,
-  ThemeMode
+  setWindowStyle
 } from '@renderer/store/settings'
+import { ThemeMode } from '@renderer/types'
 
 export function useSettings() {
   const settings = useAppSelector((state) => state.settings)

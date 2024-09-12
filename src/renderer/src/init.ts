@@ -2,7 +2,7 @@ import KeyvStorage from '@kangfenmao/keyv-storage'
 import localforage from 'localforage'
 
 import { APP_NAME } from './config/env'
-import { ThemeMode } from './store/settings'
+import { ThemeMode } from './types'
 import { loadScript } from './utils'
 
 export async function initMermaid(theme: ThemeMode) {

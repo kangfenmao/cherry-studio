@@ -7,7 +7,8 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     resolve: {
       alias: {
-        ollama: resolve('ollama/src')
+        '@types': resolve('src/renderer/src/types'),
+        '@main': resolve('src/main')
       }
     }
   },

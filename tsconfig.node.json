@@ -11,6 +11,14 @@
     "composite": true,
     "types": [
       "electron-vite/node"
-    ]
+    ],
+    "paths": {
+      "@types": [
+        "./src/renderer/src/types/index.ts"
+      ],
+      "@main/*": [
+        "./src/main/*"
+      ]
+    }
   }
 }

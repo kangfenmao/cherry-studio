@@ -1,12 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ThemeMode } from '@renderer/types'
 
 export type SendMessageShortcut = 'Enter' | 'Shift+Enter'
-
-export enum ThemeMode {
-  light = 'light',
-  dark = 'dark',
-  auto = 'auto'
-}
 
 export interface SettingsState {
   showAssistants: boolean

@@ -1,32 +1,25 @@
-import Database from 'better-sqlite3'
+/* eslint-disable react/no-is-mounted */
+import FileModel from '@main/database/models/FileModel'
+import { getFileType } from '@main/utils/file'
+import { FileMetadata } from '@types'
 import * as crypto from 'crypto'
 import { app, dialog, OpenDialogOptions } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
-import { FileMetadata } from '../renderer/src/types'
-import { getFileType } from './utils/file'
-
-export class File {
+class File {
   private storageDir: string
-  private db: Database.Database
 
   constructor() {
     this.storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
     this.initStorageDir()
-    this.initDatabase()
   }
 
   private initStorageDir(): void {
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true })
     }
-  }
-
-  private initDatabase(): void {
-    const dbPath = path.join(app.getPath('userData'), 'Data', 'data.db')
-    this.db = new Database(dbPath)
   }
 
   private async getFileHash(filePath: string): Promise<string> {
@@ -104,11 +97,10 @@ export class File {
 
     if (duplicateFile) {
       // Increment the count for the duplicate file
-      const updateStmt = this.db.prepare('UPDATE files SET count = count + 1 WHERE id = ?')
-      updateStmt.run(duplicateFile.id)
+      await FileModel.increment('count', { where: { id: duplicateFile.id } })
 
       // Fetch the updated file metadata
-      return this.getFile(duplicateFile.id)!
+      return (await this.getFile(duplicateFile.id))!
     }
 
     const uuid = uuidv4()
@@ -132,38 +124,21 @@ export class File {
       count: 1
     }
 
-    const stmt = this.db.prepare(`
-      INSERT INTO files (id, name, file_name, path, size, ext, type, created_at, count)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `)
-
-    stmt.run(
-      fileMetadata.id,
-      fileMetadata.name,
-      fileMetadata.file_name,
-      fileMetadata.path,
-      fileMetadata.size,
-      fileMetadata.ext,
-      fileMetadata.type,
-      fileMetadata.created_at.toISOString(),
-      fileMetadata.count
-    )
+    await FileModel.create(fileMetadata)
 
     return fileMetadata
   }
 
   async deleteFile(fileId: string): Promise<void> {
-    const fileMetadata = this.getFile(fileId)
+    const fileMetadata = await this.getFile(fileId)
     if (fileMetadata) {
       if (fileMetadata.count > 1) {
         // Decrement the count if there are multiple references
-        const updateStmt = this.db.prepare('UPDATE files SET count = count - 1 WHERE id = ?')
-        updateStmt.run(fileId)
+        await FileModel.decrement('count', { where: { id: fileId } })
       } else {
         // Delete the file and database entry if this is the last reference
         await fs.promises.unlink(fileMetadata.path)
-        const deleteStmt = this.db.prepare('DELETE FROM files WHERE id = ?')
-        deleteStmt.run(fileId)
+        await FileModel.destroy({ where: { id: fileId } })
       }
     }
   }
@@ -178,15 +153,15 @@ export class File {
     await Promise.all(deletePromises)
   }
 
-  getFile(id: string): FileMetadata | null {
-    const stmt = this.db.prepare('SELECT * FROM files WHERE id = ?')
-    const row = stmt.get(id) as any
-    return row ? { ...row, created_at: new Date(row.created_at) } : null
+  async getFile(id: string): Promise<FileMetadata | null> {
+    const file = await FileModel.findByPk(id)
+    return file ? (file.toJSON() as FileMetadata) : null
   }
 
-  getAllFiles(): FileMetadata[] {
-    const stmt = this.db.prepare('SELECT * FROM files')
-    const rows = stmt.all() as any[]
-    return rows.map((row) => ({ ...row, created_at: new Date(row.created_at) }))
+  async getAllFiles(): Promise<FileMetadata[]> {
+    const files = await FileModel.findAll()
+    return files.map((file) => file.toJSON() as FileMetadata)
   }
 }
+
+export default File
