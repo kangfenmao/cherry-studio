@@ -1,8 +1,10 @@
 import 'emoji-picker-element'
 
+import { LoadingOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import EmojiPicker from '@renderer/components/EmojiPicker'
 import { TopView } from '@renderer/components/TopView'
 import { useAgents } from '@renderer/hooks/useAgents'
+import { fetchGenerate } from '@renderer/services/api'
 import { syncAgentToAssistant } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { getLeadingEmoji, uuid } from '@renderer/utils'
@@ -29,6 +31,8 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   const { addAgent, updateAgent } = useAgents()
   const formRef = useRef<FormInstance>(null)
   const [emoji, setEmoji] = useState(agent?.emoji)
+  const [content, setContent] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const onFinish = (values: FieldType) => {
     const _emoji = emoji || getLeadingEmoji(values.name)
@@ -81,6 +85,20 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
     }
   }, [agent, form])
 
+  const handleButtonClick = async () => {
+    const prompt = `你是一个专业的prompt优化助手，我会给你一段prompt，你需要帮我优化它，仅回复优化后的prompt不要添加任何解释，使用[CRISPE提示框架]回复。`
+    setLoading(true)
+    try {
+      const prefixedContent = `请帮我优化下面这段prompt，使用CRISPE提示框架，请使用Markdown格式回复: ${content}`
+      const generatedText = await fetchGenerate({ prompt, content: prefixedContent })
+      setContent(generatedText)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Modal
       title={agent ? t('agents.edit.title') : t('agents.add.title')}
@@ -108,7 +126,24 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
           <Input placeholder={t('agents.add.name.placeholder')} spellCheck={false} allowClear />
         </Form.Item>
         <Form.Item name="prompt" label={t('agents.add.prompt')} rules={[{ required: true }]}>
-          <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={10} />
+          <div style={{ position: 'relative' }}>
+            <TextArea
+              placeholder={t('agents.add.prompt.placeholder')}
+              spellCheck={false}
+              rows={10}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+            <Button
+              icon={loading ? <LoadingOutlined /> : <ThunderboltOutlined />}
+              style={{
+                position: 'absolute',
+                top: 8,
+                right: 8
+              }}
+              onClick={handleButtonClick}
+              disabled={loading}></Button>
+          </div>
         </Form.Item>
       </Form>
     </Modal>

@@ -29,5 +29,6 @@
   },
   "[markdown]": {
     "files.trimTrailingWhitespace": false
-  }
+  },
+  "i18n-ally.localesPaths": ["src/renderer/src/i18n"]
 }
