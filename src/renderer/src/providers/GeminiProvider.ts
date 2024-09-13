@@ -120,7 +120,7 @@ export default class GeminiProvider extends BaseProvider {
     return response.text()
   }
 
-  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+  public async generateText({ prompt, content }: { prompt: string; content: string }): Promise<string> {
     const model = getDefaultModel()
     const systemMessage = { role: 'system', content: prompt }
 

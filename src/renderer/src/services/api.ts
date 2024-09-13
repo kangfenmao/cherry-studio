@@ -140,7 +140,7 @@ export async function fetchGenerate({ prompt, content }: { prompt: string; conte
   const AI = new AiProvider(provider)
 
   try {
-    return await AI.generate({ prompt, content })
+    return await AI.generateText({ prompt, content })
   } catch (error: any) {
     return ''
   }

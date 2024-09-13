@@ -118,7 +118,7 @@ export default class AnthropicProvider extends BaseProvider {
     return message.content[0].type === 'text' ? message.content[0].text : ''
   }
 
-  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+  public async generateText({ prompt, content }: { prompt: string; content: string }): Promise<string> {
     const model = getDefaultModel()
 
     const message = await this.sdk.messages.create({

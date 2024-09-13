@@ -28,7 +28,7 @@ export default abstract class BaseProvider {
   abstract translate(message: Message, assistant: Assistant): Promise<string>
   abstract summaries(messages: Message[], assistant: Assistant): Promise<string>
   abstract suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]>
-  abstract generate({ prompt, content }: { prompt: string; content: string }): Promise<string>
+  abstract generateText({ prompt, content }: { prompt: string; content: string }): Promise<string>
   abstract check(): Promise<{ valid: boolean; error: Error | null }>
   abstract models(): Promise<OpenAI.Models.Model[]>
 }

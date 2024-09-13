@@ -128,7 +128,7 @@ export default class OpenAIProvider extends BaseProvider {
     return removeQuotes(response.choices[0].message?.content?.substring(0, 50) || '')
   }
 
-  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+  public async generateText({ prompt, content }: { prompt: string; content: string }): Promise<string> {
     const model = getDefaultModel()
 
     const response = await this.sdk.chat.completions.create({
