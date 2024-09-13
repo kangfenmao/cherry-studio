@@ -4,6 +4,7 @@ import { Sequelize } from 'sequelize'
 import { SequelizeStorage, Umzug } from 'umzug'
 
 import { DATA_PATH } from '../config'
+import migrations from './migrations'
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -12,7 +13,7 @@ const sequelize = new Sequelize({
 })
 
 const umzug = new Umzug({
-  migrations: { glob: 'src/main/database/migrations/*.js' },
+  migrations,
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize, modelName: 'Migration', tableName: 'migrations' }),
   logger: Logger

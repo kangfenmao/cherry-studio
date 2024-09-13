@@ -4,11 +4,15 @@ import { app } from 'electron'
 import Store from 'electron-store'
 import path from 'path'
 
-export const DATA_PATH = path.join(app.getPath('userData'), 'Data')
-
-if (!fs.existsSync(DATA_PATH)) {
-  fs.mkdirSync(DATA_PATH, { recursive: true })
+const getDataPath = () => {
+  const dataPath = path.join(app.getPath('userData'), 'Data')
+  if (!fs.existsSync(dataPath)) {
+    fs.mkdirSync(dataPath, { recursive: true })
+  }
+  return dataPath
 }
+
+export const DATA_PATH = getDataPath()
 
 export const appConfig = new Store()
 

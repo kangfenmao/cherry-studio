@@ -1,6 +1,6 @@
+import { FileMetadata, FileType } from '@types'
 import { DataTypes, Model } from 'sequelize'
 
-import { FileMetadata, FileType } from '../../../renderer/src/types'
 import sequelize from '..'
 
 class FileModel extends Model<FileMetadata> implements FileMetadata {
