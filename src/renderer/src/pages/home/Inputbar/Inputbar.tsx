@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import AttachmentButton from './AttachmentButton'
+import AttachmentPreview from './AttachmentPreview'
 import SendMessageButton from './SendMessageButton'
 import TokenCount from './TokenCount'
 
@@ -202,100 +203,108 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container id="inputbar" className={inputFocus ? 'focus' : ''} ref={containerRef}>
-      <Textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder={t('chat.input.placeholder')}
-        autoFocus
-        contextMenu="true"
-        variant="borderless"
-        rows={1}
-        ref={textareaRef}
-        style={{ fontSize }}
-        styles={{ textarea: TextareaStyle }}
-        onFocus={() => setInputFocus(true)}
-        onBlur={() => setInputFocus(false)}
-        onInput={onInput}
-        disabled={searching}
-        onClick={() => searching && dispatch(setSearching(false))}
-      />
-      <Toolbar>
-        <ToolbarMenu>
-          <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
-            <ToolbarButton type="text" onClick={addNewTopic}>
-              <PlusCircleOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.clear')} arrow>
-            <Popconfirm
-              title={t('chat.input.clear.content')}
-              placement="top"
-              onConfirm={clearTopic}
-              okButtonProps={{ danger: true }}
-              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              okText={t('chat.input.clear')}>
-              <ToolbarButton type="text">
-                <ClearOutlined />
-              </ToolbarButton>
-            </Popconfirm>
-          </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-            <ToolbarButton
-              type="text"
-              onClick={() => {
-                !showTopics && toggleShowTopics()
-                setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-              }}>
-              <HistoryOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <Tooltip placement="top" title={t('chat.input.settings')} arrow>
-            <ToolbarButton
-              type="text"
-              onClick={() => {
-                !showTopics && toggleShowTopics()
-                setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS), 0)
-              }}>
-              <ControlOutlined />
-            </ToolbarButton>
-          </Tooltip>
-          <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
-          <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
-            <ToolbarButton type="text" onClick={onToggleExpended}>
-              {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
-            </ToolbarButton>
-          </Tooltip>
-          <TokenCount
-            estimateTokenCount={estimateTokenCount}
-            inputTokenCount={inputTokenCount}
-            contextCount={contextCount}
-            ToolbarButton={ToolbarButton}
-            onClick={onNewContext}
-          />
-        </ToolbarMenu>
-        <ToolbarMenu>
-          {generating && (
-            <Tooltip placement="top" title={t('chat.input.pause')} arrow>
-              <ToolbarButton type="text" onClick={onPause} style={{ marginRight: -2, marginTop: 1 }}>
-                <PauseCircleOutlined style={{ color: 'var(--color-error)', fontSize: 20 }} />
+    <Container>
+      <AttachmentPreview files={files} setFiles={setFiles} />
+      <InputBarContainer id="inputbar" className={inputFocus ? 'focus' : ''} ref={containerRef}>
+        <Textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={t('chat.input.placeholder')}
+          autoFocus
+          contextMenu="true"
+          variant="borderless"
+          rows={1}
+          ref={textareaRef}
+          style={{ fontSize }}
+          styles={{ textarea: TextareaStyle }}
+          onFocus={() => setInputFocus(true)}
+          onBlur={() => setInputFocus(false)}
+          onInput={onInput}
+          disabled={searching}
+          onClick={() => searching && dispatch(setSearching(false))}
+        />
+        <Toolbar>
+          <ToolbarMenu>
+            <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
+              <ToolbarButton type="text" onClick={addNewTopic}>
+                <PlusCircleOutlined />
               </ToolbarButton>
             </Tooltip>
-          )}
-          {!generating && <SendMessageButton sendMessage={sendMessage} disabled={generating || !text} />}
-        </ToolbarMenu>
-      </Toolbar>
+            <Tooltip placement="top" title={t('chat.input.clear')} arrow>
+              <Popconfirm
+                title={t('chat.input.clear.content')}
+                placement="top"
+                onConfirm={clearTopic}
+                okButtonProps={{ danger: true }}
+                icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                okText={t('chat.input.clear')}>
+                <ToolbarButton type="text">
+                  <ClearOutlined />
+                </ToolbarButton>
+              </Popconfirm>
+            </Tooltip>
+            <Tooltip placement="top" title={t('chat.input.topics')} arrow>
+              <ToolbarButton
+                type="text"
+                onClick={() => {
+                  !showTopics && toggleShowTopics()
+                  setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
+                }}>
+                <HistoryOutlined />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip placement="top" title={t('chat.input.settings')} arrow>
+              <ToolbarButton
+                type="text"
+                onClick={() => {
+                  !showTopics && toggleShowTopics()
+                  setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_CHAT_SETTINGS), 0)
+                }}>
+                <ControlOutlined />
+              </ToolbarButton>
+            </Tooltip>
+            <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
+            <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
+              <ToolbarButton type="text" onClick={onToggleExpended}>
+                {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+              </ToolbarButton>
+            </Tooltip>
+            <TokenCount
+              estimateTokenCount={estimateTokenCount}
+              inputTokenCount={inputTokenCount}
+              contextCount={contextCount}
+              ToolbarButton={ToolbarButton}
+              onClick={onNewContext}
+            />
+          </ToolbarMenu>
+          <ToolbarMenu>
+            {generating && (
+              <Tooltip placement="top" title={t('chat.input.pause')} arrow>
+                <ToolbarButton type="text" onClick={onPause} style={{ marginRight: -2, marginTop: 1 }}>
+                  <PauseCircleOutlined style={{ color: 'var(--color-error)', fontSize: 20 }} />
+                </ToolbarButton>
+              </Tooltip>
+            )}
+            {!generating && <SendMessageButton sendMessage={sendMessage} disabled={generating || !text} />}
+          </ToolbarMenu>
+        </Toolbar>
+      </InputBarContainer>
     </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 const TextareaStyle: CSSProperties = {
   paddingLeft: 0,
   padding: '10px 15px 8px'
 }
 
-const Container = styled.div`
+const InputBarContainer = styled.div`
   border: 1px solid var(--color-border-soft);
   transition: all 0.3s ease;
   position: relative;
@@ -351,12 +360,21 @@ const ToolbarButton = styled(Button)`
     transition: all 0.3s ease;
     color: var(--color-icon);
   }
-  &:hover,
-  &.active {
+  &:hover {
     background-color: var(--color-background-soft);
     .anticon,
     .iconfont {
       color: var(--color-text-1);
+    }
+  }
+  &.active {
+    background-color: var(--color-primary) !important;
+    .anticon,
+    .iconfont {
+      color: var(--color-white-soft);
+    }
+    &:hover {
+      background-color: var(--color-primary);
     }
   }
 `
