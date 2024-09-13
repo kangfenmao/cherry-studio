@@ -22,12 +22,16 @@ export default class AiProvider {
     return this.sdk.translate(message, assistant)
   }
 
-  public async summaries(messages: Message[], assistant: Assistant): Promise<string | null> {
+  public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     return this.sdk.summaries(messages, assistant)
   }
 
   public async suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]> {
     return this.sdk.suggestions(messages, assistant)
+  }
+
+  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+    return this.sdk.generate({ prompt, content })
   }
 
   public async check(): Promise<{ valid: boolean; error: Error | null }> {

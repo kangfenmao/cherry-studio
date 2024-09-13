@@ -85,7 +85,7 @@ export default class GeminiProvider extends BaseProvider {
     return response.text()
   }
 
-  public async summaries(messages: Message[], assistant: Assistant): Promise<string | null> {
+  public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
     const userMessages = takeRight(messages, 5).map((message) => ({
@@ -116,6 +116,18 @@ export default class GeminiProvider extends BaseProvider {
     })
 
     const { response } = await chat.sendMessage(lastUserMessage?.content!)
+
+    return response.text()
+  }
+
+  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+    const model = getDefaultModel()
+    const systemMessage = { role: 'system', content: prompt }
+
+    const geminiModel = this.sdk.getGenerativeModel({ model: model.id })
+
+    const chat = await geminiModel.startChat({ systemInstruction: systemMessage.content })
+    const { response } = await chat.sendMessage(content)
 
     return response.text()
   }

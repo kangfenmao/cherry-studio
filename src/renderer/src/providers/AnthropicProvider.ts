@@ -90,7 +90,7 @@ export default class AnthropicProvider extends BaseProvider {
     return response.content[0].type === 'text' ? response.content[0].text : ''
   }
 
-  public async summaries(messages: Message[], assistant: Assistant): Promise<string | null> {
+  public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
     const userMessages = takeRight(messages, 5).map((message) => ({
@@ -115,7 +115,26 @@ export default class AnthropicProvider extends BaseProvider {
       max_tokens: 4096
     })
 
-    return message.content[0].type === 'text' ? message.content[0].text : null
+    return message.content[0].type === 'text' ? message.content[0].text : ''
+  }
+
+  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+    const model = getDefaultModel()
+
+    const message = await this.sdk.messages.create({
+      messages: [
+        {
+          role: 'user',
+          content
+        }
+      ],
+      model: model.id,
+      system: prompt,
+      stream: false,
+      max_tokens: 4096
+    })
+
+    return message.content[0].type === 'text' ? message.content[0].text : ''
   }
 
   public async suggestions(): Promise<Suggestion[]> {

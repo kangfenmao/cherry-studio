@@ -26,8 +26,9 @@ export default abstract class BaseProvider {
     onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
   ): Promise<void>
   abstract translate(message: Message, assistant: Assistant): Promise<string>
-  abstract summaries(messages: Message[], assistant: Assistant): Promise<string | null>
+  abstract summaries(messages: Message[], assistant: Assistant): Promise<string>
   abstract suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]>
+  abstract generate({ prompt, content }: { prompt: string; content: string }): Promise<string>
   abstract check(): Promise<{ valid: boolean; error: Error | null }>
   abstract models(): Promise<OpenAI.Models.Model[]>
 }

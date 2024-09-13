@@ -129,6 +129,23 @@ export async function fetchMessagesSummary({ messages, assistant }: { messages: 
   }
 }
 
+export async function fetchGenerate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+  const model = getDefaultModel()
+  const provider = getProviderByModel(model)
+
+  if (!hasApiKey(provider)) {
+    return ''
+  }
+
+  const AI = new AiProvider(provider)
+
+  try {
+    return await AI.generate({ prompt, content })
+  } catch (error: any) {
+    return ''
+  }
+}
+
 export async function fetchSuggestions({
   messages,
   assistant

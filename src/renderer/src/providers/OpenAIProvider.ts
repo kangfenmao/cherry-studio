@@ -103,7 +103,7 @@ export default class OpenAIProvider extends BaseProvider {
     return response.choices[0].message?.content || ''
   }
 
-  public async summaries(messages: Message[], assistant: Assistant): Promise<string | null> {
+  public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
     const userMessages = takeRight(messages, 5).map((message) => ({
@@ -126,6 +126,21 @@ export default class OpenAIProvider extends BaseProvider {
     })
 
     return removeQuotes(response.choices[0].message?.content?.substring(0, 50) || '')
+  }
+
+  public async generate({ prompt, content }: { prompt: string; content: string }): Promise<string> {
+    const model = getDefaultModel()
+
+    const response = await this.sdk.chat.completions.create({
+      model: model.id,
+      stream: false,
+      messages: [
+        { role: 'user', content },
+        { role: 'system', content: prompt }
+      ]
+    })
+
+    return response.choices[0].message?.content || ''
   }
 
   async suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]> {
