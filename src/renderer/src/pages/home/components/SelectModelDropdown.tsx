@@ -1,3 +1,5 @@
+import VisionIcon from '@renderer/components/Icons/VisionIcon'
+import { isVisionModel } from '@renderer/config/models'
 import { getModelLogo } from '@renderer/config/provider'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId } from '@renderer/services/model'
@@ -25,7 +27,11 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
       type: 'group',
       children: reverse(sortBy(p.models, 'name')).map((m) => ({
         key: getModelUniqId(m),
-        label: upperFirst(m?.name),
+        label: (
+          <div>
+            {upperFirst(m?.name)} {isVisionModel(m) && <VisionIcon />}
+          </div>
+        ),
         defaultSelectedKeys: model ? [getModelUniqId(model)] : [],
         icon: (
           <Avatar src={getModelLogo(m?.id || '')} size={24}>

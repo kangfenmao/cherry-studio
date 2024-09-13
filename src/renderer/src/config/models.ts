@@ -1,7 +1,7 @@
 import { Model } from '@renderer/types'
 
 const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-turbo|dall|cogview/i
-const VISION_REGEX = /llava|moondream|minicpm|gemini|claude|vision|glm-4v/i
+const VISION_REGEX = /llava|moondream|minicpm|gemini-1.5|claude-3|vision|glm-4v|gpt-4|qwen-vl/i
 const EMBEDDING_REGEX = /embedding/i
 
 export const SYSTEM_MODELS: Record<string, Model[]> = {

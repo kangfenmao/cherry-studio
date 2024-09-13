@@ -6,6 +6,8 @@ import {
   MinusCircleOutlined,
   PlusOutlined
 } from '@ant-design/icons'
+import VisionIcon from '@renderer/components/Icons/VisionIcon'
+import { isVisionModel } from '@renderer/config/models'
 import { getModelLogo } from '@renderer/config/provider'
 import { PROVIDER_CONFIG } from '@renderer/config/provider'
 import { useTheme } from '@renderer/context/ThemeProvider'
@@ -148,7 +150,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
                 <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
                   {model.name[0].toUpperCase()}
                 </Avatar>
-                {model.name}
+                {model.name} {isVisionModel(model) && <VisionIcon />}
               </ModelListHeader>
               <RemoveIcon onClick={() => removeModel(model)} />
             </ModelListItem>

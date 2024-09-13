@@ -1,5 +1,7 @@
 import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
+import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { isLocalAi } from '@renderer/config/env'
+import { isVisionModel } from '@renderer/config/models'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
 import { Button } from 'antd'
@@ -27,6 +29,7 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
       <DropdownButton size="small" type="default">
         <ModelAvatar model={model} size={20} />
         <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
+        {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
       </DropdownButton>
     </SelectModelDropdown>
   )

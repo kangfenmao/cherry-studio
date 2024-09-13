@@ -24,23 +24,23 @@ const FilesPage: FC = () => {
 
   const columns = [
     {
-      title: 'File',
+      title: t('files.file'),
       dataIndex: 'file',
       key: 'file'
     },
     {
-      title: 'Name',
+      title: t('files.name'),
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: 'Size',
+      title: t('files.size'),
       dataIndex: 'size',
       key: 'size',
       width: '100px'
     },
     {
-      title: 'Created At',
+      title: t('files.created_at'),
       dataIndex: 'created_at',
       key: 'created_at',
       width: '120px'

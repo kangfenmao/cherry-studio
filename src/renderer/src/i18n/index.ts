@@ -103,7 +103,11 @@ const resources = {
         'assistant.search.placeholder': 'Search'
       },
       files: {
-        title: 'Files'
+        title: 'Files',
+        file: 'File',
+        name: 'Name',
+        size: 'Size',
+        created_at: 'Created At'
       },
       agents: {
         title: 'Assistants',
@@ -362,7 +366,11 @@ const resources = {
         'assistant.search.placeholder': '搜索'
       },
       files: {
-        title: '文件'
+        title: '文件',
+        file: '文件',
+        name: '文件名',
+        size: '大小',
+        created_at: '创建时间'
       },
       agents: {
         title: '智能体',

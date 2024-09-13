@@ -1,5 +1,6 @@
 import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { SYSTEM_MODELS } from '@renderer/config/models'
+import VisionIcon from '@renderer/components/Icons/VisionIcon'
+import { isVisionModel, SYSTEM_MODELS } from '@renderer/config/models'
 import { getModelLogo } from '@renderer/config/provider'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/api'
@@ -126,6 +127,7 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
                     </Avatar>
                     <ListItemName>
                       {model.name}
+                      {isVisionModel(model) && <VisionIcon />}
                       {isFreeModel(model) && (
                         <Tag style={{ marginLeft: 10 }} color="green">
                           Free
