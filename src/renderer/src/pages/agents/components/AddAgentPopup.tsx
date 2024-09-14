@@ -31,7 +31,6 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   const { addAgent, updateAgent } = useAgents()
   const formRef = useRef<FormInstance>(null)
   const [emoji, setEmoji] = useState(agent?.emoji)
-  const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
 
   const onFinish = (values: FieldType) => {
@@ -86,17 +85,31 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   }, [agent, form])
 
   const handleButtonClick = async () => {
-    const prompt = `你是一个专业的prompt优化助手，我会给你一段prompt，你需要帮我优化它，仅回复优化后的prompt不要添加任何解释，使用[CRISPE提示框架]回复。`
+    const prompt = `你是一个专业的 prompt 优化助手，我会给你一段prompt，你需要帮我优化它，仅回复优化后的 prompt 不要添加任何解释，使用 [CRISPE提示框架] 回复。`
+
+    const name = formRef.current?.getFieldValue('name')
+    const content = formRef.current?.getFieldValue('prompt')
+    const promptText = content || name
+
+    if (!promptText) {
+      return
+    }
+
+    if (content) {
+      navigator.clipboard.writeText(content)
+    }
+
     setLoading(true)
+
     try {
-      const prefixedContent = `请帮我优化下面这段prompt，使用CRISPE提示框架，请使用Markdown格式回复: ${content}`
+      const prefixedContent = `请帮我优化下面这段 prompt，使用 CRISPE 提示框架，请使用 Markdown 格式回复，不要使用 codeblock: ${promptText}`
       const generatedText = await fetchGenerate({ prompt, content: prefixedContent })
-      setContent(generatedText)
+      formRef.current?.setFieldValue('prompt', generatedText)
     } catch (error) {
       console.error('Error fetching data:', error)
-    } finally {
-      setLoading(false)
     }
+
+    setLoading(false)
   }
 
   return (
@@ -125,26 +138,21 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
         <Form.Item name="name" label={t('agents.add.name')} rules={[{ required: true }]}>
           <Input placeholder={t('agents.add.name.placeholder')} spellCheck={false} allowClear />
         </Form.Item>
-        <Form.Item name="prompt" label={t('agents.add.prompt')} rules={[{ required: true }]}>
-          <div style={{ position: 'relative' }}>
-            <TextArea
-              placeholder={t('agents.add.prompt.placeholder')}
-              spellCheck={false}
-              rows={10}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-            <Button
-              icon={loading ? <LoadingOutlined /> : <ThunderboltOutlined />}
-              style={{
-                position: 'absolute',
-                top: 8,
-                right: 8
-              }}
-              onClick={handleButtonClick}
-              disabled={loading}></Button>
-          </div>
-        </Form.Item>
+        <div style={{ position: 'relative' }}>
+          <Form.Item
+            name="prompt"
+            label={t('agents.add.prompt')}
+            rules={[{ required: true }]}
+            style={{ position: 'relative' }}>
+            <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={10} />
+          </Form.Item>
+          <Button
+            icon={loading ? <LoadingOutlined /> : <ThunderboltOutlined />}
+            onClick={handleButtonClick}
+            style={{ position: 'absolute', top: 8, right: 8 }}
+            disabled={loading}
+          />
+        </div>
       </Form>
     </Modal>
   )
