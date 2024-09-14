@@ -13,6 +13,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import FileManager from '@renderer/services/file'
 import { estimateInputTokenCount } from '@renderer/services/messages'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
@@ -77,7 +78,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     }
 
     if (files.length > 0) {
-      message.files = await window.api.file.batchUpload(files)
+      message.files = await FileManager.uploadFiles(files)
     }
 
     EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, message)

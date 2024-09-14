@@ -4,6 +4,7 @@ import { GPTTokens } from 'gpt-tokens'
 import { isEmpty, takeRight } from 'lodash'
 
 import { getAssistantSettings } from './assistant'
+import FileManager from './file'
 
 export const filterMessages = (messages: Message[]) => {
   return messages
@@ -61,5 +62,5 @@ export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[])
 }
 
 export function deleteMessageFiles(message: Message) {
-  message.files && window.api.file.batchDelete(message.files.map((f) => f.id))
+  message.files && FileManager.deleteFiles(message.files.map((f) => f.id))
 }

@@ -90,7 +90,7 @@ export type MinAppType = {
 export interface FileMetadata {
   id: string
   name: string
-  file_name: string
+  origin_name: string
   path: string
   size: number
   ext: string

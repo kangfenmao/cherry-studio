@@ -1,21 +1,20 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { VStack } from '@renderer/components/Layout'
+import db from '@renderer/databases'
+import FileManager from '@renderer/services/file'
 import { FileMetadata } from '@renderer/types'
-import { Image, Table } from 'antd'
+import { Button, Image, Table } from 'antd'
 import dayjs from 'dayjs'
-import { FC, useEffect, useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const FilesPage: FC = () => {
   const { t } = useTranslation()
-  const [files, setFiles] = useState<FileMetadata[]>([])
+  const files = useLiveQuery<FileMetadata[]>(() => db.files.toArray())
 
-  useEffect(() => {
-    window.api.file.all().then(setFiles)
-  }, [])
-
-  const dataSource = files.map((file) => ({
+  const dataSource = files?.map((file) => ({
     file: <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />,
     name: <a href={'file://' + file.path}>{file.name}</a>,
     size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
@@ -53,6 +52,13 @@ const FilesPage: FC = () => {
         <NavbarCenter style={{ borderRight: 'none' }}>{t('files.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer>
+        <Button
+          onClick={async () => {
+            const files = await FileManager.selectFiles()
+            files && FileManager.uploadFiles(files)
+          }}>
+          Upload
+        </Button>
         <VStack style={{ flex: 1 }}>
           <Table dataSource={dataSource} columns={columns} style={{ width: '100%', height: '100%' }} size="small" />
         </VStack>

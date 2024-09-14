@@ -60,13 +60,6 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     await fileManager.deleteFile(fileId)
     return { success: true }
   })
-  ipcMain.handle('file:batchUpload', async (_, files: FileMetadata[]) => await fileManager.batchUploadFiles(files))
-  ipcMain.handle('file:batchDelete', async (_, fileIds: string[]) => {
-    await fileManager.batchDeleteFiles(fileIds)
-    return { success: true }
-  })
-  ipcMain.handle('file:all', () => fileManager.getAllFiles())
-
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({
       url: args.url,

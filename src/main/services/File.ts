@@ -1,5 +1,3 @@
-/* eslint-disable react/no-is-mounted */
-import FileModel from '@main/database/models/FileModel'
 import { getFileType } from '@main/utils/file'
 import { FileMetadata } from '@types'
 import * as crypto from 'crypto'
@@ -50,7 +48,17 @@ class File {
         if (originalHash === storedHash) {
           const ext = path.extname(file)
           const id = path.basename(file, ext)
-          return this.getFile(id)
+          return {
+            id,
+            origin_name: file,
+            name: file + ext,
+            path: storedFilePath,
+            created_at: storedStats.birthtime,
+            size: storedStats.size,
+            ext,
+            type: getFileType(ext),
+            count: 2
+          }
         }
       }
     }
@@ -78,8 +86,8 @@ class File {
 
       return {
         id: uuidv4(),
+        origin_name: path.basename(filePath),
         name: path.basename(filePath),
-        file_name: path.basename(filePath),
         path: filePath,
         created_at: stats.birthtime,
         size: stats.size,
@@ -96,16 +104,12 @@ class File {
     const duplicateFile = await this.findDuplicateFile(file.path)
 
     if (duplicateFile) {
-      // Increment the count for the duplicate file
-      await FileModel.increment('count', { where: { id: duplicateFile.id } })
-
-      // Fetch the updated file metadata
-      return (await this.getFile(duplicateFile.id))!
+      return duplicateFile
     }
 
     const uuid = uuidv4()
-    const name = path.basename(file.path)
-    const ext = path.extname(name)
+    const origin_name = path.basename(file.path)
+    const ext = path.extname(origin_name)
     const destPath = path.join(this.storageDir, uuid + ext)
 
     await fs.promises.copyFile(file.path, destPath)
@@ -114,8 +118,8 @@ class File {
 
     const fileMetadata: FileMetadata = {
       id: uuid,
-      name,
-      file_name: uuid + ext,
+      origin_name,
+      name: uuid + ext,
       path: destPath,
       created_at: stats.birthtime,
       size: stats.size,
@@ -124,43 +128,11 @@ class File {
       count: 1
     }
 
-    await FileModel.create(fileMetadata)
-
     return fileMetadata
   }
 
-  async deleteFile(fileId: string): Promise<void> {
-    const fileMetadata = await this.getFile(fileId)
-    if (fileMetadata) {
-      if (fileMetadata.count > 1) {
-        // Decrement the count if there are multiple references
-        await FileModel.decrement('count', { where: { id: fileId } })
-      } else {
-        // Delete the file and database entry if this is the last reference
-        await fs.promises.unlink(fileMetadata.path)
-        await FileModel.destroy({ where: { id: fileId } })
-      }
-    }
-  }
-
-  async batchUploadFiles(files: FileMetadata[]): Promise<FileMetadata[]> {
-    const uploadPromises = files.map((file) => this.uploadFile(file))
-    return Promise.all(uploadPromises)
-  }
-
-  async batchDeleteFiles(fileIds: string[]): Promise<void> {
-    const deletePromises = fileIds.map((fileId) => this.deleteFile(fileId))
-    await Promise.all(deletePromises)
-  }
-
-  async getFile(id: string): Promise<FileMetadata | null> {
-    const file = await FileModel.findByPk(id)
-    return file ? (file.toJSON() as FileMetadata) : null
-  }
-
-  async getAllFiles(): Promise<FileMetadata[]> {
-    const files = await FileModel.findAll()
-    return files.map((file) => file.toJSON() as FileMetadata)
+  async deleteFile(id: string): Promise<void> {
+    await fs.promises.unlink(path.join(this.storageDir, id))
   }
 }
 

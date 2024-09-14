@@ -19,10 +19,7 @@ const api = {
   file: {
     select: (options?: OpenDialogOptions) => ipcRenderer.invoke('file:select', options),
     upload: (filePath: string) => ipcRenderer.invoke('file:upload', filePath),
-    delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
-    batchUpload: (filePaths: string[]) => ipcRenderer.invoke('file:batchUpload', filePaths),
-    batchDelete: (fileIds: string[]) => ipcRenderer.invoke('file:batchDelete', fileIds),
-    all: () => ipcRenderer.invoke('file:all')
+    delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId)
   },
   image: {
     base64: (filePath: string) => ipcRenderer.invoke('image:base64', filePath)

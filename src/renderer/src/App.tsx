@@ -1,3 +1,5 @@
+import '@renderer/databases'
+
 import store, { persistor } from '@renderer/store'
 import { Provider } from 'react-redux'
 import { HashRouter, Route, Routes } from 'react-router-dom'

@@ -1,7 +1,6 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow } from 'electron'
 
-import { initDatabase } from './database'
 import { registerIpc } from './ipc'
 import { updateUserDataPath } from './utils/upgrade'
 import { createMainWindow } from './window'
@@ -11,7 +10,6 @@ import { createMainWindow } from './window'
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
   await updateUserDataPath()
-  await initDatabase()
 
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.kangfenmao.CherryStudio')

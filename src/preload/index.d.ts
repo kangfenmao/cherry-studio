@@ -25,9 +25,6 @@ declare global {
         select: (options?: OpenDialogOptions) => Promise<FileMetadata[] | null>
         upload: (file: FileMetadata) => Promise<FileMetadata>
         delete: (fileId: string) => Promise<{ success: boolean }>
-        batchUpload: (files: FileMetadata[]) => Promise<FileMetadata[]>
-        batchDelete: (fileIds: string[]) => Promise<{ success: boolean }>
-        all: () => Promise<FileMetadata[]>
       }
       image: {
         base64: (filePath: string) => Promise<{ mime: string; base64: string; data: string }>
