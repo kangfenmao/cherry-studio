@@ -1,5 +1,5 @@
 import { getFileType } from '@main/utils/file'
-import { FileMetadata } from '@types'
+import { FileType } from '@types'
 import * as crypto from 'crypto'
 import { app, dialog, OpenDialogOptions } from 'electron'
 import * as fs from 'fs'
@@ -30,7 +30,7 @@ class File {
     })
   }
 
-  async findDuplicateFile(filePath: string): Promise<FileMetadata | null> {
+  async findDuplicateFile(filePath: string): Promise<FileType | null> {
     const stats = fs.statSync(filePath)
     const fileSize = stats.size
 
@@ -66,7 +66,7 @@ class File {
     return null
   }
 
-  async selectFile(options?: OpenDialogOptions): Promise<FileMetadata[] | null> {
+  async selectFile(options?: OpenDialogOptions): Promise<FileType[] | null> {
     const defaultOptions: OpenDialogOptions = {
       properties: ['openFile']
     }
@@ -100,7 +100,7 @@ class File {
     return Promise.all(fileMetadataPromises)
   }
 
-  async uploadFile(file: FileMetadata): Promise<FileMetadata> {
+  async uploadFile(file: FileType): Promise<FileType> {
     const duplicateFile = await this.findDuplicateFile(file.path)
 
     if (duplicateFile) {
@@ -116,7 +116,7 @@ class File {
     const stats = await fs.promises.stat(destPath)
     const fileType = getFileType(ext)
 
-    const fileMetadata: FileMetadata = {
+    const fileMetadata: FileType = {
       id: uuid,
       origin_name,
       name: uuid + ext,

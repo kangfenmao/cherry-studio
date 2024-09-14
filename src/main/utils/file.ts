@@ -3,7 +3,7 @@ import logger from 'electron-log'
 import { writeFile } from 'fs'
 import { readFile } from 'fs/promises'
 
-import { FileType } from '../../renderer/src/types'
+import { FileTypes } from '../../renderer/src/types'
 
 export async function saveFile(
   _: Electron.IpcMainInvokeEvent,
@@ -56,16 +56,16 @@ export async function openFile(
   }
 }
 
-export function getFileType(ext: string): FileType {
+export function getFileType(ext: string): FileTypes {
   const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
   const videoExts = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv']
   const audioExts = ['.mp3', '.wav', '.ogg', '.flac', '.aac']
   const documentExts = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt']
 
   ext = ext.toLowerCase()
-  if (imageExts.includes(ext)) return FileType.IMAGE
-  if (videoExts.includes(ext)) return FileType.VIDEO
-  if (audioExts.includes(ext)) return FileType.AUDIO
-  if (documentExts.includes(ext)) return FileType.DOCUMENT
-  return FileType.OTHER
+  if (imageExts.includes(ext)) return FileTypes.IMAGE
+  if (videoExts.includes(ext)) return FileTypes.VIDEO
+  if (audioExts.includes(ext)) return FileTypes.AUDIO
+  if (documentExts.includes(ext)) return FileTypes.DOCUMENT
+  return FileTypes.OTHER
 }

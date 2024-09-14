@@ -1,4 +1,4 @@
-import { FileMetadata } from '@types'
+import { FileType } from '@types'
 import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'electron'
 import Logger from 'electron-log'
 import fs from 'fs'
@@ -55,7 +55,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   })
 
   ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
-  ipcMain.handle('file:upload', async (_, file: FileMetadata) => await fileManager.uploadFile(file))
+  ipcMain.handle('file:upload', async (_, file: FileType) => await fileManager.uploadFile(file))
   ipcMain.handle('file:delete', async (_, fileId: string) => {
     await fileManager.deleteFile(fileId)
     return { success: true }

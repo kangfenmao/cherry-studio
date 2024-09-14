@@ -1,14 +1,14 @@
 import { PaperClipOutlined } from '@ant-design/icons'
 import { isVisionModel } from '@renderer/config/models'
-import { FileMetadata, Model } from '@renderer/types'
+import { FileType, Model } from '@renderer/types'
 import { Tooltip } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
   model: Model
-  files: FileMetadata[]
-  setFiles: (files: FileMetadata[]) => void
+  files: FileType[]
+  setFiles: (files: FileType[]) => void
   ToolbarButton: any
 }
 

@@ -11,8 +11,7 @@ import { useSettings } from './useSettings'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
-  const { proxyUrl } = useSettings()
-  const { language } = useSettings()
+  const { proxyUrl, language } = useSettings()
   const { setDefaultModel, setTopicNamingModel, setTranslateModel } = useDefaultModel()
 
   useEffect(() => {

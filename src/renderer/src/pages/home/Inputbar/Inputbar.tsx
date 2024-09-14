@@ -1,11 +1,11 @@
 import {
   ClearOutlined,
   ControlOutlined,
+  FormOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
-  PlusCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -17,7 +17,7 @@ import FileManager from '@renderer/services/file'
 import { estimateInputTokenCount } from '@renderer/services/messages'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
-import { Assistant, FileMetadata, Message, Topic } from '@renderer/types'
+import { Assistant, FileType, Message, Topic } from '@renderer/types'
 import { delay, uuid } from '@renderer/utils'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
@@ -49,7 +49,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [contextCount, setContextCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const textareaRef = useRef<TextAreaRef>(null)
-  const [files, setFiles] = useState<FileMetadata[]>([])
+  const [files, setFiles] = useState<FileType[]>([])
   const { t } = useTranslation()
   const containerRef = useRef(null)
   const { showTopics, toggleShowTopics } = useShowTopics()
@@ -229,7 +229,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           <ToolbarMenu>
             <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
               <ToolbarButton type="text" onClick={addNewTopic}>
-                <PlusCircleOutlined />
+                <FormOutlined />
               </ToolbarButton>
             </Tooltip>
             <Tooltip placement="top" title={t('chat.input.clear')} arrow>

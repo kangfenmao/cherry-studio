@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { FileMetadata } from '@renderer/types'
+import { FileType } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
 
 declare global {
@@ -22,8 +22,8 @@ declare global {
       compress: (text: string) => Promise<Buffer>
       decompress: (text: Buffer) => Promise<string>
       file: {
-        select: (options?: OpenDialogOptions) => Promise<FileMetadata[] | null>
-        upload: (file: FileMetadata) => Promise<FileMetadata>
+        select: (options?: OpenDialogOptions) => Promise<FileType[] | null>
+        upload: (file: FileType) => Promise<FileType>
         delete: (fileId: string) => Promise<{ success: boolean }>
       }
       image: {

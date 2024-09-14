@@ -1,12 +1,12 @@
-import { FileMetadata } from '@renderer/types'
+import { FileType } from '@renderer/types'
 import { Upload } from 'antd'
 import { isEmpty } from 'lodash'
 import { FC } from 'react'
 import styled from 'styled-components'
 
 interface Props {
-  files: FileMetadata[]
-  setFiles: (files: FileMetadata[]) => void
+  files: FileType[]
+  setFiles: (files: FileType[]) => void
 }
 
 const AttachmentPreview: FC<Props> = ({ files, setFiles }) => {

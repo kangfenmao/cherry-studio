@@ -1,13 +1,13 @@
 import db from '@renderer/databases'
-import { FileMetadata } from '@renderer/types'
+import { FileType } from '@renderer/types'
 
 class FileManager {
-  static async selectFiles(options?: Electron.OpenDialogOptions): Promise<FileMetadata[] | null> {
+  static async selectFiles(options?: Electron.OpenDialogOptions): Promise<FileType[] | null> {
     const files = await window.api.file.select(options)
     return files
   }
 
-  static async uploadFile(file: FileMetadata): Promise<FileMetadata> {
+  static async uploadFile(file: FileType): Promise<FileType> {
     const uploadFile = await window.api.file.upload(file)
     const fileRecord = await db.files.get(uploadFile.id)
 
@@ -21,11 +21,11 @@ class FileManager {
     return uploadFile
   }
 
-  static async uploadFiles(files: FileMetadata[]): Promise<FileMetadata[]> {
+  static async uploadFiles(files: FileType[]): Promise<FileType[]> {
     return Promise.all(files.map((file) => this.uploadFile(file)))
   }
 
-  static async getFile(id: string): Promise<FileMetadata | undefined> {
+  static async getFile(id: string): Promise<FileType | undefined> {
     return db.files.get(id)
   }
 
@@ -49,7 +49,7 @@ class FileManager {
     await Promise.all(ids.map((id) => this.deleteFile(id)))
   }
 
-  static async allFiles(): Promise<FileMetadata[]> {
+  static async allFiles(): Promise<FileType[]> {
     return db.files.toArray()
   }
 }
