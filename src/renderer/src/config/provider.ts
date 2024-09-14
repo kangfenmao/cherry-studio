@@ -136,6 +136,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.openai.com/docs/models'
     },
     app: {
+      id: 'openai',
       name: 'ChatGPT',
       url: 'https://chatgpt.com/',
       logo: OpenAiProviderLogo
@@ -152,6 +153,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://ai.google.dev/gemini-api/docs/models/gemini'
     },
     app: {
+      id: 'gemini',
       name: 'Gemini',
       url: 'https://gemini.google.com/',
       logo: GeminiProviderLogo
@@ -168,6 +170,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://docs.siliconflow.cn/docs/model-names'
     },
     app: {
+      id: 'silicon',
       name: 'SiliconFlow',
       url: 'https://cloud.siliconflow.cn/playground/chat',
       logo: SiliconFlowProviderLogo
@@ -184,6 +187,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.deepseek.com/api-docs/'
     },
     app: {
+      id: 'deepseek',
       name: 'DeepSeek',
       url: 'https://chat.deepseek.com/',
       logo: DeepSeekProviderLogo
@@ -211,6 +215,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.lingyiwanwu.com/docs#%E6%A8%A1%E5%9E%8B'
     },
     app: {
+      id: 'yi',
       name: 'Yi',
       url: 'https://www.wanzhi.com/',
       logo: YiProviderLogo
@@ -227,6 +232,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://open.bigmodel.cn/modelcenter/square'
     },
     app: {
+      id: 'zhipu',
       name: '智谱',
       url: 'https://chatglm.cn/main/alltoolsdetail',
       logo: ZhipuProviderLogo
@@ -243,6 +249,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.moonshot.cn/docs/intro#%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8'
     },
     app: {
+      id: 'moonshot',
       name: 'Kimi',
       url: 'https://kimi.moonshot.cn/',
       logo: KimiAppLogo
@@ -259,6 +266,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.baichuan-ai.com/price'
     },
     app: {
+      id: 'baichuan',
       name: '百小应',
       url: 'https://ying.baichuan-ai.com/chat',
       logo: BaicuanAppLogo
@@ -275,6 +283,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://dashscope.console.aliyun.com/model'
     },
     app: {
+      id: 'dashscope',
       name: '通义千问',
       url: 'https://tongyi.aliyun.com/qianwen/',
       logo: QwenModelLogo
@@ -291,6 +300,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.stepfun.com/docs/llm/text'
     },
     app: {
+      id: 'stepfun',
       name: '跃问',
       url: 'https://yuewen.cn/chats/new',
       logo: YuewenAppLogo
@@ -307,6 +317,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint'
     },
     app: {
+      id: 'doubao',
       name: '豆包',
       url: 'https://www.doubao.com/chat/',
       logo: DoubaoProviderLogo
@@ -323,6 +334,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.minimaxi.com/document/Models'
     },
     app: {
+      id: 'minimax',
       name: '海螺',
       url: 'https://hailuoai.com/',
       logo: HailuoModelLogo
@@ -355,6 +367,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://console.groq.com/docs/models'
     },
     app: {
+      id: 'groq',
       name: 'Groq',
       url: 'https://chat.groq.com/',
       logo: GroqProviderLogo
@@ -381,6 +394,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://docs.anthropic.com/en/docs/about-claude/models'
     },
     app: {
+      id: 'anthropic',
       name: 'Claude',
       url: 'https://claude.ai/',
       logo: AnthropicProviderLogo

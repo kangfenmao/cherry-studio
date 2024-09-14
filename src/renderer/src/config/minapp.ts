@@ -16,61 +16,73 @@ import { MinAppType } from '@renderer/types'
 
 const _apps: MinAppType[] = [
   {
+    id: '360-ai-so',
     name: '360AI搜索',
     logo: AiSearchAppLogo,
     url: 'https://so.360.com/'
   },
   {
+    id: '360-ai-bot',
     name: 'AI 助手',
     logo: AiAssistantAppLogo,
     url: 'https://bot.360.com/'
   },
   {
+    id: 'baidu-ai-chat',
     name: '文心一言',
     logo: BaiduAiAppLogo,
     url: 'https://yiyan.baidu.com/'
   },
   {
+    id: 'tencent-yuanbao',
     name: '腾讯元宝',
     logo: TencentYuanbaoAppLogo,
     url: 'https://yuanbao.tencent.com/chat'
   },
   {
+    id: 'sensetime-chat',
     name: '商量',
     logo: SensetimeAppLogo,
     url: 'https://chat.sensetime.com/wb/chat'
   },
   {
+    id: 'spark-desk',
     name: 'SparkDesk',
     logo: SparkDeskAppLogo,
     url: 'https://xinghuo.xfyun.cn/desk'
   },
   {
+    id: 'metaso',
     name: '秘塔AI搜索',
     logo: MetasoAppLogo,
     url: 'https://metaso.cn/'
   },
   {
+    id: 'poe',
     name: 'Poe',
     logo: PoeAppLogo,
     url: 'https://poe.com'
   },
   {
+    id: 'perplexity',
     name: 'perplexity',
     logo: PerplexityAppLogo,
     url: 'https://www.perplexity.ai/'
   },
   {
+    id: 'devv',
     name: 'DEVV_',
     logo: DevvAppLogo,
     url: 'https://devv.ai/'
   },
   {
+    id: 'tiangong-ai',
     name: '天工AI',
     logo: TiangongAiLogo,
     url: 'https://www.tiangong.cn/'
   },
   {
+    id: 'zhihu-zhiada',
     name: '知乎直答',
     logo: ZhihuAppLogo,
     url: 'https://zhida.zhihu.com/'
