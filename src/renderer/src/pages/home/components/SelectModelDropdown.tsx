@@ -32,7 +32,6 @@ const SelectModelDropdown: FC<Props & PropsWithChildren> = ({ children, model, o
             {upperFirst(m?.name)} {isVisionModel(m) && <VisionIcon />}
           </div>
         ),
-        defaultSelectedKeys: model ? [getModelUniqId(model)] : [],
         icon: (
           <Avatar src={getModelLogo(m?.id || '')} size={24}>
             {first(m?.name)}

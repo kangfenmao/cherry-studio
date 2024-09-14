@@ -16,7 +16,7 @@ const FilesPage: FC = () => {
   const dataSource = files?.map((file) => ({
     key: file.id,
     file: <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />,
-    name: <a href={'file://' + file.path}>{file.name}</a>,
+    name: <a href={'file://' + file.path}>{file.origin_name}</a>,
     size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
     created_at: dayjs(file.created_at).format('MM-DD HH:mm')
   }))

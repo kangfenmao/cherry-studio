@@ -94,7 +94,7 @@ export interface FileType {
   path: string
   size: number
   ext: string
-  type: FileType
+  type: FileTypes
   created_at: Date
   count: number
 }
