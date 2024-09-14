@@ -131,7 +131,7 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
         style={{ marginTop: 25 }}
         onFinish={onFinish}>
         <Form.Item name="name" label="Emoji">
-          <Popover content={<EmojiPicker onEmojiClick={setEmoji} />} trigger="click" arrow>
+          <Popover content={<EmojiPicker onEmojiClick={setEmoji} />} arrow>
             <Button icon={emoji && <span style={{ fontSize: 20 }}>{emoji}</span>}>{t('common.select')}</Button>
           </Popover>
         </Form.Item>
