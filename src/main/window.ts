@@ -40,7 +40,6 @@ export function createMainWindow() {
     }
   })
 
-  mainWindow.webContents.openDevTools()
   mainWindowState.manage(mainWindow)
 
   mainWindow.webContents.on('context-menu', () => {

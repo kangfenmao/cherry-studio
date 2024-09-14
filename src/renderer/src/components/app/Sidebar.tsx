@@ -51,11 +51,6 @@ const Sidebar: FC = () => {
               <i className="iconfont icon-chat"></i>
             </Icon>
           </StyledLink>
-          <StyledLink onClick={() => to('/files')}>
-            <Icon className={isRoute('/files')}>
-              <FolderOutlined />
-            </Icon>
-          </StyledLink>
           <StyledLink onClick={() => to('/agents')}>
             <Icon className={isRoute('/agents')}>
               <i className="iconfont icon-business-smart-assistant"></i>
@@ -69,6 +64,11 @@ const Sidebar: FC = () => {
           <StyledLink onClick={() => to('/apps')}>
             <Icon className={isRoute('/apps')}>
               <i className="iconfont icon-appstore"></i>
+            </Icon>
+          </StyledLink>
+          <StyledLink onClick={() => to('/files')}>
+            <Icon className={isRoute('/files')}>
+              <FolderOutlined />
             </Icon>
           </StyledLink>
         </Menus>

@@ -41,8 +41,8 @@ class FileManager {
       return
     }
 
-    await window.api.file.delete(id + file.ext)
     db.files.delete(id)
+    await window.api.file.delete(id + file.ext)
   }
 
   static async deleteFiles(ids: string[]): Promise<void> {
