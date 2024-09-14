@@ -18,7 +18,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
-import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
+import { firstLetter, removeLeadingEmoji, removeTrailingDoubleSpaces } from '@renderer/utils'
 import { Alert, Avatar, Divider, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
@@ -54,7 +54,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const showMetadata = Boolean(message.usage) && !generating
 
   const onCopy = useCallback(() => {
-    navigator.clipboard.writeText(message.content)
+    navigator.clipboard.writeText(removeTrailingDoubleSpaces(message.content))
     window.message.success({ content: t('message.copied'), key: 'copy-message' })
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)

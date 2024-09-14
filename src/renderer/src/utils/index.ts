@@ -224,3 +224,8 @@ export function getBriefInfo(text: string, maxLength: number = 50): string {
   // 截取前面的内容，并在末尾添加 "..."
   return truncatedText + '...'
 }
+
+export function removeTrailingDoubleSpaces(markdown: string): string {
+  // 使用正则表达式匹配末尾的两个空格，并替换为空字符串
+  return markdown.replace(/ {2}$/gm, '')
+}
