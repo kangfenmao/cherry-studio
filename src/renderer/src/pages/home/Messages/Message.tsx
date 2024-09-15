@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'
 import UserPopup from '@renderer/components/Popups/UserPopup'
 import { FONT_FAMILY } from '@renderer/config/constant'
+import { APP_NAME, AppLogo, isLocalAi } from '@renderer/config/env'
 import { startMinAppById } from '@renderer/config/minapp'
 import { getModelLogo } from '@renderer/config/provider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -71,18 +72,24 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   )
 
   const getUserName = useCallback(() => {
-    if (message.id === 'assistant') return assistant?.name
+    if (isLocalAi && message.role !== 'user') return APP_NAME
     if (message.role === 'assistant') return upperFirst(model?.name || model?.id)
     return userName || t('common.you')
-  }, [assistant?.name, message.id, message.role, model?.id, model?.name, t, userName])
+  }, [message.role, model?.id, model?.name, t, userName])
 
   const fontFamily = useMemo(() => {
     return messageFont === 'serif' ? FONT_FAMILY.replace('sans-serif', 'serif').replace('Ubuntu, ', '') : FONT_FAMILY
   }, [messageFont])
 
   const messageBorder = showMessageDivider ? undefined : 'none'
-  const avatarSource = useMemo(() => (message.modelId ? getModelLogo(message.modelId) : undefined), [message.modelId])
+
+  const avatarSource = useMemo(() => {
+    if (isLocalAi) return AppLogo
+    return message.modelId ? getModelLogo(message.modelId) : undefined
+  }, [message.modelId])
+
   const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])
+
   const username = useMemo(() => removeLeadingEmoji(getUserName()), [getUserName])
 
   const dropdownItems = useMemo(
@@ -146,7 +153,11 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             <Avatar
               src={avatarSource}
               size={35}
-              style={{ borderRadius: '20%', cursor: 'pointer' }}
+              style={{
+                borderRadius: '20%',
+                cursor: 'pointer',
+                border: isLocalAi ? '1px solid var(--color-border)' : ''
+              }}
               onClick={showMiniApp}>
               {avatarName}
             </Avatar>

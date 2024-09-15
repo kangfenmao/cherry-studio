@@ -12,7 +12,7 @@ app.whenReady().then(async () => {
   await updateUserDataPath()
 
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.kangfenmao.CherryStudio')
+  electronApp.setAppUserModelId(import.meta.env.VITE_MAIN_BUNDLE_ID || 'com.kangfenmao.CherryStudio')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
