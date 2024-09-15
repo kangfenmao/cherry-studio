@@ -11,7 +11,6 @@ __metadata:
   dependencies:
     "@electron-toolkit/preload": "npm:^3.0.0"
     "@electron-toolkit/utils": "npm:^3.0.0"
-    "@electron/notarize": "patch:@electron/notarize@npm%3A2.3.2#~/.yarn/patches/@electron-notarize-npm-2.3.2-535908a4bd.patch"
     "@types/adm-zip": "npm:^0"
     adm-zip: "npm:^0.5.15"
     dotenv-cli: "npm:^7.4.2"
@@ -500,6 +499,17 @@ __metadata:
     fs-extra: "npm:^9.0.1"
     promise-retry: "npm:^2.0.1"
   checksum: 10c0/539ed5cd264c3885fd3ca9c0b243144e3e2856d767de3999da1e3f94f0d79db57cbb08862b640270dfad0292bc5345cd7177db096da2061e28e15a6b85946b32
+  languageName: node
+  linkType: hard
+
+"@electron/notarize@patch:@electron/notarize@npm%3A2.3.2#~/.yarn/patches/@electron-notarize-npm-2.3.2-535908a4bd.patch":
+  version: 2.3.2
+  resolution: "@electron/notarize@patch:@electron/notarize@npm%3A2.3.2#~/.yarn/patches/@electron-notarize-npm-2.3.2-535908a4bd.patch::version=2.3.2&hash=dd0991"
+  dependencies:
+    debug: "npm:^4.1.1"
+    fs-extra: "npm:^9.0.1"
+    promise-retry: "npm:^2.0.1"
+  checksum: 10c0/37729f49effdf43fe6a4c5ea8f90c624c6c5f4eab3e040d91366a5b23aade9481148266d5015de64eb369ed75886664f22b9a7c34aeb9355978b78e2c901ea5e
   languageName: node
   linkType: hard
 
@@ -8853,11 +8863,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
   version: 5.6.2
-  resolution: "typescript@patch:typescript@npm%3A5.6.2#optional!builtin<compat/typescript>::version=5.6.2&hash=379a07"
+  resolution: "typescript@patch:typescript@npm%3A5.6.2#optional!builtin<compat/typescript>::version=5.6.2&hash=8c6c40"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/e6c1662e4852e22fe4bbdca471dca3e3edc74f6f1df043135c44a18a7902037023ccb0abdfb754595ca9028df8920f2f8492c00fc3cbb4309079aae8b7de71cd
+  checksum: 10c0/94eb47e130d3edd964b76da85975601dcb3604b0c848a36f63ac448d0104e93819d94c8bdf6b07c00120f2ce9c05256b8b6092d23cf5cf1c6fa911159e4d572f
   languageName: node
   linkType: hard
 
