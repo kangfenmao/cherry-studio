@@ -56,10 +56,12 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
   ipcMain.handle('file:upload', async (_, file: FileType) => await fileManager.uploadFile(file))
+  ipcMain.handle('file:clear', async () => await fileManager.clear())
   ipcMain.handle('file:delete', async (_, fileId: string) => {
     await fileManager.deleteFile(fileId)
     return { success: true }
   })
+
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({
       url: args.url,

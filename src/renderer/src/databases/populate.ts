@@ -4,6 +4,11 @@ import localforage from 'localforage'
 
 export async function populateTopics(trans: Transaction) {
   const indexedKeys = await localforage.keys()
+
+  if (indexedKeys.length === 0) {
+    return
+  }
+
   for (const key of indexedKeys) {
     const value: any = await localforage.getItem(key)
     if (key.startsWith('topic:')) {

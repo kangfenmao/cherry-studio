@@ -4,6 +4,10 @@ import { app } from 'electron'
 import Store from 'electron-store'
 import path from 'path'
 
+const isDev = process.env.NODE_ENV === 'development'
+
+isDev && app.setPath('userData', app.getPath('userData') + 'Dev')
+
 const getDataPath = () => {
   const dataPath = path.join(app.getPath('userData'), 'Data')
   if (!fs.existsSync(dataPath)) {

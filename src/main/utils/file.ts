@@ -1,6 +1,6 @@
 import { dialog, OpenDialogOptions, OpenDialogReturnValue, SaveDialogOptions, SaveDialogReturnValue } from 'electron'
 import logger from 'electron-log'
-import { writeFile } from 'fs'
+import { writeFileSync } from 'fs'
 import { readFile } from 'fs/promises'
 
 import { FileTypes } from '../../renderer/src/types'
@@ -19,11 +19,7 @@ export async function saveFile(
     })
 
     if (!result.canceled && result.filePath) {
-      writeFile(result.filePath, content, { encoding: 'utf-8' }, (err) => {
-        if (err) {
-          logger.error('[IPC - Error]', 'An error occurred saving the file:', err)
-        }
-      })
+      await writeFileSync(result.filePath, content, { encoding: 'utf-8' })
     }
   } catch (err) {
     logger.error('[IPC - Error]', 'An error occurred saving the file:', err)

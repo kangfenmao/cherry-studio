@@ -12,14 +12,15 @@ const api = {
   openFile: (options?: { decompress: boolean }) => ipcRenderer.invoke('open-file', options),
   reload: () => ipcRenderer.invoke('reload'),
   saveFile: (path: string, content: string, options?: { compress: boolean }) => {
-    ipcRenderer.invoke('save-file', path, content, options)
+    return ipcRenderer.invoke('save-file', path, content, options)
   },
   compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
   decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text),
   file: {
     select: (options?: OpenDialogOptions) => ipcRenderer.invoke('file:select', options),
     upload: (filePath: string) => ipcRenderer.invoke('file:upload', filePath),
-    delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId)
+    delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
+    clear: () => ipcRenderer.invoke('file:clear')
   },
   image: {
     base64: (filePath: string) => ipcRenderer.invoke('image:base64', filePath)

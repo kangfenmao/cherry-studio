@@ -134,6 +134,11 @@ class File {
   async deleteFile(id: string): Promise<void> {
     await fs.promises.unlink(path.join(this.storageDir, id))
   }
+
+  async clear(): Promise<void> {
+    await fs.promises.rmdir(this.storageDir, { recursive: true })
+    await this.initStorageDir()
+  }
 }
 
 export default File
