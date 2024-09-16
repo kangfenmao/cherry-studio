@@ -2,6 +2,7 @@ import {
   CheckOutlined,
   DeleteOutlined,
   EditOutlined,
+  ForkOutlined,
   MenuOutlined,
   QuestionCircleOutlined,
   SaveOutlined,
@@ -70,6 +71,10 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     },
     [setModel]
   )
+
+  const onNewBranch = useCallback(() => {
+    EventEmitter.emit(EVENT_NAMES.NEW_BRANCH, index)
+  }, [index])
 
   const getUserName = useCallback(() => {
     if (isLocalAi && message.role !== 'user') return APP_NAME
@@ -173,6 +178,13 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
                     </ActionButton>
                   </Tooltip>
                 </SelectModelDropdown>
+              )}
+              {isAssistantMessage && (
+                <Tooltip title={t('chat.message.new.branch')} mouseEnterDelay={0.8}>
+                  <ActionButton onClick={onNewBranch}>
+                    <ForkOutlined />
+                  </ActionButton>
+                </Tooltip>
               )}
               <Popconfirm
                 title={t('message.message.delete.content')}

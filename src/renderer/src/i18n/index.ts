@@ -103,6 +103,7 @@ const resources = {
         'suggestions.title': 'Suggested Questions',
         'add.assistant.title': 'Add Assistant',
         'message.new.context': 'New Context',
+        'message.new.branch': 'New Branch',
         'assistant.search.placeholder': 'Search'
       },
       files: {
@@ -369,6 +370,7 @@ const resources = {
         'suggestions.title': '建议的问题',
         'add.assistant.title': '添加智能体',
         'message.new.context': '清除上下文',
+        'message.new.branch': '新分支',
         'assistant.search.placeholder': '搜索'
       },
       files: {

@@ -3,6 +3,7 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
+import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import {
   deleteMessageFiles,
@@ -13,7 +14,7 @@ import {
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
-import { last, reverse } from 'lodash'
+import { last, reverse, take } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -32,7 +33,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const provider = useProviderByAssistant(assistant)
   const containerRef = useRef<HTMLDivElement>(null)
-  const { updateTopic } = useAssistant(assistant.id)
+  const { updateTopic, addTopic } = useAssistant(assistant.id)
 
   const onSendMessage = useCallback(
     (message: Message) => {
@@ -116,10 +117,18 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
           status: 'success',
           type: 'clear'
         } as Message)
+      }),
+      EventEmitter.on(EVENT_NAMES.NEW_BRANCH, async (index: number) => {
+        const _topic = getDefaultTopic()
+        _topic.name = topic.name
+        await db.topics.add({ id: _topic.id, messages: take(messages, messages.length - index) })
+        addTopic(_topic)
+        setActiveTopic(_topic)
+        autoRenameTopic()
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [assistant, messages, provider, topic, autoRenameTopic, updateTopic, onSendMessage])
+  }, [addTopic, assistant, autoRenameTopic, messages, onSendMessage, setActiveTopic, topic, updateTopic])
 
   useEffect(() => {
     runAsyncFunction(async () => {
