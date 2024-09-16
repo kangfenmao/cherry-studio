@@ -38,7 +38,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     (message: Message) => {
       const _messages = [...messages, message]
       setMessages(_messages)
-      db.topics.add({ id: topic.id, messages: _messages })
+      db.topics.put({ id: topic.id, messages: _messages })
     },
     [messages, topic]
   )
@@ -142,7 +142,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   return (
     <Container id="messages" key={assistant.id} ref={containerRef}>
       <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
-      {lastMessage && <MessageItem message={lastMessage} />}
+      {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} />}
       {reverse([...messages]).map((message, index) => (
         <MessageItem key={message.id} message={message} showMenu index={index} onDeleteMessage={onDeleteMessage} />
       ))}

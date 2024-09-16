@@ -8,6 +8,7 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
+import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useRuntime, useShowTopics } from '@renderer/hooks/useStore'
@@ -120,6 +121,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     const topic = getDefaultTopic()
     addTopic(topic)
     setActiveTopic(topic)
+    db.topics.add({ id: topic.id, messages: [] })
   }, [addTopic, setActiveTopic])
 
   const clearTopic = async () => {

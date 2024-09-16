@@ -3,7 +3,7 @@ import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { initMermaid } from '@renderer/init'
 import { ThemeMode } from '@renderer/types'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -17,19 +17,10 @@ interface CodeBlockProps {
   [key: string]: any
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) => {
+const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
-  const [copied, setCopied] = useState(false)
+  const showFooterCopyButton = children && children.length > 500
   const { theme } = useTheme()
-
-  const { t } = useTranslation()
-
-  const onCopy = () => {
-    navigator.clipboard.writeText(children)
-    window.message.success({ content: t('message.copied'), key: 'copy-code' })
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   if (match && match[1] === 'mermaid') {
     initMermaid(theme)
@@ -37,14 +28,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
   }
 
   return match ? (
-    <>
+    <div className="code-block">
       <CodeHeader>
         <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
-        {!copied && <CopyIcon className="copy" onClick={onCopy} />}
-        {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
+        <CopyButton text={children} />
       </CodeHeader>
       <SyntaxHighlighter
-        {...rest}
         language={match[1]}
         style={theme === ThemeMode.dark ? atomDark : oneLight}
         wrapLongLines={true}
@@ -56,11 +45,32 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, ...rest }) =
         }}>
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>
-    </>
+      {showFooterCopyButton && (
+        <CodeFooter>
+          <CopyButton text={children} style={{ marginTop: -40, marginRight: 10 }} />
+        </CodeFooter>
+      )}
+    </div>
   ) : (
-    <code {...rest} className={className}>
-      {children}
-    </code>
+    <code className={className}>{children}</code>
+  )
+}
+
+const CopyButton: React.FC<{ text: string; style?: React.CSSProperties }> = ({ text, style }) => {
+  const [copied, setCopied] = useState(false)
+  const { t } = useTranslation()
+
+  const onCopy = () => {
+    navigator.clipboard.writeText(text)
+    window.message.success({ content: t('message.copied'), key: 'copy-code' })
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return copied ? (
+    <CheckOutlined style={{ color: 'var(--color-primary)', ...style }} />
+  ) : (
+    <CopyIcon className="copy" style={style} onClick={onCopy} />
   )
 }
 
@@ -90,4 +100,19 @@ const CodeLanguage = styled.div`
   font-weight: bold;
 `
 
-export default CodeBlock
+const CodeFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  .copy {
+    cursor: pointer;
+    color: var(--color-text-3);
+    transition: color 0.3s;
+  }
+  .copy:hover {
+    color: var(--color-text-1);
+  }
+`
+
+export default memo(CodeBlock)

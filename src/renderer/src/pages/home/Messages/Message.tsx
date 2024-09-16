@@ -107,34 +107,6 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
     [t, message]
   )
 
-  const MessageItem = useCallback(() => {
-    if (message.status === 'sending') {
-      return (
-        <MessageContentLoading>
-          <SyncOutlined spin size={24} />
-        </MessageContentLoading>
-      )
-    }
-
-    if (message.status === 'error') {
-      return (
-        <Alert
-          message={<div style={{ fontSize: 14 }}>{t('error.chat.response')}</div>}
-          description={<Markdown message={message} />}
-          type="error"
-          style={{ marginBottom: 15, padding: 10, fontSize: 12 }}
-        />
-      )
-    }
-
-    return (
-      <>
-        <Markdown message={message} />
-        <MessageAttachments message={message} />
-      </>
-    )
-  }, [message, t])
-
   const showMiniApp = () => model?.provider && startMinAppById(model?.provider)
 
   if (message.type === 'clear') {
@@ -175,8 +147,8 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
           </UserWrap>
         </AvatarWrapper>
       </MessageHeader>
-      <MessageContent style={{ fontFamily, fontSize }}>
-        <MessageItem />
+      <MessageContentContainer style={{ fontFamily, fontSize }}>
+        <MessageContent message={message} />
         <MessageFooter style={{ border: messageBorder }}>
           {showMenu && (
             <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
@@ -229,8 +201,38 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
             </MessageMetadata>
           )}
         </MessageFooter>
-      </MessageContent>
+      </MessageContentContainer>
     </MessageContainer>
+  )
+}
+
+const MessageContent: React.FC<{ message: Message }> = ({ message }) => {
+  const { t } = useTranslation()
+
+  if (message.status === 'sending') {
+    return (
+      <MessageContentLoading>
+        <SyncOutlined spin size={24} />
+      </MessageContentLoading>
+    )
+  }
+
+  if (message.status === 'error') {
+    return (
+      <Alert
+        message={<div style={{ fontSize: 14 }}>{t('error.chat.response')}</div>}
+        description={<Markdown message={message} />}
+        type="error"
+        style={{ marginBottom: 15, padding: 10, fontSize: 12 }}
+      />
+    )
+  }
+
+  return (
+    <>
+      <Markdown message={message} />
+      <MessageAttachments message={message} />
+    </>
   )
 }
 
@@ -290,7 +292,7 @@ const MessageTime = styled.div`
   color: var(--color-text-3);
 `
 
-const MessageContent = styled.div`
+const MessageContentContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
