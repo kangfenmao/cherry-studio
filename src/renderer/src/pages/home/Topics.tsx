@@ -2,8 +2,8 @@ import { CloseOutlined, DeleteOutlined, EditOutlined, OpenAIOutlined } from '@an
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import { TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/api'
-import LocalStorage from '@renderer/services/storage'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
@@ -53,7 +53,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           key: 'auto-rename',
           icon: <OpenAIOutlined />,
           async onClick() {
-            const messages = await LocalStorage.getTopicMessages(topic.id)
+            const messages = await TopicManager.getTopicMessages(topic.id)
             if (messages.length >= 2) {
               const summaryText = await fetchMessagesSummary({ messages, assistant })
               if (summaryText) {

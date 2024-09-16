@@ -57,7 +57,10 @@ const resources = {
         'restore.success': 'Restored successfully',
         'reset.confirm.content': 'Are you sure you want to clear all data?',
         'reset.double.confirm.title': 'DATA LOST !!!',
-        'reset.double.confirm.content': 'All data will be lost, do you want to continue?'
+        'reset.double.confirm.content': 'All data will be lost, do you want to continue?',
+        'upgrade.success.title': 'Upgrade successfully',
+        'upgrade.success.content': 'Please restart the application to complete the upgrade',
+        'upgrade.success.button': 'Restart'
       },
       chat: {
         save: 'Save',
@@ -319,7 +322,10 @@ const resources = {
         'restore.success': '恢复成功',
         'reset.confirm.content': '确定要重置所有数据吗？',
         'reset.double.confirm.title': '数据丢失！！！',
-        'reset.double.confirm.content': '你的全部数据都会丢失，如果没有备份数据，将无法恢复，确定要继续吗？'
+        'reset.double.confirm.content': '你的全部数据都会丢失，如果没有备份数据，将无法恢复，确定要继续吗？',
+        'upgrade.success.title': '升级成功',
+        'upgrade.success.content': '重启应用以完成升级',
+        'upgrade.success.button': '重启'
       },
       chat: {
         save: '保存',

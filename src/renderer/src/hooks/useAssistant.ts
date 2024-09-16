@@ -1,5 +1,4 @@
 import { getDefaultTopic } from '@renderer/services/assistant'
-import LocalStorage from '@renderer/services/storage'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addAssistant,
@@ -18,6 +17,8 @@ import {
 import { setDefaultModel, setTopicNamingModel, setTranslateModel } from '@renderer/store/llm'
 import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
 
+import { TopicManager } from './useTopic'
+
 export function useAssistants() {
   const { assistants } = useAppSelector((state) => state.assistants)
   const dispatch = useAppDispatch()
@@ -30,7 +31,7 @@ export function useAssistants() {
       dispatch(removeAssistant({ id }))
       const assistant = assistants.find((a) => a.id === id)
       const topics = assistant?.topics || []
-      topics.forEach(({ id }) => LocalStorage.removeTopic(id))
+      topics.forEach(({ id }) => TopicManager.removeTopic(id))
     }
   }
 }
@@ -45,7 +46,7 @@ export function useAssistant(id: string) {
     model: assistant?.model ?? defaultModel,
     addTopic: (topic: Topic) => dispatch(addTopic({ assistantId: assistant.id, topic })),
     removeTopic: (topic: Topic) => {
-      LocalStorage.removeTopic(topic.id)
+      TopicManager.removeTopic(topic.id)
       dispatch(removeTopic({ assistantId: assistant.id, topic }))
     },
     updateTopic: (topic: Topic) => dispatch(updateTopic({ assistantId: assistant.id, topic })),

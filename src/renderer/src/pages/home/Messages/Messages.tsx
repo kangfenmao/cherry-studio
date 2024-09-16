@@ -1,6 +1,7 @@
+import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useProviderByAssistant } from '@renderer/hooks/useProvider'
-import { getTopic } from '@renderer/hooks/useTopic'
+import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import {
@@ -9,11 +10,9 @@ import {
   filterMessages,
   getContextCount
 } from '@renderer/services/messages'
-import LocalStorage from '@renderer/services/storage'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
-import localforage from 'localforage'
 import { last, reverse } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -39,7 +38,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     (message: Message) => {
       const _messages = [...messages, message]
       setMessages(_messages)
-      localforage.setItem(`topic:${topic.id}`, { id: topic.id, messages: _messages })
+      db.topics.add({ id: topic.id, messages: _messages })
     },
     [messages, topic]
   )
@@ -60,7 +59,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     (message: Message) => {
       const _messages = messages.filter((m) => m.id !== message.id)
       setMessages(_messages)
-      localforage.setItem(`topic:${topic.id}`, { id: topic.id, messages: _messages })
+      db.topics.update(topic.id, { messages: _messages })
       deleteMessageFiles(message)
     },
     [messages, topic.id]
@@ -94,7 +93,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {
         setMessages([])
         updateTopic({ ...topic, messages: [] })
-        LocalStorage.clearTopicMessages(topic.id)
+        TopicManager.clearTopicMessages(topic.id)
       }),
       EventEmitter.on(EVENT_NAMES.NEW_CONTEXT, () => {
         const lastMessage = last(messages)
@@ -124,7 +123,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
 
   useEffect(() => {
     runAsyncFunction(async () => {
-      const messages = (await LocalStorage.getTopicMessages(topic.id)) || []
+      const messages = (await TopicManager.getTopicMessages(topic.id)) || []
       setMessages(messages)
     })
   }, [topic.id])

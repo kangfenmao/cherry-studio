@@ -1,6 +1,6 @@
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
-import LocalStorage from '@renderer/services/storage'
+import ImageStorage from '@renderer/services/storage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { setUserName } from '@renderer/store/settings'
@@ -55,8 +55,8 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
             try {
               const _file = file.originFileObj as File
               const compressedFile = await compressImage(_file)
-              await LocalStorage.storeImage('avatar', compressedFile)
-              dispatch(setAvatar(await LocalStorage.getImage('avatar')))
+              await ImageStorage.set('avatar', compressedFile)
+              dispatch(setAvatar(await ImageStorage.get('avatar')))
             } catch (error: any) {
               window.message.error(error.message)
             }

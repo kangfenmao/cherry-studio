@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TopicManager } from '@renderer/hooks/useTopic'
 import { getDefaultAssistant, getDefaultTopic } from '@renderer/services/assistant'
-import LocalStorage from '@renderer/services/storage'
 import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
 import { uniqBy } from 'lodash'
 
@@ -91,7 +91,7 @@ const assistantsSlice = createSlice({
     removeAllTopics: (state, action: PayloadAction<{ assistantId: string }>) => {
       state.assistants = state.assistants.map((assistant) => {
         if (assistant.id === action.payload.assistantId) {
-          assistant.topics.forEach((topic) => LocalStorage.removeTopic(topic.id))
+          assistant.topics.forEach((topic) => TopicManager.removeTopic(topic.id))
           return {
             ...assistant,
             topics: [getDefaultTopic()]
