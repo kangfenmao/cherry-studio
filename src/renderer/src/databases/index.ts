@@ -14,14 +14,14 @@ db.version(1).stores({
   files: 'id, name, origin_name, path, size, ext, type, created_at, count'
 })
 
-db.version(2).stores({
-  files: 'id, name, origin_name, path, size, ext, type, created_at, count',
-  topics: '&id, messages',
-  settings: '&id, value'
-})
+db.version(2)
+  .stores({
+    files: 'id, name, origin_name, path, size, ext, type, created_at, count',
+    topics: '&id, messages',
+    settings: '&id, value'
+  })
+  .upgrade(populateTopics)
 
-db.on('populate', async (trans) => {
-  populateTopics(trans)
-})
+db.on('populate', populateTopics)
 
 export default db
