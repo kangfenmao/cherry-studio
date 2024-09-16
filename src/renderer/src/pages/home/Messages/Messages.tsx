@@ -1,6 +1,5 @@
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { useProviderByAssistant } from '@renderer/hooks/useProvider'
 import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { getDefaultTopic } from '@renderer/services/assistant'
@@ -31,7 +30,6 @@ interface Props {
 const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
-  const provider = useProviderByAssistant(assistant)
   const containerRef = useRef<HTMLDivElement>(null)
   const { updateTopic, addTopic } = useAssistant(assistant.id)
 

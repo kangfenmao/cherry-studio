@@ -192,6 +192,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.EDIT_MESSAGE, (message: Message) => {
         setText(message.content)
         textareaRef.current?.focus()
+        setTimeout(() => resizeTextArea(), 0)
       }),
       EventEmitter.on(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, ({ tokensCount, contextCount }) => {
         _setEstimateTokenCount(tokensCount)
