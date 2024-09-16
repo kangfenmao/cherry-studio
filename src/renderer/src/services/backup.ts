@@ -32,7 +32,20 @@ export async function restore() {
       const data = JSON.parse(content)
 
       if (data.version === 1) {
-        window.modal.confirm({ content: 'Please use a version less than v0.7.0 for recovery.' })
+        await clearDatabase()
+
+        for (const { key, value } of data.indexedDB) {
+          if (key.startsWith('topic:')) {
+            await db.table('topics').add({ id: value.id, messages: value.messages })
+          }
+          if (key === 'image://avatar') {
+            await db.table('settings').add({ id: key, value })
+          }
+        }
+
+        await localStorage.setItem('persist:cherry-studio', data.localStorage['persist:cherry-studio'])
+        window.message.success({ content: i18n.t('message.restore.success'), key: 'restore' })
+        setTimeout(() => window.api.reload(), 1000)
         return
       }
 

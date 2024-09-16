@@ -1,8 +1,7 @@
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
-import localforage from 'localforage'
-import { isEmpty, pick } from 'lodash'
+import { isEmpty } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
 import { RootState } from '.'
@@ -375,12 +374,7 @@ const migrateConfig = {
       }
     }
   },
-  '24': async (state: RootState) => {
-    for (const key of await localforage.keys()) {
-      if (key.startsWith('topic:')) {
-        localforage.getItem(key).then((topic) => localforage.setItem(key, pick(topic, ['id', 'messages'])))
-      }
-    }
+  '24': (state: RootState) => {
     return {
       ...state,
       assistants: {
