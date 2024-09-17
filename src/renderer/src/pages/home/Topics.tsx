@@ -1,7 +1,7 @@
-import { CloseOutlined, DeleteOutlined, EditOutlined, OpenAIOutlined } from '@ant-design/icons'
+import { CloseOutlined, DeleteOutlined, EditOutlined, FolderOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
-import { useAssistant } from '@renderer/hooks/useAssistant'
+import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import { useAppSelector } from '@renderer/store'
@@ -19,7 +19,8 @@ interface Props {
 }
 
 const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
-  const { assistant, removeTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
+  const { assistants } = useAssistants()
+  const { assistant, removeTopic, moveTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
@@ -32,6 +33,15 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
       }
     },
     [assistant.topics, removeTopic, setActiveTopic]
+  )
+
+  const onMoveTopic = useCallback(
+    (topic: Topic, toAssistant: Assistant) => {
+      const index = findIndex(assistant.topics, (t) => t.id === topic.id)
+      setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
+      moveTopic(topic, toAssistant)
+    },
+    [assistant.topics, moveTopic, setActiveTopic]
   )
 
   const onSwitchTopic = useCallback(
@@ -51,7 +61,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
         {
           label: t('chat.topics.auto_rename'),
           key: 'auto-rename',
-          icon: <OpenAIOutlined />,
+          icon: <i className="iconfont icon-business-smart-assistant" style={{ fontSize: '14px' }} />,
           async onClick() {
             const messages = await TopicManager.getTopicMessages(topic.id)
             if (messages.length >= 2) {
@@ -79,6 +89,21 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
         }
       ]
 
+      if (assistants.length > 1 && assistant.topics.length > 1) {
+        menus.push({
+          label: t('chat.topics.move_to'),
+          key: 'move',
+          icon: <FolderOutlined />,
+          children: assistants
+            .filter((a) => a.id !== assistant.id)
+            .map((a) => ({
+              label: a.name,
+              key: a.id,
+              onClick: () => onMoveTopic(topic, a)
+            }))
+        })
+      }
+
       if (assistant.topics.length > 1) {
         menus.push({ type: 'divider' })
         menus.push({
@@ -92,7 +117,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
       return menus
     },
-    [assistant, onDeleteTopic, t, updateTopic]
+    [assistant, assistants, onDeleteTopic, onMoveTopic, t, updateTopic]
   )
 
   return (

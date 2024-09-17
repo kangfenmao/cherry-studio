@@ -49,6 +49,10 @@ export function useAssistant(id: string) {
       TopicManager.removeTopic(topic.id)
       dispatch(removeTopic({ assistantId: assistant.id, topic }))
     },
+    moveTopic: (topic: Topic, toAssistant: Assistant) => {
+      dispatch(addTopic({ assistantId: toAssistant.id, topic: { ...topic } }))
+      dispatch(removeTopic({ assistantId: assistant.id, topic }))
+    },
     updateTopic: (topic: Topic) => dispatch(updateTopic({ assistantId: assistant.id, topic })),
     updateTopics: (topics: Topic[]) => dispatch(updateTopics({ assistantId: assistant.id, topics })),
     removeAllTopics: () => dispatch(removeAllTopics({ assistantId: assistant.id })),
