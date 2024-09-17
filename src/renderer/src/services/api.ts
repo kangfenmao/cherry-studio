@@ -15,7 +15,7 @@ import {
   getTranslateModel
 } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
-import { filterMessages } from './messages'
+import { estimateMessagesToken, filterMessages } from './messages'
 
 export async function fetchChatCompletion({
   messages,
@@ -67,6 +67,7 @@ export async function fetchChatCompletion({
       onResponse({ ...message, status: 'pending' })
     })
     message.status = 'success'
+    message.usage = message.usage || (await estimateMessagesToken({ assistant, messages: [...messages, message] }))
   } catch (error: any) {
     message.content = `Error: ${error.message}`
     message.status = 'error'

@@ -1,7 +1,8 @@
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { Assistant, Message } from '@renderer/types'
 import { GPTTokens } from 'gpt-tokens'
-import { isEmpty, takeRight } from 'lodash'
+import { isEmpty, last, takeRight } from 'lodash'
+import { CompletionUsage } from 'openai/resources'
 
 import { getAssistantSettings } from './assistant'
 import FileManager from './file'
@@ -42,6 +43,24 @@ export function estimateInputTokenCount(text: string) {
   })
 
   return input.usedTokens - 7
+}
+
+export async function estimateMessagesToken({
+  assistant,
+  messages
+}: {
+  assistant: Assistant
+  messages: Message[]
+}): Promise<CompletionUsage> {
+  const responseMessageContent = last(messages)?.content
+  const inputMessageContent = messages[messages.length - 2]?.content
+  const completion_tokens = await estimateInputTokenCount(responseMessageContent ?? '')
+  const prompt_tokens = await estimateInputTokenCount(assistant.prompt + inputMessageContent ?? '')
+  return {
+    completion_tokens,
+    prompt_tokens: prompt_tokens,
+    total_tokens: prompt_tokens + completion_tokens
+  } as CompletionUsage
 }
 
 export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[]) {
