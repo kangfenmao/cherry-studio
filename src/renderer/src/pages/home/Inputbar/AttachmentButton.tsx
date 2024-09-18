@@ -18,6 +18,9 @@ const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) 
   const extensions = isVisionModel(model) ? [...imageExts, ...textExts] : [...textExts]
 
   const onSelectFile = async () => {
+    if (files.length > 0) {
+      return setFiles([])
+    }
     const _files = await window.api.file.select({ filters: [{ name: 'Files', extensions }] })
     _files && setFiles(_files)
   }

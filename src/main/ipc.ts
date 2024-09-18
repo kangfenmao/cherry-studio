@@ -41,6 +41,12 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('file:clear', async () => await fileManager.clear())
   ipcMain.handle('file:read', async (_, id: string) => await fileManager.readFile(id))
   ipcMain.handle('file:delete', async (_, id: string) => await fileManager.deleteFile(id))
+  ipcMain.handle('file:get', async (_, filePath: string) => await fileManager.getFile(filePath))
+  ipcMain.handle('file:create', async (_, fileName: string) => await fileManager.createTempFile(fileName))
+  ipcMain.handle(
+    'file:write',
+    async (_, filePath: string, data: Uint8Array | string) => await fileManager.writeFile(filePath, data)
+  )
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

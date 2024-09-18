@@ -33,49 +33,34 @@ export default class OpenAIProvider extends BaseProvider {
     return true
   }
 
-  private async getMessageParam(message: Message): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam[]> {
-    const file = first(message.files)
+  private async getMessageParam(message: Message): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
+    const parts: ChatCompletionContentPart[] = [
+      {
+        type: 'text',
+        text: message.content
+      }
+    ]
 
-    const content: string | ChatCompletionContentPart[] = message.content
-
-    if (file) {
+    for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
         const image = await window.api.file.base64Image(file.id + file.ext)
-        return [
-          {
-            role: message.role,
-            content: [
-              { type: 'text', text: message.content },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: image.data
-                }
-              }
-            ]
-          } as ChatCompletionMessageParam
-        ]
+        parts.push({
+          type: 'image_url',
+          image_url: { url: image.data }
+        })
       }
       if (file.type === FileTypes.TEXT) {
-        return [
-          {
-            role: 'assistant',
-            content: await window.api.file.read(file.id + file.ext)
-          } as ChatCompletionMessageParam,
-          {
-            role: message.role,
-            content
-          } as ChatCompletionMessageParam
-        ]
+        parts.push({
+          type: 'text',
+          text: await window.api.file.read(file.id + file.ext)
+        })
       }
     }
 
-    return [
-      {
-        role: message.role,
-        content
-      } as ChatCompletionMessageParam
-    ]
+    return {
+      role: message.role,
+      content: parts
+    } as ChatCompletionMessageParam
   }
 
   async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
@@ -84,13 +69,13 @@ export default class OpenAIProvider extends BaseProvider {
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
-    let userMessages: ChatCompletionMessageParam[] = []
+    const userMessages: ChatCompletionMessageParam[] = []
 
     const _messages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
     onFilterMessages(_messages)
 
     for (const message of _messages) {
-      userMessages = userMessages.concat(await this.getMessageParam(message))
+      userMessages.push(await this.getMessageParam(message))
     }
 
     // @ts-ignore key is not typed

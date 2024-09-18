@@ -235,3 +235,9 @@ export function getFileDirectory(filePath: string) {
   const directory = parts.slice(0, -1).join('/')
   return directory
 }
+
+export function getFileExtension(filePath: string) {
+  const parts = filePath.split('.')
+  const extension = parts.slice(-1)[0]
+  return '.' + extension
+}

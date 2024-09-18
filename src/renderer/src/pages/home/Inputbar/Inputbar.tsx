@@ -8,6 +8,7 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
+import { textExts } from '@renderer/config/constant'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -19,7 +20,7 @@ import { estimateTextTokens } from '@renderer/services/tokens'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, Message, Topic } from '@renderer/types'
-import { delay, uuid } from '@renderer/utils'
+import { delay, getFileExtension, uuid } from '@renderer/utils'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
@@ -171,6 +172,44 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   const onInput = () => !expended && resizeTextArea()
 
+  const onPaste = useCallback(async (event: ClipboardEvent) => {
+    for (const file of event.clipboardData?.files || []) {
+      event.preventDefault()
+      const ext = getFileExtension(file.path)
+      if (textExts.includes(ext)) {
+        const selectedFile = await window.api.file.get(file.path)
+        selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+      }
+    }
+
+    if (event.clipboardData?.items) {
+      const item = event.clipboardData.items[0]
+      const file = item.getAsFile()
+      if (file && file.type.startsWith('image/')) {
+        const tempFilePath = await window.api.file.create(file.name)
+        const arrayBuffer = await file.arrayBuffer()
+        const uint8Array = new Uint8Array(arrayBuffer)
+        await window.api.file.write(tempFilePath, uint8Array)
+        const selectedFile = await window.api.file.get(tempFilePath)
+        selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+      }
+      // if (item.kind === 'string' && item.type === 'text/plain') {
+      //   // 处理文本内容
+      //   await new Promise<void>((resolve) => {
+      //     item.getAsString(async (text) => {
+      //       const tempFilePath = await window.api.file.create('pasted_text.txt')
+      //       await window.api.file.write(tempFilePath, text)
+      //       const selectedFile = await window.api.file.get(tempFilePath)
+      //       if (selectedFile) {
+      //         newFiles.push(selectedFile)
+      //       }
+      //       resolve()
+      //     })
+      //   })
+      // }
+    }
+  }, [])
+
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -205,6 +244,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   useEffect(() => {
     textareaRef.current?.focus()
   }, [assistant])
+
+  useEffect(() => {
+    document.addEventListener('paste', onPaste)
+    return () => document.removeEventListener('paste', onPaste)
+  }, [onPaste])
 
   return (
     <Container>

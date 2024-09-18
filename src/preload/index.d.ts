@@ -28,6 +28,9 @@ declare global {
         read: (fileId: string) => Promise<string>
         base64Image: (fileId: string) => Promise<{ mime: string; base64: string; data: string }>
         clear: () => Promise<void>
+        get: (filePath: string) => Promise<FileType | null>
+        create: (fileName: string) => Promise<string>
+        write: (filePath: string, data: Uint8Array | string) => Promise<void>
       }
     }
   }

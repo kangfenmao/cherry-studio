@@ -131,6 +131,30 @@ class File {
     return fileMetadata
   }
 
+  async getFile(filePath: string): Promise<FileType | null> {
+    if (!fs.existsSync(filePath)) {
+      return null
+    }
+
+    const stats = fs.statSync(filePath)
+    const ext = path.extname(filePath)
+    const fileType = getFileType(ext)
+
+    const fileInfo: FileType = {
+      id: uuidv4(),
+      origin_name: path.basename(filePath),
+      name: path.basename(filePath),
+      path: filePath,
+      created_at: stats.birthtime,
+      size: stats.size,
+      ext: ext,
+      type: fileType,
+      count: 1
+    }
+
+    return fileInfo
+  }
+
   async deleteFile(id: string): Promise<void> {
     await fs.promises.unlink(path.join(this.storageDir, id))
   }
@@ -138,6 +162,19 @@ class File {
   async readFile(id: string): Promise<string> {
     const filePath = path.join(this.storageDir, id)
     return fs.readFileSync(filePath, 'utf8')
+  }
+
+  async createTempFile(fileName: string): Promise<string> {
+    const tempDir = path.join(app.getPath('temp'), 'CherryStudio')
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir, { recursive: true })
+    }
+    const tempFilePath = path.join(tempDir, `${uuidv4()}_${fileName}`)
+    return tempFilePath
+  }
+
+  async writeFile(filePath: string, data: Uint8Array | string): Promise<void> {
+    await fs.promises.writeFile(filePath, data)
   }
 
   async base64Image(id: string): Promise<{ mime: string; base64: string; data: string }> {

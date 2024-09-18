@@ -22,7 +22,10 @@ const api = {
     delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
     read: (fileId: string) => ipcRenderer.invoke('file:read', fileId),
     base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId),
-    clear: () => ipcRenderer.invoke('file:clear')
+    clear: () => ipcRenderer.invoke('file:clear'),
+    get: (filePath: string) => ipcRenderer.invoke('file:get', filePath),
+    create: (fileName: string) => ipcRenderer.invoke('file:create', fileName),
+    write: (filePath: string, data: Uint8Array | string) => ipcRenderer.invoke('file:write', filePath, data)
   }
 }
 

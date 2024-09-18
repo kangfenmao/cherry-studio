@@ -1,10 +1,10 @@
-import { Content, GoogleGenerativeAI, InlineDataPart, TextPart } from '@google/generative-ai'
+import { Content, GoogleGenerativeAI, InlineDataPart, Part, TextPart } from '@google/generative-ai'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
 import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import axios from 'axios'
-import { first, flatten, isEmpty, takeRight } from 'lodash'
+import { flatten, isEmpty, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import BaseProvider from './BaseProvider'
@@ -17,48 +17,37 @@ export default class GeminiProvider extends BaseProvider {
     this.sdk = new GoogleGenerativeAI(provider.apiKey)
   }
 
-  private async getMessageContents(message: Message): Promise<Content[]> {
-    const file = first(message.files)
+  private async getMessageContents(message: Message): Promise<Content> {
     const role = message.role === 'user' ? 'user' : 'model'
 
-    if (file) {
+    const parts: Part[] = [
+      {
+        type: 'text',
+        text: message.content
+      } as TextPart
+    ]
+
+    for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
         const base64Data = await window.api.file.base64Image(file.id + file.ext)
-        return [
-          {
-            role: message.role,
-            parts: [
-              { text: message.content } as TextPart,
-              {
-                inlineData: {
-                  data: base64Data.base64,
-                  mimeType: base64Data.mime
-                }
-              } as InlineDataPart
-            ]
+        parts.push({
+          inlineData: {
+            data: base64Data.base64,
+            mimeType: base64Data.mime
           }
-        ]
+        } as InlineDataPart)
       }
       if (file.type === FileTypes.TEXT) {
-        return [
-          {
-            role: 'model',
-            parts: [{ text: await window.api.file.read(file.id + file.ext) } as TextPart]
-          },
-          {
-            role,
-            parts: [{ text: message.content } as TextPart]
-          }
-        ]
+        parts.push({
+          text: await window.api.file.read(file.id + file.ext)
+        } as TextPart)
       }
     }
 
-    return [
-      {
-        role,
-        parts: [{ text: message.content } as TextPart]
-      }
-    ]
+    return {
+      role,
+      parts: parts
+    }
   }
 
   public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams) {

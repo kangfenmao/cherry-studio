@@ -18,49 +18,33 @@ export default class AnthropicProvider extends BaseProvider {
     this.sdk = new Anthropic({ apiKey: provider.apiKey, baseURL: this.getBaseURL() })
   }
 
-  private async getMessageParam(message: Message): Promise<MessageParam[]> {
-    const file = first(message.files)
+  private async getMessageParam(message: Message): Promise<MessageParam> {
+    const parts: MessageParam['content'] = [{ type: 'text', text: message.content }]
 
-    if (file) {
+    for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
         const base64Data = await window.api.file.base64Image(file.id + file.ext)
-        return [
-          {
-            role: message.role,
-            content: [
-              { type: 'text', text: message.content },
-              {
-                type: 'image',
-                source: {
-                  data: base64Data.base64,
-                  media_type: base64Data.mime.replace('jpg', 'jpeg') as any,
-                  type: 'base64'
-                }
-              }
-            ]
-          } as MessageParam
-        ]
+        parts.push({
+          type: 'image',
+          source: {
+            data: base64Data.base64,
+            media_type: base64Data.mime.replace('jpg', 'jpeg') as any,
+            type: 'base64'
+          }
+        })
       }
       if (file.type === FileTypes.TEXT) {
-        return [
-          {
-            role: message.role,
-            content: message.content
-          } as MessageParam,
-          {
-            role: 'assistant',
-            content: (await window.api.file.read(file.id + file.ext)).trimEnd()
-          } as MessageParam
-        ]
+        parts.push({
+          type: 'text',
+          text: (await window.api.file.read(file.id + file.ext)).trimEnd()
+        })
       }
     }
 
-    return [
-      {
-        role: message.role,
-        content: message.content
-      } as MessageParam
-    ]
+    return {
+      role: message.role,
+      content: parts
+    }
   }
 
   public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams) {
