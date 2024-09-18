@@ -229,3 +229,9 @@ export function removeTrailingDoubleSpaces(markdown: string): string {
   // 使用正则表达式匹配末尾的两个空格，并替换为空字符串
   return markdown.replace(/ {2}$/gm, '')
 }
+
+export function getFileDirectory(filePath: string) {
+  const parts = filePath.split('/')
+  const directory = parts.slice(0, -1).join('/')
+  return directory
+}

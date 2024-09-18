@@ -15,7 +15,8 @@ import {
   getTranslateModel
 } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
-import { estimateMessagesToken, filterMessages } from './messages'
+import { filterMessages } from './messages'
+import { estimateMessagesUsage } from './tokens'
 
 export async function fetchChatCompletion({
   messages,
@@ -61,13 +62,27 @@ export async function fetchChatCompletion({
   }, 1000)
 
   try {
-    await AI.completions(messages, assistant, ({ text, usage }) => {
-      message.content = message.content + text || ''
-      message.usage = usage
-      onResponse({ ...message, status: 'pending' })
+    let _messages: Message[] = []
+
+    await AI.completions({
+      messages,
+      assistant,
+      onFilterMessages: (messages) => (_messages = messages),
+      onChunk: ({ text, usage }) => {
+        message.content = message.content + text || ''
+        message.usage = usage
+        onResponse({ ...message, status: 'pending' })
+      }
     })
+
     message.status = 'success'
-    message.usage = message.usage || (await estimateMessagesToken({ assistant, messages: [...messages, message] }))
+
+    if (!message.usage) {
+      message.usage = await estimateMessagesUsage({
+        assistant,
+        messages: [..._messages, message]
+      })
+    }
   } catch (error: any) {
     message.content = `Error: ${error.message}`
     message.status = 'error'
@@ -83,7 +98,7 @@ export async function fetchChatCompletion({
   message.status = window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED) ? 'paused' : message.status
 
   // Emit chat completion event
-  EventEmitter.emit(EVENT_NAMES.AI_CHAT_COMPLETION, message)
+  EventEmitter.emit(EVENT_NAMES.RECEIVE_MESSAGE, message)
 
   // Reset generating state
   store.dispatch(setGenerating(false))

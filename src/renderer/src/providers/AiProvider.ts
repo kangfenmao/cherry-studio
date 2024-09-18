@@ -10,12 +10,8 @@ export default class AiProvider {
     this.sdk = ProviderFactory.create(provider)
   }
 
-  public async completions(
-    messages: Message[],
-    assistant: Assistant,
-    onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
-  ): Promise<void> {
-    return this.sdk.completions(messages, assistant, onChunk)
+  public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
+    return this.sdk.completions({ messages, assistant, onChunk, onFilterMessages })
   }
 
   public async translate(message: Message, assistant: Assistant): Promise<string> {

@@ -1,10 +1,7 @@
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { Assistant, Message } from '@renderer/types'
-import { GPTTokens } from 'gpt-tokens'
-import { isEmpty, last, takeRight } from 'lodash'
-import { CompletionUsage } from 'openai/resources'
+import { isEmpty, takeRight } from 'lodash'
 
-import { getAssistantSettings } from './assistant'
 import FileManager from './file'
 
 export const filterMessages = (messages: Message[]) => {
@@ -34,50 +31,6 @@ export function getContextCount(assistant: Assistant, messages: Message[]) {
   }
 
   return messagesCount - (clearIndex + 1)
-}
-
-export function estimateInputTokenCount(text: string) {
-  const input = new GPTTokens({
-    model: 'gpt-4o',
-    messages: [{ role: 'user', content: text }]
-  })
-
-  return input.usedTokens - 7
-}
-
-export async function estimateMessagesToken({
-  assistant,
-  messages
-}: {
-  assistant: Assistant
-  messages: Message[]
-}): Promise<CompletionUsage> {
-  const responseMessageContent = last(messages)?.content
-  const inputMessageContent = messages[messages.length - 2]?.content
-  const completion_tokens = await estimateInputTokenCount(responseMessageContent ?? '')
-  const prompt_tokens = await estimateInputTokenCount(assistant.prompt + inputMessageContent ?? '')
-  return {
-    completion_tokens,
-    prompt_tokens: prompt_tokens,
-    total_tokens: prompt_tokens + completion_tokens
-  } as CompletionUsage
-}
-
-export function estimateHistoryTokenCount(assistant: Assistant, msgs: Message[]) {
-  const { contextCount } = getAssistantSettings(assistant)
-
-  const all = new GPTTokens({
-    model: 'gpt-4o',
-    messages: [
-      { role: 'system', content: assistant.prompt },
-      ...filterMessages(filterContextMessages(takeRight(msgs, contextCount))).map((message) => ({
-        role: message.role,
-        content: message.content
-      }))
-    ]
-  })
-
-  return all.usedTokens - 7
 }
 
 export function deleteMessageFiles(message: Message) {

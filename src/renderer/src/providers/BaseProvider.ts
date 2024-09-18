@@ -20,11 +20,7 @@ export default abstract class BaseProvider {
     return this.provider.id === 'ollama' ? getOllamaKeepAliveTime() : undefined
   }
 
-  abstract completions(
-    messages: Message[],
-    assistant: Assistant,
-    onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
-  ): Promise<void>
+  abstract completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void>
   abstract translate(message: Message, assistant: Assistant): Promise<string>
   abstract summaries(messages: Message[], assistant: Assistant): Promise<string>
   abstract suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]>

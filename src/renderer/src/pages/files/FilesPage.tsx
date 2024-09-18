@@ -1,7 +1,8 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { VStack } from '@renderer/components/Layout'
 import db from '@renderer/databases'
-import { FileType } from '@renderer/types'
+import { FileType, FileTypes } from '@renderer/types'
+import { getFileDirectory } from '@renderer/utils'
 import { Image, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -13,13 +14,17 @@ const FilesPage: FC = () => {
   const { t } = useTranslation()
   const files = useLiveQuery<FileType[]>(() => db.files.toArray())
 
-  const dataSource = files?.map((file) => ({
-    key: file.id,
-    file: <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />,
-    name: <a href={'file://' + file.path}>{file.origin_name}</a>,
-    size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-    created_at: dayjs(file.created_at).format('MM-DD HH:mm')
-  }))
+  const dataSource = files?.map((file) => {
+    const isImage = file.type === FileTypes.IMAGE
+    const ImageView = <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />
+    return {
+      key: file.id,
+      file: isImage ? ImageView : file.origin_name,
+      name: <a href={'file://' + getFileDirectory(file.path)}>{file.origin_name}</a>,
+      size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+      created_at: dayjs(file.created_at).format('MM-DD HH:mm')
+    }
+  })
 
   const columns = [
     {

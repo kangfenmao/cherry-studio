@@ -46,14 +46,12 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
   const { assistant, setModel } = useAssistant(message.assistantId)
   const model = useModel(message.modelId)
   const { userName, showMessageDivider, messageFont, fontSize } = useSettings()
-  const { generating } = useRuntime()
   const [copied, setCopied] = useState(false)
 
   const isLastMessage = index === 0
   const isUserMessage = message.role === 'user'
   const isAssistantMessage = message.role === 'assistant'
   const canRegenerate = isLastMessage && isAssistantMessage
-  const showMetadata = Boolean(message.usage) && !generating
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(removeTrailingDoubleSpaces(message.content))
@@ -133,7 +131,7 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
               style={{
                 borderRadius: '20%',
                 cursor: 'pointer',
-                border: isLocalAi ? '1px solid var(--color-border)' : ''
+                border: '1px solid var(--color-border)'
               }}
               onClick={showMiniApp}>
               {avatarName}
@@ -206,16 +204,37 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
               )}
             </MenusBar>
           )}
-          {showMetadata && (
-            <MessageMetadata>
-              Tokens: {message?.usage?.total_tokens} | ↑{message?.usage?.prompt_tokens} | ↓
-              {message?.usage?.completion_tokens}
-            </MessageMetadata>
-          )}
+          <MessgeTokens message={message} />
         </MessageFooter>
       </MessageContentContainer>
     </MessageContainer>
   )
+}
+
+const MessgeTokens: React.FC<{ message: Message }> = ({ message }) => {
+  const { generating } = useRuntime()
+
+  if (!message.usage) {
+    return null
+  }
+
+  if (message.role === 'user') {
+    return <MessageMetadata>Tokens: {message?.usage?.total_tokens}</MessageMetadata>
+  }
+
+  if (generating) {
+    return null
+  }
+
+  if (message.role === 'assistant') {
+    return (
+      <MessageMetadata>
+        Tokens: {message?.usage?.total_tokens} | ↑{message?.usage?.prompt_tokens} | ↓{message?.usage?.completion_tokens}
+      </MessageMetadata>
+    )
+  }
+
+  return null
 }
 
 const MessageContent: React.FC<{ message: Message }> = ({ message }) => {

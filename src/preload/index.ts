@@ -20,10 +20,9 @@ const api = {
     select: (options?: OpenDialogOptions) => ipcRenderer.invoke('file:select', options),
     upload: (filePath: string) => ipcRenderer.invoke('file:upload', filePath),
     delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
+    read: (fileId: string) => ipcRenderer.invoke('file:read', fileId),
+    base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId),
     clear: () => ipcRenderer.invoke('file:clear')
-  },
-  image: {
-    base64: (filePath: string) => ipcRenderer.invoke('image:base64', filePath)
   }
 }
 

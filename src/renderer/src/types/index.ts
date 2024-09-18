@@ -97,12 +97,14 @@ export interface FileType {
   type: FileTypes
   created_at: Date
   count: number
+  tokens?: number
 }
 
 export enum FileTypes {
   IMAGE = 'image',
   VIDEO = 'video',
   AUDIO = 'audio',
+  TEXT = 'text',
   DOCUMENT = 'document',
   OTHER = 'other'
 }

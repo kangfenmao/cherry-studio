@@ -1,8 +1,5 @@
 import { FileType } from '@types'
 import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'electron'
-import Logger from 'electron-log'
-import fs from 'fs'
-import path from 'path'
 
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
@@ -38,29 +35,12 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
   ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
 
-  ipcMain.handle('image:base64', async (_, filePath) => {
-    try {
-      const data = await fs.promises.readFile(filePath)
-      const base64 = data.toString('base64')
-      const mime = `image/${path.extname(filePath).slice(1)}`
-      return {
-        mime,
-        base64,
-        data: `data:${mime};base64,${base64}`
-      }
-    } catch (error) {
-      Logger.error('Error reading file:', error)
-      return ''
-    }
-  })
-
+  ipcMain.handle('file:base64Image', async (_, id) => await fileManager.base64Image(id))
   ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
   ipcMain.handle('file:upload', async (_, file: FileType) => await fileManager.uploadFile(file))
   ipcMain.handle('file:clear', async () => await fileManager.clear())
-  ipcMain.handle('file:delete', async (_, fileId: string) => {
-    await fileManager.deleteFile(fileId)
-    return { success: true }
-  })
+  ipcMain.handle('file:read', async (_, id: string) => await fileManager.readFile(id))
+  ipcMain.handle('file:delete', async (_, id: string) => await fileManager.deleteFile(id))
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

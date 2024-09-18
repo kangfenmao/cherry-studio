@@ -1,4 +1,5 @@
 import { PaperClipOutlined } from '@ant-design/icons'
+import { imageExts, textExts } from '@renderer/config/constant'
 import { isVisionModel } from '@renderer/config/models'
 import { FileType, Model } from '@renderer/types'
 import { Tooltip } from 'antd'
@@ -14,16 +15,11 @@ interface Props {
 
 const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) => {
   const { t } = useTranslation()
+  const extensions = isVisionModel(model) ? [...imageExts, ...textExts] : [...textExts]
 
   const onSelectFile = async () => {
-    const _files = await window.api.file.select({
-      filters: [{ name: 'Files', extensions: ['jpg', 'png', 'jpeg'] }]
-    })
+    const _files = await window.api.file.select({ filters: [{ name: 'Files', extensions }] })
     _files && setFiles(_files)
-  }
-
-  if (!isVisionModel(model)) {
-    return null
   }
 
   return (

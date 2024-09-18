@@ -24,11 +24,10 @@ declare global {
       file: {
         select: (options?: OpenDialogOptions) => Promise<FileType[] | null>
         upload: (file: FileType) => Promise<FileType>
-        delete: (fileId: string) => Promise<{ success: boolean }>
+        delete: (fileId: string) => Promise<void>
+        read: (fileId: string) => Promise<string>
+        base64Image: (fileId: string) => Promise<{ mime: string; base64: string; data: string }>
         clear: () => Promise<void>
-      }
-      image: {
-        base64: (filePath: string) => Promise<{ mime: string; base64: string; data: string }>
       }
     }
   }

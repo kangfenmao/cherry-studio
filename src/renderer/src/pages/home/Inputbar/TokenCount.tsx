@@ -44,8 +44,8 @@ const TokenCount: FC<Props> = ({ estimateTokenCount, inputTokenCount, contextCou
           <PicCenterOutlined />
         </Tooltip>
       </ToolbarButton>
-      <Container {...props}>
-        <Popover content={PopoverContent} title="" mouseEnterDelay={0.6}>
+      <Container>
+        <Popover content={PopoverContent}>
           <MenuOutlined /> {contextCount}
           <Divider type="vertical" style={{ marginTop: 0, marginLeft: 5, marginRight: 5 }} />
           <ArrowUpOutlined />

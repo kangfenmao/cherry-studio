@@ -4,8 +4,8 @@ import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
-import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
-import { first, sum, takeRight } from 'lodash'
+import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
+import { first, flatten, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import BaseProvider from './BaseProvider'
@@ -18,48 +18,66 @@ export default class AnthropicProvider extends BaseProvider {
     this.sdk = new Anthropic({ apiKey: provider.apiKey, baseURL: this.getBaseURL() })
   }
 
-  private async getMessageContent(message: Message): Promise<MessageParam['content']> {
+  private async getMessageParam(message: Message): Promise<MessageParam[]> {
     const file = first(message.files)
 
-    if (!file) {
-      return message.content
+    if (file) {
+      if (file.type === FileTypes.IMAGE) {
+        const base64Data = await window.api.file.base64Image(file.id + file.ext)
+        return [
+          {
+            role: message.role,
+            content: [
+              { type: 'text', text: message.content },
+              {
+                type: 'image',
+                source: {
+                  data: base64Data.base64,
+                  media_type: base64Data.mime.replace('jpg', 'jpeg') as any,
+                  type: 'base64'
+                }
+              }
+            ]
+          } as MessageParam
+        ]
+      }
+      if (file.type === FileTypes.TEXT) {
+        return [
+          {
+            role: message.role,
+            content: message.content
+          } as MessageParam,
+          {
+            role: 'assistant',
+            content: (await window.api.file.read(file.id + file.ext)).trimEnd()
+          } as MessageParam
+        ]
+      }
     }
 
-    if (file.type === 'image') {
-      const base64Data = await window.api.image.base64(file.path)
-      return [
-        { type: 'text', text: message.content },
-        {
-          type: 'image',
-          source: {
-            data: base64Data.base64,
-            media_type: base64Data.mime.replace('jpg', 'jpeg') as any,
-            type: 'base64'
-          }
-        }
-      ]
-    }
-
-    return message.content
+    return [
+      {
+        role: message.role,
+        content: message.content
+      } as MessageParam
+    ]
   }
 
-  public async completions(
-    messages: Message[],
-    assistant: Assistant,
-    onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
-  ) {
+  public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    const userMessages: MessageParam[] = []
+    let userMessagesParams: MessageParam[][] = []
+    const _messages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 2)))
 
-    for (const message of filterMessages(filterContextMessages(takeRight(messages, contextCount + 2)))) {
-      userMessages.push({
-        role: message.role,
-        content: await this.getMessageContent(message)
-      })
+    onFilterMessages(_messages)
+
+    for (const message of _messages) {
+      userMessagesParams = userMessagesParams.concat(await this.getMessageParam(message))
     }
+
+    const userMessages = flatten(userMessagesParams)
 
     if (first(userMessages)?.role === 'assistant') {
       userMessages.shift()
@@ -69,7 +87,7 @@ export default class AnthropicProvider extends BaseProvider {
       const stream = this.sdk.messages
         .stream({
           model: model.id,
-          messages: userMessages.filter(Boolean) as MessageParam[],
+          messages: userMessages,
           max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
           temperature: assistant?.settings?.temperature,
           system: assistant.prompt,

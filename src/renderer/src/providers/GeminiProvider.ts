@@ -1,10 +1,10 @@
-import { Content, GoogleGenerativeAI, InlineDataPart, Part } from '@google/generative-ai'
+import { Content, GoogleGenerativeAI, InlineDataPart, TextPart } from '@google/generative-ai'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
-import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
+import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import axios from 'axios'
-import { first, isEmpty, takeRight } from 'lodash'
+import { first, flatten, isEmpty, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import BaseProvider from './BaseProvider'
@@ -17,42 +17,67 @@ export default class GeminiProvider extends BaseProvider {
     this.sdk = new GoogleGenerativeAI(provider.apiKey)
   }
 
-  private async getMessageParts(message: Message): Promise<Part[]> {
+  private async getMessageContents(message: Message): Promise<Content[]> {
     const file = first(message.files)
+    const role = message.role === 'user' ? 'user' : 'model'
 
-    if (file && file.type === 'image') {
-      const base64Data = await window.api.image.base64(file.path)
-      return [
-        {
-          text: message.content
-        },
-        {
-          inlineData: {
-            data: base64Data.base64,
-            mimeType: base64Data.mime
+    if (file) {
+      if (file.type === FileTypes.IMAGE) {
+        const base64Data = await window.api.file.base64Image(file.id + file.ext)
+        return [
+          {
+            role: message.role,
+            parts: [
+              { text: message.content } as TextPart,
+              {
+                inlineData: {
+                  data: base64Data.base64,
+                  mimeType: base64Data.mime
+                }
+              } as InlineDataPart
+            ]
           }
-        } as InlineDataPart
-      ]
+        ]
+      }
+      if (file.type === FileTypes.TEXT) {
+        return [
+          {
+            role: 'model',
+            parts: [{ text: await window.api.file.read(file.id + file.ext) } as TextPart]
+          },
+          {
+            role,
+            parts: [{ text: message.content } as TextPart]
+          }
+        ]
+      }
     }
 
-    return [{ text: message.content }]
+    return [
+      {
+        role,
+        parts: [{ text: message.content } as TextPart]
+      }
+    ]
   }
 
-  public async completions(
-    messages: Message[],
-    assistant: Assistant,
-    onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
-  ) {
+  public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1))).map((message) => {
-      return {
-        role: message.role,
-        message
-      }
-    })
+    const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
+    onFilterMessages(userMessages)
+
+    const userLastMessage = userMessages.pop()
+
+    let historyContents: Content[][] = []
+
+    for (const message of userMessages) {
+      historyContents = historyContents.concat(await this.getMessageContents(message))
+    }
+
+    const history = flatten(historyContents)
 
     const geminiModel = this.sdk.getGenerativeModel({
       model: model.id,
@@ -63,21 +88,9 @@ export default class GeminiProvider extends BaseProvider {
       }
     })
 
-    const userLastMessage = userMessages.pop()
-
-    const history: Content[] = []
-
-    for (const message of userMessages) {
-      history.push({
-        role: message.role === 'user' ? 'user' : 'model',
-        parts: await this.getMessageParts(message.message)
-      })
-    }
-
     const chat = geminiModel.startChat({ history })
-    const message = await this.getMessageParts(userLastMessage?.message!)
-
-    const userMessagesStream = await chat.sendMessageStream(message)
+    const messageContents = await this.getMessageContents(userLastMessage!)
+    const userMessagesStream = await chat.sendMessageStream(messageContents[0].parts)
 
     for await (const chunk of userMessagesStream.stream) {
       if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break

@@ -2,7 +2,7 @@ import { isLocalAi } from '@renderer/config/env'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
-import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
+import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
 import { first, takeRight } from 'lodash'
 import OpenAI from 'openai'
@@ -26,61 +26,92 @@ export default class OpenAIProvider extends BaseProvider {
     })
   }
 
-  private async getMessageContent(message: Message): Promise<string | ChatCompletionContentPart[]> {
-    const file = first(message.files)
-
-    if (!file) {
-      return message.content
+  private isSupportStreamOutput(modelId: string): boolean {
+    if (this.provider.id === 'openai' && modelId.includes('o1-')) {
+      return false
     }
-
-    if (file.type === 'image') {
-      const base64Data = await window.api.image.base64(file.path)
-      return [
-        { type: 'text', text: message.content },
-        {
-          type: 'image_url',
-          image_url: {
-            url: base64Data.data
-          }
-        }
-      ]
-    }
-
-    return message.content
+    return true
   }
 
-  async completions(
-    messages: Message[],
-    assistant: Assistant,
-    onChunk: ({ text, usage }: { text?: string; usage?: OpenAI.Completions.CompletionUsage }) => void
-  ): Promise<void> {
+  private async getMessageParam(message: Message): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam[]> {
+    const file = first(message.files)
+
+    const content: string | ChatCompletionContentPart[] = message.content
+
+    if (file) {
+      if (file.type === FileTypes.IMAGE) {
+        const image = await window.api.file.base64Image(file.id + file.ext)
+        return [
+          {
+            role: message.role,
+            content: [
+              { type: 'text', text: message.content },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: image.data
+                }
+              }
+            ]
+          } as ChatCompletionMessageParam
+        ]
+      }
+      if (file.type === FileTypes.TEXT) {
+        return [
+          {
+            role: 'assistant',
+            content: await window.api.file.read(file.id + file.ext)
+          } as ChatCompletionMessageParam,
+          {
+            role: message.role,
+            content
+          } as ChatCompletionMessageParam
+        ]
+      }
+    }
+
+    return [
+      {
+        role: message.role,
+        content
+      } as ChatCompletionMessageParam
+    ]
+  }
+
+  async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
-    const userMessages: ChatCompletionMessageParam[] = []
+    let userMessages: ChatCompletionMessageParam[] = []
 
-    for (const message of filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))) {
-      userMessages.push({
-        role: message.role,
-        content: await this.getMessageContent(message)
-      } as ChatCompletionMessageParam)
+    const _messages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
+    onFilterMessages(_messages)
+
+    for (const message of _messages) {
+      userMessages = userMessages.concat(await this.getMessageParam(message))
     }
 
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({
       model: model.id,
       messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
-      stream: true,
+      stream: this.isSupportStreamOutput(model.id),
       temperature: assistant?.settings?.temperature,
       max_tokens: maxTokens,
       keep_alive: this.keepAliveTime
     })
 
     for await (const chunk of stream) {
-      if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break
-      onChunk({ text: chunk.choices[0]?.delta?.content || '', usage: chunk.usage })
+      if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
+        break
+      }
+
+      onChunk({
+        text: chunk.choices[0]?.delta?.content || '',
+        usage: chunk.usage
+      })
     }
   }
 

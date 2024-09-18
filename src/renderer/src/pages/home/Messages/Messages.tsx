@@ -4,16 +4,12 @@ import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import {
-  deleteMessageFiles,
-  estimateHistoryTokenCount,
-  filterMessages,
-  getContextCount
-} from '@renderer/services/messages'
+import { deleteMessageFiles, filterMessages, getContextCount } from '@renderer/services/messages'
+import { estimateHistoryTokens, estimateMessageUsage } from '@renderer/services/tokens'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
-import { last, reverse, take } from 'lodash'
+import { flatten, last, reverse, take } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -34,12 +30,15 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const { updateTopic, addTopic } = useAssistant(assistant.id)
 
   const onSendMessage = useCallback(
-    (message: Message) => {
+    async (message: Message) => {
+      if (message.role === 'user') {
+        message.usage = await estimateMessageUsage(message)
+      }
       const _messages = [...messages, message]
       setMessages(_messages)
       db.topics.put({ id: topic.id, messages: _messages })
     },
-    [messages, topic]
+    [messages, topic.id]
   )
 
   const autoRenameTopic = useCallback(async () => {
@@ -68,9 +67,14 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         onSendMessage(msg)
-        fetchChatCompletion({ assistant, messages: [...messages, msg], topic, onResponse: setLastMessage })
+        fetchChatCompletion({
+          assistant,
+          messages: [...messages, msg],
+          topic,
+          onResponse: setLastMessage
+        })
       }),
-      EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
+      EventEmitter.on(EVENT_NAMES.RECEIVE_MESSAGE, async (msg: Message) => {
         setLastMessage(null)
         onSendMessage(msg)
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
@@ -98,6 +102,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         const lastMessage = last(messages)
 
         if (lastMessage && lastMessage.type === 'clear') {
+          onDeleteMessage(lastMessage)
           return
         }
 
@@ -117,16 +122,37 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         } as Message)
       }),
       EventEmitter.on(EVENT_NAMES.NEW_BRANCH, async (index: number) => {
-        const _topic = getDefaultTopic()
-        _topic.name = topic.name
-        await db.topics.add({ id: _topic.id, messages: take(messages, messages.length - index) })
-        addTopic(_topic)
-        setActiveTopic(_topic)
+        const newTopic = getDefaultTopic()
+        newTopic.name = topic.name
+        const branchMessages = take(messages, messages.length - index)
+
+        // 将分支的消息放入数据库
+        await db.topics.add({ id: newTopic.id, messages: branchMessages })
+        addTopic(newTopic)
+        setActiveTopic(newTopic)
         autoRenameTopic()
+
+        // 由于复制了消息，消息中附带的文件的总数变了，需要更新
+        const filesArr = branchMessages.map((m) => m.files)
+        const files = flatten(filesArr).filter(Boolean)
+        files.map(async (f) => {
+          const file = await db.files.get({ id: f?.id })
+          file && db.files.update(file.id, { count: file.count + 1 })
+        })
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [addTopic, assistant, autoRenameTopic, messages, onSendMessage, setActiveTopic, topic, updateTopic])
+  }, [
+    addTopic,
+    assistant,
+    autoRenameTopic,
+    messages,
+    onDeleteMessage,
+    onSendMessage,
+    setActiveTopic,
+    topic,
+    updateTopic
+  ])
 
   useEffect(() => {
     runAsyncFunction(async () => {
@@ -140,9 +166,11 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [messages])
 
   useEffect(() => {
-    EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, {
-      tokensCount: estimateHistoryTokenCount(assistant, messages),
-      contextCount: getContextCount(assistant, messages)
+    runAsyncFunction(async () => {
+      EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, {
+        tokensCount: await estimateHistoryTokens(assistant, messages),
+        contextCount: getContextCount(assistant, messages)
+      })
     })
   }, [assistant, messages])
 

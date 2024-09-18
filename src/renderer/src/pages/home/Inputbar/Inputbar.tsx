@@ -15,7 +15,7 @@ import { useRuntime, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import FileManager from '@renderer/services/file'
-import { estimateInputTokenCount } from '@renderer/services/messages'
+import { estimateTextTokens } from '@renderer/services/tokens'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, Message, Topic } from '@renderer/types'
@@ -92,7 +92,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setExpend(false)
   }, [assistant.id, assistant.topics, generating, files, text])
 
-  const inputTokenCount = useMemo(() => estimateInputTokenCount(text), [text])
+  const inputTokenCount = useMemo(() => estimateTextTokens(text), [text])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isEnterPressed = event.keyCode == 13

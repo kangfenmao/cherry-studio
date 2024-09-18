@@ -37,7 +37,7 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
 
   useEffect(() => {
     const unsubscribes = [
-      EventEmitter.on(EVENT_NAMES.AI_CHAT_COMPLETION, async (msg: Message) => {
+      EventEmitter.on(EVENT_NAMES.RECEIVE_MESSAGE, async (msg: Message) => {
         setLoadingSuggestions(true)
         const _suggestions = await fetchSuggestions({ assistant, messages: [...messages, msg] })
         if (_suggestions.length) {

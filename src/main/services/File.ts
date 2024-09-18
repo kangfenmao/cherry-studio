@@ -135,6 +135,23 @@ class File {
     await fs.promises.unlink(path.join(this.storageDir, id))
   }
 
+  async readFile(id: string): Promise<string> {
+    const filePath = path.join(this.storageDir, id)
+    return fs.readFileSync(filePath, 'utf8')
+  }
+
+  async base64Image(id: string): Promise<{ mime: string; base64: string; data: string }> {
+    const filePath = path.join(this.storageDir, id)
+    const data = await fs.promises.readFile(filePath)
+    const base64 = data.toString('base64')
+    const mime = `image/${path.extname(filePath).slice(1)}`
+    return {
+      mime,
+      base64,
+      data: `data:${mime};base64,${base64}`
+    }
+  }
+
   async clear(): Promise<void> {
     await fs.promises.rmdir(this.storageDir, { recursive: true })
     await this.initStorageDir()

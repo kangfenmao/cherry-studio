@@ -14,6 +14,7 @@ import GemmaModelLogo from '@renderer/assets/images/models/gemma.jpeg'
 import HailuoModelLogo from '@renderer/assets/images/models/hailuo.png'
 import LlamaModelLogo from '@renderer/assets/images/models/llama.jpeg'
 import MicrosoftModelLogo from '@renderer/assets/images/models/microsoft.png'
+import MinicpmModelLogo from '@renderer/assets/images/models/minicpm.webp'
 import MixtralModelLogo from '@renderer/assets/images/models/mixtral.jpeg'
 import PalmModelLogo from '@renderer/assets/images/models/palm.svg'
 import QwenModelLogo from '@renderer/assets/images/models/qwen.png'
@@ -91,6 +92,7 @@ export function getModelLogo(modelId: string) {
   }
 
   const logoMap = {
+    o1: OpenAiProviderLogo,
     gpt: ChatGPTModelLogo,
     glm: ChatGLMModelLogo,
     deepseek: DeepSeekModelLogo,
@@ -112,7 +114,8 @@ export function getModelLogo(modelId: string) {
     abab: HailuoModelLogo,
     'ep-202': DoubaoModelLogo,
     cohere: CohereModelLogo,
-    command: CohereModelLogo
+    command: CohereModelLogo,
+    minicpm: MinicpmModelLogo
   }
 
   for (const key in logoMap) {
