@@ -182,6 +182,12 @@ body,
   -webkit-app-region: no-drag;
 }
 
+.text-nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .minapp-drawer {
   .ant-drawer-content-wrapper {
     box-shadow: none;

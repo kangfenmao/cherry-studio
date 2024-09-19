@@ -3,12 +3,12 @@ import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'elect
 
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
-import File from './services/File'
+import FileManager from './services/FileManager'
 import { openFile, saveFile } from './utils/file'
 import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
 
-const fileManager = new File()
+const fileManager = new FileManager()
 
 export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   const { autoUpdater } = new AppUpdater(mainWindow)

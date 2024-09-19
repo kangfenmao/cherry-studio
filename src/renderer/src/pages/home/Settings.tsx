@@ -8,6 +8,7 @@ import { useAppDispatch } from '@renderer/store'
 import {
   setFontSize,
   setMessageFont,
+  setPasteLongTextAsFile,
   setShowInputEstimatedTokens,
   setShowMessageDivider
 } from '@renderer/store/settings'
@@ -33,8 +34,14 @@ const SettingsTab: FC<Props> = (props) => {
 
   const dispatch = useAppDispatch()
 
-  const { showMessageDivider, messageFont, showInputEstimatedTokens, sendMessageShortcut, setSendMessageShortcut } =
-    useSettings()
+  const {
+    showMessageDivider,
+    messageFont,
+    showInputEstimatedTokens,
+    sendMessageShortcut,
+    setSendMessageShortcut,
+    pasteLongTextAsFile
+  } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
     updateAssistantSettings({
@@ -207,6 +214,15 @@ const SettingsTab: FC<Props> = (props) => {
           size="small"
           checked={showInputEstimatedTokens}
           onChange={(checked) => dispatch(setShowInputEstimatedTokens(checked))}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitleSmall>{t('settings.messages.input.paste_long_text_as_file')}</SettingRowTitleSmall>
+        <Switch
+          size="small"
+          checked={pasteLongTextAsFile}
+          onChange={(checked) => dispatch(setPasteLongTextAsFile(checked))}
         />
       </SettingRow>
       <SettingDivider />

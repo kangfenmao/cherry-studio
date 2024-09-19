@@ -8,7 +8,8 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
-import { textExts } from '@renderer/config/constant'
+import { imageExts, textExts } from '@renderer/config/constant'
+import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -45,7 +46,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic, model } = useAssistant(assistant.id)
-  const { sendMessageShortcut, fontSize } = useSettings()
+  const { sendMessageShortcut, fontSize, pasteLongTextAsFile } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const [contextCount, setContextCount] = useState(0)
@@ -57,6 +58,9 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { showTopics, toggleShowTopics } = useShowTopics()
   const { searching } = useRuntime()
   const dispatch = useAppDispatch()
+
+  const isVision = useMemo(() => isVisionModel(model), [model])
+  const supportExts = useMemo(() => [...textExts, ...(isVision ? imageExts : [])], [isVision])
 
   _text = text
 
@@ -172,43 +176,52 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   const onInput = () => !expended && resizeTextArea()
 
-  const onPaste = useCallback(async (event: ClipboardEvent) => {
-    for (const file of event.clipboardData?.files || []) {
-      event.preventDefault()
-      const ext = getFileExtension(file.path)
-      if (textExts.includes(ext)) {
-        const selectedFile = await window.api.file.get(file.path)
-        selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
-      }
-    }
+  const onPaste = useCallback(
+    async (event: ClipboardEvent) => {
+      for (const file of event.clipboardData?.files || []) {
+        event.preventDefault()
 
-    if (event.clipboardData?.items) {
-      const item = event.clipboardData.items[0]
-      const file = item.getAsFile()
-      if (file && file.type.startsWith('image/')) {
-        const tempFilePath = await window.api.file.create(file.name)
-        const arrayBuffer = await file.arrayBuffer()
-        const uint8Array = new Uint8Array(arrayBuffer)
-        await window.api.file.write(tempFilePath, uint8Array)
-        const selectedFile = await window.api.file.get(tempFilePath)
-        selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+        if (file.path === '') {
+          if (file.type.startsWith('image/')) {
+            const tempFilePath = await window.api.file.create(file.name)
+            const arrayBuffer = await file.arrayBuffer()
+            const uint8Array = new Uint8Array(arrayBuffer)
+            await window.api.file.write(tempFilePath, uint8Array)
+            const selectedFile = await window.api.file.get(tempFilePath)
+            selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+            break
+          }
+        }
+
+        if (file.path) {
+          if (supportExts.includes(getFileExtension(file.path))) {
+            const selectedFile = await window.api.file.get(file.path)
+            selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+          }
+        }
       }
-      // if (item.kind === 'string' && item.type === 'text/plain') {
-      //   // 处理文本内容
-      //   await new Promise<void>((resolve) => {
-      //     item.getAsString(async (text) => {
-      //       const tempFilePath = await window.api.file.create('pasted_text.txt')
-      //       await window.api.file.write(tempFilePath, text)
-      //       const selectedFile = await window.api.file.get(tempFilePath)
-      //       if (selectedFile) {
-      //         newFiles.push(selectedFile)
-      //       }
-      //       resolve()
-      //     })
-      //   })
-      // }
-    }
-  }, [])
+
+      if (pasteLongTextAsFile) {
+        const item = event.clipboardData?.items[0]
+        if (item && item.kind === 'string' && item.type === 'text/plain') {
+          event.preventDefault()
+          item.getAsString(async (text) => {
+            if (text.length > 1500) {
+              console.debug(item.getAsFile())
+              const tempFilePath = await window.api.file.create('pasted_text.txt')
+              await window.api.file.write(tempFilePath, text)
+              const selectedFile = await window.api.file.get(tempFilePath)
+              selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+            } else {
+              setText((prevText) => prevText + text)
+              setTimeout(() => resizeTextArea(), 0)
+            }
+          })
+        }
+      }
+    },
+    [supportExts, pasteLongTextAsFile]
+  )
 
   // Command or Ctrl + N create new topic
   useEffect(() => {

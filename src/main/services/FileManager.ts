@@ -6,7 +6,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
-class File {
+class FileManager {
   private storageDir: string
 
   constructor() {
@@ -169,7 +169,7 @@ class File {
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true })
     }
-    const tempFilePath = path.join(tempDir, `${uuidv4()}_${fileName}`)
+    const tempFilePath = path.join(tempDir, `temp_file_${uuidv4()}_${fileName}`)
     return tempFilePath
   }
 
@@ -195,4 +195,4 @@ class File {
   }
 }
 
-export default File
+export default FileManager

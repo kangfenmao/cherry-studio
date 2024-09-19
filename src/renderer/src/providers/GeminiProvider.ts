@@ -4,7 +4,7 @@ import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
 import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import axios from 'axios'
-import { flatten, isEmpty, takeRight } from 'lodash'
+import { isEmpty, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import BaseProvider from './BaseProvider'
@@ -20,12 +20,7 @@ export default class GeminiProvider extends BaseProvider {
   private async getMessageContents(message: Message): Promise<Content> {
     const role = message.role === 'user' ? 'user' : 'model'
 
-    const parts: Part[] = [
-      {
-        type: 'text',
-        text: message.content
-      } as TextPart
-    ]
+    const parts: Part[] = [{ text: message.content }]
 
     for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
@@ -38,15 +33,16 @@ export default class GeminiProvider extends BaseProvider {
         } as InlineDataPart)
       }
       if (file.type === FileTypes.TEXT) {
+        const fileContent = await (await window.api.file.read(file.id + file.ext)).trim()
         parts.push({
-          text: await window.api.file.read(file.id + file.ext)
+          text: file.origin_name + '\n' + fileContent
         } as TextPart)
       }
     }
 
     return {
       role,
-      parts: parts
+      parts
     }
   }
 
@@ -60,13 +56,11 @@ export default class GeminiProvider extends BaseProvider {
 
     const userLastMessage = userMessages.pop()
 
-    let historyContents: Content[][] = []
+    const history: Content[] = []
 
     for (const message of userMessages) {
-      historyContents = historyContents.concat(await this.getMessageContents(message))
+      history.push(await this.getMessageContents(message))
     }
-
-    const history = flatten(historyContents)
 
     const geminiModel = this.sdk.getGenerativeModel({
       model: model.id,
@@ -79,7 +73,7 @@ export default class GeminiProvider extends BaseProvider {
 
     const chat = geminiModel.startChat({ history })
     const messageContents = await this.getMessageContents(userLastMessage!)
-    const userMessagesStream = await chat.sendMessageStream(messageContents[0].parts)
+    const userMessagesStream = await chat.sendMessageStream(messageContents.parts)
 
     for await (const chunk of userMessagesStream.stream) {
       if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break

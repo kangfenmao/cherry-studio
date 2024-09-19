@@ -8,7 +8,7 @@ export const isMac = platform === 'darwin'
 export const isWindows = platform === 'win32' || platform === 'win64'
 export const isLinux = platform === 'linux'
 
-export const imageExts = ['jpg', 'png', 'jpeg']
+export const imageExts = ['.jpg', '.png', '.jpeg']
 export const textExts = [
   '.txt', // 普通文本文件
   '.md', // Markdown 文件

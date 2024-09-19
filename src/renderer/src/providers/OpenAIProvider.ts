@@ -50,9 +50,10 @@ export default class OpenAIProvider extends BaseProvider {
         })
       }
       if (file.type === FileTypes.TEXT) {
+        const fileContent = await (await window.api.file.read(file.id + file.ext)).trim()
         parts.push({
           type: 'text',
-          text: await window.api.file.read(file.id + file.ext)
+          text: file.origin_name + '\n' + fileContent
         })
       }
     }

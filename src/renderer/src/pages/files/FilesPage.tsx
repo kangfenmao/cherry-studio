@@ -12,14 +12,14 @@ import styled from 'styled-components'
 
 const FilesPage: FC = () => {
   const { t } = useTranslation()
-  const files = useLiveQuery<FileType[]>(() => db.files.toArray())
+  const files = useLiveQuery<FileType[]>(() => db.files.orderBy('created_at').reverse().toArray())
 
   const dataSource = files?.map((file) => {
     const isImage = file.type === FileTypes.IMAGE
     const ImageView = <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />
     return {
       key: file.id,
-      file: isImage ? ImageView : file.origin_name,
+      file: isImage ? ImageView : <FileNameText className="text-nowrap">{file.origin_name}</FileNameText>,
       name: <a href={'file://' + getFileDirectory(file.path)}>{file.origin_name}</a>,
       size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
       created_at: dayjs(file.created_at).format('MM-DD HH:mm')
@@ -82,6 +82,12 @@ const ContentContainer = styled.div`
   overflow-y: scroll;
   background-color: var(--color-background);
   padding: 20px;
+`
+
+const FileNameText = styled.div`
+  font-size: 14px;
+  color: var(--color-text);
+  max-width: 300px;
 `
 
 export default FilesPage
