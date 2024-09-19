@@ -1,8 +1,8 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { VStack } from '@renderer/components/Layout'
 import db from '@renderer/databases'
+import FileManager from '@renderer/services/file'
 import { FileType, FileTypes } from '@renderer/types'
-import { getFileDirectory } from '@renderer/utils'
 import { Image, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -20,7 +20,7 @@ const FilesPage: FC = () => {
     return {
       key: file.id,
       file: isImage ? ImageView : <FileNameText className="text-nowrap">{file.origin_name}</FileNameText>,
-      name: <a href={'file://' + getFileDirectory(file.path)}>{file.origin_name}</a>,
+      name: <a href={'file://' + FileManager.getSafePath(file)}>{file.origin_name}</a>,
       size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
       count: file.count,
       created_at: dayjs(file.created_at).format('MM-DD HH:mm')

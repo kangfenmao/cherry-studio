@@ -1,5 +1,6 @@
 import db from '@renderer/databases'
 import { FileType } from '@renderer/types'
+import { getFileDirectory } from '@renderer/utils'
 
 class FileManager {
   static async selectFiles(options?: Electron.OpenDialogOptions): Promise<FileType[] | null> {
@@ -51,6 +52,14 @@ class FileManager {
 
   static async allFiles(): Promise<FileType[]> {
     return db.files.toArray()
+  }
+
+  static isDangerFile(file: FileType) {
+    return ['.sh', '.bat', '.cmd', '.ps1'].includes(file.ext)
+  }
+
+  static getSafePath(file: FileType) {
+    return this.isDangerFile(file) ? getFileDirectory(file.path) : file.path
   }
 }
 

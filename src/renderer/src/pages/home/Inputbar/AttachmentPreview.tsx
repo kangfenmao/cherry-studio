@@ -1,3 +1,4 @@
+import FileManager from '@renderer/services/file'
 import { FileType } from '@renderer/types'
 import { Upload } from 'antd'
 import { isEmpty } from 'lodash'
@@ -18,7 +19,12 @@ const AttachmentPreview: FC<Props> = ({ files, setFiles }) => {
     <Container>
       <Upload
         listType="picture-card"
-        fileList={files.map((file) => ({ uid: file.id, url: 'file://' + file.path, status: 'done', name: file.name }))}
+        fileList={files.map((file) => ({
+          uid: file.id,
+          url: 'file://' + FileManager.getSafePath(file),
+          status: 'done',
+          name: file.name
+        }))}
         onRemove={(item) => setFiles(files.filter((file) => item.uid !== file.id))}
       />
     </Container>

@@ -21,7 +21,16 @@ const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) 
     if (files.length > 0) {
       return setFiles([])
     }
-    const _files = await window.api.file.select({ filters: [{ name: 'Files', extensions }] })
+
+    const _files = await window.api.file.select({
+      filters: [
+        {
+          name: 'Files',
+          extensions: extensions.map((i) => i.replace('.', ''))
+        }
+      ]
+    })
+
     _files && setFiles(_files)
   }
 
