@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
+import MinApp from '../MinApp'
 import UserPopup from '../Popups/UserPopup'
 
 const Sidebar: FC = () => {
@@ -45,7 +46,7 @@ const Sidebar: FC = () => {
     <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBgColor }}>
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
-        <Menus>
+        <Menus onClick={MinApp.onClose}>
           <StyledLink onClick={onToggleShowAssistants}>
             <Icon className={isRoute('/')}>
               <i className="iconfont icon-chat"></i>
@@ -73,7 +74,7 @@ const Sidebar: FC = () => {
           </StyledLink>
         </Menus>
       </MainMenus>
-      <Menus>
+      <Menus onClick={MinApp.onClose}>
         <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
           <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
             <i className="iconfont icon-setting"></i>
@@ -96,6 +97,7 @@ const Container = styled.div`
   border-right: 0.5px solid var(--color-border);
   margin-top: ${isMac ? 'var(--navbar-height)' : 0};
   transition: background-color 0.3s ease;
+  z-index: 10000;
 `
 
 const AvatarImg = styled(Avatar)`
