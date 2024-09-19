@@ -32,7 +32,13 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const onSendMessage = useCallback(
     async (message: Message) => {
       if (message.role === 'user') {
-        message.usage = await estimateMessageUsage(message)
+        estimateMessageUsage(message).then((usage) => {
+          setMessages((prev) => {
+            const _messages = prev.map((m) => (m.id === message.id ? { ...m, usage } : m))
+            db.topics.update(topic.id, { messages: _messages })
+            return _messages
+          })
+        })
       }
       const _messages = [...messages, message]
       setMessages(_messages)

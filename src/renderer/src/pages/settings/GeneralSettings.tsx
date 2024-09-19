@@ -5,11 +5,11 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { backup, reset, restore } from '@renderer/services/backup'
 import { useAppDispatch } from '@renderer/store'
-import { setLanguage, setUserName } from '@renderer/store/settings'
+import { setClickAssistantToShowTopic, setLanguage } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { ThemeMode } from '@renderer/types'
 import { isValidProxyUrl } from '@renderer/utils'
-import { Button, Input, Select } from 'antd'
+import { Button, Input, Select, Switch } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -19,10 +19,10 @@ const GeneralSettings: FC = () => {
   const {
     language,
     proxyUrl: storeProxyUrl,
-    userName,
     theme,
     windowStyle,
     topicPosition,
+    clickAssistantToShowTopic,
     setTheme,
     setWindowStyle,
     setTopicPosition
@@ -106,17 +106,18 @@ const GeneralSettings: FC = () => {
         />
       </SettingRow>
       <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('settings.general.user_name')}</SettingRowTitle>
-        <Input
-          placeholder={t('settings.general.user_name.placeholder')}
-          value={userName}
-          onChange={(e) => dispatch(setUserName(e.target.value))}
-          style={{ width: 180 }}
-          maxLength={30}
-        />
-      </SettingRow>
-      <SettingDivider />
+      {topicPosition === 'left' && (
+        <>
+          <SettingRow>
+            <SettingRowTitle>{t('settings.advanced.click_assistant_switch_to_topics')}</SettingRowTitle>
+            <Switch
+              checked={clickAssistantToShowTopic}
+              onChange={(checked) => dispatch(setClickAssistantToShowTopic(checked))}
+            />
+          </SettingRow>
+          <SettingDivider />
+        </>
+      )}
       <SettingRow>
         <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
         <Input

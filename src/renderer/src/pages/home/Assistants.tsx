@@ -3,6 +3,7 @@ import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
@@ -27,6 +28,7 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const generating = useAppSelector((state) => state.runtime.generating)
   const [search, setSearch] = useState('')
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
+  const { clickAssistantToShowTopic, topicPosition } = useSettings()
   const searchRef = useRef<InputRef>(null)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
@@ -103,9 +105,13 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
         })
       }
 
+      if (topicPosition === 'left' && clickAssistantToShowTopic) {
+        EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)
+      }
+
       setActiveAssistant(assistant)
     },
-    [generating, setActiveAssistant, t]
+    [clickAssistantToShowTopic, generating, setActiveAssistant, t, topicPosition]
   )
 
   const list = assistants.filter((assistant) => assistant.name?.toLowerCase().includes(search.toLowerCase().trim()))

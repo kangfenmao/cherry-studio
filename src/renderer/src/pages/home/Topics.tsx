@@ -154,7 +154,7 @@ const Container = styled.div`
   flex-direction: column;
   padding-top: 10px;
   overflow-y: scroll;
-  max-height: calc(100vh - var(--navbar-height) - 50px);
+  max-height: calc(100vh - var(--navbar-height) - 140px);
 `
 
 const TopicListItem = styled.div`
