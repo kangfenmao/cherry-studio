@@ -34,6 +34,11 @@ export default class OpenAIProvider extends BaseProvider {
     return true
   }
 
+  private get isNotSupportFiles() {
+    const providers = ['deepseek', 'baichuan', 'minimax', 'yi', 'doubao']
+    return providers.includes(this.provider.id)
+  }
+
   private async getMessageParam(
     message: Message,
     model: Model
@@ -41,6 +46,35 @@ export default class OpenAIProvider extends BaseProvider {
     const isVision = isVisionModel(model)
 
     if (!message.files) {
+      return {
+        role: message.role,
+        content: message.content
+      }
+    }
+
+    if (this.isNotSupportFiles) {
+      if (message.files) {
+        const textFiles = message.files.filter((file) => file.type === FileTypes.TEXT)
+
+        if (textFiles.length > 0) {
+          let text = ''
+          const divider = '\n\n---\n\n'
+
+          for (const file of textFiles) {
+            const fileContent = (await window.api.file.read(file.id + file.ext)).trim()
+            const fileNameRow = 'file: ' + file.origin_name + '\n\n'
+            text = text + fileNameRow + fileContent + divider
+          }
+
+          message.content = message.content + divider + text
+
+          return {
+            role: message.role,
+            content: message.content
+          }
+        }
+      }
+
       return {
         role: message.role,
         content: message.content
