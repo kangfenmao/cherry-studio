@@ -17,7 +17,6 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useModel } from '@renderer/hooks/useModel'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useRuntime } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji, removeTrailingDoubleSpaces } from '@renderer/utils'
@@ -31,6 +30,7 @@ import styled from 'styled-components'
 import SelectModelDropdown from '../components/SelectModelDropdown'
 import Markdown from '../Markdown/Markdown'
 import MessageAttachments from './MessageAttachments'
+import MessgeTokens from './MessageTokens'
 
 interface Props {
   message: Message
@@ -152,9 +152,10 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
       </MessageHeader>
       <MessageContentContainer style={{ fontFamily, fontSize }}>
         <MessageContent message={message} />
-        <MessageFooter style={{ border: messageBorder }}>
+        <MessageFooter style={{ border: messageBorder, flexDirection: isLastMessage ? 'row-reverse' : undefined }}>
+          <MessgeTokens message={message} />
           {showMenu && (
-            <MenusBar className={`menubar ${isLastMessage && 'show'} ${(!isLastMessage || isUserMessage) && 'user'}`}>
+            <MenusBar className={`menubar ${isLastMessage && 'show'}`}>
               {message.role === 'user' && (
                 <Tooltip title="Edit" mouseEnterDelay={0.8}>
                   <ActionButton onClick={onEdit}>
@@ -204,37 +205,10 @@ const MessageItem: FC<Props> = ({ message, index, showMenu, onDeleteMessage }) =
               )}
             </MenusBar>
           )}
-          <MessgeTokens message={message} />
         </MessageFooter>
       </MessageContentContainer>
     </MessageContainer>
   )
-}
-
-const MessgeTokens: React.FC<{ message: Message }> = ({ message }) => {
-  const { generating } = useRuntime()
-
-  if (!message.usage) {
-    return null
-  }
-
-  if (message.role === 'user') {
-    return <MessageMetadata>Tokens: {message?.usage?.total_tokens}</MessageMetadata>
-  }
-
-  if (generating) {
-    return null
-  }
-
-  if (message.role === 'assistant') {
-    return (
-      <MessageMetadata>
-        Tokens: {message?.usage?.total_tokens} | ↑{message?.usage?.prompt_tokens} | ↓{message?.usage?.completion_tokens}
-      </MessageMetadata>
-    )
-  }
-
-  return null
 }
 
 const MessageContent: React.FC<{ message: Message }> = ({ message }) => {
@@ -356,13 +330,6 @@ const MenusBar = styled.div`
   align-items: center;
   gap: 6px;
   margin-left: -5px;
-`
-
-const MessageMetadata = styled.div`
-  font-size: 12px;
-  color: var(--color-text-2);
-  user-select: text;
-  margin: 2px 0;
 `
 
 const ActionButton = styled.div`

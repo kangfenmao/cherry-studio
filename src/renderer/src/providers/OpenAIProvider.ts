@@ -1,8 +1,9 @@
 import { isLocalAi } from '@renderer/config/env'
+import { isVisionModel } from '@renderer/config/models'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
-import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
+import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
 import { first, takeRight } from 'lodash'
 import OpenAI from 'openai'
@@ -33,7 +34,12 @@ export default class OpenAIProvider extends BaseProvider {
     return true
   }
 
-  private async getMessageParam(message: Message): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
+  private async getMessageParam(
+    message: Message,
+    model: Model
+  ): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
+    const isVision = isVisionModel(model)
+
     if (message.role !== 'user') {
       return {
         role: message.role,
@@ -49,7 +55,7 @@ export default class OpenAIProvider extends BaseProvider {
     ]
 
     for (const file of message.files || []) {
-      if (file.type === FileTypes.IMAGE) {
+      if (file.type === FileTypes.IMAGE && isVision) {
         const image = await window.api.file.base64Image(file.id + file.ext)
         parts.push({
           type: 'image_url',
@@ -83,7 +89,7 @@ export default class OpenAIProvider extends BaseProvider {
     onFilterMessages(_messages)
 
     for (const message of _messages) {
-      userMessages.push(await this.getMessageParam(message))
+      userMessages.push(await this.getMessageParam(message, model))
     }
 
     // @ts-ignore key is not typed

@@ -113,6 +113,7 @@ const resources = {
         file: 'File',
         name: 'Name',
         size: 'Size',
+        count: 'Count',
         created_at: 'Created At'
       },
       agents: {
@@ -385,6 +386,7 @@ const resources = {
         file: '文件',
         name: '文件名',
         size: '大小',
+        count: '文件数',
         created_at: '创建时间'
       },
       agents: {

@@ -77,20 +77,22 @@ const GeneralSettings: FC = () => {
           ]}
         />
       </SettingRow>
-      <SettingDivider />
       {isMac && (
-        <SettingRow>
-          <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
-          <Select
-            defaultValue={windowStyle || 'opaque'}
-            style={{ width: 180 }}
-            onChange={setWindowStyle}
-            options={[
-              { value: 'transparent', label: t('settings.theme.window.style.transparent') },
-              { value: 'opaque', label: t('settings.theme.window.style.opaque') }
-            ]}
-          />
-        </SettingRow>
+        <>
+          <SettingDivider />
+          <SettingRow>
+            <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
+            <Select
+              defaultValue={windowStyle || 'opaque'}
+              style={{ width: 180 }}
+              onChange={setWindowStyle}
+              options={[
+                { value: 'transparent', label: t('settings.theme.window.style.transparent') },
+                { value: 'opaque', label: t('settings.theme.window.style.opaque') }
+              ]}
+            />
+          </SettingRow>
+        </>
       )}
       <SettingDivider />
       <SettingRow>
@@ -108,7 +110,7 @@ const GeneralSettings: FC = () => {
       <SettingDivider />
       {topicPosition === 'left' && (
         <>
-          <SettingRow>
+          <SettingRow style={{ minHeight: 32 }}>
             <SettingRowTitle>{t('settings.advanced.click_assistant_switch_to_topics')}</SettingRowTitle>
             <Switch
               checked={clickAssistantToShowTopic}
