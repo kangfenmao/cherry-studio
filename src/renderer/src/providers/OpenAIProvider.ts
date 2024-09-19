@@ -66,11 +66,9 @@ export default class OpenAIProvider extends BaseProvider {
             text = text + fileNameRow + fileContent + divider
           }
 
-          message.content = message.content + divider + text
-
           return {
             role: message.role,
-            content: message.content
+            content: message.content + divider + text
           }
         }
       }
