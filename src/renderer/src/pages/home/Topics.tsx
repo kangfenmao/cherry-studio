@@ -26,28 +26,36 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
   const onDeleteTopic = useCallback(
     (topic: Topic) => {
+      if (generating) {
+        window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
+        return
+      }
       if (assistant.topics.length > 1) {
         const index = findIndex(assistant.topics, (t) => t.id === topic.id)
         setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
         removeTopic(topic)
       }
     },
-    [assistant.topics, removeTopic, setActiveTopic]
+    [assistant.topics, generating, removeTopic, setActiveTopic, t]
   )
 
   const onMoveTopic = useCallback(
     (topic: Topic, toAssistant: Assistant) => {
+      if (generating) {
+        window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
+        return
+      }
       const index = findIndex(assistant.topics, (t) => t.id === topic.id)
       setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
       moveTopic(topic, toAssistant)
     },
-    [assistant.topics, moveTopic, setActiveTopic]
+    [assistant.topics, generating, moveTopic, setActiveTopic, t]
   )
 
   const onSwitchTopic = useCallback(
     (topic: Topic) => {
       if (generating) {
-        window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
+        window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
         return
       }
       setActiveTopic(topic)
