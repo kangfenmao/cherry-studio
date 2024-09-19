@@ -40,7 +40,7 @@ export default class OpenAIProvider extends BaseProvider {
   ): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
     const isVision = isVisionModel(model)
 
-    if (message.role !== 'user') {
+    if (!message.files) {
       return {
         role: message.role,
         content: message.content
