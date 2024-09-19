@@ -53,13 +53,13 @@ export default class AnthropicProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens } = getAssistantSettings(assistant)
 
-    let userMessagesParams: MessageParam[][] = []
+    const userMessagesParams: MessageParam[] = []
     const _messages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 2)))
 
     onFilterMessages(_messages)
 
     for (const message of _messages) {
-      userMessagesParams = userMessagesParams.concat(await this.getMessageParam(message))
+      userMessagesParams.push(await this.getMessageParam(message))
     }
 
     const userMessages = flatten(userMessagesParams)

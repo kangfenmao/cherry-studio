@@ -34,6 +34,13 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   private async getMessageParam(message: Message): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
+    if (message.role !== 'user') {
+      return {
+        role: message.role,
+        content: message.content
+      }
+    }
+
     const parts: ChatCompletionContentPart[] = [
       {
         type: 'text',
