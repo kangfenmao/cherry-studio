@@ -21,6 +21,7 @@ import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, Message, Topic } from '@renderer/types'
 import { delay, getFileExtension, uuid } from '@renderer/utils'
+import { insertTextAtCursor } from '@renderer/utils/input'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
@@ -40,6 +41,7 @@ interface Props {
 }
 
 let _text = ''
+let _files: FileType[] = []
 
 const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
@@ -60,8 +62,10 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...(isVision ? imageExts : [])], [isVision])
+  const inputTokenCount = useMemo(() => estimateTextTokens(text), [text])
 
   _text = text
+  _files = files
 
   const sendMessage = useCallback(async () => {
     if (generating) {
@@ -95,8 +99,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
     setExpend(false)
   }, [assistant.id, assistant.topics, generating, files, text])
-
-  const inputTokenCount = useMemo(() => estimateTextTokens(text), [text])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isEnterPressed = event.keyCode == 13
@@ -142,10 +144,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }
 
   const onNewContext = () => {
-    if (generating) {
-      onPause()
-      return
-    }
+    if (generating) return onPause()
     EventEmitter.emit(EVENT_NAMES.NEW_CONTEXT)
   }
 
@@ -204,22 +203,21 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         const item = event.clipboardData?.items[0]
         if (item && item.kind === 'string' && item.type === 'text/plain') {
           event.preventDefault()
-          item.getAsString(async (text) => {
-            if (text.length > 1500) {
-              console.debug(item.getAsFile())
+          item.getAsString(async (pasteText) => {
+            if (pasteText.length > 1500) {
               const tempFilePath = await window.api.file.create('pasted_text.txt')
-              await window.api.file.write(tempFilePath, text)
+              await window.api.file.write(tempFilePath, pasteText)
               const selectedFile = await window.api.file.get(tempFilePath)
               selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
             } else {
-              setText((prevText) => prevText + text)
+              insertTextAtCursor({ text, pasteText, textareaRef, setText })
               setTimeout(() => resizeTextArea(), 0)
             }
           })
         }
       }
     },
-    [supportExts, pasteLongTextAsFile]
+    [pasteLongTextAsFile, supportExts, text]
   )
 
   // Command or Ctrl + N create new topic
