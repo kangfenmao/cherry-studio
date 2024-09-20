@@ -99,8 +99,8 @@ const Container = styled.div`
 `
 
 const AvatarImg = styled(Avatar)`
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   background-color: var(--color-background-soft);
   margin-bottom: ${isMac ? '12px' : '12px'};
   margin-top: ${isMac ? '5px' : '2px'};
@@ -124,7 +124,7 @@ const Icon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 6px;
+  border-radius: 50%;
   margin-bottom: 5px;
   transition: background-color 0.2s ease;
   -webkit-app-region: none;
@@ -139,7 +139,7 @@ const Icon = styled.div`
     font-size: 17px;
   }
   &:hover {
-    background-color: var(--color-background-soft);
+    background-color: var(--color-background-mute);
     cursor: pointer;
     .iconfont,
     .anticon {
@@ -147,7 +147,7 @@ const Icon = styled.div`
     }
   }
   &.active {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
     .iconfont,
     .anticon {
       color: var(--color-icon-white);

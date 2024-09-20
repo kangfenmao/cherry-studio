@@ -136,7 +136,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
               <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
-                <TopicName>{topic.name}</TopicName>
+                <TopicName className="name">{topic.name}</TopicName>
                 {assistant.topics.length > 1 && (
                   <MenuButton
                     className="menu"
@@ -162,14 +162,17 @@ const Container = styled.div`
   flex-direction: column;
   padding-top: 10px;
   overflow-y: scroll;
-  max-height: calc(100vh - var(--navbar-height) - 140px);
+  max-height: calc(100vh - var(--navbar-height) - 70px);
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const TopicListItem = styled.div`
   padding: 7px 10px;
   margin: 0 10px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;
@@ -183,7 +186,10 @@ const TopicListItem = styled.div`
   }
   &.active {
     background-color: var(--color-background-mute);
-    font-weight: 500;
+    .name {
+      opacity: 1;
+      font-weight: 500;
+    }
     .menu {
       opacity: 1;
       background-color: var(--color-background-mute);
@@ -195,12 +201,12 @@ const TopicListItem = styled.div`
 `
 
 const TopicName = styled.div`
-  color: var(--color-text);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 13px;
+  opacity: 0.6;
 `
 
 const MenuButton = styled.div`

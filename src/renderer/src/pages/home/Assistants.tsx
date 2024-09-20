@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
@@ -20,13 +20,20 @@ import styled from 'styled-components'
 interface Props {
   activeAssistant: Assistant
   setActiveAssistant: (assistant: Assistant) => void
+  onCreateDefaultAssistant: () => void
   onCreateAssistant: () => void
 }
 
-const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAssistant }) => {
+const Assistants: FC<Props> = ({
+  activeAssistant,
+  setActiveAssistant,
+  onCreateAssistant,
+  onCreateDefaultAssistant
+}) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
   const generating = useAppSelector((state) => state.runtime.generating)
   const [search, setSearch] = useState('')
+  const [dragging, setDragging] = useState(false)
   const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
   const { clickAssistantToShowTopic, topicPosition } = useSettings()
   const searchRef = useRef<InputRef>(null)
@@ -36,10 +43,10 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
   const onDelete = useCallback(
     (assistant: Assistant) => {
       const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
-      _assistant ? setActiveAssistant(_assistant) : onCreateAssistant()
+      _assistant ? setActiveAssistant(_assistant) : onCreateDefaultAssistant()
       removeAssistant(assistant.id)
     },
-    [assistants, onCreateAssistant, removeAssistant, setActiveAssistant]
+    [assistants, onCreateDefaultAssistant, removeAssistant, setActiveAssistant]
   )
 
   const onEditAssistant = useCallback(
@@ -175,7 +182,12 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
           />
         </SearchContainer>
       )}
-      <DragableList list={list} onUpdate={updateAssistants} droppableProps={{ isDropDisabled: !isEmpty(search) }}>
+      <DragableList
+        list={list}
+        onUpdate={updateAssistants}
+        droppableProps={{ isDropDisabled: !isEmpty(search) }}
+        onDragStart={() => setDragging(true)}
+        onDragEnd={() => setDragging(false)}>
         {(assistant) => {
           const isCurrent = assistant.id === activeAssistant?.id
           return (
@@ -193,6 +205,12 @@ const Assistants: FC<Props> = ({ activeAssistant, setActiveAssistant, onCreateAs
           )
         }}
       </DragableList>
+      {!dragging && (
+        <AddButton onClick={onCreateAssistant}>
+          <AddButtonText>{t('chat.add.assistant.title')}</AddButtonText>
+          <PlusOutlined />
+        </AddButton>
+      )}
     </Container>
   )
 }
@@ -212,7 +230,7 @@ const AssistantItem = styled.div`
   justify-content: space-between;
   padding: 7px 10px;
   position: relative;
-  border-radius: 4px;
+  border-radius: 6px;
   margin: 0 10px;
   padding-right: 35px;
   cursor: pointer;
@@ -292,5 +310,30 @@ const CommandKey = styled.div`
   background-color: var(--color-background);
   margin-right: -4px;
 `
+
+const AddButton = styled.div`
+  height: 34px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  margin: 0 10px;
+  margin-top: -2px;
+  color: var(--color-text-2);
+  transition: all 0.2s ease-in-out;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 8px;
+  .anticon {
+    margin: 0 4px;
+  }
+  &:hover {
+    color: var(--color-text-1);
+    background-color: var(--color-background-soft);
+  }
+`
+
+const AddButtonText = styled.span``
 
 export default Assistants

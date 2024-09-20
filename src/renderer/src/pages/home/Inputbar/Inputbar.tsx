@@ -1,10 +1,8 @@
 import {
   ClearOutlined,
   ControlOutlined,
-  FormOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
-  HistoryOutlined,
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
@@ -289,7 +287,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           <ToolbarMenu>
             <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
               <ToolbarButton type="text" onClick={addNewTopic}>
-                <FormOutlined />
+                <i className="iconfont icon-a-addchat" />
               </ToolbarButton>
             </Tooltip>
             <Tooltip placement="top" title={t('chat.input.clear')} arrow>
@@ -304,16 +302,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                   <ClearOutlined />
                 </ToolbarButton>
               </Popconfirm>
-            </Tooltip>
-            <Tooltip placement="top" title={t('chat.input.topics')} arrow>
-              <ToolbarButton
-                type="text"
-                onClick={() => {
-                  !showTopics && toggleShowTopics()
-                  setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-                }}>
-                <HistoryOutlined />
-              </ToolbarButton>
             </Tooltip>
             <Tooltip placement="top" title={t('chat.input.settings')} arrow>
               <ToolbarButton
@@ -420,6 +408,10 @@ const ToolbarButton = styled(Button)`
   &.iconfont {
     transition: all 0.3s ease;
     color: var(--color-icon);
+  }
+  .icon-a-addchat {
+    font-size: 19px;
+    margin-bottom: -2px;
   }
   &:hover {
     background-color: var(--color-background-soft);
