@@ -48,12 +48,12 @@ const Sidebar: FC = () => {
         <Menus onClick={MinApp.onClose}>
           <StyledLink onClick={() => to('/')}>
             <Icon className={isRoute('/')}>
-              <i className="iconfont icon-chat"></i>
+              <i className="iconfont icon-chat" />
             </Icon>
           </StyledLink>
           <StyledLink onClick={() => to('/agents')}>
             <Icon className={isRoute('/agents')}>
-              <i className="iconfont icon-business-smart-assistant"></i>
+              <i className="iconfont icon-business-smart-assistant" />
             </Icon>
           </StyledLink>
           <StyledLink onClick={() => to('/translate')}>
@@ -63,7 +63,7 @@ const Sidebar: FC = () => {
           </StyledLink>
           <StyledLink onClick={() => to('/apps')}>
             <Icon className={isRoute('/apps')}>
-              <i className="iconfont icon-appstore"></i>
+              <i className="iconfont icon-appstore" />
             </Icon>
           </StyledLink>
           <StyledLink onClick={() => to('/files')}>
@@ -76,7 +76,7 @@ const Sidebar: FC = () => {
       <Menus onClick={MinApp.onClose}>
         <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
           <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
-            <i className="iconfont icon-setting"></i>
+            <i className="iconfont icon-setting" />
           </Icon>
         </StyledLink>
       </Menus>
@@ -128,6 +128,7 @@ const Icon = styled.div`
   margin-bottom: 5px;
   transition: background-color 0.2s ease;
   -webkit-app-region: none;
+  transition: all 0.2s ease;
   .iconfont,
   .anticon {
     color: var(--color-icon);
@@ -139,7 +140,7 @@ const Icon = styled.div`
     font-size: 17px;
   }
   &:hover {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
     cursor: pointer;
     .iconfont,
     .anticon {
@@ -147,7 +148,7 @@ const Icon = styled.div`
     }
   }
   &.active {
-    background-color: var(--color-background-soft);
+    background-color: var(--color-background-mute);
     .iconfont,
     .anticon {
       color: var(--color-icon-white);

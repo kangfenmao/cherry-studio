@@ -1,3 +1,4 @@
+import { FormOutlined } from '@ant-design/icons'
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import { HStack } from '@renderer/components/Layout'
 import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
@@ -8,6 +9,7 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
 import { Switch } from 'antd'
 import { FC, useCallback } from 'react'
@@ -41,7 +43,8 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
     addTopic(topic)
     setActiveTopic(topic)
     db.topics.add({ id: topic.id, messages: [] })
-    window.message.success({ content: t('message.topic.added') })
+    window.message.success({ content: t('message.topic.added'), key: 'topic-added' })
+    setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
   }, [addTopic, setActiveTopic, t])
 
   return (
@@ -52,7 +55,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
             <i className="iconfont icon-hide-sidebar" />
           </NewButton>
           <NewButton onClick={addNewTopic}>
-            <i className="iconfont icon-a-addchat" />
+            <FormOutlined />
           </NewButton>
         </NavbarLeft>
       )}

@@ -102,8 +102,16 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
           options={
             [
               position === 'left' && topicPosition === 'left' ? assistantTab : undefined,
-              { label: t('common.topics'), value: 'topic', icon: <BarsOutlined /> },
-              { label: t('settings.title'), value: 'settings', icon: <SettingOutlined /> }
+              {
+                label: t('common.topics'),
+                value: 'topic',
+                icon: <BarsOutlined />
+              },
+              {
+                label: t('settings.title'),
+                value: 'settings',
+                icon: <SettingOutlined />
+              }
             ].filter(Boolean) as SegmentedProps['options']
           }
           onChange={(value) => setTab(value as 'topic' | 'settings')}

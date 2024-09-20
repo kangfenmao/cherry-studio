@@ -136,8 +136,11 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
               <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
-                <TopicName className="name">{topic.name}</TopicName>
-                {assistant.topics.length > 1 && (
+                <TopicName className="name">
+                  <TopicHash>#</TopicHash>
+                  {topic.name.replace('`', '')}
+                </TopicName>
+                {assistant.topics.length > 1 && isActive && (
                   <MenuButton
                     className="menu"
                     onClick={(e) => {
@@ -171,8 +174,7 @@ const Container = styled.div`
 const TopicListItem = styled.div`
   padding: 7px 10px;
   margin: 0 10px;
-  cursor: pointer;
-  border-radius: 6px;
+  border-radius: 4px;
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;
@@ -180,9 +182,17 @@ const TopicListItem = styled.div`
   justify-content: space-between;
   align-items: center;
   position: relative;
+  font-family: Ubuntu;
+  cursor: pointer;
   .menu {
     opacity: 0;
     color: var(--color-text-3);
+  }
+  &:hover {
+    background-color: var(--color-background-soft);
+    .name {
+      opacity: 1;
+    }
   }
   &.active {
     background-color: var(--color-background-mute);
@@ -214,17 +224,20 @@ const MenuButton = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 24px;
-  min-width: 24px;
-  min-height: 24px;
-  border-radius: 4px;
+  min-width: 22px;
+  min-height: 22px;
   position: absolute;
-  right: 10px;
-  top: 5px;
+  right: 8px;
+  top: 6px;
   .anticon {
     font-size: 12px;
   }
+`
+
+const TopicHash = styled.span`
+  font-size: 13px;
+  color: var(--color-text-3);
+  margin-right: 2px;
 `
 
 export default Topics

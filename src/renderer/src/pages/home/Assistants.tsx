@@ -186,6 +186,7 @@ const Assistants: FC<Props> = ({
         list={list}
         onUpdate={updateAssistants}
         droppableProps={{ isDropDisabled: !isEmpty(search) }}
+        style={{ paddingBottom: dragging ? '34px' : 0 }}
         onDragStart={() => setDragging(true)}
         onDragEnd={() => setDragging(false)}>
         {(assistant) => {
@@ -194,11 +195,11 @@ const Assistants: FC<Props> = ({
             <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
               <AssistantItem onClick={() => onSwitchAssistant(assistant)} className={isCurrent ? 'active' : ''}>
                 <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-                <ArrowRightButton
-                  className={`arrow-button ${isCurrent ? 'active' : ''}`}
-                  onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
-                  <i className="iconfont icon-gridlines" />
-                </ArrowRightButton>
+                {isCurrent && (
+                  <ArrowRightButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
+                    <i className="iconfont icon-gridlines" />
+                  </ArrowRightButton>
+                )}
                 {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
               </AssistantItem>
             </Dropdown>
@@ -206,10 +207,12 @@ const Assistants: FC<Props> = ({
         }}
       </DragableList>
       {!dragging && (
-        <AddButton onClick={onCreateAssistant}>
-          <AddButtonText>{t('chat.add.assistant.title')}</AddButtonText>
-          <PlusOutlined />
-        </AddButton>
+        <AssistantItem onClick={onCreateAssistant}>
+          <AssistantName>
+            <PlusOutlined style={{ color: 'var(--color-text-2)', marginRight: 4 }} />
+            {t('chat.add.assistant.title')}
+          </AssistantName>
+        </AssistantItem>
       )}
     </Container>
   )
@@ -230,14 +233,17 @@ const AssistantItem = styled.div`
   justify-content: space-between;
   padding: 7px 10px;
   position: relative;
-  border-radius: 6px;
+  border-radius: 4px;
   margin: 0 10px;
   padding-right: 35px;
-  cursor: pointer;
   font-family: Ubuntu;
+  cursor: pointer;
   .iconfont {
     opacity: 0;
     color: var(--color-text-3);
+  }
+  &:hover {
+    background-color: var(--color-background-soft);
   }
   &.active {
     background-color: var(--color-background-mute);
@@ -310,30 +316,5 @@ const CommandKey = styled.div`
   background-color: var(--color-background);
   margin-right: -4px;
 `
-
-const AddButton = styled.div`
-  height: 34px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 10px;
-  margin: 0 10px;
-  margin-top: -2px;
-  color: var(--color-text-2);
-  transition: all 0.2s ease-in-out;
-  font-size: 13px;
-  cursor: pointer;
-  border-radius: 8px;
-  .anticon {
-    margin: 0 4px;
-  }
-  &:hover {
-    color: var(--color-text-1);
-    background-color: var(--color-background-soft);
-  }
-`
-
-const AddButtonText = styled.span``
 
 export default Assistants

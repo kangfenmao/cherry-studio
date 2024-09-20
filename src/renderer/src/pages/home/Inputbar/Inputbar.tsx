@@ -1,6 +1,7 @@
 import {
   ClearOutlined,
   ControlOutlined,
+  FormOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   PauseCircleOutlined,
@@ -256,11 +257,6 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     textareaRef.current?.focus()
   }, [assistant])
 
-  useEffect(() => {
-    document.addEventListener('paste', onPaste)
-    return () => document.removeEventListener('paste', onPaste)
-  }, [onPaste])
-
   return (
     <Container>
       <AttachmentPreview files={files} setFiles={setFiles} />
@@ -281,13 +277,14 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           onBlur={() => setInputFocus(false)}
           onInput={onInput}
           disabled={searching}
+          onPaste={(e) => onPaste(e.nativeEvent)}
           onClick={() => searching && dispatch(setSearching(false))}
         />
         <Toolbar>
           <ToolbarMenu>
             <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
               <ToolbarButton type="text" onClick={addNewTopic}>
-                <i className="iconfont icon-a-addchat" />
+                <FormOutlined />
               </ToolbarButton>
             </Tooltip>
             <Tooltip placement="top" title={t('chat.input.clear')} arrow>
