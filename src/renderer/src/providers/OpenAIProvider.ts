@@ -124,15 +124,24 @@ export default class OpenAIProvider extends BaseProvider {
       userMessages.push(await this.getMessageParam(message, model))
     }
 
+    const isSupportStreamOutput = this.isSupportStreamOutput(model.id)
+
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({
       model: model.id,
       messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
-      stream: this.isSupportStreamOutput(model.id),
+      stream: isSupportStreamOutput,
       temperature: assistant?.settings?.temperature,
       max_tokens: maxTokens,
       keep_alive: this.keepAliveTime
     })
+
+    if (!isSupportStreamOutput) {
+      return onChunk({
+        text: stream.choices[0].message?.content || '',
+        usage: stream.usage
+      })
+    }
 
     for await (const chunk of stream) {
       if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
