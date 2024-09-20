@@ -3,7 +3,7 @@ import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { useRuntime, useShowAssistants } from '@renderer/hooks/useStore'
+import { useRuntime } from '@renderer/hooks/useStore'
 import { Avatar } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,7 +17,6 @@ const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
   const { minappShow } = useRuntime()
-  const { toggleShowAssistants } = useShowAssistants()
   const { generating } = useRuntime()
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -38,16 +37,16 @@ const Sidebar: FC = () => {
     navigate(path)
   }
 
-  const onToggleShowAssistants = () => {
-    pathname === '/' ? toggleShowAssistants() : navigate('/')
-  }
-
   return (
-    <Container style={{ backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBgColor }}>
+    <Container
+      style={{
+        backgroundColor: minappShow ? 'var(--navbar-background)' : sidebarBgColor,
+        zIndex: minappShow ? 10000 : 'initial'
+      }}>
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus onClick={MinApp.onClose}>
-          <StyledLink onClick={onToggleShowAssistants}>
+          <StyledLink onClick={() => to('/')}>
             <Icon className={isRoute('/')}>
               <i className="iconfont icon-chat"></i>
             </Icon>
@@ -97,7 +96,6 @@ const Container = styled.div`
   border-right: 0.5px solid var(--color-border);
   margin-top: ${isMac ? 'var(--navbar-height)' : 0};
   transition: background-color 0.3s ease;
-  z-index: 10000;
 `
 
 const AvatarImg = styled(Avatar)`
