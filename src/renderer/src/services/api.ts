@@ -77,7 +77,7 @@ export async function fetchChatCompletion({
 
     message.status = 'success'
 
-    if (!message.usage) {
+    if (!message.usage || !message?.usage?.completion_tokens) {
       message.usage = await estimateMessagesUsage({
         assistant,
         messages: [..._messages, message]
