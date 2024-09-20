@@ -18,6 +18,10 @@ export default class AnthropicProvider extends BaseProvider {
     this.sdk = new Anthropic({ apiKey: provider.apiKey, baseURL: this.getBaseURL() })
   }
 
+  public getBaseURL(): string {
+    return this.provider.apiHost
+  }
+
   private async getMessageParam(message: Message): Promise<MessageParam> {
     const parts: MessageParam['content'] = [{ type: 'text', text: message.content }]
 
