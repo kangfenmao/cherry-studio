@@ -84,8 +84,8 @@ export default class AnthropicProvider extends BaseProvider {
         })
         .on('text', (text) => {
           if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
-            resolve()
-            return stream.controller.abort()
+            stream.controller.abort()
+            return resolve()
           }
           onChunk({ text })
         })

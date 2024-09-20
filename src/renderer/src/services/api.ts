@@ -56,6 +56,9 @@ export async function fetchChatCompletion({
   const timer = setInterval(() => {
     if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
       paused = true
+      message.status = 'paused'
+      EventEmitter.emit(EVENT_NAMES.RECEIVE_MESSAGE, message)
+      store.dispatch(setGenerating(false))
       onResponse({ ...message, status: 'paused' })
       clearInterval(timer)
     }
