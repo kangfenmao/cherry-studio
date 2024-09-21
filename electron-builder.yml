@@ -42,7 +42,10 @@ dmg:
   artifactName: ${productName}-${version}-${arch}.${ext}
 linux:
   target:
-    - AppImage
+    - target: AppImage
+      arch:
+        - arm64
+        - x64
     # - snap
     # - deb
   maintainer: electronjs.org
@@ -60,10 +63,13 @@ afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     本次更新：
+      支持话题导出为图片
+      启动界面增加LOGO显示避免空白
+      修复输入框光标位置粘贴文字问题
+      修复暂停生成导致消息显示错乱问题
+      修复公式渲染异常情况
+      修复 Anthropic API 地址错误问题
+    近期更新：
       增加了30多种文本文档格式选择
       支持粘贴图片和文件到聊天输入框
       支持将对话移动到其他智能体了
-    近期更新：
-      支持 Vision 模型
-      新增文件功能
-      支持从特定消息创建新分支

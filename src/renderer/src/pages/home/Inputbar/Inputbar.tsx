@@ -53,7 +53,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [contextCount, setContextCount] = useState(0)
   const generating = useAppSelector((state) => state.runtime.generating)
   const textareaRef = useRef<TextAreaRef>(null)
-  const [files, setFiles] = useState<FileType[]>([])
+  const [files, setFiles] = useState<FileType[]>(_files)
   const { t } = useTranslation()
   const containerRef = useRef(null)
   const { showTopics, toggleShowTopics } = useShowTopics()
