@@ -40,7 +40,7 @@ const PromptPopupContainer: React.FC<Props> = ({
   }
 
   return (
-    <Modal title={title} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose}>
+    <Modal title={title} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose} centered>
       <Box mb={8}>{message}</Box>
       <Input
         placeholder={inputPlaceholder}
