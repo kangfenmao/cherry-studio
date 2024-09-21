@@ -9,11 +9,7 @@ const api = {
   setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy),
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
-  openFile: (options?: { decompress: boolean }) => ipcRenderer.invoke('open-file', options),
   reload: () => ipcRenderer.invoke('reload'),
-  saveFile: (path: string, content: string, options?: { compress: boolean }) => {
-    return ipcRenderer.invoke('save-file', path, content, options)
-  },
   compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
   decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text),
   file: {
@@ -25,7 +21,12 @@ const api = {
     clear: () => ipcRenderer.invoke('file:clear'),
     get: (filePath: string) => ipcRenderer.invoke('file:get', filePath),
     create: (fileName: string) => ipcRenderer.invoke('file:create', fileName),
-    write: (filePath: string, data: Uint8Array | string) => ipcRenderer.invoke('file:write', filePath, data)
+    write: (filePath: string, data: Uint8Array | string) => ipcRenderer.invoke('file:write', filePath, data),
+    open: (options?: { decompress: boolean }) => ipcRenderer.invoke('file:open', options),
+    save: (path: string, content: string, options?: { compress: boolean }) => {
+      return ipcRenderer.invoke('file:save', path, content, options)
+    },
+    saveImage: (name: string, data: string) => ipcRenderer.invoke('file:saveImage', name, data)
   }
 }
 

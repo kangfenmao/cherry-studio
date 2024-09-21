@@ -7,7 +7,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { deleteMessageFiles, filterMessages, getContextCount } from '@renderer/services/messages'
 import { estimateHistoryTokens, estimateMessageUsage } from '@renderer/services/tokens'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
-import { getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
+import { captureScrollableDiv, getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import { flatten, last, reverse, take } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
@@ -103,6 +103,12 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         setMessages([])
         updateTopic({ ...topic, messages: [] })
         TopicManager.clearTopicMessages(topic.id)
+      }),
+      EventEmitter.on(EVENT_NAMES.EXPORT_TOPIC_IMAGE, async () => {
+        const imageData = await captureScrollableDiv(containerRef)
+        if (imageData) {
+          window.api.file.saveImage(topic.name, imageData)
+        }
       }),
       EventEmitter.on(EVENT_NAMES.NEW_CONTEXT, () => {
         const lastMessage = last(messages)
@@ -200,6 +206,7 @@ const Container = styled.div`
   flex-direction: column-reverse;
   max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
   padding: 10px 0;
+  background-color: var(--color-background);
 `
 
 export default Messages

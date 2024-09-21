@@ -1,8 +1,18 @@
 import { getFileType } from '@main/utils/file'
 import { FileType } from '@types'
 import * as crypto from 'crypto'
-import { app, dialog, OpenDialogOptions } from 'electron'
+import {
+  app,
+  dialog,
+  OpenDialogOptions,
+  OpenDialogReturnValue,
+  SaveDialogOptions,
+  SaveDialogReturnValue
+} from 'electron'
+import logger from 'electron-log'
 import * as fs from 'fs'
+import { writeFileSync } from 'fs'
+import { readFile } from 'fs/promises'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -192,6 +202,69 @@ class FileManager {
   async clear(): Promise<void> {
     await fs.promises.rmdir(this.storageDir, { recursive: true })
     await this.initStorageDir()
+  }
+
+  async open(
+    _: Electron.IpcMainInvokeEvent,
+    options: OpenDialogOptions
+  ): Promise<{ fileName: string; content: Buffer } | null> {
+    try {
+      const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+        title: '打开文件',
+        properties: ['openFile'],
+        filters: [{ name: '所有文件', extensions: ['*'] }],
+        ...options
+      })
+
+      if (!result.canceled && result.filePaths.length > 0) {
+        const filePath = result.filePaths[0]
+        const fileName = filePath.split('/').pop() || ''
+        const content = await readFile(filePath)
+        return { fileName, content }
+      }
+
+      return null
+    } catch (err) {
+      logger.error('[IPC - Error]', 'An error occurred opening the file:', err)
+      return null
+    }
+  }
+
+  async save(
+    _: Electron.IpcMainInvokeEvent,
+    fileName: string,
+    content: string,
+    options?: SaveDialogOptions
+  ): Promise<void> {
+    try {
+      const result: SaveDialogReturnValue = await dialog.showSaveDialog({
+        title: '保存文件',
+        defaultPath: fileName,
+        ...options
+      })
+
+      if (!result.canceled && result.filePath) {
+        await writeFileSync(result.filePath, content, { encoding: 'utf-8' })
+      }
+    } catch (err) {
+      logger.error('[IPC - Error]', 'An error occurred saving the file:', err)
+    }
+  }
+
+  async saveImage(_: Electron.IpcMainInvokeEvent, name: string, data: string): Promise<void> {
+    try {
+      const filePath = dialog.showSaveDialogSync({
+        defaultPath: `${name}.png`,
+        filters: [{ name: 'PNG Image', extensions: ['png'] }]
+      })
+
+      if (filePath) {
+        const base64Data = data.replace(/^data:image\/png;base64,/, '')
+        fs.writeFileSync(filePath, base64Data, 'base64')
+      }
+    } catch (error) {
+      logger.error('[IPC - Error]', 'An error occurred saving the image:', error)
+    }
   }
 }
 

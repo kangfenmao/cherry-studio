@@ -14,8 +14,6 @@ declare global {
       checkForUpdate: () => void
       openWebsite: (url: string) => void
       setProxy: (proxy: string | undefined) => void
-      saveFile: (path: string, content: string | NodeJS.ArrayBufferView, options?: SaveDialogOptions) => void
-      openFile: (options?: OpenDialogOptions) => Promise<{ fileName: string; content: Buffer } | null>
       setTheme: (theme: 'light' | 'dark') => void
       minApp: (options: { url: string; windowOptions?: Electron.BrowserWindowConstructorOptions }) => void
       reload: () => void
@@ -31,6 +29,9 @@ declare global {
         get: (filePath: string) => Promise<FileType | null>
         create: (fileName: string) => Promise<string>
         write: (filePath: string, data: Uint8Array | string) => Promise<void>
+        open: (options?: OpenDialogOptions) => Promise<{ fileName: string; content: Buffer } | null>
+        save: (path: string, content: string | NodeJS.ArrayBufferView, options?: SaveDialogOptions) => void
+        saveImage: (name: string, data: string) => void
       }
     }
   }

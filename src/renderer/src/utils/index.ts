@@ -1,5 +1,6 @@
 import { Model } from '@renderer/types'
 import imageCompression from 'browser-image-compression'
+import html2canvas from 'html2canvas'
 // @ts-ignore next-line`
 import { v4 as uuidv4 } from 'uuid'
 
@@ -240,4 +241,67 @@ export function getFileExtension(filePath: string) {
   const parts = filePath.split('.')
   const extension = parts.slice(-1)[0]
   return '.' + extension
+}
+
+export async function captureDiv(divRef: React.RefObject<HTMLDivElement>) {
+  if (divRef.current) {
+    try {
+      const canvas = await html2canvas(divRef.current)
+      const imageData = canvas.toDataURL('image/png')
+      return imageData
+    } catch (error) {
+      console.error('Error capturing div:', error)
+      return Promise.reject()
+    }
+  }
+  return Promise.resolve(undefined)
+}
+
+export const captureScrollableDiv = async (divRef: React.RefObject<HTMLDivElement>) => {
+  if (divRef.current) {
+    try {
+      const div = divRef.current
+
+      // 保存原始样式
+      const originalStyle = {
+        height: div.style.height,
+        maxHeight: div.style.maxHeight,
+        overflow: div.style.overflow,
+        position: div.style.position
+      }
+
+      const originalScrollTop = div.scrollTop
+
+      // 修改样式以显示全部内容
+      div.style.height = 'auto'
+      div.style.maxHeight = 'none'
+      div.style.overflow = 'visible'
+      div.style.position = 'static'
+
+      // 捕获整个内容
+      const canvas = await html2canvas(div, {
+        scrollY: -window.scrollY,
+        windowHeight: document.documentElement.scrollHeight
+      })
+
+      // 恢复原始样式
+      div.style.height = originalStyle.height
+      div.style.maxHeight = originalStyle.maxHeight
+      div.style.overflow = originalStyle.overflow
+      div.style.position = originalStyle.position
+
+      const imageData = canvas.toDataURL('image/png')
+
+      // 恢复原始滚动位置
+      setTimeout(() => {
+        div.scrollTop = originalScrollTop
+      }, 0)
+
+      return imageData
+    } catch (error) {
+      console.error('Error capturing scrollable div:', error)
+    }
+  }
+
+  return Promise.resolve(undefined)
 }

@@ -18,13 +18,13 @@ export async function backup() {
   const fileContnet = JSON.stringify(data)
   const file = await window.api.compress(fileContnet)
 
-  await window.api.saveFile(filename, file)
+  await window.api.file.save(filename, file)
 
   window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
 }
 
 export async function restore() {
-  const file = await window.api.openFile()
+  const file = await window.api.file.open()
 
   if (file) {
     try {

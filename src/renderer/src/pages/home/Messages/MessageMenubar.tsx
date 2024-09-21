@@ -65,7 +65,7 @@ const MessageMenubar: FC<Props> = (props) => {
         icon: <SaveOutlined />,
         onClick: () => {
           const fileName = message.createdAt + '.md'
-          window.api.saveFile(fileName, message.content)
+          window.api.file.save(fileName, message.content)
         }
       }
     ],

@@ -4,7 +4,6 @@ import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'elect
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
 import FileManager from './services/FileManager'
-import { openFile, saveFile } from './utils/file'
 import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
 
@@ -28,13 +27,14 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     session.defaultSession.setProxy(proxy ? { proxyRules: proxy } : {})
   })
 
-  ipcMain.handle('save-file', saveFile)
-  ipcMain.handle('open-file', openFile)
   ipcMain.handle('reload', () => mainWindow.reload())
 
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
   ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
 
+  ipcMain.handle('file:open', fileManager.open)
+  ipcMain.handle('file:save', fileManager.save)
+  ipcMain.handle('file:saveImage', fileManager.saveImage)
   ipcMain.handle('file:base64Image', async (_, id) => await fileManager.base64Image(id))
   ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
   ipcMain.handle('file:upload', async (_, file: FileType) => await fileManager.uploadFile(file))

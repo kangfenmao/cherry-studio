@@ -1,9 +1,10 @@
-import { CloseOutlined, DeleteOutlined, EditOutlined, FolderOutlined } from '@ant-design/icons'
+import { CloseOutlined, DeleteOutlined, EditOutlined, FolderOutlined, UploadOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/api'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppSelector } from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
@@ -94,6 +95,18 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
               updateTopic({ ...topic, name })
             }
           }
+        },
+        {
+          label: t('chat.topics.export.title'),
+          key: 'export',
+          icon: <UploadOutlined />,
+          children: [
+            {
+              label: t('chat.topics.export.image'),
+              key: 'image',
+              onClick: () => EventEmitter.emit(EVENT_NAMES.EXPORT_TOPIC_IMAGE, topic)
+            }
+          ]
         }
       ]
 

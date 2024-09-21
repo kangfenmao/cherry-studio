@@ -34,7 +34,8 @@
     "electron-log": "^5.1.5",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.1.7",
-    "electron-window-state": "^5.0.3"
+    "electron-window-state": "^5.0.3",
+    "html2canvas": "^1.4.1"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.24.3",

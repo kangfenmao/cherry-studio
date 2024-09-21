@@ -118,6 +118,7 @@ const MenuItem = styled.li`
   }
   .iconfont {
     font-size: 18px;
+    line-height: 18px;
     opacity: 0.7;
     margin-left: -1px;
   }

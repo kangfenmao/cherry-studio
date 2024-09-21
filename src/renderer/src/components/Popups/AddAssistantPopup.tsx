@@ -1,4 +1,4 @@
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined } from '@ant-design/icons'
 import { TopView } from '@renderer/components/TopView'
 import systemAgents from '@renderer/config/agents.json'
 import { useAgents } from '@renderer/hooks/useAgents'
@@ -110,7 +110,6 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
             onClick={() => onCreateAssistant(agent)}
             className={agent.id === 'default' ? 'default' : ''}>
             <HStack alignItems="center" gap={5}>
-              {agent.id === 'default' && <PlusOutlined style={{ marginLeft: -2 }} />}
               {agent.emoji} {agent.name}
             </HStack>
             {agent.group === 'system' && <Tag color="green">{t('agents.tag.system')}</Tag>}

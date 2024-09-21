@@ -119,8 +119,8 @@ const Menus = styled.div`
 `
 
 const Icon = styled.div`
-  width: 34px;
-  height: 34px;
+  width: 35px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
