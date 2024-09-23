@@ -25,7 +25,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 16px;
-  background-color: var(--color-background-soft);
   border: 0.5px solid var(--color-border);
   border-radius: 10px;
   padding: 15px;
