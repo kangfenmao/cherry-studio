@@ -24,7 +24,7 @@ const MessageAttachments: FC<Props> = ({ message }) => {
   return (
     <Container style={{ marginTop: 2, marginBottom: 8 }}>
       <Upload
-        listType="picture"
+        listType="text"
         disabled
         fileList={message.files?.map((file) => ({
           uid: file.id,
