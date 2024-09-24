@@ -41,6 +41,7 @@ Thumbs.db
 node_modules
 dist
 out
+build/icons
 
 # ENV
 .env
