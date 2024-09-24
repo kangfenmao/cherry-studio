@@ -1,8 +1,8 @@
 <div align="center">
   <a href="https://github.com/kangfenmao/cherry-studio/releases">
-    <img src="https://github.com/user-attachments/assets/7b4f2f78-5cbe-4be8-9aec-f98d8405a505" alt="banner"/>
+    <img src="https://github.com/user-attachments/assets/7b4f2f78-5cbe-4be8-9aec-f98d8405a505" alt="banner" />
   </a>
-  English / <a href="./docs/README_zh.md>中文</a>
+  English | <a href="./docs/README_zh.md">中文</a>
 </div>
 
 # 🍒 Cherry Studio
@@ -73,4 +73,3 @@ $ yarn build:linux
 # 📃 License
 
 [LICENSE](./LICENSE)
-
