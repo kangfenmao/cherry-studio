@@ -32,7 +32,7 @@ const initialState: SettingsState = {
   messageFont: 'system',
   showInputEstimatedTokens: false,
   theme: ThemeMode.light,
-  windowStyle: 'opaque',
+  windowStyle: 'transparent',
   fontSize: 14,
   topicPosition: 'right',
   pasteLongTextAsFile: true,

@@ -14,6 +14,7 @@ interface ImportMeta {
 
 declare global {
   interface Window {
+    root: HTMLElement
     message: MessageInstance
     modal: HookAPI
     keyv: KeyvStorage

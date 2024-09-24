@@ -41,9 +41,7 @@ export function useAppInit() {
 
   useEffect(() => {
     const transparentWindow = windowStyle === 'transparent' && isMac && !minappShow
-    window.document.body.style.background = transparentWindow
-      ? 'var(--navbar-background-mac)'
-      : 'var(--navbar-background)'
+    window.root.style.background = transparentWindow ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
   }, [windowStyle, minappShow])
 
   useEffect(() => {
