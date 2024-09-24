@@ -99,11 +99,11 @@ const Container = styled.div`
 `
 
 const AvatarImg = styled(Avatar)`
-  width: 32px;
-  height: 32px;
+  width: 31px;
+  height: 31px;
   background-color: var(--color-background-soft);
   margin-bottom: ${isMac ? '12px' : '12px'};
-  margin-top: ${isMac ? '-5px' : '2px'};
+  margin-top: ${isMac ? '0px' : '2px'};
   border: none;
   cursor: pointer;
 `

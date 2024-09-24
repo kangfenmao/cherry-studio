@@ -2,7 +2,7 @@ import { SyncOutlined } from '@ant-design/icons'
 import UserPopup from '@renderer/components/Popups/UserPopup'
 import { FONT_FAMILY } from '@renderer/config/constant'
 import { APP_NAME, AppLogo, isLocalAi } from '@renderer/config/env'
-import { startMinAppById } from '@renderer/config/minapp'
+import { startMinAppById } from '@renderer/config/minapps'
 import { getModelLogo } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -56,6 +56,7 @@ const MessageItem: FC<Props> = ({ message, index, onDeleteMessage }) => {
   const avatarSource = useMemo(() => {
     if (isLocalAi) return AppLogo
     return message.modelId ? getModelLogo(message.modelId) : undefined
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message.modelId, theme])
 
   const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])

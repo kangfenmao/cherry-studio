@@ -1,7 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { Center } from '@renderer/components/Layout'
-import { getAllMinApps } from '@renderer/config/minapp'
+import { getAllMinApps } from '@renderer/config/minapps'
 import { Empty, Input } from 'antd'
 import { isEmpty } from 'lodash'
 import { FC, useMemo, useState } from 'react'

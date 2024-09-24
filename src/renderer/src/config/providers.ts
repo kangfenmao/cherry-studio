@@ -1,16 +1,11 @@
-import BaicuanAppLogo from '@renderer/assets/images/apps/baixiaoying.webp'
-import KimiAppLogo from '@renderer/assets/images/apps/kimi.jpg'
-import YuewenAppLogo from '@renderer/assets/images/apps/yuewen.png'
-import HailuoModelLogo from '@renderer/assets/images/models/hailuo.png'
-import QwenModelLogo from '@renderer/assets/images/models/qwen.png'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
-import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.jpeg'
+import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.png'
 import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
+import BytedanceProviderLogo from '@renderer/assets/images/providers/bytedance.png'
 import DashScopeProviderLogo from '@renderer/assets/images/providers/dashscope.png'
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
-import DoubaoProviderLogo from '@renderer/assets/images/providers/doubao.png'
-import GeminiProviderLogo from '@renderer/assets/images/providers/gemini.png'
-import GithubProviderLogo from '@renderer/assets/images/providers/github.svg'
+import GithubProviderLogo from '@renderer/assets/images/providers/github.png'
+import GoogleProviderLogo from '@renderer/assets/images/providers/google.png'
 import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import MinimaxProviderLogo from '@renderer/assets/images/providers/minimax.png'
@@ -20,8 +15,8 @@ import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
 import OpenAiProviderLogo from '@renderer/assets/images/providers/openai.png'
 import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter.png'
 import SiliconFlowProviderLogo from '@renderer/assets/images/providers/silicon.png'
-import StepFunProviderLogo from '@renderer/assets/images/providers/stepfun.png'
-import YiProviderLogo from '@renderer/assets/images/providers/yi.png'
+import StepProviderLogo from '@renderer/assets/images/providers/step.png'
+import ZeroOneProviderLogo from '@renderer/assets/images/providers/zero-one.png'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
 
 export function getProviderLogo(providerId: string) {
@@ -33,7 +28,7 @@ export function getProviderLogo(providerId: string) {
     case 'deepseek':
       return DeepSeekProviderLogo
     case 'yi':
-      return YiProviderLogo
+      return ZeroOneProviderLogo
     case 'groq':
       return GroqProviderLogo
     case 'zhipu':
@@ -53,11 +48,11 @@ export function getProviderLogo(providerId: string) {
     case 'aihubmix':
       return AiHubMixProviderLogo
     case 'gemini':
-      return GeminiProviderLogo
+      return GoogleProviderLogo
     case 'stepfun':
-      return StepFunProviderLogo
+      return StepProviderLogo
     case 'doubao':
-      return DoubaoProviderLogo
+      return BytedanceProviderLogo
     case 'graphrag-kylin-mountain':
       return GraphRagProviderLogo
     case 'minimax':
@@ -81,12 +76,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.openai.com/api-keys',
       docs: 'https://platform.openai.com/docs',
       models: 'https://platform.openai.com/docs/models'
-    },
-    app: {
-      id: 'openai',
-      name: 'ChatGPT',
-      url: 'https://chatgpt.com/',
-      logo: OpenAiProviderLogo
     }
   },
   gemini: {
@@ -98,12 +87,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://aistudio.google.com/app/apikey',
       docs: 'https://ai.google.dev/gemini-api/docs',
       models: 'https://ai.google.dev/gemini-api/docs/models/gemini'
-    },
-    app: {
-      id: 'gemini',
-      name: 'Gemini',
-      url: 'https://gemini.google.com/',
-      logo: GeminiProviderLogo
     }
   },
   silicon: {
@@ -115,12 +98,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://cloud.siliconflow.cn/account/ak?referrer=clxty1xuy0014lvqwh5z50i88',
       docs: 'https://docs.siliconflow.cn/',
       models: 'https://docs.siliconflow.cn/docs/model-names'
-    },
-    app: {
-      id: 'silicon',
-      name: 'SiliconFlow',
-      url: 'https://cloud.siliconflow.cn/playground/chat',
-      logo: SiliconFlowProviderLogo
     }
   },
   deepseek: {
@@ -132,12 +109,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.deepseek.com/api_keys',
       docs: 'https://platform.deepseek.com/api-docs/',
       models: 'https://platform.deepseek.com/api-docs/'
-    },
-    app: {
-      id: 'deepseek',
-      name: 'DeepSeek',
-      url: 'https://chat.deepseek.com/',
-      logo: DeepSeekProviderLogo
     }
   },
   ocoolai: {
@@ -171,12 +142,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.lingyiwanwu.com/apikeys',
       docs: 'https://platform.lingyiwanwu.com/docs',
       models: 'https://platform.lingyiwanwu.com/docs#%E6%A8%A1%E5%9E%8B'
-    },
-    app: {
-      id: 'yi',
-      name: 'Yi',
-      url: 'https://www.wanzhi.com/',
-      logo: YiProviderLogo
     }
   },
   zhipu: {
@@ -188,12 +153,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://open.bigmodel.cn/usercenter/apikeys',
       docs: 'https://open.bigmodel.cn/dev/howuse/introduction',
       models: 'https://open.bigmodel.cn/modelcenter/square'
-    },
-    app: {
-      id: 'zhipu',
-      name: '智谱',
-      url: 'https://chatglm.cn/main/alltoolsdetail',
-      logo: ZhipuProviderLogo
     }
   },
   moonshot: {
@@ -205,12 +164,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.moonshot.cn/console/api-keys',
       docs: 'https://platform.moonshot.cn/docs/',
       models: 'https://platform.moonshot.cn/docs/intro#%E6%A8%A1%E5%9E%8B%E5%88%97%E8%A1%A8'
-    },
-    app: {
-      id: 'moonshot',
-      name: 'Kimi',
-      url: 'https://kimi.moonshot.cn/',
-      logo: KimiAppLogo
     }
   },
   baichuan: {
@@ -222,12 +175,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.baichuan-ai.com/console/apikey',
       docs: 'https://platform.baichuan-ai.com/docs',
       models: 'https://platform.baichuan-ai.com/price'
-    },
-    app: {
-      id: 'baichuan',
-      name: '百小应',
-      url: 'https://ying.baichuan-ai.com/chat',
-      logo: BaicuanAppLogo
     }
   },
   dashscope: {
@@ -239,12 +186,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://help.aliyun.com/zh/dashscope/developer-reference/acquisition-and-configuration-of-api-key',
       docs: 'https://help.aliyun.com/zh/dashscope/',
       models: 'https://dashscope.console.aliyun.com/model'
-    },
-    app: {
-      id: 'dashscope',
-      name: '通义千问',
-      url: 'https://tongyi.aliyun.com/qianwen/',
-      logo: QwenModelLogo
     }
   },
   stepfun: {
@@ -256,12 +197,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.stepfun.com/interface-key',
       docs: 'https://platform.stepfun.com/docs/overview/concept',
       models: 'https://platform.stepfun.com/docs/llm/text'
-    },
-    app: {
-      id: 'stepfun',
-      name: '跃问',
-      url: 'https://yuewen.cn/chats/new',
-      logo: YuewenAppLogo
     }
   },
   doubao: {
@@ -273,12 +208,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey',
       docs: 'https://www.volcengine.com/docs/82379/1182403',
       models: 'https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint'
-    },
-    app: {
-      id: 'doubao',
-      name: '豆包',
-      url: 'https://www.doubao.com/chat/',
-      logo: DoubaoProviderLogo
     }
   },
   minimax: {
@@ -290,12 +219,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://platform.minimaxi.com/user-center/basic-information/interface-key',
       docs: 'https://platform.minimaxi.com/document/Announcement',
       models: 'https://platform.minimaxi.com/document/Models'
-    },
-    app: {
-      id: 'minimax',
-      name: '海螺',
-      url: 'https://hailuoai.com/',
-      logo: HailuoModelLogo
     }
   },
   'graphrag-kylin-mountain': {
@@ -323,12 +246,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.groq.com/keys',
       docs: 'https://console.groq.com/docs/quickstart',
       models: 'https://console.groq.com/docs/models'
-    },
-    app: {
-      id: 'groq',
-      name: 'Groq',
-      url: 'https://chat.groq.com/',
-      logo: GroqProviderLogo
     }
   },
   ollama: {
@@ -350,12 +267,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.anthropic.com/settings/keys',
       docs: 'https://docs.anthropic.com/en/docs',
       models: 'https://docs.anthropic.com/en/docs/about-claude/models'
-    },
-    app: {
-      id: 'anthropic',
-      name: 'Claude',
-      url: 'https://claude.ai/',
-      logo: AnthropicProviderLogo
     }
   },
   aihubmix: {

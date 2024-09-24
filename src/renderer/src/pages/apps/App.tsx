@@ -1,5 +1,4 @@
 import MinApp from '@renderer/components/MinApp'
-import { useTheme } from '@renderer/context/ThemeProvider'
 import { MinAppType } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
@@ -9,15 +8,13 @@ interface Props {
 }
 
 const App: FC<Props> = ({ app }) => {
-  const { theme } = useTheme()
-
   const onClick = () => {
     MinApp.start(app)
   }
 
   return (
     <Container onClick={onClick}>
-      <AppIcon src={app.logo} style={{ border: theme === 'dark' ? 'none' : '0.5px solid var(--color-border' }} />
+      <AppIcon src={app.logo} style={{ border: app.bodered ? '0.5px solid var(--color-border)' : 'none' }} />
       <AppTitle>{app.name}</AppTitle>
     </Container>
   )

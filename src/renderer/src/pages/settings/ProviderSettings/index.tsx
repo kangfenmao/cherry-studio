@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
-import { getProviderLogo } from '@renderer/config/provider'
+import { getProviderLogo } from '@renderer/config/providers'
 import { useAllProviders, useProviders } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
 import { droppableReorder, generateColorFromChar, getFirstCharacter, uuid } from '@renderer/utils'
@@ -106,15 +106,15 @@ const ProvidersList: FC = () => {
                               className={provider.id === selectedProvider?.id ? 'active' : ''}
                               onClick={() => setSelectedProvider(provider)}>
                               {provider.isSystem && (
-                                <Avatar shape="square" src={getProviderLogo(provider.id)} size={25} />
+                                <ProviderLogo shape="square" src={getProviderLogo(provider.id)} size={25} />
                               )}
                               {!provider.isSystem && (
-                                <Avatar
+                                <ProviderLogo
                                   size={25}
                                   shape="square"
                                   style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 25 }}>
                                   {getFirstCharacter(provider.name)}
-                                </Avatar>
+                                </ProviderLogo>
                               )}
                               <ProviderItemName>
                                 {provider.isSystem ? t(`provider.${provider.id}`) : provider.name}
@@ -188,6 +188,10 @@ const ProviderListItem = styled.div`
     background: var(--color-background-mute);
     font-weight: bold !important;
   }
+`
+
+const ProviderLogo = styled(Avatar)`
+  border: 0.5px solid var(--color-border);
 `
 
 const ProviderItemName = styled.div`

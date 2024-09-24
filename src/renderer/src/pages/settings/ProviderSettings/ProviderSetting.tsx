@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { getModelLogo, isVisionModel } from '@renderer/config/models'
-import { PROVIDER_CONFIG } from '@renderer/config/provider'
+import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { checkApi } from '@renderer/services/api'
