@@ -413,6 +413,26 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '26': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'ocoolai',
+            name: 'ocoolAI',
+            apiKey: '',
+            apiHost: 'https://one.ooo.cool',
+            models: [],
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 }
 

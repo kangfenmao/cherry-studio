@@ -78,6 +78,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'ocoolai',
+      name: 'ocoolAI',
+      apiKey: '',
+      apiHost: 'https://one.ooo.cool',
+      models: [],
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'github',
       name: 'Github Models',
       apiKey: '',

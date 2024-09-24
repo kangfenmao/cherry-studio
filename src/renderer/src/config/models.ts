@@ -260,6 +260,14 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'DeepSeek Coder'
     }
   ],
+  ocoolai: [
+    {
+      id: 'gpt-4o',
+      provider: 'ocoolai',
+      name: 'OpenAI GPT-4o',
+      group: 'OpenAI'
+    }
+  ],
   github: [
     {
       id: 'gpt-4o',

@@ -159,7 +159,8 @@ const resources = {
         doubao: 'Doubao',
         minimax: 'MiniMax',
         'graphrag-kylin-mountain': 'GraphRAG',
-        github: 'GitHub Models'
+        github: 'GitHub Models',
+        ocoolai: 'ocoolAI'
       },
       settings: {
         title: 'Settings',
@@ -440,7 +441,8 @@ const resources = {
         doubao: '豆包',
         minimax: 'MiniMax',
         'graphrag-kylin-mountain': 'GraphRAG',
-        github: 'GitHub Models'
+        github: 'GitHub Models',
+        ocoolai: 'ocoolAI'
       },
       settings: {
         title: '设置',

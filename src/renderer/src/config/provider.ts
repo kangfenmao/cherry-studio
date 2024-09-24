@@ -15,6 +15,7 @@ import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.pn
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import MinimaxProviderLogo from '@renderer/assets/images/providers/minimax.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.png'
+import OcoolAiProviderLogo from '@renderer/assets/images/providers/ocoolai.png'
 import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
 import OpenAiProviderLogo from '@renderer/assets/images/providers/openai.png'
 import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter.png'
@@ -63,6 +64,8 @@ export function getProviderLogo(providerId: string) {
       return MinimaxProviderLogo
     case 'github':
       return GithubProviderLogo
+    case 'ocoolai':
+      return OcoolAiProviderLogo
     default:
       return undefined
   }
@@ -135,6 +138,17 @@ export const PROVIDER_CONFIG = {
       name: 'DeepSeek',
       url: 'https://chat.deepseek.com/',
       logo: DeepSeekProviderLogo
+    }
+  },
+  ocoolai: {
+    api: {
+      url: 'https://one.ooo.cool'
+    },
+    websites: {
+      official: 'https://ocoolai.com/',
+      apiKey: 'https://one.ocoolai.com/token',
+      docs: 'https://docs.ooo.cool/',
+      models: 'https://docs.ooo.cool/guides/jiage/'
     }
   },
   github: {
