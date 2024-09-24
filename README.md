@@ -64,6 +64,13 @@ $ yarn build:linux
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
 
+### Contributors
+
+<a href="https://github.com/kangfenmao/cherry-studio/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kangfenmao/cherry-studio" />
+</a>
+
 # 📃 License
 
 [LICENSE](./LICENSE)
+
