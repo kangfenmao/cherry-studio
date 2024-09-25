@@ -130,10 +130,10 @@ export default class OpenAIProvider extends BaseProvider {
     const stream = await this.sdk.chat.completions.create({
       model: model.id,
       messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
-      stream: isSupportStreamOutput,
       temperature: assistant?.settings?.temperature,
       max_tokens: maxTokens,
-      keep_alive: this.keepAliveTime
+      keep_alive: this.keepAliveTime,
+      stream: isSupportStreamOutput
     })
 
     if (!isSupportStreamOutput) {

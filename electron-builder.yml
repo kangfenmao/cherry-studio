@@ -65,9 +65,15 @@ afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     本次更新：
+      增加流式输出开关
+      Windows 安装程序支持修改安装位置了
+      服务商和小程序图标更新
+      增加 ocoolAI 服务商
+      小程序增加 HuggingChat
+      Gemini 模型回复安全级别关闭
+      修复 macOS 切换窗口透明不生效问题
+      修复消息回复完成界面会自动滚动到最底部的问题
+    近期更新：
       全新应用图标
       模型图标更新
-    近期更新：
-      支持话题导出为图片
-      支持粘贴图片和文件到聊天输入框
-      支持将对话移动到其他智能体了
+      支持 Linux ARM 架构

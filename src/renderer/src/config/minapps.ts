@@ -5,6 +5,7 @@ import BaicuanAppLogo from '@renderer/assets/images/apps/baixiaoying.webp'
 import DevvAppLogo from '@renderer/assets/images/apps/devv.png'
 import DoubaoAppLogo from '@renderer/assets/images/apps/doubao.png'
 import GeminiAppLogo from '@renderer/assets/images/apps/gemini.png'
+import HuggingChatLogo from '@renderer/assets/images/apps/huggingchat.svg'
 import KimiAppLogo from '@renderer/assets/images/apps/kimi.jpg'
 import MetasoAppLogo from '@renderer/assets/images/apps/metaso.webp'
 import PerplexityAppLogo from '@renderer/assets/images/apps/perplexity.webp'
@@ -190,6 +191,13 @@ const _apps: MinAppType[] = [
     name: '知乎直答',
     logo: ZhihuAppLogo,
     url: 'https://zhida.zhihu.com/',
+    bodered: true
+  },
+  {
+    id: 'hugging-chat',
+    name: 'HuggingChat',
+    logo: HuggingChatLogo,
+    url: 'https://huggingface.co/chat/',
     bodered: true
   }
 ]

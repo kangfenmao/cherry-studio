@@ -72,15 +72,16 @@ export default class AnthropicProvider extends BaseProvider {
       userMessages.shift()
     }
 
+    const body: MessageCreateParamsNonStreaming = {
+      model: model.id,
+      messages: userMessages,
+      max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
+      temperature: assistant?.settings?.temperature,
+      system: assistant.prompt
+    }
+
     if (!streamOutput) {
-      const message = await this.sdk.messages.create({
-        model: model.id,
-        messages: userMessages,
-        max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
-        temperature: assistant?.settings?.temperature,
-        system: assistant.prompt,
-        stream: false
-      })
+      const message = await this.sdk.messages.create({ ...body, stream: false })
       return onChunk({
         text: message.content[0].type === 'text' ? message.content[0].text : '',
         usage: message.usage
@@ -89,14 +90,7 @@ export default class AnthropicProvider extends BaseProvider {
 
     return new Promise<void>((resolve, reject) => {
       const stream = this.sdk.messages
-        .stream({
-          model: model.id,
-          messages: userMessages,
-          max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
-          temperature: assistant?.settings?.temperature,
-          system: assistant.prompt,
-          stream: true
-        })
+        .stream({ ...body, stream: true })
         .on('text', (text) => {
           if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
             stream.controller.abort()
