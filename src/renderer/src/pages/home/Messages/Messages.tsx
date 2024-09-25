@@ -173,9 +173,9 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     })
   }, [topic.id])
 
-  useEffect(() => {
-    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 0)
-  }, [messages])
+  // useEffect(() => {
+  //   setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 0)
+  // }, [messages])
 
   useEffect(() => {
     runAsyncFunction(async () => {
