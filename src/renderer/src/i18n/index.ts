@@ -116,6 +116,9 @@ const resources = {
         abbr: 'Assistant',
         search: 'Search assistants...'
       },
+      model: {
+        stream_output: 'Stream Output'
+      },
       files: {
         title: 'Files',
         file: 'File',
@@ -397,6 +400,9 @@ const resources = {
         title: '助手',
         abbr: '助手',
         search: '搜索助手'
+      },
+      model: {
+        stream_output: '流式输出'
       },
       files: {
         title: '文件',

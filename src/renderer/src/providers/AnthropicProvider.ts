@@ -55,7 +55,7 @@ export default class AnthropicProvider extends BaseProvider {
   public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
-    const { contextCount, maxTokens } = getAssistantSettings(assistant)
+    const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
     const userMessagesParams: MessageParam[] = []
     const _messages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 2)))
@@ -70,6 +70,21 @@ export default class AnthropicProvider extends BaseProvider {
 
     if (first(userMessages)?.role === 'assistant') {
       userMessages.shift()
+    }
+
+    if (!streamOutput) {
+      const message = await this.sdk.messages.create({
+        model: model.id,
+        messages: userMessages,
+        max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
+        temperature: assistant?.settings?.temperature,
+        system: assistant.prompt,
+        stream: false
+      })
+      return onChunk({
+        text: message.content[0].type === 'text' ? message.content[0].text : '',
+        usage: message.usage
+      })
     }
 
     return new Promise<void>((resolve, reject) => {

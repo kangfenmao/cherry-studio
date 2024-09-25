@@ -57,7 +57,7 @@ export default class GeminiProvider extends BaseProvider {
   public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
-    const { contextCount, maxTokens } = getAssistantSettings(assistant)
+    const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
     const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
     onFilterMessages(userMessages)
@@ -78,19 +78,32 @@ export default class GeminiProvider extends BaseProvider {
         temperature: assistant?.settings?.temperature
       },
       safetySettings: [
-        { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+        { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
         {
           category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH
+          threshold: HarmBlockThreshold.BLOCK_NONE
         },
-        { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
-        { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH }
+        { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+        { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE }
       ]
     })
 
     const chat = geminiModel.startChat({ history })
-
     const messageContents = await this.getMessageContents(userLastMessage!)
+
+    if (!streamOutput) {
+      const { response } = await chat.sendMessage(messageContents.parts)
+      onChunk({
+        text: response.candidates?.[0].content.parts[0].text,
+        usage: {
+          prompt_tokens: response.usageMetadata?.promptTokenCount || 0,
+          completion_tokens: response.usageMetadata?.candidatesTokenCount || 0,
+          total_tokens: response.usageMetadata?.totalTokenCount || 0
+        }
+      })
+      return
+    }
+
     const userMessagesStream = await chat.sendMessageStream(messageContents.parts)
 
     for await (const chunk of userMessagesStream.stream) {

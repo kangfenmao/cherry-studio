@@ -29,6 +29,7 @@ const SettingsTab: FC<Props> = (props) => {
   const [contextCount, setConextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
+  const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const [fontSizeValue, setFontSizeValue] = useState(fontSize)
   const { t } = useTranslation()
 
@@ -48,7 +49,8 @@ const SettingsTab: FC<Props> = (props) => {
       temperature: settings.temperature ?? temperature,
       contextCount: settings.contextCount ?? contextCount,
       enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
-      maxTokens: settings.maxTokens ?? maxTokens
+      maxTokens: settings.maxTokens ?? maxTokens,
+      streamOutput: settings.streamOutput ?? streamOutput
     })
   }
 
@@ -80,7 +82,8 @@ const SettingsTab: FC<Props> = (props) => {
         temperature: DEFAULT_TEMPERATURE,
         contextCount: DEFAULT_CONEXTCOUNT,
         enableMaxTokens: false,
-        maxTokens: DEFAULT_MAX_TOKENS
+        maxTokens: DEFAULT_MAX_TOKENS,
+        streamOutput: true
       }
     })
   }
@@ -90,6 +93,7 @@ const SettingsTab: FC<Props> = (props) => {
     setConextCount(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
     setEnableMaxTokens(assistant?.settings?.enableMaxTokens ?? false)
     setMaxTokens(assistant?.settings?.maxTokens ?? DEFAULT_MAX_TOKENS)
+    setStreamOutput(assistant?.settings?.streamOutput ?? true)
   }, [assistant])
 
   return (
@@ -137,6 +141,18 @@ const SettingsTab: FC<Props> = (props) => {
           />
         </Col>
       </Row>
+      <SettingRow>
+        <SettingRowTitleSmall>{t('model.stream_output')}</SettingRowTitleSmall>
+        <Switch
+          size="small"
+          checked={streamOutput}
+          onChange={(checked) => {
+            setStreamOutput(checked)
+            onUpdateAssistantSettings({ streamOutput: checked })
+          }}
+        />
+      </SettingRow>
+      <SettingDivider />
       <Row align="middle" justify="space-between">
         <HStack alignItems="center">
           <Label>{t('chat.settings.max_tokens')}</Label>

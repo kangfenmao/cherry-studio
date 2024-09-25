@@ -80,7 +80,8 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
     contextCount: contextCount === 20 ? 100000 : contextCount,
     temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE,
     enableMaxTokens: assistant?.settings?.enableMaxTokens ?? false,
-    maxTokens: getAssistantMaxTokens()
+    maxTokens: getAssistantMaxTokens(),
+    streamOutput: assistant?.settings?.streamOutput ?? true
   }
 }
 

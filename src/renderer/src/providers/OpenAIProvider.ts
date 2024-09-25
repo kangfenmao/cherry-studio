@@ -28,7 +28,7 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   private isSupportStreamOutput(modelId: string): boolean {
-    if (this.provider.id === 'openai' && modelId.includes('o1-')) {
+    if (modelId.includes('o1-')) {
       return false
     }
     return true
@@ -112,7 +112,7 @@ export default class OpenAIProvider extends BaseProvider {
   async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
-    const { contextCount, maxTokens } = getAssistantSettings(assistant)
+    const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
     const userMessages: ChatCompletionMessageParam[] = []
@@ -124,7 +124,7 @@ export default class OpenAIProvider extends BaseProvider {
       userMessages.push(await this.getMessageParam(message, model))
     }
 
-    const isSupportStreamOutput = this.isSupportStreamOutput(model.id)
+    const isSupportStreamOutput = streamOutput && this.isSupportStreamOutput(model.id)
 
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({

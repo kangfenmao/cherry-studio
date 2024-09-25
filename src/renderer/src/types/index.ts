@@ -16,6 +16,7 @@ export type AssistantSettings = {
   temperature: number
   maxTokens: number | undefined
   enableMaxTokens: boolean
+  streamOutput: boolean
 }
 
 export type Message = {

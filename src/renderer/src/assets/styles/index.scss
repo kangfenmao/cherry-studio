@@ -41,7 +41,7 @@
   --color-hover: rgba(40, 40, 40, 1);
   --color-active: rgba(55, 55, 55, 1);
 
-  --navbar-background-mac: rgba(30, 30, 30, 0.4);
+  --navbar-background-mac: rgba(30, 30, 30, 0.6);
   --navbar-background: rgba(30, 30, 30);
 
   --navbar-height: 40px;
@@ -92,7 +92,7 @@ body[theme-mode='light'] {
   --color-hover: var(--color-white-mute);
   --color-active: var(--color-white-soft);
 
-  --navbar-background-mac: rgba(255, 255, 255, 0.4);
+  --navbar-background-mac: rgba(255, 255, 255, 0.6);
   --navbar-background: rgba(255, 255, 255);
 }
 

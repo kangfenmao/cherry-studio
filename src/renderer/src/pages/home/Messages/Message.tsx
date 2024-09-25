@@ -27,10 +27,11 @@ interface Props {
   message: Message
   index?: number
   total?: number
+  lastMessage?: boolean
   onDeleteMessage?: (message: Message) => void
 }
 
-const MessageItem: FC<Props> = ({ message, index, onDeleteMessage }) => {
+const MessageItem: FC<Props> = ({ message, index, lastMessage, onDeleteMessage }) => {
   const avatar = useAvatar()
   const { t } = useTranslation()
   const { assistant, setModel } = useAssistant(message.assistantId)
@@ -38,7 +39,7 @@ const MessageItem: FC<Props> = ({ message, index, onDeleteMessage }) => {
   const { userName, showMessageDivider, messageFont, fontSize } = useSettings()
   const { theme } = useTheme()
 
-  const isLastMessage = index === 0
+  const isLastMessage = lastMessage || index === 0
   const isAssistantMessage = message.role === 'assistant'
 
   const getUserName = useCallback(() => {
@@ -106,18 +107,20 @@ const MessageItem: FC<Props> = ({ message, index, onDeleteMessage }) => {
       </MessageHeader>
       <MessageContentContainer style={{ fontFamily, fontSize }}>
         <MessageContent message={message} />
-        <MessageFooter style={{ border: messageBorder, flexDirection: isLastMessage ? 'row-reverse' : undefined }}>
-          <MessgeTokens message={message} />
-          <MessageMenubar
-            message={message}
-            model={model}
-            index={index}
-            isLastMessage={isLastMessage}
-            isAssistantMessage={isAssistantMessage}
-            setModel={setModel}
-            onDeleteMessage={onDeleteMessage}
-          />
-        </MessageFooter>
+        {!lastMessage && (
+          <MessageFooter style={{ border: messageBorder, flexDirection: isLastMessage ? 'row-reverse' : undefined }}>
+            <MessgeTokens message={message} />
+            <MessageMenubar
+              message={message}
+              model={model}
+              index={index}
+              isLastMessage={isLastMessage}
+              isAssistantMessage={isAssistantMessage}
+              setModel={setModel}
+              onDeleteMessage={onDeleteMessage}
+            />
+          </MessageFooter>
+        )}
       </MessageContentContainer>
     </MessageContainer>
   )

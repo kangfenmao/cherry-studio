@@ -189,7 +189,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   return (
     <Container id="messages" key={assistant.id} ref={containerRef}>
       <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
-      {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} />}
+      {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
       {reverse([...messages]).map((message, index) => (
         <MessageItem key={message.id} message={message} index={index} onDeleteMessage={onDeleteMessage} />
       ))}
