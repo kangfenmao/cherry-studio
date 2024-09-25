@@ -22,7 +22,7 @@ const MessageAttachments: FC<Props> = ({ message }) => {
   }
 
   return (
-    <Container style={{ marginTop: 2, marginBottom: 8 }}>
+    <Container style={{ marginTop: 2, marginBottom: 8 }} className="message-attachments">
       <Upload
         listType="text"
         disabled

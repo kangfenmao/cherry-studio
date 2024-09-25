@@ -1,0 +1,73 @@
+#inputbar .ant-input {
+  resize: none;
+}
+
+.chat-nav-dropdown {
+  .ant-dropdown-menu {
+    padding-bottom: 12px;
+  }
+}
+
+.ant-segmented-group {
+  gap: 4px;
+}
+
+.minapp-drawer {
+  max-width: calc(100vw - var(--sidebar-width));
+  .ant-drawer-content-wrapper {
+    box-shadow: none;
+  }
+  .ant-drawer-header {
+    position: absolute;
+    -webkit-app-region: drag;
+    min-height: calc(var(--navbar-height) + 0.5px);
+    width: calc(100vw - var(--sidebar-width));
+    margin-top: -0.5px;
+    border-bottom: none;
+  }
+  .ant-drawer-body {
+    padding: 0;
+    margin-top: var(--navbar-height);
+    overflow: hidden;
+    @extend #content-container;
+  }
+  .minapp-mask {
+    background-color: transparent !important;
+  }
+}
+
+.ant-drawer-header {
+  -webkit-app-region: no-drag;
+}
+
+.segmented-tab {
+  .ant-segmented-item-selected {
+    background-color: var(--color-background-mute);
+  }
+  .ant-segmented-item-label {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 13px;
+  }
+  .iconfont {
+    font-size: 13px;
+    margin-left: -2px;
+  }
+  .anticon-setting {
+    font-size: 12px;
+  }
+  .icon-business-smart-assistant {
+    margin-right: -2px;
+  }
+  .ant-segmented-item-icon + * {
+    margin-left: 4px;
+  }
+}
+
+.message-attachments {
+  .ant-upload-list-item:hover {
+    background-color: initial !important;
+  }
+}
