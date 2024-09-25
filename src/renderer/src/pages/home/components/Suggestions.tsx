@@ -67,7 +67,7 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
   }
 
   if (suggestions.length === 0) {
-    return <Container style={{ paddingBottom: 10 }} />
+    return null
   }
 
   return (

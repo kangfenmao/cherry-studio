@@ -73,6 +73,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         await onSendMessage(msg)
+        containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' })
         fetchChatCompletion({
           assistant,
           messages: [...messages, msg],
@@ -173,10 +174,6 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     })
   }, [topic.id])
 
-  // useEffect(() => {
-  //   setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 0)
-  // }, [messages])
-
   useEffect(() => {
     runAsyncFunction(async () => {
       EventEmitter.emit(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, {
@@ -207,6 +204,7 @@ const Container = styled.div`
   max-height: calc(100vh - var(--input-bar-height) - var(--navbar-height));
   padding: 10px 0;
   background-color: var(--color-background);
+  padding-bottom: 20px;
 `
 
 export default Messages
