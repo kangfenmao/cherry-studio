@@ -113,10 +113,10 @@ export const PROVIDER_CONFIG = {
   },
   ocoolai: {
     api: {
-      url: 'https://one.ooo.cool'
+      url: 'https://api.ocoolai.com'
     },
     websites: {
-      official: 'https://ocoolai.com/',
+      official: 'https://one.ocoolai.com/',
       apiKey: 'https://one.ocoolai.com/token',
       docs: 'https://docs.ooo.cool/',
       models: 'https://docs.ooo.cool/guides/jiage/'
