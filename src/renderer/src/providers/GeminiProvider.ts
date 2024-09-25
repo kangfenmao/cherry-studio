@@ -1,4 +1,12 @@
-import { Content, GoogleGenerativeAI, InlineDataPart, Part, TextPart } from '@google/generative-ai'
+import {
+  Content,
+  GoogleGenerativeAI,
+  HarmBlockThreshold,
+  HarmCategory,
+  InlineDataPart,
+  Part,
+  TextPart
+} from '@google/generative-ai'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages, filterMessages } from '@renderer/services/messages'
@@ -68,10 +76,20 @@ export default class GeminiProvider extends BaseProvider {
       generationConfig: {
         maxOutputTokens: maxTokens,
         temperature: assistant?.settings?.temperature
-      }
+      },
+      safetySettings: [
+        { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+        {
+          category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+          threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH
+        },
+        { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+        { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH }
+      ]
     })
 
     const chat = geminiModel.startChat({ history })
+
     const messageContents = await this.getMessageContents(userLastMessage!)
     const userMessagesStream = await chat.sendMessageStream(messageContents.parts)
 
