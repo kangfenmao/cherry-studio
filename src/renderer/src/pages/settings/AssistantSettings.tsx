@@ -28,7 +28,8 @@ const AssistantSettings: FC = () => {
         temperature: settings.temperature ?? temperature,
         contextCount: settings.contextCount ?? contextCount,
         enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
-        maxTokens: settings.maxTokens ?? maxTokens
+        maxTokens: settings.maxTokens ?? maxTokens,
+        streamOutput: settings.streamOutput ?? true
       }
     })
   }
@@ -63,7 +64,8 @@ const AssistantSettings: FC = () => {
         temperature: DEFAULT_TEMPERATURE,
         contextCount: DEFAULT_CONEXTCOUNT,
         enableMaxTokens: false,
-        maxTokens: DEFAULT_MAX_TOKENS
+        maxTokens: DEFAULT_MAX_TOKENS,
+        streamOutput: true
       }
     })
   }
