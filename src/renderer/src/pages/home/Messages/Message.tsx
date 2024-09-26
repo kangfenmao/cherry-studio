@@ -28,10 +28,11 @@ interface Props {
   index?: number
   total?: number
   lastMessage?: boolean
+  onEditMessage?: (message: Message) => void
   onDeleteMessage?: (message: Message) => void
 }
 
-const MessageItem: FC<Props> = ({ message, index, lastMessage, onDeleteMessage }) => {
+const MessageItem: FC<Props> = ({ message, index, lastMessage, onEditMessage, onDeleteMessage }) => {
   const avatar = useAvatar()
   const { t } = useTranslation()
   const { assistant, setModel } = useAssistant(message.assistantId)
@@ -117,6 +118,7 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, onDeleteMessage }
               isLastMessage={isLastMessage}
               isAssistantMessage={isAssistantMessage}
               setModel={setModel}
+              onEditMessage={onEditMessage}
               onDeleteMessage={onDeleteMessage}
             />
           </MessageFooter>
@@ -126,7 +128,10 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, onDeleteMessage }
   )
 }
 
-const MessageContent: React.FC<{ message: Message; model?: Model }> = ({ message, model }) => {
+const MessageContent: React.FC<{
+  message: Message
+  model?: Model
+}> = ({ message, model }) => {
   const { t } = useTranslation()
 
   if (message.status === 'sending') {

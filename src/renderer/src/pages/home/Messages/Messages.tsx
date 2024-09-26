@@ -69,6 +69,15 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     [messages, topic.id]
   )
 
+  const onEditMessage = useCallback(
+    (message: Message) => {
+      const _messages = messages.map((m) => (m.id === message.id ? message : m))
+      setMessages(_messages)
+      db.topics.update(topic.id, { messages: _messages })
+    },
+    [messages, topic.id]
+  )
+
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
@@ -199,7 +208,13 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
       {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
       {reverse([...messages]).map((message, index) => (
-        <MessageItem key={message.id} message={message} index={index} onDeleteMessage={onDeleteMessage} />
+        <MessageItem
+          key={message.id}
+          message={message}
+          index={index}
+          onEditMessage={onEditMessage}
+          onDeleteMessage={onDeleteMessage}
+        />
       ))}
       <Prompt assistant={assistant} key={assistant.prompt} />
     </Container>

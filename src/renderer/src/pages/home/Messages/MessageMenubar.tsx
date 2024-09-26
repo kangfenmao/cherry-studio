@@ -8,6 +8,7 @@ import {
   SaveOutlined,
   SyncOutlined
 } from '@ant-design/icons'
+import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
 import { removeTrailingDoubleSpaces } from '@renderer/utils'
@@ -25,18 +26,17 @@ interface Props {
   isLastMessage: boolean
   isAssistantMessage: boolean
   setModel: (model: Model) => void
+  onEditMessage?: (message: Message) => void
   onDeleteMessage?: (message: Message) => void
 }
 
 const MessageMenubar: FC<Props> = (props) => {
-  const { message, index, model, isLastMessage, isAssistantMessage, setModel, onDeleteMessage } = props
+  const { message, index, model, isLastMessage, isAssistantMessage, setModel, onEditMessage, onDeleteMessage } = props
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
 
   const isUserMessage = message.role === 'user'
   const canRegenerate = isLastMessage && isAssistantMessage
-
-  const onEdit = useCallback(() => EventEmitter.emit(EVENT_NAMES.EDIT_MESSAGE, message), [message])
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(removeTrailingDoubleSpaces(message.content))
@@ -57,6 +57,11 @@ const MessageMenubar: FC<Props> = (props) => {
     EventEmitter.emit(EVENT_NAMES.NEW_BRANCH, index)
   }, [index])
 
+  const onEdit = useCallback(async () => {
+    const editedText = await TextEditPopup.show({ text: message.content })
+    editedText && onEditMessage?.({ ...message, content: editedText })
+  }, [message, onEditMessage])
+
   const dropdownItems = useMemo(
     () => [
       {
@@ -67,9 +72,15 @@ const MessageMenubar: FC<Props> = (props) => {
           const fileName = message.createdAt + '.md'
           window.api.file.save(fileName, message.content)
         }
+      },
+      {
+        label: t('common.edit'),
+        key: 'edit',
+        icon: <EditOutlined />,
+        onClick: onEdit
       }
     ],
-    [t, message]
+    [message.content, message.createdAt, onEdit, t]
   )
 
   return (

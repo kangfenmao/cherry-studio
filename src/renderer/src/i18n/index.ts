@@ -309,6 +309,7 @@ const resources = {
         regenerate: '重新生成',
         provider: '提供商',
         you: '用户',
+        save: '保存',
         footnote: '引用内容',
         select: '选择',
         search: '搜索',
