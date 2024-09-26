@@ -1,4 +1,3 @@
-import { SyncOutlined } from '@ant-design/icons'
 import UserPopup from '@renderer/components/Popups/UserPopup'
 import { FONT_FAMILY } from '@renderer/config/constant'
 import { APP_NAME, AppLogo, isLocalAi } from '@renderer/config/env'
@@ -9,17 +8,16 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useModel } from '@renderer/hooks/useModel'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { Message, Model } from '@renderer/types'
-import { firstLetter, getBriefInfo, removeLeadingEmoji } from '@renderer/utils'
-import { Alert, Avatar, Divider } from 'antd'
+import { Message } from '@renderer/types'
+import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
+import { Avatar, Divider } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
 import { FC, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import Markdown from '../Markdown/Markdown'
-import MessageAttachments from './MessageAttachments'
+import MessageContent from './MessageContent'
 import MessageMenubar from './MessageMenubar'
 import MessgeTokens from './MessageTokens'
 
@@ -128,44 +126,6 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, onEditMessage, on
   )
 }
 
-const MessageContent: React.FC<{
-  message: Message
-  model?: Model
-}> = ({ message, model }) => {
-  const { t } = useTranslation()
-
-  if (message.status === 'sending') {
-    return (
-      <MessageContentLoading>
-        <SyncOutlined spin size={24} />
-      </MessageContentLoading>
-    )
-  }
-
-  if (message.status === 'error') {
-    return (
-      <Alert
-        message={<div style={{ fontSize: 14 }}>{t('error.chat.response')}</div>}
-        description={<Markdown message={message} />}
-        type="error"
-        style={{ marginBottom: 15, padding: 10, fontSize: 12 }}
-      />
-    )
-  }
-
-  if (message.type === '@' && model) {
-    const content = `[@${model.name}](#)  ${getBriefInfo(message.content)}`
-    return <Markdown message={{ ...message, content }} />
-  }
-
-  return (
-    <>
-      <Markdown message={message} />
-      <MessageAttachments message={message} />
-    </>
-  )
-}
-
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -234,13 +194,6 @@ const MessageFooter = styled.div`
   padding: 2px 0;
   margin: 2px 0 8px 0;
   border-top: 0.5px dashed var(--color-border);
-`
-
-const MessageContentLoading = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 32px;
 `
 
 export default memo(MessageItem)
