@@ -19,11 +19,6 @@ async function getFileContent(file: FileType) {
 
   const fileId = file.id + file.ext
 
-  if (file.type === FileTypes.IMAGE) {
-    const data = await window.api.file.base64Image(fileId)
-    return data.data
-  }
-
   if (file.type === FileTypes.TEXT) {
     return await window.api.file.read(fileId)
   }
@@ -60,18 +55,31 @@ export function estimateTextTokens(text: string) {
   return usedTokens - 7
 }
 
+export function estimateImageTokens(file: FileType) {
+  return Math.floor(file.size / 100)
+}
+
 export async function estimateMessageUsage(message: Message): Promise<CompletionUsage> {
   const { usedTokens, promptUsedTokens, completionUsedTokens } = new GPTTokens({
     model: 'gpt-4o',
     messages: await getMessageParam(message)
   })
 
-  const hasImage = message.files?.some((f) => f.type === FileTypes.IMAGE)
+  let imageTokens = 0
+
+  if (message.files) {
+    const images = message.files.filter((f) => f.type === FileTypes.IMAGE)
+    if (images.length > 0) {
+      for (const image of images) {
+        imageTokens = estimateImageTokens(image) + imageTokens
+      }
+    }
+  }
 
   return {
     prompt_tokens: promptUsedTokens,
     completion_tokens: completionUsedTokens,
-    total_tokens: hasImage ? Math.floor(usedTokens / 80) : usedTokens - 7
+    total_tokens: usedTokens + imageTokens - 7
   }
 }
 

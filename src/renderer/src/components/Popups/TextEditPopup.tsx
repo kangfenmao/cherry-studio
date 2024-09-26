@@ -65,7 +65,7 @@ const PopupContainer: React.FC<Props> = ({ text, textareaProps, modalProps, reso
       centered>
       <TextArea
         ref={textareaRef}
-        rows={4}
+        rows={2}
         autoFocus
         {...textareaProps}
         value={textValue}
