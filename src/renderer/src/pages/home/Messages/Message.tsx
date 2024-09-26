@@ -9,8 +9,8 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useModel } from '@renderer/hooks/useModel'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { Message } from '@renderer/types'
-import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
+import { Message, Model } from '@renderer/types'
+import { firstLetter, getBriefInfo, removeLeadingEmoji } from '@renderer/utils'
 import { Alert, Avatar, Divider } from 'antd'
 import dayjs from 'dayjs'
 import { upperFirst } from 'lodash'
@@ -106,7 +106,7 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, onDeleteMessage }
         </AvatarWrapper>
       </MessageHeader>
       <MessageContentContainer style={{ fontFamily, fontSize }}>
-        <MessageContent message={message} />
+        <MessageContent message={message} model={model} />
         {!lastMessage && (
           <MessageFooter style={{ border: messageBorder, flexDirection: isLastMessage ? 'row-reverse' : undefined }}>
             <MessgeTokens message={message} />
@@ -126,7 +126,7 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, onDeleteMessage }
   )
 }
 
-const MessageContent: React.FC<{ message: Message }> = ({ message }) => {
+const MessageContent: React.FC<{ message: Message; model?: Model }> = ({ message, model }) => {
   const { t } = useTranslation()
 
   if (message.status === 'sending') {
@@ -146,6 +146,11 @@ const MessageContent: React.FC<{ message: Message }> = ({ message }) => {
         style={{ marginBottom: 15, padding: 10, fontSize: 12 }}
       />
     )
+  }
+
+  if (message.type === '@' && model) {
+    const content = `[@${model.name}](#)  ${getBriefInfo(message.content)}`
+    return <Markdown message={{ ...message, content }} />
   }
 
   return (

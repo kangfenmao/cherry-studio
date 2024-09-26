@@ -9,10 +9,10 @@ import {
 } from '@google/generative-ai'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
-import { filterContextMessages, filterMessages } from '@renderer/services/messages'
+import { filterContextMessages } from '@renderer/services/messages'
 import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import axios from 'axios'
-import { isEmpty, takeRight } from 'lodash'
+import { first, isEmpty, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import BaseProvider from './BaseProvider'
@@ -59,8 +59,12 @@ export default class GeminiProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
-    const userMessages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
+    const userMessages = filterContextMessages(takeRight(messages, contextCount + 2))
     onFilterMessages(userMessages)
+
+    if (first(userMessages)?.role === 'assistant') {
+      userMessages.shift()
+    }
 
     const userLastMessage = userMessages.pop()
 

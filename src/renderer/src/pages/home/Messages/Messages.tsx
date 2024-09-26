@@ -7,7 +7,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { deleteMessageFiles, filterMessages, getContextCount } from '@renderer/services/messages'
 import { estimateHistoryTokens, estimateMessageUsage } from '@renderer/services/tokens'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
-import { captureScrollableDiv, getBriefInfo, runAsyncFunction, uuid } from '@renderer/utils'
+import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import { flatten, last, reverse, take } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
@@ -73,7 +73,14 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         await onSendMessage(msg)
-        containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' })
+
+        // Scroll to bottom
+        setTimeout(
+          () => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }),
+          10
+        )
+
+        // Fetch completion
         fetchChatCompletion({
           assistant,
           messages: [...messages, msg],
@@ -89,8 +96,12 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async (model: Model) => {
         const lastUserMessage = last(filterMessages(messages).filter((m) => m.role === 'user'))
         if (lastUserMessage) {
-          const content = `[@${model.name}](#)  ${getBriefInfo(lastUserMessage.content)}`
-          onSendMessage({ ...lastUserMessage, id: uuid(), type: '@', content })
+          onSendMessage({
+            ...lastUserMessage,
+            id: uuid(),
+            type: '@',
+            modelId: model.id
+          })
           fetchChatCompletion({
             assistant,
             topic,

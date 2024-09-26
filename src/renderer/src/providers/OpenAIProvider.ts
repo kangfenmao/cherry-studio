@@ -2,7 +2,7 @@ import { isLocalAi } from '@renderer/config/env'
 import { isVisionModel } from '@renderer/config/models'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
-import { filterContextMessages, filterMessages } from '@renderer/services/messages'
+import { filterContextMessages } from '@renderer/services/messages'
 import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
 import { first, takeRight } from 'lodash'
@@ -117,7 +117,7 @@ export default class OpenAIProvider extends BaseProvider {
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
     const userMessages: ChatCompletionMessageParam[] = []
 
-    const _messages = filterMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
+    const _messages = filterContextMessages(takeRight(messages, contextCount + 1))
     onFilterMessages(_messages)
 
     for (const message of _messages) {
