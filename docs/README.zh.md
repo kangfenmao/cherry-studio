@@ -89,7 +89,7 @@ $ yarn build:linux
 
 # 赞助
 
-[微信赞赏码](docs/Sponsor.md)
+[微信赞赏码](docs/sponsor.md)
 
 # 📃 许可证
 
