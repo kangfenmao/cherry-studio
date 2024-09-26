@@ -19,6 +19,7 @@ export interface SettingsState {
   topicPosition: 'left' | 'right'
   pasteLongTextAsFile: boolean
   clickAssistantToShowTopic: boolean
+  manualUpdateCheck: boolean
 }
 
 const initialState: SettingsState = {
@@ -36,7 +37,8 @@ const initialState: SettingsState = {
   fontSize: 14,
   topicPosition: 'right',
   pasteLongTextAsFile: true,
-  clickAssistantToShowTopic: false
+  clickAssistantToShowTopic: false,
+  manualUpdateCheck: false
 }
 
 const settingsSlice = createSlice({
@@ -94,6 +96,9 @@ const settingsSlice = createSlice({
     },
     setClickAssistantToShowTopic: (state, action: PayloadAction<boolean>) => {
       state.clickAssistantToShowTopic = action.payload
+    },
+    setManualUpdateCheck: (state, action: PayloadAction<boolean>) => {
+      state.manualUpdateCheck = action.payload
     }
   }
 })
@@ -115,7 +120,8 @@ export const {
   setWindowStyle,
   setTopicPosition,
   setPasteLongTextAsFile,
-  setClickAssistantToShowTopic
+  setClickAssistantToShowTopic,
+  setManualUpdateCheck
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

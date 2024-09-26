@@ -14,7 +14,7 @@ import { useRuntime } from './useStore'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
-  const { proxyUrl, language, windowStyle } = useSettings()
+  const { proxyUrl, language, windowStyle, manualUpdateCheck } = useSettings()
   const { minappShow } = useRuntime()
   const { setDefaultModel, setTopicNamingModel, setTranslateModel } = useDefaultModel()
   const avatar = useLiveQuery(() => db.settings.get('image://avatar'))
@@ -27,8 +27,11 @@ export function useAppInit() {
     document.getElementById('spinner')?.remove()
     runAsyncFunction(async () => {
       const { isPackaged } = await window.api.getAppInfo()
-      isPackaged && setTimeout(window.api.checkForUpdate, 3000)
+      if (isPackaged && !manualUpdateCheck) {
+        setTimeout(window.api.checkForUpdate, 3000)
+      }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
