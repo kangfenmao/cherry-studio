@@ -29,7 +29,7 @@ const AppsPage: FC = () => {
 
     window.modal.confirm({
       title: agent.emoji + ' ' + agent.name,
-      content: agent.description || agent.prompt,
+      content: (agent.description || agent.prompt).substring(0, 1000) + '...',
       icon: null,
       closable: true,
       maskClosable: true,
