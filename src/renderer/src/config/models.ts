@@ -94,10 +94,12 @@ import WenxinModelLogoDark from '@renderer/assets/images/models/wenxin_dark.png'
 import YiModelLogo from '@renderer/assets/images/models/yi.png'
 import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import { Model } from '@renderer/types'
+import OpenAI from 'openai'
 
 const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-turbo|dall|cogview/i
 const VISION_REGEX = /llava|moondream|minicpm|gemini-1.5|claude-3|vision|glm-4v|gpt-4|qwen-vl/i
-const EMBEDDING_REGEX = /embedding/i
+const EMBEDDING_REGEX = /embed|rerank/i
+const NOT_SUPPORTED_REGEX = /embed|tts|rerank|whisper|speech/i
 
 export function getModelLogo(modelId: string) {
   const isLight = true
@@ -664,4 +666,8 @@ export function isEmbeddingModel(model: Model): boolean {
 
 export function isVisionModel(model: Model): boolean {
   return VISION_REGEX.test(model.id)
+}
+
+export function isSupportedModel(model: OpenAI.Models.Model): boolean {
+  return !NOT_SUPPORTED_REGEX.test(model.id)
 }

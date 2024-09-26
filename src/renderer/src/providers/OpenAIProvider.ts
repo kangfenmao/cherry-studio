@@ -1,5 +1,5 @@
 import { isLocalAi } from '@renderer/config/env'
-import { isVisionModel } from '@renderer/config/models'
+import { isSupportedModel, isVisionModel } from '@renderer/config/models'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages } from '@renderer/services/messages'
@@ -263,18 +263,29 @@ export default class OpenAIProvider extends BaseProvider {
 
   public async models(): Promise<OpenAI.Models.Model[]> {
     try {
-      if (this.provider.id === 'github') {
-        // @ts-ignore key is not typed
-        return response.body.map((model) => ({
-          id: model.name,
-          description: model.summary,
-          object: 'model',
-          owned_by: model.publisher
-        }))
+      const query: Record<string, any> = {}
+
+      if (this.provider.id === 'silicon') {
+        query.type = 'text'
       }
 
-      const response = await this.sdk.models.list()
-      return response.data
+      const response = await this.sdk.models.list({ query })
+
+      if (this.provider.id === 'github') {
+        // @ts-ignore key is not typed
+        return response.body
+          .map((model) => ({
+            id: model.name,
+            description: model.summary,
+            object: 'model',
+            owned_by: model.publisher
+          }))
+          .filter(isSupportedModel)
+      }
+
+      const models = response?.data || []
+
+      return models.filter(isSupportedModel)
     } catch (error) {
       return []
     }
