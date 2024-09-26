@@ -2,11 +2,12 @@ import { CheckOutlined, SendOutlined, SettingOutlined, SwapOutlined, WarningOutl
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { isLocalAi } from '@renderer/config/env'
+import db from '@renderer/databases'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { fetchTranslate } from '@renderer/services/api'
 import { getDefaultAssistant } from '@renderer/services/assistant'
 import { Assistant, Message } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { runAsyncFunction, uuid } from '@renderer/utils'
 import { Button, Select, Space } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { isEmpty } from 'lodash'
@@ -134,6 +135,13 @@ const TranslatePage: FC = () => {
     isEmpty(text) && setResult('')
   }, [text])
 
+  useEffect(() => {
+    runAsyncFunction(async () => {
+      const targetLang = await db.settings.get({ id: 'translate:target:language' })
+      targetLang && setTargetLanguage(targetLang.value)
+    })
+  }, [])
+
   const SettingButton = () => {
     if (isLocalAi) {
       return null
@@ -181,7 +189,10 @@ const TranslatePage: FC = () => {
             style={{ width: 180 }}
             optionFilterProp="label"
             options={languageOptions}
-            onChange={(value) => setTargetLanguage(value)}
+            onChange={(value) => {
+              setTargetLanguage(value)
+              db.settings.put({ id: 'translate:target:language', value })
+            }}
             optionRender={(option) => (
               <Space>
                 <span role="img" aria-label={option.data.label}>
