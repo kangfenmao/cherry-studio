@@ -87,6 +87,10 @@ $ yarn build:linux
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
 
+# 赞助
+
+[微信赞赏码](docs/Sponsor.md)
+
 # 📃 许可证
 
 [LICENSE](./LICENSE)

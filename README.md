@@ -70,6 +70,10 @@ $ yarn build:linux
   <img src="https://contrib.rocks/image?repo=kangfenmao/cherry-studio" />
 </a>
 
+# Sponsor
+
+[Buy Me a Coffee](docs/Sponsor.md)
+
 # 📃 License
 
 [LICENSE](./LICENSE)
