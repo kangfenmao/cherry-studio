@@ -52,7 +52,11 @@ const AboutSettings: FC = () => {
   }
 
   const showLicense = () => {
-    window.api.openWebsite('https://raw.githubusercontent.com/kangfenmao/cherry-studio/main/LICENSE')
+    MinApp.start({
+      name: t('settings.about.releases.title'),
+      url: 'https://raw.githubusercontent.com/kangfenmao/cherry-studio/main/LICENSE',
+      logo: AppLogo
+    })
   }
 
   useEffect(() => {
@@ -145,7 +149,7 @@ const AboutSettings: FC = () => {
             MinApp.start({
               name: t('settings.about.releases.title'),
               url: 'https://github.com/kangfenmao/cherry-studio/releases',
-              logo: ''
+              logo: AppLogo
             })
           }>
           {t('settings.about.releases.button')}
