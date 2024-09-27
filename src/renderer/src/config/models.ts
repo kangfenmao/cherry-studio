@@ -67,8 +67,6 @@ import MidjourneyModelLogo from '@renderer/assets/images/models/midjourney.png'
 import MidjourneyModelLogoDark from '@renderer/assets/images/models/midjourney_dark.png'
 import MinicpmModelLogo from '@renderer/assets/images/models/minicpm.webp'
 import MinicpmModelLogoDark from '@renderer/assets/images/models/minicpm.webp'
-import MinimaxModelLogo from '@renderer/assets/images/models/minimax.png'
-import MinimaxModelLogoDark from '@renderer/assets/images/models/minimax_dark.png'
 import MistralModelLogo from '@renderer/assets/images/models/mixtral.png'
 import MistralModelLogoDark from '@renderer/assets/images/models/mixtral_dark.png'
 import MoonshotModelLogo from '@renderer/assets/images/models/moonshot.png'
@@ -108,7 +106,7 @@ const allowedModels = [
   'gpt-4(?:-[\\w-]+)',
   'gpt-4o(?:-[\\w-]+)?'
 ]
-const excludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k','gpt-4-\\d+']
+const excludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
 const VISION_REGEX = new RegExp(`\\b(?!(?:${excludedModels.join('|')})\\b)(${allowedModels.join('|')})\\b`, 'i')
 const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview/i
 const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|base|retrieval|uae-)/i
@@ -171,7 +169,6 @@ export function getModelLogo(modelId: string) {
     magic: isLight ? MagicModelLogo : MagicModelLogoDark,
     midjourney: isLight ? MidjourneyModelLogo : MidjourneyModelLogoDark,
     'mj-': isLight ? MidjourneyModelLogo : MidjourneyModelLogoDark,
-    abab: isLight ? MinimaxModelLogo : MinimaxModelLogoDark,
     'ernie-': isLight ? WenxinModelLogo : WenxinModelLogoDark,
     voice: isLight ? FlashaudioModelLogo : FlashaudioModelLogoDark,
     'tts-1': isLight ? ChatGptModelLogo : ChatGptModelLogoDakr,
