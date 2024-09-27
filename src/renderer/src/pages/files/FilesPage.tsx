@@ -12,7 +12,7 @@ import styled from 'styled-components'
 
 const FilesPage: FC = () => {
   const { t } = useTranslation()
-  const files = useLiveQuery<FileType[]>(() => db.files.orderBy('created_at').reverse().toArray())
+  const files = useLiveQuery<FileType[]>(() => db.files.orderBy('ext').reverse().toArray())
 
   const dataSource = files?.map((file) => {
     const isImage = file.type === FileTypes.IMAGE
@@ -65,8 +65,14 @@ const FilesPage: FC = () => {
         <NavbarCenter style={{ borderRight: 'none' }}>{t('files.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer id="content-container">
-        <VStack style={{ flex: 1 }}>
-          <Table dataSource={dataSource} columns={columns} style={{ width: '100%', height: '100%' }} size="small" />
+        <VStack style={{ width: '100%' }}>
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            style={{ width: '100%', marginBottom: 20 }}
+            size="small"
+            pagination={{ pageSize: 15 }}
+          />
         </VStack>
       </ContentContainer>
     </Container>

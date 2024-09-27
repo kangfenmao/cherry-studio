@@ -1,13 +1,13 @@
-import { FileType } from '@types'
-import { BrowserWindow, ipcMain, OpenDialogOptions, session, shell } from 'electron'
+import { BrowserWindow, ipcMain, session, shell } from 'electron'
 
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
+import BackupManager from './services/BackupManager'
 import FileManager from './services/FileManager'
-import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
 
 const fileManager = new FileManager()
+const backupManager = new BackupManager()
 
 export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   const { autoUpdater } = new AppUpdater(mainWindow)
@@ -29,24 +29,22 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('reload', () => mainWindow.reload())
 
-  ipcMain.handle('zip:compress', (_, text: string) => compress(text))
-  ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
+  ipcMain.handle('backup:save', backupManager.backup)
+  ipcMain.handle('backup:restore', backupManager.restore)
 
   ipcMain.handle('file:open', fileManager.open)
   ipcMain.handle('file:save', fileManager.save)
+  ipcMain.handle('file:select', fileManager.selectFile)
+  ipcMain.handle('file:upload', fileManager.uploadFile)
+  ipcMain.handle('file:clear', fileManager.clear)
+  ipcMain.handle('file:read', fileManager.readFile)
+  ipcMain.handle('file:delete', fileManager.deleteFile)
+  ipcMain.handle('file:get', fileManager.getFile)
+  ipcMain.handle('file:selectFolder', fileManager.selectFolder)
+  ipcMain.handle('file:create', fileManager.createTempFile)
+  ipcMain.handle('file:write', fileManager.writeFile)
   ipcMain.handle('file:saveImage', fileManager.saveImage)
-  ipcMain.handle('file:base64Image', async (_, id) => await fileManager.base64Image(id))
-  ipcMain.handle('file:select', async (_, options?: OpenDialogOptions) => await fileManager.selectFile(options))
-  ipcMain.handle('file:upload', async (_, file: FileType) => await fileManager.uploadFile(file))
-  ipcMain.handle('file:clear', async () => await fileManager.clear())
-  ipcMain.handle('file:read', async (_, id: string) => await fileManager.readFile(id))
-  ipcMain.handle('file:delete', async (_, id: string) => await fileManager.deleteFile(id))
-  ipcMain.handle('file:get', async (_, filePath: string) => await fileManager.getFile(filePath))
-  ipcMain.handle('file:create', async (_, fileName: string) => await fileManager.createTempFile(fileName))
-  ipcMain.handle(
-    'file:write',
-    async (_, filePath: string, data: Uint8Array | string) => await fileManager.writeFile(filePath, data)
-  )
+  ipcMain.handle('file:base64Image', fileManager.base64Image)
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

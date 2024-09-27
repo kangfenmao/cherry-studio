@@ -59,7 +59,7 @@ export default class GeminiProvider extends BaseProvider {
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
-    const userMessages = filterContextMessages(takeRight(messages, contextCount + 2))
+    const userMessages = filterContextMessages(takeRight(messages, contextCount + 1))
     onFilterMessages(userMessages)
 
     if (first(userMessages)?.role === 'assistant') {

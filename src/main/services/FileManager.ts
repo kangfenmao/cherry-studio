@@ -17,20 +17,19 @@ import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 class FileManager {
-  private storageDir: string
+  private storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
 
   constructor() {
-    this.storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
     this.initStorageDir()
   }
 
-  private initStorageDir(): void {
+  private initStorageDir = (): void => {
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true })
     }
   }
 
-  private async getFileHash(filePath: string): Promise<string> {
+  private getFileHash = async (filePath: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const hash = crypto.createHash('md5')
       const stream = fs.createReadStream(filePath)
@@ -40,7 +39,7 @@ class FileManager {
     })
   }
 
-  async findDuplicateFile(filePath: string): Promise<FileType | null> {
+  findDuplicateFile = async (filePath: string): Promise<FileType | null> => {
     const stats = fs.statSync(filePath)
     const fileSize = stats.size
 
@@ -76,7 +75,10 @@ class FileManager {
     return null
   }
 
-  async selectFile(options?: OpenDialogOptions): Promise<FileType[] | null> {
+  public selectFile = async (
+    _: Electron.IpcMainInvokeEvent,
+    options?: OpenDialogOptions
+  ): Promise<FileType[] | null> => {
     const defaultOptions: OpenDialogOptions = {
       properties: ['openFile']
     }
@@ -110,7 +112,7 @@ class FileManager {
     return Promise.all(fileMetadataPromises)
   }
 
-  async uploadFile(file: FileType): Promise<FileType> {
+  public uploadFile = async (_: Electron.IpcMainInvokeEvent, file: FileType): Promise<FileType> => {
     const duplicateFile = await this.findDuplicateFile(file.path)
 
     if (duplicateFile) {
@@ -141,7 +143,7 @@ class FileManager {
     return fileMetadata
   }
 
-  async getFile(filePath: string): Promise<FileType | null> {
+  public getFile = async (_: Electron.IpcMainInvokeEvent, filePath: string): Promise<FileType | null> => {
     if (!fs.existsSync(filePath)) {
       return null
     }
@@ -165,16 +167,16 @@ class FileManager {
     return fileInfo
   }
 
-  async deleteFile(id: string): Promise<void> {
+  public deleteFile = async (_: Electron.IpcMainInvokeEvent, id: string): Promise<void> => {
     await fs.promises.unlink(path.join(this.storageDir, id))
   }
 
-  async readFile(id: string): Promise<string> {
+  public readFile = async (_: Electron.IpcMainInvokeEvent, id: string): Promise<string> => {
     const filePath = path.join(this.storageDir, id)
     return fs.readFileSync(filePath, 'utf8')
   }
 
-  async createTempFile(fileName: string): Promise<string> {
+  public createTempFile = async (_: Electron.IpcMainInvokeEvent, fileName: string): Promise<string> => {
     const tempDir = path.join(app.getPath('temp'), 'CherryStudio')
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true })
@@ -183,11 +185,18 @@ class FileManager {
     return tempFilePath
   }
 
-  async writeFile(filePath: string, data: Uint8Array | string): Promise<void> {
+  public writeFile = async (
+    _: Electron.IpcMainInvokeEvent,
+    filePath: string,
+    data: Uint8Array | string
+  ): Promise<void> => {
     await fs.promises.writeFile(filePath, data)
   }
 
-  async base64Image(id: string): Promise<{ mime: string; base64: string; data: string }> {
+  public base64Image = async (
+    _: Electron.IpcMainInvokeEvent,
+    id: string
+  ): Promise<{ mime: string; base64: string; data: string }> => {
     const filePath = path.join(this.storageDir, id)
     const data = await fs.promises.readFile(filePath)
     const base64 = data.toString('base64')
@@ -199,15 +208,15 @@ class FileManager {
     }
   }
 
-  async clear(): Promise<void> {
+  public clear = async (): Promise<void> => {
     await fs.promises.rmdir(this.storageDir, { recursive: true })
     await this.initStorageDir()
   }
 
-  async open(
+  public open = async (
     _: Electron.IpcMainInvokeEvent,
     options: OpenDialogOptions
-  ): Promise<{ fileName: string; content: Buffer } | null> {
+  ): Promise<{ fileName: string; filePath: string; content: Buffer } | null> => {
     try {
       const result: OpenDialogReturnValue = await dialog.showOpenDialog({
         title: '打开文件',
@@ -220,7 +229,7 @@ class FileManager {
         const filePath = result.filePaths[0]
         const fileName = filePath.split('/').pop() || ''
         const content = await readFile(filePath)
-        return { fileName, content }
+        return { fileName, filePath, content }
       }
 
       return null
@@ -230,12 +239,12 @@ class FileManager {
     }
   }
 
-  async save(
+  public save = async (
     _: Electron.IpcMainInvokeEvent,
     fileName: string,
     content: string,
     options?: SaveDialogOptions
-  ): Promise<void> {
+  ): Promise<void> => {
     try {
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         title: '保存文件',
@@ -251,7 +260,7 @@ class FileManager {
     }
   }
 
-  async saveImage(_: Electron.IpcMainInvokeEvent, name: string, data: string): Promise<void> {
+  public saveImage = async (_: Electron.IpcMainInvokeEvent, name: string, data: string): Promise<void> => {
     try {
       const filePath = dialog.showSaveDialogSync({
         defaultPath: `${name}.png`,
@@ -264,6 +273,25 @@ class FileManager {
       }
     } catch (error) {
       logger.error('[IPC - Error]', 'An error occurred saving the image:', error)
+    }
+  }
+
+  public selectFolder = async (_: Electron.IpcMainInvokeEvent, options: OpenDialogOptions): Promise<string | null> => {
+    try {
+      const result: OpenDialogReturnValue = await dialog.showOpenDialog({
+        title: '选择文件夹',
+        properties: ['openDirectory'],
+        ...options
+      })
+
+      if (!result.canceled && result.filePaths.length > 0) {
+        return result.filePaths[0]
+      }
+
+      return null
+    } catch (err) {
+      logger.error('[IPC - Error]', 'An error occurred selecting the folder:', err)
+      return null
     }
   }
 }

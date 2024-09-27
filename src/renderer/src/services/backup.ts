@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import localforage from 'localforage'
 
 export async function backup() {
-  const version = 2
+  const version = 3
   const time = new Date().getTime()
 
   const data = {
@@ -14,22 +14,31 @@ export async function backup() {
     indexedDB: await backupDatabase()
   }
 
-  const filename = `cherry-studio.${dayjs().format('YYYYMMDD')}.bak`
+  const filename = `cherry-studio.${dayjs().format('YYYYMMDDHHmm')}`
   const fileContnet = JSON.stringify(data)
-  const file = await window.api.compress(fileContnet)
 
-  await window.api.file.save(filename, file)
+  const selectFolder = await window.api.file.selectFolder()
 
-  window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
+  if (selectFolder) {
+    await window.api.backup.save(fileContnet, filename, selectFolder)
+    window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
+  }
 }
 
 export async function restore() {
-  const file = await window.api.file.open()
+  const file = await window.api.file.open({ filters: [{ name: '备份文件', extensions: ['bak', 'zip'] }] })
 
   if (file) {
     try {
-      const content = await window.api.decompress(file.content)
-      const data = JSON.parse(content)
+      let data: Record<string, any> = {}
+
+      // zip backup file
+      if (file?.fileName.endsWith('.zip')) {
+        const restoreData = await window.api.backup.restore(file.filePath)
+        data = JSON.parse(restoreData.data)
+      } else {
+        data = JSON.parse(await window.api.decompress(file.content))
+      }
 
       if (data.version === 1) {
         await clearDatabase()
@@ -49,7 +58,7 @@ export async function restore() {
         return
       }
 
-      if (data.version === 2) {
+      if (data.version >= 2) {
         localStorage.setItem('persist:cherry-studio', data.localStorage['persist:cherry-studio'])
         await restoreDatabase(data.indexedDB)
         window.message.success({ content: i18n.t('message.restore.success'), key: 'restore' })

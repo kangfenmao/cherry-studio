@@ -10,23 +10,27 @@ const api = {
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
   reload: () => ipcRenderer.invoke('reload'),
-  compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
-  decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text),
+  backup: {
+    save: (data: string, fileName: string, destinationPath: string) => {
+      ipcRenderer.invoke('backup:save', data, fileName, destinationPath)
+    },
+    restore: (backupPath: string) => ipcRenderer.invoke('backup:restore', backupPath)
+  },
   file: {
     select: (options?: OpenDialogOptions) => ipcRenderer.invoke('file:select', options),
     upload: (filePath: string) => ipcRenderer.invoke('file:upload', filePath),
     delete: (fileId: string) => ipcRenderer.invoke('file:delete', fileId),
     read: (fileId: string) => ipcRenderer.invoke('file:read', fileId),
-    base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId),
     clear: () => ipcRenderer.invoke('file:clear'),
     get: (filePath: string) => ipcRenderer.invoke('file:get', filePath),
     create: (fileName: string) => ipcRenderer.invoke('file:create', fileName),
     write: (filePath: string, data: Uint8Array | string) => ipcRenderer.invoke('file:write', filePath, data),
     open: (options?: { decompress: boolean }) => ipcRenderer.invoke('file:open', options),
-    save: (path: string, content: string, options?: { compress: boolean }) => {
-      return ipcRenderer.invoke('file:save', path, content, options)
-    },
-    saveImage: (name: string, data: string) => ipcRenderer.invoke('file:saveImage', name, data)
+    save: (path: string, content: string, options?: { compress: boolean }) =>
+      ipcRenderer.invoke('file:save', path, content, options),
+    selectFolder: () => ipcRenderer.invoke('file:selectFolder'),
+    saveImage: (name: string, data: string) => ipcRenderer.invoke('file:saveImage', name, data),
+    base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId)
   }
 }
 

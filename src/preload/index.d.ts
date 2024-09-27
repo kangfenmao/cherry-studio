@@ -19,19 +19,24 @@ declare global {
       reload: () => void
       compress: (text: string) => Promise<Buffer>
       decompress: (text: Buffer) => Promise<string>
+      backup: {
+        save: (data: string, fileName: string, destinationPath: string) => Promise<void>
+        restore: (backupPath: string) => Promise<{ data: string; success: boolean }>
+      }
       file: {
         select: (options?: OpenDialogOptions) => Promise<FileType[] | null>
         upload: (file: FileType) => Promise<FileType>
         delete: (fileId: string) => Promise<void>
         read: (fileId: string) => Promise<string>
-        base64Image: (fileId: string) => Promise<{ mime: string; base64: string; data: string }>
         clear: () => Promise<void>
         get: (filePath: string) => Promise<FileType | null>
+        selectFolder: () => Promise<string | null>
         create: (fileName: string) => Promise<string>
         write: (filePath: string, data: Uint8Array | string) => Promise<void>
-        open: (options?: OpenDialogOptions) => Promise<{ fileName: string; content: Buffer } | null>
+        open: (options?: OpenDialogOptions) => Promise<{ fileName: string; filePath: string; content: Buffer } | null>
         save: (path: string, content: string | NodeJS.ArrayBufferView, options?: SaveDialogOptions) => void
         saveImage: (name: string, data: string) => void
+        base64Image: (fileId: string) => Promise<{ mime: string; base64: string; data: string }>
       }
     }
   }

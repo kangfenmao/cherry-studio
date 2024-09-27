@@ -58,7 +58,7 @@ export default class AnthropicProvider extends BaseProvider {
     const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
     const userMessagesParams: MessageParam[] = []
-    const _messages = filterContextMessages(takeRight(messages, contextCount + 2))
+    const _messages = filterContextMessages(takeRight(messages, contextCount + 1))
 
     onFilterMessages(_messages)
 
