@@ -4,6 +4,8 @@ import Ai21ModelLogo from '@renderer/assets/images/models/ai21.png'
 import Ai21ModelLogoDark from '@renderer/assets/images/models/ai21_dark.png'
 import AimassModelLogo from '@renderer/assets/images/models/aimass.png'
 import AimassModelLogoDark from '@renderer/assets/images/models/aimass_dark.png'
+import MinimaxModelLogo from '@renderer/assets/images/models/minimax.png'
+import MinimaxModelLogoDark from '@renderer/assets/images/models/minimax_dark.png'
 import BaichuanModelLogo from '@renderer/assets/images/models/baichuan.png'
 import BaichuanModelLogoDark from '@renderer/assets/images/models/baichuan_dark.png'
 import ChatGLMModelLogo from '@renderer/assets/images/models/chatglm.png'
@@ -120,6 +122,7 @@ export function getModelLogo(modelId: string) {
   }
 
   const logoMap = {
+    abab: isLight ? MinimaxModelLogo : MinimaxModelLogoDark,
     'o1-': isLight ? ChatGPTo1ModelLogo : ChatGPTo1ModelLogoDark,
     'gpt-3': isLight ? ChatGPT35ModelLogo : ChatGPT35ModelLogoDark,
     'gpt-4': isLight ? ChatGPT4ModelLogo : ChatGPT4ModelLogoDark,
@@ -145,7 +148,7 @@ export function getModelLogo(modelId: string) {
     bison: isLight ? PalmModelLogo : PalmModelLogoDark,
     palm: isLight ? PalmModelLogo : PalmModelLogoDark,
     step: isLight ? StepModelLogo : StepModelLogoDark,
-    abab: isLight ? HailuoModelLogo : HailuoModelLogoDark,
+    hailuo: isLight ? HailuoModelLogo : HailuoModelLogoDark,
     'ep-202': isLight ? DoubaoModelLogo : DoubaoModelLogoDark,
     cohere: isLight ? CohereModelLogo : CohereModelLogoDark,
     command: isLight ? CohereModelLogo : CohereModelLogoDark,
