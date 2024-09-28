@@ -1,6 +1,7 @@
 import AiAssistantAppLogo from '@renderer/assets/images/apps/360-ai.png'
 import AiSearchAppLogo from '@renderer/assets/images/apps/ai-search.png'
 import BaiduAiAppLogo from '@renderer/assets/images/apps/baidu-ai.png'
+import FeloAppLogo from '@renderer/assets/images/apps/felo.png'
 import BaicuanAppLogo from '@renderer/assets/images/apps/baixiaoying.webp'
 import DevvAppLogo from '@renderer/assets/images/apps/devv.png'
 import DoubaoAppLogo from '@renderer/assets/images/apps/doubao.png'
@@ -198,6 +199,13 @@ const _apps: MinAppType[] = [
     name: 'HuggingChat',
     logo: HuggingChatLogo,
     url: 'https://huggingface.co/chat/',
+    bodered: true
+  },
+  {
+    id: 'Felo',
+    name: 'Felo',
+    logo: FeloAppLogo,
+    url: 'https://felo.ai/',
     bodered: true
   }
 ]
