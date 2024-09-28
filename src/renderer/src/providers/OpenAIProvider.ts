@@ -117,7 +117,7 @@ export default class OpenAIProvider extends BaseProvider {
     const systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
     const userMessages: ChatCompletionMessageParam[] = []
 
-    const _messages = filterContextMessages(takeRight(messages, contextCount))
+    const _messages = filterContextMessages(takeRight(messages, contextCount + 1))
     onFilterMessages(_messages)
 
     for (const message of _messages) {
