@@ -65,14 +65,15 @@ afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     本次更新：
-      支持关闭自动检测更新
-      支持消息的编辑
-      支持备份聊天中的文件
-      修复 Gemini 消息回复经常出错问题
-      过滤一些软件不支持的模型
-      修复 Github Models 无法加载问题
-      更新部分图标
+      增加 WebDAV 备份功能 by @DrayChou
+      增加使用 Markdown 渲染用户消息开关
+      新的助手设置界面
+      增加 Felo 小程序
+      修复输入框文字撤销问题
+      修复上下文数量为0时报错
     近期更新：
       全新应用图标
       Windows 安装程序支持修改安装位置了
       增加流式输出开关
+      支持关闭自动检测更新
+      支持消息的编辑
