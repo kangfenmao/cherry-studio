@@ -433,6 +433,15 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '27': (state: RootState) => {
+    return {
+      ...state,
+      settings: {
+        ...state.settings,
+        renderInputMessageAsMarkdown: true
+      }
+    }
   }
 }
 

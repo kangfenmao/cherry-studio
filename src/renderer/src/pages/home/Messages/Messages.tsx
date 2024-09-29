@@ -1,5 +1,6 @@
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
 import { getDefaultTopic } from '@renderer/services/assistant'
@@ -10,7 +11,7 @@ import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import { flatten, last, reverse, take } from 'lodash'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import Suggestions from '../components/Suggestions'
@@ -28,6 +29,14 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const { updateTopic, addTopic } = useAssistant(assistant.id)
+  const { showTopics, topicPosition, showAssistants } = useSettings()
+
+  const maxWidth = useMemo(() => {
+    const showRightTopics = showTopics && topicPosition === 'right'
+    const minusAssistantsWidth = showAssistants ? '- var(--assistants-width)' : ''
+    const minusRightTopicsWidth = showRightTopics ? '- var(--assistants-width)' : ''
+    return `calc(100vw - var(--sidebar-width) ${minusAssistantsWidth} ${minusRightTopicsWidth}`
+  }, [showAssistants, showTopics, topicPosition])
 
   const onSendMessage = useCallback(
     async (message: Message) => {
@@ -204,7 +213,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [assistant, messages])
 
   return (
-    <Container id="messages" key={assistant.id} ref={containerRef}>
+    <Container id="messages" style={{ maxWidth }} key={assistant.id} ref={containerRef}>
       <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
       {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
       {reverse([...messages]).map((message, index) => (
@@ -231,6 +240,7 @@ const Container = styled.div`
   padding: 10px 0;
   background-color: var(--color-background);
   padding-bottom: 20px;
+  overflow-x: hidden;
 `
 
 export default Messages

@@ -9,6 +9,7 @@ import {
   setFontSize,
   setMessageFont,
   setPasteLongTextAsFile,
+  setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
   setShowMessageDivider
 } from '@renderer/store/settings'
@@ -41,7 +42,8 @@ const SettingsTab: FC<Props> = (props) => {
     showInputEstimatedTokens,
     sendMessageShortcut,
     setSendMessageShortcut,
-    pasteLongTextAsFile
+    pasteLongTextAsFile,
+    renderInputMessageAsMarkdown
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
@@ -239,6 +241,15 @@ const SettingsTab: FC<Props> = (props) => {
           size="small"
           checked={pasteLongTextAsFile}
           onChange={(checked) => dispatch(setPasteLongTextAsFile(checked))}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitleSmall>{t('settings.messages.markdown_rendering_input_message')}</SettingRowTitleSmall>
+        <Switch
+          size="small"
+          checked={renderInputMessageAsMarkdown}
+          onChange={(checked) => dispatch(setRenderInputMessageAsMarkdown(checked))}
         />
       </SettingRow>
       <SettingDivider />

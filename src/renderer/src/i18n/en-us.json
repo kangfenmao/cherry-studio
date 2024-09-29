@@ -178,6 +178,7 @@
       "messages.input.show_estimated_tokens": "Show estimated input tokens",
       "messages.input.send_shortcuts": "Send shortcuts",
       "messages.input.paste_long_text_as_file": "Paste long text as file",
+      "messages.markdown_rendering_input_message": "Markdown render input msg",
       "general.title": "General Settings",
       "general.user_name": "User Name",
       "general.user_name.placeholder": "Enter your name",

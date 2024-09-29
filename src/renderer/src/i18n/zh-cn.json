@@ -178,6 +178,7 @@
       "messages.input.show_estimated_tokens": "状态显示",
       "messages.input.send_shortcuts": "发送快捷键",
       "messages.input.paste_long_text_as_file": "长文本粘贴为文件",
+      "messages.markdown_rendering_input_message": "Markdown 渲染输入消息",
       "general.title": "常规设置",
       "general.user_name": "用户名",
       "general.user_name.placeholder": "请输入用户名",

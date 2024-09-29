@@ -20,7 +20,7 @@ export interface SettingsState {
   pasteLongTextAsFile: boolean
   clickAssistantToShowTopic: boolean
   manualUpdateCheck: boolean
-
+  renderInputMessageAsMarkdown: boolean
   // webdav 配置 host, user, pass, path
   webdavHost: string
   webdavUser: string
@@ -45,7 +45,7 @@ const initialState: SettingsState = {
   pasteLongTextAsFile: true,
   clickAssistantToShowTopic: false,
   manualUpdateCheck: false,
-
+  renderInputMessageAsMarkdown: true,
   webdavHost: '',
   webdavUser: '',
   webdavPass: '',
@@ -122,6 +122,9 @@ const settingsSlice = createSlice({
     },
     setWebdavPath: (state, action: PayloadAction<string>) => {
       state.webdavPath = action.payload
+    },
+    setRenderInputMessageAsMarkdown: (state, action: PayloadAction<boolean>) => {
+      state.renderInputMessageAsMarkdown = action.payload
     }
   }
 })
@@ -143,6 +146,7 @@ export const {
   setWindowStyle,
   setTopicPosition,
   setPasteLongTextAsFile,
+  setRenderInputMessageAsMarkdown,
   setClickAssistantToShowTopic,
   setManualUpdateCheck,
   setWebdavHost,

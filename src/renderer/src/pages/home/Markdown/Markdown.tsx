@@ -1,5 +1,6 @@
 import 'katex/dist/katex.min.css'
 
+import { useSettings } from '@renderer/hooks/useSettings'
 import { Message } from '@renderer/types'
 import { escapeBrackets } from '@renderer/utils/formula'
 import { isEmpty } from 'lodash'
@@ -27,6 +28,7 @@ const components = {
 
 const Markdown: FC<Props> = ({ message }) => {
   const { t } = useTranslation()
+  const { renderInputMessageAsMarkdown } = useSettings()
 
   const messageContent = useMemo(() => {
     const empty = isEmpty(message.content)
@@ -34,6 +36,10 @@ const Markdown: FC<Props> = ({ message }) => {
     const content = empty && paused ? t('message.chat.completion.paused') : message.content
     return escapeBrackets(content)
   }, [message.content, message.status, t])
+
+  if (message.role === 'user' && !renderInputMessageAsMarkdown) {
+    return <p style={{ marginBottom: 5, whiteSpace: 'pre-wrap' }}>{messageContent}</p>
+  }
 
   return (
     <ReactMarkdown
