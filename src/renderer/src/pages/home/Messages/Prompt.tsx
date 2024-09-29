@@ -1,6 +1,4 @@
-import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
-import { useAssistant } from '@renderer/hooks/useAssistant'
-import { syncAsistantToAgent } from '@renderer/services/assistant'
+import AssistantSettingPopup from '@renderer/components/AssistantSettings'
 import { Assistant } from '@renderer/types'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,22 +10,15 @@ interface Props {
 
 const Prompt: FC<Props> = ({ assistant }) => {
   const { t } = useTranslation()
-  const { updateAssistant } = useAssistant(assistant.id)
 
   const prompt = assistant.prompt || t('chat.default.description')
-
-  const onEdit = async () => {
-    const _assistant = await AssistantSettingPopup.show({ assistant })
-    updateAssistant(_assistant)
-    syncAsistantToAgent(_assistant)
-  }
 
   if (!prompt) {
     return null
   }
 
   return (
-    <Container onClick={onEdit}>
+    <Container onClick={() => AssistantSettingPopup.show({ assistant })}>
       <Text>{prompt}</Text>
     </Container>
   )

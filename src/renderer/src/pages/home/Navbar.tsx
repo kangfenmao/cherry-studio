@@ -1,14 +1,14 @@
 import { FormOutlined } from '@ant-design/icons'
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import AssistantSettingPopup from '@renderer/components/AssistantSettings'
 import { HStack } from '@renderer/components/Layout'
-import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
-import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
+import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
 import { Switch } from 'antd'
@@ -25,18 +25,12 @@ interface Props {
 }
 
 const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
-  const { assistant, updateAssistant, addTopic } = useAssistant(activeAssistant.id)
+  const { assistant, addTopic } = useAssistant(activeAssistant.id)
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { theme, toggleTheme } = useTheme()
   const { topicPosition } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
   const { t } = useTranslation()
-
-  const onEditAssistant = useCallback(async () => {
-    const _assistant = await AssistantSettingPopup.show({ assistant })
-    updateAssistant(_assistant)
-    syncAsistantToAgent(_assistant)
-  }, [assistant, updateAssistant])
 
   const addNewTopic = useCallback(() => {
     const topic = getDefaultTopic()
@@ -68,7 +62,10 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
               <i className="iconfont icon-show-sidebar" />
             </NewButton>
           )}
-          <TitleText style={{ marginRight: 10, cursor: 'pointer' }} className="nodrag" onClick={onEditAssistant}>
+          <TitleText
+            style={{ marginRight: 10, cursor: 'pointer' }}
+            className="nodrag"
+            onClick={() => AssistantSettingPopup.show({ assistant })}>
             {assistant.name}
           </TitleText>
           <SelectModelButton assistant={assistant} />

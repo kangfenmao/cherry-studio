@@ -110,7 +110,9 @@
     "assistants": {
       "title": "Assistants",
       "abbr": "Assistant",
-      "search": "Search assistants..."
+      "search": "Search assistants...",
+      "prompt_settings": "Prompt Settings",
+      "model_settings": "Model Settings"
     },
     "model": {
       "stream_output": "Stream Output"

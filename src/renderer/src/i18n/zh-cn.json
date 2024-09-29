@@ -110,7 +110,9 @@
     "assistants": {
       "title": "助手",
       "abbr": "助手",
-      "search": "搜索助手"
+      "search": "搜索助手",
+      "prompt_settings": "提示词设置",
+      "model_settings": "模型设置"
     },
     "model": {
       "stream_output": "流式输出"

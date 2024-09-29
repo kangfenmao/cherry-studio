@@ -20,11 +20,14 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
             trackBg: 'transparent',
             itemSelectedBg: isDarkTheme ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
             boxShadowTertiary: undefined
+          },
+          Menu: {
+            activeBarBorderWidth: 0,
+            darkItemBg: 'transparent'
           }
         },
         token: {
-          colorPrimary: '#00b96b',
-          borderRadius: 6
+          colorPrimary: '#00b96b'
         }
       }}>
       {children}

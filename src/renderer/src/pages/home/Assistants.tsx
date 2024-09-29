@@ -1,10 +1,10 @@
 import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import AssistantSettingPopup from '@renderer/components/AssistantSettings'
 import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
-import AssistantSettingPopup from '@renderer/components/Popups/AssistantSettingPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { getDefaultTopic, syncAsistantToAgent } from '@renderer/services/assistant'
+import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setSearching } from '@renderer/store/runtime'
@@ -34,7 +34,7 @@ const Assistants: FC<Props> = ({
   const generating = useAppSelector((state) => state.runtime.generating)
   const [search, setSearch] = useState('')
   const [dragging, setDragging] = useState(false)
-  const { updateAssistant, removeAllTopics } = useAssistant(activeAssistant.id)
+  const { removeAllTopics } = useAssistant(activeAssistant.id)
   const { clickAssistantToShowTopic, topicPosition } = useSettings()
   const searchRef = useRef<InputRef>(null)
   const { t } = useTranslation()
@@ -49,15 +49,6 @@ const Assistants: FC<Props> = ({
     [assistants, onCreateDefaultAssistant, removeAssistant, setActiveAssistant]
   )
 
-  const onEditAssistant = useCallback(
-    async (assistant: Assistant) => {
-      const _assistant = await AssistantSettingPopup.show({ assistant })
-      updateAssistant(_assistant)
-      syncAsistantToAgent(_assistant)
-    },
-    [updateAssistant]
-  )
-
   const getMenuItems = useCallback(
     (assistant: Assistant) =>
       [
@@ -65,7 +56,7 @@ const Assistants: FC<Props> = ({
           label: t('common.edit'),
           key: 'edit',
           icon: <EditOutlined />,
-          onClick: () => onEditAssistant(assistant)
+          onClick: () => AssistantSettingPopup.show({ assistant })
         },
         {
           label: t('common.duplicate'),
@@ -100,7 +91,7 @@ const Assistants: FC<Props> = ({
           onClick: () => onDelete(assistant)
         }
       ] as ItemType[],
-    [addAssistant, onDelete, onEditAssistant, removeAllTopics, setActiveAssistant, t]
+    [addAssistant, onDelete, removeAllTopics, setActiveAssistant, t]
   )
 
   const onSwitchAssistant = useCallback(

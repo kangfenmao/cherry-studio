@@ -110,7 +110,9 @@
     "assistants": {
       "title": "助手",
       "abbr": "助",
-      "search": "搜尋助手..."
+      "search": "搜尋助手...",
+      "prompt_settings": "提示詞設定",
+      "model_settings": "模型設定"
     },
     "model": {
       "stream_output": "串流輸出"
