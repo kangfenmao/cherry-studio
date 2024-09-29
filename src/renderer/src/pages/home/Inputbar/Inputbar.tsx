@@ -21,7 +21,6 @@ import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, Message, Topic } from '@renderer/types'
 import { delay, getFileExtension, uuid } from '@renderer/utils'
-import { insertTextAtCursor } from '@renderer/utils/input'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
@@ -202,22 +201,20 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       if (pasteLongTextAsFile) {
         const item = event.clipboardData?.items[0]
         if (item && item.kind === 'string' && item.type === 'text/plain') {
-          event.preventDefault()
           item.getAsString(async (pasteText) => {
             if (pasteText.length > 1500) {
               const tempFilePath = await window.api.file.create('pasted_text.txt')
               await window.api.file.write(tempFilePath, pasteText)
               const selectedFile = await window.api.file.get(tempFilePath)
               selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
-            } else {
-              insertTextAtCursor({ text, pasteText, textareaRef, setText })
+              setText((prevText) => prevText.replace(pasteText, ''))
               setTimeout(() => resizeTextArea(), 0)
             }
           })
         }
       }
     },
-    [pasteLongTextAsFile, supportExts, text]
+    [pasteLongTextAsFile, supportExts]
   )
 
   // Command or Ctrl + N create new topic
