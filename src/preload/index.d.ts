@@ -1,6 +1,8 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { FileType } from '@renderer/types'
+import { WebDavConfig } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
+import { Readable } from 'stream'
 
 declare global {
   interface Window {
@@ -20,8 +22,10 @@ declare global {
       compress: (text: string) => Promise<Buffer>
       decompress: (text: Buffer) => Promise<string>
       backup: {
-        save: (data: string, fileName: string, destinationPath: string) => Promise<void>
-        restore: (backupPath: string) => Promise<{ data: string; success: boolean }>
+        backup: (fileName: string, data: string, destinationPath?: string) => Promise<Readable>
+        restore: (backupPath: string) => Promise<string>
+        backupToWebdav: (data: string, webdavConfig: WebDavConfig) => Promise<boolean>
+        restoreFromWebdav: (webdavConfig: WebDavConfig) => Promise<string>
       }
       file: {
         select: (options?: OpenDialogOptions) => Promise<FileType[] | null>

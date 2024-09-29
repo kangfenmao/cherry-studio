@@ -1,4 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
+import { WebDavConfig } from '@types'
 import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
@@ -11,10 +12,12 @@ const api = {
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
   reload: () => ipcRenderer.invoke('reload'),
   backup: {
-    save: (data: string, fileName: string, destinationPath: string) => {
-      ipcRenderer.invoke('backup:save', data, fileName, destinationPath)
-    },
-    restore: (backupPath: string) => ipcRenderer.invoke('backup:restore', backupPath)
+    backup: (fileName: string, data: string, destinationPath?: string) =>
+      ipcRenderer.invoke('backup:backup', fileName, data, destinationPath),
+    restore: (backupPath: string) => ipcRenderer.invoke('backup:restore', backupPath),
+    backupToWebdav: (data: string, webdavConfig: WebDavConfig) =>
+      ipcRenderer.invoke('backup:backupToWebdav', data, webdavConfig),
+    restoreFromWebdav: (webdavConfig: WebDavConfig) => ipcRenderer.invoke('backup:restoreFromWebdav', webdavConfig)
   },
   file: {
     select: (options?: OpenDialogOptions) => ipcRenderer.invoke('file:select', options),

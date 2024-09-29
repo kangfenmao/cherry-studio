@@ -116,3 +116,10 @@ export enum ThemeMode {
   dark = 'dark',
   auto = 'auto'
 }
+
+export type WebDavConfig = {
+  webdavHost: string
+  webdavUser: string
+  webdavPass: string
+  webdavPath: string
+}

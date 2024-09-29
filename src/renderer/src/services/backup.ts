@@ -1,29 +1,15 @@
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
+import store from '@renderer/store'
 import dayjs from 'dayjs'
 import localforage from 'localforage'
-import store from '@renderer/store'
-
-import { createClient } from 'webdav'
 
 export async function backup() {
-  const version = 3
-  const time = new Date().getTime()
-
-  const data = {
-    time,
-    version,
-    localStorage,
-    indexedDB: await backupDatabase()
-  }
-
-  const filename = `cherry-studio.${dayjs().format('YYYYMMDDHHmm')}`
-  const fileContnet = JSON.stringify(data)
-
+  const filename = `cherry-studio.${dayjs().format('YYYYMMDDHHmm')}.zip`
+  const fileContnet = await getBackupData()
   const selectFolder = await window.api.file.selectFolder()
-
   if (selectFolder) {
-    await window.api.backup.save(fileContnet, filename, selectFolder)
+    await window.api.backup.backup(filename, fileContnet, selectFolder)
     window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
   }
 }
@@ -38,7 +24,7 @@ export async function restore() {
       // zip backup file
       if (file?.fileName.endsWith('.zip')) {
         const restoreData = await window.api.backup.restore(file.filePath)
-        data = JSON.parse(restoreData.data)
+        data = JSON.parse(restoreData)
       } else {
         data = JSON.parse(await window.api.decompress(file.content))
       }
@@ -78,127 +64,73 @@ export async function reset() {
 
 // 备份到 webdav
 export async function backupToWebdav() {
-  // 先走之前的 backup 流程，存储到临时文件
-  const version = 3
-  const time = new Date().getTime()
-
-  const data = {
-    time,
-    version,
-    localStorage,
-    indexedDB: await backupDatabase()
-  }
-
-  const filename = `cherry-studio.backup.json`
-  const fileContent = JSON.stringify(data)
-
-  // 获取 userSetting 里的 WebDAV 配置
   const { webdavHost, webdavUser, webdavPass, webdavPath } = store.getState().settings
-  // console.log('backup.backupToWebdav', webdavHost, webdavUser, webdavPass, webdavPath)
 
-  let host = webdavHost
-  if (!host.startsWith('http://') && !host.startsWith('https://')) {
-    host = `http://${host}`
-  }
-  console.log('backup.backupToWebdav', host)
+  const backupData = await getBackupData()
 
-  // 创建 WebDAV 客户端
-  const client = createClient(
-    host, // WebDAV 服务器地址
-    {
-      username: webdavUser, // 用户名
-      password: webdavPass // 密码
-    }
-  )
-
-  // 上传文件到 WebDAV
-  const remoteFilePath = `${webdavPath}/${filename}`
-
-  // 先检查创建目录
-  try {
-    if (!(await client.exists(webdavPath))) {
-      await client.createDirectory(webdavPath)
-    }
-  } catch (error) {
-    console.error('Error creating directory on WebDAV:', error)
-  }
+  console.debug({
+    webdavHost,
+    webdavUser,
+    webdavPass,
+    webdavPath
+  })
 
   // 上传文件
   try {
-    await client.putFileContents(remoteFilePath, fileContent, { overwrite: true })
-    console.log('File uploaded successfully!')
-    window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
-  } catch (error) {
-    console.error('Error uploading file to WebDAV:', error)
+    const success = await window.api.backup.backupToWebdav(backupData, {
+      webdavHost,
+      webdavUser,
+      webdavPass,
+      webdavPath
+    })
+    if (success) {
+      window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
+    } else {
+      window.message.error({ content: i18n.t('message.backup.failed'), key: 'backup' })
+    }
+  } catch (error: any) {
+    console.error('[backup] backupToWebdav: Error uploading file to WebDAV:', error)
+    window.modal.error({
+      title: i18n.t('message.backup.failed'),
+      content: error.message
+    })
   }
 }
 
 // 从 webdav 恢复
 export async function restoreFromWebdav() {
-  const filename = `cherry-studio.backup.json`
-
-  // 获取 userSetting 里的 WebDAV 配置
   const { webdavHost, webdavUser, webdavPass, webdavPath } = store.getState().settings
-  // console.log('backup.restoreFromWebdav', webdavHost, webdavUser, webdavPass, webdavPath)
+  let data = ''
 
-  let host = webdavHost
-  if (!host.startsWith('http://') && !host.startsWith('https://')) {
-    host = `http://${host}`
-  }
-  console.log('backup.restoreFromWebdav', host)
-
-  // 创建 WebDAV 客户端
-  const client = createClient(
-    host, // WebDAV 服务器地址
-    {
-      username: webdavUser, // 用户名
-      password: webdavPass // 密码
-    }
-  )
-
-  // 上传文件到 WebDAV
-  const remoteFilePath = `${webdavPath}/${filename}`
-
-  // 下载文件
   try {
-    // 下载文件内容
-    const fileContent = await client.getFileContents(remoteFilePath, { format: 'text' })
-    console.log('File downloaded successfully!', fileContent)
+    data = await window.api.backup.restoreFromWebdav({ webdavHost, webdavUser, webdavPass, webdavPath })
+  } catch (error: any) {
+    console.error('[backup] restoreFromWebdav: Error downloading file from WebDAV:', error)
+    window.modal.error({
+      title: i18n.t('message.restore.failed'),
+      content: error.message
+    })
+  }
 
-    // 处理文件内容
-    const data = parseFileContent(fileContent.toString())
-    console.log('Parsed file content:', data)
-
-    await handleData(data)
+  try {
+    await handleData(JSON.parse(data))
   } catch (error) {
-    console.error('Error downloading file from WebDAV:', error)
+    console.error('[backup] Error downloading file from WebDAV:', error)
     window.message.error({ content: i18n.t('error.backup.file_format'), key: 'restore' })
   }
 }
 
-/************************************* Backup Utils ************************************** */
-
-function parseFileContent(fileContent: string | Buffer | { data: string | Buffer } | ArrayBuffer): any {
-  let fileContentString: string
-
-  if (typeof fileContent === 'string') {
-    fileContentString = fileContent
-  } else if (Buffer.isBuffer(fileContent)) {
-    fileContentString = fileContent.toString('utf-8')
-  } else if (fileContent instanceof ArrayBuffer) {
-    fileContentString = Buffer.from(fileContent).toString('utf-8')
-  } else if (fileContent && typeof fileContent.data === 'string') {
-    fileContentString = fileContent.data
-  } else if (fileContent && Buffer.isBuffer(fileContent.data)) {
-    fileContentString = fileContent.data.toString('utf-8')
-  } else {
-    throw new Error('Unsupported file content type')
-  }
-
-  return JSON.parse(fileContentString)
+async function getBackupData() {
+  return JSON.stringify({
+    time: new Date().getTime(),
+    version: 3,
+    localStorage,
+    indexedDB: await backupDatabase()
+  })
 }
 
-async function handleData(data: any) {
+/************************************* Backup Utils ************************************** */
+async function handleData(data: Record<string, any>) {
   if (data.version === 1) {
     await clearDatabase()
 

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import AboutSettings from './AboutSettings'
 import AssistantSettings from './AssistantSettings'
-import GeneralSettings from './GeneralSettings'
+import GeneralSettings from './GeneralSettings/GeneralSettings'
 import ModelSettings from './ModelSettings'
 import ProvidersList from './ProviderSettings'
 
@@ -16,7 +16,7 @@ const SettingsPage: FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
 
-  const isRoute = (path: string): string => (pathname === path ? 'active' : '')
+  const isRoute = (path: string): string => (pathname.startsWith(path) ? 'active' : '')
 
   return (
     <Container>
@@ -65,7 +65,7 @@ const SettingsPage: FC = () => {
             <Route path="provider" element={<ProvidersList />} />
             <Route path="model" element={<ModelSettings />} />
             <Route path="assistant" element={<AssistantSettings />} />
-            <Route path="general" element={<GeneralSettings />} />
+            <Route path="general/*" element={<GeneralSettings />} />
             <Route path="about" element={<AboutSettings />} />
           </Routes>
         </SettingContent>

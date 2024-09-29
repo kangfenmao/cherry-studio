@@ -40,7 +40,7 @@
     "fs-extra": "^11.2.0",
     "html2canvas": "^1.4.1",
     "unzipper": "^0.12.3",
-    "webdav": "^5.7.1"
+    "webdav": "4.11.4"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.24.3",

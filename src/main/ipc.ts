@@ -29,8 +29,10 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('reload', () => mainWindow.reload())
 
-  ipcMain.handle('backup:save', backupManager.backup)
+  ipcMain.handle('backup:backup', backupManager.backup)
   ipcMain.handle('backup:restore', backupManager.restore)
+  ipcMain.handle('backup:backupToWebdav', backupManager.backupToWebdav)
+  ipcMain.handle('backup:restoreFromWebdav', backupManager.restoreFromWebdav)
 
   ipcMain.handle('file:open', fileManager.open)
   ipcMain.handle('file:save', fileManager.save)
