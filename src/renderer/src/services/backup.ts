@@ -68,13 +68,6 @@ export async function backupToWebdav() {
 
   const backupData = await getBackupData()
 
-  console.debug({
-    webdavHost,
-    webdavUser,
-    webdavPass,
-    webdavPath
-  })
-
   // 上传文件
   try {
     const success = await window.api.backup.backupToWebdav(backupData, {

@@ -8,7 +8,7 @@ export default class WebDav {
   private webdavPath: string
 
   constructor(params: WebDavConfig) {
-    this.webdavPath = params.webdavPath.replace('/', '')
+    this.webdavPath = params.webdavPath
 
     this.instance = createClient(params.webdavHost, {
       username: params.webdavUser,
