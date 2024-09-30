@@ -326,7 +326,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://ai.360.com/platform/limit'
     }
   },
-  navida: {
+  nvidia: {
     api: {
       url: 'https://integrate.api.nvidia.com'
     },

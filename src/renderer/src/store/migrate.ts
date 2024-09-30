@@ -455,67 +455,34 @@ const migrateConfig = {
             name: 'Together',
             apiKey: '',
             apiHost: 'https://api.together.xyz',
-            models: [],
+            models: SYSTEM_MODELS.together,
             isSystem: true,
             enabled: false
-          }
-        ]
-      }
-    }
-  },
-  '29': (state: RootState) => {
-    return {
-      ...state,
-      llm: {
-        ...state.llm,
-        providers: [
-          ...state.llm.providers,
+          },
           {
             id: 'fireworks',
             name: 'Fireworks',
             apiKey: '',
             apiHost: 'https://api.fireworks.ai/inference',
-            models: [],
+            models: SYSTEM_MODELS.fireworks,
             isSystem: true,
             enabled: false
-          }
-        ]
-      }
-    }
-  },
-  '30': (state: RootState) => {
-    return {
-      ...state,
-      llm: {
-        ...state.llm,
-        providers: [
-          ...state.llm.providers,
+          },
           {
             id: 'zhinao',
             name: 'zhinao',
             apiKey: '',
             apiHost: 'https://api.360.cn',
-            models: [],
+            models: SYSTEM_MODELS.zhinao,
             isSystem: true,
             enabled: false
-          }
-        ]
-      }
-    }
-  },
-  '31': (state: RootState) => {
-    return {
-      ...state,
-      llm: {
-        ...state.llm,
-        providers: [
-          ...state.llm.providers,
+          },
           {
             id: 'nvidia',
-            name: 'nvidia',
+            name: 'Nvidia',
             apiKey: '',
             apiHost: 'https://integrate.api.nvidia.com',
-            models: [],
+            models: SYSTEM_MODELS.nvidia,
             isSystem: true,
             enabled: false
           }
