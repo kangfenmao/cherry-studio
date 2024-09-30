@@ -283,6 +283,18 @@ export default class OpenAIProvider extends BaseProvider {
           .filter(isSupportedModel)
       }
 
+      if (this.provider.id === 'together') {
+        // @ts-ignore key is not typed
+        return response?.body
+          .map((model: any) => ({
+            id: model.id,
+            description: model.display_name,
+            object: 'model',
+            owned_by: model.organization
+          }))
+          .filter(isSupportedModel)
+      }
+
       const models = response?.data || []
 
       return models.filter(isSupportedModel)
