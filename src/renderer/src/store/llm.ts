@@ -82,7 +82,7 @@ const initialState: LlmState = {
       name: 'ocoolAI',
       apiKey: '',
       apiHost: 'https://one.ooo.cool',
-      models: [],
+      models: SYSTEM_MODELS.ocoolai,
       isSystem: true,
       enabled: false
     },
@@ -191,6 +191,42 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://api.groq.com/openai',
       models: SYSTEM_MODELS.groq,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'together',
+      name: 'Together',
+      apiKey: '',
+      apiHost: 'https://api.together.xyz',
+      models: SYSTEM_MODELS.together,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'fireworks',
+      name: 'Fireworks',
+      apiKey: '',
+      apiHost: 'https://api.fireworks.ai/inference',
+      models: SYSTEM_MODELS.fireworks,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'zhinao',
+      name: 'zhinao',
+      apiKey: '',
+      apiHost: 'https://api.360.cn',
+      models: SYSTEM_MODELS.zhinao,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'nvidia',
+      name: 'nvidia',
+      apiKey: '',
+      apiHost: 'https://integrate.api.nvidia.com',
+      models: SYSTEM_MODELS.nvidia,
       isSystem: true,
       enabled: false
     },
