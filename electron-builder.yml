@@ -65,15 +65,12 @@ afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     本次更新：
+      增加 Together 服务商 by @1355873789
+      增加 360智脑 服务商 by @1355873789
+      增加 Fireworks 服务商 by @1355873789
+      增加 NVIDIA 服务商 by @1355873789
+      修复 WebDAV 路径错误问题
+    近期更新：
       增加 WebDAV 备份功能 by @DrayChou
       增加使用 Markdown 渲染用户消息开关
-      新的助手设置界面
       增加 Felo 小程序
-      修复输入框文字撤销问题
-      修复上下文数量为0时报错
-    近期更新：
-      全新应用图标
-      Windows 安装程序支持修改安装位置了
-      增加流式输出开关
-      支持关闭自动检测更新
-      支持消息的编辑

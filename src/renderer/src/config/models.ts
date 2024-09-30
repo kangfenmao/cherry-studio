@@ -57,6 +57,8 @@ import GrypheModelLogo from '@renderer/assets/images/models/gryphe.png'
 import GrypheModelLogoDark from '@renderer/assets/images/models/gryphe_dark.png'
 import HailuoModelLogo from '@renderer/assets/images/models/hailuo.png'
 import HailuoModelLogoDark from '@renderer/assets/images/models/hailuo_dark.png'
+import HuggingfaceModelLogo from '@renderer/assets/images/models/huggingface.png'
+import HuggingfaceModelLogoDark from '@renderer/assets/images/models/huggingface_dark.png'
 import HunyuanModelLogo from '@renderer/assets/images/models/hunyuan.png'
 import HunyuanModelLogoDark from '@renderer/assets/images/models/hunyuan_dark.png'
 import IbmModelLogo from '@renderer/assets/images/models/ibm.png'
@@ -226,7 +228,8 @@ export function getModelLogo(modelId: string) {
     upstage: isLight ? UpstageModelLogo : UpstageModelLogoDark,
     rakutenai: isLight ? RakutenaiModelLogo : RakutenaiModelLogoDark,
     ibm: isLight ? IbmModelLogo : IbmModelLogoDark,
-    'google/': isLight ? GoogleModelLogo : GoogleModelLogoDark
+    'google/': isLight ? GoogleModelLogo : GoogleModelLogoDark,
+    hugging: isLight ? HuggingfaceModelLogo : HuggingfaceModelLogoDark
   }
 
   for (const key in logoMap) {
