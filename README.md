@@ -11,9 +11,9 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 
 # 🌠 Screenshot
 
-![](https://github.com/user-attachments/assets/2037a038-4731-49db-85b9-0d09e8c08bdb)
-![](https://github.com/user-attachments/assets/b09f2acd-dcd4-42ea-be07-7e12665a729c)
-![](https://github.com/user-attachments/assets/bac2a613-17ed-4a6c-bcc5-8f7b9617d457)
+![](https://github.com/user-attachments/assets/28585d83-4bf0-4714-b561-8c7bf57cc600)
+![](https://github.com/user-attachments/assets/8576863a-f632-4776-bc12-657eeced9da3)
+![](https://github.com/user-attachments/assets/790790d7-b462-48dd-bde1-91c1697a4648)
 
 # 🌟 Features
 
