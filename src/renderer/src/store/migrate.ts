@@ -489,6 +489,21 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '29': (state: RootState) => {
+    return {
+      ...state,
+      assistants: {
+        ...state.assistants,
+        assistants: state.assistants.assistants.map((assistant) => {
+          assistant.topics = assistant.topics.map((topic) => ({
+            ...topic,
+            assistantId: assistant.id
+          }))
+          return assistant
+        })
+      }
+    }
   }
 }
 

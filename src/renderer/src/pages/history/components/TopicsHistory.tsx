@@ -1,0 +1,114 @@
+import { useAssistants } from '@renderer/hooks/useAssistant'
+import { getTopicById } from '@renderer/hooks/useTopic'
+import { Topic } from '@renderer/types'
+import { Divider, Empty } from 'antd'
+import dayjs from 'dayjs'
+import { groupBy, isEmpty, orderBy } from 'lodash'
+import styled from 'styled-components'
+
+type Props = {
+  keywords: string
+  onClick: (topic: Topic) => void
+} & React.HTMLAttributes<HTMLDivElement>
+
+const GroupedTopics: React.FC<Props> = ({ keywords, onClick, ...props }) => {
+  const { assistants } = useAssistants()
+
+  const topics = orderBy(assistants.map((assistant) => assistant.topics).flat(), 'createdAt', 'desc')
+
+  const filteredTopics = topics.filter((topic) => {
+    return topic.name.toLowerCase().includes(keywords.toLowerCase())
+  })
+
+  const groupedTopics = groupBy(filteredTopics, (topic) => {
+    return dayjs(topic.createdAt).format('MM/DD')
+  })
+
+  if (isEmpty(filteredTopics)) {
+    return (
+      <ListContainer {...props}>
+        <ContainerWrapper>
+          <Empty />
+        </ContainerWrapper>
+      </ListContainer>
+    )
+  }
+
+  return (
+    <ListContainer {...props}>
+      <ContainerWrapper>
+        {Object.entries(groupedTopics).map(([date, items]) => (
+          <ListItem key={date}>
+            <Date>{date}</Date>
+            <Divider style={{ margin: '5px 0' }} />
+            {items.map((topic) => (
+              <TopicItem
+                key={topic.id}
+                onClick={async () => {
+                  const _topic = await getTopicById(topic.id)
+                  onClick(_topic)
+                }}>
+                <TopicName>{topic.name.substring(0, 50)}</TopicName>
+                <TopicDate>{dayjs(topic.updatedAt).format('HH:mm')}</TopicDate>
+              </TopicItem>
+            ))}
+          </ListItem>
+        ))}
+        <div style={{ minHeight: 30 }}></div>
+      </ContainerWrapper>
+    </ListContainer>
+  )
+}
+
+GroupedTopics.displayName = 'GroupedTopics'
+
+const ContainerWrapper = styled.div`
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+`
+
+const ListContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: scroll;
+  width: 100%;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`
+
+const ListItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+`
+
+const Date = styled.div`
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--color-text-3);
+`
+
+const TopicItem = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+`
+
+const TopicName = styled.div`
+  font-size: 14px;
+  color: var(--color-text);
+`
+
+const TopicDate = styled.div`
+  font-size: 14px;
+  color: var(--color-text-3);
+  margin-left: 10px;
+`
+
+export default GroupedTopics

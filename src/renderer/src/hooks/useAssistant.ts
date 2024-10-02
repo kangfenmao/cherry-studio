@@ -71,7 +71,7 @@ export function useDefaultAssistant() {
   return {
     defaultAssistant: {
       ...defaultAssistant,
-      topics: [getDefaultTopic()]
+      topics: [getDefaultTopic(defaultAssistant.id)]
     },
     updateDefaultAssistant: (assistant: Assistant) => dispatch(updateDefaultAssistant({ assistant }))
   }

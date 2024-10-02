@@ -141,6 +141,14 @@
       "tag.system": "系統",
       "tag.user": "我的"
     },
+    "minapp": {
+      "title": "小程序"
+    },
+    "history": {
+      "title": "搜尋話題",
+      "search.placeholder": "搜尋話題或訊息...",
+      "continue_chat": "繼續聊天"
+    },
     "provider": {
       "nvidia": "輝達",
       "zhinao": "360智腦",
@@ -289,9 +297,6 @@
       "keep_alive_time.title": "保持活躍時間",
       "keep_alive_time.placeholder": "分鐘",
       "keep_alive_time.description": "對話後模型在記憶體中保持的時間（預設為 5 分鐘）。"
-    },
-    "minapp": {
-      "title": "小程序"
     },
     "error": {
       "chat.response": "出現錯誤。如果尚未配置 API 密鑰，請前往設定 > 模型提供者中配置密鑰",

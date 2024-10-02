@@ -123,11 +123,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }
 
   const addNewTopic = useCallback(() => {
-    const topic = getDefaultTopic()
+    const topic = getDefaultTopic(assistant.id)
     addTopic(topic)
     setActiveTopic(topic)
     db.topics.add({ id: topic.id, messages: [] })
-  }, [addTopic, setActiveTopic])
+  }, [addTopic, assistant.id, setActiveTopic])
 
   const clearTopic = async () => {
     if (generating) {

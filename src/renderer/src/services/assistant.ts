@@ -11,7 +11,7 @@ export function getDefaultAssistant(): Assistant {
     id: 'default',
     name: i18n.t('chat.default.name'),
     prompt: '',
-    topics: [getDefaultTopic()]
+    topics: [getDefaultTopic('default')]
   }
 }
 
@@ -19,9 +19,10 @@ export function getDefaultAssistantSettings() {
   return store.getState().assistants.defaultAssistant.settings
 }
 
-export function getDefaultTopic(): Topic {
+export function getDefaultTopic(assistantId: string): Topic {
   return {
     id: uuid(),
+    assistantId,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     name: i18n.t('chat.default.topic.name'),
@@ -86,10 +87,12 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
 }
 
 export function covertAgentToAssistant(agent: Agent): Assistant {
+  const id = agent.group === 'system' ? uuid() : String(agent.id)
   return {
     ...getDefaultAssistant(),
     ...agent,
-    id: agent.group === 'system' ? uuid() : String(agent.id),
+    id,
+    topics: [getDefaultTopic(id)],
     name: getAssistantNameWithAgent(agent),
     settings: getDefaultAssistantSettings()
   }
@@ -128,4 +131,9 @@ export function syncAgentToAssistant(agent: Agent) {
       })
     )
   }
+}
+
+export function getAssistantById(id: string) {
+  const assistants = store.getState().assistants.assistants
+  return assistants.find((a) => a.id === id)
 }

@@ -164,7 +164,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         } as Message)
       }),
       EventEmitter.on(EVENT_NAMES.NEW_BRANCH, async (index: number) => {
-        const newTopic = getDefaultTopic()
+        const newTopic = getDefaultTopic(assistant.id)
         newTopic.name = topic.name
         const branchMessages = take(messages, messages.length - index)
 

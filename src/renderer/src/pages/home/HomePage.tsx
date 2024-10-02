@@ -3,6 +3,7 @@ import { useShowAssistants } from '@renderer/hooks/useStore'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
 import { Assistant } from '@renderer/types'
 import { FC, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Chat from './Chat'
@@ -13,9 +14,13 @@ let _activeAssistant: Assistant
 
 const HomePage: FC = () => {
   const { assistants } = useAssistants()
-  const [activeAssistant, setActiveAssistant] = useState(_activeAssistant || assistants[0])
+
+  const location = useLocation()
+  const state = location.state
+
+  const [activeAssistant, setActiveAssistant] = useState(state?.assistant || _activeAssistant || assistants[0])
+  const { activeTopic, setActiveTopic } = useActiveTopic(activeAssistant, state?.topic)
   const { showAssistants } = useShowAssistants()
-  const { activeTopic, setActiveTopic } = useActiveTopic(activeAssistant)
 
   _activeAssistant = activeAssistant
 

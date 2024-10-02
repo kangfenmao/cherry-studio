@@ -1,5 +1,6 @@
 import db from '@renderer/databases'
 import { deleteMessageFiles } from '@renderer/services/messages'
+import store from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
 import { find } from 'lodash'
 import { useEffect, useState } from 'react'
@@ -8,9 +9,9 @@ import { useAssistant } from './useAssistant'
 
 let _activeTopic: Topic
 
-export function useActiveTopic(_assistant: Assistant) {
+export function useActiveTopic(_assistant: Assistant, topic?: Topic) {
   const { assistant } = useAssistant(_assistant.id)
-  const [activeTopic, setActiveTopic] = useState(_activeTopic || assistant?.topics[0])
+  const [activeTopic, setActiveTopic] = useState(topic || _activeTopic || assistant?.topics[0])
 
   _activeTopic = activeTopic
 
@@ -26,6 +27,14 @@ export function useActiveTopic(_assistant: Assistant) {
 
 export function getTopic(assistant: Assistant, topicId: string) {
   return assistant?.topics.find((topic) => topic.id === topicId)
+}
+
+export async function getTopicById(topicId: string) {
+  const assistants = store.getState().assistants.assistants
+  const topics = assistants.map((assistant) => assistant.topics).flat()
+  const topic = topics.find((topic) => topic.id === topicId)
+  const messages = await TopicManager.getTopicMessages(topicId)
+  return { ...topic, messages } as Topic
 }
 
 export class TopicManager {

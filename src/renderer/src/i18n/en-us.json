@@ -141,6 +141,14 @@
       "tag.system": "System",
       "tag.user": "Mine"
     },
+    "minapp": {
+      "title": "MinApp"
+    },
+    "history": {
+      "title": "Topics Search",
+      "search.placeholder": "Search topics or messages...",
+      "continue_chat": "Continue Chatting"
+    },
     "provider": {
       "nvidia": "Nvidia",
       "zhinao": "360AI",
@@ -289,9 +297,6 @@
       "keep_alive_time.title": "Keep Alive Time",
       "keep_alive_time.placeholder": "Minutes",
       "keep_alive_time.description": "The time in minutes to keep the connection alive, default is 5 minutes."
-    },
-    "minapp": {
-      "title": "MinApp"
     },
     "error": {
       "chat.response": "Something went wrong. Please check if you have set your API key in the Settings > Providers",

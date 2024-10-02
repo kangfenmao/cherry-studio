@@ -141,6 +141,14 @@
       "tag.system": "系统",
       "tag.user": "我的"
     },
+    "minapp": {
+      "title": "小程序"
+    },
+    "history": {
+      "title": "话题搜索",
+      "search.placeholder": "搜索话题或消息...",
+      "continue_chat": "继续聊天"
+    },
     "provider": {
       "nvidia": "英伟达",
       "zhinao": "360智脑",
@@ -289,9 +297,6 @@
       "keep_alive_time.title": "保持活跃时间",
       "keep_alive_time.placeholder": "分钟",
       "keep_alive_time.description": "对话后模型在内存中保持的时间（默认：5分钟）"
-    },
-    "minapp": {
-      "title": "小程序"
     },
     "error": {
       "chat.response": "出错了，如果没有配置 API 密钥，请前往设置 > 模型提供商中配置密钥",

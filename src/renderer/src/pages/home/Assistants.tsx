@@ -63,7 +63,7 @@ const Assistants: FC<Props> = ({
           key: 'duplicate',
           icon: <CopyIcon />,
           onClick: async () => {
-            const _assistant: Assistant = { ...assistant, id: uuid(), topics: [getDefaultTopic()] }
+            const _assistant: Assistant = { ...assistant, id: uuid(), topics: [getDefaultTopic(assistant.id)] }
             addAssistant(_assistant)
             setActiveAssistant(_assistant)
           }

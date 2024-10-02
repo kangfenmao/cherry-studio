@@ -12,6 +12,7 @@ import { ThemeProvider } from './context/ThemeProvider'
 import AgentsPage from './pages/agents/AgentsPage'
 import AppsPage from './pages/apps/AppsPage'
 import FilesPage from './pages/files/FilesPage'
+import HistoryPage from './pages/history/HistoryPage'
 import HomePage from './pages/home/HomePage'
 import SettingsPage from './pages/settings/SettingsPage'
 import TranslatePage from './pages/translate/TranslatePage'
@@ -31,6 +32,7 @@ function App(): JSX.Element {
                   <Route path="/agents" element={<AgentsPage />} />
                   <Route path="/translate" element={<TranslatePage />} />
                   <Route path="/apps" element={<AppsPage />} />
+                  <Route path="/messages/*" element={<HistoryPage />} />
                   <Route path="/settings/*" element={<SettingsPage />} />
                 </Routes>
               </HashRouter>

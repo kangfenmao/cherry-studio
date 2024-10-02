@@ -1,4 +1,4 @@
-import { FolderOutlined, TranslationOutlined } from '@ant-design/icons'
+import { FileSearchOutlined, FolderOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import useAvatar from '@renderer/hooks/useAvatar'
@@ -23,6 +23,7 @@ const Sidebar: FC = () => {
   const { windowStyle } = useSettings()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
+  const isRoutes = (path: string): string => (pathname.startsWith(path) ? 'active' : '')
 
   const onEditUser = () => UserPopup.show()
 
@@ -70,6 +71,11 @@ const Sidebar: FC = () => {
           <StyledLink onClick={() => to('/files')}>
             <Icon className={isRoute('/files')}>
               <FolderOutlined />
+            </Icon>
+          </StyledLink>
+          <StyledLink onClick={() => to('/messages')}>
+            <Icon className={isRoutes('/messages')}>
+              <FileSearchOutlined />
             </Icon>
           </StyledLink>
         </Menus>

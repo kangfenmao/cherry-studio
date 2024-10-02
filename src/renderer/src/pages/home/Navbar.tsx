@@ -33,13 +33,13 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
   const { t } = useTranslation()
 
   const addNewTopic = useCallback(() => {
-    const topic = getDefaultTopic()
+    const topic = getDefaultTopic(assistant.id)
     addTopic(topic)
     setActiveTopic(topic)
     db.topics.add({ id: topic.id, messages: [] })
     window.message.success({ content: t('message.topic.added'), key: 'topic-added' })
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-  }, [addTopic, setActiveTopic, t])
+  }, [addTopic, assistant.id, setActiveTopic, t])
 
   return (
     <Navbar>

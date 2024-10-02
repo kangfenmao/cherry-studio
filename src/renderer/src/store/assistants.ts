@@ -94,7 +94,7 @@ const assistantsSlice = createSlice({
           assistant.topics.forEach((topic) => TopicManager.removeTopic(topic.id))
           return {
             ...assistant,
-            topics: [getDefaultTopic()]
+            topics: [getDefaultTopic(assistant.id)]
           }
         }
         return assistant

@@ -36,6 +36,7 @@ export type Message = {
 
 export type Topic = {
   id: string
+  assistantId: string
   name: string
   createdAt: string
   updatedAt: string
