@@ -93,7 +93,7 @@ const ContentContainer = styled.div`
   justify-content: center;
   height: 100%;
   overflow-y: scroll;
-  padding: 20px;
+  padding: 15px;
 `
 
 const FileNameText = styled.div`

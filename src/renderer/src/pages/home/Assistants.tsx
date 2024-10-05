@@ -224,7 +224,7 @@ const AssistantItem = styled.div`
   justify-content: space-between;
   padding: 7px 10px;
   position: relative;
-  border-radius: 4px;
+  border-radius: 17px;
   margin: 0 10px;
   padding-right: 35px;
   font-family: Ubuntu;
@@ -239,7 +239,6 @@ const AssistantItem = styled.div`
   &.active {
     background-color: var(--color-background-mute);
     .name {
-      font-weight: 500;
     }
     .topics-count {
       display: none;

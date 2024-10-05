@@ -149,10 +149,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
               <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
-                <TopicName className="name">
-                  <TopicHash>#</TopicHash>
-                  {topic.name.replace('`', '')}
-                </TopicName>
+                <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
                 {assistant.topics.length > 1 && isActive && (
                   <MenuButton
                     className="menu"
@@ -187,7 +184,7 @@ const Container = styled.div`
 const TopicListItem = styled.div`
   padding: 7px 10px;
   margin: 0 10px;
-  border-radius: 4px;
+  border-radius: 17px;
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;
@@ -211,7 +208,6 @@ const TopicListItem = styled.div`
     background-color: var(--color-background-mute);
     .name {
       opacity: 1;
-      font-weight: 500;
     }
     .menu {
       opacity: 1;
@@ -245,12 +241,6 @@ const MenuButton = styled.div`
   .anticon {
     font-size: 12px;
   }
-`
-
-const TopicHash = styled.span`
-  font-size: 13px;
-  color: var(--color-text-3);
-  margin-right: 2px;
 `
 
 export default Topics
