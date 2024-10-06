@@ -1,9 +1,11 @@
 import { useAssistants } from '@renderer/hooks/useAssistant'
+import useScrollPosition from '@renderer/hooks/useScrollPosition'
 import { getTopicById } from '@renderer/hooks/useTopic'
 import { Topic } from '@renderer/types'
 import { Divider, Empty } from 'antd'
 import dayjs from 'dayjs'
 import { groupBy, isEmpty, orderBy } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type Props = {
@@ -11,8 +13,10 @@ type Props = {
   onClick: (topic: Topic) => void
 } & React.HTMLAttributes<HTMLDivElement>
 
-const GroupedTopics: React.FC<Props> = ({ keywords, onClick, ...props }) => {
+const TopicsHistory: React.FC<Props> = ({ keywords, onClick, ...props }) => {
   const { assistants } = useAssistants()
+  const { t } = useTranslation()
+  const { handleScroll, containerRef } = useScrollPosition('TopicsHistory')
 
   const topics = orderBy(assistants.map((assistant) => assistant.topics).flat(), 'createdAt', 'desc')
 
@@ -28,14 +32,14 @@ const GroupedTopics: React.FC<Props> = ({ keywords, onClick, ...props }) => {
     return (
       <ListContainer {...props}>
         <ContainerWrapper>
-          <Empty />
+          <Empty description={t('history.search.topics.empty')} />
         </ContainerWrapper>
       </ListContainer>
     )
   }
 
   return (
-    <ListContainer {...props}>
+    <ListContainer {...props} ref={containerRef} onScroll={handleScroll}>
       <ContainerWrapper>
         {Object.entries(groupedTopics).map(([date, items]) => (
           <ListItem key={date}>
@@ -59,8 +63,6 @@ const GroupedTopics: React.FC<Props> = ({ keywords, onClick, ...props }) => {
     </ListContainer>
   )
 }
-
-GroupedTopics.displayName = 'GroupedTopics'
 
 const ContainerWrapper = styled.div`
   width: 800px;
@@ -111,4 +113,4 @@ const TopicDate = styled.div`
   margin-left: 10px;
 `
 
-export default GroupedTopics
+export default TopicsHistory

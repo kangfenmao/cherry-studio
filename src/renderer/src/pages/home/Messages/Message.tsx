@@ -2,9 +2,10 @@ import { FONT_FAMILY } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useModel } from '@renderer/hooks/useModel'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import { Divider } from 'antd'
-import { FC, memo, useMemo } from 'react'
+import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -28,6 +29,7 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, showMenu = true, 
   const { assistant, setModel } = useAssistant(message.assistantId)
   const model = useModel(message.modelId)
   const { showMessageDivider, messageFont, fontSize } = useSettings()
+  const messageRef = useRef<HTMLDivElement>(null)
 
   const isLastMessage = lastMessage || index === 0
   const isAssistantMessage = message.role === 'assistant'
@@ -38,6 +40,23 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, showMenu = true, 
 
   const messageBorder = showMessageDivider ? undefined : 'none'
 
+  useEffect(() => {
+    const unsubscribes = [
+      EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, () => {
+        if (messageRef.current) {
+          messageRef.current.scrollIntoView({ behavior: 'smooth' })
+          setTimeout(() => {
+            messageRef.current?.classList.add('message-highlight')
+            setTimeout(() => {
+              messageRef.current?.classList.remove('message-highlight')
+            }, 2500)
+          }, 500)
+        }
+      })
+    ]
+    return () => unsubscribes.forEach((unsub) => unsub())
+  }, [message])
+
   if (message.type === 'clear') {
     return (
       <Divider dashed style={{ padding: '0 20px' }} plain>
@@ -47,7 +66,7 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, showMenu = true, 
   }
 
   return (
-    <MessageContainer key={message.id} className="message">
+    <MessageContainer key={message.id} className="message" ref={messageRef}>
       <MessageHeader message={message} assistant={assistant} model={model} />
       <MessageContentContainer style={{ fontFamily, fontSize }}>
         <MessageContent message={message} model={model} />
@@ -74,8 +93,12 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, showMenu = true, 
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+  padding: 15px 20px 0 20px;
   position: relative;
+  transition: background-color 0.3s ease;
+  &.message-highlight {
+    background-color: var(--color-primary-mute);
+  }
   .menubar {
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -105,7 +128,7 @@ const MessageFooter = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 2px 0;
-  margin: 2px 0 8px 0;
+  margin-top: 2px;
   border-top: 0.5px dashed var(--color-border);
 `
 

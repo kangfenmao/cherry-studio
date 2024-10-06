@@ -1,12 +1,12 @@
-import { getTopicById } from '@renderer/hooks/useTopic'
+import { ArrowRightOutlined } from '@ant-design/icons'
+import { HStack } from '@renderer/components/Layout'
 import { default as MessageItem } from '@renderer/pages/home/Messages/Message'
-import { getAssistantById } from '@renderer/services/assistant'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { locateToMessage } from '@renderer/services/messages'
 import { Message } from '@renderer/types'
 import { Button } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import styled from 'styled-components'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,27 +14,29 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const SearchMessage: FC<Props> = ({ message, ...props }) => {
-  const { t } = useTranslation()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   if (!message) {
     return null
   }
 
-  const onContinueChat = async (message: Message) => {
-    const assistant = getAssistantById(message.assistantId)
-    const topic = await getTopicById(message.topicId)
-    navigate('/', { state: { assistant, topic } })
-    setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 100)
-  }
-
   return (
     <MessagesContainer {...props}>
-      <ContainerWrapper style={{ paddingTop: 30, paddingBottom: 30 }}>
+      <ContainerWrapper style={{ paddingTop: 20, paddingBottom: 20, position: 'relative' }}>
         <MessageItem message={message} showMenu={false} />
-        <Button type="link" onClick={() => onContinueChat(message)}>
-          {t('history.continue_chat')}
-        </Button>
+        <Button
+          type="text"
+          size="middle"
+          style={{ color: 'var(--color-text-3)', position: 'absolute', right: 0, top: 10 }}
+          onClick={() => locateToMessage(navigate, message)}
+          icon={<ArrowRightOutlined />}
+        />
+        <HStack mt="10px" justifyContent="center">
+          <Button onClick={() => locateToMessage(navigate, message)} icon={<ArrowRightOutlined />}>
+            {t('history.locate.message')}
+          </Button>
+        </HStack>
       </ContainerWrapper>
     </MessagesContainer>
   )
@@ -52,6 +54,9 @@ const ContainerWrapper = styled.div`
   width: 800px;
   display: flex;
   flex-direction: column;
+  .message {
+    padding: 0;
+  }
 `
 
 export default SearchMessage

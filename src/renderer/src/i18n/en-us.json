@@ -147,7 +147,9 @@
     "history": {
       "title": "Topics Search",
       "search.placeholder": "Search topics or messages...",
-      "continue_chat": "Continue Chatting"
+      "continue_chat": "Continue Chatting",
+      "search.topics.empty": "No topics found, press Enter to search all messages",
+      "locate.message": "Locate the message"
     },
     "provider": {
       "nvidia": "Nvidia",

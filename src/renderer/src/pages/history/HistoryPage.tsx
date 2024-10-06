@@ -109,7 +109,7 @@ const ContentContainer = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  overflow: hidden;
+  overflow-y: scroll;
 `
 
 const Header = styled.div`

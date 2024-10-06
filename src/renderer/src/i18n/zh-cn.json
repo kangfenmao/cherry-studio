@@ -147,7 +147,9 @@
     "history": {
       "title": "话题搜索",
       "search.placeholder": "搜索话题或消息...",
-      "continue_chat": "继续聊天"
+      "continue_chat": "继续聊天",
+      "search.topics.empty": "没有找到相关话题, 点击回车键搜索所有消息",
+      "locate.message": "定位到消息"
     },
     "provider": {
       "nvidia": "英伟达",

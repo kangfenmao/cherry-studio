@@ -1,5 +1,9 @@
+import { ArrowRightOutlined, MessageOutlined } from '@ant-design/icons'
+import { HStack } from '@renderer/components/Layout'
+import useScrollPosition from '@renderer/hooks/useScrollPosition'
 import { getAssistantById } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { locateToMessage } from '@renderer/services/messages'
 import { Topic } from '@renderer/types'
 import { Button, Divider, Empty } from 'antd'
 import { t } from 'i18next'
@@ -15,6 +19,8 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const TopicMessages: FC<Props> = ({ topic, ...props }) => {
   const navigate = useNavigate()
+  const { handleScroll, containerRef } = useScrollPosition('TopicMessages')
+
   const isEmpty = (topic?.messages || []).length === 0
 
   if (!topic) {
@@ -28,19 +34,28 @@ const TopicMessages: FC<Props> = ({ topic, ...props }) => {
   }
 
   return (
-    <MessagesContainer {...props}>
+    <MessagesContainer {...props} ref={containerRef} onScroll={handleScroll}>
       <ContainerWrapper style={{ paddingTop: 30, paddingBottom: 30 }}>
         {topic?.messages.map((message) => (
-          <div key={message.id}>
+          <div key={message.id} style={{ position: 'relative' }}>
             <MessageItem message={message} showMenu={false} />
-            <Divider style={{ margin: '10px auto' }} />
+            <Button
+              type="text"
+              size="middle"
+              style={{ color: 'var(--color-text-3)', position: 'absolute', right: 0, top: 5 }}
+              onClick={() => locateToMessage(navigate, message)}
+              icon={<ArrowRightOutlined />}
+            />
+            <Divider style={{ margin: '8px auto 15px' }} variant="dashed" />
           </div>
         ))}
         {isEmpty && <Empty />}
         {!isEmpty && (
-          <Button type="link" onClick={() => onContinueChat(topic)}>
-            {t('history.continue_chat')}
-          </Button>
+          <HStack justifyContent="center">
+            <Button onClick={() => onContinueChat(topic)} icon={<MessageOutlined />}>
+              {t('history.continue_chat')}
+            </Button>
+          </HStack>
         )}
       </ContainerWrapper>
     </MessagesContainer>
@@ -59,6 +74,9 @@ const ContainerWrapper = styled.div`
   width: 800px;
   display: flex;
   flex-direction: column;
+  .message {
+    padding: 0;
+  }
 `
 
 export default TopicMessages

@@ -19,7 +19,10 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
           Segmented: {
             trackBg: 'transparent',
             itemSelectedBg: isDarkTheme ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
-            boxShadowTertiary: undefined
+            boxShadowTertiary: undefined,
+            borderRadiusLG: 12,
+            borderRadiusSM: 12,
+            borderRadiusXS: 12
           },
           Menu: {
             activeBarBorderWidth: 0,

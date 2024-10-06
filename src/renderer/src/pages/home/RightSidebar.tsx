@@ -103,6 +103,7 @@ const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssist
             borderRadius: 0,
             padding: '10px 0',
             margin: '0 10px',
+            paddingBottom: 10,
             borderBottom: '0.5px solid var(--color-border)',
             gap: 2
           }}

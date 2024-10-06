@@ -147,7 +147,9 @@
     "history": {
       "title": "搜尋話題",
       "search.placeholder": "搜尋話題或訊息...",
-      "continue_chat": "繼續聊天"
+      "continue_chat": "繼續聊天",
+      "search.topics.empty": "沒有找到相關話題, 點擊回車鍵搜尋所有訊息",
+      "locate.message": "定位到訊息"
     },
     "provider": {
       "nvidia": "輝達",

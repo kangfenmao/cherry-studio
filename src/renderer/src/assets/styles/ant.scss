@@ -41,6 +41,9 @@
 }
 
 .segmented-tab {
+  .ant-segmented-item {
+    overflow: hidden;
+  }
   .ant-segmented-item-selected {
     background-color: var(--color-background-mute);
   }

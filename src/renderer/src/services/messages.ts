@@ -1,7 +1,11 @@
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
+import { getTopicById } from '@renderer/hooks/useTopic'
 import { Assistant, Message } from '@renderer/types'
 import { isEmpty, takeRight } from 'lodash'
+import { NavigateFunction } from 'react-router'
 
+import { getAssistantById } from './assistant'
+import { EVENT_NAMES, EventEmitter } from './event'
 import FileManager from './file'
 
 export const filterMessages = (messages: Message[]) => {
@@ -35,4 +39,12 @@ export function getContextCount(assistant: Assistant, messages: Message[]) {
 
 export function deleteMessageFiles(message: Message) {
   message.files && FileManager.deleteFiles(message.files.map((f) => f.id))
+}
+
+export async function locateToMessage(navigate: NavigateFunction, message: Message) {
+  const assistant = getAssistantById(message.assistantId)
+  const topic = await getTopicById(message.topicId)
+  navigate('/', { state: { assistant, topic } })
+  setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
+  setTimeout(() => EventEmitter.emit(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id), 300)
 }

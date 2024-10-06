@@ -182,7 +182,7 @@ const Container = styled.div`
 `
 
 const TopicListItem = styled.div`
-  padding: 7px 10px;
+  padding: 7px 12px;
   margin: 0 10px;
   border-radius: 17px;
   font-family: Ubuntu;

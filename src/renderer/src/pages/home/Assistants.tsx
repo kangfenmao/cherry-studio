@@ -222,7 +222,7 @@ const AssistantItem = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 7px 10px;
+  padding: 7px 12px;
   position: relative;
   border-radius: 17px;
   margin: 0 10px;

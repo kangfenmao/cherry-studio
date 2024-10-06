@@ -1,9 +1,10 @@
 import db from '@renderer/databases'
+import useScrollPosition from '@renderer/hooks/useScrollPosition'
 import { getTopicById } from '@renderer/hooks/useTopic'
 import { Message, Topic } from '@renderer/types'
 import { List, Typography } from 'antd'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 const { Text, Title } = Typography
@@ -15,7 +16,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const SearchResults: FC<Props> = ({ keywords, onMessageClick, onTopicClick, ...props }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const { handleScroll, containerRef } = useScrollPosition('SearchResults')
 
   const [searchTerms, setSearchTerms] = useState<string[]>(
     keywords
@@ -84,7 +85,7 @@ const SearchResults: FC<Props> = ({ keywords, onMessageClick, onTopicClick, ...p
   }, [onSearch])
 
   return (
-    <Container ref={containerRef} {...props}>
+    <Container ref={containerRef} {...props} onScroll={handleScroll}>
       <ContainerWrapper>
         {searchResults.length > 0 && (
           <SearchStats>
