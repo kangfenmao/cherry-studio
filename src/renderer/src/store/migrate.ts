@@ -504,6 +504,27 @@ const migrateConfig = {
         })
       }
     }
+  },
+  '30': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'azure-openai',
+            name: 'Azure OpenAI',
+            apiKey: '',
+            apiHost: '',
+            apiVersion: '',
+            models: SYSTEM_MODELS['azure-openai'],
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 }
 

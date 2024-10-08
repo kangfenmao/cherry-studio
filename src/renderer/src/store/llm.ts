@@ -60,6 +60,16 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'azure-openai',
+      name: 'Azure OpenAI',
+      apiKey: '',
+      apiHost: '',
+      apiVersion: '',
+      models: SYSTEM_MODELS['azure-openai'],
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'gemini',
       name: 'Gemini',
       apiKey: '',

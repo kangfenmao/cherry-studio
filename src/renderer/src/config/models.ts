@@ -343,6 +343,20 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'o1'
     }
   ],
+  'azure-openai': [
+    {
+      id: 'gpt-4o',
+      provider: 'openai',
+      name: ' GPT-4o',
+      group: 'GPT 4o'
+    },
+    {
+      id: 'gpt-4o-mini',
+      provider: 'openai',
+      name: ' GPT-4o-mini',
+      group: 'GPT 4o'
+    }
+  ],
   gemini: [
     {
       id: 'gemini-1.5-flash',

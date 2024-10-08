@@ -6,7 +6,7 @@ import { filterContextMessages } from '@renderer/services/messages'
 import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
 import { first, takeRight } from 'lodash'
-import OpenAI from 'openai'
+import OpenAI, { AzureOpenAI } from 'openai'
 import {
   ChatCompletionContentPart,
   ChatCompletionCreateParamsNonStreaming,
@@ -20,6 +20,16 @@ export default class OpenAIProvider extends BaseProvider {
 
   constructor(provider: Provider) {
     super(provider)
+    if (provider.id === 'azure-openai') {
+      this.sdk = new AzureOpenAI({
+        dangerouslyAllowBrowser: true,
+        apiKey: provider.apiKey,
+        apiVersion: provider.apiVersion,
+        endpoint: provider.apiHost
+      })
+      return
+    }
+
     this.sdk = new OpenAI({
       dangerouslyAllowBrowser: true,
       apiKey: provider.apiKey,

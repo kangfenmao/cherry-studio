@@ -175,7 +175,8 @@
       "minimax": "MiniMax",
       "graphrag-kylin-mountain": "GraphRAG",
       "github": "GitHub Models",
-      "ocoolai": "ocoolAI"
+      "ocoolai": "ocoolAI",
+      "azure-openai": "Azure OpenAI"
     },
     "settings": {
       "title": "Settings",
@@ -220,6 +221,7 @@
       "provider.check": "Check",
       "provider.get_api_key": "Get API Key",
       "provider.api_host": "API Host",
+      "provider.api_version": "API Version",
       "provider.docs_check": "Check",
       "provider.docs_more_details": "for more details",
       "provider.search_placeholder": "Search model id or name",

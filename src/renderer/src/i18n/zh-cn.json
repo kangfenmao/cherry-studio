@@ -175,7 +175,8 @@
       "minimax": "MiniMax",
       "graphrag-kylin-mountain": "GraphRAG",
       "github": "GitHub Models",
-      "ocoolai": "ocoolAI"
+      "ocoolai": "ocoolAI",
+      "azure-openai": "Azure OpenAI"
     },
     "settings": {
       "title": "设置",
@@ -220,6 +221,7 @@
       "provider.check": "检查",
       "provider.get_api_key": "点击这里获取密钥",
       "provider.api_host": "API 地址",
+      "provider.api_version": "API 版本",
       "provider.docs_check": "查看",
       "provider.docs_more_details": "获取更多详情",
       "provider.search_placeholder": "搜索模型 ID 或名称",

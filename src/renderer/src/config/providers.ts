@@ -1,4 +1,5 @@
 import ZhinaoProviderLogo from '@renderer/assets/images/models/360.png'
+import AzureProviderLogo from '@renderer/assets/images/models/microsoft.png'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.png'
 import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
@@ -73,7 +74,8 @@ export function getProviderLogo(providerId: string) {
       return ZhinaoProviderLogo
     case 'nvidia':
       return NvidiaProviderLogo
-
+    case 'azure-openai':
+      return AzureProviderLogo
     default:
       return undefined
   }
@@ -335,6 +337,17 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://build.nvidia.com/meta/llama-3_1-405b-instruct',
       docs: 'https://docs.api.nvidia.com/nim/reference/llm-apis',
       models: 'https://build.nvidia.com/nim'
+    }
+  },
+  'azure-openai': {
+    api: {
+      url: ''
+    },
+    websites: {
+      official: 'https://azure.microsoft.com/en-us/products/ai-services/openai-service',
+      apiKey: 'https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI',
+      docs: 'https://learn.microsoft.com/en-us/azure/ai-services/openai/',
+      models: 'https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models'
     }
   }
 }

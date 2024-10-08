@@ -41,6 +41,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const { provider } = useProvider(_provider.id)
   const [apiKey, setApiKey] = useState(provider.apiKey)
   const [apiHost, setApiHost] = useState(provider.apiHost)
+  const [apiVersion, setApiVersion] = useState(provider.apiVersion)
   const [apiValid, setApiValid] = useState(false)
   const [apiChecking, setApiChecking] = useState(false)
   const { updateProvider, models, removeModel } = useProvider(provider.id)
@@ -56,6 +57,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
 
   const onUpdateApiKey = () => updateProvider({ ...provider, apiKey })
   const onUpdateApiHost = () => updateProvider({ ...provider, apiHost })
+  const onUpdateApiVersion = () => updateProvider({ ...provider, apiVersion })
   const onManageModel = () => EditModelsPopup.show({ provider })
   const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add.add_model'), provider })
 
@@ -136,6 +138,19 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>
         )}
       </Space.Compact>
+      {provider.id === 'azure-openai' && (
+        <>
+          <SettingSubtitle>{t('settings.provider.api_version')}</SettingSubtitle>
+          <Space.Compact style={{ width: '100%', marginTop: 5 }}>
+            <Input
+              value={apiVersion}
+              placeholder="2024-xx-xx-preview"
+              onChange={(e) => setApiVersion(e.target.value)}
+              onBlur={onUpdateApiVersion}
+            />
+          </Space.Compact>
+        </>
+      )}
       {provider.id === 'ollama' && <OllamSettings />}
       {provider.id === 'graphrag-kylin-mountain' && provider.models.length > 0 && (
         <GraphRAGSettings provider={provider} />
