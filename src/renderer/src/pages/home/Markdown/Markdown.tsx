@@ -8,6 +8,7 @@ import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown, { Components } from 'react-markdown'
 import rehypeKatex from 'rehype-katex'
+import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
@@ -18,7 +19,7 @@ interface Props {
   message: Message
 }
 
-const rehypePlugins = [rehypeKatex]
+const rehypePlugins = [rehypeRaw, rehypeKatex]
 const remarkPlugins = [remarkMath, remarkGfm]
 
 const components = {
