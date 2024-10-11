@@ -166,7 +166,7 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   overflow: hidden;
-  padding-bottom: 10px;
+  padding: 5px;
 `
 
 const Label = styled.p`

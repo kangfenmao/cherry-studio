@@ -81,7 +81,7 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
           />
         </LeftMenu>
         <Settings>
-          {menu === 'prompt' && <AssistantPromptSettings assistant={assistant} />}
+          {menu === 'prompt' && <AssistantPromptSettings assistant={assistant} onOk={onOk} />}
           {menu === 'model' && <AssistantModelSettings assistant={assistant} />}
         </Settings>
       </HStack>

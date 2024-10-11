@@ -27,7 +27,8 @@
       "default": "默认",
       "warning": "警告",
       "back": "返回",
-      "chat": "聊天"
+      "chat": "聊天",
+      "close": "关闭"
     },
     "button": {
       "add": "添加",
