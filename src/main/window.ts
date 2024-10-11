@@ -45,11 +45,9 @@ export function createMainWindow() {
 
   mainWindow.webContents.on('context-menu', () => {
     const menu = new Menu()
-    menu.append(new MenuItem({ label: '复制', role: 'copy', sublabel: '⌘ + C' }))
-    menu.append(new MenuItem({ label: '粘贴', role: 'paste', sublabel: '⌘ + V' }))
-    menu.append(new MenuItem({ label: '剪切', role: 'cut', sublabel: '⌘ + X' }))
-    menu.append(new MenuItem({ type: 'separator' }))
-    menu.append(new MenuItem({ label: '全选', role: 'selectAll', sublabel: '⌘ + A' }))
+    menu.append(new MenuItem({ label: '复制', role: 'copy' }))
+    menu.append(new MenuItem({ label: '粘贴', role: 'paste' }))
+    menu.append(new MenuItem({ label: '剪切', role: 'cut' }))
     menu.popup()
   })
 
