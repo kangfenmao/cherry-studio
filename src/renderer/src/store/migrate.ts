@@ -525,6 +525,23 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '31': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: state.llm.providers.map((provider) => {
+          if (provider.id === 'azure-openai') {
+            provider.models = provider.models.map((model) => {
+              model.provider = 'azure-openai'
+              return model
+            })
+          }
+          return provider
+        })
+      }
+    }
   }
 }
 
