@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import Chat from './Chat'
 import Navbar from './Navbar'
-import RightSidebar from './RightSidebar'
+import HomeTabs from './Tabs'
 
 let _activeAssistant: Assistant
 
@@ -29,7 +29,7 @@ const HomePage: FC = () => {
       <Navbar activeAssistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
       <ContentContainer id="content-container">
         {showAssistants && (
-          <RightSidebar
+          <HomeTabs
             activeAssistant={activeAssistant}
             activeTopic={activeTopic}
             setActiveAssistant={setActiveAssistant}

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import Inputbar from './Inputbar/Inputbar'
 import Messages from './Messages/Messages'
-import RightSidebar from './RightSidebar'
+import RightSidebar from './Tabs'
 
 interface Props {
   assistant: Assistant

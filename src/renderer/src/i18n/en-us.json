@@ -115,7 +115,8 @@
       "model_settings": "Model Settings"
     },
     "model": {
-      "stream_output": "Stream Output"
+      "stream_output": "Stream Output",
+      "search": "Search models..."
     },
     "files": {
       "title": "Files",

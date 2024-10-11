@@ -27,7 +27,7 @@ type Tab = 'assistants' | 'topic' | 'settings'
 
 let _tab: any = ''
 
-const RightSidebar: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant, setActiveTopic, position }) => {
+const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant, setActiveTopic, position }) => {
   const { addAssistant } = useAssistants()
   const [tab, setTab] = useState<Tab>(position === 'left' ? _tab || 'assistants' : 'topic')
   const { topicPosition } = useSettings()
@@ -164,4 +164,4 @@ const TabContent = styled.div`
   overflow-x: hidden;
 `
 
-export default RightSidebar
+export default HomeTabs

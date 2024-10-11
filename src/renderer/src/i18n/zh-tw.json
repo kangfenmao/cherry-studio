@@ -115,7 +115,8 @@
       "model_settings": "模型設定"
     },
     "model": {
-      "stream_output": "串流輸出"
+      "stream_output": "串流輸出",
+      "search": "搜尋模型..."
     },
     "files": {
       "title": "檔案",

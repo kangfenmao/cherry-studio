@@ -2,10 +2,8 @@
   resize: none;
 }
 
-.chat-nav-dropdown {
-  .ant-dropdown-menu {
-    padding-bottom: 12px;
-  }
+.ant-btn:not(:disabled):focus-visible {
+  outline: none;
 }
 
 .ant-segmented-group {

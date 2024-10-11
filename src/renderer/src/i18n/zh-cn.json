@@ -115,7 +115,8 @@
       "model_settings": "模型设置"
     },
     "model": {
-      "stream_output": "流式输出"
+      "stream_output": "流式输出",
+      "search": "搜索模型..."
     },
     "files": {
       "title": "文件",

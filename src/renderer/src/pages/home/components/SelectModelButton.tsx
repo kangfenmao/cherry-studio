@@ -1,5 +1,6 @@
 import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
+import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import { isLocalAi } from '@renderer/config/env'
 import { isVisionModel } from '@renderer/config/models'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -9,8 +10,6 @@ import { upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import SelectModelDropdown from './SelectModelDropdown'
 
 interface Props {
   assistant: Assistant
@@ -24,14 +23,19 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
     return null
   }
 
+  const onSelectModel = async () => {
+    const selectedModel = await SelectModelPopup.show({ model })
+    if (selectedModel) {
+      setModel(selectedModel)
+    }
+  }
+
   return (
-    <SelectModelDropdown model={model} onSelect={setModel} placement="top">
-      <DropdownButton size="small" type="default">
-        <ModelAvatar model={model} size={20} />
-        <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
-        {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
-      </DropdownButton>
-    </SelectModelDropdown>
+    <DropdownButton size="small" type="default" onClick={onSelectModel}>
+      <ModelAvatar model={model} size={20} />
+      <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
+      {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
+    </DropdownButton>
   )
 }
 
@@ -39,6 +43,7 @@ const DropdownButton = styled(Button)`
   font-size: 11px;
   border-radius: 15px;
   padding: 12px 8px 12px 3px;
+  -webkit-app-region: none;
 `
 
 const ModelName = styled.span`

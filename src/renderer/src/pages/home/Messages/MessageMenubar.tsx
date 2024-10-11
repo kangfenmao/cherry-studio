@@ -8,6 +8,7 @@ import {
   SaveOutlined,
   SyncOutlined
 } from '@ant-design/icons'
+import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
@@ -16,8 +17,6 @@ import { Dropdown, Popconfirm, Tooltip } from 'antd'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import SelectModelDropdown from '../components/SelectModelDropdown'
 
 interface Props {
   message: Message
@@ -83,6 +82,13 @@ const MessageMenubar: FC<Props> = (props) => {
     [message.content, message.createdAt, onEdit, t]
   )
 
+  const onSelectModel = async () => {
+    const selectedModel = await SelectModelPopup.show({ model })
+    if (selectedModel) {
+      setModel(selectedModel)
+    }
+  }
+
   return (
     <MenusBar className={`menubar ${isLastMessage && 'show'}`}>
       {message.role === 'user' && (
@@ -99,13 +105,11 @@ const MessageMenubar: FC<Props> = (props) => {
         </ActionButton>
       </Tooltip>
       {canRegenerate && (
-        <SelectModelDropdown model={model} onSelect={onRegenerate} placement="topLeft">
-          <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-            <ActionButton>
-              <SyncOutlined />
-            </ActionButton>
-          </Tooltip>
-        </SelectModelDropdown>
+        <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+          <ActionButton onClick={onSelectModel}>
+            <SyncOutlined />
+          </ActionButton>
+        </Tooltip>
       )}
       {isAssistantMessage && (
         <Tooltip title={t('chat.message.new.branch')} mouseEnterDelay={0.8}>

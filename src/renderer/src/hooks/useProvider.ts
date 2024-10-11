@@ -22,7 +22,7 @@ export function useProviders() {
   const dispatch = useAppDispatch()
 
   return {
-    providers,
+    providers: providers || {},
     addProvider: (provider: Provider) => dispatch(addProvider(provider)),
     removeProvider: (provider: Provider) => dispatch(removeProvider(provider)),
     updateProvider: (provider: Provider) => dispatch(updateProvider(provider)),
