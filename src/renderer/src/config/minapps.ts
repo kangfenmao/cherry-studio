@@ -1,10 +1,11 @@
 import AiAssistantAppLogo from '@renderer/assets/images/apps/360-ai.png'
 import AiSearchAppLogo from '@renderer/assets/images/apps/ai-search.png'
 import BaiduAiAppLogo from '@renderer/assets/images/apps/baidu-ai.png'
-import FeloAppLogo from '@renderer/assets/images/apps/felo.png'
 import BaicuanAppLogo from '@renderer/assets/images/apps/baixiaoying.webp'
+import BoltAppLogo from '@renderer/assets/images/apps/bolt.svg'
 import DevvAppLogo from '@renderer/assets/images/apps/devv.png'
 import DoubaoAppLogo from '@renderer/assets/images/apps/doubao.png'
+import FeloAppLogo from '@renderer/assets/images/apps/felo.png'
 import GeminiAppLogo from '@renderer/assets/images/apps/gemini.png'
 import HuggingChatLogo from '@renderer/assets/images/apps/huggingchat.svg'
 import KimiAppLogo from '@renderer/assets/images/apps/kimi.jpg'
@@ -206,6 +207,13 @@ const _apps: MinAppType[] = [
     name: 'Felo',
     logo: FeloAppLogo,
     url: 'https://felo.ai/',
+    bodered: true
+  },
+  {
+    id: 'bolt',
+    name: 'bolt',
+    logo: BoltAppLogo,
+    url: 'https://bolt.new/',
     bodered: true
   }
 ]
