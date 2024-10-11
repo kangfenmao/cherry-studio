@@ -84,9 +84,7 @@ const MessageMenubar: FC<Props> = (props) => {
 
   const onSelectModel = async () => {
     const selectedModel = await SelectModelPopup.show({ model })
-    if (selectedModel) {
-      setModel(selectedModel)
-    }
+    selectedModel && onRegenerate(selectedModel)
   }
 
   return (
