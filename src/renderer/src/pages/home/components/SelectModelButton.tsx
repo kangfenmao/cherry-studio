@@ -6,7 +6,6 @@ import { isVisionModel } from '@renderer/config/models'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
 import { Button } from 'antd'
-import { upperFirst } from 'lodash'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -34,7 +33,7 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
   return (
     <DropdownButton size="small" type="default" onClick={onSelectModel}>
       <ModelAvatar model={model} size={20} />
-      <ModelName>{model ? upperFirst(model.name) : t('button.select_model')}</ModelName>
+      <ModelName>{model ? model.name : t('button.select_model')}</ModelName>
       {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
     </DropdownButton>
   )

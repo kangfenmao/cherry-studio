@@ -9,7 +9,6 @@ import { Assistant, Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar } from 'antd'
 import dayjs from 'dayjs'
-import { upperFirst } from 'lodash'
 import { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -36,7 +35,7 @@ const MessageHeader: FC<Props> = ({ assistant, model, message }) => {
 
   const getUserName = useCallback(() => {
     if (isLocalAi && message.role !== 'user') return APP_NAME
-    if (message.role === 'assistant') return upperFirst(model?.name || model?.id)
+    if (message.role === 'assistant') return model?.name || model?.id || ''
     return userName || t('common.you')
   }, [message.role, model?.id, model?.name, t, userName])
 

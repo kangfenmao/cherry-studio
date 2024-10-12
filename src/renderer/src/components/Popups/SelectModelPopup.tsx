@@ -6,7 +6,7 @@ import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId } from '@renderer/services/model'
 import { Model } from '@renderer/types'
 import { Avatar, Divider, Empty, Input, InputRef, Menu, MenuProps, Modal } from 'antd'
-import { first, reverse, sortBy, upperFirst } from 'lodash'
+import { first, reverse, sortBy } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -42,7 +42,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
           key: getModelUniqId(m),
           label: (
             <ModelItem>
-              {upperFirst(m?.name)} {isVisionModel(m) && <VisionIcon />}
+              {m?.name} {isVisionModel(m) && <VisionIcon />}
             </ModelItem>
           ),
           icon: (

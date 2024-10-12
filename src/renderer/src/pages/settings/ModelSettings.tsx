@@ -4,7 +4,7 @@ import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId, hasModel } from '@renderer/services/model'
 import { Model } from '@renderer/types'
 import { Select } from 'antd'
-import { find, sortBy, upperFirst } from 'lodash'
+import { find, sortBy } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +23,7 @@ const ModelSettings: FC = () => {
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       title: p.name,
       options: sortBy(p.models, 'name').map((m) => ({
-        label: upperFirst(m.name),
+        label: m.name,
         value: getModelUniqId(m)
       }))
     }))
