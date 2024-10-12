@@ -14,6 +14,7 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
 import CodeBlock from './CodeBlock'
+import ImagePreview from './ImagePreview'
 import Link from './Link'
 
 interface Props {
@@ -25,7 +26,8 @@ const remarkPlugins = [remarkMath, remarkGfm]
 
 const components = {
   code: CodeBlock,
-  a: Link
+  a: Link,
+  img: ImagePreview
 }
 
 const Markdown: FC<Props> = ({ message }) => {

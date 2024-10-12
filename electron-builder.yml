@@ -65,10 +65,7 @@ afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     本次更新：
-      支持更多的数学公式显示
-      可以通过搜索快速切换模型
-      增加 Bolt 小程序
-      修复 Azure OpenAI 默认模型无法使用问题
+      支持图片的预览和下载
     近期更新：
       增加 WebDAV 备份功能 by @DrayChou
       增加话题历史记录
