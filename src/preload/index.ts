@@ -11,6 +11,8 @@ const api = {
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
   reload: () => ipcRenderer.invoke('reload'),
+  compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
+  decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text),
   backup: {
     backup: (fileName: string, data: string, destinationPath?: string) =>
       ipcRenderer.invoke('backup:backup', fileName, data, destinationPath),

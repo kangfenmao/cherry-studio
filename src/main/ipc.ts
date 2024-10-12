@@ -4,6 +4,7 @@ import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
 import BackupManager from './services/BackupManager'
 import FileManager from './services/FileManager'
+import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
 
 const fileManager = new FileManager()
@@ -29,6 +30,8 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('reload', () => mainWindow.reload())
 
+  ipcMain.handle('zip:compress', (_, text: string) => compress(text))
+  ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
   ipcMain.handle('backup:backup', backupManager.backup)
   ipcMain.handle('backup:restore', backupManager.restore)
   ipcMain.handle('backup:backupToWebdav', backupManager.backupToWebdav)
