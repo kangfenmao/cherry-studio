@@ -102,7 +102,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
           size="middle"
         />
       </HStack>
-      <Divider style={{ margin: 0 }} />
+      <Divider style={{ margin: 0, borderBlockStartWidth: 0.5 }} />
       <Container>
         {agents.map((agent) => (
           <AgentItem
