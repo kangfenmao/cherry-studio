@@ -16,6 +16,8 @@ export function createMainWindow() {
   const theme = appConfig.get('theme') || 'light'
 
   // Create the browser window.
+  const isMac = process.platform === 'darwin'
+
   const mainWindow = new BrowserWindow({
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -25,11 +27,12 @@ export function createMainWindow() {
     minHeight: 600,
     show: true,
     autoHideMenuBar: true,
-    transparent: process.platform === 'darwin',
+    transparent: isMac,
     vibrancy: 'fullscreen-ui',
     visualEffectState: 'active',
     titleBarStyle: 'hidden',
     titleBarOverlay: theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight,
+    backgroundColor: isMac ? undefined : theme === 'dark' ? '#181818' : '#FFFFFF',
     trafficLightPosition: { x: 8, y: 12 },
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
