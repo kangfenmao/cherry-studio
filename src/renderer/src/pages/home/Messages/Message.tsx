@@ -42,15 +42,17 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, showMenu = true, 
 
   useEffect(() => {
     const unsubscribes = [
-      EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, () => {
+      EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, (highlight: boolean = true) => {
         if (messageRef.current) {
           messageRef.current.scrollIntoView({ behavior: 'smooth' })
-          setTimeout(() => {
-            messageRef.current?.classList.add('message-highlight')
+          if (highlight) {
             setTimeout(() => {
-              messageRef.current?.classList.remove('message-highlight')
-            }, 2500)
-          }, 500)
+              messageRef.current?.classList.add('message-highlight')
+              setTimeout(() => {
+                messageRef.current?.classList.remove('message-highlight')
+              }, 2500)
+            }, 500)
+          }
         }
       })
     ]

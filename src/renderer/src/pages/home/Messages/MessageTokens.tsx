@@ -1,16 +1,21 @@
 import { useRuntime } from '@renderer/hooks/useStore'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import styled from 'styled-components'
 
 const MessgeTokens: React.FC<{ message: Message }> = ({ message }) => {
   const { generating } = useRuntime()
 
+  const locateMessage = () => {
+    EventEmitter.emit(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, false)
+  }
+
   if (!message.usage) {
     return null
   }
 
   if (message.role === 'user') {
-    return <MessageMetadata>Tokens: {message?.usage?.total_tokens}</MessageMetadata>
+    return <MessageMetadata onClick={locateMessage}>Tokens: {message?.usage?.total_tokens}</MessageMetadata>
   }
 
   if (generating) {
@@ -19,7 +24,7 @@ const MessgeTokens: React.FC<{ message: Message }> = ({ message }) => {
 
   if (message.role === 'assistant') {
     return (
-      <MessageMetadata>
+      <MessageMetadata onClick={locateMessage}>
         Tokens: {message?.usage?.total_tokens} | ↑{message?.usage?.prompt_tokens} | ↓{message?.usage?.completion_tokens}
       </MessageMetadata>
     )
@@ -33,6 +38,7 @@ const MessageMetadata = styled.div`
   color: var(--color-text-2);
   user-select: text;
   margin: 2px 0;
+  cursor: pointer;
 `
 
 export default MessgeTokens
