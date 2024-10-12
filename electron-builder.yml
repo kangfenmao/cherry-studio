@@ -65,7 +65,14 @@ afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     本次更新：
+      支持 PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ODT, ODP, ODS 文件
       支持图片的预览和下载
+      修复旧版本备份文件无法恢复问题
+      o1模型设置使用优化
+      修复黑暗模式的启动页是白色的
+      取消模型首字母大写
+      字体大小上限增加到22
+      点击消息token返回到消息顶部
     近期更新：
       增加 WebDAV 备份功能 by @DrayChou
       增加话题历史记录
