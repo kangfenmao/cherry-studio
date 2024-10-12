@@ -7,7 +7,7 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
-import { imageExts, textExts } from '@renderer/config/constant'
+import { documentExts, imageExts, textExts } from '@renderer/config/constant'
 import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -60,7 +60,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const dispatch = useAppDispatch()
 
   const isVision = useMemo(() => isVisionModel(model), [model])
-  const supportExts = useMemo(() => [...textExts, ...(isVision ? imageExts : [])], [isVision])
+  const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
   const inputTokenCount = useMemo(() => estimateTextTokens(text), [text])
 
   _text = text

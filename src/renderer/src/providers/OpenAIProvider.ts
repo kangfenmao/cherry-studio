@@ -64,7 +64,7 @@ export default class OpenAIProvider extends BaseProvider {
 
     if (this.isNotSupportFiles) {
       if (message.files) {
-        const textFiles = message.files.filter((file) => file.type === FileTypes.TEXT)
+        const textFiles = message.files.filter((file) => [FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type))
 
         if (textFiles.length > 0) {
           let text = ''
@@ -104,7 +104,7 @@ export default class OpenAIProvider extends BaseProvider {
           image_url: { url: image.data }
         })
       }
-      if (file.type === FileTypes.TEXT) {
+      if ([FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type)) {
         const fileContent = await (await window.api.file.read(file.id + file.ext)).trim()
         parts.push({
           type: 'text',

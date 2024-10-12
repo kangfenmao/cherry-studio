@@ -1,3 +1,4 @@
+import { documentExts } from '@main/constant'
 import { getFileType } from '@main/utils/file'
 import { FileType } from '@types'
 import * as crypto from 'crypto'
@@ -13,6 +14,7 @@ import logger from 'electron-log'
 import * as fs from 'fs'
 import { writeFileSync } from 'fs'
 import { readFile } from 'fs/promises'
+import officeParser from 'officeparser'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -172,7 +174,12 @@ class FileManager {
   }
 
   public readFile = async (_: Electron.IpcMainInvokeEvent, id: string): Promise<string> => {
-    const filePath = path.join(this.storageDir, id)
+    const filePath = id.includes('/') ? id : path.join(this.storageDir, id)
+
+    if (documentExts.includes(path.extname(filePath))) {
+      return await officeParser.parseOfficeAsync(filePath)
+    }
+
     return fs.readFileSync(filePath, 'utf8')
   }
 

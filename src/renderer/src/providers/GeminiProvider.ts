@@ -40,7 +40,7 @@ export default class GeminiProvider extends BaseProvider {
           }
         } as InlineDataPart)
       }
-      if (file.type === FileTypes.TEXT) {
+      if ([FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type)) {
         const fileContent = await (await window.api.file.read(file.id + file.ext)).trim()
         parts.push({
           text: file.origin_name + '\n' + fileContent
