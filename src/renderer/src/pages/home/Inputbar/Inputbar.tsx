@@ -16,7 +16,7 @@ import { useRuntime, useShowTopics } from '@renderer/hooks/useStore'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import FileManager from '@renderer/services/file'
-import { estimateTextTokens } from '@renderer/services/tokens'
+import { estimateTextTokens as estimateTxtTokens } from '@renderer/services/tokens'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, Message, Topic } from '@renderer/types'
@@ -46,7 +46,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic, model } = useAssistant(assistant.id)
-  const { sendMessageShortcut, fontSize, pasteLongTextAsFile } = useSettings()
+  const { sendMessageShortcut, fontSize, pasteLongTextAsFile, showInputEstimatedTokens } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const [contextCount, setContextCount] = useState(0)
@@ -61,7 +61,12 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
-  const inputTokenCount = useMemo(() => estimateTextTokens(text), [text])
+
+  const estimateTextTokens = useCallback(debounce(estimateTxtTokens, 1000), [])
+  const inputTokenCount = useMemo(
+    () => showInputEstimatedTokens && estimateTextTokens(text),
+    [estimateTextTokens, showInputEstimatedTokens, text]
+  )
 
   _text = text
   _files = files
