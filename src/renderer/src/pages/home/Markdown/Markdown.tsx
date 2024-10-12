@@ -21,15 +21,6 @@ interface Props {
   message: Message
 }
 
-const rehypePlugins = [rehypeRaw, rehypeMathjax]
-const remarkPlugins = [remarkMath, remarkGfm]
-
-const components = {
-  code: CodeBlock,
-  a: Link,
-  img: ImagePreview
-}
-
 const Markdown: FC<Props> = ({ message }) => {
   const { t } = useTranslation()
   const { renderInputMessageAsMarkdown } = useSettings()
@@ -41,6 +32,11 @@ const Markdown: FC<Props> = ({ message }) => {
     return escapeBrackets(content)
   }, [message.content, message.status, t])
 
+  const rehypePlugins = useMemo(() => {
+    const hasUnsafeElements = /<(input|textarea|select)/i.test(messageContent)
+    return hasUnsafeElements ? [rehypeMathjax] : [rehypeRaw, rehypeMathjax]
+  }, [messageContent])
+
   if (message.role === 'user' && !renderInputMessageAsMarkdown) {
     return <p style={{ marginBottom: 5, whiteSpace: 'pre-wrap' }}>{messageContent}</p>
   }
@@ -49,8 +45,14 @@ const Markdown: FC<Props> = ({ message }) => {
     <ReactMarkdown
       className="markdown"
       rehypePlugins={rehypePlugins}
-      remarkPlugins={remarkPlugins}
-      components={components as Partial<Components>}
+      remarkPlugins={[remarkMath, remarkGfm]}
+      components={
+        {
+          a: Link,
+          code: CodeBlock,
+          img: ImagePreview
+        } as Partial<Components>
+      }
       remarkRehypeOptions={{
         footnoteLabel: t('common.footnotes'),
         footnoteLabelTagName: 'h4',
