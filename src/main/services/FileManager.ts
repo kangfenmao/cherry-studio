@@ -16,10 +16,12 @@ import { writeFileSync } from 'fs'
 import { readFile } from 'fs/promises'
 import officeParser from 'officeparser'
 import * as path from 'path'
+import { chdir } from 'process'
 import { v4 as uuidv4 } from 'uuid'
 
 class FileManager {
   private storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
+  private tempDir = path.join(app.getPath('temp'), 'CherryStudio')
 
   constructor() {
     this.initStorageDir()
@@ -28,6 +30,9 @@ class FileManager {
   private initStorageDir = (): void => {
     if (!fs.existsSync(this.storageDir)) {
       fs.mkdirSync(this.storageDir, { recursive: true })
+    }
+    if (!fs.existsSync(this.tempDir)) {
+      fs.mkdirSync(this.tempDir, { recursive: true })
     }
   }
 
@@ -177,18 +182,27 @@ class FileManager {
     const filePath = path.join(this.storageDir, id)
 
     if (documentExts.includes(path.extname(filePath))) {
-      return await officeParser.parseOfficeAsync(filePath)
+      const originalCwd = process.cwd()
+      try {
+        chdir(this.tempDir)
+        const data = await officeParser.parseOfficeAsync(filePath)
+        chdir(originalCwd)
+        return data
+      } catch (error) {
+        chdir(originalCwd)
+        logger.error(error)
+        throw error
+      }
     }
 
     return fs.readFileSync(filePath, 'utf8')
   }
 
   public createTempFile = async (_: Electron.IpcMainInvokeEvent, fileName: string): Promise<string> => {
-    const tempDir = path.join(app.getPath('temp'), 'CherryStudio')
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true })
+    if (!fs.existsSync(this.tempDir)) {
+      fs.mkdirSync(this.tempDir, { recursive: true })
     }
-    const tempFilePath = path.join(tempDir, `temp_file_${uuidv4()}_${fileName}`)
+    const tempFilePath = path.join(this.tempDir, `temp_file_${uuidv4()}_${fileName}`)
     return tempFilePath
   }
 
