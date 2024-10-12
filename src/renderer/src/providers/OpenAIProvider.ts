@@ -134,13 +134,16 @@ export default class OpenAIProvider extends BaseProvider {
       userMessages.push(await this.getMessageParam(message, model))
     }
 
+    const isOpenAIo1 = model.id.includes('o1-')
     const isSupportStreamOutput = streamOutput && this.isSupportStreamOutput(model.id)
 
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({
       model: model.id,
-      messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
-      temperature: assistant?.settings?.temperature,
+      messages: [isOpenAIo1 ? undefined : systemMessage, ...userMessages].filter(
+        Boolean
+      ) as ChatCompletionMessageParam[],
+      temperature: isOpenAIo1 ? 1 : assistant?.settings?.temperature,
       max_tokens: maxTokens,
       keep_alive: this.keepAliveTime,
       stream: isSupportStreamOutput

@@ -29,9 +29,6 @@ export async function restore() {
         data = JSON.parse(await window.api.decompress(file.content))
       }
 
-      // 处理文件内容
-      console.log('Parsed file content:', data)
-
       await handleData(data)
     } catch (error) {
       console.error(error)
