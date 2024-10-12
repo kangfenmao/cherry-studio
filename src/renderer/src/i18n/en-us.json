@@ -90,7 +90,7 @@
       "input.send": "Send",
       "input.pause": "Pause",
       "input.settings": "Settings",
-      "input.upload": "Upload image or text file",
+      "input.upload": "Upload image or document file",
       "input.context_count.tip": "Context Count",
       "input.estimated_tokens.tip": "Estimated tokens",
       "settings.temperature": "Temperature",

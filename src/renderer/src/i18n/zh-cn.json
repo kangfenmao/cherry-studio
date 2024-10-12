@@ -90,7 +90,7 @@
       "input.send": "发送",
       "input.pause": "暂停",
       "input.settings": "设置",
-      "input.upload": "上传图片或纯文本文件",
+      "input.upload": "上传图片或文档",
       "input.context_count.tip": "上下文数",
       "input.estimated_tokens.tip": "预估 token 数",
       "settings.temperature": "模型温度",

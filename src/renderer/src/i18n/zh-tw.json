@@ -90,7 +90,7 @@
       "input.send": "發送",
       "input.pause": "暫停",
       "input.settings": "設定",
-      "input.upload": "上傳圖片或文字檔",
+      "input.upload": "上傳圖片或文檔",
       "input.context_count.tip": "上下文數量",
       "input.estimated_tokens.tip": "預估 Token 數",
       "settings.temperature": "溫度",

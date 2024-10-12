@@ -174,7 +174,7 @@ class FileManager {
   }
 
   public readFile = async (_: Electron.IpcMainInvokeEvent, id: string): Promise<string> => {
-    const filePath = id.includes('/') ? id : path.join(this.storageDir, id)
+    const filePath = path.join(this.storageDir, id)
 
     if (documentExts.includes(path.extname(filePath))) {
       return await officeParser.parseOfficeAsync(filePath)

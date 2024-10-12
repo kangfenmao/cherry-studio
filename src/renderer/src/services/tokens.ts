@@ -17,10 +17,8 @@ async function getFileContent(file: FileType) {
     return ''
   }
 
-  const fileId = file.id + file.ext
-
   if (file.type === FileTypes.TEXT) {
-    return await window.api.file.read(fileId)
+    return await window.api.file.read(file.id + file.ext)
   }
 
   return ''

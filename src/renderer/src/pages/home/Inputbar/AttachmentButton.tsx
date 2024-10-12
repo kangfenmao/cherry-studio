@@ -15,7 +15,9 @@ interface Props {
 
 const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) => {
   const { t } = useTranslation()
-  const extensions = isVisionModel(model) ? [...imageExts, ...textExts, ...documentExts] : [...textExts]
+  const extensions = isVisionModel(model)
+    ? [...imageExts, ...documentExts, ...textExts]
+    : [...documentExts, ...textExts]
 
   const onSelectFile = async () => {
     if (files.length > 0) {
