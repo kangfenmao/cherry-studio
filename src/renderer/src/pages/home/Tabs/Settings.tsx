@@ -214,12 +214,12 @@ const SettingsTab: FC<Props> = (props) => {
             onChange={(value) => setFontSizeValue(value)}
             onChangeComplete={(value) => dispatch(setFontSize(value))}
             min={12}
-            max={18}
+            max={22}
             step={1}
             marks={{
               12: <span style={{ fontSize: '12px' }}>A</span>,
               14: <span style={{ fontSize: '14px' }}>{t('common.default')}</span>,
-              18: <span style={{ fontSize: '18px' }}>A</span>
+              22: <span style={{ fontSize: '18px' }}>A</span>
             }}
           />
         </Col>
