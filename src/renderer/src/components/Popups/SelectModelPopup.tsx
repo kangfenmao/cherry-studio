@@ -133,7 +133,6 @@ const StyledMenu = styled(Menu)`
   padding: 5px;
   margin-top: -10px;
   max-height: calc(60vh - 50px);
-  overflow-y: auto;
 
   .ant-menu-item-group-title {
     padding: 5px 10px 0;
