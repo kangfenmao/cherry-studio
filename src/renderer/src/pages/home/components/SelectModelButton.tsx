@@ -23,7 +23,8 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
     return null
   }
 
-  const onSelectModel = async () => {
+  const onSelectModel = async (event: React.MouseEvent<HTMLElement>) => {
+    event.currentTarget.blur()
     const selectedModel = await SelectModelPopup.show({ model })
     if (selectedModel) {
       setModel(selectedModel)
