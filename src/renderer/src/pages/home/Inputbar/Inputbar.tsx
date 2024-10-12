@@ -207,14 +207,14 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               await window.api.file.write(tempFilePath, pasteText)
               const selectedFile = await window.api.file.get(tempFilePath)
               selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
-              setText((prevText) => prevText.replace(pasteText, ''))
+              setText(text)
               setTimeout(() => resizeTextArea(), 0)
             }
           })
         }
       }
     },
-    [pasteLongTextAsFile, supportExts]
+    [pasteLongTextAsFile, supportExts, text]
   )
 
   // Command or Ctrl + N create new topic
