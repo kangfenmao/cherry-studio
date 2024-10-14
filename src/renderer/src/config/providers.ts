@@ -46,7 +46,7 @@ export function getProviderLogo(providerId: string) {
       return OpenRouterProviderLogo
     case 'baichuan':
       return BaichuanProviderLogo
-    case 'bailian':
+    case 'dashscope':
       return BailianProviderLogo
     case 'anthropic':
       return AnthropicProviderLogo
@@ -203,7 +203,7 @@ export const PROVIDER_CONFIG = {
       models: 'https://platform.baichuan-ai.com/price'
     }
   },
-  bailian: {
+  dashscope: {
     api: {
       url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/'
     },

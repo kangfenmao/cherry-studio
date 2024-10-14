@@ -142,7 +142,7 @@ const initialState: LlmState = {
       enabled: false
     },
     {
-      id: 'bailian',
+      id: 'dashscope',
       name: 'Bailian',
       apiKey: '',
       apiHost: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',

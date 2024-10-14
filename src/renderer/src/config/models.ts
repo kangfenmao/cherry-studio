@@ -698,19 +698,19 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   bailian: [
     {
       id: 'qwen-turbo',
-      provider: 'bailian',
+      provider: 'dashscope',
       name: 'Qwen Turbo',
       group: 'Qwen'
     },
     {
       id: 'qwen-plus',
-      provider: 'bailian',
+      provider: 'dashscope',
       name: 'Qwen Plus',
       group: 'Qwen'
     },
     {
       id: 'qwen-max',
-      provider: 'bailian',
+      provider: 'dashscope',
       name: 'Qwen Max',
       group: 'Qwen'
     }

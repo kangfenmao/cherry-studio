@@ -178,8 +178,8 @@ const migrateConfig = {
         providers: [
           ...state.llm.providers,
           {
-            id: 'bailian',
-            name: 'Bailian',
+            id: 'dashscope',
+            name: 'DashScope',
             apiKey: '',
             apiHost: 'https://dashscope.aliyuncs.com/compatible-mode/v1/',
             models: SYSTEM_MODELS.bailian,

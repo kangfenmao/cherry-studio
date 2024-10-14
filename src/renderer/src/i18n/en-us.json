@@ -169,7 +169,7 @@
       "groq": "Groq",
       "ollama": "Ollama",
       "baichuan": "Baichuan",
-      "bailian": "Alibaba Cloud",
+      "dashscope": "Alibaba Cloud",
       "anthropic": "Anthropic",
       "aihubmix": "AiHubMix",
       "stepfun": "StepFun",
