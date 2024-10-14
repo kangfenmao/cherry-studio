@@ -25,6 +25,7 @@ const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) 
     }
 
     const _files = await window.api.file.select({
+      properties: ['openFile', 'multiSelections'],
       filters: [
         {
           name: 'Files',
