@@ -107,7 +107,9 @@
       "add.assistant.title": "添加助手",
       "message.new.context": "新上下文",
       "message.new.branch": "新分支",
-      "assistant.search.placeholder": "搜尋"
+      "assistant.search.placeholder": "搜尋",
+      "artifacts.button.preview": "預覽",
+      "artifacts.button.download": "下載"
     },
     "assistants": {
       "title": "助手",

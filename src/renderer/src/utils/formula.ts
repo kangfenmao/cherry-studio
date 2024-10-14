@@ -32,3 +32,14 @@ $$
     return match
   })
 }
+
+export function extractTitle(html: string): string | null {
+  const titleRegex = /<title>(.*?)<\/title>/i
+  const match = html.match(titleRegex)
+
+  if (match && match[1]) {
+    return match[1].trim()
+  }
+
+  return null
+}

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import Inputbar from './Inputbar/Inputbar'
 import Messages from './Messages/Messages'
-import RightSidebar from './Tabs'
+import Tabs from './Tabs'
 
 interface Props {
   assistant: Assistant
@@ -29,7 +29,7 @@ const Chat: FC<Props> = (props) => {
         <Inputbar assistant={assistant} setActiveTopic={props.setActiveTopic} />
       </Main>
       {topicPosition === 'right' && showTopics && (
-        <RightSidebar
+        <Tabs
           activeAssistant={assistant}
           activeTopic={props.activeTopic}
           setActiveAssistant={props.setActiveAssistant}

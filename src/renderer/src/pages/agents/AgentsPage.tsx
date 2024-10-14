@@ -61,22 +61,24 @@ const AppsPage: FC = () => {
             {agents.length > 0 && <ManageIcon onClick={ManageAgentsPopup.show} />}
           </HStack>
           <UserAgents onAdd={onAddAgentConfirm} />
-          {Object.keys(agentGroups).map((group) => (
-            <div key={group}>
-              <Title level={4} key={group} style={{ marginBottom: 16 }}>
-                {group}
-              </Title>
-              <Row gutter={16}>
-                {agentGroups[group].map((agent, index) => {
-                  return (
-                    <Col span={8} key={group + index}>
-                      <AgentCard onClick={() => onAddAgentConfirm(agent)} agent={agent as any} />
-                    </Col>
-                  )
-                })}
-              </Row>
-            </div>
-          ))}
+          {Object.keys(agentGroups)
+            .reverse()
+            .map((group) => (
+              <div key={group}>
+                <Title level={4} key={group} style={{ marginBottom: 16 }}>
+                  {group}
+                </Title>
+                <Row gutter={16}>
+                  {agentGroups[group].map((agent, index) => {
+                    return (
+                      <Col span={8} key={group + index}>
+                        <AgentCard onClick={() => onAddAgentConfirm(agent)} agent={agent as any} />
+                      </Col>
+                    )
+                  })}
+                </Row>
+              </div>
+            ))}
           <div style={{ minHeight: 20 }} />
         </AssistantsContainer>
       </ContentContainer>

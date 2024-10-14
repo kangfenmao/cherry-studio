@@ -9,6 +9,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { atomDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import styled from 'styled-components'
 
+import Artifacts from './Artifacts'
 import Mermaid from './Mermaid'
 
 interface CodeBlockProps {
@@ -21,8 +22,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
   const showFooterCopyButton = children && children.length > 500
   const { theme } = useTheme()
+  const language = match?.[1]
 
-  if (match && match[1] === 'mermaid') {
+  if (language === 'mermaid') {
     initMermaid(theme)
     return <Mermaid chart={children} />
   }
@@ -50,6 +52,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
           <CopyButton text={children} style={{ marginTop: -40, marginRight: 10 }} />
         </CodeFooter>
       )}
+      {language === 'html' && children?.includes('</html>') && <Artifacts html={children} />}
     </div>
   ) : (
     <code className={className}>{children}</code>
