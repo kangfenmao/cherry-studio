@@ -131,7 +131,8 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {
         setMessages([])
-        updateTopic({ ...topic, messages: [] })
+        const defaultTopic = getDefaultTopic(assistant.id)
+        updateTopic({ ...topic, name: defaultTopic.name, messages: [] })
         TopicManager.clearTopicMessages(topic.id)
       }),
       EventEmitter.on(EVENT_NAMES.EXPORT_TOPIC_IMAGE, async () => {

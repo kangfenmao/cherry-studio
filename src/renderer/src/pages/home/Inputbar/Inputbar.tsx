@@ -248,10 +248,13 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.ESTIMATED_TOKEN_COUNT, ({ tokensCount, contextCount }) => {
         _setEstimateTokenCount(tokensCount)
         setContextCount(contextCount)
+      }),
+      EventEmitter.on(EVENT_NAMES.ADD_NEW_TOPIC, () => {
+        addNewTopic()
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [])
+  }, [addNewTopic])
 
   useEffect(() => {
     textareaRef.current?.focus()

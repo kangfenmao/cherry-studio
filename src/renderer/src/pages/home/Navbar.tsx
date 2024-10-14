@@ -4,11 +4,9 @@ import AssistantSettingPopup from '@renderer/components/AssistantSettings'
 import { HStack } from '@renderer/components/Layout'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
-import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
-import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
 import { Switch } from 'antd'
@@ -24,8 +22,8 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
-  const { assistant, addTopic } = useAssistant(activeAssistant.id)
+const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
+  const { assistant } = useAssistant(activeAssistant.id)
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { theme, toggleTheme } = useTheme()
   const { topicPosition } = useSettings()
@@ -33,13 +31,10 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveTopic }) => {
   const { t } = useTranslation()
 
   const addNewTopic = useCallback(() => {
-    const topic = getDefaultTopic(assistant.id)
-    addTopic(topic)
-    setActiveTopic(topic)
-    db.topics.add({ id: topic.id, messages: [] })
+    EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)
     window.message.success({ content: t('message.topic.added'), key: 'topic-added' })
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-  }, [addTopic, assistant.id, setActiveTopic, t])
+  }, [t])
 
   return (
     <Navbar>

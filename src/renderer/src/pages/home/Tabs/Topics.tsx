@@ -29,7 +29,7 @@ interface Props {
 
 const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic }) => {
   const { assistants } = useAssistants()
-  const { assistant, removeTopic, moveTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
+  const { assistant, removeTopic, moveTopic, updateTopic, updateTopics, addTopic } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
 
@@ -39,11 +39,9 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
         window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
         return
       }
-      if (assistant.topics.length > 1) {
-        const index = findIndex(assistant.topics, (t) => t.id === topic.id)
-        setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
-        removeTopic(topic)
-      }
+      const index = findIndex(assistant.topics, (t) => t.id === topic.id)
+      setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
+      removeTopic(topic)
     },
     [assistant.topics, generating, removeTopic, setActiveTopic, t]
   )
@@ -71,6 +69,12 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
     },
     [generating, setActiveTopic, t]
   )
+
+  const onClearMessages = useCallback(() => {
+    window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
+    store.dispatch(setGenerating(false))
+    EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
+  }, [])
 
   const getTopicMenuItems = useCallback(
     (topic: Topic) => {
@@ -112,11 +116,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
             window.modal.confirm({
               title: t('chat.input.clear.content'),
               centered: true,
-              onOk: async () => {
-                window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
-                store.dispatch(setGenerating(false))
-                EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
-              }
+              onOk: onClearMessages
             })
           }
         },
@@ -162,7 +162,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
       return menus
     },
-    [assistant, assistants, onDeleteTopic, onMoveTopic, t, updateTopic]
+    [assistant, assistants, onClearMessages, onDeleteTopic, onMoveTopic, t, updateTopic]
   )
 
   return (
@@ -174,11 +174,14 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
               <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
                 <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
-                {assistant.topics.length > 1 && isActive && (
+                {isActive && (
                   <MenuButton
                     className="menu"
                     onClick={(e) => {
                       e.stopPropagation()
+                      if (assistant.topics.length === 1) {
+                        return onClearMessages()
+                      }
                       onDeleteTopic(topic)
                     }}>
                     <CloseOutlined />
