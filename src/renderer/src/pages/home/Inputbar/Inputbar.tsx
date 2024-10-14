@@ -64,7 +64,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
   const estimateTextTokens = useCallback(debounce(estimateTxtTokens, 1000), [])
   const inputTokenCount = useMemo(
-    () => showInputEstimatedTokens && estimateTextTokens(text),
+    () => (showInputEstimatedTokens ? estimateTextTokens(text) || 0 : 0),
     [estimateTextTokens, showInputEstimatedTokens, text]
   )
 
