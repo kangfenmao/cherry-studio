@@ -1,11 +1,19 @@
-import { CloseOutlined, DeleteOutlined, EditOutlined, FolderOutlined, UploadOutlined } from '@ant-design/icons'
+import {
+  ClearOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  FolderOutlined,
+  UploadOutlined
+} from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { useAppSelector } from '@renderer/store'
+import store, { useAppSelector } from '@renderer/store'
+import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
 import { findIndex } from 'lodash'
@@ -94,6 +102,22 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
             if (name && topic?.name !== name) {
               updateTopic({ ...topic, name })
             }
+          }
+        },
+        {
+          label: t('chat.topics.clear.title'),
+          key: 'clear-messages',
+          icon: <ClearOutlined />,
+          async onClick() {
+            window.modal.confirm({
+              title: t('chat.input.clear.content'),
+              centered: true,
+              onOk: async () => {
+                window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
+                store.dispatch(setGenerating(false))
+                EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
+              }
+            })
           }
         },
         {

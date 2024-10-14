@@ -72,6 +72,7 @@
       "topics.auto_rename": "Auto Rename",
       "topics.edit.title": "Edit Name",
       "topics.edit.placeholder": "Enter new name",
+      "topics.clear.title": "Clear Messages",
       "topics.delete.all.title": "Delete all topics",
       "topics.delete.all.content": "Are you sure you want to delete all topics?",
       "topics.move_to": "Move to",

@@ -72,6 +72,7 @@
       "topics.auto_rename": "自動重新命名",
       "topics.edit.title": "編輯名稱",
       "topics.edit.placeholder": "輸入新名稱",
+      "topics.clear.title": "清空消息",
       "topics.delete.all.title": "刪除所有話題",
       "topics.delete.all.content": "確定要刪除所有話題嗎？",
       "topics.move_to": "移動到",
