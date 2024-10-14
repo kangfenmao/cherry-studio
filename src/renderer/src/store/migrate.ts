@@ -478,6 +478,15 @@ const migrateConfig = {
             enabled: false
           },
           {
+            id: 'hunyuan',
+            name: 'hunyuan',
+            apiKey: '',
+            apiHost: 'https://api.hunyuan.cloud.tencent.com',
+            models: SYSTEM_MODELS.hunyuan,
+            isSystem: true,
+            enabled: false
+          },
+          {
             id: 'nvidia',
             name: 'Nvidia',
             apiKey: '',
@@ -537,6 +546,26 @@ const migrateConfig = {
           }
           return provider
         })
+      }
+    }
+  },
+  '32': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'hunyuan',
+            name: 'Hunyuan',
+            apiKey: '',
+            apiHost: 'https://api.hunyuan.cloud.tencent.com',
+            models: SYSTEM_MODELS.hunyuan,
+            isSystem: true,
+            enabled: false
+          }
+        ]
       }
     }
   }

@@ -1,4 +1,5 @@
 import ZhinaoProviderLogo from '@renderer/assets/images/models/360.png'
+import HunyuanProviderLogo from '@renderer/assets/images/models/hunyuan.png'
 import AzureProviderLogo from '@renderer/assets/images/models/microsoft.png'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.png'
@@ -76,6 +77,8 @@ export function getProviderLogo(providerId: string) {
       return NvidiaProviderLogo
     case 'azure-openai':
       return AzureProviderLogo
+    case 'hunyuan':
+      return HunyuanProviderLogo
     default:
       return undefined
   }
@@ -326,6 +329,17 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://ai.360.com/platform/keys',
       docs: 'https://ai.360.com/platform/docs/overview',
       models: 'https://ai.360.com/platform/limit'
+    }
+  },
+  hunyuan: {
+    api: {
+      url: 'https://api.hunyuan.cloud.tencent.com'
+    },
+    websites: {
+      official: 'https://cloud.tencent.com/product/hunyuan',
+      apiKey: 'https://console.cloud.tencent.com/hunyuan/api-key',
+      docs: 'https://cloud.tencent.com/document/product/1729/111007',
+      models: 'https://cloud.tencent.com/document/product/1729/104753'
     }
   },
   nvidia: {

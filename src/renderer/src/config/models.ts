@@ -798,6 +798,56 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: '360Gpt'
     }
   ],
+  hunyuan: [
+    {
+      id: 'hunyuan-pro',
+      provider: 'hunyuan',
+      name: 'hunyuan-pro',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-standard',
+      provider: 'hunyuan',
+      name: 'hunyuan-standard',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-lite',
+      provider: 'hunyuan',
+      name: 'hunyuan-lite',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-standard-256k',
+      provider: 'hunyuan',
+      name: 'hunyuan-standard-256k',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-vision',
+      provider: 'hunyuan',
+      name: 'hunyuan-vision',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-code',
+      provider: 'hunyuan',
+      name: 'hunyuan-code',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-role',
+      provider: 'hunyuan',
+      name: 'hunyuan-role',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-turbo',
+      provider: 'hunyuan',
+      name: 'hunyuan-turbo',
+      group: 'Hunyuan'
+    }
+  ],
   nvidia: [
     {
       id: '01-ai/yi-large',

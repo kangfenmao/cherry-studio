@@ -158,6 +158,7 @@
     },
     "provider": {
       "nvidia": "Nvidia",
+      "hunyuan": "Tencent Hunyuan",
       "zhinao": "360AI",
       "fireworks": "Fireworks",
       "together": "Together",

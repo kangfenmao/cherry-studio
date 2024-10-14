@@ -158,6 +158,7 @@
     },
     "provider": {
       "nvidia": "英伟达",
+      "hunyuan": "腾讯混元",
       "zhinao": "360智脑",
       "fireworks": "Fireworks",
       "together": "Together",

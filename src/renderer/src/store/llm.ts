@@ -232,6 +232,15 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'hunyuan',
+      name: 'hunyuan',
+      apiKey: '',
+      apiHost: 'https://api.hunyuan.cloud.tencent.com',
+      models: SYSTEM_MODELS.hunyuan,
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'nvidia',
       name: 'nvidia',
       apiKey: '',
