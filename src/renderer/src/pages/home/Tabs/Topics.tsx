@@ -198,14 +198,9 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
 const Container = styled.div`
   display: flex;
-  flex: 1;
   flex-direction: column;
   padding-top: 10px;
-  overflow-y: scroll;
   max-height: calc(100vh - var(--navbar-height) - 70px);
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `
 
 const TopicListItem = styled.div`
@@ -252,7 +247,6 @@ const TopicName = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 13px;
-  opacity: 0.6;
 `
 
 const MenuButton = styled.div`

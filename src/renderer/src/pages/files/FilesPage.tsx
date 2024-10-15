@@ -71,7 +71,7 @@ const FilesPage: FC = () => {
             columns={columns}
             style={{ width: '100%', marginBottom: 20 }}
             size="small"
-            pagination={{ pageSize: 15 }}
+            pagination={{ pageSize: 100 }}
           />
         </VStack>
       </ContentContainer>
