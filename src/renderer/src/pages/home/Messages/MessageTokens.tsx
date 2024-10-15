@@ -3,7 +3,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import styled from 'styled-components'
 
-const MessgeTokens: React.FC<{ message: Message }> = ({ message }) => {
+const MessgeTokens: React.FC<{ message: Message; isLastMessage: boolean }> = ({ message, isLastMessage }) => {
   const { generating } = useRuntime()
 
   const locateMessage = () => {
@@ -18,7 +18,7 @@ const MessgeTokens: React.FC<{ message: Message }> = ({ message }) => {
     return <MessageMetadata onClick={locateMessage}>Tokens: {message?.usage?.total_tokens}</MessageMetadata>
   }
 
-  if (generating) {
+  if (isLastMessage && generating) {
     return null
   }
 

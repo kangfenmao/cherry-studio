@@ -74,7 +74,7 @@ const MessageItem: FC<Props> = ({ message, index, lastMessage, showMenu = true, 
         <MessageContent message={message} model={model} />
         {!lastMessage && showMenu && (
           <MessageFooter style={{ border: messageBorder, flexDirection: isLastMessage ? 'row-reverse' : undefined }}>
-            <MessgeTokens message={message} />
+            <MessgeTokens message={message} isLastMessage={isLastMessage} />
             <MessageMenubar
               message={message}
               model={model}
