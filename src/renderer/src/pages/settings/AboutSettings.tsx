@@ -51,10 +51,11 @@ const AboutSettings: FC = () => {
     onOpenWebsite(url)
   }
 
-  const showLicense = () => {
+  const showLicense = async () => {
+    const { appPath } = await window.api.getAppInfo()
     MinApp.start({
-      name: t('settings.about.releases.title'),
-      url: 'https://raw.githubusercontent.com/kangfenmao/cherry-studio/main/LICENSE',
+      name: t('settings.about.license.title'),
+      url: `file://${appPath}/resources/cherry-studio/license.html`,
       logo: AppLogo
     })
   }
