@@ -21,6 +21,7 @@ export interface SettingsState {
   clickAssistantToShowTopic: boolean
   manualUpdateCheck: boolean
   renderInputMessageAsMarkdown: boolean
+  codeShowLineNumbers: boolean
   // webdav 配置 host, user, pass, path
   webdavHost: string
   webdavUser: string
@@ -46,6 +47,7 @@ const initialState: SettingsState = {
   clickAssistantToShowTopic: false,
   manualUpdateCheck: false,
   renderInputMessageAsMarkdown: true,
+  codeShowLineNumbers: false,
   webdavHost: '',
   webdavUser: '',
   webdavPass: '',
@@ -125,6 +127,9 @@ const settingsSlice = createSlice({
     },
     setRenderInputMessageAsMarkdown: (state, action: PayloadAction<boolean>) => {
       state.renderInputMessageAsMarkdown = action.payload
+    },
+    setCodeShowLineNumbers: (state, action: PayloadAction<boolean>) => {
+      state.codeShowLineNumbers = action.payload
     }
   }
 })
@@ -152,7 +157,8 @@ export const {
   setWebdavHost,
   setWebdavUser,
   setWebdavPass,
-  setWebdavPath
+  setWebdavPath,
+  setCodeShowLineNumbers
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

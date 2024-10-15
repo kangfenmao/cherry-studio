@@ -103,6 +103,7 @@
       "settings.reset": "重置",
       "settings.set_as_default": "应用到默认助手",
       "settings.max": "不限",
+      "settings.show_line_numbers": "代码显示行号",
       "suggestions.title": "建议的问题",
       "add.assistant.title": "添加助手",
       "message.new.context": "清除上下文",

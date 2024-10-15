@@ -6,6 +6,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings'
 import { useAppDispatch } from '@renderer/store'
 import {
+  setCodeShowLineNumbers,
   setFontSize,
   setMessageFont,
   setPasteLongTextAsFile,
@@ -43,7 +44,8 @@ const SettingsTab: FC<Props> = (props) => {
     sendMessageShortcut,
     setSendMessageShortcut,
     pasteLongTextAsFile,
-    renderInputMessageAsMarkdown
+    renderInputMessageAsMarkdown,
+    codeShowLineNumbers
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
@@ -205,6 +207,15 @@ const SettingsTab: FC<Props> = (props) => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
+        <SettingRowTitleSmall>{t('chat.settings.show_line_numbers')}</SettingRowTitleSmall>
+        <Switch
+          size="small"
+          checked={codeShowLineNumbers}
+          onChange={(checked) => dispatch(setCodeShowLineNumbers(checked))}
+        />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
         <SettingRowTitleSmall>{t('settings.font_size.title')}</SettingRowTitleSmall>
       </SettingRow>
       <Row align="middle" gutter={10}>
@@ -274,7 +285,6 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  overflow: hidden;
   padding-bottom: 10px;
   padding: 10px 15px;
 `

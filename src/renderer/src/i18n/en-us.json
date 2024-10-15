@@ -103,6 +103,7 @@
       "settings.reset": "Reset",
       "settings.set_as_default": "Apply to default assistant",
       "settings.max": "Max",
+      "settings.show_line_numbers": "Show Line Numbers in Code",
       "suggestions.title": "Suggested Questions",
       "add.assistant.title": "Add Assistant",
       "message.new.context": "New Context",

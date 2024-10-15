@@ -1,6 +1,7 @@
 import { CheckOutlined } from '@ant-design/icons'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useTheme } from '@renderer/context/ThemeProvider'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { initMermaid } from '@renderer/init'
 import { ThemeMode } from '@renderer/types'
 import React, { memo, useState } from 'react'
@@ -21,6 +22,7 @@ interface CodeBlockProps {
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
   const showFooterCopyButton = children && children.length > 500
+  const { codeShowLineNumbers } = useSettings()
   const { theme } = useTheme()
   const language = match?.[1]
 
@@ -38,7 +40,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
       <SyntaxHighlighter
         language={match[1]}
         style={theme === ThemeMode.dark ? atomDark : oneLight}
-        wrapLongLines={true}
+        wrapLongLines={false}
+        showLineNumbers={codeShowLineNumbers}
         customStyle={{
           border: '0.5px solid var(--color-code-background)',
           borderTopLeftRadius: 0,
