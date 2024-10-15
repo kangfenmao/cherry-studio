@@ -37,7 +37,9 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
       label: p.isSystem ? t(`provider.${p.id}`) : p.name,
       type: 'group',
       children: reverse(sortBy(p.models, 'name'))
-        .filter((m) => m.name.toLowerCase().includes(searchText.toLowerCase()))
+        .filter((m) =>
+          [m.name + m.provider + t('provider.' + p.id)].join('').toLowerCase().includes(searchText.toLowerCase())
+        )
         .map((m) => ({
           key: getModelUniqId(m),
           label: (
