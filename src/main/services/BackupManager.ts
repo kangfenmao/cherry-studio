@@ -102,7 +102,13 @@ class BackupManager {
     const webdavClient = new WebDav(webdavConfig)
     const retrievedFile = await webdavClient.getFileContents(filename)
     const backupedFilePath = path.join(this.backupDir, filename)
+
+    if (!fs.existsSync(this.backupDir)) {
+      fs.mkdirSync(this.backupDir, { recursive: true })
+    }
+
     await fs.writeFileSync(backupedFilePath, retrievedFile as Buffer)
+
     return await this.restore(_, backupedFilePath)
   }
 }
