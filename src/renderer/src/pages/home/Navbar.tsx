@@ -11,7 +11,6 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Topic } from '@renderer/types'
 import { Switch } from 'antd'
 import { FC, useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import SelectModelButton from './components/SelectModelButton'
@@ -28,13 +27,11 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   const { theme, toggleTheme } = useTheme()
   const { topicPosition } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
-  const { t } = useTranslation()
 
   const addNewTopic = useCallback(() => {
     EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)
-    window.message.success({ content: t('message.topic.added'), key: 'topic-added' })
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-  }, [t])
+  }, [])
 
   return (
     <Navbar>

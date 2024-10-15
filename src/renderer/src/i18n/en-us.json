@@ -107,6 +107,7 @@
       "add.assistant.title": "Add Assistant",
       "message.new.context": "New Context",
       "message.new.branch": "New Branch",
+      "message.new.branch.created": "New Branch Created",
       "assistant.search.placeholder": "Search",
       "artifacts.button.preview": "Preview",
       "artifacts.button.download": "Download"

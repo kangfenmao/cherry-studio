@@ -81,7 +81,7 @@
       "topics.export.image": "导出为图片",
       "input.new_topic": "新话题",
       "input.topics": " 话题 ",
-      "input.clear": "清除会话消息",
+      "input.clear": "清空消息",
       "input.new.context": "清除上下文",
       "input.expand": "展开",
       "input.collapse": "收起",
@@ -107,6 +107,7 @@
       "add.assistant.title": "添加助手",
       "message.new.context": "清除上下文",
       "message.new.branch": "新分支",
+      "message.new.branch.created": "新分支已创建",
       "assistant.search.placeholder": "搜索",
       "artifacts.button.preview": "预览",
       "artifacts.button.download": "下载"
