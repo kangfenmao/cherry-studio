@@ -305,3 +305,13 @@ export const captureScrollableDiv = async (divRef: React.RefObject<HTMLDivElemen
 
   return Promise.resolve(undefined)
 }
+
+export function hasPath(url: string): boolean {
+  try {
+    const parsedUrl = new URL(url)
+    return parsedUrl.pathname !== '/' && parsedUrl.pathname !== ''
+  } catch (error) {
+    console.error('Invalid URL:', error)
+    return false
+  }
+}

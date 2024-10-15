@@ -11,6 +11,7 @@ import { getModelLogo, isVisionModel } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useProvider } from '@renderer/hooks/useProvider'
+import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/api'
 import { Provider } from '@renderer/types'
 import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
@@ -81,6 +82,8 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     updateProvider({ ...provider, apiHost: configedApiHost })
   }
 
+  const hostPreview = (apiHost.endsWith('/') ? apiHost : `${apiHost}/v1/`) + 'chat/completions'
+
   return (
     <SettingContainer
       style={
@@ -138,6 +141,12 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>
         )}
       </Space.Compact>
+      {isOpenAIProvider(provider) && (
+        <SettingHelpTextRow style={{ justifyContent: 'space-between' }}>
+          <SettingHelpText style={{ marginLeft: 6 }}>{hostPreview}</SettingHelpText>
+          <SettingHelpText>{t('settings.provider.api.url.tip')}</SettingHelpText>
+        </SettingHelpTextRow>
+      )}
       {provider.id === 'azure-openai' && (
         <>
           <SettingSubtitle>{t('settings.provider.api_version')}</SettingSubtitle>

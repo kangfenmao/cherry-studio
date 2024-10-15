@@ -235,6 +235,8 @@
       "provider.docs_more_details": "for more details",
       "provider.search_placeholder": "Search model id or name",
       "provider.api.url.reset": "Reset",
+      "provider.api.url.preview": "Preview: {{url}}",
+      "provider.api.url.tip": "Add / at the end to force using the input address",
       "models.default_assistant_model": "Default Assistant Model",
       "models.topic_naming_model": "Topic Naming Model",
       "models.translate_model": "Translate Model",

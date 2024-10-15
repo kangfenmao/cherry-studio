@@ -17,3 +17,7 @@ export default class ProviderFactory {
     }
   }
 }
+
+export function isOpenAIProvider(provider: Provider) {
+  return !['anthropic', 'gemini'].includes(provider.id)
+}

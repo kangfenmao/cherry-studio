@@ -235,6 +235,8 @@
       "provider.docs_more_details": "查看更多細節",
       "provider.search_placeholder": "搜尋模型 ID 或名稱",
       "provider.api.url.reset": "重置",
+      "provider.api.url.preview": "預覽: {{url}}",
+      "provider.api.url.tip": "結尾新增 / 強制使用輸入地址",
       "models.default_assistant_model": "預設助手模型",
       "models.topic_naming_model": "話題命名模型",
       "models.translate_model": "翻譯模型",
