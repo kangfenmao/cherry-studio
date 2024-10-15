@@ -62,20 +62,20 @@ const WebDavSettings: FC = () => {
       <Breadcrumb
         items={[
           {
-            title: t('settings.general.title'),
-            href: '#/settings/general'
+            title: t('settings.data'),
+            href: '#/settings/data'
           },
           {
-            title: t('settings.general.webdav.title')
+            title: t('settings.data.webdav.title')
           }
         ]}
       />
-      <SettingTitle style={{ marginTop: 20 }}>{t('settings.general.webdav.title')}</SettingTitle>
+      <SettingTitle style={{ marginTop: 20 }}>{t('settings.data.webdav.title')}</SettingTitle>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.general.webdav.host')}</SettingRowTitle>
+        <SettingRowTitle>{t('settings.data.webdav.host')}</SettingRowTitle>
         <Input
-          placeholder={t('settings.general.webdav.host.placeholder')}
+          placeholder={t('settings.data.webdav.host.placeholder')}
           value={webdavHost}
           onChange={(e) => setWebdavHost(e.target.value)}
           style={{ width: 250 }}
@@ -85,9 +85,9 @@ const WebDavSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.general.webdav.user')}</SettingRowTitle>
+        <SettingRowTitle>{t('settings.data.webdav.user')}</SettingRowTitle>
         <Input
-          placeholder={t('settings.general.webdav.user')}
+          placeholder={t('settings.data.webdav.user')}
           value={webdavUser}
           onChange={(e) => setWebdavUser(e.target.value)}
           style={{ width: 250 }}
@@ -96,9 +96,9 @@ const WebDavSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.general.webdav.password')}</SettingRowTitle>
+        <SettingRowTitle>{t('settings.data.webdav.password')}</SettingRowTitle>
         <Input.Password
-          placeholder={t('settings.general.webdav.password')}
+          placeholder={t('settings.data.webdav.password')}
           value={webdavPass}
           onChange={(e) => setWebdavPass(e.target.value)}
           style={{ width: 250 }}
@@ -107,9 +107,9 @@ const WebDavSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.general.webdav.path')}</SettingRowTitle>
+        <SettingRowTitle>{t('settings.data.webdav.path')}</SettingRowTitle>
         <Input
-          placeholder={t('settings.general.webdav.path.placeholder')}
+          placeholder={t('settings.data.webdav.path.placeholder')}
           value={webdavPath}
           onChange={(e) => setWebdavPath(e.target.value)}
           style={{ width: 250 }}
@@ -122,10 +122,10 @@ const WebDavSettings: FC = () => {
         <HStack gap="5px" justifyContent="space-between">
           {/* 添加 在线备份 在线还原 按钮 */}
           <Button onClick={onBackup} icon={<SaveOutlined />} loading={backuping}>
-            {t('settings.general.webdav.backup.button')}
+            {t('settings.data.webdav.backup.button')}
           </Button>
           <Button onClick={onRestore} icon={<FolderOpenOutlined />} loading={restoring}>
-            {t('settings.general.webdav.restore.button')}
+            {t('settings.data.webdav.restore.button')}
           </Button>
         </HStack>
       </SettingRow>
