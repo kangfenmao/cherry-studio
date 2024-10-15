@@ -45,8 +45,8 @@ const assistantsSlice = createSlice({
     },
     addTopic: (state, action: PayloadAction<{ assistantId: string; topic: Topic }>) => {
       const topic = action.payload.topic
-      topic.createdAt = new Date().toISOString()
-      topic.updatedAt = new Date().toISOString()
+      topic.createdAt = topic.createdAt || new Date().toISOString()
+      topic.updatedAt = topic.updatedAt || new Date().toISOString()
       state.assistants = state.assistants.map((assistant) =>
         assistant.id === action.payload.assistantId
           ? {
