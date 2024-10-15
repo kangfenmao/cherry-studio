@@ -1,11 +1,15 @@
 <div align="center">
   <a href="https://github.com/kangfenmao/cherry-studio/releases">
-    <img src="https://github.com/user-attachments/assets/995910f3-177a-4d1e-97ea-04e3b009ba36" alt="banner"/>
+    <img src="https://github.com/kangfenmao/cherry-studio/blob/develop/build/icon.png?raw=true" width="150" height="150" alt="banner" />
   </a>
-  English / <a href="https://github.com/kangfenmao/cherry-studio">中文</a>
+</div>
+<div align="center">
+   中文 / <a href="https://github.com/kangfenmao/cherry-studio">English</a>
 </div>
 
 # 🍒 Cherry Studio
+
+![](https://github.com/user-attachments/assets/995910f3-177a-4d1e-97ea-04e3b009ba36)
 
 Cherry Studio 是一款跨平台桌面客户端，支持多个大语言模型（LLM）服务商，兼容 Windows、Mac 和 Linux 系统，并拥丰富的个性化选项与领先的功能设计。
 

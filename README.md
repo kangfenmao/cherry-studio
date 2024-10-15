@@ -1,11 +1,15 @@
 <div align="center">
   <a href="https://github.com/kangfenmao/cherry-studio/releases">
-    <img src="https://github.com/user-attachments/assets/7b4f2f78-5cbe-4be8-9aec-f98d8405a505" alt="banner" />
+    <img src="https://github.com/kangfenmao/cherry-studio/blob/develop/build/icon.png?raw=true" width="150" height="150" alt="banner" />
   </a>
-  English | <a href="./docs/README.zh.md">中文</a>
+</div>
+<div align="center">
+   English | <a href="./docs/README.zh.md">中文</a>
 </div>
 
 # 🍒 Cherry Studio
+
+![](https://github.com/user-attachments/assets/7b4f2f78-5cbe-4be8-9aec-f98d8405a505)
 
 Cherry Studio is a desktop client that supports for multiple LLM providers, available on Windows, Mac and Linux.
 
