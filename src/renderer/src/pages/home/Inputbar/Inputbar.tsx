@@ -222,6 +222,25 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     [pasteLongTextAsFile, supportExts, text]
   )
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const files = Array.from(e.dataTransfer.files)
+
+    files.forEach(async (file) => {
+      if (supportExts.includes(getFileExtension(file.path))) {
+        const selectedFile = await window.api.file.get(file.path)
+        selectedFile && setFiles((prevFiles) => [...prevFiles, selectedFile])
+      }
+    })
+  }
+
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -261,7 +280,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   return (
-    <Container>
+    <Container onDragOver={handleDragOver} onDrop={handleDrop}>
       <AttachmentPreview files={files} setFiles={setFiles} />
       <InputBarContainer id="inputbar" className={inputFocus ? 'focus' : ''} ref={containerRef}>
         <Textarea
