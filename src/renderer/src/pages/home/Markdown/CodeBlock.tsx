@@ -22,7 +22,7 @@ interface CodeBlockProps {
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
   const showFooterCopyButton = children && children.length > 500
-  const { codeShowLineNumbers } = useSettings()
+  const { codeShowLineNumbers, fontSize } = useSettings()
   const { theme } = useTheme()
   const language = match?.[1]
 
@@ -46,7 +46,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
           border: '0.5px solid var(--color-code-background)',
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-          marginTop: 0
+          marginTop: 0,
+          fontSize
         }}>
         {String(children).replace(/\n$/, '')}
       </SyntaxHighlighter>
@@ -88,7 +89,7 @@ const CodeHeader = styled.div`
   font-size: 14px;
   font-weight: bold;
   /* background-color: var(--color-code-background); */
-  height: 36px;
+  height: 34px;
   padding: 0 10px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
