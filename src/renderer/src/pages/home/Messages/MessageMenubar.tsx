@@ -54,7 +54,11 @@ const MessageMenubar: FC<Props> = (props) => {
 
   const onNewBranch = useCallback(() => {
     EventEmitter.emit(EVENT_NAMES.NEW_BRANCH, index)
-  }, [index])
+    window.message.success({
+      content: t('chat.message.new.branch.created'),
+      key: 'new-branch'
+    })
+  }, [index, t])
 
   const onEdit = useCallback(async () => {
     const editedText = await TextEditPopup.show({ text: message.content })
