@@ -87,16 +87,17 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     [messages, topic.id]
   )
 
+  const scrollToBottom = useCallback(() => {
+    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 10)
+  }, [])
+
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
         await onSendMessage(msg)
 
         // Scroll to bottom
-        setTimeout(
-          () => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }),
-          10
-        )
+        scrollToBottom()
 
         // Fetch completion
         fetchChatCompletion({
@@ -146,6 +147,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
 
         if (lastMessage && lastMessage.type === 'clear') {
           onDeleteMessage(lastMessage)
+          scrollToBottom()
           return
         }
 
@@ -163,6 +165,8 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
           status: 'success',
           type: 'clear'
         } as Message)
+
+        scrollToBottom()
       }),
       EventEmitter.on(EVENT_NAMES.NEW_BRANCH, async (index: number) => {
         const newTopic = getDefaultTopic(assistant.id)
@@ -192,6 +196,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     messages,
     onDeleteMessage,
     onSendMessage,
+    scrollToBottom,
     setActiveTopic,
     topic,
     updateTopic
