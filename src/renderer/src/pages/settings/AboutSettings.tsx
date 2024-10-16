@@ -29,7 +29,7 @@ const AboutSettings: FC = () => {
       try {
         await window.api.checkForUpdate()
       } catch (error) {
-        setCheckUpdateLoading(false)
+        window.message.error(t('settings.about.updateError'))
       }
 
       setCheckUpdateLoading(false)

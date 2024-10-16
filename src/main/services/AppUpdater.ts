@@ -20,8 +20,10 @@ export default class AppUpdater {
     autoUpdater.on('update-available', (releaseInfo: UpdateInfo) => {
       autoUpdater.logger?.info('检测到新版本，确认是否下载')
       mainWindow.webContents.send('update-available', releaseInfo)
+
       const releaseNotes = releaseInfo.releaseNotes
       let releaseContent = ''
+
       if (releaseNotes) {
         if (typeof releaseNotes === 'string') {
           releaseContent = <string>releaseNotes

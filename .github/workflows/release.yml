@@ -71,5 +71,6 @@ jobs:
             dist/*.rpm
             dist/*.tar.gz
             dist/latest*.yml
+            dist/*.blockmap
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
