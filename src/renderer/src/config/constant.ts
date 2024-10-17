@@ -98,5 +98,6 @@ export const textExts = [
   '.gradle', // Gradle 构建文件
   '.groovy', // Gradle 构建文件
   '.gradle', // Gradle 构建文件
-  '.kts' // Kotlin Script 文件
+  '.kts', // Kotlin Script 文件
+  '.java' // Java 代码文件
 ]
