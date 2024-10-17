@@ -97,7 +97,7 @@ $ yarn build:linux
 
 # 社区
 
-[Telegram](https://t.me/CherryStudio)
+[Telegram](https://t.me/CherryStudioAI)
 
 # 赞助
 

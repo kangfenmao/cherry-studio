@@ -78,7 +78,7 @@ $ yarn build:linux
 
 # Community
 
-[Telegram](https://t.me/CherryStudio)
+[Telegram](https://t.me/CherryStudioAI)
 
 # Sponsor
 
