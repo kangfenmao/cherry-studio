@@ -4,7 +4,7 @@
   </a>
 </div>
 <div align="center">
-   中文 / <a href="https://github.com/kangfenmao/cherry-studio">English</a>
+  中文 / <a href="https://github.com/kangfenmao/cherry-studio">English</a>
 </div>
 
 # 🍒 Cherry Studio
@@ -23,6 +23,10 @@ Cherry Studio 是一款跨平台桌面客户端，支持多个大语言模型（
 <img width="1582" alt="Xnip2024-09-23_16-12-59" src="https://github.com/user-attachments/assets/894b5e97-569f-4471-813c-c48d19455215">
 
 # 🌟 特性
+
+<div align="center">
+  <a href="https://www.producthunt.com/posts/cherry-studio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-cherry&#0045;studio" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=496640&theme=light" alt="Cherry&#0032;Studio - AI&#0032;Chatbots&#0044;&#0032;AI&#0032;Desktop&#0032;Client | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</div>
 
 ## 😌 轻松上手
 
@@ -56,9 +60,9 @@ Cherry Studio 是一款跨平台桌面客户端，支持多个大语言模型（
 
 # 🖥️ 开发指南
 
-## 推荐的开发环境
+## 开发环境
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+[VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ## 项目设置
 
@@ -90,6 +94,10 @@ $ yarn build:linux
 # ⭐️ Star 记录
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
+
+# 社区
+
+[Telegram](https://t.me/CherryStudio)
 
 # 赞助
 

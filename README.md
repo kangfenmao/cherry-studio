@@ -4,7 +4,7 @@
   </a>
 </div>
 <div align="center">
-   English | <a href="./docs/README.zh.md">中文</a>
+  English | <a href="./docs/README.zh.md">中文</a>
 </div>
 
 # 🍒 Cherry Studio
@@ -21,6 +21,10 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 
 # 🌟 Features
 
+<div align="center">
+  <a href="https://www.producthunt.com/posts/cherry-studio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-cherry&#0045;studio" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=496640&theme=light" alt="Cherry&#0032;Studio - AI&#0032;Chatbots&#0044;&#0032;AI&#0032;Desktop&#0032;Client | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</div>
+
 1. Support for Multiple LLM Providers.
 2. Allows creation of multiple Assistants.
 3. Enables creation of multiple topics.
@@ -31,9 +35,9 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 
 # 🖥️ Develop
 
-## Recommended IDE Setup
+## IDE Setup
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+[VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ## Project Setup
 
@@ -71,6 +75,10 @@ $ yarn build:linux
 <a href="https://github.com/kangfenmao/cherry-studio/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=kangfenmao/cherry-studio" />
 </a>
+
+# Community
+
+[Telegram](https://t.me/CherryStudio)
 
 # Sponsor
 
