@@ -3,6 +3,7 @@ import { VStack } from '@renderer/components/Layout'
 import db from '@renderer/databases'
 import FileManager from '@renderer/services/file'
 import { FileType, FileTypes } from '@renderer/types'
+import { formatFileSize } from '@renderer/utils'
 import { Image, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -12,7 +13,7 @@ import styled from 'styled-components'
 
 const FilesPage: FC = () => {
   const { t } = useTranslation()
-  const files = useLiveQuery<FileType[]>(() => db.files.orderBy('ext').reverse().toArray())
+  const files = useLiveQuery<FileType[]>(() => db.files.orderBy('count').reverse().toArray())
 
   const dataSource = files?.map((file) => {
     const isImage = file.type === FileTypes.IMAGE
@@ -21,7 +22,7 @@ const FilesPage: FC = () => {
       key: file.id,
       file: isImage ? ImageView : <FileNameText className="text-nowrap">{file.origin_name}</FileNameText>,
       name: <a href={'file://' + FileManager.getSafePath(file)}>{file.origin_name}</a>,
-      size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+      size: formatFileSize(file),
       count: file.count,
       created_at: dayjs(file.created_at).format('MM-DD HH:mm')
     }

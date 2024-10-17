@@ -1,4 +1,4 @@
-import { Model } from '@renderer/types'
+import { FileType, Model } from '@renderer/types'
 import imageCompression from 'browser-image-compression'
 import html2canvas from 'html2canvas'
 // @ts-ignore next-line`
@@ -314,4 +314,18 @@ export function hasPath(url: string): boolean {
     console.error('Invalid URL:', error)
     return false
   }
+}
+
+export function formatFileSize(file: FileType) {
+  const size = file.size
+
+  if (size > 1024 * 1024) {
+    return (size / 1024 / 1024).toFixed(1) + ' MB'
+  }
+
+  if (size > 1024) {
+    return (size / 1024).toFixed(0) + ' KB'
+  }
+
+  return (size / 1024).toFixed(2) + ' KB'
 }
