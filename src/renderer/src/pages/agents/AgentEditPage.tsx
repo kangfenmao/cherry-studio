@@ -109,21 +109,25 @@ const AgentEditPage: FC = () => {
           <Form.Item name="name" label={t('agents.add.name')} rules={[{ required: true }]}>
             <Input placeholder={t('agents.add.name.placeholder')} spellCheck={false} allowClear />
           </Form.Item>
-          <div style={{ position: 'relative' }}>
-            <Form.Item
-              name="prompt"
-              label={t('agents.add.prompt')}
-              rules={[{ required: true }]}
-              style={{ position: 'relative' }}>
-              <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={10} />
-            </Form.Item>
-            <Button
-              icon={loading ? <LoadingOutlined /> : <ThunderboltOutlined />}
-              onClick={handleButtonClick}
-              style={{ position: 'absolute', top: 8, right: 8 }}
-              disabled={loading}
-            />
-          </div>
+          <Form.Item
+            name="prompt"
+            label={
+              <>
+                {t('agents.add.prompt')}{' '}
+                <Button
+                  size="small"
+                  style={{ marginLeft: 5 }}
+                  type="text"
+                  icon={loading ? <LoadingOutlined /> : <ThunderboltOutlined />}
+                  onClick={handleButtonClick}
+                  disabled={loading}
+                />
+              </>
+            }
+            rules={[{ required: true }]}
+            style={{ position: 'relative' }}>
+            <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={10} />
+          </Form.Item>
           <Form.Item wrapperCol={{ span: 16 }}>
             <Button type="primary" htmlType="submit">
               {t('common.save')}

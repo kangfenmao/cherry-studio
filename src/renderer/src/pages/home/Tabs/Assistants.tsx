@@ -161,7 +161,7 @@ const Assistants: FC<Props> = ({
             suffix={<CommandKey>⌘+K</CommandKey>}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ borderRadius: 4, borderWidth: 0.5 }}
+            style={{ borderRadius: 16, borderWidth: 0.5 }}
             onKeyDown={onSearch}
             ref={searchRef}
             onFocus={() => dispatch(setSearching(true))}
