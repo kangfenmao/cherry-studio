@@ -1,8 +1,6 @@
-import { UnorderedListOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
-import { HStack } from '@renderer/components/Layout'
+import { VStack } from '@renderer/components/Layout'
 import Agents from '@renderer/config/agents.json'
-import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { covertAgentToAssistant } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
@@ -13,14 +11,12 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import AgentCard from './components/AgentCard'
-import ManageAgentsPopup from './components/ManageAgentsPopup'
-import UserAgents from './components/UserAgents'
+import MyAgents from './components/MyAgents'
 
 const { Title } = Typography
 
 const AppsPage: FC = () => {
   const { assistants, addAssistant } = useAssistants()
-  const { agents } = useAgents()
   const agentGroups = groupBy(Agents, 'group')
   const { t } = useTranslation()
 
@@ -55,31 +51,29 @@ const AppsPage: FC = () => {
         <NavbarCenter style={{ borderRight: 'none' }}>{t('agents.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer id="content-container">
+        <MyAgents onClick={onAddAgentConfirm} />
         <AssistantsContainer>
-          <HStack alignItems="center" style={{ marginBottom: 16 }}>
-            <Title level={4}>{t('agents.my_agents')}</Title>
-            {agents.length > 0 && <ManageIcon onClick={ManageAgentsPopup.show} />}
-          </HStack>
-          <UserAgents onAdd={onAddAgentConfirm} />
-          {Object.keys(agentGroups)
-            .reverse()
-            .map((group) => (
-              <div key={group}>
-                <Title level={4} key={group} style={{ marginBottom: 16 }}>
-                  {group}
-                </Title>
-                <Row gutter={16}>
-                  {agentGroups[group].map((agent, index) => {
-                    return (
-                      <Col span={8} key={group + index}>
-                        <AgentCard onClick={() => onAddAgentConfirm(agent)} agent={agent as any} />
-                      </Col>
-                    )
-                  })}
-                </Row>
-              </div>
-            ))}
-          <div style={{ minHeight: 20 }} />
+          <VStack style={{ flex: 1 }}>
+            {Object.keys(agentGroups)
+              .reverse()
+              .map((group) => (
+                <div key={group}>
+                  <Title level={5} key={group} style={{ marginBottom: 16 }}>
+                    {group}
+                  </Title>
+                  <Row gutter={16}>
+                    {agentGroups[group].map((agent, index) => {
+                      return (
+                        <Col span={8} key={group + index}>
+                          <AgentCard onClick={() => onAddAgentConfirm(agent)} agent={agent as any} />
+                        </Col>
+                      )
+                    })}
+                  </Row>
+                </div>
+              ))}
+            <div style={{ minHeight: 20 }} />
+          </VStack>
         </AssistantsContainer>
       </ContentContainer>
     </Container>
@@ -99,24 +93,15 @@ const ContentContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   height: 100%;
-  overflow-y: scroll;
 `
 
 const AssistantsContainer = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column;
+  flex-direction: row;
   height: calc(100vh - var(--navbar-height));
-  padding: 20px;
-  max-width: 1000px;
-`
-
-const ManageIcon = styled(UnorderedListOutlined)`
-  font-size: 18px;
-  color: var(--color-icon);
-  cursor: pointer;
-  margin-bottom: 0.5em;
-  margin-left: 0.5em;
+  padding: 15px 20px;
+  overflow-y: scroll;
 `
 
 export default AppsPage

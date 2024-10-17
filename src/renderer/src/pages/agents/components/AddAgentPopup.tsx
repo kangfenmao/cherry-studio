@@ -5,16 +5,14 @@ import EmojiPicker from '@renderer/components/EmojiPicker'
 import { TopView } from '@renderer/components/TopView'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { fetchGenerate } from '@renderer/services/api'
-import { syncAgentToAssistant } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { getLeadingEmoji, uuid } from '@renderer/utils'
 import { Button, Form, FormInstance, Input, Modal, Popover } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
-  agent?: Agent
   resolve: (data: Agent | null) => void
 }
 
@@ -24,33 +22,19 @@ type FieldType = {
   prompt: string
 }
 
-const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
+const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const [open, setOpen] = useState(true)
   const [form] = Form.useForm()
   const { t } = useTranslation()
-  const { addAgent, updateAgent } = useAgents()
+  const { addAgent } = useAgents()
   const formRef = useRef<FormInstance>(null)
-  const [emoji, setEmoji] = useState(agent?.emoji)
+  const [emoji, setEmoji] = useState('')
   const [loading, setLoading] = useState(false)
 
   const onFinish = (values: FieldType) => {
     const _emoji = emoji || getLeadingEmoji(values.name)
 
     if (values.name.trim() === '' || values.prompt.trim() === '') {
-      return
-    }
-
-    if (agent) {
-      const _agent = {
-        ...agent,
-        name: values.name,
-        emoji: _emoji,
-        prompt: values.prompt
-      }
-      updateAgent(_agent)
-      syncAgentToAssistant(_agent)
-      resolve(_agent)
-      setOpen(false)
       return
     }
 
@@ -74,15 +58,6 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
   const onClose = () => {
     resolve(null)
   }
-
-  useEffect(() => {
-    if (agent) {
-      form.setFieldsValue({
-        name: agent.name,
-        prompt: agent.prompt
-      })
-    }
-  }, [agent, form])
 
   const handleButtonClick = async () => {
     const prompt = `你是一个专业的 prompt 优化助手，我会给你一段prompt，你需要帮我优化它，仅回复优化后的 prompt 不要添加任何解释，使用 [CRISPE提示框架] 回复。`
@@ -114,13 +89,13 @@ const PopupContainer: React.FC<Props> = ({ agent, resolve }) => {
 
   return (
     <Modal
-      title={agent ? t('agents.edit.title') : t('agents.add.title')}
+      title={t('agents.add.title')}
       open={open}
       onOk={() => formRef.current?.submit()}
       onCancel={onCancel}
       maskClosable={false}
       afterClose={onClose}
-      okText={agent ? t('common.save') : t('agents.add.button')}
+      okText={t('agents.add.button')}
       centered>
       <Form
         ref={formRef}
@@ -163,11 +138,10 @@ export default class AddAgentPopup {
   static hide() {
     TopView.hide('AddAgentPopup')
   }
-  static show(agent?: Agent) {
+  static show() {
     return new Promise<Agent | null>((resolve) => {
       TopView.show(
         <PopupContainer
-          agent={agent}
           resolve={(v) => {
             resolve(v)
             this.hide()

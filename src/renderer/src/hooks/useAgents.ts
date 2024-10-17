@@ -15,3 +15,14 @@ export function useAgents() {
     updateAgents: (agents: Agent[]) => dispatch(updateAgents(agents))
   }
 }
+
+export function useAgent(id: string) {
+  const agents = useSelector((state: RootState) => state.agents.agents)
+  const dispatch = useDispatch()
+  const agent = agents.find((a) => a.id === id)
+
+  return {
+    agent,
+    updateAgent: (agent: Agent) => dispatch(updateAgent(agent))
+  }
+}

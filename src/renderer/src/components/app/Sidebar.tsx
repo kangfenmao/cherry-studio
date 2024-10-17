@@ -54,7 +54,7 @@ const Sidebar: FC = () => {
             </Icon>
           </StyledLink>
           <StyledLink onClick={() => to('/agents')}>
-            <Icon className={isRoute('/agents')}>
+            <Icon className={isRoutes('/agents')}>
               <i className="iconfont icon-business-smart-assistant" />
             </Icon>
           </StyledLink>

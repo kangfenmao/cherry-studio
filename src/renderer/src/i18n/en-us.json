@@ -28,7 +28,8 @@
       "warning": "Warning",
       "back": "Back",
       "chat": "Chat",
-      "close": "Close"
+      "close": "Close",
+      "cancel": "Cancel"
     },
     "button": {
       "add": "Add",

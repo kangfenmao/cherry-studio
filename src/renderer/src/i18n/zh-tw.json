@@ -28,7 +28,8 @@
       "warning": "警告",
       "back": "返回",
       "chat": "聊天",
-      "close": "關閉"
+      "close": "關閉",
+      "cancel": "取消"
     },
     "button": {
       "add": "添加",
