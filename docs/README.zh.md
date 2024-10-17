@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/kangfenmao/cherry-studio/releases">
-    <img src="https://github.com/kangfenmao/cherry-studio/blob/develop/build/icon.png?raw=true" width="150" height="150" alt="banner" />
+    <img src="https://github.com/kangfenmao/cherry-studio/blob/main/build/icon.png?raw=true" width="150" height="150" alt="banner" />
   </a>
 </div>
 <div align="center">
