@@ -13,6 +13,8 @@
 
 Cherry Studio 是一款跨平台桌面客户端，支持多个大语言模型（LLM）服务商，兼容 Windows、Mac 和 Linux 系统，并拥丰富的个性化选项与领先的功能设计。
 
+👏 欢迎加入 [Telegram 群组](https://t.me/CherryStudioAI)
+
 # 🌠 界面
 
 <img width="1582" alt="Xnip2024-09-23_15-01-53" src="https://github.com/user-attachments/assets/554aa31b-87b6-49fe-877d-af313e1608b0">
