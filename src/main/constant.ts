@@ -24,8 +24,6 @@ export const textExts = [
   '.conf', // 配置文件
   '.config', // 配置文件
   '.env', // 环境变量文件
-  '.properties', // 配置属性文件
-  '.latex', // LaTeX 文档文件
   '.rst', // reStructuredText 文件
   '.php', // PHP 脚本文件，包含嵌入的 HTML
   '.js', // JavaScript 文件（部分是文本，部分可能包含代码）
@@ -44,7 +42,6 @@ export const textExts = [
   '.sass', // Sass 文件
   '.styl', // Stylus CSS 预处理器文件
   '.coffee', // CoffeeScript 文件
-  '.ino', // Arduino 代码文件
   '.ino', // Arduino 代码文件
   '.asm', // Assembly 语言文件
   '.go', // Go 语言文件
@@ -89,7 +86,6 @@ export const textExts = [
   '.mm', // Objective-C++ 源文件
   '.gradle', // Gradle 构建文件
   '.groovy', // Gradle 构建文件
-  '.gradle', // Gradle 构建文件
   '.kts', // Kotlin Script 文件
   '.java' // Java 代码文件
 ]
