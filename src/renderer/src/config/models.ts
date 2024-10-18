@@ -120,7 +120,7 @@ import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import { Model } from '@renderer/types'
 import OpenAI from 'openai'
 
-const allowedModels = [
+const visionAllowedModels = [
   'llava',
   'moondream',
   'minicpm',
@@ -129,11 +129,19 @@ const allowedModels = [
   'vision',
   'glm-4v',
   'qwen-vl',
+  'qwen2-vl',
+  'internvl2',
   'gpt-4(?:-[\\w-]+)',
   'gpt-4o(?:-[\\w-]+)?'
 ]
-const excludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
-const VISION_REGEX = new RegExp(`\\b(?!(?:${excludedModels.join('|')})\\b)(${allowedModels.join('|')})\\b`, 'i')
+
+const visionExcludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
+
+const VISION_REGEX = new RegExp(
+  `\\b(?!(?:${visionExcludedModels.join('|')})\\b)(${visionAllowedModels.join('|')})\\b`,
+  'i'
+)
+
 const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview/i
 const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|base|retrieval|uae-)/i
 const NOT_SUPPORTED_REGEX = /(?:^text-|embed|tts|rerank|whisper|speech|davinci|babbage|bge-|base|retrieval|uae-)/i
