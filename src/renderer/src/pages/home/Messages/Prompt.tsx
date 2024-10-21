@@ -1,4 +1,4 @@
-import AssistantSettingPopup from '@renderer/components/AssistantSettings'
+import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import { Assistant } from '@renderer/types'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,7 @@ const Prompt: FC<Props> = ({ assistant }) => {
   }
 
   return (
-    <Container onClick={() => AssistantSettingPopup.show({ assistant })}>
+    <Container onClick={() => AssistantSettingsPopup.show({ assistant })}>
       <Text>{prompt}</Text>
     </Container>
   )

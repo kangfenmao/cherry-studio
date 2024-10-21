@@ -118,6 +118,7 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   padding: 8px 20px;
+  padding-top: 10px;
   width: 100%;
   position: relative;
 `

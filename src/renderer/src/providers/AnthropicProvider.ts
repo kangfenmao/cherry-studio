@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
 import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
+import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages } from '@renderer/services/messages'
@@ -136,22 +137,34 @@ export default class AnthropicProvider extends BaseProvider {
   public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
-    const userMessages = takeRight(messages, 5).map((message) => ({
-      role: message.role,
-      content: message.content
-    }))
+    const userMessages = takeRight(messages, 5)
+      .filter((message) => !message.isPreset)
+      .map((message) => ({
+        role: message.role,
+        content: message.content
+      }))
 
     if (first(userMessages)?.role === 'assistant') {
       userMessages.shift()
     }
 
+    const userMessageContent = userMessages.reduce((prev, curr) => {
+      const content = curr.role === 'user' ? `User: ${curr.content}` : `Assistant: ${curr.content}`
+      return prev + (prev ? '\n' : '') + content
+    }, '')
+
     const systemMessage = {
       role: 'system',
-      content: '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，不要使用标点符号和其他特殊符号。'
+      content: SUMMARIZE_PROMPT
+    }
+
+    const userMessage = {
+      role: 'user',
+      content: userMessageContent
     }
 
     const message = await this.sdk.messages.create({
-      messages: userMessages as Anthropic.Messages.MessageParam[],
+      messages: [userMessage] as Anthropic.Messages.MessageParam[],
       model: model.id,
       system: systemMessage.content,
       stream: false,
@@ -165,16 +178,16 @@ export default class AnthropicProvider extends BaseProvider {
     const model = getDefaultModel()
 
     const message = await this.sdk.messages.create({
+      model: model.id,
+      system: prompt,
+      stream: false,
+      max_tokens: 4096,
       messages: [
         {
           role: 'user',
           content
         }
-      ],
-      model: model.id,
-      system: prompt,
-      stream: false,
-      max_tokens: 4096
+      ]
     })
 
     return message.content[0].type === 'text' ? message.content[0].text : ''

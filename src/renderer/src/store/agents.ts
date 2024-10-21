@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Agent } from '@renderer/types'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { Agent, AssistantSettings } from '@renderer/types'
 
 export interface AgentsState {
   agents: Agent[]
@@ -9,25 +10,49 @@ const initialState: AgentsState = {
   agents: []
 }
 
-const runtimeSlice = createSlice({
+const assistantsSlice = createSlice({
   name: 'agents',
   initialState,
   reducers: {
+    updateAgents: (state, action: PayloadAction<Agent[]>) => {
+      state.agents = action.payload
+    },
     addAgent: (state, action: PayloadAction<Agent>) => {
       state.agents.push(action.payload)
     },
-    removeAgent: (state, action: PayloadAction<Agent>) => {
-      state.agents = state.agents.filter((a) => a.id !== action.payload.id)
+    removeAgent: (state, action: PayloadAction<{ id: string }>) => {
+      state.agents = state.agents.filter((c) => c.id !== action.payload.id)
     },
     updateAgent: (state, action: PayloadAction<Agent>) => {
-      state.agents = state.agents.map((a) => (a.id === action.payload.id ? action.payload : a))
+      state.agents = state.agents.map((c) => (c.id === action.payload.id ? action.payload : c))
     },
-    updateAgents: (state, action: PayloadAction<Agent[]>) => {
-      state.agents = action.payload
+    updateAgentSettings: (
+      state,
+      action: PayloadAction<{ assistantId: string; settings: Partial<AssistantSettings> }>
+    ) => {
+      for (const agent of state.agents) {
+        const settings = action.payload.settings
+        if (agent.id === action.payload.assistantId) {
+          for (const key in settings) {
+            if (!agent.settings) {
+              agent.settings = {
+                temperature: DEFAULT_TEMPERATURE,
+                contextCount: DEFAULT_CONEXTCOUNT,
+                enableMaxTokens: false,
+                maxTokens: 0,
+                streamOutput: true,
+                hideMessages: false,
+                autoResetModel: false
+              }
+            }
+            agent.settings[key] = settings[key]
+          }
+        }
+      }
     }
   }
 })
 
-export const { addAgent, removeAgent, updateAgent, updateAgents } = runtimeSlice.actions
+export const { updateAgents, addAgent, removeAgent, updateAgent, updateAgentSettings } = assistantsSlice.actions
 
-export default runtimeSlice.reducer
+export default assistantsSlice.reducer

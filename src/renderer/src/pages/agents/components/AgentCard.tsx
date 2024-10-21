@@ -32,7 +32,8 @@ const Container = styled.div`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   &:hover {
-    background-color: var(--color-background-mute);
+    border: 0.5px solid var(--color-primary);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
 `
 const EmojiHeader = styled.div`
@@ -69,6 +70,7 @@ const AgentCardPrompt = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  white-space: pre-wrap;
   font-size: 12px;
 `
 

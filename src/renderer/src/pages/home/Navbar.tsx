@@ -1,6 +1,6 @@
 import { FormOutlined } from '@ant-design/icons'
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
-import AssistantSettingPopup from '@renderer/components/AssistantSettings'
+import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import { HStack } from '@renderer/components/Layout'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
@@ -57,7 +57,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <TitleText
             style={{ marginRight: 10, cursor: 'pointer' }}
             className="nodrag"
-            onClick={() => AssistantSettingPopup.show({ assistant })}>
+            onClick={() => AssistantSettingsPopup.show({ assistant })}>
             {assistant.name}
           </TitleText>
           <SelectModelButton assistant={assistant} />

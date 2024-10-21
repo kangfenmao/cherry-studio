@@ -62,7 +62,8 @@
       "upgrade.success.title": "Upgrade successfully",
       "upgrade.success.content": "Please restart the application to complete the upgrade",
       "upgrade.success.button": "Restart",
-      "topic.added": "New topic added"
+      "topic.added": "New topic added",
+      "save.success.title": "Saved successfully"
     },
     "chat": {
       "save": "Save",
@@ -74,8 +75,6 @@
       "topics.edit.title": "Edit Name",
       "topics.edit.placeholder": "Enter new name",
       "topics.clear.title": "Clear Messages",
-      "topics.delete.all.title": "Delete all topics",
-      "topics.delete.all.content": "Are you sure you want to delete all topics?",
       "topics.move_to": "Move to",
       "topics.list": "Topic List",
       "topics.export.title": "Export",
@@ -118,8 +117,19 @@
       "title": "Assistants",
       "abbr": "Assistant",
       "search": "Search assistants...",
-      "prompt_settings": "Prompt Settings",
-      "model_settings": "Model Settings"
+      "settings.prompt": "Prompt Settings",
+      "settings.model": "Model Settings",
+      "settings.preset_messages": "Preset Messages",
+      "settings.default_model": "Default Model",
+      "settings.auto_reset_model": "Auto Reset Model",
+      "settings.auto_reset_model.tip": "Automatically reset the model when a new topic is created.",
+      "edit.title": "Edit Assistant",
+      "copy.title": "Copy Assistant",
+      "clear.title": "Clear topics",
+      "clear.content": "Clearing the topic will delete all topics and files in the assistant. Are you sure you want to continue?",
+      "saveto.title": "Save to agent",
+      "delete.title": "Delete Assistant",
+      "delete.content": "Deleting an assistant will delete all topics and files under the assistant. Are you sure you want to delete it?"
     },
     "model": {
       "stream_output": "Stream Output",
@@ -136,18 +146,28 @@
     "agents": {
       "title": "Agents",
       "my_agents": "My Agents",
-      "add.title": "Add Agent",
+      "add.title": "Create Agent",
       "edit.title": "Edit Agent",
       "add.name": "Name",
       "add.name.placeholder": "Enter name",
       "add.prompt": "Prompt",
       "add.prompt.placeholder": "Enter prompt",
-      "add.button": "Add",
+      "add.button": "Add to Assistant",
       "manage.title": "Manage Agents",
       "delete.popup.content": "Are you sure you want to delete this agent?",
       "tag.default": "Default",
       "tag.system": "System",
-      "tag.user": "Mine"
+      "tag.agent": "Agent",
+      "edit.message.title": "Preset messages",
+      "edit.message.add.title": "Add",
+      "edit.message.group.title": "Message Group",
+      "edit.message.assistant.title": "Assistant",
+      "edit.message.assistant.placeholder": "Enter assistant message",
+      "edit.message.user.title": "User",
+      "edit.message.user.placeholder": "Enter user message",
+      "edit.message.empty.content": "Conversation input content cannot be empty",
+      "edit.model.select.title": "Select Model",
+      "edit.settings.hide_preset_messages": "Hide Preset Message"
     },
     "minapp": {
       "title": "MinApp"
@@ -211,6 +231,9 @@
       "general.backup.button": "Backup",
       "general.restore.button": "Restore",
       "general.view_webdav_settings": "View WebDAV settings",
+      "general.reset.title": "Data Reset",
+      "general.reset.button": "Reset",
+      "general.manually_check_update.title": "Manually Check for updates",
       "data.webdav.title": "WebDAV",
       "data.webdav.host": "WebDAV Host",
       "data.webdav.host.placeholder": "http://localhost:8080",
@@ -220,11 +243,6 @@
       "data.webdav.path.placeholder": "/backup",
       "data.webdav.backup.button": "Backup to WebDAV",
       "data.webdav.restore.button": "Restore from WebDAV",
-      "general.reset.title": "Data Reset",
-      "general.reset.button": "Reset",
-      "general.check_update_setting": "Check for updates",
-      "general.manual_update_check": "Check for updates manually",
-      "general.auto_update_check": "Check for updates automatically",
       "advanced.title": "Advanced Settings",
       "advanced.click_assistant_switch_to_topics": "Auto switch to topic",
       "provider.api_key": "API Key",
@@ -285,7 +303,8 @@
       "font_size.title": "Message Font Size",
       "topic.position": "Topic Position",
       "topic.position.left": "Left",
-      "topic.position.right": "Right"
+      "topic.position.right": "Right",
+      "topic.show.time": "Show Topic Time"
     },
     "translate": {
       "title": "Translation",

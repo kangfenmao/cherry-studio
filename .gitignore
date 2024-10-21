@@ -19,12 +19,6 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-# NPM
-npm/*/*
-!npm/*/dist
-!npm/*/package.json
-!npm/*/*.js
-
 # Yarn
 .pnp.*
 .yarn/*

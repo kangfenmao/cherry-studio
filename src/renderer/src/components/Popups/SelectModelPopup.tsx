@@ -80,7 +80,6 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
       onCancel={onCancel}
       afterClose={onClose}
       transitionName="ant-move-down"
-      maskTransitionName="ant-fade"
       styles={{ content: { borderRadius: 20, padding: 0, overflow: 'hidden', paddingBottom: 20 } }}
       closeIcon={null}
       footer={null}>

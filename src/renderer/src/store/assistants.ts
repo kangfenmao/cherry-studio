@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { TopicManager } from '@renderer/hooks/useTopic'
 import { getDefaultAssistant, getDefaultTopic } from '@renderer/services/assistant'
 import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
@@ -33,15 +34,29 @@ const assistantsSlice = createSlice({
     updateAssistant: (state, action: PayloadAction<Assistant>) => {
       state.assistants = state.assistants.map((c) => (c.id === action.payload.id ? action.payload : c))
     },
-    updateAssistantSettings: (state, action: PayloadAction<{ assistantId: string; settings: AssistantSettings }>) => {
-      state.assistants = state.assistants.map((assistant) =>
-        assistant.id === action.payload.assistantId
-          ? {
-              ...assistant,
-              settings: action.payload.settings
+    updateAssistantSettings: (
+      state,
+      action: PayloadAction<{ assistantId: string; settings: Partial<AssistantSettings> }>
+    ) => {
+      for (const assistant of state.assistants) {
+        const settings = action.payload.settings
+        if (assistant.id === action.payload.assistantId) {
+          for (const key in settings) {
+            if (!assistant.settings) {
+              assistant.settings = {
+                temperature: DEFAULT_TEMPERATURE,
+                contextCount: DEFAULT_CONEXTCOUNT,
+                enableMaxTokens: false,
+                maxTokens: 0,
+                streamOutput: true,
+                hideMessages: false,
+                autoResetModel: false
+              }
             }
-          : assistant
-      )
+            assistant.settings[key] = settings[key]
+          }
+        }
+      }
     },
     addTopic: (state, action: PayloadAction<{ assistantId: string; topic: Topic }>) => {
       const topic = action.payload.topic

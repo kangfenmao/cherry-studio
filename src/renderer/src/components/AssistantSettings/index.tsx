@@ -1,4 +1,5 @@
-import { useTheme } from '@renderer/context/ThemeProvider'
+import { useAgent } from '@renderer/hooks/useAgents'
+import { useAssistant } from '@renderer/hooks/useAssistant'
 import { Assistant } from '@renderer/types'
 import { Menu, Modal } from 'antd'
 import { useState } from 'react'
@@ -7,6 +8,7 @@ import styled from 'styled-components'
 
 import { HStack } from '../Layout'
 import { TopView } from '../TopView'
+import AssistantMessagesSettings from './AssistantMessagesSettings'
 import AssistantModelSettings from './AssistantModelSettings'
 import AssistantPromptSettings from './AssistantPromptSettings'
 
@@ -18,32 +20,43 @@ interface Props extends AssistantSettingPopupShowParams {
   resolve: (assistant: Assistant) => void
 }
 
-const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve }) => {
+const AssistantSettingPopupContainer: React.FC<Props> = ({ resolve, ...props }) => {
   const [open, setOpen] = useState(true)
   const { t } = useTranslation()
   const [menu, setMenu] = useState('prompt')
-  const { theme } = useTheme()
+
+  const _useAssistant = useAssistant(props.assistant.id)
+  const _useAgent = useAgent(props.assistant.id)
+  const isAgent = props.assistant.type === 'agent'
+
+  const assistant = isAgent ? _useAgent.agent : _useAssistant.assistant
+  const updateAssistant = isAgent ? _useAgent.updateAgent : _useAssistant.updateAssistant
+  const updateAssistantSettings = isAgent ? _useAgent.updateAgentSettings : _useAssistant.updateAssistantSettings
 
   const onOk = () => {
     setOpen(false)
   }
 
-  const handleCancel = () => {
+  const onCancel = () => {
     setOpen(false)
   }
 
-  const onClose = () => {
+  const afterClose = () => {
     resolve(assistant)
   }
 
   const items = [
     {
       key: 'prompt',
-      label: t('assistants.prompt_settings')
+      label: t('assistants.settings.prompt')
     },
     {
       key: 'model',
-      label: t('assistants.model_settings')
+      label: t('assistants.settings.model')
+    },
+    {
+      key: 'messages',
+      label: t('assistants.settings.preset_messages')
     }
   ]
 
@@ -51,21 +64,19 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
     <StyledModal
       open={open}
       onOk={onOk}
-      onCancel={handleCancel}
-      afterClose={onClose}
-      transitionName="ant-move-down"
-      maskTransitionName="ant-fade"
+      onClose={onCancel}
+      onCancel={onCancel}
+      afterClose={afterClose}
       footer={null}
       title={assistant.name}
+      transitionName="ant-move-down"
       styles={{
         content: {
           padding: 0,
           overflow: 'hidden',
-          border: '1px solid var(--color-border)',
           background: 'var(--color-background)'
         },
-        header: { padding: '10px 15px', borderBottom: '0.5px solid var(--color-border)', margin: 0 },
-        mask: { background: theme === 'light' ? 'rgba(255,255,255, 0.8)' : 'rgba(0,0,0, 0.8)' }
+        header: { padding: '10px 15px', borderBottom: '0.5px solid var(--color-border)', margin: 0 }
       }}
       width="70vw"
       height="80vh"
@@ -81,8 +92,28 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ assistant, resolve })
           />
         </LeftMenu>
         <Settings>
-          {menu === 'prompt' && <AssistantPromptSettings assistant={assistant} onOk={onOk} />}
-          {menu === 'model' && <AssistantModelSettings assistant={assistant} />}
+          {menu === 'prompt' && (
+            <AssistantPromptSettings
+              assistant={assistant}
+              updateAssistant={updateAssistant}
+              updateAssistantSettings={updateAssistantSettings}
+              onOk={onOk}
+            />
+          )}
+          {menu === 'model' && (
+            <AssistantModelSettings
+              assistant={assistant}
+              updateAssistant={updateAssistant}
+              updateAssistantSettings={updateAssistantSettings}
+            />
+          )}
+          {menu === 'messages' && (
+            <AssistantMessagesSettings
+              assistant={assistant}
+              updateAssistant={updateAssistant}
+              updateAssistantSettings={updateAssistantSettings}
+            />
+          )}
         </Settings>
       </HStack>
     </StyledModal>
@@ -111,7 +142,7 @@ const StyledModal = styled(Modal)`
   }
   .ant-menu-item {
     height: 36px;
-    border-radius: 4px;
+    border-radius: 6px;
     color: var(--color-text-2);
     display: flex;
     align-items: center;
@@ -132,11 +163,7 @@ const StyledModal = styled(Modal)`
   }
 `
 
-export default class AssistantSettingPopup {
-  static topviewId = 0
-  static hide() {
-    TopView.hide('AssistantSettingPopup')
-  }
+export default class AssistantSettingsPopup {
   static show(props: AssistantSettingPopupShowParams) {
     return new Promise<Assistant>((resolve) => {
       TopView.show(
@@ -144,10 +171,10 @@ export default class AssistantSettingPopup {
           {...props}
           resolve={(v) => {
             resolve(v)
-            this.hide()
+            TopView.hide('AssistantSettingsPopup')
           }}
         />,
-        'AssistantSettingPopup'
+        'AssistantSettingsPopup'
       )
     })
   }

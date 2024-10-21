@@ -17,6 +17,7 @@ export interface SettingsState {
   windowStyle: 'transparent' | 'opaque'
   fontSize: number
   topicPosition: 'left' | 'right'
+  showTopicTime: boolean
   pasteLongTextAsFile: boolean
   clickAssistantToShowTopic: boolean
   manualUpdateCheck: boolean
@@ -43,7 +44,8 @@ const initialState: SettingsState = {
   windowStyle: 'transparent',
   fontSize: 14,
   topicPosition: 'right',
-  pasteLongTextAsFile: true,
+  showTopicTime: false,
+  pasteLongTextAsFile: false,
   clickAssistantToShowTopic: false,
   manualUpdateCheck: false,
   renderInputMessageAsMarkdown: true,
@@ -104,6 +106,9 @@ const settingsSlice = createSlice({
     setTopicPosition: (state, action: PayloadAction<'left' | 'right'>) => {
       state.topicPosition = action.payload
     },
+    setShowTopicTime: (state, action: PayloadAction<boolean>) => {
+      state.showTopicTime = action.payload
+    },
     setPasteLongTextAsFile: (state, action: PayloadAction<boolean>) => {
       state.pasteLongTextAsFile = action.payload
     },
@@ -150,6 +155,7 @@ export const {
   setFontSize,
   setWindowStyle,
   setTopicPosition,
+  setShowTopicTime,
   setPasteLongTextAsFile,
   setRenderInputMessageAsMarkdown,
   setClickAssistantToShowTopic,

@@ -1,7 +1,8 @@
-import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import AssistantSettingPopup from '@renderer/components/AssistantSettings'
+import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons'
+import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
+import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { getDefaultTopic } from '@renderer/services/assistant'
@@ -12,7 +13,7 @@ import { Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Dropdown, Input, InputRef } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
-import { isEmpty, last } from 'lodash'
+import { isEmpty, last, omit } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -39,6 +40,7 @@ const Assistants: FC<Props> = ({
   const searchRef = useRef<InputRef>(null)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { addAgent } = useAgents()
 
   const onDelete = useCallback(
     (assistant: Assistant) => {
@@ -53,13 +55,13 @@ const Assistants: FC<Props> = ({
     (assistant: Assistant) =>
       [
         {
-          label: t('common.edit'),
+          label: t('assistants.edit.title'),
           key: 'edit',
           icon: <EditOutlined />,
-          onClick: () => AssistantSettingPopup.show({ assistant })
+          onClick: () => AssistantSettingsPopup.show({ assistant })
         },
         {
-          label: t('common.duplicate'),
+          label: t('assistants.copy.title'),
           key: 'duplicate',
           icon: <CopyIcon />,
           onClick: async () => {
@@ -69,17 +71,28 @@ const Assistants: FC<Props> = ({
           }
         },
         {
-          label: t('chat.topics.delete.all.title'),
-          key: 'delete-all',
+          label: t('assistants.clear.title'),
+          key: 'clear',
           icon: <MinusCircleOutlined />,
           onClick: () => {
             window.modal.confirm({
-              title: t('chat.topics.delete.all.title'),
-              content: t('chat.topics.delete.all.content'),
+              title: t('assistants.clear.title'),
+              content: t('assistants.clear.content'),
               centered: true,
               okButtonProps: { danger: true },
               onOk: removeAllTopics
             })
+          }
+        },
+        {
+          label: t('assistants.saveto.title'),
+          key: 'save-to-agent',
+          icon: <SaveOutlined />,
+          onClick: async () => {
+            const agent = omit(assistant, ['model', 'emoji'])
+            agent.id = uuid()
+            agent.type = 'agent'
+            addAgent(agent)
           }
         },
         { type: 'divider' },
@@ -88,10 +101,18 @@ const Assistants: FC<Props> = ({
           key: 'delete',
           icon: <DeleteOutlined />,
           danger: true,
-          onClick: () => onDelete(assistant)
+          onClick: () => {
+            window.modal.confirm({
+              title: t('assistants.delete.title'),
+              content: t('assistants.delete.content'),
+              centered: true,
+              okButtonProps: { danger: true },
+              onOk: () => onDelete(assistant)
+            })
+          }
         }
       ] as ItemType[],
-    [addAssistant, onDelete, removeAllTopics, setActiveAssistant, t]
+    [addAgent, addAssistant, onDelete, removeAllTopics, setActiveAssistant, t]
   )
 
   const onSwitchAssistant = useCallback(

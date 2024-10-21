@@ -58,7 +58,7 @@ export function useAssistant(id: string) {
     removeAllTopics: () => dispatch(removeAllTopics({ assistantId: assistant.id })),
     setModel: (model: Model) => dispatch(setModel({ assistantId: assistant.id, model })),
     updateAssistant: (assistant: Assistant) => dispatch(updateAssistant(assistant)),
-    updateAssistantSettings: (settings: AssistantSettings) => {
+    updateAssistantSettings: (settings: Partial<AssistantSettings>) => {
       dispatch(updateAssistantSettings({ assistantId: assistant.id, settings }))
     }
   }

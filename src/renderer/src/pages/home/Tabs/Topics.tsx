@@ -9,6 +9,7 @@ import {
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/api'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
@@ -16,6 +17,7 @@ import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
 import { Dropdown, MenuProps } from 'antd'
+import dayjs from 'dayjs'
 import { findIndex } from 'lodash'
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,6 +34,9 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const { assistant, removeTopic, moveTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
+  const { showTopicTime } = useSettings()
+
+  const borderRadius = showTopicTime ? 12 : 17
 
   const onDeleteTopic = useCallback(
     (topic: Topic) => {
@@ -172,8 +177,12 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           const isActive = topic.id === activeTopic?.id
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
-              <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
+              <TopicListItem
+                className={isActive ? 'active' : ''}
+                style={{ borderRadius }}
+                onClick={() => onSwitchTopic(topic)}>
                 <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
+                {showTopicTime && <TopicTime>{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>}
                 {isActive && (
                   <MenuButton
                     className="menu"
@@ -192,6 +201,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           )
         }}
       </DragableList>
+      <div style={{ minHeight: '10px' }}></div>
     </Container>
   )
 }
@@ -210,9 +220,8 @@ const TopicListItem = styled.div`
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   position: relative;
   font-family: Ubuntu;
   cursor: pointer;
@@ -247,6 +256,11 @@ const TopicName = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 13px;
+`
+
+const TopicTime = styled.div`
+  color: var(--color-text-3);
+  font-size: 11px;
 `
 
 const MenuButton = styled.div`

@@ -3,8 +3,10 @@ import 'emoji-picker-element'
 import { LoadingOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import EmojiPicker from '@renderer/components/EmojiPicker'
 import { TopView } from '@renderer/components/TopView'
+import { AGENT_PROMPT } from '@renderer/config/prompts'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { fetchGenerate } from '@renderer/services/api'
+import { getDefaultModel } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { getLeadingEmoji, uuid } from '@renderer/utils'
 import { Button, Form, FormInstance, Input, Modal, Popover } from 'antd'
@@ -38,12 +40,15 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       return
     }
 
-    const _agent = {
+    const _agent: Agent = {
       id: uuid(),
       name: values.name,
       emoji: _emoji,
       prompt: values.prompt,
-      group: 'user'
+      defaultModel: getDefaultModel(),
+      type: 'agent',
+      topics: [],
+      messages: []
     }
 
     addAgent(_agent)
@@ -60,8 +65,6 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   }
 
   const handleButtonClick = async () => {
-    const prompt = `你是一个专业的 prompt 优化助手，我会给你一段prompt，你需要帮我优化它，仅回复优化后的 prompt 不要添加任何解释，使用 [CRISPE提示框架] 回复。`
-
     const name = formRef.current?.getFieldValue('name')
     const content = formRef.current?.getFieldValue('prompt')
     const promptText = content || name
@@ -77,8 +80,10 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
     setLoading(true)
 
     try {
-      const prefixedContent = `请帮我优化下面这段 prompt，使用 CRISPE 提示框架，请使用 Markdown 格式回复，不要使用 codeblock: ${promptText}`
-      const generatedText = await fetchGenerate({ prompt, content: prefixedContent })
+      const generatedText = await fetchGenerate({
+        prompt: AGENT_PROMPT,
+        content: promptText
+      })
       formRef.current?.setFieldValue('prompt', generatedText)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -95,7 +100,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       onCancel={onCancel}
       maskClosable={false}
       afterClose={onClose}
-      okText={t('agents.add.button')}
+      okText={t('agents.add.title')}
       centered>
       <Form
         ref={formRef}

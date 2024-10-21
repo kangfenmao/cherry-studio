@@ -1,81 +1,100 @@
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
-import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
-import { useAssistant } from '@renderer/hooks/useAssistant'
-import { SettingRow, SettingRowTitle } from '@renderer/pages/settings'
+import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { SettingRow } from '@renderer/pages/settings'
 import { Assistant, AssistantSettings } from '@renderer/types'
-import { Button, Col, Row, Slider, Switch, Tooltip } from 'antd'
-import { FC, useEffect, useState } from 'react'
+import { Button, Col, Divider, Row, Slider, Switch, Tooltip } from 'antd'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import ModelAvatar from '../Avatar/ModelAvatar'
+import SelectModelPopup from '../Popups/SelectModelPopup'
+
 interface Props {
   assistant: Assistant
+  updateAssistant: (assistant: Assistant) => void
+  updateAssistantSettings: (settings: Partial<AssistantSettings>) => void
 }
 
-const AssistantModelSettings: FC<Props> = (props) => {
-  const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
+const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateAssistantSettings }) => {
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setConextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
+  const [autoResetModel, setAutoResetModel] = useState(assistant?.settings?.autoResetModel ?? false)
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
+  const [defaultModel, setDefaultModel] = useState(assistant?.defaultModel)
   const { t } = useTranslation()
-
-  const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
-    updateAssistantSettings({
-      temperature: settings.temperature ?? temperature,
-      contextCount: settings.contextCount ?? contextCount,
-      enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
-      maxTokens: settings.maxTokens ?? maxTokens,
-      streamOutput: settings.streamOutput ?? streamOutput
-    })
-  }
 
   const onTemperatureChange = (value) => {
     if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ temperature: value })
+      updateAssistantSettings({ temperature: value })
     }
   }
 
   const onConextCountChange = (value) => {
     if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ contextCount: value })
+      updateAssistantSettings({ contextCount: value })
     }
   }
 
   const onMaxTokensChange = (value) => {
     if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ maxTokens: value })
+      updateAssistantSettings({ maxTokens: value })
     }
   }
 
   const onReset = () => {
     setTemperature(DEFAULT_TEMPERATURE)
     setConextCount(DEFAULT_CONEXTCOUNT)
-    updateAssistant({
-      ...assistant,
-      settings: {
-        ...assistant.settings,
-        temperature: DEFAULT_TEMPERATURE,
-        contextCount: DEFAULT_CONEXTCOUNT,
-        enableMaxTokens: false,
-        maxTokens: DEFAULT_MAX_TOKENS,
-        streamOutput: true
-      }
-    })
+    setEnableMaxTokens(false)
+    setMaxTokens(0)
+    setStreamOutput(true)
   }
 
-  useEffect(() => {
-    setTemperature(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
-    setConextCount(assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
-    setEnableMaxTokens(assistant?.settings?.enableMaxTokens ?? false)
-    setMaxTokens(assistant?.settings?.maxTokens ?? DEFAULT_MAX_TOKENS)
-    setStreamOutput(assistant?.settings?.streamOutput ?? true)
-  }, [assistant])
+  const onSelectModel = async () => {
+    const selectedModel = await SelectModelPopup.show({ model: assistant?.model })
+    if (selectedModel) {
+      setDefaultModel(selectedModel)
+      updateAssistant({
+        ...assistant,
+        defaultModel: selectedModel
+      })
+    }
+  }
 
   return (
     <Container>
+      <Row align="middle" style={{ marginBottom: 10 }}>
+        <Label style={{ marginBottom: 10 }}>{t('assistants.settings.default_model')}</Label>
+        <Col span={24}>
+          <HStack alignItems="center">
+            <Button
+              icon={defaultModel ? <ModelAvatar model={defaultModel} size={20} /> : <PlusOutlined />}
+              onClick={onSelectModel}>
+              {defaultModel ? defaultModel.name : t('agents.edit.model.select.title')}
+            </Button>
+          </HStack>
+        </Col>
+      </Row>
+      <Divider style={{ margin: '10px 0' }} />
+      <SettingRow style={{ minHeight: 30 }}>
+        <Label>
+          {t('assistants.settings.auto_reset_model')}{' '}
+          <Tooltip title={t('assistants.settings.auto_reset_model.tip')}>
+            <QuestionIcon />
+          </Tooltip>
+        </Label>
+        <Switch
+          value={autoResetModel}
+          onChange={(checked) => {
+            setAutoResetModel(checked)
+            updateAssistantSettings({ autoResetModel: checked })
+          }}
+        />
+      </SettingRow>
+      <Divider style={{ margin: '10px 0' }} />
       <Row align="middle">
         <Label>{t('chat.settings.temperature')}</Label>
         <Tooltip title={t('chat.settings.temperature.tip')}>
@@ -95,10 +114,12 @@ const AssistantModelSettings: FC<Props> = (props) => {
         </Col>
       </Row>
       <Row align="middle">
-        <Label>{t('chat.settings.conext_count')}</Label>
-        <Tooltip title={t('chat.settings.conext_count.tip')}>
-          <QuestionIcon />
-        </Tooltip>
+        <Label>
+          {t('chat.settings.conext_count')}{' '}
+          <Tooltip title={t('chat.settings.conext_count.tip')}>
+            <QuestionIcon />
+          </Tooltip>
+        </Label>
       </Row>
       <Row align="middle" gutter={10}>
         <Col span={24}>
@@ -123,7 +144,7 @@ const AssistantModelSettings: FC<Props> = (props) => {
           checked={enableMaxTokens}
           onChange={(enabled) => {
             setEnableMaxTokens(enabled)
-            onUpdateAssistantSettings({ enableMaxTokens: enabled })
+            updateAssistantSettings({ enableMaxTokens: enabled })
           }}
         />
       </Row>
@@ -141,18 +162,17 @@ const AssistantModelSettings: FC<Props> = (props) => {
         </Col>
       </Row>
       <SettingRow>
-        <SettingRowTitleSmall>{t('model.stream_output')}</SettingRowTitleSmall>
+        <Label>{t('model.stream_output')}</Label>
         <Switch
           checked={streamOutput}
           onChange={(checked) => {
             setStreamOutput(checked)
-            onUpdateAssistantSettings({ streamOutput: checked })
+            updateAssistantSettings({ streamOutput: checked })
           }}
         />
       </SettingRow>
-      <HStack
-        justifyContent="flex-end"
-        style={{ marginTop: 20, padding: '10px 0', borderTop: '0.5px solid var(--color-border)' }}>
+      <Divider style={{ margin: '15px 0' }} />
+      <HStack justifyContent="flex-end">
         <Button onClick={onReset} style={{ width: 80 }} danger type="primary">
           {t('chat.settings.reset')}
         </Button>
@@ -170,18 +190,14 @@ const Container = styled.div`
 `
 
 const Label = styled.p`
-  margin: 0;
   margin-right: 5px;
+  font-weight: 500;
 `
 
 const QuestionIcon = styled(QuestionCircleOutlined)`
   font-size: 12px;
   cursor: pointer;
   color: var(--color-text-3);
-`
-
-const SettingRowTitleSmall = styled(SettingRowTitle)`
-  font-size: 13px;
 `
 
 export default AssistantModelSettings

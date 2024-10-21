@@ -116,7 +116,7 @@ const ProvidersList: FC = () => {
                                   {getFirstCharacter(provider.name)}
                                 </ProviderLogo>
                               )}
-                              <ProviderItemName>
+                              <ProviderItemName className="text-nowrap">
                                 {provider.isSystem ? t(`provider.${provider.id}`) : provider.name}
                               </ProviderItemName>
                               {provider.enabled && (
@@ -196,9 +196,6 @@ const ProviderLogo = styled(Avatar)`
 
 const ProviderItemName = styled.div`
   margin-left: 10px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   font-weight: 500;
   font-family: Ubuntu;
 `

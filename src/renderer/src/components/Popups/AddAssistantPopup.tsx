@@ -3,7 +3,7 @@ import { TopView } from '@renderer/components/TopView'
 import systemAgents from '@renderer/config/agents.json'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
-import { covertAgentToAssistant } from '@renderer/services/assistant'
+import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Agent, Assistant } from '@renderer/types'
 import { Divider, Input, InputRef, Modal, Tag } from 'antd'
@@ -26,35 +26,22 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const { assistants, addAssistant } = useAssistants()
   const inputRef = useRef<InputRef>(null)
 
-  const defaultAgent: Agent = useMemo(
-    () => ({
-      id: defaultAssistant.id,
-      name: defaultAssistant.name,
-      emoji: defaultAssistant.emoji || '',
-      prompt: defaultAssistant.prompt,
-      group: 'system'
-    }),
-    [defaultAssistant.emoji, defaultAssistant.id, defaultAssistant.name, defaultAssistant.prompt]
-  )
-
   const agents = useMemo(() => {
     const allAgents = [...userAgents, ...systemAgents] as Agent[]
-    const list = [defaultAgent, ...allAgents.filter((agent) => !assistants.map((a) => a.id).includes(agent.id))]
+    const list = [defaultAssistant, ...allAgents.filter((agent) => !assistants.map((a) => a.id).includes(agent.id))]
     return searchText
       ? list.filter((agent) => agent.name.toLowerCase().includes(searchText.trim().toLocaleLowerCase()))
       : list
-  }, [assistants, defaultAgent, searchText, userAgents])
+  }, [assistants, defaultAssistant, searchText, userAgents])
 
-  const onCreateAssistant = (agent: Agent) => {
-    if (agent.id !== 'default') {
-      if (assistants.map((a) => a.id).includes(String(agent.id))) {
-        return
-      }
+  const onCreateAssistant = async (agent: Agent) => {
+    if (agent.id === 'default') {
+      addAssistant(agent)
+      return
     }
 
-    const assistant = covertAgentToAssistant(agent)
+    const assistant = await createAssistantFromAgent(agent)
 
-    addAssistant(assistant)
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_ASSISTANTS), 0)
     resolve(assistant)
     setOpen(false)
@@ -112,8 +99,8 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
             <HStack alignItems="center" gap={5}>
               {agent.emoji} {agent.name}
             </HStack>
-            {agent.group === 'system' && <Tag color="green">{t('agents.tag.system')}</Tag>}
-            {agent.group === 'user' && <Tag color="orange">{t('agents.tag.user')}</Tag>}
+            {agent.id === 'default' && <Tag color="green">{t('agents.tag.system')}</Tag>}
+            {agent.type === 'agent' && <Tag color="orange">{t('agents.tag.agent')}</Tag>}
           </AgentItem>
         ))}
       </Container>

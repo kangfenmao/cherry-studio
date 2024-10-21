@@ -7,6 +7,7 @@ import {
   Part,
   TextPart
 } from '@google/generative-ai'
+import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages } from '@renderer/services/messages'
@@ -145,14 +146,26 @@ export default class GeminiProvider extends BaseProvider {
   public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
-    const userMessages = takeRight(messages, 5).map((message) => ({
-      role: message.role,
-      content: message.content
-    }))
+    const userMessages = takeRight(messages, 5)
+      .filter((message) => !message.isPreset)
+      .map((message) => ({
+        role: message.role,
+        content: message.content
+      }))
+
+    const userMessageContent = userMessages.reduce((prev, curr) => {
+      const content = curr.role === 'user' ? `User: ${curr.content}` : `Assistant: ${curr.content}`
+      return prev + (prev ? '\n' : '') + content
+    }, '')
 
     const systemMessage = {
       role: 'system',
-      content: '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，不要使用标点符号和其他特殊符号。'
+      content: SUMMARIZE_PROMPT
+    }
+
+    const userMessage = {
+      role: 'user',
+      content: userMessageContent
     }
 
     const geminiModel = this.sdk.getGenerativeModel({
@@ -163,16 +176,9 @@ export default class GeminiProvider extends BaseProvider {
       }
     })
 
-    const lastUserMessage = userMessages.pop()
+    const chat = await geminiModel.startChat()
 
-    const chat = await geminiModel.startChat({
-      history: userMessages.map((message) => ({
-        role: message.role === 'user' ? 'user' : 'model',
-        parts: [{ text: message.content }]
-      }))
-    })
-
-    const { response } = await chat.sendMessage(lastUserMessage?.content!)
+    const { response } = await chat.sendMessage(userMessage.content)
 
     return response.text()
   }

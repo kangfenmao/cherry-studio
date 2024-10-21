@@ -49,13 +49,7 @@ const SettingsTab: FC<Props> = (props) => {
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
-    updateAssistantSettings({
-      temperature: settings.temperature ?? temperature,
-      contextCount: settings.contextCount ?? contextCount,
-      enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
-      maxTokens: settings.maxTokens ?? maxTokens,
-      streamOutput: settings.streamOutput ?? streamOutput
-    })
+    updateAssistantSettings(settings)
   }
 
   const onTemperatureChange = (value) => {

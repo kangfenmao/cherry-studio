@@ -1,6 +1,7 @@
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
+import { uuid } from '@renderer/utils'
 import { isEmpty } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
@@ -566,6 +567,31 @@ const migrateConfig = {
             enabled: false
           }
         ]
+      }
+    }
+  },
+  '33': (state: RootState) => {
+    state.assistants.defaultAssistant.type = 'assistant'
+
+    state.agents.agents.forEach((agent) => {
+      agent.type = 'agent'
+      // @ts-ignore eslint-disable-next-line
+      delete agent.group
+    })
+
+    return {
+      ...state,
+      assistants: {
+        ...state.assistants,
+        assistants: [...state.assistants.assistants].map((assistant) => {
+          // @ts-ignore eslint-disable-next-line
+          delete assistant.group
+          return {
+            ...assistant,
+            id: assistant.id.length === 36 ? assistant.id : uuid(),
+            type: assistant.type === 'system' ? assistant.type : 'assistant'
+          }
+        })
       }
     }
   }

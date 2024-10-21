@@ -62,7 +62,8 @@
       "upgrade.success.title": "升級成功",
       "upgrade.success.content": "請重新啟動應用以完成升級",
       "upgrade.success.button": "重新啟動",
-      "topic.added": "新話題已添加"
+      "topic.added": "新話題已添加",
+      "save.success.title": "保存成功"
     },
     "chat": {
       "save": "保存",
@@ -74,8 +75,6 @@
       "topics.edit.title": "編輯名稱",
       "topics.edit.placeholder": "輸入新名稱",
       "topics.clear.title": "清空消息",
-      "topics.delete.all.title": "刪除所有話題",
-      "topics.delete.all.content": "確定要刪除所有話題嗎？",
       "topics.move_to": "移動到",
       "topics.list": "話題列表",
       "topics.export.title": "匯出",
@@ -118,8 +117,19 @@
       "title": "助手",
       "abbr": "助",
       "search": "搜尋助手...",
-      "prompt_settings": "提示詞設定",
-      "model_settings": "模型設定"
+      "settings.prompt": "提示詞設定",
+      "settings.model": "模型設定",
+      "settings.preset_messages": "預設訊息",
+      "settings.default_model": "預設模型",
+      "settings.auto_reset_model": "自動重置模型",
+      "settings.auto_reset_model.tip": "每次新的話題時自動重置模型",
+      "edit.title": "編輯助手",
+      "copy.title": "複製助手",
+      "clear.title": "清空話題",
+      "clear.content": "清空話題會刪除助手下所有主題和文件，確定要繼續嗎？",
+      "saveto.title": "儲存到智能體",
+      "delete.title": "删除助手",
+      "delete.content": "删除助手会删除所有该助手下的话题和文件，确定要繼續吗？"
     },
     "model": {
       "stream_output": "串流輸出",
@@ -136,18 +146,28 @@
     "agents": {
       "title": "智能體",
       "my_agents": "我的智能體",
-      "add.title": "添加智能體",
+      "add.title": "创建智能體",
       "edit.title": "編輯智能體",
       "add.name": "名稱",
       "add.name.placeholder": "輸入名稱",
       "add.prompt": "提示詞",
       "add.prompt.placeholder": "輸入提示詞",
-      "add.button": "添加",
+      "add.button": "添加到助手",
       "manage.title": "管理智能體",
       "delete.popup.content": "確定要刪除此智能體嗎？",
       "tag.default": "預設",
       "tag.system": "系統",
-      "tag.user": "我的"
+      "tag.agent": "智能体",
+      "edit.message.title": "預設訊息",
+      "edit.message.add.title": "添加",
+      "edit.message.group.title": "訊息組",
+      "edit.message.assistant.title": "助手",
+      "edit.message.assistant.placeholder": "輸入助手消息",
+      "edit.message.user.title": "用戶",
+      "edit.message.user.placeholder": "輸入用戶消息",
+      "edit.message.empty.content": "會話輸入內容不能為空",
+      "edit.model.select.title": "選擇模型",
+      "edit.settings.hide_preset_messages": "隱藏預設消息"
     },
     "minapp": {
       "title": "小程序"
@@ -211,6 +231,9 @@
       "general.backup.button": "備份",
       "general.restore.button": "復原",
       "general.view_webdav_settings": "查看 WebDAV 設定",
+      "general.reset.title": "資料重置",
+      "general.reset.button": "重置",
+      "general.manually_check_update.title": "手動檢查更新",
       "data.webdav.title": "WebDAV",
       "data.webdav.host": "WebDAV 主機位址",
       "data.webdav.host.placeholder": "http://localhost:8080",
@@ -220,11 +243,6 @@
       "data.webdav.path.placeholder": "/backup",
       "data.webdav.backup.button": "從 WebDAV 備份",
       "data.webdav.restore.button": "從 WebDAV 恢復",
-      "general.reset.title": "資料重置",
-      "general.reset.button": "重置",
-      "general.check_update_setting": "更新設定",
-      "general.manual_update_check": "手動檢查更新",
-      "general.auto_update_check": "自動檢查更新",
       "advanced.title": "進階設定",
       "advanced.click_assistant_switch_to_topics": "點擊助手切換到話題",
       "provider.api_key": "API 密鑰",
@@ -285,7 +303,8 @@
       "font_size.title": "訊息字體大小",
       "topic.position": "話題位置",
       "topic.position.left": "左側",
-      "topic.position.right": "右側"
+      "topic.position.right": "右側",
+      "topic.show.time": "顯示話題時間"
     },
     "translate": {
       "title": "翻譯",

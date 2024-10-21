@@ -1,11 +1,11 @@
-import { isLocalAi } from '@renderer/config/env'
 import { isSupportedModel, isVisionModel } from '@renderer/config/models'
+import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
 import { EVENT_NAMES } from '@renderer/services/event'
 import { filterContextMessages } from '@renderer/services/messages'
 import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
-import { first, takeRight } from 'lodash'
+import { takeRight } from 'lodash'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
   ChatCompletionContentPart,
@@ -45,7 +45,7 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   private get isNotSupportFiles() {
-    const providers = ['deepseek', 'baichuan', 'minimax', 'yi', 'doubao']
+    const providers = ['deepseek', 'baichuan', 'minimax', 'doubao']
     return providers.includes(this.provider.id)
   }
 
@@ -190,23 +190,35 @@ export default class OpenAIProvider extends BaseProvider {
   public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
-    const userMessages = takeRight(messages, 5).map((message) => ({
-      role: message.role,
-      content: message.content
-    }))
+    const userMessages = takeRight(messages, 5)
+      .filter((message) => !message.isPreset)
+      .map((message) => ({
+        role: message.role,
+        content: message.content
+      }))
+
+    const userMessageContent = userMessages.reduce((prev, curr) => {
+      const content = curr.role === 'user' ? `User: ${curr.content}` : `Assistant: ${curr.content}`
+      return prev + (prev ? '\n' : '') + content
+    }, '')
 
     const systemMessage = {
       role: 'system',
-      content: '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，不要使用标点符号和其他特殊符号。'
+      content: SUMMARIZE_PROMPT
+    }
+
+    const userMessage = {
+      role: 'user',
+      content: userMessageContent
     }
 
     // @ts-ignore key is not typed
     const response = await this.sdk.chat.completions.create({
       model: model.id,
-      messages: [systemMessage, ...(isLocalAi ? [first(userMessages)] : userMessages)] as ChatCompletionMessageParam[],
+      messages: [systemMessage, userMessage] as ChatCompletionMessageParam[],
       stream: false,
-      max_tokens: 50,
-      keep_alive: this.keepAliveTime
+      keep_alive: this.keepAliveTime,
+      max_tokens: 1000
     })
 
     return removeQuotes(response.choices[0].message?.content?.substring(0, 50) || '')
@@ -219,8 +231,8 @@ export default class OpenAIProvider extends BaseProvider {
       model: model.id,
       stream: false,
       messages: [
-        { role: 'user', content },
-        { role: 'system', content: prompt }
+        { role: 'system', content: prompt },
+        { role: 'user', content }
       ]
     })
 

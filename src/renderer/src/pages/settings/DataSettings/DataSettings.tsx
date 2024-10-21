@@ -24,7 +24,7 @@ const DataSettings: FC = () => {
               <SettingRowTitle>{t('settings.data.webdav.title')}</SettingRowTitle>
               <VStack gap="5px">
                 <Link to="/settings/data/webdav" style={{ color: 'var(--color-text-2)' }}>
-                  {t('settings.general.view_webdav_settings')}
+                  <Button>{t('settings.general.view_webdav_settings')}</Button>
                 </Link>
               </VStack>
             </SettingRow>

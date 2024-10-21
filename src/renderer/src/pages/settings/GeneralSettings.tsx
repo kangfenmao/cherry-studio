@@ -2,7 +2,7 @@ import { isMac } from '@renderer/config/constant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
-import { setClickAssistantToShowTopic, setLanguage, setManualUpdateCheck } from '@renderer/store/settings'
+import { setClickAssistantToShowTopic, setLanguage, setShowTopicTime } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { ThemeMode } from '@renderer/types'
 import { isValidProxyUrl } from '@renderer/utils'
@@ -19,8 +19,8 @@ const GeneralSettings: FC = () => {
     theme,
     windowStyle,
     topicPosition,
+    showTopicTime,
     clickAssistantToShowTopic,
-    manualUpdateCheck,
     setTheme,
     setWindowStyle,
     setTopicPosition
@@ -96,19 +96,6 @@ const GeneralSettings: FC = () => {
       )}
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.general.check_update_setting')}</SettingRowTitle>
-        <Select
-          defaultValue={manualUpdateCheck ?? false}
-          style={{ width: 180 }}
-          onChange={(v) => dispatch(setManualUpdateCheck(v))}
-          options={[
-            { value: false, label: t('settings.general.auto_update_check') },
-            { value: true, label: t('settings.general.manual_update_check') }
-          ]}
-        />
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
         <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
         <Input
           placeholder="socks5://127.0.0.1:6153"
@@ -145,6 +132,11 @@ const GeneralSettings: FC = () => {
           <SettingDivider />
         </>
       )}
+      <SettingRow>
+        <SettingRowTitle>{t('settings.topic.show.time')}</SettingRowTitle>
+        <Switch checked={showTopicTime} onChange={(checked) => dispatch(setShowTopicTime(checked))} />
+      </SettingRow>
+      <SettingDivider />
     </SettingContainer>
   )
 }
