@@ -51,6 +51,13 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
     setEnableMaxTokens(false)
     setMaxTokens(0)
     setStreamOutput(true)
+    updateAssistantSettings({
+      temperature: DEFAULT_TEMPERATURE,
+      contextCount: DEFAULT_CONEXTCOUNT,
+      enableMaxTokens: false,
+      maxTokens: 0,
+      streamOutput: true
+    })
   }
 
   const onSelectModel = async () => {

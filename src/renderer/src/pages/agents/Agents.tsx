@@ -5,15 +5,13 @@ import { HStack } from '@renderer/components/Layout'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
-import { Button, Dropdown, Typography } from 'antd'
+import { Button, Dropdown } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import AddAgentPopup from './components/AddAgentPopup'
-
-const { Title } = Typography
 
 interface Props {
   onClick: (agent: Agent) => void

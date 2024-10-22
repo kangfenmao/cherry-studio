@@ -28,6 +28,7 @@
     "build:linux": "dotenv electron-vite build && electron-builder --linux --publish never",
     "release": "node scripts/version.js",
     "publish": "yarn release patch push",
+    "pulish:artifacts": "cd npm/artifacts && npm publish && cd -",
     "generate:icons": "electron-icon-builder --input=./build/logo.png --output=build"
   },
   "dependencies": {

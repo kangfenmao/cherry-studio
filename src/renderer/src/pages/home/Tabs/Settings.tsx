@@ -81,7 +81,9 @@ const SettingsTab: FC<Props> = (props) => {
         contextCount: DEFAULT_CONEXTCOUNT,
         enableMaxTokens: false,
         maxTokens: DEFAULT_MAX_TOKENS,
-        streamOutput: true
+        streamOutput: true,
+        hideMessages: false,
+        autoResetModel: false
       }
     })
   }

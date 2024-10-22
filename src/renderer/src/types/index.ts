@@ -10,7 +10,7 @@ export type Assistant = {
   description?: string
   model?: Model
   defaultModel?: Model
-  settings?: AssistantSettings
+  settings?: Partial<AssistantSettings>
   messages?: AssistantMessage[]
 }
 
