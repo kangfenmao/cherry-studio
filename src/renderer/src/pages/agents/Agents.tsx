@@ -32,8 +32,8 @@ const Agents: React.FC<Props> = ({ onClick }) => {
           onClick: () => AssistantSettingsPopup.show({ assistant: agent })
         },
         {
-          label: t('agents.add.title'),
-          key: 'add',
+          label: t('agents.add.button'),
+          key: 'create',
           icon: <PlusOutlined />,
           onClick: () => createAssistantFromAgent(agent)
         },

@@ -127,7 +127,8 @@
       "copy.title": "Copy Assistant",
       "clear.title": "Clear topics",
       "clear.content": "Clearing the topic will delete all topics and files in the assistant. Are you sure you want to continue?",
-      "saveto.title": "Save to agent",
+      "save.title": "Save to agent",
+      "save.success": "Saved successfully",
       "delete.title": "Delete Assistant",
       "delete.content": "Deleting an assistant will delete all topics and files under the assistant. Are you sure you want to delete it?"
     },

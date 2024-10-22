@@ -14,6 +14,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message, Model } from '@renderer/types'
 import { removeTrailingDoubleSpaces } from '@renderer/utils'
 import { Dropdown, Popconfirm, Tooltip } from 'antd'
+import dayjs from 'dayjs'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -72,7 +73,7 @@ const MessageMenubar: FC<Props> = (props) => {
         key: 'save',
         icon: <SaveOutlined />,
         onClick: () => {
-          const fileName = message.createdAt + '.md'
+          const fileName = dayjs(message.createdAt).format('YYYYMMDDHHmm') + '.md'
           window.api.file.save(fileName, message.content)
         }
       },

@@ -127,7 +127,8 @@
       "copy.title": "複製助手",
       "clear.title": "清空話題",
       "clear.content": "清空話題會刪除助手下所有主題和文件，確定要繼續嗎？",
-      "saveto.title": "儲存到智能體",
+      "save.title": "儲存到智能體",
+      "save.success": "儲存成功",
       "delete.title": "删除助手",
       "delete.content": "删除助手会删除所有该助手下的话题和文件，确定要繼續吗？"
     },

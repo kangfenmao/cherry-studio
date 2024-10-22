@@ -77,7 +77,7 @@ export async function estimateMessageUsage(message: Message): Promise<Completion
   return {
     prompt_tokens: promptUsedTokens,
     completion_tokens: completionUsedTokens,
-    total_tokens: usedTokens + imageTokens - 7
+    total_tokens: usedTokens + (imageTokens ? imageTokens - 7 : 0)
   }
 }
 

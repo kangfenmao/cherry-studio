@@ -85,7 +85,7 @@ const Assistants: FC<Props> = ({
           }
         },
         {
-          label: t('assistants.saveto.title'),
+          label: t('assistants.save.title'),
           key: 'save-to-agent',
           icon: <SaveOutlined />,
           onClick: async () => {
@@ -93,6 +93,10 @@ const Assistants: FC<Props> = ({
             agent.id = uuid()
             agent.type = 'agent'
             addAgent(agent)
+            window.message.success({
+              content: t('assistants.save.success'),
+              key: 'save-to-agent'
+            })
           }
         },
         { type: 'divider' },
