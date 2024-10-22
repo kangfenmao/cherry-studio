@@ -16,6 +16,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
+import { exportTopicAsMarkdown } from '@renderer/utils/export'
 import { Dropdown, MenuProps } from 'antd'
 import dayjs from 'dayjs'
 import { findIndex } from 'lodash'
@@ -134,6 +135,11 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
               label: t('chat.topics.export.image'),
               key: 'image',
               onClick: () => EventEmitter.emit(EVENT_NAMES.EXPORT_TOPIC_IMAGE, topic)
+            },
+            {
+              label: t('chat.topics.export.md'),
+              key: 'markdown',
+              onClick: () => exportTopicAsMarkdown(topic)
             }
           ]
         }
