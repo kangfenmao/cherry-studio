@@ -45,6 +45,7 @@ export function useAppInit() {
   useEffect(() => {
     const transparentWindow = windowStyle === 'transparent' && isMac && !minappShow
     window.root.style.background = transparentWindow ? 'var(--navbar-background-mac)' : 'var(--navbar-background)'
+    !isMac && import('@renderer/assets/styles/scrollbar.scss')
   }, [windowStyle, minappShow])
 
   useEffect(() => {

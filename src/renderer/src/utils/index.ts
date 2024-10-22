@@ -329,3 +329,7 @@ export function formatFileSize(file: FileType) {
 
   return (size / 1024).toFixed(2) + ' KB'
 }
+
+export function classNames(...classes: Array<string | boolean | undefined | null>) {
+  return classes.filter(Boolean).join(' ')
+}

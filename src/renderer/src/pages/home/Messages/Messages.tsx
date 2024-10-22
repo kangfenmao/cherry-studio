@@ -1,3 +1,4 @@
+import { isWindows } from '@renderer/config/constant'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -8,7 +9,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { deleteMessageFiles, filterMessages, getContextCount } from '@renderer/services/messages'
 import { estimateHistoryTokens, estimateMessageUsage } from '@renderer/services/tokens'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
-import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
+import { captureScrollableDiv, classNames, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
 import { flatten, last, reverse, take } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -219,7 +220,12 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [assistant, messages])
 
   return (
-    <Container id="messages" style={{ maxWidth }} key={assistant.id} ref={containerRef}>
+    <Container
+      id="messages"
+      className={classNames(isWindows && 'scrollbar')}
+      style={{ maxWidth }}
+      key={assistant.id}
+      ref={containerRef}>
       <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
       {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
       {reverse([...messages]).map((message, index) => (
@@ -248,6 +254,11 @@ const Container = styled.div`
   background-color: var(--color-background);
   padding-bottom: 20px;
   overflow-x: hidden;
+  &.scrollbar {
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+  }
 `
 
 export default Messages
