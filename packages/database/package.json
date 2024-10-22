@@ -1,0 +1,13 @@
+{
+  "name": "@cherry-studio/database",
+  "packageManager": "yarn@4.3.1",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "agents": "node src/agents.js",
+    "email": "yarn csv && node src/email.js",
+    "csv": "node src/csv.js"
+  }
+}
