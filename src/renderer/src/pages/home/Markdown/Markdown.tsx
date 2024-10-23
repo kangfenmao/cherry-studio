@@ -46,7 +46,6 @@ const Markdown: FC<Props> = ({ message }) => {
       className="markdown"
       rehypePlugins={rehypePlugins}
       remarkPlugins={[remarkMath, remarkGfm]}
-      disallowedElements={['style']}
       components={
         {
           a: Link,
