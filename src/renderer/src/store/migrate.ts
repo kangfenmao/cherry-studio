@@ -1,7 +1,8 @@
 import { SYSTEM_MODELS } from '@renderer/config/models'
+import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { runAsyncFunction, uuid } from '@renderer/utils'
 import { isEmpty } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
@@ -594,6 +595,21 @@ const migrateConfig = {
         })
       }
     }
+  },
+  '34': (state: RootState) => {
+    state.assistants.assistants.forEach((assistant) => {
+      assistant.topics.forEach((topic) => {
+        topic.assistantId = assistant.id
+        runAsyncFunction(async () => {
+          const _topic = await db.topics.get(topic.id)
+          if (_topic) {
+            const messages = (_topic?.messages || []).map((message) => ({ ...message, assistantId: assistant.id }))
+            db.topics.put({ ..._topic, messages }, topic.id)
+          }
+        })
+      })
+    })
+    return state
   }
 }
 
