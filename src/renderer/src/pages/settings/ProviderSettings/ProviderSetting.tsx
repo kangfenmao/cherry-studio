@@ -82,7 +82,13 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     updateProvider({ ...provider, apiHost: configedApiHost })
   }
 
-  const hostPreview = (apiHost.endsWith('/') ? apiHost : `${apiHost}/v1/`) + 'chat/completions'
+  const hostPreview = () => {
+    if (apiHost.endsWith('#')) {
+      return apiHost.replace('#', '')
+    }
+
+    return (apiHost.endsWith('/') ? apiHost : `${apiHost}/v1/`) + 'chat/completions'
+  }
 
   return (
     <SettingContainer
@@ -143,7 +149,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       </Space.Compact>
       {isOpenAIProvider(provider) && (
         <SettingHelpTextRow style={{ justifyContent: 'space-between' }}>
-          <SettingHelpText style={{ marginLeft: 6 }}>{hostPreview}</SettingHelpText>
+          <SettingHelpText style={{ marginLeft: 6 }}>{hostPreview()}</SettingHelpText>
           <SettingHelpText>{t('settings.provider.api.url.tip')}</SettingHelpText>
         </SettingHelpTextRow>
       )}
