@@ -1,5 +1,6 @@
 @import './markdown.scss';
 @import './ant.scss';
+@import './scrollbar.scss';
 @import '../fonts/icon-fonts/iconfont.css';
 @import '../fonts/ubuntu/ubuntu.css';
 
@@ -36,9 +37,6 @@
   --color-error: #f44336;
   --color-link: #1677ff;
   --color-code-background: #323232;
-  --color-scrollbar-thumb: rgba(255, 255, 255, 0.08);
-  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.15);
-  --color-scrollbar-thumb-active: rgba(255, 255, 255, 0.2);
   --color-hover: rgba(40, 40, 40, 1);
   --color-active: rgba(55, 55, 55, 1);
 
@@ -48,7 +46,7 @@
   --navbar-height: 40px;
   --sidebar-width: 50px;
   --status-bar-height: 40px;
-  --input-bar-height: 85px;
+  --input-bar-height: 100px;
 
   --assistants-width: 275px;
   --topic-list-width: 275px;
@@ -88,9 +86,6 @@ body[theme-mode='light'] {
   --color-error: #f44336;
   --color-link: #1677ff;
   --color-code-background: #e3e3e3;
-  --color-scrollbar-thumb: rgba(0, 0, 0, 0.08);
-  --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.15);
-  --color-scrollbar-thumb-active: rgba(0, 0, 0, 0.2);
   --color-hover: var(--color-white-mute);
   --color-active: var(--color-white-soft);
 

@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined, MinusCircleOutlined, PlusOutlined, SaveOu
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import DragableList from '@renderer/components/DragableList'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
+import { Scrollbar } from '@renderer/components/Scrollbar'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -178,69 +179,69 @@ const Assistants: FC<Props> = ({
   }, [activeAssistant?.id, list, onSwitchAssistant])
 
   return (
-    <Container>
-      {assistants.length >= 10 && (
-        <SearchContainer>
-          <Input
-            placeholder={t('chat.assistant.search.placeholder')}
-            suffix={<CommandKey>⌘+K</CommandKey>}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ borderRadius: 16, borderWidth: 0.5 }}
-            onKeyDown={onSearch}
-            ref={searchRef}
-            onFocus={() => dispatch(setSearching(true))}
-            onBlur={() => {
-              dispatch(setSearching(false))
-              setSearch('')
-            }}
-            allowClear
-          />
-        </SearchContainer>
-      )}
-      <DragableList
-        list={list}
-        onUpdate={updateAssistants}
-        droppableProps={{ isDropDisabled: !isEmpty(search) }}
-        style={{ paddingBottom: dragging ? '34px' : 0 }}
-        onDragStart={() => setDragging(true)}
-        onDragEnd={() => setDragging(false)}>
-        {(assistant) => {
-          const isCurrent = assistant.id === activeAssistant?.id
-          return (
-            <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
-              <AssistantItem onClick={() => onSwitchAssistant(assistant)} className={isCurrent ? 'active' : ''}>
-                <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
-                {isCurrent && (
-                  <ArrowRightButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
-                    <i className="iconfont icon-gridlines" />
-                  </ArrowRightButton>
-                )}
-                {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
-              </AssistantItem>
-            </Dropdown>
-          )
-        }}
-      </DragableList>
-      {!dragging && (
-        <AssistantItem onClick={onCreateAssistant}>
-          <AssistantName>
-            <PlusOutlined style={{ color: 'var(--color-text-2)', marginRight: 4 }} />
-            {t('chat.add.assistant.title')}
-          </AssistantName>
-        </AssistantItem>
-      )}
-    </Container>
+    <Scrollbar>
+      <Container>
+        {assistants.length >= 10 && (
+          <SearchContainer>
+            <Input
+              placeholder={t('chat.assistant.search.placeholder')}
+              suffix={<CommandKey>⌘+K</CommandKey>}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{ borderRadius: 16, borderWidth: 0.5 }}
+              onKeyDown={onSearch}
+              ref={searchRef}
+              onFocus={() => dispatch(setSearching(true))}
+              onBlur={() => {
+                dispatch(setSearching(false))
+                setSearch('')
+              }}
+              allowClear
+            />
+          </SearchContainer>
+        )}
+        <DragableList
+          list={list}
+          onUpdate={updateAssistants}
+          droppableProps={{ isDropDisabled: !isEmpty(search) }}
+          style={{ paddingBottom: dragging ? '34px' : 0 }}
+          onDragStart={() => setDragging(true)}
+          onDragEnd={() => setDragging(false)}>
+          {(assistant) => {
+            const isCurrent = assistant.id === activeAssistant?.id
+            return (
+              <Dropdown key={assistant.id} menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
+                <AssistantItem onClick={() => onSwitchAssistant(assistant)} className={isCurrent ? 'active' : ''}>
+                  <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
+                  {isCurrent && (
+                    <ArrowRightButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
+                      <i className="iconfont icon-gridlines" />
+                    </ArrowRightButton>
+                  )}
+                  {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
+                </AssistantItem>
+              </Dropdown>
+            )
+          }}
+        </DragableList>
+        {!dragging && (
+          <AssistantItem onClick={onCreateAssistant}>
+            <AssistantName>
+              <PlusOutlined style={{ color: 'var(--color-text-2)', marginRight: 4 }} />
+              {t('chat.add.assistant.title')}
+            </AssistantName>
+          </AssistantItem>
+        )}
+        <div style={{ minHeight: 10 }}></div>
+      </Container>
+    </Scrollbar>
   )
 }
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--navbar-height));
-  overflow-y: auto;
   padding-top: 10px;
-  padding-bottom: 10px;
 `
 
 const AssistantItem = styled.div`

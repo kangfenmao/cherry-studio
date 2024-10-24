@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
+import { Scrollbar } from '@renderer/components/Scrollbar'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { TopicManager } from '@renderer/hooks/useTopic'
@@ -177,38 +178,40 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   )
 
   return (
-    <Container>
-      <DragableList list={assistant.topics} onUpdate={updateTopics}>
-        {(topic) => {
-          const isActive = topic.id === activeTopic?.id
-          return (
-            <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
-              <TopicListItem
-                className={isActive ? 'active' : ''}
-                style={{ borderRadius }}
-                onClick={() => onSwitchTopic(topic)}>
-                <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
-                {showTopicTime && <TopicTime>{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>}
-                {isActive && (
-                  <MenuButton
-                    className="menu"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      if (assistant.topics.length === 1) {
-                        return onClearMessages()
-                      }
-                      onDeleteTopic(topic)
-                    }}>
-                    <CloseOutlined />
-                  </MenuButton>
-                )}
-              </TopicListItem>
-            </Dropdown>
-          )
-        }}
-      </DragableList>
-      <div style={{ minHeight: '10px' }}></div>
-    </Container>
+    <Scrollbar>
+      <Container>
+        <DragableList list={assistant.topics} onUpdate={updateTopics}>
+          {(topic) => {
+            const isActive = topic.id === activeTopic?.id
+            return (
+              <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
+                <TopicListItem
+                  className={isActive ? 'active' : ''}
+                  style={{ borderRadius }}
+                  onClick={() => onSwitchTopic(topic)}>
+                  <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
+                  {showTopicTime && <TopicTime>{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>}
+                  {isActive && (
+                    <MenuButton
+                      className="menu"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (assistant.topics.length === 1) {
+                          return onClearMessages()
+                        }
+                        onDeleteTopic(topic)
+                      }}>
+                      <CloseOutlined />
+                    </MenuButton>
+                  )}
+                </TopicListItem>
+              </Dropdown>
+            )
+          }}
+        </DragableList>
+        <div style={{ minHeight: '10px' }}></div>
+      </Container>
+    </Scrollbar>
   )
 }
 
@@ -216,7 +219,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 10px;
-  max-height: calc(100vh - var(--navbar-height) - 70px);
 `
 
 const TopicListItem = styled.div`

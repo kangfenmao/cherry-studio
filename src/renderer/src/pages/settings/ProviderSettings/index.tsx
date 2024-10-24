@@ -1,5 +1,6 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
+import { Scrollbar } from '@renderer/components/Scrollbar'
 import { getProviderLogo } from '@renderer/config/providers'
 import { useAllProviders, useProviders } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
@@ -85,56 +86,58 @@ const ProvidersList: FC = () => {
   return (
     <Container>
       <ProviderListContainer>
-        <ProviderList>
-          <DragDropContext onDragStart={() => setDragging(true)} onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {providers.map((provider, index) => (
-                    <Draggable key={`draggable_${provider.id}_${index}`} draggableId={provider.id} index={index}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
-                          <Dropdown
-                            menu={{ items: provider.isSystem ? [] : getDropdownMenus(provider) }}
-                            trigger={['contextMenu']}>
-                            <ProviderListItem
-                              key={JSON.stringify(provider)}
-                              className={provider.id === selectedProvider?.id ? 'active' : ''}
-                              onClick={() => setSelectedProvider(provider)}>
-                              {provider.isSystem && (
-                                <ProviderLogo shape="square" src={getProviderLogo(provider.id)} size={25} />
-                              )}
-                              {!provider.isSystem && (
-                                <ProviderLogo
-                                  size={25}
-                                  shape="square"
-                                  style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 25 }}>
-                                  {getFirstCharacter(provider.name)}
-                                </ProviderLogo>
-                              )}
-                              <ProviderItemName className="text-nowrap">
-                                {provider.isSystem ? t(`provider.${provider.id}`) : provider.name}
-                              </ProviderItemName>
-                              {provider.enabled && (
-                                <Tag color="green" style={{ marginLeft: 'auto' }}>
-                                  ON
-                                </Tag>
-                              )}
-                            </ProviderListItem>
-                          </Dropdown>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </ProviderList>
+        <Scrollbar>
+          <ProviderList>
+            <DragDropContext onDragStart={() => setDragging(true)} onDragEnd={onDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {providers.map((provider, index) => (
+                      <Draggable key={`draggable_${provider.id}_${index}`} draggableId={provider.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{ ...provided.draggableProps.style, marginBottom: 5 }}>
+                            <Dropdown
+                              menu={{ items: provider.isSystem ? [] : getDropdownMenus(provider) }}
+                              trigger={['contextMenu']}>
+                              <ProviderListItem
+                                key={JSON.stringify(provider)}
+                                className={provider.id === selectedProvider?.id ? 'active' : ''}
+                                onClick={() => setSelectedProvider(provider)}>
+                                {provider.isSystem && (
+                                  <ProviderLogo shape="square" src={getProviderLogo(provider.id)} size={25} />
+                                )}
+                                {!provider.isSystem && (
+                                  <ProviderLogo
+                                    size={25}
+                                    shape="square"
+                                    style={{ backgroundColor: generateColorFromChar(provider.name), minWidth: 25 }}>
+                                    {getFirstCharacter(provider.name)}
+                                  </ProviderLogo>
+                                )}
+                                <ProviderItemName className="text-nowrap">
+                                  {provider.isSystem ? t(`provider.${provider.id}`) : provider.name}
+                                </ProviderItemName>
+                                {provider.enabled && (
+                                  <Tag color="green" style={{ marginLeft: 'auto' }}>
+                                    ON
+                                  </Tag>
+                                )}
+                              </ProviderListItem>
+                            </Dropdown>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </ProviderList>
+        </Scrollbar>
         {!dragging && (
           <AddButtonWrapper>
             <Button type="dashed" style={{ width: '100%' }} icon={<PlusOutlined />} onClick={onAddProvider} />
@@ -159,15 +162,12 @@ const ProviderListContainer = styled.div`
   width: var(--assistants-width);
   height: calc(100vh - var(--navbar-height));
   border-right: 0.5px solid var(--color-border);
-  overflow-y: auto;
 `
 
 const ProviderList = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: calc(100vh - var(--navbar-height));
-  overflow: auto;
   padding: 8px;
 `
 
