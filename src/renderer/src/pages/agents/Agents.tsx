@@ -57,7 +57,7 @@ const Agents: React.FC<Props> = ({ onClick }) => {
   )
 
   return (
-    <Scrollbar style={{ width: 280 }}>
+    <Scrollbar style={{ maxWidth: 'var(--assistants-width)' }}>
       <Container style={{ paddingBottom: dragging ? 30 : 0 }}>
         {agents.length > 0 && (
           <DragableList
@@ -105,6 +105,7 @@ const Container = styled.div`
   flex-direction: column;
   border-right: 0.5px solid var(--color-border);
   min-height: calc(100vh - var(--navbar-height));
+  width: var(--assistants-width);
 `
 
 const AgentItem = styled.div`
