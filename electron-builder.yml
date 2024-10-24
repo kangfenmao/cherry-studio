@@ -63,6 +63,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
+    修复滚动条显示问题
     增加数学公式渲染引擎切换
-    多个系统滚动条样式统一
     修复添加默认助手会添加两个

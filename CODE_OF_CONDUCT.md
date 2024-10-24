@@ -1,32 +1,29 @@
-This software is licensed under the **Apache License 2.0**. In addition to the terms of the Apache License 2.0, the following additional terms apply to the use of Cherry Studio:
+# Code of Conduct
 
-**I. Commercial Use License**
+## Our Pledge
 
-1. **Free Commercial Use**: Users can use the software for commercial purposes without modifying the code.
-2. **Commercial License Required**: A commercial license is required if any of the following conditions are met:
-   1. You modify, develop, or alter the software, including but not limited to changes to the application name, logo, code, or functionality.
-   2. You provide multi-tenant services to enterprise customers with 10 or more users.
-   3. You pre-install or integrate the software into hardware devices or products and bundle it for sale.
-   4. You are engaging in large-scale procurement for government or educational institutions, especially involving security, data privacy, or other sensitive requirements.
+In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-**II. Contributor Agreement**
+## Our Standards
 
-As a contributor to Cherry Studio, you agree to the following:
+Examples of behavior that contributes to creating a positive environment include:
 
-1. **License Adjustment**: The producer reserves the right to adjust the open-source license as needed, making it stricter or more lenient.
-2. **Commercial Use**: Any code you contribute may be used for commercial purposes, including but not limited to cloud business operations.
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints and experiences
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy towards other community members
 
-**III. Other Terms**
+Examples of unacceptable behavior by participants include:
 
-1. The interpretation of these terms is subject to the discretion of Cherry Studio developers.
-2. These terms may be updated, and users will be notified through the software when changes occur.
+- The use of sexualized language or imagery and unwelcome sexual attention or advances
+- Trolling, insulting/derogatory comments, and personal or political attacks
+- Public or private harassment
+- Publishing others' private information, such as a physical or electronic address, without explicit permission
+- Other conduct which could reasonably be considered inappropriate in a professional setting
 
-For any questions or to request a commercial license, please contact the Cherry Studio development team.
+## Our Responsibilities
 
-Apart from the specific conditions mentioned above, all other rights and restrictions follow the Apache License 2.0. Detailed information about the Apache License 2.0 can be found at http://www.apache.org/licenses/LICENSE-2.0.
+Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
 
----
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.

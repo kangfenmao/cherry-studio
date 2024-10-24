@@ -36,7 +36,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const { assistant, removeTopic, moveTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
   const generating = useAppSelector((state) => state.runtime.generating)
-  const { showTopicTime } = useSettings()
+  const { showTopicTime, topicPosition } = useSettings()
 
   const borderRadius = showTopicTime ? 12 : 17
 
@@ -178,7 +178,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   )
 
   return (
-    <Container>
+    <Container right={topicPosition === 'right'}>
       <DragableList list={assistant.topics} onUpdate={updateTopics}>
         {(topic) => {
           const isActive = topic.id === activeTopic?.id

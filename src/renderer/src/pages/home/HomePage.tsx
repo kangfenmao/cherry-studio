@@ -52,6 +52,7 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+  max-width: calc(100vw - var(--sidebar-width));
 `
 
 const ContentContainer = styled.div`

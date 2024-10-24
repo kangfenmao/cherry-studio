@@ -36,7 +36,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     const showRightTopics = showTopics && topicPosition === 'right'
     const minusAssistantsWidth = showAssistants ? '- var(--assistants-width)' : ''
     const minusRightTopicsWidth = showRightTopics ? '- var(--assistants-width)' : ''
-    return `calc(100vw - var(--sidebar-width) ${minusAssistantsWidth} ${minusRightTopicsWidth}`
+    return `calc(100vw - var(--sidebar-width) ${minusAssistantsWidth} ${minusRightTopicsWidth} - 5px)`
   }, [showAssistants, showTopics, topicPosition])
 
   const onSendMessage = useCallback(
@@ -220,7 +220,12 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [assistant, messages])
 
   return (
-    <Container id="messages" style={{ maxWidth }} key={assistant.id} ref={containerRef} right>
+    <Container
+      id="messages"
+      style={{ maxWidth }}
+      key={assistant.id}
+      ref={containerRef}
+      right={topicPosition === 'left'}>
       <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
       {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
       {reverse([...messages]).map((message, index) => (
@@ -245,7 +250,6 @@ const Container = styled(Scrollbar)`
   background-color: var(--color-background);
   padding-bottom: 20px;
   overflow-x: hidden;
-  margin-right: 3px;
 `
 
 export default Messages
