@@ -55,7 +55,6 @@ const PopupContainer: React.FC<Props> = ({ text, textareaProps, modalProps, reso
       width="60vw"
       style={{ maxHeight: '70vh' }}
       transitionName="ant-move-down"
-      maskTransitionName="ant-fade"
       okText={t('common.save')}
       {...modalProps}
       open={open}

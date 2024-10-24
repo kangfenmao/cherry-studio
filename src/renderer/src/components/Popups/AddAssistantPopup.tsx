@@ -6,6 +6,7 @@ import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Agent, Assistant } from '@renderer/types'
+import { uuid } from '@renderer/utils'
 import { Divider, Input, InputRef, Modal, Tag } from 'antd'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,7 +37,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
 
   const onCreateAssistant = async (agent: Agent) => {
     if (agent.id === 'default') {
-      addAssistant(agent)
+      addAssistant({ ...agent, id: uuid() })
       return
     }
 
@@ -66,8 +67,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       open={open}
       onCancel={onCancel}
       afterClose={onClose}
-      transitionName="ant-move-down"
-      maskTransitionName="ant-fade"
+      transitionName="ant-move-up"
       styles={{ content: { borderRadius: 20, padding: 0, overflow: 'hidden', paddingBottom: 20 } }}
       closeIcon={null}
       footer={null}>

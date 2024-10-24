@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HStack } from '../Layout'
+import { Scrollbar } from '../Scrollbar'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -102,28 +103,28 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
         />
       </HStack>
       <Divider style={{ margin: 0, borderBlockStartWidth: 0.5 }} />
-      <Container>
-        {filteredItems.length > 0 ? (
-          <StyledMenu
-            items={filteredItems}
-            selectedKeys={model ? [getModelUniqId(model)] : []}
-            mode="inline"
-            inlineIndent={6}
-          />
-        ) : (
-          <EmptyState>
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-          </EmptyState>
-        )}
-      </Container>
+      <Scrollbar style={{ height: '50vh' }}>
+        <Container>
+          {filteredItems.length > 0 ? (
+            <StyledMenu
+              items={filteredItems}
+              selectedKeys={model ? [getModelUniqId(model)] : []}
+              mode="inline"
+              inlineIndent={6}
+            />
+          ) : (
+            <EmptyState>
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </EmptyState>
+          )}
+        </Container>
+      </Scrollbar>
     </Modal>
   )
 }
 
 const Container = styled.div`
-  height: 50vh;
   margin-top: 10px;
-  overflow-y: auto;
 `
 
 const StyledMenu = styled(Menu)`
