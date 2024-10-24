@@ -9,6 +9,7 @@ import { useAppDispatch } from '@renderer/store'
 import {
   setCodeShowLineNumbers,
   setFontSize,
+  setMathEngine,
   setMessageFont,
   setPasteLongTextAsFile,
   setRenderInputMessageAsMarkdown,
@@ -46,7 +47,8 @@ const SettingsTab: FC<Props> = (props) => {
     setSendMessageShortcut,
     pasteLongTextAsFile,
     renderInputMessageAsMarkdown,
-    codeShowLineNumbers
+    codeShowLineNumbers,
+    mathEngine
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
@@ -214,6 +216,18 @@ const SettingsTab: FC<Props> = (props) => {
         </SettingRow>
         <SettingDivider />
         <SettingRow>
+          <SettingRowTitleSmall>{t('settings.messages.math_engine')}</SettingRowTitleSmall>
+          <Select
+            value={mathEngine}
+            onChange={(value) => dispatch(setMathEngine(value))}
+            style={{ width: 100 }}
+            size="small">
+            <Select.Option value="KaTeX">KaTeX</Select.Option>
+            <Select.Option value="MathJax">MathJax</Select.Option>
+          </Select>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
           <SettingRowTitleSmall>{t('settings.font_size.title')}</SettingRowTitleSmall>
         </SettingRow>
         <Row align="middle" gutter={10}>
@@ -264,17 +278,18 @@ const SettingsTab: FC<Props> = (props) => {
         <SettingDivider />
         <SettingRow>
           <SettingRowTitleSmall>{t('settings.messages.input.send_shortcuts')}</SettingRowTitleSmall>
+          <Select
+            size="small"
+            value={sendMessageShortcut}
+            menuItemSelectedIcon={<CheckOutlined />}
+            options={[
+              { value: 'Enter', label: 'Enter' },
+              { value: 'Shift+Enter', label: `Shift + Enter` }
+            ]}
+            onChange={(value) => setSendMessageShortcut(value)}
+            style={{ width: 100 }}
+          />
         </SettingRow>
-        <Select
-          value={sendMessageShortcut}
-          menuItemSelectedIcon={<CheckOutlined />}
-          options={[
-            { value: 'Enter', label: `Enter ${t('chat.input.send')}` },
-            { value: 'Shift+Enter', label: `Shift + Enter ${t('chat.input.send')}` }
-          ]}
-          onChange={(value) => setSendMessageShortcut(value)}
-          style={{ width: '100%', marginTop: 10 }}
-        />
       </Container>
     </Scrollbar>
   )
@@ -286,6 +301,7 @@ const Container = styled.div`
   flex-direction: column;
   padding-bottom: 10px;
   padding: 10px 15px;
+  margin-bottom: 10px;
 `
 
 const Label = styled.p`

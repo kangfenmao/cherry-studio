@@ -226,6 +226,7 @@
       "messages.input.send_shortcuts": "Send shortcuts",
       "messages.input.paste_long_text_as_file": "Paste long text as file",
       "messages.markdown_rendering_input_message": "Markdown render input msg",
+      "messages.math_engine": "Math render engine",
       "general.title": "General Settings",
       "general.user_name": "User Name",
       "general.user_name.placeholder": "Enter your name",

@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown, { Components } from 'react-markdown'
+import rehypeKatex from 'rehype-katex'
 // @ts-ignore next-line
 import rehypeMathjax from 'rehype-mathjax'
 import rehypeRaw from 'rehype-raw'
@@ -23,7 +24,9 @@ interface Props {
 
 const Markdown: FC<Props> = ({ message }) => {
   const { t } = useTranslation()
-  const { renderInputMessageAsMarkdown } = useSettings()
+  const { renderInputMessageAsMarkdown, mathEngine } = useSettings()
+
+  const rehypeMath = mathEngine === 'KaTeX' ? rehypeKatex : rehypeMathjax
 
   const messageContent = useMemo(() => {
     const empty = isEmpty(message.content)
@@ -34,8 +37,8 @@ const Markdown: FC<Props> = ({ message }) => {
 
   const rehypePlugins = useMemo(() => {
     const hasUnsafeElements = /<(input|textarea|select)/i.test(messageContent)
-    return hasUnsafeElements ? [rehypeMathjax] : [rehypeRaw, rehypeMathjax]
-  }, [messageContent])
+    return hasUnsafeElements ? [rehypeMath] : [rehypeRaw, rehypeMath]
+  }, [messageContent, rehypeMath])
 
   if (message.role === 'user' && !renderInputMessageAsMarkdown) {
     return <p style={{ marginBottom: 5, whiteSpace: 'pre-wrap' }}>{messageContent}</p>

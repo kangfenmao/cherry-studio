@@ -610,6 +610,10 @@ const migrateConfig = {
       })
     })
     return state
+  },
+  '35': (state: RootState) => {
+    state.settings.mathEngine = 'KaTeX'
+    return state
   }
 }
 
