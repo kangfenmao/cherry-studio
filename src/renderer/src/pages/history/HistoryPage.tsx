@@ -85,7 +85,7 @@ const TopicsPage: FC = () => {
         <TopicsHistory keywords={search} onClick={onTopicClick as any} style={{ display: isShow('topics') }} />
         <TopicMessages topic={topic} style={{ display: isShow('topic') }} />
         <SearchResults
-          keywords={search}
+          keywords={isShow('search') ? search : ''}
           onMessageClick={onMessageClick}
           onTopicClick={onTopicClick}
           style={{ display: isShow('search') }}

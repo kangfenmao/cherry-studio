@@ -1,11 +1,15 @@
 :root {
-  --color-scrollbar-thumb: #6b6b6b;
-  --color-scrollbar-thumb-hover: #939393;
+  --color-scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.2);
+  --color-scrollbar-thumb-right: rgba(255, 255, 255, 0.25);
+  --color-scrollbar-thumb-right-hover: rgba(255, 255, 255, 0.35);
 }
 
 body[theme-mode='light'] {
-  --color-scrollbar-thumb: #b1b1b1;
-  --color-scrollbar-thumb-hover: #7d7d7d;
+  --color-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+  --color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.2);
+  --color-scrollbar-thumb-right: rgba(0, 0, 0, 0.25);
+  --color-scrollbar-thumb-right-hover: rgba(0, 0, 0, 0.35);
 }
 
 /* 全局初始化滚动条样式 */

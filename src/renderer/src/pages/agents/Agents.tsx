@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from '@ant-d
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import DragableList from '@renderer/components/DragableList'
 import { HStack } from '@renderer/components/Layout'
-import { Scrollbar } from '@renderer/components/Scrollbar'
+import Scrollbar from '@renderer/components/Scrollbar'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
@@ -57,49 +57,47 @@ const Agents: React.FC<Props> = ({ onClick }) => {
   )
 
   return (
-    <Scrollbar style={{ maxWidth: 'var(--assistants-width)' }}>
-      <Container style={{ paddingBottom: dragging ? 30 : 0 }}>
-        {agents.length > 0 && (
-          <DragableList
-            list={agents}
-            onUpdate={updateAgents}
-            onDragStart={() => setDragging(true)}
-            onDragEnd={() => setDragging(false)}>
-            {(agent: Agent) => (
-              <Dropdown menu={{ items: getMenuItems(agent) }} trigger={['contextMenu']}>
-                <AgentItem onClick={() => onClick(agent)}>
-                  <HStack alignItems="center" justifyContent="space-between" h="36px">
-                    <AgentItemName className="text-nowrap">
-                      {agent.emoji} {agent.name}
-                    </AgentItemName>
-                    <ActionButton className="actions" gap="15px" onClick={(e) => e.stopPropagation()}>
-                      <Dropdown menu={{ items: getMenuItems(agent) }} trigger={['hover']}>
-                        <MoreOutlined style={{ cursor: 'pointer' }} />
-                      </Dropdown>
-                    </ActionButton>
-                  </HStack>
-                  <AgentItemPrompt>{agent.prompt}</AgentItemPrompt>
-                </AgentItem>
-              </Dropdown>
-            )}
-          </DragableList>
-        )}
-        {!dragging && (
-          <Button
-            type="dashed"
-            icon={<PlusOutlined />}
-            onClick={() => AddAgentPopup.show()}
-            style={{ borderRadius: 20, height: 34 }}>
-            {t('agents.add.title')}
-          </Button>
-        )}
-        <div style={{ height: 10 }} />
-      </Container>
-    </Scrollbar>
+    <Container style={{ paddingBottom: dragging ? 30 : 0 }}>
+      {agents.length > 0 && (
+        <DragableList
+          list={agents}
+          onUpdate={updateAgents}
+          onDragStart={() => setDragging(true)}
+          onDragEnd={() => setDragging(false)}>
+          {(agent: Agent) => (
+            <Dropdown menu={{ items: getMenuItems(agent) }} trigger={['contextMenu']}>
+              <AgentItem onClick={() => onClick(agent)}>
+                <HStack alignItems="center" justifyContent="space-between" h="36px">
+                  <AgentItemName className="text-nowrap">
+                    {agent.emoji} {agent.name}
+                  </AgentItemName>
+                  <ActionButton className="actions" gap="15px" onClick={(e) => e.stopPropagation()}>
+                    <Dropdown menu={{ items: getMenuItems(agent) }} trigger={['hover']}>
+                      <MoreOutlined style={{ cursor: 'pointer' }} />
+                    </Dropdown>
+                  </ActionButton>
+                </HStack>
+                <AgentItemPrompt>{agent.prompt}</AgentItemPrompt>
+              </AgentItem>
+            </Dropdown>
+          )}
+        </DragableList>
+      )}
+      {!dragging && (
+        <Button
+          type="dashed"
+          icon={<PlusOutlined />}
+          onClick={() => AddAgentPopup.show()}
+          style={{ borderRadius: 20, height: 34 }}>
+          {t('agents.add.title')}
+        </Button>
+      )}
+      <div style={{ height: 10 }} />
+    </Container>
   )
 }
 
-const Container = styled.div`
+const Container = styled(Scrollbar)`
   padding: 15px;
   display: flex;
   flex-direction: column;

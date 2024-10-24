@@ -1,6 +1,6 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { VStack } from '@renderer/components/Layout'
-import { Scrollbar } from '@renderer/components/Scrollbar'
+import Scrollbar from '@renderer/components/Scrollbar'
 import SystemAgents from '@renderer/config/agents.json'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
@@ -61,34 +61,32 @@ const AgentsPage: FC = () => {
       </Navbar>
       <ContentContainer id="content-container">
         <Agents onClick={onAddAgentConfirm} />
-        <Scrollbar>
-          <AssistantsContainer>
-            <VStack style={{ flex: 1 }}>
-              {Object.keys(agentGroups)
-                .reverse()
-                .map((group) => (
-                  <div key={group}>
-                    <Title level={5} key={group} style={{ marginBottom: 16 }}>
-                      {group}
-                    </Title>
-                    <Row gutter={16}>
-                      {agentGroups[group].map((agent, index) => {
-                        return (
-                          <Col span={8} key={group + index}>
-                            <AgentCard
-                              onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
-                              agent={agent as any}
-                            />
-                          </Col>
-                        )
-                      })}
-                    </Row>
-                  </div>
-                ))}
-              <div style={{ minHeight: 20 }} />
-            </VStack>
-          </AssistantsContainer>
-        </Scrollbar>
+        <AssistantsContainer right>
+          <VStack style={{ flex: 1 }}>
+            {Object.keys(agentGroups)
+              .reverse()
+              .map((group) => (
+                <div key={group}>
+                  <Title level={5} key={group} style={{ marginBottom: 16 }}>
+                    {group}
+                  </Title>
+                  <Row gutter={16}>
+                    {agentGroups[group].map((agent, index) => {
+                      return (
+                        <Col span={8} key={group + index}>
+                          <AgentCard
+                            onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
+                            agent={agent as any}
+                          />
+                        </Col>
+                      )
+                    })}
+                  </Row>
+                </div>
+              ))}
+            <div style={{ minHeight: 20 }} />
+          </VStack>
+        </AssistantsContainer>
       </ContentContainer>
     </Container>
   )
@@ -109,12 +107,13 @@ const ContentContainer = styled.div`
   height: 100%;
 `
 
-const AssistantsContainer = styled.div`
+const AssistantsContainer = styled(Scrollbar)`
   display: flex;
   flex: 1;
   flex-direction: row;
   height: calc(100vh - var(--navbar-height));
   padding: 15px 20px;
+  margin-right: 4px;
 `
 
 const AgentPrompt = styled.div`

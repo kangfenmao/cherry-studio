@@ -48,6 +48,13 @@ const SearchResults: FC<Props> = ({ keywords, onMessageClick, onTopicClick, ...p
 
   const onSearch = useCallback(async () => {
     setSearchResults([])
+
+    if (keywords.length === 0) {
+      setSearchStats({ count: 0, time: 0 })
+      setSearchTerms([])
+      return
+    }
+
     const startTime = performance.now()
     const results: { message: Message; topic: Topic }[] = []
     const newSearchTerms = keywords
@@ -74,8 +81,12 @@ const SearchResults: FC<Props> = ({ keywords, onMessageClick, onTopicClick, ...p
   const highlightText = (text: string) => {
     let highlightedText = removeMarkdown(text)
     searchTerms.forEach((term) => {
-      const regex = new RegExp(term, 'gi')
-      highlightedText = highlightedText.replace(regex, (match) => `<mark>${match}</mark>`)
+      try {
+        const regex = new RegExp(term, 'gi')
+        highlightedText = highlightedText.replace(regex, (match) => `<mark>${match}</mark>`)
+      } catch (error) {
+        //
+      }
     })
     return <span dangerouslySetInnerHTML={{ __html: highlightedText }} />
   }

@@ -1,6 +1,5 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
-import { VStack } from '@renderer/components/Layout'
-import { Scrollbar } from '@renderer/components/Scrollbar'
+import Scrollbar from '@renderer/components/Scrollbar'
 import db from '@renderer/databases'
 import FileManager from '@renderer/services/file'
 import { FileType, FileTypes } from '@renderer/types'
@@ -67,17 +66,15 @@ const FilesPage: FC = () => {
         <NavbarCenter style={{ borderRight: 'none' }}>{t('files.title')}</NavbarCenter>
       </Navbar>
       <ContentContainer id="content-container">
-        <Scrollbar>
-          <VStack style={{ width: '100%', padding: 15 }}>
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              style={{ width: '100%', marginBottom: 20 }}
-              size="small"
-              pagination={{ pageSize: 100 }}
-            />
-          </VStack>
-        </Scrollbar>
+        <TableContainer right>
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            style={{ width: '100%' }}
+            size="small"
+            pagination={{ pageSize: 100 }}
+          />
+        </TableContainer>
       </ContentContainer>
     </Container>
   )
@@ -87,7 +84,7 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: 100%;
+  height: calc(100vh - var(--navbar-height));
 `
 
 const ContentContainer = styled.div`
@@ -96,6 +93,14 @@ const ContentContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   height: 100%;
+  padding: 0 2px;
+`
+
+const TableContainer = styled(Scrollbar)`
+  padding: 15px;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
 `
 
 const FileNameText = styled.div`

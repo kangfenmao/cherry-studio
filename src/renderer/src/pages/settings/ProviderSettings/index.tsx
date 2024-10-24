@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
-import { Scrollbar } from '@renderer/components/Scrollbar'
+import Scrollbar from '@renderer/components/Scrollbar'
 import { getProviderLogo } from '@renderer/config/providers'
 import { useAllProviders, useProviders } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'

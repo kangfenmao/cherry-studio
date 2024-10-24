@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HStack } from '../Layout'
-import { Scrollbar } from '../Scrollbar'
+import Scrollbar from '../Scrollbar'
 
 type MenuItem = Required<MenuProps>['items'][number]
 

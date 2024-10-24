@@ -1,4 +1,4 @@
-import { Scrollbar } from '@renderer/components/Scrollbar'
+import Scrollbar from '@renderer/components/Scrollbar'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -220,33 +220,32 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [assistant, messages])
 
   return (
-    <Scrollbar>
-      <Container id="messages" style={{ maxWidth }} key={assistant.id} ref={containerRef}>
-        <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
-        {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
-        {reverse([...messages]).map((message, index) => (
-          <MessageItem
-            key={message.id}
-            message={message}
-            index={index}
-            hidePresetMessages={assistant.settings?.hideMessages}
-            onEditMessage={onEditMessage}
-            onDeleteMessage={onDeleteMessage}
-          />
-        ))}
-        <Prompt assistant={assistant} key={assistant.prompt} />
-      </Container>
-    </Scrollbar>
+    <Container id="messages" style={{ maxWidth }} key={assistant.id} ref={containerRef} right>
+      <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
+      {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
+      {reverse([...messages]).map((message, index) => (
+        <MessageItem
+          key={message.id}
+          message={message}
+          index={index}
+          hidePresetMessages={assistant.settings?.hideMessages}
+          onEditMessage={onEditMessage}
+          onDeleteMessage={onDeleteMessage}
+        />
+      ))}
+      <Prompt assistant={assistant} key={assistant.prompt} />
+    </Container>
   )
 }
 
-const Container = styled.div`
+const Container = styled(Scrollbar)`
   display: flex;
   flex-direction: column-reverse;
   padding: 10px 0;
   background-color: var(--color-background);
   padding-bottom: 20px;
   overflow-x: hidden;
+  margin-right: 3px;
 `
 
 export default Messages
