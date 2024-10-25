@@ -12,7 +12,9 @@ export default class WebDav {
 
     this.instance = createClient(params.webdavHost, {
       username: params.webdavUser,
-      password: params.webdavPass
+      password: params.webdavPass,
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity
     })
 
     this.putFileContents = this.putFileContents.bind(this)
