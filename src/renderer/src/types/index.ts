@@ -43,7 +43,7 @@ export type Message = {
   files?: FileType[]
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
-  type?: 'text' | '@' | 'clear'
+  type: 'text' | '@' | 'clear'
   isPreset?: boolean
 }
 

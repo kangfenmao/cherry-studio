@@ -1,10 +1,11 @@
 import { DEFAULT_CONEXTCOUNT } from '@renderer/config/constant'
 import { getTopicById } from '@renderer/hooks/useTopic'
-import { Assistant, Message } from '@renderer/types'
+import { Assistant, Message, Topic } from '@renderer/types'
+import { uuid } from '@renderer/utils'
 import { isEmpty, takeRight } from 'lodash'
 import { NavigateFunction } from 'react-router'
 
-import { getAssistantById } from './assistant'
+import { getAssistantById, getDefaultModel } from './assistant'
 import { EVENT_NAMES, EventEmitter } from './event'
 import FileManager from './file'
 
@@ -47,4 +48,46 @@ export async function locateToMessage(navigate: NavigateFunction, message: Messa
   navigate('/', { state: { assistant, topic } })
   setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
   setTimeout(() => EventEmitter.emit(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id), 300)
+}
+
+export function getUserMessage({
+  assistant,
+  topic,
+  type
+}: {
+  assistant: Assistant
+  topic: Topic
+  type: Message['type']
+}): Message {
+  const defaultModel = getDefaultModel()
+  const model = assistant.model || defaultModel
+
+  return {
+    id: uuid(),
+    role: 'user',
+    content: '',
+    assistantId: assistant.id,
+    topicId: topic.id,
+    modelId: model.id,
+    createdAt: new Date().toISOString(),
+    type,
+    status: 'success'
+  }
+}
+
+export function getAssistantMessage({ assistant, topic }: { assistant: Assistant; topic: Topic }): Message {
+  const defaultModel = getDefaultModel()
+  const model = assistant.model || defaultModel
+
+  return {
+    id: uuid(),
+    role: 'assistant',
+    content: '',
+    assistantId: assistant.id,
+    topicId: topic.id,
+    modelId: model.id,
+    createdAt: new Date().toISOString(),
+    type: 'text',
+    status: 'sending'
+  }
 }

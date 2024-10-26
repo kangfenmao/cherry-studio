@@ -116,6 +116,7 @@ const TranslatePage: FC = () => {
       topicId: uuid(),
       modelId: translateModel.id,
       createdAt: new Date().toISOString(),
+      type: 'text',
       status: 'sending'
     }
 

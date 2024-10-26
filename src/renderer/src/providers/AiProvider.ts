@@ -10,6 +10,10 @@ export default class AiProvider {
     this.sdk = ProviderFactory.create(provider)
   }
 
+  public async fakeCompletions(params: CompletionsParams): Promise<void> {
+    return this.sdk.fakeCompletions(params)
+  }
+
   public async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
     return this.sdk.completions({ messages, assistant, onChunk, onFilterMessages })
   }

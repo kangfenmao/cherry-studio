@@ -3,11 +3,17 @@ import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
-import { fetchChatCompletion, fetchMessagesSummary } from '@renderer/services/api'
+import { fetchMessagesSummary } from '@renderer/services/api'
 import { getDefaultTopic } from '@renderer/services/assistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
-import { deleteMessageFiles, filterMessages, getContextCount } from '@renderer/services/messages'
-import { estimateHistoryTokens, estimateMessageUsage } from '@renderer/services/tokens'
+import {
+  deleteMessageFiles,
+  filterMessages,
+  getAssistantMessage,
+  getContextCount,
+  getUserMessage
+} from '@renderer/services/messages'
+import { estimateHistoryTokens } from '@renderer/services/tokens'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
@@ -27,10 +33,12 @@ interface Props {
 
 const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [messages, setMessages] = useState<Message[]>([])
-  const [lastMessage, setLastMessage] = useState<Message | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const { updateTopic, addTopic } = useAssistant(assistant.id)
   const { showTopics, topicPosition, showAssistants } = useSettings()
+
+  const messagesRef = useRef(messages)
+  messagesRef.current = messages
 
   const maxWidth = useMemo(() => {
     const showRightTopics = showTopics && topicPosition === 'right'
@@ -39,22 +47,23 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     return `calc(100vw - var(--sidebar-width) ${minusAssistantsWidth} ${minusRightTopicsWidth} - 5px)`
   }, [showAssistants, showTopics, topicPosition])
 
+  const scrollToBottom = useCallback(() => {
+    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 10)
+  }, [])
+
   const onSendMessage = useCallback(
     async (message: Message) => {
-      if (message.role === 'user') {
-        estimateMessageUsage(message).then((usage) => {
-          setMessages((prev) => {
-            const _messages = prev.map((m) => (m.id === message.id ? { ...m, usage } : m))
-            db.topics.update(topic.id, { messages: _messages })
-            return _messages
-          })
-        })
-      }
-      const _messages = [...messages, message]
-      setMessages(_messages)
-      db.topics.put({ id: topic.id, messages: _messages })
+      const assistantMessage = getAssistantMessage({ assistant, topic })
+
+      setMessages((prev) => {
+        const messages = prev.concat([message, assistantMessage])
+        db.topics.put({ id: topic.id, messages })
+        return messages
+      })
+
+      scrollToBottom()
     },
-    [messages, topic.id]
+    [assistant, scrollToBottom, topic]
   )
 
   const autoRenameTopic = useCallback(async () => {
@@ -79,56 +88,19 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     [messages, topic.id]
   )
 
-  const onEditMessage = useCallback(
-    (message: Message) => {
-      const _messages = messages.map((m) => (m.id === message.id ? message : m))
-      setMessages(_messages)
-      db.topics.update(topic.id, { messages: _messages })
-    },
-    [messages, topic.id]
-  )
-
-  const scrollToBottom = useCallback(() => {
-    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 10)
+  const onGetMessages = useCallback(() => {
+    return messagesRef.current
   }, [])
 
   useEffect(() => {
     const unsubscribes = [
-      EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, async (msg: Message) => {
-        await onSendMessage(msg)
-
-        // Scroll to bottom
-        scrollToBottom()
-
-        // Fetch completion
-        fetchChatCompletion({
-          assistant,
-          messages: [...messages, msg],
-          topic,
-          onResponse: setLastMessage
-        })
-      }),
-      EventEmitter.on(EVENT_NAMES.RECEIVE_MESSAGE, async (msg: Message) => {
-        setLastMessage(null)
-        onSendMessage(msg)
+      EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, onSendMessage),
+      EventEmitter.on(EVENT_NAMES.RECEIVE_MESSAGE, async () => {
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
       }),
       EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async (model: Model) => {
         const lastUserMessage = last(filterMessages(messages).filter((m) => m.role === 'user'))
-        if (lastUserMessage) {
-          onSendMessage({
-            ...lastUserMessage,
-            id: uuid(),
-            type: '@',
-            modelId: model.id
-          })
-          fetchChatCompletion({
-            assistant,
-            topic,
-            messages: [...messages, lastUserMessage],
-            onResponse: setLastMessage
-          })
-        }
+        lastUserMessage && onSendMessage({ ...lastUserMessage, id: uuid(), type: '@', modelId: model.id })
       }),
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {
@@ -156,16 +128,11 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
           return
         }
 
-        onSendMessage({
-          id: uuid(),
-          assistantId: assistant.id,
-          role: 'user',
-          content: '',
-          topicId: topic.id,
-          createdAt: new Date().toISOString(),
-          status: 'success',
-          type: 'clear'
-        } as Message)
+        setMessages((prev) => {
+          const messages = prev.concat([getUserMessage({ assistant, topic, type: 'clear' })])
+          db.topics.put({ id: topic.id, messages })
+          return messages
+        })
 
         scrollToBottom()
       }),
@@ -219,6 +186,8 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     })
   }, [assistant, messages])
 
+  const memoizedMessages = useMemo(() => reverse([...messages]), [messages])
+
   return (
     <Container
       id="messages"
@@ -226,16 +195,17 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       key={assistant.id}
       ref={containerRef}
       right={topicPosition === 'left'}>
-      <Suggestions assistant={assistant} messages={messages} lastMessage={lastMessage} />
-      {lastMessage && <MessageItem key={lastMessage.id} message={lastMessage} lastMessage />}
-      {reverse([...messages]).map((message, index) => (
+      <Suggestions assistant={assistant} messages={messages} />
+      {memoizedMessages.map((message, index) => (
         <MessageItem
           key={message.id}
           message={message}
+          topic={topic}
           index={index}
           hidePresetMessages={assistant.settings?.hideMessages}
-          onEditMessage={onEditMessage}
+          onSetMessages={setMessages}
           onDeleteMessage={onDeleteMessage}
+          onGetMessages={onGetMessages}
         />
       ))}
       <Prompt assistant={assistant} key={assistant.prompt} />

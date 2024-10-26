@@ -2,8 +2,6 @@ import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Provider, Suggestion, Topic } from '@renderer/types'
-import { uuid } from '@renderer/utils'
-import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 
 import AiProvider from '../providers/AiProvider'
@@ -19,11 +17,12 @@ import { filterMessages } from './messages'
 import { estimateMessagesUsage } from './tokens'
 
 export async function fetchChatCompletion({
+  message,
   messages,
-  topic,
   assistant,
   onResponse
 }: {
+  message: Message
   messages: Message[]
   topic: Topic
   assistant: Assistant
@@ -32,22 +31,9 @@ export async function fetchChatCompletion({
   window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, false)
 
   const provider = getAssistantProvider(assistant)
-  const defaultModel = getDefaultModel()
-  const model = assistant.model || defaultModel
   const AI = new AiProvider(provider)
 
   store.dispatch(setGenerating(true))
-
-  const message: Message = {
-    id: uuid(),
-    role: 'assistant',
-    content: '',
-    assistantId: assistant.id,
-    topicId: topic.id,
-    modelId: model.id,
-    createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    status: 'sending'
-  }
 
   onResponse({ ...message })
 
@@ -102,6 +88,7 @@ export async function fetchChatCompletion({
 
   // Emit chat completion event
   EventEmitter.emit(EVENT_NAMES.RECEIVE_MESSAGE, message)
+  onResponse(message)
 
   // Reset generating state
   store.dispatch(setGenerating(false))

@@ -3,6 +3,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Assistant, Message, Suggestion } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'
+import { last } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import BeatLoader from 'react-spinners/BeatLoader'
 import styled from 'styled-components'
@@ -10,12 +11,11 @@ import styled from 'styled-components'
 interface Props {
   assistant: Assistant
   messages: Message[]
-  lastMessage: Message | null
 }
 
 const suggestionsMap = new Map<string, Suggestion[]>()
 
-const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
+const Suggestions: FC<Props> = ({ assistant, messages }) => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>(
     suggestionsMap.get(messages[messages.length - 1]?.id) || []
   )
@@ -29,6 +29,7 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
       assistantId: assistant.id,
       topicId: assistant.topics[0].id || uuid(),
       createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      type: 'text',
       status: 'success'
     }
 
@@ -54,7 +55,7 @@ const Suggestions: FC<Props> = ({ assistant, messages, lastMessage }) => {
     setSuggestions(suggestionsMap.get(messages[messages.length - 1]?.id) || [])
   }, [messages])
 
-  if (lastMessage) {
+  if (last(messages)?.status !== 'success') {
     return null
   }
 

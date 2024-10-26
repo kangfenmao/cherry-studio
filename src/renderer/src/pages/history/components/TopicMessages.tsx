@@ -38,7 +38,7 @@ const TopicMessages: FC<Props> = ({ topic, ...props }) => {
       <ContainerWrapper style={{ paddingTop: 30, paddingBottom: 30 }}>
         {topic?.messages.map((message) => (
           <div key={message.id} style={{ position: 'relative' }}>
-            <MessageItem message={message} showMenu={false} />
+            <MessageItem message={message} />
             <Button
               type="text"
               size="middle"

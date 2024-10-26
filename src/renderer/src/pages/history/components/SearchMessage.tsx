@@ -24,7 +24,7 @@ const SearchMessage: FC<Props> = ({ message, ...props }) => {
   return (
     <MessagesContainer {...props}>
       <ContainerWrapper style={{ paddingTop: 20, paddingBottom: 20, position: 'relative' }}>
-        <MessageItem message={message} showMenu={false} />
+        <MessageItem message={message} />
         <Button
           type="text"
           size="middle"
