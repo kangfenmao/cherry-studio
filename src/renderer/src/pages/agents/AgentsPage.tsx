@@ -194,6 +194,7 @@ const Tabs = styled(TabsAntd)`
     border-radius: 6px;
     margin-bottom: 5px !important;
     font-size: 14px;
+    justify-content: center;
     &:hover {
       background-color: var(--color-background-soft);
     }
