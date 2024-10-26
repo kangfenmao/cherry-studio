@@ -9,7 +9,7 @@ import { estimateMessageUsage } from '@renderer/services/tokens'
 import { Message, Topic } from '@renderer/types'
 import { runAsyncFunction } from '@renderer/utils'
 import { Divider } from 'antd'
-import { Dispatch, FC, memo, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
+import { Dispatch, FC, memo, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -47,6 +47,7 @@ const MessageItem: FC<Props> = ({
 
   const isLastMessage = index === 0
   const isAssistantMessage = message.role === 'assistant'
+  const showMenubar = !message.status.includes('ing')
 
   const fontFamily = useMemo(() => {
     return messageFont === 'serif' ? FONT_FAMILY.replace('sans-serif', 'serif').replace('Ubuntu, ', '') : FONT_FAMILY
@@ -54,12 +55,15 @@ const MessageItem: FC<Props> = ({
 
   const messageBorder = showMessageDivider ? undefined : 'none'
 
-  const onEditMessage = (msg: Message) => {
-    setMessage(msg)
-    const messages = onGetMessages?.().map((m) => (m.id === message.id ? message : m))
-    messages && onSetMessages?.(messages)
-    topic && db.topics.update(topic.id, { messages })
-  }
+  const onEditMessage = useCallback(
+    (msg: Message) => {
+      setMessage(msg)
+      const messages = onGetMessages?.().map((m) => (m.id === message.id ? message : m))
+      messages && onSetMessages?.(messages)
+      topic && db.topics.update(topic.id, { messages })
+    },
+    [message, onGetMessages, onSetMessages, topic]
+  )
 
   useEffect(() => {
     const unsubscribes = [
@@ -68,10 +72,9 @@ const MessageItem: FC<Props> = ({
           messageContainerRef.current.scrollIntoView({ behavior: 'smooth' })
           if (highlight) {
             setTimeout(() => {
-              messageContainerRef.current?.classList.add('message-highlight')
-              setTimeout(() => {
-                messageContainerRef.current?.classList.remove('message-highlight')
-              }, 2500)
+              const classList = messageContainerRef.current?.classList
+              classList?.add('message-highlight')
+              setTimeout(() => classList?.remove('message-highlight'), 2500)
             }, 500)
           }
         }
@@ -112,6 +115,7 @@ const MessageItem: FC<Props> = ({
         })
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (hidePresetMessages && message.isPreset) {
@@ -131,7 +135,7 @@ const MessageItem: FC<Props> = ({
       <MessageHeader message={message} assistant={assistant} model={model} />
       <MessageContentContainer style={{ fontFamily, fontSize }}>
         <MessageContent message={message} model={model} />
-        {!message.status.includes('ing') && (
+        {showMenubar && (
           <MessageFooter style={{ border: messageBorder, flexDirection: isLastMessage ? 'row-reverse' : undefined }}>
             <MessgeTokens message={message} isLastMessage={isLastMessage} />
             <MessageMenubar

@@ -88,7 +88,6 @@ const CodeHeader = styled.div`
   color: var(--color-text);
   font-size: 14px;
   font-weight: bold;
-  /* background-color: var(--color-code-background); */
   height: 34px;
   padding: 0 10px;
   border-top-left-radius: 8px;

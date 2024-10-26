@@ -1,3 +1,4 @@
+import { DownloadOutlined, ExpandOutlined } from '@ant-design/icons'
 import MinApp from '@renderer/components/MinApp'
 import { AppLogo } from '@renderer/config/env'
 import { extractTitle } from '@renderer/utils/formula'
@@ -31,10 +32,10 @@ const Artifacts: FC<Props> = ({ html }) => {
 
   return (
     <Container>
-      <Button type="primary" size="middle" onClick={onPreview}>
+      <Button type="primary" icon={<ExpandOutlined />} onClick={onPreview}>
         {t('chat.artifacts.button.preview')}
       </Button>
-      <Button size="middle" onClick={onDownload}>
+      <Button icon={<DownloadOutlined />} onClick={onDownload}>
         {t('chat.artifacts.button.download')}
       </Button>
     </Container>
