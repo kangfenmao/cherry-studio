@@ -184,18 +184,19 @@ const Tabs = styled(TabsAntd)`
     padding-left: 0 !important;
   }
   .ant-tabs-nav-list {
-    padding: 10px;
+    padding: 10px 8px;
   }
   .ant-tabs-nav-operations {
     display: none !important;
   }
   .ant-tabs-tab {
     margin: 0 !important;
-    border-radius: 6px;
+    border-radius: 20px;
     margin-bottom: 5px !important;
     font-size: 14px;
     justify-content: center;
     &:hover {
+      color: var(--color-text) !important;
       background-color: var(--color-background-soft);
     }
   }
@@ -209,6 +210,14 @@ const Tabs = styled(TabsAntd)`
   }
   .ant-tabs-ink-bar {
     display: none;
+  }
+  .ant-tabs-tab-btn:active {
+    color: var(--color-text) !important;
+  }
+  .ant-tabs-tab-active {
+    .ant-tabs-tab-btn {
+      color: var(--color-text) !important;
+    }
   }
 `
 

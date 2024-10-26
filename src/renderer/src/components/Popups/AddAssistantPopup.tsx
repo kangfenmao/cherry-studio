@@ -8,11 +8,13 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Agent, Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Divider, Input, InputRef, Modal, Tag } from 'antd'
+import { take } from 'lodash'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HStack } from '../Layout'
+import Scrollbar from '../Scrollbar'
 
 interface Props {
   resolve: (value: Assistant | undefined) => void
@@ -93,7 +95,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       </HStack>
       <Divider style={{ margin: 0, borderBlockStartWidth: 0.5 }} />
       <Container>
-        {agents.map((agent) => (
+        {take(agents, 100).map((agent) => (
           <AgentItem
             key={agent.id}
             onClick={() => onCreateAssistant(agent)}
@@ -110,14 +112,10 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   )
 }
 
-const Container = styled.div`
+const Container = styled(Scrollbar)`
   padding: 0 12px;
   height: 50vh;
   margin-top: 10px;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `
 
 const AgentItem = styled.div`
