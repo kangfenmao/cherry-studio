@@ -6,8 +6,8 @@ import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Col, Input, Row, Tabs as TabsAntd, Typography } from 'antd'
-import { debounce, groupBy, omit } from 'lodash'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { groupBy, omit } from 'lodash'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
@@ -30,33 +30,25 @@ const getAgentsFromSystemAgents = () => {
 
 const AgentsPage: FC = () => {
   const [search, setSearch] = useState('')
-  const [filteredAgentGroups, setFilteredAgentGroups] = useState({})
   const agentGroups = useMemo(() => groupBy(getAgentsFromSystemAgents(), 'group'), [])
   const { t } = useTranslation()
 
-  const debouncedSearch = useMemo(
-    () =>
-      debounce((searchTerm: string) => {
-        if (!searchTerm.trim()) {
-          setFilteredAgentGroups(agentGroups)
-          return
-        }
+  const filteredAgentGroups = useMemo(() => {
+    if (!search.trim()) return agentGroups
 
-        const filtered = {}
-        Object.entries(agentGroups).forEach(([group, agents]) => {
-          const filteredAgents = agents.filter(
-            (agent) =>
-              agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              agent.prompt?.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-          if (filteredAgents.length > 0) {
-            filtered[group] = filteredAgents
-          }
-        })
-        setFilteredAgentGroups(filtered)
-      }, 500),
-    [agentGroups]
-  )
+    const filtered = {}
+    Object.entries(agentGroups).forEach(([group, agents]) => {
+      const filteredAgents = agents.filter(
+        (agent) =>
+          agent.name.toLowerCase().includes(search.toLowerCase()) ||
+          agent.prompt?.toLowerCase().includes(search.toLowerCase())
+      )
+      if (filteredAgents.length > 0) {
+        filtered[group] = filteredAgents
+      }
+    })
+    return filtered
+  }, [agentGroups, search])
 
   const getAgentName = (agent: Agent) => {
     return agent.emoji ? agent.emoji + ' ' + agent.name : agent.name
@@ -90,10 +82,6 @@ const AgentsPage: FC = () => {
       type: 'agent'
     }
   }
-
-  useEffect(() => {
-    debouncedSearch(search)
-  }, [search, debouncedSearch])
 
   return (
     <Container>
