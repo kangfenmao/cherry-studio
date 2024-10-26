@@ -1,13 +1,13 @@
+import { SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
-import { VStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
 import SystemAgents from '@renderer/config/agents.json'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Col, Row, Typography } from 'antd'
-import { groupBy, omit } from 'lodash'
-import { FC } from 'react'
+import { Col, Input, Row, Tabs as TabsAntd, Typography } from 'antd'
+import { debounce, groupBy, omit } from 'lodash'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
@@ -17,9 +17,46 @@ import AgentCard from './components/AgentCard'
 
 const { Title } = Typography
 
+const getAgentsFromSystemAgents = () => {
+  const agents: Agent[] = []
+  for (let i = 0; i < SystemAgents.length; i++) {
+    for (let j = 0; j < SystemAgents[i].group.length; j++) {
+      const agent = { ...SystemAgents[i], group: SystemAgents[i].group[j], topics: [], type: 'agent' } as Agent
+      agents.push(agent)
+    }
+  }
+  return agents
+}
+
 const AgentsPage: FC = () => {
-  const agentGroups = groupBy(SystemAgents, 'group')
+  const [search, setSearch] = useState('')
+  const [filteredAgentGroups, setFilteredAgentGroups] = useState({})
+  const agentGroups = useMemo(() => groupBy(getAgentsFromSystemAgents(), 'group'), [])
   const { t } = useTranslation()
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((searchTerm: string) => {
+        if (!searchTerm.trim()) {
+          setFilteredAgentGroups(agentGroups)
+          return
+        }
+
+        const filtered = {}
+        Object.entries(agentGroups).forEach(([group, agents]) => {
+          const filteredAgents = agents.filter(
+            (agent) =>
+              agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              agent.prompt?.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          if (filteredAgents.length > 0) {
+            filtered[group] = filteredAgents
+          }
+        })
+        setFilteredAgentGroups(filtered)
+      }, 500),
+    [agentGroups]
+  )
 
   const getAgentName = (agent: Agent) => {
     return agent.emoji ? agent.emoji + ' ' + agent.name : agent.name
@@ -54,38 +91,62 @@ const AgentsPage: FC = () => {
     }
   }
 
+  useEffect(() => {
+    debouncedSearch(search)
+  }, [search, debouncedSearch])
+
   return (
     <Container>
       <Navbar>
-        <NavbarCenter style={{ borderRight: 'none' }}>{t('agents.title')}</NavbarCenter>
+        <NavbarCenter style={{ borderRight: 'none', justifyContent: 'space-between' }}>
+          {t('agents.title')}
+          <Input
+            placeholder={t('common.search')}
+            className="nodrag"
+            style={{ width: '30%', height: 28 }}
+            size="small"
+            variant="filled"
+            suffix={<SearchOutlined />}
+            value={search}
+            maxLength={50}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div style={{ width: 80 }} />
+        </NavbarCenter>
       </Navbar>
       <ContentContainer id="content-container">
-        <Agents onClick={onAddAgentConfirm} />
-        <AssistantsContainer right>
-          <VStack style={{ flex: 1 }}>
-            {Object.keys(agentGroups)
-              .reverse()
-              .map((group) => (
-                <div key={group}>
-                  <Title level={5} key={group} style={{ marginBottom: 16 }}>
-                    {group}
-                  </Title>
-                  <Row gutter={16}>
-                    {agentGroups[group].map((agent, index) => {
-                      return (
-                        <Col span={8} key={group + index}>
-                          <AgentCard
-                            onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
-                            agent={agent as any}
-                          />
-                        </Col>
-                      )
-                    })}
-                  </Row>
-                </div>
-              ))}
-            <div style={{ minHeight: 20 }} />
-          </VStack>
+        <AssistantsContainer>
+          <Agents onClick={onAddAgentConfirm} />
+          <Tabs
+            tabPosition="left"
+            animated
+            items={Object.keys(filteredAgentGroups).map((group, i) => {
+              const id = String(i + 1)
+              return {
+                label: group,
+                key: id,
+                children: (
+                  <TabContent key={group}>
+                    <Title level={5} key={group} style={{ marginBottom: 16 }}>
+                      {group}
+                    </Title>
+                    <Row gutter={16}>
+                      {filteredAgentGroups[group].map((agent, index) => {
+                        return (
+                          <Col span={8} key={group + index}>
+                            <AgentCard
+                              onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
+                              agent={agent as any}
+                            />
+                          </Col>
+                        )
+                      })}
+                    </Row>
+                  </TabContent>
+                )
+              }
+            })}
+          />
         </AssistantsContainer>
       </ContentContainer>
     </Container>
@@ -107,12 +168,16 @@ const ContentContainer = styled.div`
   height: 100%;
 `
 
-const AssistantsContainer = styled(Scrollbar)`
+const AssistantsContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
   height: calc(100vh - var(--navbar-height));
-  padding: 15px 20px;
+`
+
+const TabContent = styled(Scrollbar)`
+  height: calc(100vh - var(--navbar-height));
+  padding: 10px 10px 10px 15px;
   margin-right: 4px;
 `
 
@@ -120,6 +185,41 @@ const AgentPrompt = styled.div`
   max-height: 60vh;
   overflow-y: scroll;
   max-width: 560px;
+`
+
+const Tabs = styled(TabsAntd)`
+  display: flex;
+  flex: 1;
+  flex-direction: row-reverse;
+  .ant-tabs-tabpane {
+    padding-left: 0 !important;
+  }
+  .ant-tabs-nav-list {
+    padding: 10px;
+  }
+  .ant-tabs-nav-operations {
+    display: none !important;
+  }
+  .ant-tabs-tab {
+    margin: 0 !important;
+    border-radius: 6px;
+    margin-bottom: 5px !important;
+    font-size: 14px;
+    &:hover {
+      background-color: var(--color-background-soft);
+    }
+  }
+  .ant-tabs-tab-active {
+    background-color: var(--color-background-mute);
+    border-right: none;
+  }
+  .ant-tabs-content-holder {
+    border-left: 0.5px solid var(--color-border);
+    border-right: 0.5px solid var(--color-border);
+  }
+  .ant-tabs-ink-bar {
+    display: none;
+  }
 `
 
 export default AgentsPage

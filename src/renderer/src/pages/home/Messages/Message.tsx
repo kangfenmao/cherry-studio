@@ -106,7 +106,7 @@ const MessageItem: FC<Props> = ({
           topic,
           onResponse: (msg) => {
             setMessage(msg)
-            if (msg.status === 'success') {
+            if (msg.status !== 'pending') {
               const _messages = messages.map((m) => (m.id === msg.id ? msg : m))
               onSetMessages(_messages)
               db.topics.update(topic.id, { messages: _messages })

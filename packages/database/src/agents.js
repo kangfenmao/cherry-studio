@@ -20,6 +20,8 @@ db.all('SELECT * FROM agents', [], (err, rows) => {
   // 将 ID 类型转换为字符串
   for (const row of rows) {
     row.id = row.id.toString()
+    row.group = row.group.toString().split(',')
+    row.group = row.group.map((item) => item.trim().replace('\r\n', ''))
   }
 
   // 将查询结果转换为JSON字符串

@@ -6,7 +6,7 @@ import Scrollbar from '@renderer/components/Scrollbar'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
-import { Button, Dropdown } from 'antd'
+import { Button, Dropdown, Typography } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -58,6 +58,9 @@ const Agents: React.FC<Props> = ({ onClick }) => {
 
   return (
     <Container style={{ paddingBottom: dragging ? 30 : 0 }}>
+      <Typography.Title level={5} style={{ marginBottom: 16 }}>
+        {t('agents.my_agents')}
+      </Typography.Title>
       {agents.length > 0 && (
         <DragableList
           list={agents}
@@ -98,23 +101,23 @@ const Agents: React.FC<Props> = ({ onClick }) => {
 }
 
 const Container = styled(Scrollbar)`
-  padding: 15px;
+  padding: 10px 15px;
   display: flex;
   flex-direction: column;
-  border-right: 0.5px solid var(--color-border);
   min-height: calc(100vh - var(--navbar-height));
-  width: var(--assistants-width);
+  min-width: var(--assistants-width);
+  max-width: var(--assistants-width);
 `
 
 const AgentItem = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 12px;
-  min-height: 38px;
+  min-height: 72px;
   border-radius: 10px;
   user-select: none;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
   border: 0.5px solid var(--color-border);
   transition: all 0.2s ease-in-out;
   cursor: pointer;
@@ -138,11 +141,16 @@ const AgentItemName = styled.div`
 const AgentItemPrompt = styled.div`
   font-size: 12px;
   color: var(--color-text-soft);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-top: -5px;
   color: var(--color-text-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 16px;
 `
 
 const ActionButton = styled(HStack)`
