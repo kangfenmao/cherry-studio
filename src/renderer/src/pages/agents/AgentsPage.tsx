@@ -94,6 +94,7 @@ const AgentsPage: FC = () => {
             style={{ width: '30%', height: 28 }}
             size="small"
             variant="filled"
+            allowClear
             suffix={<SearchOutlined />}
             value={search}
             maxLength={50}

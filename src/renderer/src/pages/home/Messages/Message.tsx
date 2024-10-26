@@ -97,7 +97,7 @@ const MessageItem: FC<Props> = ({
 
   useEffect(() => {
     if (topic && onGetMessages && onSetMessages) {
-      if (message.status === 'sending') {
+      if (message.status === 'sending' && index === 0) {
         const messages = onGetMessages()
         fetchChatCompletion({
           message,

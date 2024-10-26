@@ -43,7 +43,7 @@ const EmojiHeader = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 5px;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 20px;
 `
 
