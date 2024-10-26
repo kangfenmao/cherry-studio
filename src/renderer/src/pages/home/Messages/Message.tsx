@@ -101,7 +101,7 @@ const MessageItem: FC<Props> = ({
         const messages = onGetMessages()
         fetchChatCompletion({
           message,
-          messages: [...messages, message],
+          messages: messages.filter((m) => !m.status.includes('ing')),
           assistant,
           topic,
           onResponse: (msg) => {
