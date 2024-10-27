@@ -25,7 +25,12 @@ const Chat: FC<Props> = (props) => {
   return (
     <Container id="chat">
       <Main vertical flex={1} justify="space-between">
-        <Messages assistant={assistant} topic={props.activeTopic} setActiveTopic={props.setActiveTopic} />
+        <Messages
+          key={props.activeTopic.id}
+          assistant={assistant}
+          topic={props.activeTopic}
+          setActiveTopic={props.setActiveTopic}
+        />
         <Inputbar assistant={assistant} setActiveTopic={props.setActiveTopic} />
       </Main>
       {topicPosition === 'right' && showTopics && (
