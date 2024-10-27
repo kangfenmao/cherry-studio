@@ -169,7 +169,8 @@
       "edit.message.user.placeholder": "Enter user message",
       "edit.message.empty.content": "Conversation input content cannot be empty",
       "edit.model.select.title": "Select Model",
-      "edit.settings.hide_preset_messages": "Hide Preset Message"
+      "edit.settings.hide_preset_messages": "Hide Preset Message",
+      "search.no_results": "No results found"
     },
     "minapp": {
       "title": "MinApp"

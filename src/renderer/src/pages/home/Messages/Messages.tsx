@@ -48,7 +48,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [showAssistants, showTopics, topicPosition])
 
   const scrollToBottom = useCallback(() => {
-    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 10)
+    setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 50)
   }, [])
 
   const onSendMessage = useCallback(

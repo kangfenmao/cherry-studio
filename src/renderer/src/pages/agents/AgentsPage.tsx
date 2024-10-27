@@ -5,7 +5,7 @@ import SystemAgents from '@renderer/config/agents.json'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Col, Input, Row, Tabs as TabsAntd, Typography } from 'antd'
+import { Col, Empty, Input, Row, Tabs as TabsAntd, Typography } from 'antd'
 import { groupBy, omit } from 'lodash'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -83,6 +83,30 @@ const AgentsPage: FC = () => {
     }
   }
 
+  const tabItems = Object.keys(filteredAgentGroups).map((group, i) => {
+    const id = String(i + 1)
+    return {
+      label: group,
+      key: id,
+      children: (
+        <TabContent key={group}>
+          <Title level={5} key={group} style={{ marginBottom: 16 }}>
+            {group}
+          </Title>
+          <Row gutter={16}>
+            {filteredAgentGroups[group].map((agent, index) => {
+              return (
+                <Col span={8} key={group + index}>
+                  <AgentCard onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))} agent={agent as any} />
+                </Col>
+              )
+            })}
+          </Row>
+        </TabContent>
+      )
+    }
+  })
+
   return (
     <Container>
       <Navbar>
@@ -106,36 +130,13 @@ const AgentsPage: FC = () => {
       <ContentContainer id="content-container">
         <AssistantsContainer>
           <Agents onClick={onAddAgentConfirm} />
-          <Tabs
-            tabPosition="left"
-            animated
-            items={Object.keys(filteredAgentGroups).map((group, i) => {
-              const id = String(i + 1)
-              return {
-                label: group,
-                key: id,
-                children: (
-                  <TabContent key={group}>
-                    <Title level={5} key={group} style={{ marginBottom: 16 }}>
-                      {group}
-                    </Title>
-                    <Row gutter={16}>
-                      {filteredAgentGroups[group].map((agent, index) => {
-                        return (
-                          <Col span={8} key={group + index}>
-                            <AgentCard
-                              onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
-                              agent={agent as any}
-                            />
-                          </Col>
-                        )
-                      })}
-                    </Row>
-                  </TabContent>
-                )
-              }
-            })}
-          />
+          {tabItems.length > 0 ? (
+            <Tabs tabPosition="left" animated items={tabItems} />
+          ) : (
+            <EmptyView>
+              <Empty description={t('agents.search.no_results')} />
+            </EmptyView>
+          )}
         </AssistantsContainer>
       </ContentContainer>
     </Container>
@@ -174,6 +175,16 @@ const AgentPrompt = styled.div`
   max-height: 60vh;
   overflow-y: scroll;
   max-width: 560px;
+`
+
+const EmptyView = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  border-left: 0.5px solid var(--color-border);
 `
 
 const Tabs = styled(TabsAntd)`
