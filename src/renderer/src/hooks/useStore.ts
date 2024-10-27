@@ -21,7 +21,3 @@ export function useShowTopics() {
     toggleShowTopics: () => dispatch(toggleShowTopics())
   }
 }
-
-export function useRuntime() {
-  return useAppSelector((state) => state.runtime)
-}

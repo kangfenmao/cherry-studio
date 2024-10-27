@@ -12,6 +12,7 @@ declare global {
         version: string
         isPackaged: boolean
         appPath: string
+        filesPath: string
       }>
       checkForUpdate: () => void
       openWebsite: (url: string) => void

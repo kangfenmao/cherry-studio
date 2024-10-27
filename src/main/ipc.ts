@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import { BrowserWindow, ipcMain, session, shell } from 'electron'
 
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
@@ -14,10 +16,11 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   const { autoUpdater } = new AppUpdater(mainWindow)
 
   // IPC
-  ipcMain.handle('get-app-info', () => ({
+  ipcMain.handle('app:info', () => ({
     version: app.getVersion(),
     isPackaged: app.isPackaged,
-    appPath: app.getAppPath()
+    appPath: app.getAppPath(),
+    filesPath: path.join(app.getPath('userData'), 'Data', 'Files')
   }))
 
   ipcMain.handle('open-website', (_, url: string) => {

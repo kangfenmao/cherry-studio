@@ -1,4 +1,5 @@
 import db from '@renderer/databases'
+import store from '@renderer/store'
 import { FileType } from '@renderer/types'
 import { getFileDirectory } from '@renderer/utils'
 
@@ -27,7 +28,14 @@ class FileManager {
   }
 
   static async getFile(id: string): Promise<FileType | undefined> {
-    return db.files.get(id)
+    const file = await db.files.get(id)
+
+    if (file) {
+      const filesPath = store.getState().runtime.filesPath
+      file.path = filesPath + file.id
+    }
+
+    return file
   }
 
   static async deleteFile(id: string): Promise<void> {
@@ -60,6 +68,11 @@ class FileManager {
 
   static getSafePath(file: FileType) {
     return this.isDangerFile(file) ? getFileDirectory(file.path) : file.path
+  }
+
+  static getFileUrl(file: FileType) {
+    const filesPath = store.getState().runtime.filesPath
+    return 'file://' + filesPath + '/' + file.id + file.ext
   }
 }
 

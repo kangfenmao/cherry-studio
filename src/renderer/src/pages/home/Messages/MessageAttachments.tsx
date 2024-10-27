@@ -16,7 +16,7 @@ const MessageAttachments: FC<Props> = ({ message }) => {
   if (message?.files && message.files[0]?.type === FileTypes.IMAGE) {
     return (
       <Container>
-        {message.files?.map((image) => <Image src={'file://' + image.path} key={image.id} width="33%" />)}
+        {message.files?.map((image) => <Image src={FileManager.getFileUrl(image)} key={image.id} width="33%" />)}
       </Container>
     )
   }

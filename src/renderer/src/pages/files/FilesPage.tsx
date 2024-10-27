@@ -17,7 +17,8 @@ const FilesPage: FC = () => {
 
   const dataSource = files?.map((file) => {
     const isImage = file.type === FileTypes.IMAGE
-    const ImageView = <Image src={'file://' + file.path} preview={false} style={{ maxHeight: '40px' }} />
+    const ImageView = <Image src={FileManager.getFileUrl(file)} preview={false} style={{ maxHeight: '40px' }} />
+    console.log(FileManager.getFileUrl(file))
     return {
       key: file.id,
       file: isImage ? ImageView : <FileNameText className="text-nowrap">{file.origin_name}</FileNameText>,

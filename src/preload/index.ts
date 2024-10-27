@@ -4,7 +4,7 @@ import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
 const api = {
-  getAppInfo: () => ipcRenderer.invoke('get-app-info'),
+  getAppInfo: () => ipcRenderer.invoke('app:info'),
   checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
   openWebsite: (url: string) => ipcRenderer.invoke('open-website', url),
   setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy),

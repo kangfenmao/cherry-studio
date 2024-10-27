@@ -1,4 +1,4 @@
-import { useRuntime } from '@renderer/hooks/useStore'
+import { useRuntime } from '@renderer/hooks/useRuntime'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
 import { Message } from '@renderer/types'
 import styled from 'styled-components'

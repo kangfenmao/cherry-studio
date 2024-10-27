@@ -6,13 +6,15 @@ export interface RuntimeState {
   generating: boolean
   minappShow: boolean
   searching: boolean
+  filesPath: string
 }
 
 const initialState: RuntimeState = {
   avatar: UserAvatar,
   generating: false,
   minappShow: false,
-  searching: false
+  searching: false,
+  filesPath: ''
 }
 
 const runtimeSlice = createSlice({
@@ -30,10 +32,13 @@ const runtimeSlice = createSlice({
     },
     setSearching: (state, action: PayloadAction<boolean>) => {
       state.searching = action.payload
+    },
+    setFilesPath: (state, action: PayloadAction<string>) => {
+      state.filesPath = action.payload
     }
   }
 })
 
-export const { setAvatar, setGenerating, setMinappShow, setSearching } = runtimeSlice.actions
+export const { setAvatar, setGenerating, setMinappShow, setSearching, setFilesPath } = runtimeSlice.actions
 
 export default runtimeSlice.reducer

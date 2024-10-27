@@ -188,7 +188,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
 
   useEffect(() => {
     scrollToBottom()
-  }, [])
+  }, [scrollToBottom])
 
   const memoizedMessages = useMemo(() => reverse([...messages]), [messages])
 

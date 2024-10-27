@@ -3,14 +3,14 @@ import { isLocalAi } from '@renderer/config/env'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
-import { setAvatar } from '@renderer/store/runtime'
+import { setAvatar, setFilesPath } from '@renderer/store/runtime'
 import { runAsyncFunction } from '@renderer/utils'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect } from 'react'
 
 import { useDefaultModel } from './useAssistant'
+import { useRuntime } from './useRuntime'
 import { useSettings } from './useSettings'
-import { useRuntime } from './useStore'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
@@ -56,4 +56,11 @@ export function useAppInit() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    // set files path
+    window.api.getAppInfo().then((info) => {
+      dispatch(setFilesPath(info.filesPath))
+    })
+  }, [dispatch])
 }
