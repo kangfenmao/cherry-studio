@@ -398,6 +398,9 @@ const Textarea = styled(TextArea)`
   overflow: auto;
   width: 100%;
   box-sizing: border-box;
+  &.ant-input {
+    line-height: 1.4;
+  }
 `
 
 const Toolbar = styled.div`

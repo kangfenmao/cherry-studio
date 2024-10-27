@@ -189,7 +189,11 @@ body[os='windows'] {
 }
 
 .text-nowrap {
-  white-space: nowrap;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
 }
