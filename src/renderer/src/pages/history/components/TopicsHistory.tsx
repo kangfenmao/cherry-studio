@@ -1,8 +1,9 @@
+import { VStack } from '@renderer/components/Layout'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import useScrollPosition from '@renderer/hooks/useScrollPosition'
 import { getTopicById } from '@renderer/hooks/useTopic'
 import { Topic } from '@renderer/types'
-import { Divider, Empty } from 'antd'
+import { Button, Divider, Empty } from 'antd'
 import dayjs from 'dayjs'
 import { groupBy, isEmpty, orderBy } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -11,9 +12,10 @@ import styled from 'styled-components'
 type Props = {
   keywords: string
   onClick: (topic: Topic) => void
+  onSearch: () => void
 } & React.HTMLAttributes<HTMLDivElement>
 
-const TopicsHistory: React.FC<Props> = ({ keywords, onClick, ...props }) => {
+const TopicsHistory: React.FC<Props> = ({ keywords, onClick, onSearch, ...props }) => {
   const { assistants } = useAssistants()
   const { t } = useTranslation()
   const { handleScroll, containerRef } = useScrollPosition('TopicsHistory')
@@ -31,9 +33,12 @@ const TopicsHistory: React.FC<Props> = ({ keywords, onClick, ...props }) => {
   if (isEmpty(filteredTopics)) {
     return (
       <ListContainer {...props}>
-        <ContainerWrapper>
+        <VStack alignItems="center">
           <Empty description={t('history.search.topics.empty')} />
-        </ContainerWrapper>
+          <Button style={{ width: 200, marginTop: 20 }} type="primary" onClick={onSearch}>
+            {t('history.search.messages')}
+          </Button>
+        </VStack>
       </ListContainer>
     )
   }

@@ -179,6 +179,7 @@
       "search.placeholder": "搜索话题或消息...",
       "continue_chat": "继续聊天",
       "search.topics.empty": "没有找到相关话题, 点击回车键搜索所有消息",
+      "search.messages": "搜索所有消息",
       "locate.message": "定位到消息"
     },
     "provider": {

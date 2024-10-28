@@ -82,7 +82,12 @@ const TopicsPage: FC = () => {
           />
         </Header>
         <Divider style={{ margin: 0 }} />
-        <TopicsHistory keywords={search} onClick={onTopicClick as any} style={{ display: isShow('topics') }} />
+        <TopicsHistory
+          keywords={search}
+          onClick={onTopicClick as any}
+          onSearch={onSearch}
+          style={{ display: isShow('topics') }}
+        />
         <TopicMessages topic={topic} style={{ display: isShow('topic') }} />
         <SearchResults
           keywords={isShow('search') ? search : ''}

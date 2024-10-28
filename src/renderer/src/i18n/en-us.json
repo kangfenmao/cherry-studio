@@ -180,6 +180,7 @@
       "search.placeholder": "Search topics or messages...",
       "continue_chat": "Continue Chatting",
       "search.topics.empty": "No topics found, press Enter to search all messages",
+      "search.messages": "Search All Messages",
       "locate.message": "Locate the message"
     },
     "provider": {
