@@ -308,7 +308,16 @@
       "topic.position": "话题位置",
       "topic.position.left": "左侧",
       "topic.position.right": "右侧",
-      "topic.show.time": "显示话题时间"
+      "topic.show.time": "显示话题时间",
+      "shortcuts": {
+        "title": "快捷方式",
+        "action": "操作",
+        "key": "按键",
+        "new_topic": "新建话题",
+        "zoom_in": "放大界面",
+        "zoom_out": "缩小界面",
+        "zoom_reset": "重置缩放"
+      }
     },
     "translate": {
       "title": "翻译",

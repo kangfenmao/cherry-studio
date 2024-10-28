@@ -3,6 +3,7 @@ import { app, BrowserWindow } from 'electron'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import { registerIpc } from './ipc'
+import { registerZoomShortcut } from './shortcut'
 import { updateUserDataPath } from './utils/upgrade'
 import { createMainWindow } from './window'
 
@@ -29,6 +30,8 @@ app.whenReady().then(async () => {
   })
 
   const mainWindow = createMainWindow()
+
+  registerZoomShortcut(mainWindow)
 
   registerIpc(mainWindow, app)
 

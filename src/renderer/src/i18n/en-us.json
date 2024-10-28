@@ -309,7 +309,16 @@
       "topic.position": "Topic Position",
       "topic.position.left": "Left",
       "topic.position.right": "Right",
-      "topic.show.time": "Show Topic Time"
+      "topic.show.time": "Show Topic Time",
+      "shortcuts": {
+        "title": "Keyboard Shortcuts",
+        "action": "Action",
+        "key": "Key",
+        "new_topic": "New Topic",
+        "zoom_in": "Zoom In",
+        "zoom_out": "Zoom Out",
+        "zoom_reset": "Reset Zoom"
+      }
     },
     "translate": {
       "title": "Translation",

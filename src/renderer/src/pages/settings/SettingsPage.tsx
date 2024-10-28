@@ -1,4 +1,11 @@
-import { CloudOutlined, InfoCircleOutlined, MessageOutlined, SaveOutlined, SettingOutlined } from '@ant-design/icons'
+import {
+  CloudOutlined,
+  InfoCircleOutlined,
+  MacCommandOutlined,
+  MessageOutlined,
+  SaveOutlined,
+  SettingOutlined
+} from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { isLocalAi } from '@renderer/config/env'
 import { FC } from 'react'
@@ -12,6 +19,7 @@ import DataSettings from './DataSettings/DataSettings'
 import GeneralSettings from './GeneralSettings'
 import ModelSettings from './ModelSettings'
 import ProvidersList from './ProviderSettings'
+import ShortcutSettings from './ShortcutSettings'
 
 const SettingsPage: FC = () => {
   const { pathname } = useLocation()
@@ -54,6 +62,12 @@ const SettingsPage: FC = () => {
               {t('settings.general')}
             </MenuItem>
           </MenuItemLink>
+          <MenuItemLink to="/settings/shortcut">
+            <MenuItem className={isRoute('/settings/shortcut')}>
+              <MacCommandOutlined />
+              {t('settings.shortcuts.title')}
+            </MenuItem>
+          </MenuItemLink>
           <MenuItemLink to="/settings/data">
             <MenuItem className={isRoute('/settings/data')}>
               <SaveOutlined />
@@ -74,6 +88,7 @@ const SettingsPage: FC = () => {
             <Route path="assistant" element={<AssistantSettings />} />
             <Route path="general/*" element={<GeneralSettings />} />
             <Route path="data/*" element={<DataSettings />} />
+            <Route path="shortcut" element={<ShortcutSettings />} />
             <Route path="about" element={<AboutSettings />} />
           </Routes>
         </SettingContent>
