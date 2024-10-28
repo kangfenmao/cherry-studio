@@ -84,14 +84,20 @@ const ShortcutSettings: FC = () => {
     <SettingContainer>
       <SettingTitle>{t('settings.shortcuts.title')}</SettingTitle>
       <SettingDivider style={{ marginBottom: 0 }} />
-      <Table columns={columns} dataSource={shortcuts} pagination={false} size="middle" showHeader={false} />
+      <Table
+        columns={columns as ColumnsType<unknown>}
+        dataSource={shortcuts}
+        pagination={false}
+        size="middle"
+        showHeader={false}
+      />
     </SettingContainer>
   )
 }
 
 const Table = styled(AntTable)`
   .ant-table-cell {
-    padding: 8px 0;
+    padding: 14px 0 !important;
   }
 `
 
