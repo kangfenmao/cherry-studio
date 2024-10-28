@@ -73,8 +73,12 @@ export async function fetchChatCompletion({
       })
     }
   } catch (error: any) {
-    message.content = `Error: ${error.message}`
     message.status = 'error'
+    try {
+      message.content = '```json\n' + JSON.stringify(error, null, 2) + '\n```'
+    } catch (e) {
+      message.content = 'Error: ' + error.message
+    }
   }
 
   timer && clearInterval(timer)

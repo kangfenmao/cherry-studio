@@ -97,8 +97,7 @@ const AgentsPage: FC = () => {
 
   const tabItems = useMemo(() => {
     let groups = Object.keys(filteredAgentGroups)
-    groups = groups.filter((g) => g !== '办公')
-    groups = ['办公', ...groups]
+    groups = groups.includes('办公') ? ['办公', ...groups.filter((g) => g !== '办公')] : groups
     return groups.map((group, i) => {
       const id = String(i + 1)
       return {
