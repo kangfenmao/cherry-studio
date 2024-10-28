@@ -84,7 +84,7 @@ $ yarn build:linux
 
 # スポンサー
 
-[Buy Me a Coffee](docs/sponsor.md)
+[Buy Me a Coffee](sponsor.md)
 
 # 📃 ライセンス
 
