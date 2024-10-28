@@ -381,13 +381,13 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   ],
   anthropic: [
     {
-      id: 'claude-3-5-sonnet-20240620',
+      id: 'claude-3-5-sonnet-latest',
       provider: 'anthropic',
       name: 'Claude 3.5 Sonnet',
       group: 'Claude 3.5'
     },
     {
-      id: 'claude-3-opus-20240229',
+      id: 'claude-3-opus-latest',
       provider: 'anthropic',
       name: 'Claude 3 Opus',
       group: 'Claude 3'

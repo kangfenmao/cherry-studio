@@ -166,7 +166,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     const textArea = textareaRef.current?.resizableTextArea?.textArea
     if (textArea) {
       textArea.style.height = 'auto'
-      textArea.style.height = textArea?.scrollHeight > 400 ? '400px' : `${textArea?.scrollHeight}px`
+      textArea.style.height = textArea?.scrollHeight > 400 ? '400px' : `${textArea?.scrollHeight + 2}px`
     }
   }
 
