@@ -17,6 +17,12 @@ export default abstract class BaseProvider {
     return host.endsWith('/') ? host : `${host}/v1/`
   }
 
+  public getHeaders() {
+    return {
+      'X-Api-Key': this.provider.apiKey
+    }
+  }
+
   public get keepAliveTime() {
     return this.provider.id === 'ollama' ? getOllamaKeepAliveTime() : undefined
   }
