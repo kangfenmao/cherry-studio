@@ -4,10 +4,10 @@ import Scrollbar from '@renderer/components/Scrollbar'
 import SystemAgents from '@renderer/config/agents.json'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { sortByEnglishFirst, uuid } from '@renderer/utils'
 import { Col, Empty, Input, Row, Tabs as TabsAntd, Typography } from 'antd'
 import { groupBy, omit } from 'lodash'
-import { FC, useMemo, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
@@ -28,9 +28,18 @@ const getAgentsFromSystemAgents = () => {
   return agents
 }
 
+let _agentGroups: Record<string, Agent[]> = {}
+
 const AgentsPage: FC = () => {
   const [search, setSearch] = useState('')
-  const agentGroups = useMemo(() => groupBy(getAgentsFromSystemAgents(), 'group'), [])
+
+  const agentGroups = useMemo(() => {
+    if (Object.keys(_agentGroups).length === 0) {
+      _agentGroups = groupBy(getAgentsFromSystemAgents(), 'group')
+    }
+    return _agentGroups
+  }, [])
+
   const { t } = useTranslation()
 
   const filteredAgentGroups = useMemo(() => {
@@ -41,7 +50,7 @@ const AgentsPage: FC = () => {
       const filteredAgents = agents.filter(
         (agent) =>
           agent.name.toLowerCase().includes(search.toLowerCase()) ||
-          agent.prompt?.toLowerCase().includes(search.toLowerCase())
+          agent.description?.toLowerCase().includes(search.toLowerCase())
       )
       if (filteredAgents.length > 0) {
         filtered[group] = filteredAgents
@@ -54,24 +63,27 @@ const AgentsPage: FC = () => {
     return agent.emoji ? agent.emoji + ' ' + agent.name : agent.name
   }
 
-  const onAddAgentConfirm = (agent: Agent) => {
-    window.modal.confirm({
-      title: getAgentName(agent),
-      content: (
-        <AgentPrompt>
-          <ReactMarkdown className="markdown">{agent.description || agent.prompt}</ReactMarkdown>
-        </AgentPrompt>
-      ),
-      width: 600,
-      icon: null,
-      closable: true,
-      maskClosable: true,
-      centered: true,
-      okButtonProps: { type: 'primary' },
-      okText: t('agents.add.button'),
-      onOk: () => createAssistantFromAgent(agent)
-    })
-  }
+  const onAddAgentConfirm = useCallback(
+    (agent: Agent) => {
+      window.modal.confirm({
+        title: getAgentName(agent),
+        content: (
+          <AgentPrompt>
+            <ReactMarkdown className="markdown">{agent.description || agent.prompt}</ReactMarkdown>
+          </AgentPrompt>
+        ),
+        width: 600,
+        icon: null,
+        closable: true,
+        maskClosable: true,
+        centered: true,
+        okButtonProps: { type: 'primary' },
+        okText: t('agents.add.button'),
+        onOk: () => createAssistantFromAgent(agent)
+      })
+    },
+    [t]
+  )
 
   const getAgentFromSystemAgent = (agent: (typeof SystemAgents)[number]) => {
     return {
@@ -83,29 +95,36 @@ const AgentsPage: FC = () => {
     }
   }
 
-  const tabItems = Object.keys(filteredAgentGroups).map((group, i) => {
-    const id = String(i + 1)
-    return {
-      label: group,
-      key: id,
-      children: (
-        <TabContent key={group}>
-          <Title level={5} key={group} style={{ marginBottom: 16 }}>
-            {group}
-          </Title>
-          <Row gutter={16}>
-            {filteredAgentGroups[group].map((agent, index) => {
-              return (
-                <Col span={8} key={group + index}>
-                  <AgentCard onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))} agent={agent as any} />
-                </Col>
-              )
-            })}
-          </Row>
-        </TabContent>
-      )
-    }
-  })
+  const tabItems = useMemo(() => {
+    return Object.keys(filteredAgentGroups)
+      .sort(sortByEnglishFirst)
+      .map((group, i) => {
+        const id = String(i + 1)
+        return {
+          label: group,
+          key: id,
+          children: (
+            <TabContent key={group}>
+              <Title level={5} key={group} style={{ marginBottom: 16 }}>
+                {group}
+              </Title>
+              <Row gutter={16}>
+                {filteredAgentGroups[group].map((agent, index) => {
+                  return (
+                    <Col span={8} key={group + index}>
+                      <AgentCard
+                        onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
+                        agent={agent as any}
+                      />
+                    </Col>
+                  )
+                })}
+              </Row>
+            </TabContent>
+          )
+        }
+      })
+  }, [filteredAgentGroups, onAddAgentConfirm])
 
   return (
     <Container>

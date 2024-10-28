@@ -333,3 +333,11 @@ export function formatFileSize(file: FileType) {
 export function classNames(...classes: Array<string | boolean | undefined | null>) {
   return classes.filter(Boolean).join(' ')
 }
+
+export function sortByEnglishFirst(a: string, b: string) {
+  const isAEnglish = /^[a-zA-Z]/.test(a)
+  const isBEnglish = /^[a-zA-Z]/.test(b)
+  if (isAEnglish && !isBEnglish) return -1
+  if (!isAEnglish && isBEnglish) return 1
+  return a.localeCompare(b)
+}

@@ -15,7 +15,7 @@ const AgentCard: React.FC<Props> = ({ agent, onClick }) => {
         <AgentHeader>
           <AgentName style={{ marginBottom: 0 }}>{agent.name}</AgentName>
         </AgentHeader>
-        <AgentCardPrompt>{agent.prompt}</AgentCardPrompt>
+        <AgentCardPrompt className="text-nowrap">{agent.description || agent.prompt}</AgentCardPrompt>
       </Col>
     </Container>
   )
@@ -66,12 +66,8 @@ const AgentName = styled.div`
 const AgentCardPrompt = styled.div`
   color: #666;
   margin-top: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  white-space: pre-wrap;
   font-size: 12px;
+  max-width: auto;
 `
 
 export default AgentCard
