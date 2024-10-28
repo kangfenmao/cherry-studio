@@ -4,7 +4,7 @@ import Scrollbar from '@renderer/components/Scrollbar'
 import SystemAgents from '@renderer/config/agents.json'
 import { createAssistantFromAgent } from '@renderer/services/assistant'
 import { Agent } from '@renderer/types'
-import { sortByEnglishFirst, uuid } from '@renderer/utils'
+import { uuid } from '@renderer/utils'
 import { Col, Empty, Input, Row, Tabs as TabsAntd, Typography } from 'antd'
 import { groupBy, omit } from 'lodash'
 import { FC, useCallback, useMemo, useState } from 'react'
@@ -96,34 +96,32 @@ const AgentsPage: FC = () => {
   }
 
   const tabItems = useMemo(() => {
-    return Object.keys(filteredAgentGroups)
-      .sort(sortByEnglishFirst)
-      .map((group, i) => {
-        const id = String(i + 1)
-        return {
-          label: group,
-          key: id,
-          children: (
-            <TabContent key={group}>
-              <Title level={5} key={group} style={{ marginBottom: 16 }}>
-                {group}
-              </Title>
-              <Row gutter={16}>
-                {filteredAgentGroups[group].map((agent, index) => {
-                  return (
-                    <Col span={8} key={group + index}>
-                      <AgentCard
-                        onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))}
-                        agent={agent as any}
-                      />
-                    </Col>
-                  )
-                })}
-              </Row>
-            </TabContent>
-          )
-        }
-      })
+    let groups = Object.keys(filteredAgentGroups)
+    groups = groups.filter((g) => g !== '办公')
+    groups = ['办公', ...groups]
+    return groups.map((group, i) => {
+      const id = String(i + 1)
+      return {
+        label: group,
+        key: id,
+        children: (
+          <TabContent key={group}>
+            <Title level={5} key={group} style={{ marginBottom: 16 }}>
+              {group}
+            </Title>
+            <Row gutter={16}>
+              {filteredAgentGroups[group].map((agent, index) => {
+                return (
+                  <Col span={8} key={group + index}>
+                    <AgentCard onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))} agent={agent as any} />
+                  </Col>
+                )
+              })}
+            </Row>
+          </TabContent>
+        )
+      }
+    })
   }, [filteredAgentGroups, onAddAgentConfirm])
 
   return (

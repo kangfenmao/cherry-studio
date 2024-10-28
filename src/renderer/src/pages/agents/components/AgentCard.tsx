@@ -15,7 +15,9 @@ const AgentCard: React.FC<Props> = ({ agent, onClick }) => {
         <AgentHeader>
           <AgentName style={{ marginBottom: 0 }}>{agent.name}</AgentName>
         </AgentHeader>
-        <AgentCardPrompt className="text-nowrap">{agent.description || agent.prompt}</AgentCardPrompt>
+        <AgentCardPrompt className="text-nowrap">
+          {(agent.description || agent.prompt).substring(0, 20)}
+        </AgentCardPrompt>
       </Col>
     </Container>
   )
