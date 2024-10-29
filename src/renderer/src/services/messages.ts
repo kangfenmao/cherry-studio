@@ -39,7 +39,7 @@ export function getContextCount(assistant: Assistant, messages: Message[]) {
 }
 
 export function deleteMessageFiles(message: Message) {
-  message.files && FileManager.deleteFiles(message.files.map((f) => f.id))
+  message.files && FileManager.deleteFiles(message.files)
 }
 
 export async function locateToMessage(navigate: NavigateFunction, message: Message) {

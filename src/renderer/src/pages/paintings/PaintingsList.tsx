@@ -1,6 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import { usePaintings } from '@renderer/hooks/usePaintings'
+import FileManager from '@renderer/services/file'
 import { Painting } from '@renderer/types'
 import { classNames } from '@renderer/utils'
 import { Popconfirm } from 'antd'
@@ -31,9 +32,9 @@ const PaintingsList: FC<PaintingsListProps> = ({ paintings, selectedPainting, on
           <CanvasWrapper key={item.id}>
             <Canvas
               className={classNames(selectedPainting.id === item.id && 'selected')}
-              onClick={() => onSelectPainting(item)}
-              thumbnail={item.urls[0]}
-            />
+              onClick={() => onSelectPainting(item)}>
+              {item.files[0] && <ThumbnailImage src={FileManager.getFileUrl(item.files[0])} alt="" />}
+            </Canvas>
             <DeleteButton>
               <Popconfirm
                 title={t('images.button.delete.image.confirm')}
@@ -73,16 +74,15 @@ const CanvasWrapper = styled.div`
   }
 `
 
-const Canvas = styled.div<{ thumbnail?: string }>`
+const Canvas = styled.div`
   width: 80px;
   height: 80px;
   background-color: var(--color-background-soft);
-  background-image: ${(props) => (props.thumbnail ? `url(${props.thumbnail})` : 'none')};
-  background-size: cover;
-  background-position: center;
   cursor: pointer;
   transition: background-color 0.2s ease;
   border: 1px solid var(--color-background-soft);
+  overflow: hidden;
+  position: relative;
 
   &.selected {
     border: 1px solid var(--color-primary);
@@ -91,6 +91,13 @@ const Canvas = styled.div<{ thumbnail?: string }>`
   &:hover {
     background-color: var(--color-background-mute);
   }
+`
+
+const ThumbnailImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 `
 
 const DeleteButton = styled.div.attrs({ className: 'delete-button' })`

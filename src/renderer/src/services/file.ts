@@ -9,6 +9,23 @@ class FileManager {
     return files
   }
 
+  static async addFile(file: FileType): Promise<FileType> {
+    const fileRecord = await db.files.get(file.id)
+
+    if (fileRecord) {
+      await db.files.update(fileRecord.id, { ...fileRecord, count: fileRecord.count + 1 })
+      return fileRecord
+    }
+
+    await db.files.add(file)
+
+    return file
+  }
+
+  static async addFiles(files: FileType[]): Promise<FileType[]> {
+    return Promise.all(files.map((file) => this.addFile(file)))
+  }
+
   static async uploadFile(file: FileType): Promise<FileType> {
     const uploadFile = await window.api.file.upload(file)
     const fileRecord = await db.files.get(uploadFile.id)
@@ -50,12 +67,12 @@ class FileManager {
       return
     }
 
-    db.files.delete(id)
+    await db.files.delete(id)
     await window.api.file.delete(id + file.ext)
   }
 
-  static async deleteFiles(ids: string[]): Promise<void> {
-    await Promise.all(ids.map((id) => this.deleteFile(id)))
+  static async deleteFiles(files: FileType[]): Promise<void> {
+    await Promise.all(files.map((file) => this.deleteFile(file.id)))
   }
 
   static async allFiles(): Promise<FileType[]> {

@@ -42,6 +42,7 @@ declare global {
         save: (path: string, content: string | NodeJS.ArrayBufferView, options?: SaveDialogOptions) => void
         saveImage: (name: string, data: string) => void
         base64Image: (fileId: string) => Promise<{ mime: string; base64: string; data: string }>
+        download: (url: string) => Promise<FileType | null>
       }
     }
   }

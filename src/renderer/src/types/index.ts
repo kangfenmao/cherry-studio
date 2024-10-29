@@ -99,6 +99,7 @@ export interface Painting {
   steps?: number
   guidanceScale?: number
   model?: string
+  status?: 'generating' | 'downloading' | 'completed' | 'error'
 }
 
 export type MinAppType = {

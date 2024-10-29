@@ -35,7 +35,8 @@ const api = {
       ipcRenderer.invoke('file:save', path, content, options),
     selectFolder: () => ipcRenderer.invoke('file:selectFolder'),
     saveImage: (name: string, data: string) => ipcRenderer.invoke('file:saveImage', name, data),
-    base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId)
+    base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId),
+    download: (url: string) => ipcRenderer.invoke('file:download', url)
   }
 }
 

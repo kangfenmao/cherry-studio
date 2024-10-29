@@ -14,8 +14,9 @@ import { usePaintings } from '@renderer/hooks/usePaintings'
 import { useProviders } from '@renderer/hooks/useProvider'
 import AiProvider from '@renderer/providers/AiProvider'
 import { getProviderByModel } from '@renderer/services/assistant'
+import FileManager from '@renderer/services/file'
 import { DEFAULT_PAINTING } from '@renderer/store/paintings'
-import { Painting } from '@renderer/types'
+import { FileType, Painting } from '@renderer/types'
 import { getErrorMessage } from '@renderer/utils'
 import { Button, Input, InputNumber, Radio, Select, Slider, Spin, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
@@ -97,7 +98,7 @@ const PaintingsPage: FC = () => {
   }
 
   const onGenerate = async () => {
-    if (painting.urls.length > 0) {
+    if (painting.files.length > 0) {
       const confirmed = await window.modal.confirm({
         content: t('images.regenerate.confirm'),
         centered: true
@@ -106,9 +107,12 @@ const PaintingsPage: FC = () => {
       if (!confirmed) {
         return
       }
+
+      await FileManager.deleteFiles(painting.files)
     }
 
     const prompt = textareaRef.current?.resizableTextArea?.textArea?.value || ''
+
     updatePaintingState({ prompt })
 
     const model = TEXT_TO_IMAGES_MODELS.find((m) => m.id === painting.model)
@@ -137,7 +141,22 @@ const PaintingsPage: FC = () => {
       })
 
       if (urls.length > 0) {
-        updatePaintingState({ urls })
+        const downloadedFiles = await Promise.all(
+          urls.map(async (url) => {
+            try {
+              return await window.api.file.download(url)
+            } catch (error) {
+              console.error('Failed to download image:', error)
+              return null
+            }
+          })
+        )
+
+        const validFiles = downloadedFiles.filter((file): file is FileType => file !== null)
+
+        await FileManager.addFiles(validFiles)
+
+        updatePaintingState({ files: validFiles })
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.name !== 'AbortError') {
@@ -158,12 +177,17 @@ const PaintingsPage: FC = () => {
     size && updatePaintingState({ imageSize: size.value })
   }
 
+  const getCurrentImageUrl = () => {
+    const currentFile = painting.files[currentImageIndex]
+    return currentFile ? FileManager.getFileUrl(currentFile) : ''
+  }
+
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % painting.urls.length)
+    setCurrentImageIndex((prev) => (prev + 1) % painting.files.length)
   }
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + painting.urls.length) % painting.urls.length)
+    setCurrentImageIndex((prev) => (prev - 1 + painting.files.length) % painting.files.length)
   }
 
   const onDeletePainting = (paintingToDelete: Painting) => {
@@ -299,15 +323,15 @@ const PaintingsPage: FC = () => {
         <MainContainer>
           <Artboard>
             <LoadingContainer spinning={isLoading}>
-              {painting.urls.length > 0 ? (
+              {painting.files.length > 0 ? (
                 <ImageContainer>
-                  {painting.urls.length > 1 && (
+                  {painting.files.length > 1 && (
                     <NavigationButton onClick={prevImage} style={{ left: 10 }}>
                       ←
                     </NavigationButton>
                   )}
                   <ImagePreview
-                    src={painting.urls[currentImageIndex]}
+                    src={getCurrentImageUrl()}
                     preview={{ mask: false }}
                     style={{
                       width: '70vh',
@@ -317,13 +341,13 @@ const PaintingsPage: FC = () => {
                       cursor: 'pointer'
                     }}
                   />
-                  {painting.urls.length > 1 && (
+                  {painting.files.length > 1 && (
                     <NavigationButton onClick={nextImage} style={{ right: 10 }}>
                       →
                     </NavigationButton>
                   )}
                   <ImageCounter>
-                    {currentImageIndex + 1} / {painting.urls.length}
+                    {currentImageIndex + 1} / {painting.files.length}
                   </ImageCounter>
                 </ImageContainer>
               ) : (

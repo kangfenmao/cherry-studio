@@ -1,4 +1,5 @@
 import { TEXT_TO_IMAGES_MODELS } from '@renderer/config/models'
+import FileManager from '@renderer/services/file'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import { addPainting, removePainting, updatePainting, updatePaintings } from '@renderer/store/paintings'
 import { Painting } from '@renderer/types'
@@ -27,7 +28,8 @@ export function usePaintings() {
       dispatch(addPainting(newPainting))
       return newPainting
     },
-    removePainting: (painting: Painting) => {
+    removePainting: async (painting: Painting) => {
+      FileManager.deleteFiles(painting.files)
       dispatch(removePainting(painting))
     },
     updatePainting: (painting: Painting) => {

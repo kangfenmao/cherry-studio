@@ -53,6 +53,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('file:write', fileManager.writeFile)
   ipcMain.handle('file:saveImage', fileManager.saveImage)
   ipcMain.handle('file:base64Image', fileManager.base64Image)
+  ipcMain.handle('file:download', fileManager.downloadFile)
 
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({

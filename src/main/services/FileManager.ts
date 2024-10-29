@@ -315,6 +315,86 @@ class FileManager {
       return null
     }
   }
+
+  public downloadFile = async (_: Electron.IpcMainInvokeEvent, url: string): Promise<FileType> => {
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      // 尝试从Content-Disposition获取文件名
+      const contentDisposition = response.headers.get('Content-Disposition')
+      let filename = 'download'
+
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i)
+        if (filenameMatch) {
+          filename = filenameMatch[1]
+        }
+      }
+
+      // 如果URL中有文件名，使用URL中的文件名
+      const urlFilename = url.split('/').pop()
+      if (urlFilename && urlFilename.includes('.')) {
+        filename = urlFilename
+      }
+
+      // 如果文件名没有后缀，根据Content-Type添加后缀
+      if (!filename.includes('.')) {
+        const contentType = response.headers.get('Content-Type')
+        const ext = this.getExtensionFromMimeType(contentType)
+        filename += ext
+      }
+
+      const uuid = uuidv4()
+      const ext = path.extname(filename)
+      const destPath = path.join(this.storageDir, uuid + ext)
+
+      // 将响应内容写入文件
+      const buffer = Buffer.from(await response.arrayBuffer())
+      await fs.promises.writeFile(destPath, buffer)
+
+      const stats = await fs.promises.stat(destPath)
+      const fileType = getFileType(ext)
+
+      const fileMetadata: FileType = {
+        id: uuid,
+        origin_name: filename,
+        name: uuid + ext,
+        path: destPath,
+        created_at: stats.birthtime,
+        size: stats.size,
+        ext: ext,
+        type: fileType,
+        count: 1
+      }
+
+      return fileMetadata
+    } catch (error) {
+      logger.error('[FileManager] Download file error:', error)
+      throw error
+    }
+  }
+
+  private getExtensionFromMimeType(mimeType: string | null): string {
+    if (!mimeType) return '.bin'
+
+    const mimeToExtension: { [key: string]: string } = {
+      'image/jpeg': '.jpg',
+      'image/png': '.png',
+      'image/gif': '.gif',
+      'application/pdf': '.pdf',
+      'text/plain': '.txt',
+      'application/msword': '.doc',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+      'application/zip': '.zip',
+      'application/x-zip-compressed': '.zip',
+      'application/octet-stream': '.bin'
+    }
+
+    return mimeToExtension[mimeType] || '.bin'
+  }
 }
 
 export default FileManager
