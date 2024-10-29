@@ -11,100 +11,131 @@
 
 ![](https://github.com/user-attachments/assets/995910f3-177a-4d1e-97ea-04e3b009ba36)
 
-Cherry Studio 是一款跨平台桌面客户端，支持多个大语言模型（LLM）服务商，兼容 Windows、Mac 和 Linux 系统，并拥丰富的个性化选项与领先的功能设计。
+Cherry Studio 是一款支持多个大语言模型（LLM）服务商的桌面客户端，兼容 Windows、Mac 和 Linux 系统。
 
 👏 欢迎加入 [Telegram 群组](https://t.me/CherryStudioAI)
 
 # 🌠 界面
 
-<img width="1582" alt="Xnip2024-09-23_15-01-53" src="https://github.com/user-attachments/assets/554aa31b-87b6-49fe-877d-af313e1608b0">
-<img width="1582" alt="Xnip2024-09-23_15-02-27" src="https://github.com/user-attachments/assets/f43fb4c8-194a-4f46-8575-6db2bd136cb9">
-<img width="1582" alt="Xnip2024-09-23_16-12-19" src="https://github.com/user-attachments/assets/82ce3cc1-5a0b-49aa-9fe4-0376d34be1f8">
-<img width="1582" alt="Xnip2024-09-23_16-11-44" src="https://github.com/user-attachments/assets/55e420c8-fc0f-40a0-868e-d75bebeb5af3">
-<img width="1582" alt="Xnip2024-09-23_16-11-50" src="https://github.com/user-attachments/assets/7413384e-a7c7-4525-96ea-ccd395d7e51a">
-<img width="1582" alt="Xnip2024-09-23_16-12-59" src="https://github.com/user-attachments/assets/894b5e97-569f-4471-813c-c48d19455215">
+![](https://github.com/user-attachments/assets/28585d83-4bf0-4714-b561-8c7bf57cc600)
+![](https://github.com/user-attachments/assets/8576863a-f632-4776-bc12-657eeced9da3)
+![](https://github.com/user-attachments/assets/790790d7-b462-48dd-bde1-91c1697a4648)
 
-# 🌟 特性
+# 🌟 主要特性
 
-<div align="center">
-  <a href="https://www.producthunt.com/posts/cherry-studio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-cherry&#0045;studio" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=496640&theme=light" alt="Cherry&#0032;Studio - AI&#0032;Chatbots&#0044;&#0032;AI&#0032;Desktop&#0032;Client | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-</div>
+1. **多样化 LLM 服务支持**：
 
-## 😌 轻松上手
+   - ☁️ 支持主流 LLM 云服务：OpenAI、Gemini、Anthropic、硅基流动等
+   - 🔗 集成流行 AI Web 服务：Claude、Peplexity、Poe、腾讯元宝、知乎直答等
+   - 💻 支持 Ollama 本地模型部署
 
-🍏Windows，Mac，Linux跨平台支持
+2. **智能助手与对话**：
 
-📦开箱即用，无需 Python 与 Docker
+   - 📚 内置 300+ 预配置 AI 助手
+   - 🤖 支持自定义创建专属助手
+   - 💬 多模型同时对话，获得多样化观点
 
-🤝简洁、友好的界面与交互设计
+3. **文档与数据处理**：
 
-## 🛠️多样化的 LLM 服务模式支持
+   - 📄 支持文本、图片、Office、PDF 等多种格式
+   - ☁️ WebDAV 文件管理与数据备份
+   - 📊 Mermaid 图表可视化
+   - 💻 代码高亮显示
 
-☁️ 全面覆盖 LLM 云服务，支持自定义 api key 与模型管理：OpenAI，Gemini，Anthropic，硅基流动...
+4. **实用工具集成**：
 
-🔗汇聚流行的 AI Web 服务，并计划通过功能增强提升体验：Claude，Peplexity，Poe，腾讯元宝，知乎直答...
+   - 🔍 全局搜索功能
+   - 📝 话题管理系统
+   - 🔤 AI 驱动的翻译功能
+   - 🎯 拖拽排序
+   - 🔌 小程序支持
 
-💻支持 Ollama 运行本地模型
+5. **优质使用体验**：
+   - 🖥️ Windows、Mac、Linux 跨平台支持
+   - 📦 开箱即用，无需配置环境
+   - 🎨 支持明暗主题与透明窗口
+   - 📝 完整的 Markdown 渲染
+   - 🤲 便捷的内容分享功能
 
-## 📲个性化的功能体验
+# 🖥️ 开发
 
-📄完整的 Markdown 与 Mermaid 渲染支持
+## IDE 设置
 
-🤖使用与创建智能体提升工作效率
-
-🔤持续迭代的翻译功能
-
-🤲生成结果支持 Markdown 与图片分享
-
-📎文件与图片上传，RAG 与多模态对话
-
-🎨透明窗口与明暗主题支持
-
-# 🖥️ 开发指南
-
-## 开发环境
-
-[VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+[Cursor](https://www.cursor.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
 ## 项目设置
 
-### 安装依赖
+### 安装
 
 ```bash
 $ yarn
 ```
 
-### 启动开发环境
+### 开发
 
 ```bash
 $ yarn dev
 ```
 
-### 构建版本
+### 构建
 
 ```bash
-# For windows
+# Windows
 $ yarn build:win
 
-# For macOS
+# macOS
 $ yarn build:mac
 
-# For Linux
+# Linux
 $ yarn build:linux
 ```
 
-# ⭐️ Star 记录
+# 🤝 贡献
 
-[![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
+我们欢迎对 Cherry Studio 的贡献！您可以通过以下方式贡献：
 
-# 社区
+1. **贡献代码**：开发新功能或优化现有代码。
+2. **修复错误**：提交您发现的错误修复。
+3. **维护问题**：帮助管理 GitHub 问题。
+4. **产品设计**：参与设计讨论。
+5. **撰写文档**：改进用户手册和指南。
+6. **社区参与**：加入讨论并帮助用户。
+7. **推广使用**：宣传 Cherry Studio。
 
-[Telegram](https://t.me/CherryStudioAI)
+## 入门
 
-# 赞助
+1. **Fork 仓库**：Fork 并克隆到您的本地机器。
+2. **创建分支**：为您的更改创建分支。
+3. **提交更改**：提交并推送您的更改。
+4. **打开 Pull Request**：描述您的更改和原因。
+
+有关更详细的指南，请参阅我们的 [贡献指南](./CONTRIBUTING.md)。
+
+感谢您的支持和贡献！
+
+# 🚀 贡献者
+
+<a href="https://github.com/kangfenmao/cherry-studio/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kangfenmao/cherry-studio" />
+</a>
+<br /><br />
+
+# 🌐 社区
+
+[Telegram](https://t.me/CherryStudioAI) | [Email](mailto:kangfenmao@gmail.com) | [Twitter](https://x.com/kangfenmao)
+
+# 📣 产品猎人
+
+<a href="https://www.producthunt.com/posts/cherry-studio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-cherry&#0045;studio" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=496640&theme=light" alt="Cherry&#0032;Studio - AI&#0032;Chatbots&#0044;&#0032;AI&#0032;Desktop&#0032;Client | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
+# ☕ 赞助
 
 [微信赞赏码](sponsor.md)
 
 # 📃 许可证
 
 [LICENSE](./LICENSE)
+
+# ⭐️ Star 记录
+
+[![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
