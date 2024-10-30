@@ -162,7 +162,12 @@
       "name": "Name",
       "size": "Size",
       "count": "Count",
-      "created_at": "Created At"
+      "created_at": "Created At",
+      "image": "Image",
+      "text": "Text",
+      "document": "Document",
+      "actions": "Actions",
+      "open": "Open"
     },
     "agents": {
       "title": "Agents",
