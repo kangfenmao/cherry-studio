@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { DEFAULT_CONEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { TopicManager } from '@renderer/hooks/useTopic'
-import { getDefaultAssistant, getDefaultTopic } from '@renderer/services/assistant'
+import { getDefaultAssistant, getDefaultTopic } from '@renderer/services/AssistantService'
 import { Assistant, AssistantSettings, Model, Topic } from '@renderer/types'
 import { uniqBy } from 'lodash'
 

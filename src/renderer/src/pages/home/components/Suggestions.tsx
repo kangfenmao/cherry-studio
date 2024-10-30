@@ -1,5 +1,5 @@
-import { fetchSuggestions } from '@renderer/services/api'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { fetchSuggestions } from '@renderer/services/ApiService'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, Message, Suggestion } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import dayjs from 'dayjs'

@@ -1,5 +1,5 @@
 import { useRuntime } from '@renderer/hooks/useRuntime'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Message } from '@renderer/types'
 import styled from 'styled-components'
 

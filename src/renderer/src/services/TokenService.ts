@@ -3,8 +3,8 @@ import { GPTTokens } from 'gpt-tokens'
 import { flatten, takeRight } from 'lodash'
 import { CompletionUsage } from 'openai/resources'
 
-import { getAssistantSettings } from './assistant'
-import { filterContextMessages, filterMessages } from './messages'
+import { getAssistantSettings } from './AssistantService'
+import { filterContextMessages, filterMessages } from './MessagesService'
 
 interface MessageItem {
   name?: string

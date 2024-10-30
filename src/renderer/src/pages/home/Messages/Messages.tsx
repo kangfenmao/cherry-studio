@@ -3,17 +3,17 @@ import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
-import { fetchMessagesSummary } from '@renderer/services/api'
-import { getDefaultTopic } from '@renderer/services/assistant'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { fetchMessagesSummary } from '@renderer/services/ApiService'
+import { getDefaultTopic } from '@renderer/services/AssistantService'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import {
   deleteMessageFiles,
   filterMessages,
   getAssistantMessage,
   getContextCount,
   getUserMessage
-} from '@renderer/services/messages'
-import { estimateHistoryTokens } from '@renderer/services/tokens'
+} from '@renderer/services/MessagesService'
+import { estimateHistoryTokens } from '@renderer/services/TokenService'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'

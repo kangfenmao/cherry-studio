@@ -1,6 +1,6 @@
 import { FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack, VStack } from '@renderer/components/Layout'
-import { backup, reset, restore } from '@renderer/services/backup'
+import { backup, reset, restore } from '@renderer/services/BackupService'
 import { Button } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'

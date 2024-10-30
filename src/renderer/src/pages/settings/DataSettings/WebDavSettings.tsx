@@ -1,7 +1,7 @@
 import { FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { backupToWebdav, restoreFromWebdav } from '@renderer/services/backup'
+import { backupToWebdav, restoreFromWebdav } from '@renderer/services/BackupService'
 import { useAppDispatch } from '@renderer/store'
 import {
   setWebdavHost as _setWebdavHost,

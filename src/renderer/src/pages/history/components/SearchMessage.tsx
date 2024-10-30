@@ -1,7 +1,7 @@
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { default as MessageItem } from '@renderer/pages/home/Messages/Message'
-import { locateToMessage } from '@renderer/services/messages'
+import { locateToMessage } from '@renderer/services/MessagesService'
 import { Message } from '@renderer/types'
 import { Button } from 'antd'
 import { FC } from 'react'

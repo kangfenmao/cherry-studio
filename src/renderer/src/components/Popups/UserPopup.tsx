@@ -1,6 +1,6 @@
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useSettings } from '@renderer/hooks/useSettings'
-import ImageStorage from '@renderer/services/storage'
+import ImageStorage from '@renderer/services/ImageStorage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { setUserName } from '@renderer/store/settings'

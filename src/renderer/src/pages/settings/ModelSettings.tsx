@@ -1,7 +1,7 @@
 import { EditOutlined, MessageOutlined, TranslationOutlined } from '@ant-design/icons'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
-import { getModelUniqId, hasModel } from '@renderer/services/model'
+import { getModelUniqId, hasModel } from '@renderer/services/ModelService'
 import { Model } from '@renderer/types'
 import { Select } from 'antd'
 import { find, sortBy } from 'lodash'

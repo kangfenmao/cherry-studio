@@ -1,4 +1,4 @@
-import FileManager from '@renderer/services/file'
+import FileManager from '@renderer/services/FileManager'
 import { FileType } from '@renderer/types'
 import { Upload } from 'antd'
 import { isEmpty } from 'lodash'

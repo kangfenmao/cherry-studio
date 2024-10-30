@@ -1,4 +1,4 @@
-import FileManager from '@renderer/services/file'
+import FileManager from '@renderer/services/FileManager'
 import { FileTypes, Message } from '@renderer/types'
 import { Image as AntdImage, Upload } from 'antd'
 import { FC } from 'react'

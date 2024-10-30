@@ -2,7 +2,7 @@ import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } 
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { getModelLogo, isVisionModel, SYSTEM_MODELS } from '@renderer/config/models'
 import { useProvider } from '@renderer/hooks/useProvider'
-import { fetchModels } from '@renderer/services/api'
+import { fetchModels } from '@renderer/services/ApiService'
 import { Model, Provider } from '@renderer/types'
 import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Empty, Flex, Modal, Tag } from 'antd'

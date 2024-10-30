@@ -1,7 +1,7 @@
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import Scrollbar from '@renderer/components/Scrollbar'
 import db from '@renderer/databases'
-import FileManager from '@renderer/services/file'
+import FileManager from '@renderer/services/FileManager'
 import { FileType, FileTypes } from '@renderer/types'
 import { formatFileSize } from '@renderer/utils'
 import { Image, Table } from 'antd'

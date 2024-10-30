@@ -8,9 +8,9 @@ import {
   TextPart
 } from '@google/generative-ai'
 import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
-import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
-import { EVENT_NAMES } from '@renderer/services/event'
-import { filterContextMessages } from '@renderer/services/messages'
+import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
+import { EVENT_NAMES } from '@renderer/services/EventService'
+import { filterContextMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import axios from 'axios'
 import { first, isEmpty, takeRight } from 'lodash'
@@ -196,6 +196,10 @@ export default class GeminiProvider extends BaseProvider {
   }
 
   public async suggestions(): Promise<Suggestion[]> {
+    return []
+  }
+
+  public async generateImage(): Promise<string[]> {
     return []
   }
 

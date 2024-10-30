@@ -1,4 +1,4 @@
-import { getDefaultTopic } from '@renderer/services/assistant'
+import { getDefaultTopic } from '@renderer/services/AssistantService'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   addAssistant,

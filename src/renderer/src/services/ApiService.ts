@@ -11,10 +11,10 @@ import {
   getProviderByModel,
   getTopNamingModel,
   getTranslateModel
-} from './assistant'
-import { EVENT_NAMES, EventEmitter } from './event'
-import { filterMessages } from './messages'
-import { estimateMessagesUsage } from './tokens'
+} from './AssistantService'
+import { EVENT_NAMES, EventEmitter } from './EventService'
+import { filterMessages } from './MessagesService'
+import { estimateMessagesUsage } from './TokenService'
 
 export async function fetchChatCompletion({
   message,

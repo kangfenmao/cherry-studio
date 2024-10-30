@@ -2,9 +2,9 @@ import Anthropic from '@anthropic-ai/sdk'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
 import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
-import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/assistant'
-import { EVENT_NAMES } from '@renderer/services/event'
-import { filterContextMessages } from '@renderer/services/messages'
+import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
+import { EVENT_NAMES } from '@renderer/services/EventService'
+import { filterContextMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
 import { first, flatten, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
@@ -191,6 +191,10 @@ export default class AnthropicProvider extends BaseProvider {
     })
 
     return message.content[0].type === 'text' ? message.content[0].text : ''
+  }
+
+  public async generateImage(): Promise<string[]> {
+    return []
   }
 
   public async suggestions(): Promise<Suggestion[]> {

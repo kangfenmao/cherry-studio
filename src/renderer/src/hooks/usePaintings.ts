@@ -1,5 +1,5 @@
 import { TEXT_TO_IMAGES_MODELS } from '@renderer/config/models'
-import FileManager from '@renderer/services/file'
+import FileManager from '@renderer/services/FileManager'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import { addPainting, removePainting, updatePainting, updatePaintings } from '@renderer/store/paintings'
 import { Painting } from '@renderer/types'

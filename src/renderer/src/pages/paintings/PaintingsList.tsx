@@ -1,7 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import { usePaintings } from '@renderer/hooks/usePaintings'
-import FileManager from '@renderer/services/file'
+import FileManager from '@renderer/services/FileManager'
 import { Painting } from '@renderer/types'
 import { classNames } from '@renderer/utils'
 import { Popconfirm } from 'antd'

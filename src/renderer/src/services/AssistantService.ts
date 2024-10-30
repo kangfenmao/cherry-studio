@@ -6,7 +6,7 @@ import { addAssistant } from '@renderer/store/assistants'
 import { Agent, Assistant, AssistantSettings, Message, Model, Provider, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 
-import { estimateMessageUsage } from './tokens'
+import { estimateMessageUsage } from './TokenService'
 
 export function getDefaultAssistant(): Assistant {
   return {

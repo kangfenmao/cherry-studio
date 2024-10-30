@@ -1,5 +1,5 @@
 import db from '@renderer/databases'
-import { deleteMessageFiles } from '@renderer/services/messages'
+import { deleteMessageFiles } from '@renderer/services/MessagesService'
 import store from '@renderer/store'
 import { Assistant, Topic } from '@renderer/types'
 import { find } from 'lodash'

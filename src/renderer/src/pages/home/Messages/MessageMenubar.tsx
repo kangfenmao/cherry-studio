@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/event'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Message, Model } from '@renderer/types'
 import { removeTrailingDoubleSpaces } from '@renderer/utils'
 import { Dropdown, Popconfirm, Tooltip } from 'antd'
