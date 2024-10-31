@@ -2,6 +2,10 @@
   resize: none;
 }
 
+.ant-image-preview-switch-left {
+  -webkit-app-region: no-drag;
+}
+
 .ant-btn:not(:disabled):focus-visible {
   outline: none;
 }
