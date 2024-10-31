@@ -167,7 +167,8 @@
       "text": "Text",
       "document": "Document",
       "actions": "Actions",
-      "open": "Open"
+      "open": "Open",
+      "all": "All Files"
     },
     "agents": {
       "title": "Agents",

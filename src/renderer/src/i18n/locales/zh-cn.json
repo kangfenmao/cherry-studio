@@ -167,7 +167,8 @@
       "text": "文本",
       "document": "文档",
       "actions": "操作",
-      "open": "打开"
+      "open": "打开",
+      "all": "所有文件"
     },
     "agents": {
       "title": "智能体",
@@ -284,7 +285,7 @@
       "provider.search_placeholder": "搜索模型 ID 或名称",
       "provider.api.url.reset": "重置",
       "provider.api.url.preview": "预览: {{url}}",
-      "provider.api.url.tip": "/结尾忽略v1版本，#结尾强制使用输入地址",
+      "provider.api.url.tip": "/结尾忽略v1版本，#结尾��制使用输入地址",
       "models.default_assistant_model": "默认助手模型",
       "models.topic_naming_model": "话题命名模型",
       "models.translate_model": "翻译模型",

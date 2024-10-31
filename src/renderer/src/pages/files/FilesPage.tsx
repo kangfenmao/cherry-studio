@@ -14,9 +14,14 @@ import styled from 'styled-components'
 
 const FilesPage: FC = () => {
   const { t } = useTranslation()
-  const [fileType, setFileType] = useState<FileTypes>(FileTypes.IMAGE)
+  const [fileType, setFileType] = useState<FileTypes | 'all'>('all')
 
-  const files = useLiveQuery<FileType[]>(() => db.files.where('type').equals(fileType).sortBy('count'), [fileType])
+  const files = useLiveQuery<FileType[]>(() => {
+    if (fileType === 'all') {
+      return db.files.orderBy('count').toArray()
+    }
+    return db.files.where('type').equals(fileType).sortBy('count')
+  }, [fileType])
 
   const dataSource = files?.map((file) => {
     return {
@@ -62,6 +67,7 @@ const FilesPage: FC = () => {
   ]
 
   const menuItems = [
+    { key: 'all', label: t('files.all'), icon: <FileTextOutlined /> },
     { key: FileTypes.IMAGE, label: t('files.image'), icon: <FileImageOutlined /> },
     { key: FileTypes.TEXT, label: t('files.text'), icon: <FileTextOutlined /> },
     { key: FileTypes.DOCUMENT, label: t('files.document'), icon: <FilePdfOutlined /> }
@@ -77,7 +83,7 @@ const FilesPage: FC = () => {
           <Menu selectedKeys={[fileType]} items={menuItems} onSelect={({ key }) => setFileType(key as FileTypes)} />
         </SideNav>
         <TableContainer right>
-          {fileType === FileTypes.IMAGE ? (
+          {fileType === FileTypes.IMAGE && files?.length > 0 ? (
             <Image.PreviewGroup>
               <Row gutter={[16, 16]}>
                 {files?.map((file) => (

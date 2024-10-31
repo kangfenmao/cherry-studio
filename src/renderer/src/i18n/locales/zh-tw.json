@@ -167,7 +167,8 @@
       "text": "文本",
       "document": "文檔",
       "actions": "操作",
-      "open": "打開"
+      "open": "打開",
+      "all": "所有檔案"
     },
     "agents": {
       "title": "智能體",
