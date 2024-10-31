@@ -83,7 +83,7 @@ const FilesPage: FC = () => {
           <Menu selectedKeys={[fileType]} items={menuItems} onSelect={({ key }) => setFileType(key as FileTypes)} />
         </SideNav>
         <TableContainer right>
-          {fileType === FileTypes.IMAGE && files?.length > 0 ? (
+          {fileType === FileTypes.IMAGE && files?.length && files?.length > 0 ? (
             <Image.PreviewGroup>
               <Row gutter={[16, 16]}>
                 {files?.map((file) => (
