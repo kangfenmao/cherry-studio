@@ -1,5 +1,6 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
+import Scrollbar from '@renderer/components/Scrollbar'
 import { usePaintings } from '@renderer/hooks/usePaintings'
 import FileManager from '@renderer/services/FileManager'
 import { Painting } from '@renderer/types'
@@ -29,7 +30,7 @@ const PaintingsList: FC<PaintingsListProps> = ({
   const { updatePaintings } = usePaintings()
 
   return (
-    <Container style={{ paddingBottom: dragging ? 80 : 0 }}>
+    <Container style={{ paddingBottom: dragging ? 80 : 10 }}>
       <DragableList
         list={paintings}
         onUpdate={updatePaintings}
@@ -63,17 +64,18 @@ const PaintingsList: FC<PaintingsListProps> = ({
   )
 }
 
-const Container = styled.div`
+const Container = styled(Scrollbar)`
   display: flex;
   flex: 1;
   flex-direction: column;
   align-items: center;
-  height: 100%;
   gap: 10px;
-  padding: 10px 0;
+  padding: 10px;
   background-color: var(--color-background);
   max-width: 100px;
   border-left: 0.5px solid var(--color-border);
+  height: calc(100vh - var(--navbar-height));
+  overflow-x: hidden;
 `
 
 const CanvasWrapper = styled.div`
@@ -131,6 +133,7 @@ const DeleteButton = styled.div.attrs({ className: 'delete-button' })`
 const NewPaintingButton = styled.div`
   width: 80px;
   height: 80px;
+  min-height: 80px;
   margin-top: -10px;
   background-color: var(--color-background-soft);
   cursor: pointer;
