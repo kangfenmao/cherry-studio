@@ -29,7 +29,8 @@
       "back": "返回",
       "chat": "聊天",
       "close": "关闭",
-      "cancel": "取消"
+      "cancel": "取消",
+      "download": "下载"
     },
     "button": {
       "add": "添加",
@@ -285,7 +286,7 @@
       "provider.search_placeholder": "搜索模型 ID 或名称",
       "provider.api.url.reset": "重置",
       "provider.api.url.preview": "预览: {{url}}",
-      "provider.api.url.tip": "/结尾忽略v1版本，#结尾��制使用输入地址",
+      "provider.api.url.tip": "/结尾忽略v1版本，#结尾制使用输入地址",
       "models.default_assistant_model": "默认助手模型",
       "models.topic_naming_model": "话题命名模型",
       "models.translate_model": "翻译模型",
@@ -351,7 +352,8 @@
       "button.translate": "翻译",
       "error.not_configured": "翻译模型未配置",
       "input.placeholder": "输入文本进行翻译",
-      "output.placeholder": "翻译"
+      "output.placeholder": "翻译",
+      "confirm": "原文已复制到剪贴板，是否用翻译后的文本替换？"
     },
     "languages": {
       "english": "英文",

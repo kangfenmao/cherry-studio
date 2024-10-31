@@ -1,4 +1,15 @@
 export const download = (url: string) => {
+  // 处理 file:// 协议
+  if (url.startsWith('file://')) {
+    const link = document.createElement('a')
+    link.href = url
+    link.download = url.split('/').pop() || 'download'
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    return
+  }
+
   fetch(url)
     .then((response) => {
       // 尝试从Content-Disposition头获取文件名

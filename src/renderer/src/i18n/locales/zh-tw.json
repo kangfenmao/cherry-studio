@@ -29,7 +29,8 @@
       "back": "返回",
       "chat": "聊天",
       "close": "關閉",
-      "cancel": "取消"
+      "cancel": "取消",
+      "download": "下載"
     },
     "button": {
       "add": "添加",
@@ -351,7 +352,8 @@
       "button.translate": "翻譯",
       "error.not_configured": "翻譯模型未配置",
       "input.placeholder": "輸入文字進行翻譯",
-      "output.placeholder": "翻譯"
+      "output.placeholder": "翻譯",
+      "confirm": "原文已複製到剪貼簿，是否用翻譯後的文字替換？"
     },
     "languages": {
       "english": "英文",

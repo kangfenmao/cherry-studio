@@ -29,7 +29,8 @@
       "back": "Back",
       "chat": "Chat",
       "close": "Close",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "download": "Download"
     },
     "button": {
       "add": "Add",
@@ -351,7 +352,8 @@
       "button.translate": "Translate",
       "error.not_configured": "Translation model is not configured",
       "input.placeholder": "Enter text to translate",
-      "output.placeholder": "Translation"
+      "output.placeholder": "Translation",
+      "confirm": "Original text has been copied to clipboard. Do you want to replace it with the translated text?"
     },
     "languages": {
       "english": "English",

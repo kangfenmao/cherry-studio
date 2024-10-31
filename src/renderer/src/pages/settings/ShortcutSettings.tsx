@@ -36,7 +36,7 @@ const ShortcutSettings: FC = () => {
         return (
           <span>
             {keys.map((key) => (
-              <Tag key={key} style={{ padding: '0 8px' }}>
+              <Tag key={key} style={{ padding: '2px 8px', fontSize: '13px' }}>
                 <span style={{ fontFamily: 'monospace' }}>{key}</span>
               </Tag>
             ))}
