@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
+import { groupTranslations } from './agentGroupTranslations'
 import Agents from './Agents'
 import AddAgentPopup from './components/AddAgentPopup'
 import AgentCard from './components/AgentCard'
@@ -41,7 +42,7 @@ const AgentsPage: FC = () => {
     return _agentGroups
   }, [])
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const filteredAgentGroups = useMemo(() => {
     const groups = search.trim() ? {} : { 我的: [] }
@@ -102,6 +103,14 @@ const AgentsPage: FC = () => {
     }
   }
 
+  const getLocalizedGroupName = useCallback(
+    (group: string) => {
+      const currentLang = i18n.language
+      return groupTranslations[group]?.[currentLang] || group
+    },
+    [i18n.language]
+  )
+
   const tabItems = useMemo(() => {
     let groups = Object.keys(filteredAgentGroups)
     groups = groups.filter((g) => g !== '我的' && g !== '办公')
@@ -109,25 +118,27 @@ const AgentsPage: FC = () => {
 
     return groups.map((group, i) => {
       const id = String(i + 1)
+      const localizedGroupName = getLocalizedGroupName(group)
+
       return {
-        label: group,
+        label: localizedGroupName,
         key: id,
         children: (
           <TabContent key={group}>
             <Title level={5} key={group} style={{ marginBottom: 16 }}>
-              {group}
+              {localizedGroupName}
             </Title>
-            <Row gutter={[32, 32]}>
+            <Row gutter={[25, 25]}>
               {group === '我的' ? (
                 <>
-                  <Col span={8}>
+                  <Col span={8} xxl={6}>
                     <AddAgentCard onClick={() => AddAgentPopup.show()} />
                   </Col>
                   <Agents onClick={onAddAgentConfirm} cardStyle="new" />
                 </>
               ) : (
                 filteredAgentGroups[group]?.map((agent, index) => (
-                  <Col span={8} key={group + index}>
+                  <Col span={8} xxl={6} key={group + index}>
                     <AgentCard onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))} agent={agent as any} />
                   </Col>
                 ))
@@ -137,7 +148,7 @@ const AgentsPage: FC = () => {
         )
       }
     })
-  }, [filteredAgentGroups, onAddAgentConfirm])
+  }, [filteredAgentGroups, getLocalizedGroupName, onAddAgentConfirm])
 
   return (
     <StyledContainer>
@@ -187,6 +198,7 @@ const ContentContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   height: 100%;
+  padding: 0 10px;
 `
 
 const AssistantsContainer = styled.div`
@@ -200,6 +212,7 @@ const TabContent = styled(Scrollbar)`
   height: calc(100vh - var(--navbar-height));
   padding: 10px 10px 10px 15px;
   margin-right: 4px;
+  overflow-x: hidden;
 `
 
 const AgentPrompt = styled.div`
@@ -215,7 +228,6 @@ const EmptyView = styled.div`
   align-items: center;
   font-size: 16px;
   color: var(--color-text-secondary);
-  border-left: 0.5px solid var(--color-border);
 `
 
 const Tabs = styled(TabsAntd)`
@@ -247,7 +259,7 @@ const Tabs = styled(TabsAntd)`
     border-right: none;
   }
   .ant-tabs-content-holder {
-    border-left: 0.5px solid var(--color-border);
+    border-left: none;
     border-right: 0.5px solid var(--color-border);
   }
   .ant-tabs-ink-bar {

@@ -1,48 +1,56 @@
-import { forwardRef } from 'react'
+import { throttle } from 'lodash'
+import { FC, forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-interface Props {
-  children?: React.ReactNode
-  className?: string
-  $isScrolling?: boolean
-  $right?: boolean
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  right?: boolean
+  ref?: any
 }
 
-const ScrollbarContainer = styled.div<{ $isScrolling?: boolean; $right?: boolean }>`
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
+const Scrollbar: FC<Props> = forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const [isScrolling, setIsScrolling] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
+  const handleScroll = useCallback(
+    throttle(() => {
+      setIsScrolling(true)
 
-  &::-webkit-scrollbar-track {
-    border-radius: 3px;
-    background: transparent;
-    ${({ $right }) => $right && `margin-right: 4px;`}
-  }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: ${({ $isScrolling }) =>
-      $isScrolling ? 'var(--color-scrollbar-thumb)' : 'var(--color-scrollbar-track)'};
-    transition: all 0.2s ease-in-out;
-  }
+      timeoutRef.current = setTimeout(() => setIsScrolling(false), 1500) // 增加到 2 秒
+    }, 200),
+    []
+  )
 
-  &:hover::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-thumb);
-  }
-`
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
-const Scrollbar = forwardRef<HTMLDivElement, Props>(({ children, className, $isScrolling, $right }, ref) => {
   return (
-    <ScrollbarContainer ref={ref} className={className} $isScrolling={$isScrolling} $right={$right}>
-      {children}
-    </ScrollbarContainer>
+    <Container {...props} isScrolling={isScrolling} onScroll={handleScroll} ref={ref}>
+      {props.children}
+    </Container>
   )
 })
+
+const Container = styled.div<{ isScrolling: boolean; right?: boolean }>`
+  overflow-y: auto;
+  &::-webkit-scrollbar-thumb {
+    transition: background 2s ease;
+    background: ${(props) =>
+      props.isScrolling ? `var(--color-scrollbar-thumb${props.right ? '-right' : ''})` : 'transparent'};
+    &:hover {
+      background: ${(props) =>
+        props.isScrolling ? `var(--color-scrollbar-thumb${props.right ? '-right' : ''}-hover)` : 'transparent'};
+    }
+  }
+`
 
 Scrollbar.displayName = 'Scrollbar'
 

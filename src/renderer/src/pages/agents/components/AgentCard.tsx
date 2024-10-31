@@ -1,5 +1,6 @@
 import { EllipsisOutlined } from '@ant-design/icons'
 import { Agent } from '@renderer/types'
+import { getLeadingEmoji } from '@renderer/utils'
 import { Dropdown } from 'antd'
 import styled from 'styled-components'
 
@@ -171,10 +172,11 @@ const MenuContainer = styled.div`
 `
 
 const AgentCard: React.FC<Props> = ({ agent, onClick, contextMenu, menuItems }) => {
+  const emoji = agent.emoji || getLeadingEmoji(agent.name)
   const content = (
     <Container onClick={onClick}>
       {agent.emoji && <BannerBackground className="banner-background">{agent.emoji}</BannerBackground>}
-      <EmojiContainer className="emoji-container">{agent.emoji}</EmojiContainer>
+      <EmojiContainer className="emoji-container">{emoji}</EmojiContainer>
       {menuItems && (
         <MenuContainer onClick={(e) => e.stopPropagation()}>
           <Dropdown
@@ -198,7 +200,7 @@ const AgentCard: React.FC<Props> = ({ agent, onClick, contextMenu, menuItems }) 
       )}
       <CardInfo className="card-info">
         <AgentName>{agent.name}</AgentName>
-        <AgentPrompt className="agent-prompt">{(agent.description || agent.prompt).substring(0, 50)}...</AgentPrompt>
+        <AgentPrompt className="agent-prompt">{(agent.description || agent.prompt).substring(0, 100)}...</AgentPrompt>
       </CardInfo>
     </Container>
   )

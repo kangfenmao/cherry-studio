@@ -75,7 +75,7 @@ const Agents: React.FC<Props> = ({ onClick, cardStyle = 'old' }) => {
           ]
 
           return (
-            <Col span={8} key={agent.id}>
+            <Col span={8} xxl={6} key={agent.id}>
               <AgentCard
                 agent={agent}
                 onClick={() => onClick?.(agent)}

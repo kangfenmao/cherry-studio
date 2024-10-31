@@ -153,6 +153,7 @@ const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 0.5px solid var(--color-border);
 
   .ant-image {
     height: 100%;
