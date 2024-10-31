@@ -373,7 +373,9 @@
     },
     "error": {
       "chat.response": "Something went wrong. Please check if you have set your API key in the Settings > Providers",
-      "backup.file_format": "Backup file format error"
+      "backup.file_format": "Backup file format error",
+      "provider_disabled": "Model provider is not enabled",
+      "no_api_key": "API key is not configured"
     },
     "words": {
       "knowledgeGraph": "Knowledge Graph",

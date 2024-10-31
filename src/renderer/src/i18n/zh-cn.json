@@ -373,7 +373,9 @@
     },
     "error": {
       "chat.response": "出错了，如果没有配置 API 密钥，请前往设置 > 模型提供商中配置密钥",
-      "backup.file_format": "备份文件格式错误"
+      "backup.file_format": "备份文件格式错误",
+      "provider_disabled": "模型提供商未启用",
+      "no_api_key": "API 密钥未配置"
     },
     "words": {
       "knowledgeGraph": "知识图谱",

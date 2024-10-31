@@ -11,7 +11,7 @@ import Scrollbar from '@renderer/components/Scrollbar'
 import { TEXT_TO_IMAGES_MODELS } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { usePaintings } from '@renderer/hooks/usePaintings'
-import { useProviders } from '@renderer/hooks/useProvider'
+import { useAllProviders } from '@renderer/hooks/useProvider'
 import AiProvider from '@renderer/providers/AiProvider'
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import FileManager from '@renderer/services/FileManager'
@@ -69,7 +69,7 @@ const PaintingsPage: FC = () => {
   const { paintings, addPainting, removePainting, updatePainting } = usePaintings()
   const [painting, setPainting] = useState<Painting>(_painting || paintings[0])
   const { theme } = useTheme()
-  const { providers } = useProviders()
+  const providers = useAllProviders()
   const siliconProvider = providers.find((p) => p.id === 'silicon')!
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
@@ -118,8 +118,19 @@ const PaintingsPage: FC = () => {
     const model = TEXT_TO_IMAGES_MODELS.find((m) => m.id === painting.model)
     const provider = getProviderByModel(model)
 
+    if (!provider.enabled) {
+      window.modal.error({
+        content: t('error.provider_disabled'),
+        centered: true
+      })
+      return
+    }
+
     if (!provider.apiKey) {
-      window.message.error(t('error.no_api_key'))
+      window.modal.error({
+        content: t('error.no_api_key'),
+        centered: true
+      })
       return
     }
 
@@ -160,7 +171,10 @@ const PaintingsPage: FC = () => {
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.name !== 'AbortError') {
-        window.message.error(getErrorMessage(error))
+        window.modal.error({
+          content: getErrorMessage(error),
+          centered: true
+        })
       }
     } finally {
       setIsLoading(false)
