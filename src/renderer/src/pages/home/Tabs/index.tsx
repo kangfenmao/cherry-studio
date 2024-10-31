@@ -150,6 +150,7 @@ const Container = styled.div`
   max-width: var(--assistants-width);
   min-width: var(--assistants-width);
   height: calc(100vh - var(--navbar-height));
+  background-color: var(--color-background);
   overflow: hidden;
   .collapsed {
     width: 0;
