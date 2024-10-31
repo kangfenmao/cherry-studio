@@ -8,6 +8,7 @@ import ImageSize16_9 from '@renderer/assets/images/paintings/image-size-16-9.svg
 import { Navbar, NavbarCenter, NavbarRight } from '@renderer/components/app/Navbar'
 import { VStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
+import TranslateButton from '@renderer/components/TranslateButton'
 import { TEXT_TO_IMAGES_MODELS } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { usePaintings } from '@renderer/hooks/usePaintings'
@@ -386,6 +387,12 @@ const PaintingsPage: FC = () => {
             />
             <Toolbar>
               <ToolbarMenu>
+                <TranslateButton
+                  text={textareaRef.current?.resizableTextArea?.textArea?.value}
+                  onTranslated={(translatedText) => updatePaintingState({ prompt: translatedText })}
+                  disabled={isLoading}
+                  style={{ marginRight: 6 }}
+                />
                 <SendMessageButton sendMessage={onGenerate} disabled={isLoading} />
               </ToolbarMenu>
             </Toolbar>

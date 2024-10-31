@@ -5,7 +5,7 @@ import { isLocalAi } from '@renderer/config/env'
 import db from '@renderer/databases'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { fetchTranslate } from '@renderer/services/ApiService'
-import { getDefaultAssistant } from '@renderer/services/AssistantService'
+import { getDefaultTranslateAssistant } from '@renderer/services/AssistantService'
 import { Assistant, Message } from '@renderer/types'
 import { runAsyncFunction, uuid } from '@renderer/utils'
 import { Button, Select, Space } from 'antd'
@@ -104,9 +104,7 @@ const TranslatePage: FC = () => {
       return
     }
 
-    const assistant: Assistant = getDefaultAssistant()
-    assistant.model = translateModel
-    assistant.prompt = `Translate from input language to ${targetLanguage}, provide the translation result directly without any explanation, keep original format. If the target language is the same as the source language, do not translate. The text to be translated is as follows:\n\n ${text}`
+    const assistant: Assistant = getDefaultTranslateAssistant(targetLanguage, text)
 
     const message: Message = {
       id: uuid(),
