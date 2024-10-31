@@ -9,6 +9,7 @@ import { Navbar, NavbarCenter, NavbarRight } from '@renderer/components/app/Navb
 import { VStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
 import TranslateButton from '@renderer/components/TranslateButton'
+import { isMac } from '@renderer/config/constant'
 import { TEXT_TO_IMAGES_MODELS } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { usePaintings } from '@renderer/hooks/usePaintings'
@@ -252,11 +253,13 @@ const PaintingsPage: FC = () => {
     <Container>
       <Navbar>
         <NavbarCenter style={{ borderRight: 'none' }}>{t('images.title')}</NavbarCenter>
-        <NavbarRight style={{ justifyContent: 'flex-end' }}>
-          <Button size="small" className="nodrag" icon={<PlusOutlined />} onClick={() => setPainting(addPainting())}>
-            {t('images.button.new.image')}
-          </Button>
-        </NavbarRight>
+        {isMac && (
+          <NavbarRight style={{ justifyContent: 'flex-end' }}>
+            <Button size="small" className="nodrag" icon={<PlusOutlined />} onClick={() => setPainting(addPainting())}>
+              {t('images.button.new.image')}
+            </Button>
+          </NavbarRight>
+        )}
       </Navbar>
       <ContentContainer id="content-container">
         <LeftContainer>
@@ -391,6 +394,7 @@ const PaintingsPage: FC = () => {
           selectedPainting={painting}
           onSelectPainting={onSelectPainting}
           onDeletePainting={onDeletePainting}
+          onNewPainting={() => setPainting(addPainting())}
         />
       </ContentContainer>
     </Container>

@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
 import { usePaintings } from '@renderer/hooks/usePaintings'
 import FileManager from '@renderer/services/FileManager'
@@ -14,15 +14,22 @@ interface PaintingsListProps {
   selectedPainting: Painting
   onSelectPainting: (painting: Painting) => void
   onDeletePainting: (painting: Painting) => void
+  onNewPainting: () => void
 }
 
-const PaintingsList: FC<PaintingsListProps> = ({ paintings, selectedPainting, onSelectPainting, onDeletePainting }) => {
+const PaintingsList: FC<PaintingsListProps> = ({
+  paintings,
+  selectedPainting,
+  onSelectPainting,
+  onDeletePainting,
+  onNewPainting
+}) => {
   const { t } = useTranslation()
   const [dragging, setDragging] = useState(false)
   const { updatePaintings } = usePaintings()
 
   return (
-    <Container style={{ paddingBottom: dragging ? 30 : 0 }}>
+    <Container style={{ paddingBottom: dragging ? 80 : 0 }}>
       <DragableList
         list={paintings}
         onUpdate={updatePaintings}
@@ -47,6 +54,11 @@ const PaintingsList: FC<PaintingsListProps> = ({ paintings, selectedPainting, on
           </CanvasWrapper>
         )}
       </DragableList>
+      {!dragging && (
+        <NewPaintingButton onClick={onNewPainting}>
+          <PlusOutlined />
+        </NewPaintingButton>
+      )}
     </Container>
   )
 }
@@ -114,6 +126,26 @@ const DeleteButton = styled.div.attrs({ className: 'delete-button' })`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+const NewPaintingButton = styled.div`
+  width: 80px;
+  height: 80px;
+  margin-top: -10px;
+  background-color: var(--color-background-soft);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 1px dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-2);
+
+  &:hover {
+    background-color: var(--color-background-mute);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
 `
 
 export default PaintingsList
