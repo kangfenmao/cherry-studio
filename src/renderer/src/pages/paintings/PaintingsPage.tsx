@@ -13,10 +13,13 @@ import { TEXT_TO_IMAGES_MODELS } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { usePaintings } from '@renderer/hooks/usePaintings'
 import { useAllProviders } from '@renderer/hooks/useProvider'
+import { useRuntime } from '@renderer/hooks/useRuntime'
 import AiProvider from '@renderer/providers/AiProvider'
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import FileManager from '@renderer/services/FileManager'
+import { useAppDispatch } from '@renderer/store'
 import { DEFAULT_PAINTING } from '@renderer/store/paintings'
+import { setGenerating } from '@renderer/store/runtime'
 import { FileType, Painting } from '@renderer/types'
 import { getErrorMessage } from '@renderer/utils'
 import { Button, Input, InputNumber, Radio, Select, Slider, Tooltip } from 'antd'
@@ -76,6 +79,8 @@ const PaintingsPage: FC = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
+  const dispatch = useAppDispatch()
+  const { generating } = useRuntime()
 
   const modelOptions = TEXT_TO_IMAGES_MODELS.map((model) => ({
     label: model.name,
@@ -138,6 +143,7 @@ const PaintingsPage: FC = () => {
     const controller = new AbortController()
     setAbortController(controller)
     setIsLoading(true)
+    dispatch(setGenerating(true))
     const AI = new AiProvider(provider)
 
     try {
@@ -179,6 +185,7 @@ const PaintingsPage: FC = () => {
       }
     } finally {
       setIsLoading(false)
+      dispatch(setGenerating(false))
       setAbortController(null)
     }
   }
@@ -219,6 +226,7 @@ const PaintingsPage: FC = () => {
   }
 
   const onSelectPainting = (newPainting: Painting) => {
+    if (generating) return
     setPainting(newPainting)
     setCurrentImageIndex(0)
   }
