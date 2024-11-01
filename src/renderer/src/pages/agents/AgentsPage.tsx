@@ -1,4 +1,4 @@
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import Scrollbar from '@renderer/components/Scrollbar'
 import SystemAgents from '@renderer/config/agents.json'
@@ -14,6 +14,7 @@ import styled from 'styled-components'
 
 import { groupTranslations } from './agentGroupTranslations'
 import Agents from './Agents'
+import AddAgentCard from './components/AddAgentCard'
 import AddAgentPopup from './components/AddAgentPopup'
 import AgentCard from './components/AgentCard'
 
@@ -128,17 +129,17 @@ const AgentsPage: FC = () => {
             <Title level={5} key={group} style={{ marginBottom: 16 }}>
               {localizedGroupName}
             </Title>
-            <Row gutter={[25, 25]}>
+            <Row gutter={[20, 20]}>
               {group === '我的' ? (
                 <>
-                  <Col span={8} xxl={6}>
+                  <Col span={6}>
                     <AddAgentCard onClick={() => AddAgentPopup.show()} />
                   </Col>
-                  <Agents onClick={onAddAgentConfirm} cardStyle="new" />
+                  <Agents onClick={onAddAgentConfirm} />
                 </>
               ) : (
                 filteredAgentGroups[group]?.map((agent, index) => (
-                  <Col span={8} xxl={6} key={group + index}>
+                  <Col span={6} key={group + index}>
                     <AgentCard onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))} agent={agent as any} />
                   </Col>
                 ))
@@ -151,7 +152,7 @@ const AgentsPage: FC = () => {
   }, [filteredAgentGroups, getLocalizedGroupName, onAddAgentConfirm])
 
   return (
-    <StyledContainer>
+    <Container>
       <Navbar>
         <NavbarCenter style={{ borderRight: 'none', justifyContent: 'space-between' }}>
           {t('agents.title')}
@@ -173,7 +174,7 @@ const AgentsPage: FC = () => {
       <ContentContainer id="content-container">
         <AssistantsContainer>
           {tabItems.length > 0 ? (
-            <Tabs tabPosition="left" animated items={tabItems} />
+            <Tabs tabPosition="right" animated items={tabItems} />
           ) : (
             <EmptyView>
               <Empty description={t('agents.search.no_results')} />
@@ -181,11 +182,11 @@ const AgentsPage: FC = () => {
           )}
         </AssistantsContainer>
       </ContentContainer>
-    </StyledContainer>
+    </Container>
   )
 }
 
-const StyledContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -199,6 +200,7 @@ const ContentContainer = styled.div`
   justify-content: center;
   height: 100%;
   padding: 0 10px;
+  padding-left: 0;
 `
 
 const AssistantsContainer = styled.div`
@@ -211,7 +213,7 @@ const AssistantsContainer = styled.div`
 const TabContent = styled(Scrollbar)`
   height: calc(100vh - var(--navbar-height));
   padding: 10px 10px 10px 15px;
-  margin-right: 4px;
+  margin-right: -4px;
   overflow-x: hidden;
 `
 
@@ -235,7 +237,11 @@ const Tabs = styled(TabsAntd)`
   flex: 1;
   flex-direction: row-reverse;
   .ant-tabs-tabpane {
-    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .ant-tabs-nav {
+    min-width: 120px;
+    max-width: 120px;
   }
   .ant-tabs-nav-list {
     padding: 10px 8px;
@@ -259,8 +265,8 @@ const Tabs = styled(TabsAntd)`
     border-right: none;
   }
   .ant-tabs-content-holder {
-    border-left: none;
-    border-right: 0.5px solid var(--color-border);
+    border-left: 0.5px solid var(--color-border);
+    border-right: none;
   }
   .ant-tabs-ink-bar {
     display: none;
@@ -272,35 +278,6 @@ const Tabs = styled(TabsAntd)`
     .ant-tabs-tab-btn {
       color: var(--color-text) !important;
     }
-  }
-`
-
-const AddAgentCard = styled(({ onClick, className }: { onClick: () => void; className?: string }) => {
-  const { t } = useTranslation()
-
-  return (
-    <div className={className} onClick={onClick}>
-      <PlusOutlined style={{ fontSize: 24 }} />
-      <span style={{ marginTop: 10 }}>{t('agents.add.title')}</span>
-    </div>
-  )
-})`
-  width: 100%;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-background);
-  border-radius: 15px;
-  border: 1px dashed var(--color-border);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: var(--color-text-soft);
-
-  &:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
   }
 `
 

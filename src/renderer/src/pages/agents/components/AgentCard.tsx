@@ -17,9 +17,63 @@ interface Props {
   }[]
 }
 
+const AgentCard: React.FC<Props> = ({ agent, onClick, contextMenu, menuItems }) => {
+  const emoji = agent.emoji || getLeadingEmoji(agent.name)
+  const prompt = (agent.description || agent.prompt).substring(0, 100).replace(/\\n/g, '')
+  const content = (
+    <Container onClick={onClick}>
+      {agent.emoji && <BannerBackground className="banner-background">{agent.emoji}</BannerBackground>}
+      <EmojiContainer className="emoji-container">{emoji}</EmojiContainer>
+      {menuItems && (
+        <MenuContainer onClick={(e) => e.stopPropagation()}>
+          <Dropdown
+            menu={{
+              items: menuItems.map((item) => ({
+                ...item,
+                onClick: (e) => {
+                  e.domEvent.stopPropagation()
+                  e.domEvent.preventDefault()
+                  setTimeout(() => {
+                    item.onClick()
+                  }, 0)
+                }
+              }))
+            }}
+            trigger={['click']}
+            placement="bottomRight">
+            <EllipsisOutlined style={{ cursor: 'pointer' }} />
+          </Dropdown>
+        </MenuContainer>
+      )}
+      <CardInfo className="card-info">
+        <AgentName>{agent.name}</AgentName>
+        <AgentPrompt className="agent-prompt">{prompt}...</AgentPrompt>
+      </CardInfo>
+    </Container>
+  )
+
+  if (contextMenu) {
+    return (
+      <Dropdown
+        menu={{
+          items: contextMenu.map((item) => ({
+            key: item.label,
+            label: item.label,
+            onClick: () => item.onClick()
+          }))
+        }}
+        trigger={['contextMenu']}>
+        {content}
+      </Dropdown>
+    )
+  }
+
+  return content
+}
+
 const Container = styled.div`
   width: 100%;
-  height: 220px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,7 +90,7 @@ const Container = styled.div`
   &::before {
     content: '';
     width: 100%;
-    height: 80px;
+    height: 70px;
     position: absolute;
     top: 0;
     left: 0;
@@ -51,41 +105,21 @@ const Container = styled.div`
     z-index: 1;
   }
 
-  &:hover::before {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-  }
-
-  &:hover .card-info {
-    transform: translateY(-15px);
-    padding: 0 20px;
-
-    .agent-prompt {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  &:hover .emoji-container {
-    transform: scale(0.6);
-    margin-top: 5px;
-  }
-
-  &:hover .banner-background {
-    height: 100%;
+  .agent-prompt {
+    opacity: 1;
+    transform: translateY(0);
   }
 `
 
 const EmojiContainer = styled.div`
-  width: 70px;
-  height: 70px;
-  min-width: 70px;
-  min-height: 70px;
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  min-height: 60px;
   background-color: var(--color-background);
   border-radius: 50%;
   border: 4px solid var(--color-border);
-  margin-top: 20px;
+  margin-top: 5px;
   transition: all 0.5s ease;
   display: flex;
   align-items: center;
@@ -126,7 +160,7 @@ const AgentPrompt = styled.p`
   transition: all 0.5s ease;
   margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.4;
@@ -137,7 +171,7 @@ const BannerBackground = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,58 +204,5 @@ const MenuContainer = styled.div`
     opacity: 1;
   }
 `
-
-const AgentCard: React.FC<Props> = ({ agent, onClick, contextMenu, menuItems }) => {
-  const emoji = agent.emoji || getLeadingEmoji(agent.name)
-  const content = (
-    <Container onClick={onClick}>
-      {agent.emoji && <BannerBackground className="banner-background">{agent.emoji}</BannerBackground>}
-      <EmojiContainer className="emoji-container">{emoji}</EmojiContainer>
-      {menuItems && (
-        <MenuContainer onClick={(e) => e.stopPropagation()}>
-          <Dropdown
-            menu={{
-              items: menuItems.map((item) => ({
-                ...item,
-                onClick: (e) => {
-                  e.domEvent.stopPropagation()
-                  e.domEvent.preventDefault()
-                  setTimeout(() => {
-                    item.onClick()
-                  }, 0)
-                }
-              }))
-            }}
-            trigger={['click']}
-            placement="bottomRight">
-            <EllipsisOutlined style={{ cursor: 'pointer' }} />
-          </Dropdown>
-        </MenuContainer>
-      )}
-      <CardInfo className="card-info">
-        <AgentName>{agent.name}</AgentName>
-        <AgentPrompt className="agent-prompt">{(agent.description || agent.prompt).substring(0, 100)}...</AgentPrompt>
-      </CardInfo>
-    </Container>
-  )
-
-  if (contextMenu) {
-    return (
-      <Dropdown
-        menu={{
-          items: contextMenu.map((item) => ({
-            key: item.label,
-            label: item.label,
-            onClick: () => item.onClick()
-          }))
-        }}
-        trigger={['contextMenu']}>
-        {content}
-      </Dropdown>
-    )
-  }
-
-  return content
-}
 
 export default AgentCard

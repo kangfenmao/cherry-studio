@@ -1,26 +1,22 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
-import DragableList from '@renderer/components/DragableList'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { createAssistantFromAgent } from '@renderer/services/AssistantService'
 import { Agent } from '@renderer/types'
-import { Button, Col, Typography } from 'antd'
-import { useCallback, useState } from 'react'
+import { Col } from 'antd'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import AddAgentPopup from './components/AddAgentPopup'
 import AgentCard from './components/AgentCard'
 
 interface Props {
   onClick?: (agent: Agent) => void
-  cardStyle?: 'new' | 'old'
 }
 
-const Agents: React.FC<Props> = ({ onClick, cardStyle = 'old' }) => {
+const Agents: React.FC<Props> = ({ onClick }) => {
   const { t } = useTranslation()
-  const { agents, removeAgent, updateAgents } = useAgents()
-  const [dragging, setDragging] = useState(false)
+  const { agents, removeAgent } = useAgents()
 
   const handleDelete = useCallback(
     (agent: Agent) => {
@@ -33,135 +29,58 @@ const Agents: React.FC<Props> = ({ onClick, cardStyle = 'old' }) => {
     [removeAgent, t]
   )
 
-  if (cardStyle === 'new') {
-    return (
-      <>
-        {agents.map((agent) => {
-          const dropdownMenuItems = [
-            {
-              key: 'edit',
-              label: t('agents.edit.title'),
-              icon: <EditOutlined />,
-              onClick: () => AssistantSettingsPopup.show({ assistant: agent })
-            },
-            {
-              key: 'create',
-              label: t('agents.add.button'),
-              icon: <PlusOutlined />,
-              onClick: () => createAssistantFromAgent(agent)
-            },
-            {
-              key: 'delete',
-              label: t('common.delete'),
-              icon: <DeleteOutlined />,
-              danger: true,
-              onClick: () => handleDelete(agent)
-            }
-          ]
-
-          const contextMenuItems = [
-            {
-              label: t('agents.edit.title'),
-              onClick: () => AssistantSettingsPopup.show({ assistant: agent })
-            },
-            {
-              label: t('agents.add.button'),
-              onClick: () => createAssistantFromAgent(agent)
-            },
-            {
-              label: t('common.delete'),
-              onClick: () => handleDelete(agent)
-            }
-          ]
-
-          return (
-            <Col span={8} xxl={6} key={agent.id}>
-              <AgentCard
-                agent={agent}
-                onClick={() => onClick?.(agent)}
-                contextMenu={contextMenuItems}
-                menuItems={dropdownMenuItems}
-              />
-            </Col>
-          )
-        })}
-      </>
-    )
-  }
-
   return (
-    <Container>
-      <div style={{ paddingBottom: dragging ? 30 : 0 }}>
-        <Typography.Title level={5} style={{ marginBottom: 16 }}>
-          {t('agents.my_agents')}
-        </Typography.Title>
-        {agents.length > 0 && (
-          <DragableList
-            list={agents}
-            onUpdate={updateAgents}
-            onDragStart={() => setDragging(true)}
-            onDragEnd={() => setDragging(false)}>
-            {(agent: Agent) => {
-              const dropdownMenuItems = [
-                {
-                  key: 'edit',
-                  label: t('agents.edit.title'),
-                  icon: <EditOutlined />,
-                  onClick: () => AssistantSettingsPopup.show({ assistant: agent })
-                },
-                {
-                  key: 'create',
-                  label: t('agents.add.button'),
-                  icon: <PlusOutlined />,
-                  onClick: () => createAssistantFromAgent(agent)
-                },
-                {
-                  key: 'delete',
-                  label: t('common.delete'),
-                  icon: <DeleteOutlined />,
-                  danger: true,
-                  onClick: () => handleDelete(agent)
-                }
-              ]
+    <>
+      {agents.map((agent) => {
+        const dropdownMenuItems = [
+          {
+            key: 'edit',
+            label: t('agents.edit.title'),
+            icon: <EditOutlined />,
+            onClick: () => AssistantSettingsPopup.show({ assistant: agent })
+          },
+          {
+            key: 'create',
+            label: t('agents.add.button'),
+            icon: <PlusOutlined />,
+            onClick: () => createAssistantFromAgent(agent)
+          },
+          {
+            key: 'delete',
+            label: t('common.delete'),
+            icon: <DeleteOutlined />,
+            danger: true,
+            onClick: () => handleDelete(agent)
+          }
+        ]
 
-              const contextMenuItems = [
-                {
-                  label: t('agents.edit.title'),
-                  onClick: () => AssistantSettingsPopup.show({ assistant: agent })
-                },
-                {
-                  label: t('agents.add.button'),
-                  onClick: () => createAssistantFromAgent(agent)
-                },
-                {
-                  label: t('common.delete'),
-                  onClick: () => handleDelete(agent)
-                }
-              ]
+        const contextMenuItems = [
+          {
+            label: t('agents.edit.title'),
+            onClick: () => AssistantSettingsPopup.show({ assistant: agent })
+          },
+          {
+            label: t('agents.add.button'),
+            onClick: () => createAssistantFromAgent(agent)
+          },
+          {
+            label: t('common.delete'),
+            onClick: () => handleDelete(agent)
+          }
+        ]
 
-              return (
-                <AgentCard
-                  agent={agent}
-                  onClick={() => onClick?.(agent)}
-                  contextMenu={contextMenuItems}
-                  menuItems={dropdownMenuItems}
-                />
-              )
-            }}
-          </DragableList>
-        )}
-        {!dragging && (
-          <Button
-            type="dashed"
-            icon={<PlusOutlined />}
-            onClick={() => AddAgentPopup.show()}
-            style={{ borderRadius: 20, height: 34 }}>
-            {t('agents.add.title')}
-          </Button>
-        )}
-        <div style={{ height: 10 }} />
-      </div>
-    </Container>
+        return (
+          <Col span={6} key={agent.id}>
+            <AgentCard
+              agent={agent}
+              onClick={() => onClick?.(agent)}
+              contextMenu={contextMenuItems}
+              menuItems={dropdownMenuItems}
+            />
+          </Col>
+        )
+      })}
+    </>
   )
 }
 
