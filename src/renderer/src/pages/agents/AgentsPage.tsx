@@ -44,7 +44,7 @@ const AgentsPage: FC = () => {
   const { t, i18n } = useTranslation()
 
   const filteredAgentGroups = useMemo(() => {
-    const groups = search.trim() ? {} : { 我的: [] }
+    const groups = { 我的: [] }
 
     if (!search.trim()) {
       Object.entries(agentGroups).forEach(([group, agents]) => {
@@ -112,8 +112,8 @@ const AgentsPage: FC = () => {
 
   const tabItems = useMemo(() => {
     let groups = Object.keys(filteredAgentGroups)
-    groups = groups.filter((g) => g !== '我的' && g !== '办公')
-    groups = ['我的', '办公', ...groups]
+
+    groups = groups.includes('办公') ? [groups[0], '办公', ...groups.slice(1)] : groups
 
     return groups.map((group, i) => {
       const id = String(i + 1)
