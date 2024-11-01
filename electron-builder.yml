@@ -63,7 +63,7 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    全新的智能体界面 by @cawabj
-    新增绘图模块
-    文件管理界面优化
-    修复可以同时启动多个应用问题
+    全新的对话气泡界面 by @teojs
+    将主题切换按钮移到左下角菜单栏中 by @teojs
+    智能体界面使用更加紧凑布局
+    会话面板默认移动到左侧
