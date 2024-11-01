@@ -1,3 +1,4 @@
+import { SearchOutlined } from '@ant-design/icons'
 import { VStack } from '@renderer/components/Layout'
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import useScrollPosition from '@renderer/hooks/useScrollPosition'
@@ -35,7 +36,7 @@ const TopicsHistory: React.FC<Props> = ({ keywords, onClick, onSearch, ...props 
       <ListContainer {...props}>
         <VStack alignItems="center">
           <Empty description={t('history.search.topics.empty')} />
-          <Button style={{ width: 200, marginTop: 20 }} type="primary" onClick={onSearch}>
+          <Button style={{ width: 200, marginTop: 20 }} type="primary" onClick={onSearch} icon={<SearchOutlined />}>
             {t('history.search.messages')}
           </Button>
         </VStack>
@@ -63,6 +64,13 @@ const TopicsHistory: React.FC<Props> = ({ keywords, onClick, onSearch, ...props 
             ))}
           </ListItem>
         ))}
+        {keywords.length >= 2 && (
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <Button style={{ width: 200, marginTop: 20 }} type="primary" onClick={onSearch} icon={<SearchOutlined />}>
+              {t('history.search.messages')}
+            </Button>
+          </div>
+        )}
         <div style={{ minHeight: 30 }}></div>
       </ContainerWrapper>
     </ListContainer>

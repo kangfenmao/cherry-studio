@@ -153,7 +153,7 @@ const AgentName = styled.span`
 
 const AgentPrompt = styled.p`
   color: var(--color-text-soft);
-  font-size: 14px;
+  font-size: 12px;
   max-width: 100%;
   opacity: 0;
   transform: translateY(20px);

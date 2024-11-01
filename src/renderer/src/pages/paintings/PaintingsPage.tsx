@@ -382,7 +382,7 @@ const PaintingsPage: FC = () => {
                   text={textareaRef.current?.resizableTextArea?.textArea?.value}
                   onTranslated={handleTranslation}
                   disabled={isLoading}
-                  style={{ marginRight: 6 }}
+                  style={{ marginRight: 6, borderRadius: '50%' }}
                 />
                 <SendMessageButton sendMessage={onGenerate} disabled={isLoading} />
               </ToolbarMenu>
@@ -439,13 +439,11 @@ const MainContainer = styled.div`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100px;
-  max-height: 100px;
+  min-height: 95px;
+  max-height: 95px;
   position: relative;
-  border: 1px solid var(--color-border-soft);
+  border-top: 1px solid var(--color-border-soft);
   transition: all 0.3s ease;
-  margin: 0 20px 15px 20px;
-  border-radius: 10px;
 `
 
 const Textarea = styled(TextArea)`
@@ -466,7 +464,7 @@ const Toolbar = styled.div`
   justify-content: flex-end;
   padding: 0 8px;
   padding-bottom: 0;
-  height: 36px;
+  height: 40px;
 `
 
 const ToolbarMenu = styled.div`

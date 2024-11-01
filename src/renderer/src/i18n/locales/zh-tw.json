@@ -154,7 +154,7 @@
       "guidance_scale_tip": "無分類器指導。控制模型在尋找相關圖像時對提示詞的遵循程度",
       "negative_prompt": "反向提示詞",
       "negative_prompt_tip": "描述你不想在圖片中出現的內容",
-      "prompt_placeholder": "描述你想創建的圖片，例如：'一個寧靜的湖泊，夕陽西下，遠處是群山'",
+      "prompt_placeholder": "描述你想創建的圖片，例如：一個寧靜的湖泊，夕陽西下，遠處是群山",
       "regenerate.confirm": "這將覆蓋已生成的圖片，是否繼續？"
     },
     "files": {

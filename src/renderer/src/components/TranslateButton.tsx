@@ -57,7 +57,7 @@ const TranslateButton: FC<Props> = ({ text, onTranslated, disabled, style }) => 
 
   return (
     <Button
-      icon={<TranslationOutlined />}
+      icon={<TranslationOutlined style={{ fontSize: 14 }} />}
       onClick={handleTranslate}
       disabled={disabled || isTranslating}
       loading={isTranslating}

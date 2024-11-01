@@ -154,7 +154,7 @@
       "guidance_scale_tip": "Classifier Free Guidance. How close you want the model to stick to your prompt when looking for a related image to show you",
       "negative_prompt": "Negative Prompt",
       "negative_prompt_tip": "Describe what you don't want included in the image",
-      "prompt_placeholder": "Describe the image you want to create, e.g. 'A serene lake at sunset with mountains in the background'",
+      "prompt_placeholder": "Describe the image you want to create, e.g. A serene lake at sunset with mountains in the background",
       "regenerate.confirm": "This will replace your existing generated images. Do you want to continue?"
     },
     "files": {
