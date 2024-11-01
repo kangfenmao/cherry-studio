@@ -13,10 +13,8 @@ import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 import { groupTranslations } from './agentGroupTranslations'
-import Agents from './Agents'
-import AddAgentCard from './components/AddAgentCard'
-import AddAgentPopup from './components/AddAgentPopup'
 import AgentCard from './components/AgentCard'
+import MyAgents from './components/MyAgents'
 
 const { Title } = Typography
 
@@ -131,12 +129,7 @@ const AgentsPage: FC = () => {
             </Title>
             <Row gutter={[20, 20]}>
               {group === '我的' ? (
-                <>
-                  <Col span={6}>
-                    <AddAgentCard onClick={() => AddAgentPopup.show()} />
-                  </Col>
-                  <Agents onClick={onAddAgentConfirm} />
-                </>
+                <MyAgents onClick={onAddAgentConfirm} search={search} />
               ) : (
                 filteredAgentGroups[group]?.map((agent, index) => (
                   <Col span={6} key={group + index}>
@@ -149,7 +142,7 @@ const AgentsPage: FC = () => {
         )
       }
     })
-  }, [filteredAgentGroups, getLocalizedGroupName, onAddAgentConfirm])
+  }, [filteredAgentGroups, getLocalizedGroupName, onAddAgentConfirm, search])
 
   return (
     <Container>
@@ -214,6 +207,7 @@ const TabContent = styled(Scrollbar)`
   height: calc(100vh - var(--navbar-height));
   padding: 10px 10px 10px 15px;
   margin-right: -4px;
+  padding-bottom: 20px !important;
   overflow-x: hidden;
 `
 
@@ -240,8 +234,8 @@ const Tabs = styled(TabsAntd)`
     padding-right: 0 !important;
   }
   .ant-tabs-nav {
-    min-width: 120px;
-    max-width: 120px;
+    min-width: 140px;
+    max-width: 140px;
   }
   .ant-tabs-nav-list {
     padding: 10px 8px;
@@ -253,8 +247,9 @@ const Tabs = styled(TabsAntd)`
     margin: 0 !important;
     border-radius: 20px;
     margin-bottom: 5px !important;
-    font-size: 14px;
-    justify-content: center;
+    font-size: 13px;
+    justify-content: left;
+    padding: 7px 12px !important;
     &:hover {
       color: var(--color-text) !important;
       background-color: var(--color-background-soft);

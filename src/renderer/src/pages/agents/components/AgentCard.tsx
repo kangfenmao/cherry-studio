@@ -22,7 +22,7 @@ const AgentCard: React.FC<Props> = ({ agent, onClick, contextMenu, menuItems }) 
   const prompt = (agent.description || agent.prompt).substring(0, 100).replace(/\\n/g, '')
   const content = (
     <Container onClick={onClick}>
-      {agent.emoji && <BannerBackground className="banner-background">{agent.emoji}</BannerBackground>}
+      {emoji && <BannerBackground className="banner-background">{emoji}</BannerBackground>}
       <EmojiContainer className="emoji-container">{emoji}</EmojiContainer>
       {menuItems && (
         <MenuContainer onClick={(e) => e.stopPropagation()}>
@@ -41,7 +41,7 @@ const AgentCard: React.FC<Props> = ({ agent, onClick, contextMenu, menuItems }) 
             }}
             trigger={['click']}
             placement="bottomRight">
-            <EllipsisOutlined style={{ cursor: 'pointer' }} />
+            <EllipsisOutlined style={{ cursor: 'pointer', fontSize: 20 }} />
           </Dropdown>
         </MenuContainer>
       )}
@@ -112,14 +112,14 @@ const Container = styled.div`
 `
 
 const EmojiContainer = styled.div`
-  width: 60px;
-  height: 60px;
-  min-width: 60px;
-  min-height: 60px;
+  width: 55px;
+  height: 55px;
+  min-width: 55px;
+  min-height: 55px;
   background-color: var(--color-background);
   border-radius: 50%;
   border: 4px solid var(--color-border);
-  margin-top: 5px;
+  margin-top: 8px;
   transition: all 0.5s ease;
   display: flex;
   align-items: center;
@@ -131,7 +131,7 @@ const CardInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   transition: all 0.5s ease;
   padding: 0 15px;
   width: 100%;
@@ -177,7 +177,7 @@ const BannerBackground = styled.div`
   align-items: center;
   font-size: 500px;
   opacity: 0.1;
-  filter: blur(10px);
+  filter: blur(8px);
   z-index: 0;
   overflow: hidden;
   transition: all 0.5s ease;

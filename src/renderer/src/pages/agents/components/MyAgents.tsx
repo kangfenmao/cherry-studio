@@ -1,22 +1,35 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined, SortAscendingOutlined } from '@ant-design/icons'
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { createAssistantFromAgent } from '@renderer/services/AssistantService'
 import { Agent } from '@renderer/types'
 import { Col } from 'antd'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-import AgentCard from './components/AgentCard'
+import AddAgentCard from './AddAgentCard'
+import AddAgentPopup from './AddAgentPopup'
+import AgentCard from './AgentCard'
+import ManageAgentsPopup from './ManageAgentsPopup'
 
 interface Props {
   onClick?: (agent: Agent) => void
+  search?: string
 }
 
-const Agents: React.FC<Props> = ({ onClick }) => {
+const MyAgents: React.FC<Props> = ({ onClick, search }) => {
   const { t } = useTranslation()
   const { agents, removeAgent } = useAgents()
+
+  const filteredAgents = useMemo(() => {
+    if (!search?.trim()) return agents
+
+    return agents.filter(
+      (agent) =>
+        agent.name.toLowerCase().includes(search.toLowerCase()) ||
+        agent.description?.toLowerCase().includes(search.toLowerCase())
+    )
+  }, [agents, search])
 
   const handleDelete = useCallback(
     (agent: Agent) => {
@@ -31,7 +44,7 @@ const Agents: React.FC<Props> = ({ onClick }) => {
 
   return (
     <>
-      {agents.map((agent) => {
+      {filteredAgents.map((agent) => {
         const dropdownMenuItems = [
           {
             key: 'edit',
@@ -44,6 +57,12 @@ const Agents: React.FC<Props> = ({ onClick }) => {
             label: t('agents.add.button'),
             icon: <PlusOutlined />,
             onClick: () => createAssistantFromAgent(agent)
+          },
+          {
+            key: 'sort',
+            label: t('agents.sorting.title'),
+            icon: <SortAscendingOutlined />,
+            onClick: () => ManageAgentsPopup.show()
           },
           {
             key: 'delete',
@@ -80,39 +99,11 @@ const Agents: React.FC<Props> = ({ onClick }) => {
           </Col>
         )
       })}
+      <Col span={6}>
+        <AddAgentCard onClick={() => AddAgentPopup.show()} />
+      </Col>
     </>
   )
 }
 
-const Container = styled.div`
-  padding: 10px 15px;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - var(--navbar-height));
-  min-width: var(--assistants-width);
-  max-width: var(--assistants-width);
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 3px;
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: var(--color-scrollbar-thumb);
-    transition: all 0.2s ease-in-out;
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-    background: var(--color-scrollbar-thumb);
-  }
-`
-
-export default Agents
+export default MyAgents

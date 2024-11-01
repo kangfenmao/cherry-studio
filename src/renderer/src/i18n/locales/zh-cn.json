@@ -196,7 +196,8 @@
       "edit.message.empty.content": "会话输入内容不能为空",
       "edit.model.select.title": "选择模型",
       "edit.settings.hide_preset_messages": "隐藏预设消息",
-      "search.no_results": "没有找到相关智能体"
+      "search.no_results": "没有找到相关智能体",
+      "sorting.title": "排序"
     },
     "minapp": {
       "title": "小程序"
