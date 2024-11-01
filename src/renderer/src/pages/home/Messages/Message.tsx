@@ -177,14 +177,12 @@ const MessageContainer = styled.div`
   &.message-highlight {
     background-color: var(--color-primary-mute);
   }
-  // reverse color for user message
   &.message-user {
     .markdown,
     .anticon,
     .iconfont,
     .message-tokens {
-      color: var(--color-text);
-      filter: invert(1);
+      color: var(--chat-text-user);
     }
     .message-action-button:hover {
       background-color: var(--color-white-soft);

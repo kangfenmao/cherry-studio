@@ -56,6 +56,7 @@
   --chat-background: #111111;
   --chat-background-user: #28b561;
   --chat-background-assistant: #2c2c2c;
+  --chat-text-user: var(--color-black);
 }
 
 body[theme-mode='light'] {
@@ -101,6 +102,7 @@ body[theme-mode='light'] {
   --chat-background: #f3f3f3;
   --chat-background-user: #95ec69;
   --chat-background-assistant: #ffffff;
+  --chat-text-user: var(--color-text);
 }
 
 *,
