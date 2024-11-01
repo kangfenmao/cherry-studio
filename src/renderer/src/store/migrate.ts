@@ -614,6 +614,10 @@ const migrateConfig = {
   '35': (state: RootState) => {
     state.settings.mathEngine = 'KaTeX'
     return state
+  },
+  '36': (state: RootState) => {
+    state.settings.topicPosition = 'left'
+    return state
   }
 }
 
