@@ -96,27 +96,27 @@ const MessageMenubar: FC<Props> = (props) => {
     <MenusBar className={`menubar ${isLastMessage && 'show'}`}>
       {message.role === 'user' && (
         <Tooltip title="Edit" mouseEnterDelay={0.8}>
-          <ActionButton onClick={onEdit}>
+          <ActionButton className="message-action-button" onClick={onEdit}>
             <EditOutlined />
           </ActionButton>
         </Tooltip>
       )}
       <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
-        <ActionButton onClick={onCopy}>
+        <ActionButton className="message-action-button" onClick={onCopy}>
           {!copied && <i className="iconfont icon-copy"></i>}
           {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
         </ActionButton>
       </Tooltip>
       {canRegenerate && (
         <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-          <ActionButton onClick={onSelectModel}>
+          <ActionButton className="message-action-button" onClick={onSelectModel}>
             <SyncOutlined />
           </ActionButton>
         </Tooltip>
       )}
       {isAssistantMessage && (
         <Tooltip title={t('chat.message.new.branch')} mouseEnterDelay={0.8}>
-          <ActionButton onClick={onNewBranch}>
+          <ActionButton className="message-action-button" onClick={onNewBranch}>
             <ForkOutlined />
           </ActionButton>
         </Tooltip>
@@ -127,14 +127,14 @@ const MessageMenubar: FC<Props> = (props) => {
         icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
         onConfirm={() => onDeleteMessage?.(message)}>
         <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
-          <ActionButton>
+          <ActionButton className="message-action-button">
             <DeleteOutlined />
           </ActionButton>
         </Tooltip>
       </Popconfirm>
       {!isUserMessage && (
         <Dropdown menu={{ items: dropdownItems }} trigger={['click']} placement="topRight" arrow>
-          <ActionButton>
+          <ActionButton className="message-action-button">
             <MenuOutlined />
           </ActionButton>
         </Dropdown>

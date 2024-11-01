@@ -42,6 +42,8 @@ const MessageContentLoading = styled.div`
   flex-direction: row;
   align-items: center;
   height: 32px;
+  margin-top: -5px;
+  margin-bottom: 5px;
 `
 
 export default React.memo(MessageContent)

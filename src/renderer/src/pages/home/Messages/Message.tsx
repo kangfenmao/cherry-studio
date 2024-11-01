@@ -7,7 +7,7 @@ import { fetchChatCompletion } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { estimateMessageUsage } from '@renderer/services/TokenService'
 import { Message, Topic } from '@renderer/types'
-import { runAsyncFunction } from '@renderer/utils'
+import { classNames, runAsyncFunction } from '@renderer/utils'
 import { Divider } from 'antd'
 import { Dispatch, FC, memo, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -133,11 +133,13 @@ const MessageItem: FC<Props> = ({
   return (
     <MessageContainer
       key={message.id}
-      className="message"
+      className={classNames({
+        message: true,
+        'message-assistant': isAssistantMessage,
+        'message-user': !isAssistantMessage
+      })}
       ref={messageContainerRef}
-      style={{
-        alignItems: isAssistantMessage ? 'start' : 'end'
-      }}>
+      style={{ alignItems: isAssistantMessage ? 'start' : 'end' }}>
       <MessageHeader message={message} assistant={assistant} model={model} />
       <MessageContentContainer
         style={{
@@ -174,6 +176,19 @@ const MessageContainer = styled.div`
   transition: background-color 0.3s ease;
   &.message-highlight {
     background-color: var(--color-primary-mute);
+  }
+  // reverse color for user message
+  &.message-user {
+    .markdown,
+    .anticon,
+    .iconfont,
+    .message-tokens {
+      color: var(--color-text);
+      filter: invert(1);
+    }
+    .message-action-button:hover {
+      background-color: var(--color-white-soft);
+    }
   }
   .menubar {
     opacity: 0;

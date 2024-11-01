@@ -15,7 +15,11 @@ const MessgeTokens: React.FC<{ message: Message; isLastMessage: boolean }> = ({ 
   }
 
   if (message.role === 'user') {
-    return <MessageMetadata onClick={locateMessage}>Tokens: {message?.usage?.total_tokens}</MessageMetadata>
+    return (
+      <MessageMetadata className="message-tokens" onClick={locateMessage}>
+        Tokens: {message?.usage?.total_tokens}
+      </MessageMetadata>
+    )
   }
 
   if (isLastMessage && generating) {
@@ -24,7 +28,7 @@ const MessgeTokens: React.FC<{ message: Message; isLastMessage: boolean }> = ({ 
 
   if (message.role === 'assistant') {
     return (
-      <MessageMetadata onClick={locateMessage}>
+      <MessageMetadata className="message-tokens" onClick={locateMessage}>
         Tokens: {message?.usage?.total_tokens} | ↑{message?.usage?.prompt_tokens} | ↓{message?.usage?.completion_tokens}
       </MessageMetadata>
     )

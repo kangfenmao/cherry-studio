@@ -4,6 +4,8 @@ import html2canvas from 'html2canvas'
 // @ts-ignore next-line`
 import { v4 as uuidv4 } from 'uuid'
 
+import { classNames } from './style'
+
 export const runAsyncFunction = async (fn: () => void) => {
   await fn()
 }
@@ -330,10 +332,6 @@ export function formatFileSize(file: FileType) {
   return (size / 1024).toFixed(2) + ' KB'
 }
 
-export function classNames(...classes: Array<string | boolean | undefined | null>) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export function sortByEnglishFirst(a: string, b: string) {
   const isAEnglish = /^[a-zA-Z]/.test(a)
   const isBEnglish = /^[a-zA-Z]/.test(b)
@@ -341,3 +339,5 @@ export function sortByEnglishFirst(a: string, b: string) {
   if (!isAEnglish && isBEnglish) return 1
   return a.localeCompare(b)
 }
+
+export { classNames }
