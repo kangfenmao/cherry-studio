@@ -2,7 +2,7 @@ import { FONT_FAMILY } from '@renderer/config/constant'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useModel } from '@renderer/hooks/useModel'
-import { useSettings } from '@renderer/hooks/useSettings'
+import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
 import { fetchChatCompletion } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { estimateMessageUsage } from '@renderer/services/TokenService'
@@ -42,11 +42,13 @@ const MessageItem: FC<Props> = ({
   const { t } = useTranslation()
   const { assistant, setModel } = useAssistant(message.assistantId)
   const model = useModel(message.modelId)
+  const { isBubbleStyle } = useMessageStyle()
   const { showMessageDivider, messageFont, fontSize } = useSettings()
   const messageContainerRef = useRef<HTMLDivElement>(null)
 
   const isLastMessage = index === 0
   const isAssistantMessage = message.role === 'assistant'
+
   const showMenubar = !message.status.includes('ing')
 
   const fontFamily = useMemo(() => {
@@ -54,6 +56,11 @@ const MessageItem: FC<Props> = ({
   }, [messageFont])
 
   const messageBorder = showMessageDivider ? undefined : 'none'
+  const messageBackground = isBubbleStyle
+    ? isAssistantMessage
+      ? 'var(--chat-background-assistant)'
+      : 'var(--chat-background-user)'
+    : undefined
 
   const onEditMessage = useCallback(
     (msg: Message) => {
@@ -139,17 +146,19 @@ const MessageItem: FC<Props> = ({
         'message-user': !isAssistantMessage
       })}
       ref={messageContainerRef}
-      style={{ alignItems: isAssistantMessage ? 'start' : 'end' }}>
+      style={isBubbleStyle ? { alignItems: isAssistantMessage ? 'start' : 'end' } : undefined}>
       <MessageHeader message={message} assistant={assistant} model={model} />
       <MessageContentContainer
-        style={{
-          fontFamily,
-          fontSize,
-          background: isAssistantMessage ? 'var(--chat-background-assistant)' : 'var(--chat-background-user)'
-        }}>
+        className="message-content-container"
+        style={{ fontFamily, fontSize, background: messageBackground }}>
         <MessageContent message={message} model={model} />
         {showMenubar && (
-          <MessageFooter style={{ border: messageBorder }}>
+          <MessageFooter
+            style={{
+              border: messageBorder,
+              flexDirection: isLastMessage || isBubbleStyle ? 'row-reverse' : undefined
+            }}>
+            <MessageTokens message={message} isLastMessage={isLastMessage} />
             <MessageMenubar
               message={message}
               model={model}
@@ -160,7 +169,6 @@ const MessageItem: FC<Props> = ({
               onEditMessage={onEditMessage}
               onDeleteMessage={onDeleteMessage}
             />
-            <MessageTokens message={message} isLastMessage={isLastMessage} />
           </MessageFooter>
         )}
       </MessageContentContainer>
@@ -176,17 +184,6 @@ const MessageContainer = styled.div`
   transition: background-color 0.3s ease;
   &.message-highlight {
     background-color: var(--color-primary-mute);
-  }
-  &.message-user {
-    .markdown,
-    .anticon,
-    .iconfont,
-    .message-tokens {
-      color: var(--chat-text-user);
-    }
-    .message-action-button:hover {
-      background-color: var(--color-white-soft);
-    }
   }
   .menubar {
     opacity: 0;
@@ -208,9 +205,8 @@ const MessageContentContainer = styled.div`
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
-  margin: 5px 0;
-  border-radius: 8px;
-  padding: 10px 15px 0 15px;
+  margin-left: 46px;
+  margin-top: 5px;
 `
 
 const MessageFooter = styled.div`

@@ -11,6 +11,7 @@ import {
   setFontSize,
   setMathEngine,
   setMessageFont,
+  setMessageStyle,
   setPasteLongTextAsFile,
   setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
@@ -35,6 +36,7 @@ const SettingsTab: FC<Props> = (props) => {
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const [fontSizeValue, setFontSizeValue] = useState(fontSize)
+  const { messageStyle } = useSettings()
   const { t } = useTranslation()
 
   const dispatch = useAppDispatch()
@@ -212,6 +214,18 @@ const SettingsTab: FC<Props> = (props) => {
           checked={codeShowLineNumbers}
           onChange={(checked) => dispatch(setCodeShowLineNumbers(checked))}
         />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitleSmall>{t('message.message.style')}</SettingRowTitleSmall>
+        <Select
+          value={messageStyle}
+          onChange={(value) => dispatch(setMessageStyle(value))}
+          style={{ width: 100 }}
+          size="small">
+          <Select.Option value="plain">{t('message.message.style.plain')}</Select.Option>
+          <Select.Option value="bubble">{t('message.message.style.bubble')}</Select.Option>
+        </Select>
       </SettingRow>
       <SettingDivider />
       <SettingRow>

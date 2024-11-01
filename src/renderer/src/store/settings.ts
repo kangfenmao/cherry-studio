@@ -24,6 +24,7 @@ export interface SettingsState {
   renderInputMessageAsMarkdown: boolean
   codeShowLineNumbers: boolean
   mathEngine: 'MathJax' | 'KaTeX'
+  messageStyle: 'plain' | 'bubble'
   // webdav 配置 host, user, pass, path
   webdavHost: string
   webdavUser: string
@@ -52,6 +53,7 @@ const initialState: SettingsState = {
   renderInputMessageAsMarkdown: true,
   codeShowLineNumbers: false,
   mathEngine: 'MathJax',
+  messageStyle: 'plain',
   webdavHost: '',
   webdavUser: '',
   webdavPass: '',
@@ -140,6 +142,9 @@ const settingsSlice = createSlice({
     },
     setMathEngine: (state, action: PayloadAction<'MathJax' | 'KaTeX'>) => {
       state.mathEngine = action.payload
+    },
+    setMessageStyle: (state, action: PayloadAction<'plain' | 'bubble'>) => {
+      state.messageStyle = action.payload
     }
   }
 })
@@ -170,7 +175,8 @@ export const {
   setWebdavPass,
   setWebdavPath,
   setCodeShowLineNumbers,
-  setMathEngine
+  setMathEngine,
+  setMessageStyle
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

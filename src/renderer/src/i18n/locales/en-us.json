@@ -64,7 +64,10 @@
       "upgrade.success.content": "Please restart the application to complete the upgrade",
       "upgrade.success.button": "Restart",
       "topic.added": "New topic added",
-      "save.success.title": "Saved successfully"
+      "save.success.title": "Saved successfully",
+      "message.style": "Message Style",
+      "message.style.bubble": "Bubble",
+      "message.style.plain": "Plain"
     },
     "chat": {
       "save": "Save",

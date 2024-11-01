@@ -12,7 +12,7 @@ import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useRuntime } from '@renderer/hooks/useRuntime'
-import { useSettings } from '@renderer/hooks/useSettings'
+import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
 import { useShowTopics } from '@renderer/hooks/useStore'
 import { addAssistantMessagesToTopic, getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
@@ -58,6 +58,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const containerRef = useRef(null)
   const { showTopics, toggleShowTopics } = useShowTopics()
   const { searching } = useRuntime()
+  const { isBubbleStyle } = useMessageStyle()
   const dispatch = useAppDispatch()
 
   const isVision = useMemo(() => isVisionModel(model), [model])
@@ -299,7 +300,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           autoFocus
           contextMenu="true"
           variant="borderless"
-          rows={2}
+          rows={isBubbleStyle ? 2 : 1}
           ref={textareaRef}
           style={{ fontSize }}
           styles={{ textarea: TextareaStyle }}
@@ -375,17 +376,18 @@ const Container = styled.div`
   flex-direction: column;
 `
 
+const InputBarContainer = styled.div`
+  border: 1px solid var(--color-border-soft);
+  transition: all 0.3s ease;
+  position: relative;
+  margin: 0 20px 15px 20px;
+  border-radius: 10px;
+`
+
 const TextareaStyle: CSSProperties = {
   paddingLeft: 0,
   padding: '10px 15px 8px'
 }
-
-const InputBarContainer = styled.div`
-  border-top: 1px solid var(--color-border-mute);
-  transition: all 0.3s ease;
-  position: relative;
-  background: var(--color-background);
-`
 
 const Textarea = styled(TextArea)`
   padding: 0;

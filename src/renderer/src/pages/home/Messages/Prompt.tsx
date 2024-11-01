@@ -18,7 +18,7 @@ const Prompt: FC<Props> = ({ assistant }) => {
   }
 
   return (
-    <Container onClick={() => AssistantSettingsPopup.show({ assistant })}>
+    <Container className="system-prompt" onClick={() => AssistantSettingsPopup.show({ assistant })}>
       <Text>{prompt}</Text>
     </Container>
   )
@@ -26,7 +26,7 @@ const Prompt: FC<Props> = ({ assistant }) => {
 
 const Container = styled.div`
   padding: 10px 20px;
-  background-color: var(--chat-background-assistant);
+  background-color: var(--color-background-soft);
   margin-bottom: 20px;
   margin: 0 20px 0 20px;
   border-radius: 6px;

@@ -618,6 +618,10 @@ const migrateConfig = {
   '36': (state: RootState) => {
     state.settings.topicPosition = 'left'
     return state
+  },
+  '37': (state: RootState) => {
+    state.settings.messageStyle = 'plain'
+    return state
   }
 }
 

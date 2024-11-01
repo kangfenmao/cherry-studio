@@ -28,3 +28,12 @@ export function useSettings() {
     }
   }
 }
+
+export function useMessageStyle() {
+  const { messageStyle } = useSettings()
+  const isBubbleStyle = messageStyle === 'bubble'
+
+  return {
+    isBubbleStyle
+  }
+}

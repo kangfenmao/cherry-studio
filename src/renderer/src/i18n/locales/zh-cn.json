@@ -64,7 +64,10 @@
       "upgrade.success.content": "重启用以完成升级",
       "upgrade.success.button": "重启",
       "topic.added": "话题添加成功",
-      "save.success.title": "保存成功"
+      "save.success.title": "保存成功",
+      "message.style": "消息样式",
+      "message.style.bubble": "气泡",
+      "message.style.plain": "简洁"
     },
     "chat": {
       "save": "保存",

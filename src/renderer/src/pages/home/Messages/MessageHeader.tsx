@@ -4,12 +4,12 @@ import { startMinAppById } from '@renderer/config/minapps'
 import { getModelLogo } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
-import { useSettings } from '@renderer/hooks/useSettings'
+import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
 import { Assistant, Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar } from 'antd'
 import dayjs from 'dayjs'
-import { FC, useCallback, useMemo } from 'react'
+import { CSSProperties, FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -24,8 +24,7 @@ const MessageHeader: FC<Props> = ({ assistant, model, message }) => {
   const { theme } = useTheme()
   const { userName } = useSettings()
   const { t } = useTranslation()
-
-  const isAssistantMessage = message.role === 'assistant'
+  const { isBubbleStyle } = useMessageStyle()
 
   const avatarSource = useMemo(() => {
     if (isLocalAi) return AppLogo
@@ -39,19 +38,23 @@ const MessageHeader: FC<Props> = ({ assistant, model, message }) => {
     return userName || t('common.you')
   }, [message.role, model?.id, model?.name, t, userName])
 
-  const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])
+  const isAssistantMessage = message.role === 'assistant'
 
+  const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])
   const username = useMemo(() => removeLeadingEmoji(getUserName()), [getUserName])
 
   const showMiniApp = () => model?.provider && startMinAppById(model?.provider)
 
+  const avatarStyle: CSSProperties | undefined = isBubbleStyle
+    ? {
+        flexDirection: isAssistantMessage ? 'row' : 'row-reverse',
+        textAlign: isAssistantMessage ? 'left' : 'right'
+      }
+    : undefined
+
   return (
     <Container>
-      <AvatarWrapper
-        style={{
-          flexDirection: isAssistantMessage ? 'row' : 'row-reverse',
-          textAlign: isAssistantMessage ? 'left' : 'right'
-        }}>
+      <AvatarWrapper style={avatarStyle}>
         {isAssistantMessage ? (
           <Avatar
             src={avatarSource}
