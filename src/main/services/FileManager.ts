@@ -301,7 +301,7 @@ class FileManager {
     fileName: string,
     content: string,
     options?: SaveDialogOptions
-  ): Promise<void> => {
+  ): Promise<string | null> => {
     try {
       const result: SaveDialogReturnValue = await dialog.showSaveDialog({
         title: '保存文件',
@@ -312,8 +312,11 @@ class FileManager {
       if (!result.canceled && result.filePath) {
         await writeFileSync(result.filePath, content, { encoding: 'utf-8' })
       }
+
+      return result.filePath
     } catch (err) {
       logger.error('[IPC - Error]', 'An error occurred saving the file:', err)
+      return null
     }
   }
 
@@ -430,6 +433,25 @@ class FileManager {
     }
 
     return mimeToExtension[mimeType] || '.bin'
+  }
+
+  public copyFile = async (_: Electron.IpcMainInvokeEvent, id: string, destPath: string): Promise<void> => {
+    try {
+      const sourcePath = path.join(this.storageDir, id)
+
+      // 确保目标目录存在
+      const destDir = path.dirname(destPath)
+      if (!fs.existsSync(destDir)) {
+        await fs.promises.mkdir(destDir, { recursive: true })
+      }
+
+      // 复制文件
+      await fs.promises.copyFile(sourcePath, destPath)
+      logger.info('[FileManager] File copied successfully:', { from: sourcePath, to: destPath })
+    } catch (error) {
+      logger.error('[FileManager] Copy file failed:', error)
+      throw error
+    }
   }
 }
 

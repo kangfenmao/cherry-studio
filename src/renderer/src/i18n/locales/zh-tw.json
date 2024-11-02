@@ -84,6 +84,7 @@
       "topics.export.title": "匯出",
       "topics.export.image": "匯出為圖片",
       "topics.export.md": "匯出為 Markdown",
+      "topics.export.word": "導出為 Word",
       "input.new_topic": "新話題",
       "input.topics": " 話題 ",
       "input.clear": "清除",
@@ -387,6 +388,16 @@
     "words": {
       "knowledgeGraph": "知識圖譜",
       "visualization": "可視化"
+    },
+    "export": {
+      "attached_files": "附件",
+      "user": "用戶",
+      "assistant": "助手",
+      "created": "創建時間",
+      "last_updated": "最後更新",
+      "messages": "訊息數",
+      "conversation_details": "會話詳情",
+      "conversation_history": "會話歷史"
     }
   }
 }

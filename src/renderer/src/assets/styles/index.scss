@@ -168,6 +168,7 @@ body,
 body[os='mac'] {
   #content-container {
     border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     border-left: 0.5px solid var(--color-border);
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.05);
   }

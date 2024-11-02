@@ -5,17 +5,18 @@ import { BrowserWindow, ipcMain, session, shell } from 'electron'
 import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
 import BackupManager from './services/BackupManager'
+import { ExportService } from './services/ExportService'
 import FileManager from './services/FileManager'
 import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
 
 const fileManager = new FileManager()
 const backupManager = new BackupManager()
+const exportService = new ExportService(fileManager)
 
 export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   const { autoUpdater } = new AppUpdater(mainWindow)
 
-  // IPC
   ipcMain.handle('app:info', () => ({
     version: app.getVersion(),
     isPackaged: app.isPackaged,
@@ -33,13 +34,17 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('reload', () => mainWindow.reload())
 
+  // zip
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
   ipcMain.handle('zip:decompress', (_, text: Buffer) => decompress(text))
+
+  // backup
   ipcMain.handle('backup:backup', backupManager.backup)
   ipcMain.handle('backup:restore', backupManager.restore)
   ipcMain.handle('backup:backupToWebdav', backupManager.backupToWebdav)
   ipcMain.handle('backup:restoreFromWebdav', backupManager.restoreFromWebdav)
 
+  // file
   ipcMain.handle('file:open', fileManager.open)
   ipcMain.handle('file:save', fileManager.save)
   ipcMain.handle('file:select', fileManager.selectFile)
@@ -54,7 +59,9 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('file:saveImage', fileManager.saveImage)
   ipcMain.handle('file:base64Image', fileManager.base64Image)
   ipcMain.handle('file:download', fileManager.downloadFile)
+  ipcMain.handle('file:copy', fileManager.copyFile)
 
+  // minapp
   ipcMain.handle('minapp', (_, args) => {
     createMinappWindow({
       url: args.url,
@@ -66,6 +73,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     })
   })
 
+  // theme
   ipcMain.handle('set-theme', (_, theme: 'light' | 'dark') => {
     appConfig.set('theme', theme)
     mainWindow?.setTitleBarOverlay &&
@@ -79,4 +87,6 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
       update: await autoUpdater.checkForUpdates()
     }
   })
+
+  ipcMain.handle('export:word', exportService.exportToWord)
 }

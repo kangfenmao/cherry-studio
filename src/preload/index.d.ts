@@ -39,10 +39,18 @@ declare global {
         create: (fileName: string) => Promise<string>
         write: (filePath: string, data: Uint8Array | string) => Promise<void>
         open: (options?: OpenDialogOptions) => Promise<{ fileName: string; filePath: string; content: Buffer } | null>
-        save: (path: string, content: string | NodeJS.ArrayBufferView, options?: SaveDialogOptions) => void
+        save: (
+          path: string,
+          content: string | NodeJS.ArrayBufferView,
+          options?: SaveDialogOptions
+        ) => Promise<string | null>
         saveImage: (name: string, data: string) => void
         base64Image: (fileId: string) => Promise<{ mime: string; base64: string; data: string }>
         download: (url: string) => Promise<FileType | null>
+        copy: (fileId: string, destPath: string) => Promise<void>
+      }
+      export: {
+        toWord: (markdown: string, fileName: string) => Promise<void>
       }
     }
   }

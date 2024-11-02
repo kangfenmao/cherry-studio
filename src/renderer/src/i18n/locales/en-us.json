@@ -84,6 +84,7 @@
       "topics.export.title": "Export",
       "topics.export.image": "Export as image",
       "topics.export.md": "Export as markdown",
+      "topics.export.word": "Export as Word",
       "input.new_topic": "New Topic",
       "input.topics": " Topics ",
       "input.clear": "Clear",
@@ -387,6 +388,16 @@
     "words": {
       "knowledgeGraph": "Knowledge Graph",
       "visualization": "Visualization"
+    },
+    "export": {
+      "attached_files": "Attached Files",
+      "user": "User",
+      "assistant": "Assistant",
+      "created": "Created",
+      "last_updated": "Last Updated",
+      "messages": "Messages",
+      "conversation_details": "Conversation Details",
+      "conversation_history": "Conversation History"
     }
   }
 }

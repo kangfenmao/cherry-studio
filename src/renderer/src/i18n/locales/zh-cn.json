@@ -84,6 +84,7 @@
       "topics.export.title": "导出",
       "topics.export.image": "导出为图片",
       "topics.export.md": "导出为 Markdown",
+      "topics.export.word": "导出为 Word",
       "input.new_topic": "新话题",
       "input.topics": " 话题 ",
       "input.clear": "清空消息",
@@ -387,6 +388,16 @@
     "words": {
       "knowledgeGraph": "知识图谱",
       "visualization": "可视化"
+    },
+    "export": {
+      "attached_files": "附件",
+      "user": "用户",
+      "assistant": "助手",
+      "created": "创建时间",
+      "last_updated": "最后更新",
+      "messages": "消息数",
+      "conversation_details": "会话详情",
+      "conversation_history": "会话历史"
     }
   }
 }

@@ -17,7 +17,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import store, { useAppSelector } from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
-import { exportTopicAsMarkdown } from '@renderer/utils/export'
+import { exportTopicAsMarkdown, topicToMarkdown } from '@renderer/utils/export'
 import { Dropdown, MenuProps } from 'antd'
 import dayjs from 'dayjs'
 import { findIndex } from 'lodash'
@@ -141,6 +141,14 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
               label: t('chat.topics.export.md'),
               key: 'markdown',
               onClick: () => exportTopicAsMarkdown(topic)
+            },
+            {
+              label: t('chat.topics.export.word'),
+              key: 'word',
+              onClick: async () => {
+                const markdown = await topicToMarkdown(topic)
+                window.api.export.toWord(markdown, topic.name)
+              }
             }
           ]
         }

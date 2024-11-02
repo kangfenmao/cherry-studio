@@ -36,7 +36,11 @@ const api = {
     selectFolder: () => ipcRenderer.invoke('file:selectFolder'),
     saveImage: (name: string, data: string) => ipcRenderer.invoke('file:saveImage', name, data),
     base64Image: (fileId: string) => ipcRenderer.invoke('file:base64Image', fileId),
-    download: (url: string) => ipcRenderer.invoke('file:download', url)
+    download: (url: string) => ipcRenderer.invoke('file:download', url),
+    copy: (fileId: string, destPath: string) => ipcRenderer.invoke('file:copy', fileId, destPath)
+  },
+  export: {
+    toWord: (markdown: string, fileName: string) => ipcRenderer.invoke('export:word', markdown, fileName)
   }
 }
 
