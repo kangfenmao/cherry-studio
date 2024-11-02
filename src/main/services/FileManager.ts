@@ -1,4 +1,4 @@
-import { documentExts } from '@main/constant'
+import { documentExts, imageExts } from '@main/constant'
 import { getFileType } from '@main/utils/file'
 import { FileType } from '@types'
 import * as crypto from 'crypto'
@@ -17,6 +17,7 @@ import { readFile } from 'fs/promises'
 import officeParser from 'officeparser'
 import * as path from 'path'
 import { chdir } from 'process'
+import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 class FileManager {
@@ -119,6 +120,33 @@ class FileManager {
     return Promise.all(fileMetadataPromises)
   }
 
+  private async compressImage(sourcePath: string, destPath: string): Promise<void> {
+    try {
+      const stats = fs.statSync(sourcePath)
+      const fileSizeInMB = stats.size / (1024 * 1024)
+
+      // 如果图片大于1MB才进行压缩
+      if (fileSizeInMB > 1) {
+        await sharp(sourcePath)
+          .resize(1920, 1080, {
+            fit: 'inside',
+            withoutEnlargement: true
+          })
+          .jpeg({ quality: 80 })
+          .toFile(destPath)
+
+        logger.info('[FileManager] Image compressed successfully:', sourcePath)
+      } else {
+        // 小图片直接复制
+        await fs.promises.copyFile(sourcePath, destPath)
+      }
+    } catch (error) {
+      logger.error('[FileManager] Image compression failed:', error)
+      // 压缩失败时直接复制原文件
+      await fs.promises.copyFile(sourcePath, destPath)
+    }
+  }
+
   public uploadFile = async (_: Electron.IpcMainInvokeEvent, file: FileType): Promise<FileType> => {
     const duplicateFile = await this.findDuplicateFile(file.path)
 
@@ -128,10 +156,18 @@ class FileManager {
 
     const uuid = uuidv4()
     const origin_name = path.basename(file.path)
-    const ext = path.extname(origin_name)
+    const ext = path.extname(origin_name).toLowerCase()
     const destPath = path.join(this.storageDir, uuid + ext)
 
-    await fs.promises.copyFile(file.path, destPath)
+    logger.info('[FileManager] Uploading file:', file.path)
+
+    // 根据文件类型选择处理方式
+    if (imageExts.includes(ext)) {
+      await this.compressImage(file.path, destPath)
+    } else {
+      await fs.promises.copyFile(file.path, destPath)
+    }
+
     const stats = await fs.promises.stat(destPath)
     const fileType = getFileType(ext)
 

@@ -46,6 +46,7 @@
     "fs-extra": "^11.2.0",
     "html2canvas": "^1.4.1",
     "officeparser": "^4.1.1",
+    "sharp": "^0.33.5",
     "unzipper": "^0.12.3",
     "webdav": "4.11.4"
   },
