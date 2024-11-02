@@ -6,13 +6,13 @@ import { dialog } from 'electron'
 import Logger from 'electron-log'
 import MarkdownIt from 'markdown-it'
 
-import FileManager from './FileManager'
+import FileStorage from './FileStorage'
 
 export class ExportService {
-  private fileManager: FileManager
+  private fileManager: FileStorage
   private md: MarkdownIt
 
-  constructor(fileManager: FileManager) {
+  constructor(fileManager: FileStorage) {
     this.fileManager = fileManager
     this.md = new MarkdownIt()
   }

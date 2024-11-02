@@ -4,7 +4,8 @@ import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 
 import icon from '../../build/icon.png?asset'
-import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
+import { titleBarOverlayDark, titleBarOverlayLight } from './config'
+import { configManager } from './services/ConfigManager'
 
 export function createMainWindow() {
   // Load the previous state with fallback to defaults
@@ -13,7 +14,7 @@ export function createMainWindow() {
     defaultHeight: 670
   })
 
-  const theme = appConfig.get('theme') || 'light'
+  const theme = configManager.getTheme()
 
   // Create the browser window.
   const isMac = process.platform === 'darwin'

@@ -20,7 +20,7 @@ import { chdir } from 'process'
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
-class FileManager {
+class FileStorage {
   private storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
   private tempDir = path.join(app.getPath('temp'), 'CherryStudio')
 
@@ -135,13 +135,13 @@ class FileManager {
           .jpeg({ quality: 80 })
           .toFile(destPath)
 
-        logger.info('[FileManager] Image compressed successfully:', sourcePath)
+        logger.info('[FileStorage] Image compressed successfully:', sourcePath)
       } else {
         // 小图片直接复制
         await fs.promises.copyFile(sourcePath, destPath)
       }
     } catch (error) {
-      logger.error('[FileManager] Image compression failed:', error)
+      logger.error('[FileStorage] Image compression failed:', error)
       // 压缩失败时直接复制原文件
       await fs.promises.copyFile(sourcePath, destPath)
     }
@@ -159,7 +159,7 @@ class FileManager {
     const ext = path.extname(origin_name).toLowerCase()
     const destPath = path.join(this.storageDir, uuid + ext)
 
-    logger.info('[FileManager] Uploading file:', file.path)
+    logger.info('[FileStorage] Uploading file:', file.path)
 
     // 根据文件类型选择处理方式
     if (imageExts.includes(ext)) {
@@ -411,7 +411,7 @@ class FileManager {
 
       return fileMetadata
     } catch (error) {
-      logger.error('[FileManager] Download file error:', error)
+      logger.error('[FileStorage] Download file error:', error)
       throw error
     }
   }
@@ -447,12 +447,12 @@ class FileManager {
 
       // 复制文件
       await fs.promises.copyFile(sourcePath, destPath)
-      logger.info('[FileManager] File copied successfully:', { from: sourcePath, to: destPath })
+      logger.info('[FileStorage] File copied successfully:', { from: sourcePath, to: destPath })
     } catch (error) {
-      logger.error('[FileManager] Copy file failed:', error)
+      logger.error('[FileStorage] Copy file failed:', error)
       throw error
     }
   }
 }
 
-export default FileManager
+export default FileStorage

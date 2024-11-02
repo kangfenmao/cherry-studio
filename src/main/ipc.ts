@@ -2,15 +2,16 @@ import path from 'node:path'
 
 import { BrowserWindow, ipcMain, session, shell } from 'electron'
 
-import { appConfig, titleBarOverlayDark, titleBarOverlayLight } from './config'
+import { titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
 import BackupManager from './services/BackupManager'
+import { configManager } from './services/ConfigManager'
 import { ExportService } from './services/ExportService'
-import FileManager from './services/FileManager'
+import FileStorage from './services/FileStorage'
 import { compress, decompress } from './utils/zip'
 import { createMinappWindow } from './window'
 
-const fileManager = new FileManager()
+const fileManager = new FileStorage()
 const backupManager = new BackupManager()
 const exportService = new ExportService(fileManager)
 
@@ -24,15 +25,24 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     filesPath: path.join(app.getPath('userData'), 'Data', 'Files')
   }))
 
-  ipcMain.handle('open-website', (_, url: string) => {
-    shell.openExternal(url)
+  ipcMain.handle('app:proxy', (_, proxy: string) => session.defaultSession.setProxy(proxy ? { proxyRules: proxy } : {}))
+  ipcMain.handle('app:reload', () => mainWindow.reload())
+  ipcMain.handle('open:website', (_, url: string) => shell.openExternal(url))
+
+  // theme
+  ipcMain.handle('app:set-theme', (_, theme: 'light' | 'dark') => {
+    configManager.setTheme(theme)
+    mainWindow?.setTitleBarOverlay &&
+      mainWindow.setTitleBarOverlay(theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight)
   })
 
-  ipcMain.handle('set-proxy', (_, proxy: string) => {
-    session.defaultSession.setProxy(proxy ? { proxyRules: proxy } : {})
+  // check for update
+  ipcMain.handle('app:check-for-update', async () => {
+    return {
+      currentVersion: autoUpdater.currentVersion,
+      update: await autoUpdater.checkForUpdates()
+    }
   })
-
-  ipcMain.handle('reload', () => mainWindow.reload())
 
   // zip
   ipcMain.handle('zip:compress', (_, text: string) => compress(text))
@@ -73,20 +83,6 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     })
   })
 
-  // theme
-  ipcMain.handle('set-theme', (_, theme: 'light' | 'dark') => {
-    appConfig.set('theme', theme)
-    mainWindow?.setTitleBarOverlay &&
-      mainWindow.setTitleBarOverlay(theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight)
-  })
-
-  // 触发检查更新(此方法用于被渲染线程调用，例如页面点击检查更新按钮来调用此方法)
-  ipcMain.handle('check-for-update', async () => {
-    return {
-      currentVersion: autoUpdater.currentVersion,
-      update: await autoUpdater.checkForUpdates()
-    }
-  })
-
+  // export
   ipcMain.handle('export:word', exportService.exportToWord)
 }

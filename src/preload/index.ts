@@ -5,14 +5,16 @@ import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 // Custom APIs for renderer
 const api = {
   getAppInfo: () => ipcRenderer.invoke('app:info'),
-  checkForUpdate: () => ipcRenderer.invoke('check-for-update'),
-  openWebsite: (url: string) => ipcRenderer.invoke('open-website', url),
-  setProxy: (proxy: string) => ipcRenderer.invoke('set-proxy', proxy),
-  setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('set-theme', theme),
+  reload: () => ipcRenderer.invoke('app:reload'),
+  setProxy: (proxy: string) => ipcRenderer.invoke('app:proxy', proxy),
+  checkForUpdate: () => ipcRenderer.invoke('app:check-for-update'),
+  setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('app:set-theme', theme),
+  openWebsite: (url: string) => ipcRenderer.invoke('open:website', url),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
-  reload: () => ipcRenderer.invoke('reload'),
-  compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
-  decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text),
+  zip: {
+    compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
+    decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text)
+  },
   backup: {
     backup: (fileName: string, data: string, destinationPath?: string) =>
       ipcRenderer.invoke('backup:backup', fileName, data, destinationPath),

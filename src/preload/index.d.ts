@@ -20,8 +20,10 @@ declare global {
       setTheme: (theme: 'light' | 'dark') => void
       minApp: (options: { url: string; windowOptions?: Electron.BrowserWindowConstructorOptions }) => void
       reload: () => void
-      compress: (text: string) => Promise<Buffer>
-      decompress: (text: Buffer) => Promise<string>
+      zip: {
+        compress: (text: string) => Promise<Buffer>
+        decompress: (text: Buffer) => Promise<string>
+      }
       backup: {
         backup: (fileName: string, data: string, destinationPath?: string) => Promise<Readable>
         restore: (backupPath: string) => Promise<string>

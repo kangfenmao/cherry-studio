@@ -3,7 +3,7 @@ import { app, BrowserWindow } from 'electron'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import { registerIpc } from './ipc'
-import { registerZoomShortcut } from './shortcut'
+import { registerZoomShortcut } from './services/ShortcutService'
 import { updateUserDataPath } from './utils/upgrade'
 import { createMainWindow } from './window'
 

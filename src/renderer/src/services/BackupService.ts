@@ -26,7 +26,7 @@ export async function restore() {
         const restoreData = await window.api.backup.restore(file.filePath)
         data = JSON.parse(restoreData)
       } else {
-        data = JSON.parse(await window.api.decompress(file.content))
+        data = JSON.parse(await window.api.zip.decompress(file.content))
       }
 
       await handleData(data)
