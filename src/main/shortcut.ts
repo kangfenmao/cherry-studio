@@ -6,7 +6,11 @@ export function registerZoomShortcut(mainWindow: BrowserWindow) {
     globalShortcut.register('CommandOrControl+=', () => {
       if (mainWindow) {
         const currentZoom = mainWindow.webContents.getZoomFactor()
-        mainWindow.webContents.setZoomFactor(currentZoom + 0.1)
+        const newZoom = currentZoom + 0.1
+        // Prevent zoom factor from exceeding reasonable limits
+        if (newZoom <= 5.0) {
+          mainWindow.webContents.setZoomFactor(newZoom)
+        }
       }
     })
 
@@ -14,7 +18,11 @@ export function registerZoomShortcut(mainWindow: BrowserWindow) {
     globalShortcut.register('CommandOrControl+-', () => {
       if (mainWindow) {
         const currentZoom = mainWindow.webContents.getZoomFactor()
-        mainWindow.webContents.setZoomFactor(currentZoom - 0.1)
+        const newZoom = currentZoom - 0.1
+        // Prevent zoom factor from going below 0.1
+        if (newZoom >= 0.1) {
+          mainWindow.webContents.setZoomFactor(newZoom)
+        }
       }
     })
 
