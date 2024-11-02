@@ -48,7 +48,6 @@
     "html2canvas": "^1.4.1",
     "markdown-it": "^14.1.0",
     "officeparser": "^4.1.1",
-    "sharp": "^0.33.5",
     "unzipper": "^0.12.3",
     "webdav": "4.11.4"
   },

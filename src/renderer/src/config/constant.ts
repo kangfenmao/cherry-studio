@@ -8,7 +8,7 @@ export const isMac = platform === 'darwin'
 export const isWindows = platform === 'win32' || platform === 'win64'
 export const isLinux = platform === 'linux'
 
-export const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+export const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
 export const documentExts = ['.pdf', '.docx', '.pptx', '.xlsx', '.odt', '.odp', '.ods']
 export const textExts = [
   '.txt', // 普通文本文件

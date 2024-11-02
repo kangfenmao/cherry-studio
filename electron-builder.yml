@@ -63,7 +63,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    全新的对话气泡界面 by @teojs
-    将主题切换按钮移到左下角菜单栏中 by @teojs
-    智能体界面使用更加紧凑布局
-    会话面板默认移动到左侧
+    支持聊天气泡样式和简洁样式切换
+    支持导出对话为 Word 文档
+    错误修复

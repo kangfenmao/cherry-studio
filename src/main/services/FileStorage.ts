@@ -17,7 +17,6 @@ import { readFile } from 'fs/promises'
 import officeParser from 'officeparser'
 import * as path from 'path'
 import { chdir } from 'process'
-import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid'
 
 class FileStorage {
@@ -127,22 +126,20 @@ class FileStorage {
 
       // 如果图片大于1MB才进行压缩
       if (fileSizeInMB > 1) {
-        await sharp(sourcePath)
-          .resize(1920, 1080, {
-            fit: 'inside',
-            withoutEnlargement: true
-          })
-          .jpeg({ quality: 80 })
-          .toFile(destPath)
-
-        logger.info('[FileStorage] Image compressed successfully:', sourcePath)
+        try {
+          await fs.promises.copyFile(sourcePath, destPath)
+          logger.info('[FileStorage] Image compressed successfully:', sourcePath)
+        } catch (jimpError) {
+          logger.error('[FileStorage] Image compression failed:', jimpError)
+          await fs.promises.copyFile(sourcePath, destPath)
+        }
       } else {
         // 小图片直接复制
         await fs.promises.copyFile(sourcePath, destPath)
       }
     } catch (error) {
-      logger.error('[FileStorage] Image compression failed:', error)
-      // 压缩失败时直接复制原文件
+      logger.error('[FileStorage] Image handling failed:', error)
+      // 错误情况下直接复制原文件
       await fs.promises.copyFile(sourcePath, destPath)
     }
   }
