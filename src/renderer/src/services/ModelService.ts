@@ -9,7 +9,8 @@ export const getModelUniqId = (m?: Model) => {
 export const hasModel = (m?: Model) => {
   const allModels = store
     .getState()
-    .llm.providers.map((p) => p.models)
+    .llm.providers.filter((p) => p.enabled)
+    .map((p) => p.models)
     .flat()
 
   return allModels.find((model) => model.id === m?.id)
