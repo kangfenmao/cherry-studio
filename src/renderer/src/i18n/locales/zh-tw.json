@@ -215,6 +215,10 @@
       "locate.message": "定位到訊息"
     },
     "provider": {
+      "jina": "Jina",
+      "mistral": "Mistral",
+      "hyperbolic": "Hyperbolic",
+      "grok": "Grok",
       "nvidia": "輝達",
       "zhinao": "360智腦",
       "hunyuan": "騰訊混元",

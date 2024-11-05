@@ -44,8 +44,6 @@ import GemmaModelLogo from '@renderer/assets/images/models/gemma.png'
 import GemmaModelLogoDark from '@renderer/assets/images/models/gemma_dark.png'
 import GoogleModelLogo from '@renderer/assets/images/models/google.png'
 import GoogleModelLogoDark from '@renderer/assets/images/models/google.png'
-import GorkModelLogo from '@renderer/assets/images/models/gork.png'
-import GorkModelLogoDark from '@renderer/assets/images/models/gork_dark.png'
 import ChatGPT35ModelLogo from '@renderer/assets/images/models/gpt_3.5.png'
 import ChatGPT4ModelLogo from '@renderer/assets/images/models/gpt_4.png'
 import ChatGptModelLogoDakr from '@renderer/assets/images/models/gpt_dark.png'
@@ -53,6 +51,8 @@ import ChatGPT35ModelLogoDark from '@renderer/assets/images/models/gpt_dark.png'
 import ChatGPT4ModelLogoDark from '@renderer/assets/images/models/gpt_dark.png'
 import ChatGPTo1ModelLogoDark from '@renderer/assets/images/models/gpt_dark.png'
 import ChatGPTo1ModelLogo from '@renderer/assets/images/models/gpt_o1.png'
+import GrokModelLogo from '@renderer/assets/images/models/grok.png'
+import GrokModelLogoDark from '@renderer/assets/images/models/grok_dark.png'
 import GrypheModelLogo from '@renderer/assets/images/models/gryphe.png'
 import GrypheModelLogoDark from '@renderer/assets/images/models/gryphe_dark.png'
 import HailuoModelLogo from '@renderer/assets/images/models/hailuo.png'
@@ -65,6 +65,8 @@ import IbmModelLogo from '@renderer/assets/images/models/ibm.png'
 import IbmModelLogoDark from '@renderer/assets/images/models/ibm_dark.png'
 import InternlmModelLogo from '@renderer/assets/images/models/internlm.png'
 import InternlmModelLogoDark from '@renderer/assets/images/models/internlm_dark.png'
+import JinaModelLogo from '@renderer/assets/images/models/jina.png'
+import JinaModelLogoDark from '@renderer/assets/images/models/jina_dark.png'
 import KeLingModelLogo from '@renderer/assets/images/models/keling.png'
 import KeLingModelLogoDark from '@renderer/assets/images/models/keling_dark.png'
 import LlamaModelLogo from '@renderer/assets/images/models/llama.png'
@@ -154,6 +156,7 @@ export function getModelLogo(modelId: string) {
   }
 
   const logoMap = {
+    jina: isLight ? JinaModelLogo : JinaModelLogoDark,
     abab: isLight ? MinimaxModelLogo : MinimaxModelLogoDark,
     'o1-': isLight ? ChatGPTo1ModelLogo : ChatGPTo1ModelLogoDark,
     'gpt-3': isLight ? ChatGPT35ModelLogo : ChatGPT35ModelLogoDark,
@@ -197,7 +200,7 @@ export function getModelLogo(modelId: string) {
     dbrx: isLight ? DbrxModelLogo : DbrxModelLogo,
     flashaudio: isLight ? FlashaudioModelLogo : FlashaudioModelLogoDark,
     flux: isLight ? FluxModelLogo : FluxModelLogoDark,
-    gork: isLight ? GorkModelLogo : GorkModelLogoDark,
+    grok: isLight ? GrokModelLogo : GrokModelLogoDark,
     hunyuan: isLight ? HunyuanModelLogo : HunyuanModelLogoDark,
     internlm: isLight ? InternlmModelLogo : InternlmModelLogoDark,
     llava: isLight ? LLavaModelLogo : LLavaModelLogoDark,
@@ -764,6 +767,55 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'abab5'
     }
   ],
+  hyperbolic: [
+    {
+      id: 'Qwen/Qwen2-VL-72B-Instruct',
+      provider: 'hyperbolic',
+      name: 'Qwen2-VL-72B-Instruct',
+      group: 'Qwen2-VL'
+    },
+    {
+      id: 'Qwen/Qwen2-VL-7B-Instruct',
+      provider: 'hyperbolic',
+      name: 'Qwen2-VL-7B-Instruct',
+      group: 'Qwen2-VL'
+    },
+    {
+      id: 'mistralai/Pixtral-12B-2409',
+      provider: 'hyperbolic',
+      name: 'Pixtral-12B-2409',
+      group: 'Pixtral'
+    },
+    {
+      id: 'meta-llama/Meta-Llama-3.1-405B',
+      provider: 'hyperbolic',
+      name: 'Meta-Llama-3.1-405B',
+      group: 'Meta-Llama-3.1'
+    }
+  ],
+  grok: [
+    {
+      id: 'grok-beta',
+      provider: 'grok',
+      name: 'Grok Beta',
+      group: 'Grok'
+    }
+  ],
+  mistral: [
+    {
+      id: 'pixtral-12b-2409',
+      provider: 'mistral',
+      name: 'Pixtral-12B-2409',
+      group: 'Pixtral'
+    },
+    {
+      id: 'open-mistral-nemo',
+      provider: 'mistral',
+      name: 'Open-Mistral-Nemo',
+      group: 'Mistral'
+    }
+  ],
+  jina: [],
   aihubmix: [
     {
       id: 'gpt-4o-mini',

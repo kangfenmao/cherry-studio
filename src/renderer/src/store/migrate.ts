@@ -622,6 +622,53 @@ const migrateConfig = {
   '37': (state: RootState) => {
     state.settings.messageStyle = 'plain'
     return state
+  },
+  '38': (state: RootState) => {
+    return {
+      ...state,
+      llm: {
+        ...state.llm,
+        providers: [
+          ...state.llm.providers,
+          {
+            id: 'grok',
+            name: 'Grok',
+            apiKey: '',
+            apiHost: 'https://api.x.ai',
+            models: SYSTEM_MODELS.grok,
+            isSystem: true,
+            enabled: false
+          },
+          {
+            id: 'hyperbolic',
+            name: 'Hyperbolic',
+            apiKey: '',
+            apiHost: 'https://api.hyperbolic.xyz',
+            models: SYSTEM_MODELS.hyperbolic,
+            isSystem: true,
+            enabled: false
+          },
+          {
+            id: 'mistral',
+            name: 'Mistral',
+            apiKey: '',
+            apiHost: 'https://api.mistral.ai',
+            models: SYSTEM_MODELS.mistral,
+            isSystem: true,
+            enabled: false
+          },
+          {
+            id: 'jina',
+            name: 'Jina',
+            apiKey: '',
+            apiHost: 'https://api.jina.ai',
+            models: SYSTEM_MODELS.jina,
+            isSystem: true,
+            enabled: false
+          }
+        ]
+      }
+    }
   }
 }
 

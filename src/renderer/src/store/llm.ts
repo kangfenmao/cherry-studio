@@ -250,6 +250,42 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'grok',
+      name: 'Grok',
+      apiKey: '',
+      apiHost: 'https://api.x.ai',
+      models: SYSTEM_MODELS.grok,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'hyperbolic',
+      name: 'Hyperbolic',
+      apiKey: '',
+      apiHost: 'https://api.hyperbolic.xyz',
+      models: SYSTEM_MODELS.hyperbolic,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'mistral',
+      name: 'Mistral',
+      apiKey: '',
+      apiHost: 'https://api.mistral.ai',
+      models: SYSTEM_MODELS.mistral,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'jina',
+      name: 'Jina',
+      apiKey: '',
+      apiHost: 'https://api.jina.ai',
+      models: SYSTEM_MODELS.jina,
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'aihubmix',
       name: 'AiHubMix',
       apiKey: '',
