@@ -97,6 +97,8 @@ import NvidiaModelLogo from '@renderer/assets/images/models/nvidia.png'
 import NvidiaModelLogoDark from '@renderer/assets/images/models/nvidia_dark.png'
 import PalmModelLogo from '@renderer/assets/images/models/palm.png'
 import PalmModelLogoDark from '@renderer/assets/images/models/palm_dark.png'
+import PixtralModelLogo from '@renderer/assets/images/models/pixtral.png'
+import PixtralModelLogoDark from '@renderer/assets/images/models/pixtral_dark.png'
 import QwenModelLogo from '@renderer/assets/images/models/qwen.png'
 import QwenModelLogoDark from '@renderer/assets/images/models/qwen_dark.png'
 import RakutenaiModelLogo from '@renderer/assets/images/models/rakutenai.png'
@@ -156,6 +158,7 @@ export function getModelLogo(modelId: string) {
   }
 
   const logoMap = {
+    pixtral: isLight ? PixtralModelLogo : PixtralModelLogoDark,
     jina: isLight ? JinaModelLogo : JinaModelLogoDark,
     abab: isLight ? MinimaxModelLogo : MinimaxModelLogoDark,
     'o1-': isLight ? ChatGPTo1ModelLogo : ChatGPTo1ModelLogoDark,
