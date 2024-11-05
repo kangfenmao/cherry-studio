@@ -40,14 +40,27 @@ export function registerZoomShortcut(mainWindow: BrowserWindow) {
     globalShortcut.unregister('CommandOrControl+0')
   }
 
-  // 当窗口获得焦点时注册快捷键
-  mainWindow.on('focus', registerShortcuts)
+  // Add check for window destruction
+  if (mainWindow.isDestroyed()) {
+    return
+  }
 
-  // 当窗口失去焦点时注销快捷键
-  mainWindow.on('blur', unregisterShortcuts)
+  // When window gains focus, register shortcuts
+  mainWindow.on('focus', () => {
+    if (!mainWindow.isDestroyed()) {
+      registerShortcuts()
+    }
+  })
 
-  // 初始注册（如果窗口已经处于焦点状态）
-  if (mainWindow.isFocused()) {
+  // When window loses focus, unregister shortcuts
+  mainWindow.on('blur', () => {
+    if (!mainWindow.isDestroyed()) {
+      unregisterShortcuts()
+    }
+  })
+
+  // Initial registration (if window is already focused)
+  if (!mainWindow.isDestroyed() && mainWindow.isFocused()) {
     registerShortcuts()
   }
 }
