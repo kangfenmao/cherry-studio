@@ -24,6 +24,10 @@ import StepProviderLogo from '@renderer/assets/images/providers/step.png'
 import TogetherProviderLogo from '@renderer/assets/images/providers/together.png'
 import ZeroOneProviderLogo from '@renderer/assets/images/providers/zero-one.png'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
+import GrokProviderLogo from '@renderer/assets/images/providers/grok.png'
+import HyperbolicProviderLogo from '@renderer/assets/images/providers/hyperbolic.png'
+import MistralProviderLogo from '@renderer/assets/images/providers/mistral.png'
+import JinaProviderLogo from '@renderer/assets/images/providers/jina.png'
 
 export function getProviderLogo(providerId: string) {
   switch (providerId) {
@@ -79,6 +83,14 @@ export function getProviderLogo(providerId: string) {
       return AzureProviderLogo
     case 'hunyuan':
       return HunyuanProviderLogo
+    case 'grok':
+      return GrokProviderLogo
+    case 'hyperbolic':
+      return HyperbolicProviderLogo
+    case 'mistral':
+      return MistralProviderLogo
+    case 'jina':
+      return JinaProviderLogo
     default:
       return undefined
   }
@@ -296,6 +308,46 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://console.anthropic.com/settings/keys',
       docs: 'https://docs.anthropic.com/en/docs',
       models: 'https://docs.anthropic.com/en/docs/about-claude/models'
+    }
+  },
+  grok: {
+    api: {
+      url: 'https://api.x.ai'
+    },
+    websites: {
+      official: 'https://x.ai/',
+      docs: 'https://docs.x.ai/',
+      models: 'https://docs.x.ai/docs#getting-started'
+    }
+  },
+  hyperbolic: {
+    api: {
+      url: 'https://api.hyperbolic.xyz'
+    },
+    websites: {
+      official: 'https://app.hyperbolic.xyz',
+      docs: 'https://docs.hyperbolic.xyz',
+      models: 'https://app.hyperbolic.xyz/models'
+    }
+  },
+  mistral: {
+    api: {
+      url: 'https://api.mistral.ai'
+    },
+    websites: {
+      official: 'https://mistral.ai',
+      docs: 'https://docs.mistral.ai',
+      models: 'https://docs.mistral.ai/getting-started/models/models_overview'
+    }
+  },
+  jina: {
+    api: {
+      url: 'https://api.jina.ai'
+    },
+    websites: {
+      official: 'https://jina.ai',
+      docs: 'https://jina.ai',
+      models: 'https://jina.ai'
     }
   },
   aihubmix: {

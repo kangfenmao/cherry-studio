@@ -215,6 +215,10 @@
       "locate.message": "Locate the message"
     },
     "provider": {
+      "jina": "Jina",
+      "mistral": "Mistral",
+      "hyperbolic": "Hyperbolic",
+      "grok": "Grok",
       "nvidia": "Nvidia",
       "hunyuan": "Tencent Hunyuan",
       "zhinao": "360AI",
