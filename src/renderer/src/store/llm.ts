@@ -276,15 +276,15 @@ const initialState: LlmState = {
       isSystem: true,
       enabled: false
     },
-    {
-      id: 'jina',
-      name: 'Jina',
-      apiKey: '',
-      apiHost: 'https://api.jina.ai',
-      models: SYSTEM_MODELS.jina,
-      isSystem: true,
-      enabled: false
-    },
+    // {
+    //   id: 'jina',
+    //   name: 'Jina',
+    //   apiKey: '',
+    //   apiHost: 'https://api.jina.ai',
+    //   models: SYSTEM_MODELS.jina,
+    //   isSystem: true,
+    //   enabled: false
+    // },
     {
       id: 'aihubmix',
       name: 'AiHubMix',

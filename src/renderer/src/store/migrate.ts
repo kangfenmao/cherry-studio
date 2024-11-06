@@ -656,16 +656,16 @@ const migrateConfig = {
             models: SYSTEM_MODELS.mistral,
             isSystem: true,
             enabled: false
-          },
-          {
-            id: 'jina',
-            name: 'Jina',
-            apiKey: '',
-            apiHost: 'https://api.jina.ai',
-            models: SYSTEM_MODELS.jina,
-            isSystem: true,
-            enabled: false
           }
+          // {
+          //   id: 'jina',
+          //   name: 'Jina',
+          //   apiKey: '',
+          //   apiHost: 'https://api.jina.ai',
+          //   models: SYSTEM_MODELS.jina,
+          //   isSystem: true,
+          //   enabled: false
+          // }
         ]
       }
     }
