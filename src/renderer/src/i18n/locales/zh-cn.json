@@ -261,7 +261,7 @@
       "messages.divider": "消息分割线",
       "messages.use_serif_font": "使用衬线字体",
       "messages.input.title": "输入设置",
-      "messages.input.show_estimated_tokens": "状态显示",
+      "messages.input.show_estimated_tokens": "显示预估 Token 数",
       "messages.input.send_shortcuts": "发送快捷键",
       "messages.input.paste_long_text_as_file": "长文本粘贴为文件",
       "messages.markdown_rendering_input_message": "Markdown 渲染输入消息",

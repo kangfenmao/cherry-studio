@@ -261,7 +261,7 @@
       "messages.divider": "訊息間顯示分隔線",
       "messages.use_serif_font": "使用襯線字體",
       "messages.input.title": "輸入設定",
-      "messages.input.show_estimated_tokens": "顯示預估輸入 Token 數",
+      "messages.input.show_estimated_tokens": "顯示預估 Token 數",
       "messages.input.send_shortcuts": "發送快捷鍵",
       "messages.input.paste_long_text_as_file": "將長文本貼上為檔案",
       "messages.math_engine": "Markdown 渲染輸入訊息",
