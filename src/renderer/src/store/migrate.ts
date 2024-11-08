@@ -669,6 +669,10 @@ const migrateConfig = {
         ]
       }
     }
+  },
+  '39': (state: RootState) => {
+    state.settings.codeStyle = 'auto'
+    return state
   }
 }
 

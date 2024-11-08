@@ -24,8 +24,11 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
   const { codeStyle } = useSettings()
 
   const highlighterTheme = useMemo(() => {
-    if (codeStyle === 'auto') return theme === ThemeMode.light ? 'one-light' : 'material-theme-darker'
-    else return codeStyle
+    if (!codeStyle || codeStyle === 'auto') {
+      return theme === ThemeMode.light ? 'one-light' : 'material-theme-darker'
+    }
+
+    return codeStyle
   }, [theme, codeStyle])
 
   useEffect(() => {
