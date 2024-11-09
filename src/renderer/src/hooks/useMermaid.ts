@@ -23,13 +23,15 @@ export const useMermaid = () => {
   }, [])
 
   useEffect(() => {
-    if (window.mermaid) {
-      window.mermaid.initialize({
-        startOnLoad: true,
-        theme: theme === ThemeMode.dark ? 'dark' : 'default'
-      })
-      window.mermaid.contentLoaded()
-    }
+    setTimeout(() => {
+      if (window.mermaid) {
+        window.mermaid.initialize({
+          startOnLoad: true,
+          theme: theme === ThemeMode.dark ? 'dark' : 'default'
+        })
+        window.mermaid.contentLoaded()
+      }
+    }, 2000)
   }, [theme])
 
   useEffect(() => {

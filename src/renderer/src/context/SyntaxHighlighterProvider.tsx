@@ -49,7 +49,7 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
     }
 
     initHighlighter()
-  }, [highlighterTheme, theme])
+  }, [highlighterTheme])
 
   const codeToHtml = async (code: string, language: string) => {
     if (!highlighter) return ''
