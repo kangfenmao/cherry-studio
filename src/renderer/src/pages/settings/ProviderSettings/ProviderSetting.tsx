@@ -118,7 +118,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <Input.Password
           value={apiKey}
           placeholder={t('settings.provider.api_key')}
-          onChange={(e) => setApiKey(e.target.value)}
+          onChange={(e) => setApiKey(e.target.value.replaceAll('，', ','))}
           onBlur={onUpdateApiKey}
           spellCheck={false}
           type="password"
@@ -129,10 +129,11 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         </Button>
       </Space.Compact>
       {apiKeyWebsite && (
-        <SettingHelpTextRow>
+        <SettingHelpTextRow style={{ justifyContent: 'space-between' }}>
           <SettingHelpLink target="_blank" href={apiKeyWebsite}>
             {t('settings.provider.get_api_key')}
           </SettingHelpLink>
+          <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
         </SettingHelpTextRow>
       )}
       <SettingSubtitle>{t('settings.provider.api_host')}</SettingSubtitle>

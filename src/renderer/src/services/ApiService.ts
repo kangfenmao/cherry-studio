@@ -163,8 +163,6 @@ export async function fetchSuggestions({
   messages: Message[]
   assistant: Assistant
 }): Promise<Suggestion[]> {
-  const provider = getAssistantProvider(assistant)
-  const AI = new AiProvider(provider)
   const model = assistant.model
 
   if (!model) {
@@ -178,6 +176,9 @@ export async function fetchSuggestions({
   if (model.id.endsWith('global')) {
     return []
   }
+
+  const provider = getAssistantProvider(assistant)
+  const AI = new AiProvider(provider)
 
   try {
     return await AI.suggestions(filterMessages(messages), assistant)

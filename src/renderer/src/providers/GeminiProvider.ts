@@ -23,7 +23,7 @@ export default class GeminiProvider extends BaseProvider {
 
   constructor(provider: Provider) {
     super(provider)
-    this.sdk = new GoogleGenerativeAI(provider.apiKey)
+    this.sdk = new GoogleGenerativeAI(this.apiKey)
   }
 
   private async getMessageContents(message: Message): Promise<Content> {
@@ -231,7 +231,7 @@ export default class GeminiProvider extends BaseProvider {
   public async models(): Promise<OpenAI.Models.Model[]> {
     try {
       const api = this.provider.apiHost + '/v1beta/models'
-      const { data } = await axios.get(api, { params: { key: this.provider.apiKey } })
+      const { data } = await axios.get(api, { params: { key: this.apiKey } })
       return data.models.map(
         (m: any) =>
           ({

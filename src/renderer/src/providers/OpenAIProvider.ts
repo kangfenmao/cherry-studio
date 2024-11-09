@@ -20,10 +20,11 @@ export default class OpenAIProvider extends BaseProvider {
 
   constructor(provider: Provider) {
     super(provider)
+
     if (provider.id === 'azure-openai') {
       this.sdk = new AzureOpenAI({
         dangerouslyAllowBrowser: true,
-        apiKey: provider.apiKey,
+        apiKey: this.apiKey,
         apiVersion: provider.apiVersion,
         endpoint: provider.apiHost
       })
@@ -32,7 +33,7 @@ export default class OpenAIProvider extends BaseProvider {
 
     this.sdk = new OpenAI({
       dangerouslyAllowBrowser: true,
-      apiKey: provider.apiKey,
+      apiKey: this.apiKey,
       baseURL: this.getBaseURL(),
       defaultHeaders: this.defaultHeaders()
     })

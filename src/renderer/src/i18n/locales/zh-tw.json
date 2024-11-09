@@ -289,6 +289,7 @@
       "advanced.title": "進階設定",
       "advanced.click_assistant_switch_to_topics": "點擊助手切換到話題",
       "provider.api_key": "API 密鑰",
+      "provider.api_key.tip": "多個密鑰使用逗號分隔",
       "provider.check": "檢查",
       "provider.get_api_key": "獲取 API 密鑰",
       "provider.api_host": "API 主機地址",
