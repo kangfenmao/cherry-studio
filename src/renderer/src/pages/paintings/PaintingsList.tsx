@@ -45,7 +45,7 @@ const PaintingsList: FC<PaintingsListProps> = ({
             </Canvas>
             <DeleteButton>
               <Popconfirm
-                title={t('images.button.delete.image.confirm')}
+                title={t('paintings.button.delete.image.confirm')}
                 onConfirm={() => onDeletePainting(item)}
                 okButtonProps={{ danger: true }}
                 placement="left">

@@ -5,6 +5,7 @@ import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { Tooltip } from 'antd'
 import { Avatar } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -50,57 +51,74 @@ const Sidebar: FC = () => {
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus onClick={MinApp.onClose}>
-          <StyledLink onClick={() => to('/')}>
-            <Icon className={isRoute('/')}>
-              <i className="iconfont icon-chat" />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/agents')}>
-            <Icon className={isRoutes('/agents')}>
-              <i className="iconfont icon-business-smart-assistant" />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/paintings')}>
-            <Icon className={isRoute('/paintings')}>
-              <PictureOutlined style={{ fontSize: 16 }} />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/translate')}>
-            <Icon className={isRoute('/translate')}>
-              <TranslationOutlined />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/apps')}>
-            <Icon className={isRoute('/apps')}>
-              <i className="iconfont icon-appstore" />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/files')}>
-            <Icon className={isRoute('/files')}>
-              <FolderOutlined />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/messages')}>
-            <Icon className={isRoutes('/messages')}>
-              <FileSearchOutlined />
-            </Icon>
-          </StyledLink>
+          <Tooltip title={t('assistants.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/')}>
+              <Icon className={isRoute('/')}>
+                <i className="iconfont icon-chat" />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('agents.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/agents')}>
+              <Icon className={isRoutes('/agents')}>
+                <i className="iconfont icon-business-smart-assistant" />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('paintings.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/paintings')}>
+              <Icon className={isRoute('/paintings')}>
+                <PictureOutlined style={{ fontSize: 16 }} />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('translate.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/translate')}>
+              <Icon className={isRoute('/translate')}>
+                <TranslationOutlined />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('minapp.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/apps')}>
+              <Icon className={isRoute('/apps')}>
+                <i className="iconfont icon-appstore" />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('files.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/files')}>
+              <Icon className={isRoute('/files')}>
+                <FolderOutlined />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('history.title')} mouseEnterDelay={0.5} placement="right">
+            <StyledLink onClick={() => to('/messages')}>
+              <Icon className={isRoutes('/messages')}>
+                <FileSearchOutlined />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
         </Menus>
       </MainMenus>
       <Menus onClick={MinApp.onClose}>
-        <Icon onClick={() => toggleTheme()}>
-          {theme === 'dark' ? (
-            <i className="iconfont icon-theme icon-dark1" />
-          ) : (
-            <i className="iconfont icon-theme icon-theme-light" />
-          )}
-        </Icon>
-
-        <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
-          <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
-            <i className="iconfont icon-setting" />
+        <Tooltip title={t('settings.theme.title')} mouseEnterDelay={0.5} placement="right">
+          <Icon onClick={() => toggleTheme()}>
+            {theme === 'dark' ? (
+              <i className="iconfont icon-theme icon-dark1" />
+            ) : (
+              <i className="iconfont icon-theme icon-theme-light" />
+            )}
           </Icon>
-        </StyledLink>
+        </Tooltip>
+        <Tooltip title={t('settings.title')} mouseEnterDelay={0.5} placement="right">
+          <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
+            <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
+              <i className="iconfont icon-setting" />
+            </Icon>
+          </StyledLink>
+        </Tooltip>
       </Menus>
     </Container>
   )

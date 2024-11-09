@@ -107,7 +107,7 @@ const PaintingsPage: FC = () => {
   const onGenerate = async () => {
     if (painting.files.length > 0) {
       const confirmed = await window.modal.confirm({
-        content: t('images.regenerate.confirm'),
+        content: t('paintings.regenerate.confirm'),
         centered: true
       })
 
@@ -252,11 +252,11 @@ const PaintingsPage: FC = () => {
   return (
     <Container>
       <Navbar>
-        <NavbarCenter style={{ borderRight: 'none' }}>{t('images.title')}</NavbarCenter>
+        <NavbarCenter style={{ borderRight: 'none' }}>{t('paintings.title')}</NavbarCenter>
         {isMac && (
           <NavbarRight style={{ justifyContent: 'flex-end' }}>
             <Button size="small" className="nodrag" icon={<PlusOutlined />} onClick={() => setPainting(addPainting())}>
-              {t('images.button.new.image')}
+              {t('paintings.button.new.image')}
             </Button>
           </NavbarRight>
         )}
@@ -271,7 +271,7 @@ const PaintingsPage: FC = () => {
           />
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>{t('common.model')}</SettingTitle>
           <Select value={painting.model} options={modelOptions} onChange={onSelectModel} />
-          <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>{t('images.image.size')}</SettingTitle>
+          <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>{t('paintings.image.size')}</SettingTitle>
           <Radio.Group
             value={painting.imageSize}
             onChange={(e) => onSelectImageSize(e.target.value)}
@@ -287,8 +287,8 @@ const PaintingsPage: FC = () => {
           </Radio.Group>
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
-            {t('images.number_images')}
-            <Tooltip title={t('images.number_images_tip')}>
+            {t('paintings.number_images')}
+            <Tooltip title={t('paintings.number_images_tip')}>
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
@@ -300,8 +300,8 @@ const PaintingsPage: FC = () => {
           />
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
-            {t('images.seed')}
-            <Tooltip title={t('images.seed_tip')}>
+            {t('paintings.seed')}
+            <Tooltip title={t('paintings.seed_tip')}>
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
@@ -312,8 +312,8 @@ const PaintingsPage: FC = () => {
           />
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
-            {t('images.inference_steps')}
-            <Tooltip title={t('images.inference_steps_tip')}>
+            {t('paintings.inference_steps')}
+            <Tooltip title={t('paintings.inference_steps_tip')}>
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
@@ -326,8 +326,8 @@ const PaintingsPage: FC = () => {
           />
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
-            {t('images.guidance_scale')}
-            <Tooltip title={t('images.guidance_scale_tip')}>
+            {t('paintings.guidance_scale')}
+            <Tooltip title={t('paintings.guidance_scale_tip')}>
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
@@ -347,8 +347,8 @@ const PaintingsPage: FC = () => {
           />
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
-            {t('images.negative_prompt')}
-            <Tooltip title={t('images.negative_prompt_tip')}>
+            {t('paintings.negative_prompt')}
+            <Tooltip title={t('paintings.negative_prompt_tip')}>
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
@@ -374,7 +374,7 @@ const PaintingsPage: FC = () => {
               disabled={isLoading}
               value={painting.prompt}
               onChange={(e) => updatePaintingState({ prompt: e.target.value })}
-              placeholder={t('images.prompt_placeholder')}
+              placeholder={t('paintings.prompt_placeholder')}
             />
             <Toolbar>
               <ToolbarMenu>
