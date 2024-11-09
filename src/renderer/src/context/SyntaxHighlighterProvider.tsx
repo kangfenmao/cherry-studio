@@ -36,7 +36,7 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
       if (!window.mermaid) {
         await loadScript('https://unpkg.com/mermaid@11.4.0/dist/mermaid.min.js')
         window.mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: theme === ThemeMode.dark ? 'dark' : 'default'
         })
         window.mermaid.contentLoaded()
