@@ -2,7 +2,7 @@ import { CheckOutlined } from '@ant-design/icons'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useSyntaxHighlighter } from '@renderer/context/SyntaxHighlighterProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -20,10 +20,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const showFooterCopyButton = children && children.length > 500
   const { codeShowLineNumbers, fontSize } = useSettings()
   const language = match?.[1] ?? 'text'
-
+  const [html, setHtml] = useState<string>('')
   const { codeToHtml } = useSyntaxHighlighter()
 
-  const html = codeToHtml(children, language)
+  useEffect(() => {
+    const loadHighlightedCode = async () => {
+      const highlightedHtml = await codeToHtml(children, language)
+      setHtml(highlightedHtml)
+    }
+    loadHighlightedCode()
+  }, [children, language, codeToHtml])
 
   if (language === 'mermaid') {
     return <Mermaid chart={children} />

@@ -13,7 +13,7 @@ import {
 } from 'shiki'
 
 interface SyntaxHighlighterContextType {
-  codeToHtml: (code: string, language: string) => string
+  codeToHtml: (code: string, language: string) => Promise<string>
 }
 
 const SyntaxHighlighterContext = createContext<SyntaxHighlighterContextType | undefined>(undefined)
@@ -34,11 +34,10 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
   useEffect(() => {
     const initMermaid = async () => {
       if (!window.mermaid) {
-        await loadScript('https://unpkg.com/mermaid@10.9.1/dist/mermaid.min.js')
+        await loadScript('https://unpkg.com/mermaid@11.4.0/dist/mermaid.min.js')
         window.mermaid.initialize({
           startOnLoad: true,
-          theme: theme === ThemeMode.dark ? 'dark' : 'default',
-          securityLevel: 'loose'
+          theme: theme === ThemeMode.dark ? 'dark' : 'default'
         })
         window.mermaid.contentLoaded()
       }
@@ -49,31 +48,49 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
 
   useEffect(() => {
     const initHighlighter = async () => {
+      const commonLanguages = ['javascript', 'typescript', 'python', 'java', 'markdown']
+
       const hl = await createHighlighter({
-        themes: Object.keys(bundledThemes),
-        langs: Object.keys(bundledLanguages)
+        themes: [highlighterTheme],
+        langs: commonLanguages
       })
+
       setHighlighter(hl)
+
+      window.requestIdleCallback(
+        () => {
+          hl.loadTheme(...(Object.keys(bundledThemes) as BundledTheme[]))
+          hl.loadLanguage(...(Object.keys(bundledLanguages) as BundledLanguage[]))
+        },
+        { timeout: 2000 }
+      )
     }
 
     initHighlighter()
-  }, [])
+  }, [highlighterTheme, theme])
 
-  const codeToHtml = (code: string, language: string) => {
+  const codeToHtml = async (code: string, language: string) => {
     if (!highlighter) return ''
 
-    return highlighter.codeToHtml(code, {
-      lang: language,
-      theme: highlighterTheme,
-      transformers: [
-        {
-          preprocess(code) {
-            if (code.endsWith('\n')) code = code.slice(0, -1)
-            return code
-          }
+    try {
+      if (!highlighter.getLoadedLanguages().includes(language as BundledLanguage)) {
+        if (language in bundledLanguages) {
+          await highlighter.loadLanguage(language as BundledLanguage)
+          console.log(`Loaded language: ${language}`)
+        } else {
+          console.warn(`Language '${language}' is not supported`)
+          return `<pre><code>${code}</code></pre>`
         }
-      ]
-    })
+      }
+
+      return highlighter.codeToHtml(code, {
+        lang: language,
+        theme: highlighterTheme
+      })
+    } catch (error) {
+      console.warn(`Error highlighting code for language '${language}':`, error)
+      return `<pre><code>${code}</code></pre>`
+    }
   }
 
   return <SyntaxHighlighterContext.Provider value={{ codeToHtml }}>{children}</SyntaxHighlighterContext.Provider>
