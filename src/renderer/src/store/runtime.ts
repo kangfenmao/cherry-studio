@@ -26,15 +26,6 @@ const runtimeSlice = createSlice({
     },
     setGenerating: (state, action: PayloadAction<boolean>) => {
       state.generating = action.payload
-      if (!state.generating) {
-        const mermaidElements = document.querySelectorAll('.mermaid')
-        for (const element of mermaidElements) {
-          if (!element.querySelector('svg')) {
-            element.removeAttribute('data-processed')
-          }
-        }
-        setTimeout(() => window.mermaid.contentLoaded(), 100)
-      }
     },
     setMinappShow: (state, action: PayloadAction<boolean>) => {
       state.minappShow = action.payload

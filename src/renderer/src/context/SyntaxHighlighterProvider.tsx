@@ -1,7 +1,7 @@
 import { useTheme } from '@renderer/context/ThemeProvider'
+import { useMermaid } from '@renderer/hooks/useMermaid'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { CodeStyleVarious, ThemeMode } from '@renderer/types'
-import { loadScript } from '@renderer/utils'
 import React, { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
 import {
   BundledLanguage,
@@ -22,6 +22,7 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
   const { theme } = useTheme()
   const [highlighter, setHighlighter] = useState<HighlighterGeneric<BundledLanguage, BundledTheme> | null>(null)
   const { codeStyle } = useSettings()
+  useMermaid()
 
   const highlighterTheme = useMemo(() => {
     if (!codeStyle || codeStyle === 'auto') {
@@ -30,21 +31,6 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
 
     return codeStyle
   }, [theme, codeStyle])
-
-  useEffect(() => {
-    const initMermaid = async () => {
-      if (!window.mermaid) {
-        await loadScript('https://unpkg.com/mermaid@11.4.0/dist/mermaid.min.js')
-        window.mermaid.initialize({
-          startOnLoad: false,
-          theme: theme === ThemeMode.dark ? 'dark' : 'default'
-        })
-        window.mermaid.contentLoaded()
-      }
-    }
-
-    initMermaid()
-  }, [theme])
 
   useEffect(() => {
     const initHighlighter = async () => {
@@ -57,13 +43,9 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
 
       setHighlighter(hl)
 
-      window.requestIdleCallback(
-        () => {
-          hl.loadTheme(...(Object.keys(bundledThemes) as BundledTheme[]))
-          hl.loadLanguage(...(Object.keys(bundledLanguages) as BundledLanguage[]))
-        },
-        { timeout: 2000 }
-      )
+      // Load all themes and languages
+      // hl.loadTheme(...(Object.keys(bundledThemes) as BundledTheme[]))
+      // hl.loadLanguage(...(Object.keys(bundledLanguages) as BundledLanguage[]))
     }
 
     initHighlighter()
