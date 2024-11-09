@@ -9,8 +9,8 @@ import BackupManager from './services/BackupManager'
 import { configManager } from './services/ConfigManager'
 import { ExportService } from './services/ExportService'
 import FileStorage from './services/FileStorage'
+import { windowService } from './services/WindowService'
 import { compress, decompress } from './utils/zip'
-import { createMinappWindow } from './window'
 
 const fileManager = new FileStorage()
 const backupManager = new BackupManager()
@@ -79,7 +79,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   // minapp
   ipcMain.handle('minapp', (_, args) => {
-    createMinappWindow({
+    windowService.createMinappWindow({
       url: args.url,
       parent: mainWindow,
       windowOptions: {

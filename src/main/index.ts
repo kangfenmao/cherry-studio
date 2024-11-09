@@ -4,8 +4,9 @@ import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import { registerIpc } from './ipc'
 import { registerZoomShortcut } from './services/ShortcutService'
+import { TrayService } from './services/TrayService'
+import { windowService } from './services/WindowService'
 import { updateUserDataPath } from './utils/upgrade'
-import { createMainWindow } from './window'
 
 // Check for single instance lock
 if (!app.requestSingleInstanceLock()) {
@@ -21,20 +22,18 @@ app.whenReady().then(async () => {
   // Set app user model id for windows
   electronApp.setAppUserModelId(import.meta.env.VITE_MAIN_BUNDLE_ID || 'com.kangfenmao.CherryStudio')
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
+  const mainWindow = windowService.createMainWindow()
+  new TrayService()
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      windowService.createMainWindow()
+    } else {
+      windowService.showMainWindow()
+    }
   })
-
-  const mainWindow = createMainWindow()
 
   registerZoomShortcut(mainWindow)
 
@@ -56,13 +55,12 @@ app.on('second-instance', () => {
   }
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+app.on('browser-window-created', (_, window) => {
+  optimizer.watchWindowShortcuts(window)
+})
+
+app.on('before-quit', () => {
+  app.isQuitting = true
 })
 
 // In this file you can include the rest of your app"s specific main process
