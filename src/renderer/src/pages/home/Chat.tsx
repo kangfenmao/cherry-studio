@@ -85,7 +85,7 @@ const Container = styled.div`
       }
     }
     code {
-      color: var(--color-white-soft);
+      color: var(--color-text);
     }
   }
 `
