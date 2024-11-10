@@ -112,6 +112,9 @@
     overflow-x: auto;
     font-family: 'Fira Code', 'Courier New', Courier, monospace;
     background-color: var(--color-background-mute);
+    &:has(> .mermaid) {
+      background-color: transparent;
+    }
     &:not(pre pre) {
       > code:not(pre pre > code) {
         padding: 15px;

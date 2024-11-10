@@ -1,7 +1,9 @@
+import { locales } from '@main/utils/locales'
 import { app, Menu, nativeImage, nativeTheme, Tray } from 'electron'
 
 import iconDark from '../../../build/tray_icon_dark.png?asset'
 import iconLight from '../../../build/tray_icon_light.png?asset'
+import { configManager } from './ConfigManager'
 import { windowService } from './WindowService'
 
 export class TrayService {
@@ -40,13 +42,16 @@ export class TrayService {
 
     this.tray = tray
 
+    const locale = locales[configManager.getLanguage()]
+    const { tray: trayLocale } = locale.translation
+
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: '显示窗口',
+        label: trayLocale.show_window,
         click: () => windowService.showMainWindow()
       },
       {
-        label: '退出',
+        label: trayLocale.quit,
         click: () => this.quit()
       }
     ])

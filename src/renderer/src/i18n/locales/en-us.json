@@ -406,6 +406,21 @@
       "messages": "Messages",
       "conversation_details": "Conversation Details",
       "conversation_history": "Conversation History"
+    },
+    "mermaid": {
+      "title": "Mermaid Diagram",
+      "download": {
+        "svg": "Download SVG",
+        "png": "Download PNG"
+      },
+      "tabs": {
+        "preview": "Preview",
+        "source": "Source"
+      }
+    },
+    "tray": {
+      "show_window": "Show Window",
+      "quit": "Quit"
     }
   }
 }

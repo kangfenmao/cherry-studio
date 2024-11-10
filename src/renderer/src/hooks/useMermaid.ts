@@ -13,25 +13,13 @@ export const useMermaid = () => {
     runAsyncFunction(async () => {
       if (!window.mermaid) {
         await loadScript('https://unpkg.com/mermaid@11.4.0/dist/mermaid.min.js')
-        window.mermaid.initialize({
-          startOnLoad: true,
-          theme: theme === ThemeMode.dark ? 'dark' : 'default'
-        })
-        window.mermaid.contentLoaded()
       }
+      window.mermaid.initialize({
+        startOnLoad: true,
+        theme: theme === ThemeMode.dark ? 'dark' : 'default'
+      })
+      window.mermaid.contentLoaded()
     })
-  }, [])
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (window.mermaid) {
-        window.mermaid.initialize({
-          startOnLoad: true,
-          theme: theme === ThemeMode.dark ? 'dark' : 'default'
-        })
-        window.mermaid.contentLoaded()
-      }
-    }, 2000)
   }, [theme])
 
   useEffect(() => {

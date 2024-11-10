@@ -60,7 +60,6 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
           await highlighter.loadLanguage(language as BundledLanguage)
           console.log(`Loaded language: ${language}`)
         } else {
-          console.warn(`Language '${language}' is not supported`)
           return `<pre><code>${code}</code></pre>`
         }
       }

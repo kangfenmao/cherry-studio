@@ -47,10 +47,10 @@ export const groupTranslations: GroupTranslations = {
     'zh-CN': '写作',
     'zh-TW': '寫作'
   },
-  Artifacts: {
-    'en-US': 'Artifacts',
-    'zh-CN': 'Artifacts',
-    'zh-TW': 'Artifacts'
+  精选: {
+    'en-US': 'Featured',
+    'zh-CN': '精选',
+    'zh-TW': '精選'
   },
   编程: {
     'en-US': 'Programming',

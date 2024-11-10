@@ -406,6 +406,21 @@
       "messages": "訊息數",
       "conversation_details": "會話詳情",
       "conversation_history": "會話歷史"
+    },
+    "mermaid": {
+      "title": "Mermaid 圖表",
+      "download": {
+        "svg": "下載 SVG",
+        "png": "下載 PNG"
+      },
+      "tabs": {
+        "preview": "預覽",
+        "source": "原始碼"
+      }
+    },
+    "tray": {
+      "show_window": "顯示視窗",
+      "quit": "退出"
     }
   }
 }
