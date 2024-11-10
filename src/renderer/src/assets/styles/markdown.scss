@@ -107,6 +107,10 @@
     white-space: pre;
   }
 
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+
   pre {
     border-radius: 5px;
     overflow-x: auto;
