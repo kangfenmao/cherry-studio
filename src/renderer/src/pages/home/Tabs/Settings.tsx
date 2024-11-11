@@ -1,9 +1,6 @@
-import { CheckOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
-import { HStack } from '@renderer/components/Layout'
+import { CheckOutlined } from '@ant-design/icons'
 import Scrollbar from '@renderer/components/Scrollbar'
-import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { codeThemes } from '@renderer/context/SyntaxHighlighterProvider'
-import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings'
 import { useAppDispatch } from '@renderer/store'
@@ -21,26 +18,14 @@ import {
   setShowMessageDivider,
   setShowTopicTime
 } from '@renderer/store/settings'
-import { Assistant, AssistantSettings } from '@renderer/types'
-import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
+import { Col, Row, Select, Slider, Switch } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-interface Props {
-  assistant: Assistant
-}
-
-const SettingsTab: FC<Props> = (props) => {
-  const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
+const SettingsTab: FC = () => {
   const { messageStyle, codeStyle, fontSize } = useSettings()
-
-  const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
-  const [contextCount, setContextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
-  const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
-  const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
   const [fontSizeValue, setFontSizeValue] = useState(fontSize)
-  const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const { t } = useTranslation()
 
   const dispatch = useAppDispatch()
@@ -61,140 +46,12 @@ const SettingsTab: FC<Props> = (props) => {
     setTopicPosition
   } = useSettings()
 
-  const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
-    updateAssistantSettings(settings)
-  }
-
-  const onTemperatureChange = (value) => {
-    if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ temperature: value })
-    }
-  }
-
-  const onContextCountChange = (value) => {
-    if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ contextCount: value })
-    }
-  }
-
-  const onMaxTokensChange = (value) => {
-    if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ maxTokens: value })
-    }
-  }
-
-  const onReset = () => {
-    setTemperature(DEFAULT_TEMPERATURE)
-    setContextCount(DEFAULT_CONTEXTCOUNT)
-    updateAssistant({
-      ...assistant,
-      settings: {
-        ...assistant.settings,
-        temperature: DEFAULT_TEMPERATURE,
-        contextCount: DEFAULT_CONTEXTCOUNT,
-        enableMaxTokens: false,
-        maxTokens: DEFAULT_MAX_TOKENS,
-        streamOutput: true,
-        hideMessages: false,
-        autoResetModel: false
-      }
-    })
-  }
-
   useEffect(() => {
-    setTemperature(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
-    setContextCount(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
-    setEnableMaxTokens(assistant?.settings?.enableMaxTokens ?? false)
-    setMaxTokens(assistant?.settings?.maxTokens ?? DEFAULT_MAX_TOKENS)
-    setStreamOutput(assistant?.settings?.streamOutput ?? true)
-  }, [assistant])
+    setFontSizeValue(fontSize)
+  }, [fontSize])
 
   return (
     <Container>
-      <SettingSubtitle style={{ marginTop: 5 }}>
-        {t('settings.messages.model.title')}{' '}
-        <Tooltip title={t('chat.settings.reset')}>
-          <ReloadOutlined onClick={onReset} style={{ cursor: 'pointer', fontSize: 12, padding: '0 3px' }} />
-        </Tooltip>
-      </SettingSubtitle>
-      <SettingDivider />
-      <Row align="middle">
-        <Label>{t('chat.settings.temperature')}</Label>
-        <Tooltip title={t('chat.settings.temperature.tip')}>
-          <QuestionIcon />
-        </Tooltip>
-      </Row>
-      <Row align="middle" gutter={10}>
-        <Col span={24}>
-          <Slider
-            min={0}
-            max={2}
-            onChange={setTemperature}
-            onChangeComplete={onTemperatureChange}
-            value={typeof temperature === 'number' ? temperature : 0}
-            step={0.1}
-          />
-        </Col>
-      </Row>
-      <Row align="middle">
-        <Label>{t('chat.settings.context_count')}</Label>
-        <Tooltip title={t('chat.settings.context_count.tip')}>
-          <QuestionIcon />
-        </Tooltip>
-      </Row>
-      <Row align="middle" gutter={10}>
-        <Col span={24}>
-          <Slider
-            min={0}
-            max={20}
-            onChange={setContextCount}
-            onChangeComplete={onContextCountChange}
-            value={typeof contextCount === 'number' ? contextCount : 0}
-            step={1}
-          />
-        </Col>
-      </Row>
-      <SettingRow>
-        <SettingRowTitleSmall>{t('model.stream_output')}</SettingRowTitleSmall>
-        <Switch
-          size="small"
-          checked={streamOutput}
-          onChange={(checked) => {
-            setStreamOutput(checked)
-            onUpdateAssistantSettings({ streamOutput: checked })
-          }}
-        />
-      </SettingRow>
-      <SettingDivider />
-      <Row align="middle" justify="space-between">
-        <HStack alignItems="center">
-          <Label>{t('chat.settings.max_tokens')}</Label>
-          <Tooltip title={t('chat.settings.max_tokens.tip')}>
-            <QuestionIcon />
-          </Tooltip>
-        </HStack>
-        <Switch
-          size="small"
-          checked={enableMaxTokens}
-          onChange={(enabled) => {
-            setEnableMaxTokens(enabled)
-            onUpdateAssistantSettings({ enableMaxTokens: enabled })
-          }}
-        />
-      </Row>
-      <Row align="middle" gutter={10}>
-        <Col span={24}>
-          <Slider
-            disabled={!enableMaxTokens}
-            min={0}
-            max={32000}
-            onChange={setMaxTokens}
-            onChangeComplete={onMaxTokensChange}
-            value={typeof maxTokens === 'number' ? maxTokens : 0}
-            step={100}
-          />
-        </Col>
-      </Row>
       <SettingSubtitle>{t('settings.messages.title')}</SettingSubtitle>
       <SettingDivider />
       <SettingRow>
@@ -229,7 +86,7 @@ const SettingsTab: FC<Props> = (props) => {
         <Select
           value={codeStyle}
           onChange={(value) => dispatch(setCodeStyle(value))}
-          style={{ width: 150 }}
+          style={{ width: 135 }}
           size="small">
           {codeThemes.map((theme) => (
             <Select.Option key={theme} value={theme}>
@@ -244,7 +101,7 @@ const SettingsTab: FC<Props> = (props) => {
         <Select
           value={messageStyle}
           onChange={(value) => dispatch(setMessageStyle(value))}
-          style={{ width: 100 }}
+          style={{ width: 135 }}
           size="small">
           <Select.Option value="plain">{t('message.message.style.plain')}</Select.Option>
           <Select.Option value="bubble">{t('message.message.style.bubble')}</Select.Option>
@@ -256,7 +113,7 @@ const SettingsTab: FC<Props> = (props) => {
         <Select
           value={mathEngine}
           onChange={(value) => dispatch(setMathEngine(value))}
-          style={{ width: 100 }}
+          style={{ width: 135 }}
           size="small">
           <Select.Option value="KaTeX">KaTeX</Select.Option>
           <Select.Option value="MathJax">MathJax</Select.Option>
@@ -323,7 +180,7 @@ const SettingsTab: FC<Props> = (props) => {
             { value: 'Shift+Enter', label: `Shift + Enter` }
           ]}
           onChange={(value) => setSendMessageShortcut(value)}
-          style={{ width: 100 }}
+          style={{ width: 135 }}
         />
       </SettingRow>
       <SettingDivider />
@@ -333,7 +190,7 @@ const SettingsTab: FC<Props> = (props) => {
         <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
         <Select
           defaultValue={topicPosition || 'right'}
-          style={{ width: 100 }}
+          style={{ width: 135 }}
           onChange={setTopicPosition}
           size="small"
           options={[
@@ -372,18 +229,7 @@ const Container = styled(Scrollbar)`
   padding-bottom: 10px;
   padding: 10px 15px;
   margin-bottom: 10px;
-`
-
-const Label = styled.p`
-  margin: 0;
-  font-size: 12px;
-  margin-right: 5px;
-`
-
-const QuestionIcon = styled(QuestionCircleOutlined)`
-  font-size: 12px;
-  cursor: pointer;
-  color: var(--color-text-3);
+  padding-top: 0;
 `
 
 const SettingRowTitleSmall = styled(SettingRowTitle)`

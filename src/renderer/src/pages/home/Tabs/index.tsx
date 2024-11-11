@@ -138,7 +138,7 @@ const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant,
         {tab === 'topic' && (
           <Topics assistant={activeAssistant} activeTopic={activeTopic} setActiveTopic={setActiveTopic} />
         )}
-        {tab === 'settings' && <Settings assistant={activeAssistant} />}
+        {tab === 'settings' && <Settings />}
       </TabContent>
     </Container>
   )
