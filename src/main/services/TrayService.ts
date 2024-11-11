@@ -30,12 +30,12 @@ export class TrayService {
       tray.setImage(resizedImage)
     } else if (process.platform === 'linux') {
       const image = nativeImage.createFromPath(iconPath)
-      const resizedImage = image.resize({ width: 24, height: 24 })
+      const resizedImage = image.resize({ width: 16, height: 16 })
       tray.setImage(resizedImage)
       nativeTheme.on('updated', () => {
         const newIconPath = nativeTheme.shouldUseDarkColors ? iconLight : iconDark
         const newImage = nativeImage.createFromPath(newIconPath)
-        const newResizedImage = newImage.resize({ width: 24, height: 24 })
+        const newResizedImage = newImage.resize({ width: 16, height: 16 })
         tray.setImage(newResizedImage)
       })
     }
