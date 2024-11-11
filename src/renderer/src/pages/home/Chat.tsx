@@ -74,6 +74,7 @@ const Container = styled.div`
       padding: 10px 15px 0 15px;
     }
     .message-user {
+      color: var(--chat-text-user);
       .markdown,
       .anticon,
       .iconfont,
