@@ -15,6 +15,7 @@ interface Props extends ShowParams {
 const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
   const [open, setOpen] = useState(true)
   const { t } = useTranslation()
+  const mermaidId = `mermaid-popup-${Date.now()}`
 
   const onOk = () => {
     setOpen(false)
@@ -30,7 +31,7 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
 
   const handleDownload = async (format: 'svg' | 'png') => {
     try {
-      const element = document.querySelector('.mermaid')
+      const element = document.getElementById(mermaidId)
       if (!element) return
 
       const timestamp = Date.now()
@@ -50,14 +51,14 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         const img = new Image()
+        img.crossOrigin = 'anonymous'
 
         const viewBox = svgElement.getAttribute('viewBox')?.split(' ').map(Number) || []
         const width = viewBox[2] || svgElement.clientWidth || svgElement.getBoundingClientRect().width
         const height = viewBox[3] || svgElement.clientHeight || svgElement.getBoundingClientRect().height
 
         const svgData = new XMLSerializer().serializeToString(svgElement)
-        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
-        const url = URL.createObjectURL(svgBlob)
+        const svgBase64 = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgData)))}`
 
         img.onload = () => {
           const scale = 3
@@ -76,9 +77,8 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
               URL.revokeObjectURL(pngUrl)
             }
           }, 'image/png')
-          URL.revokeObjectURL(url)
         }
-        img.src = url
+        img.src = svgBase64
       }
     } catch (error) {
       console.error('Download failed:', error)
@@ -110,6 +110,7 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
             label: t('mermaid.tabs.preview'),
             children: (
               <div
+                id={mermaidId}
                 className="mermaid"
                 style={{
                   maxHeight: 'calc(80vh - 200px)',
