@@ -11,6 +11,7 @@ import { getModelLogo, isVisionModel } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useProvider } from '@renderer/hooks/useProvider'
+import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/ApiService'
 import { Provider } from '@renderer/types'
@@ -30,6 +31,7 @@ import {
   SettingTitle
 } from '..'
 import AddModelPopup from './AddModelPopup'
+import ApiCheckPopup from './ApiCheckPopup'
 import EditModelsPopup from './EditModelsPopup'
 import GraphRAGSettings from './GraphRAGSettings'
 import OllamSettings from './OllamaSettings'
@@ -63,11 +65,34 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add.add_model'), provider })
 
   const onCheckApi = async () => {
-    setApiChecking(true)
-    const valid = await checkApi({ ...provider, apiKey, apiHost })
-    setApiValid(valid)
-    setApiChecking(false)
-    setTimeout(() => setApiValid(false), 3000)
+    if (apiKey.includes(',')) {
+      const keys = apiKey
+        .split(',')
+        .map((k) => k.trim())
+        .filter((k) => k)
+      const result = await ApiCheckPopup.show({
+        title: t('settings.provider.check_multiple_keys'),
+        provider: { ...provider, apiHost },
+        apiKeys: keys
+      })
+
+      if (result?.validKeys) {
+        setApiKey(result.validKeys.join(','))
+        updateProvider({ ...provider, apiKey: result.validKeys.join(',') })
+      }
+    } else {
+      setApiChecking(true)
+      const valid = await checkApi({ ...provider, apiKey, apiHost })
+      window.message[valid ? 'success' : 'error']({
+        key: 'api-check',
+        style: { marginTop: '3vh' },
+        duration: valid ? 2 : 8,
+        content: valid ? i18n.t('message.api.connection.success') : i18n.t('message.api.connection.failed')
+      })
+      setApiValid(valid)
+      setApiChecking(false)
+      setTimeout(() => setApiValid(false), 3000)
+    }
   }
 
   const providerConfig = PROVIDER_CONFIG[provider.id]

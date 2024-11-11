@@ -39,7 +39,7 @@ const SettingsPage: FC = () => {
               <MenuItemLink to="/settings/provider">
                 <MenuItem className={isRoute('/settings/provider')}>
                   <CloudOutlined />
-                  {t('settings.provider')}
+                  {t('settings.provider.title')}
                 </MenuItem>
               </MenuItemLink>
               <MenuItemLink to="/settings/model">

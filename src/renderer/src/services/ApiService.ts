@@ -213,13 +213,6 @@ export async function checkApi(provider: Provider) {
 
   const { valid } = await AI.check()
 
-  window.message[valid ? 'success' : 'error']({
-    key: 'api-check',
-    style: { marginTop: '3vh' },
-    duration: valid ? 2 : 8,
-    content: valid ? i18n.t('message.api.connection.success') : i18n.t('message.api.connection.failed')
-  })
-
   return valid
 }
 
