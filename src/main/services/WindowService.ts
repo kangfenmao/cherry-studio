@@ -171,11 +171,6 @@ export class WindowService {
         mainWindow.hide()
       }
     })
-
-    mainWindow.on('minimize', (event) => {
-      event.preventDefault()
-      mainWindow.hide()
-    })
   }
 
   public showMainWindow() {
