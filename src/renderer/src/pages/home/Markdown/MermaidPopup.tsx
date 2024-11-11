@@ -3,6 +3,7 @@ import { download } from '@renderer/utils/download'
 import { Button, Modal, Space, Tabs } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 interface ShowParams {
   chart: string
@@ -97,6 +98,7 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
       onCancel={onCancel}
       afterClose={onClose}
       width={1000}
+      centered
       footer={[
         <Space key="download-buttons">
           <Button onClick={() => handleDownload('svg')}>{t('mermaid.download.svg')}</Button>
@@ -109,18 +111,9 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
             key: 'preview',
             label: t('mermaid.tabs.preview'),
             children: (
-              <div
-                id={mermaidId}
-                className="mermaid"
-                style={{
-                  maxHeight: 'calc(80vh - 200px)',
-                  overflowY: 'auto',
-                  padding: '16px',
-                  display: 'flex',
-                  justifyContent: 'center'
-                }}>
+              <StyledMermaid id={mermaidId} className="mermaid">
                 {chart}
-              </div>
+              </StyledMermaid>
             )
           },
           {
@@ -163,3 +156,9 @@ export default class MermaidPopup {
     })
   }
 }
+
+const StyledMermaid = styled.div`
+  max-height: calc(80vh - 200px);
+  text-align: center;
+  overflow-y: auto;
+`
