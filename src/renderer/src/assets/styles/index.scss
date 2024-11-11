@@ -211,6 +211,9 @@ body[os='windows'] {
 
 .bubble {
   background-color: var(--chat-background);
+  #chat-main {
+    background-color: var(--chat-background);
+  }
   #messages {
     background-color: var(--chat-background);
   }
@@ -235,7 +238,7 @@ body[os='windows'] {
     .anticon,
     .iconfont,
     .message-tokens {
-      color: var(--chat-text-user);
+      color: var(--chat-text-user) !important;
     }
     .message-action-button:hover {
       background-color: var(--color-white-soft);

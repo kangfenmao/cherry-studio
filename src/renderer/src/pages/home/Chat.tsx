@@ -24,7 +24,7 @@ const Chat: FC<Props> = (props) => {
 
   return (
     <Container id="chat" className={messageStyle}>
-      <Main vertical flex={1} justify="space-between">
+      <Main id="chat-main" vertical flex={1} justify="space-between">
         <Messages
           key={props.activeTopic.id}
           assistant={assistant}
@@ -52,7 +52,6 @@ const Container = styled.div`
   height: 100%;
   flex: 1;
   justify-content: space-between;
-  background-color: var(--color-background);
 `
 
 const Main = styled(Flex)`
