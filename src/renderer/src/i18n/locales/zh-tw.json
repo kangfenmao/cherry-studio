@@ -324,7 +324,7 @@
       "about.license.button": "查看",
       "about.contact.button": "郵件",
       "proxy.title": "代理地址",
-      "tray.title": "顯示工作列圖示",
+      "tray.title": "工作列圖示",
       "theme.title": "主題",
       "theme.dark": "深色主題",
       "theme.light": "淺色主題",
@@ -337,6 +337,7 @@
       "topic.position.left": "左側",
       "topic.position.right": "右側",
       "topic.show.time": "顯示話題時間",
+      "display.title": "顯示設定",
       "shortcuts": {
         "title": "快速方式",
         "action": "操作",

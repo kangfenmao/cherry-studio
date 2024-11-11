@@ -2,7 +2,7 @@ import { isMac } from '@renderer/config/constant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
-import { setClickAssistantToShowTopic, setLanguage, setShowTopicTime } from '@renderer/store/settings'
+import { setLanguage } from '@renderer/store/settings'
 import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { LanguageVarious, ThemeMode } from '@renderer/types'
 import { isValidProxyUrl } from '@renderer/utils'
@@ -21,11 +21,7 @@ const GeneralSettings: FC = () => {
     setTray,
     tray,
     windowStyle,
-    topicPosition,
-    showTopicTime,
-    clickAssistantToShowTopic,
-    setWindowStyle,
-    setTopicPosition
+    setWindowStyle
   } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
 
@@ -116,38 +112,8 @@ const GeneralSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
-        <Select
-          defaultValue={topicPosition || 'right'}
-          style={{ width: 180 }}
-          onChange={setTopicPosition}
-          options={[
-            { value: 'left', label: t('settings.topic.position.left') },
-            { value: 'right', label: t('settings.topic.position.right') }
-          ]}
-        />
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
         <SettingRowTitle>{t('settings.tray.title')}</SettingRowTitle>
         <Switch checked={tray} onChange={(checked) => updateTray(checked)} />
-      </SettingRow>
-      <SettingDivider />
-      {topicPosition === 'left' && (
-        <>
-          <SettingRow style={{ minHeight: 32 }}>
-            <SettingRowTitle>{t('settings.advanced.click_assistant_switch_to_topics')}</SettingRowTitle>
-            <Switch
-              checked={clickAssistantToShowTopic}
-              onChange={(checked) => dispatch(setClickAssistantToShowTopic(checked))}
-            />
-          </SettingRow>
-          <SettingDivider />
-        </>
-      )}
-      <SettingRow>
-        <SettingRowTitle>{t('settings.topic.show.time')}</SettingRowTitle>
-        <Switch checked={showTopicTime} onChange={(checked) => dispatch(setShowTopicTime(checked))} />
       </SettingRow>
       <SettingDivider />
     </SettingContainer>

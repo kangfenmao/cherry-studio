@@ -399,12 +399,8 @@ const Textarea = styled(TextArea)`
   overflow: auto;
   width: 100%;
   box-sizing: border-box;
-  color: var(--color-text);
   &.ant-input {
     line-height: 1.4;
-  }
-  &::placeholder {
-    color: var(--color-text-3);
   }
 `
 

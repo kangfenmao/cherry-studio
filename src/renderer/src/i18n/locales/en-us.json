@@ -336,7 +336,7 @@
       "about.license.button": "License",
       "about.contact.button": "Email",
       "proxy.title": "Proxy Address",
-      "tray.title": "Show Tray Icon",
+      "tray.title": "Tray Icon",
       "theme.title": "Theme",
       "theme.dark": "Dark",
       "theme.light": "Light",
@@ -349,6 +349,7 @@
       "topic.position.left": "Left",
       "topic.position.right": "Right",
       "topic.show.time": "Show Topic Time",
+      "display.title": "Display Settings",
       "shortcuts": {
         "title": "Keyboard Shortcuts",
         "action": "Action",

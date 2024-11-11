@@ -8,6 +8,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings'
 import { useAppDispatch } from '@renderer/store'
 import {
+  setClickAssistantToShowTopic,
   setCodeShowLineNumbers,
   setCodeStyle,
   setFontSize,
@@ -17,7 +18,8 @@ import {
   setPasteLongTextAsFile,
   setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
-  setShowMessageDivider
+  setShowMessageDivider,
+  setShowTopicTime
 } from '@renderer/store/settings'
 import { Assistant, AssistantSettings } from '@renderer/types'
 import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
@@ -52,7 +54,11 @@ const SettingsTab: FC<Props> = (props) => {
     pasteLongTextAsFile,
     renderInputMessageAsMarkdown,
     codeShowLineNumbers,
-    mathEngine
+    mathEngine,
+    topicPosition,
+    showTopicTime,
+    clickAssistantToShowTopic,
+    setTopicPosition
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
@@ -223,7 +229,7 @@ const SettingsTab: FC<Props> = (props) => {
         <Select
           value={codeStyle}
           onChange={(value) => dispatch(setCodeStyle(value))}
-          style={{ width: 160 }}
+          style={{ width: 150 }}
           size="small">
           {codeThemes.map((theme) => (
             <Select.Option key={theme} value={theme}>
@@ -320,6 +326,41 @@ const SettingsTab: FC<Props> = (props) => {
           style={{ width: 100 }}
         />
       </SettingRow>
+      <SettingDivider />
+      <SettingSubtitle>{t('settings.display.title')}</SettingSubtitle>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
+        <Select
+          defaultValue={topicPosition || 'right'}
+          style={{ width: 100 }}
+          onChange={setTopicPosition}
+          size="small"
+          options={[
+            { value: 'left', label: t('settings.topic.position.left') },
+            { value: 'right', label: t('settings.topic.position.right') }
+          ]}
+        />
+      </SettingRow>
+      <SettingDivider />
+      {topicPosition === 'left' && (
+        <>
+          <SettingRow>
+            <SettingRowTitle>{t('settings.advanced.click_assistant_switch_to_topics')}</SettingRowTitle>
+            <Switch
+              size="small"
+              checked={clickAssistantToShowTopic}
+              onChange={(checked) => dispatch(setClickAssistantToShowTopic(checked))}
+            />
+          </SettingRow>
+          <SettingDivider />
+        </>
+      )}
+      <SettingRow>
+        <SettingRowTitle>{t('settings.topic.show.time')}</SettingRowTitle>
+        <Switch size="small" checked={showTopicTime} onChange={(checked) => dispatch(setShowTopicTime(checked))} />
+      </SettingRow>
+      <SettingDivider />
     </Container>
   )
 }
