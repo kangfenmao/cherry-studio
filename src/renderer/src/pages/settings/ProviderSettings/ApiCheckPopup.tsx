@@ -1,8 +1,9 @@
-import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
+import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined } from '@ant-design/icons'
+import Scrollbar from '@renderer/components/Scrollbar'
 import { TopView } from '@renderer/components/TopView'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { checkApi } from '@renderer/services/ApiService'
-import { Button, List, Modal, Space, Typography } from 'antd'
+import { Button, List, Modal, Space, Spin, Typography } from 'antd'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -30,18 +31,24 @@ const PopupContainer: React.FC<Props> = ({ title, provider, apiKeys, resolve }) 
   })
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const [isChecking, setIsChecking] = useState(false)
 
   const checkAllKeys = async () => {
+    setIsChecking(true)
     const newStatuses = [...keyStatuses]
 
-    for (let i = 0; i < newStatuses.length; i++) {
-      setKeyStatuses((prev) => prev.map((status, idx) => (idx === i ? { ...status, checking: true } : status)))
+    try {
+      for (let i = 0; i < newStatuses.length; i++) {
+        setKeyStatuses((prev) => prev.map((status, idx) => (idx === i ? { ...status, checking: true } : status)))
 
-      const valid = await checkApi({ ...provider, apiKey: newStatuses[i].key })
+        const valid = await checkApi({ ...provider, apiKey: newStatuses[i].key })
 
-      setKeyStatuses((prev) =>
-        prev.map((status, idx) => (idx === i ? { ...status, checking: false, isValid: valid } : status))
-      )
+        setKeyStatuses((prev) =>
+          prev.map((status, idx) => (idx === i ? { ...status, checking: false, isValid: valid } : status))
+        )
+      }
+    } finally {
+      setIsChecking(false)
     }
   }
 
@@ -85,7 +92,7 @@ const PopupContainer: React.FC<Props> = ({ title, provider, apiKeys, resolve }) 
             </Button>
           </Space>
           <Space>
-            <Button key="check" type="primary" ghost onClick={checkAllKeys}>
+            <Button key="check" type="primary" ghost onClick={checkAllKeys} disabled={isChecking}>
               {t('settings.provider.check_all_keys')}
             </Button>
             <Button key="save" type="primary" onClick={onOk}>
@@ -94,24 +101,32 @@ const PopupContainer: React.FC<Props> = ({ title, provider, apiKeys, resolve }) 
           </Space>
         </Space>
       }>
-      <List
-        dataSource={keyStatuses}
-        renderItem={(status) => (
-          <List.Item>
-            <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-              <Typography.Text copyable={{ text: status.key }}>
-                {status.key.slice(0, 8)}...{status.key.slice(-8)}
-              </Typography.Text>
-              <Space>
-                {status.checking && <span>{t('settings.provider.check')}</span>}
-                {status.isValid === true && <CheckCircleFilled style={{ color: '#52c41a' }} />}
-                {status.isValid === false && <CloseCircleFilled style={{ color: '#ff4d4f' }} />}
-                {status.isValid === undefined && !status.checking && <span>{t('settings.provider.not_checked')}</span>}
+      <Scrollbar style={{ maxHeight: '70vh', overflowX: 'hidden' }}>
+        <List
+          dataSource={keyStatuses}
+          renderItem={(status) => (
+            <List.Item>
+              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                <Typography.Text copyable={{ text: status.key }}>
+                  {status.key.slice(0, 8)}...{status.key.slice(-8)}
+                </Typography.Text>
+                <Space>
+                  {status.checking && (
+                    <Space>
+                      <Spin indicator={<LoadingOutlined style={{ fontSize: 16 }} spin />} />
+                    </Space>
+                  )}
+                  {status.isValid === true && <CheckCircleFilled style={{ color: '#52c41a' }} />}
+                  {status.isValid === false && <CloseCircleFilled style={{ color: '#ff4d4f' }} />}
+                  {status.isValid === undefined && !status.checking && (
+                    <span>{t('settings.provider.not_checked')}</span>
+                  )}
+                </Space>
               </Space>
-            </Space>
-          </List.Item>
-        )}
-      />
+            </List.Item>
+          )}
+        />
+      </Scrollbar>
     </Modal>
   )
 }
