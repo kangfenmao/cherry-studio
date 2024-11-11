@@ -53,42 +53,6 @@ const Container = styled.div`
   flex: 1;
   justify-content: space-between;
   background-color: var(--color-background);
-  &.bubble {
-    background-color: var(--chat-background);
-    #messages {
-      background-color: var(--chat-background);
-    }
-    #inputbar {
-      border-radius: 0;
-      margin: 0;
-      border: none;
-      border-top: 1px solid var(--color-border-mute);
-      background: var(--color-background);
-    }
-    .system-prompt {
-      background-color: var(--chat-background-assistant);
-    }
-    .message-content-container {
-      margin: 5px 0;
-      border-radius: 8px;
-      padding: 10px 15px 0 15px;
-    }
-    .message-user {
-      color: var(--chat-text-user);
-      .markdown,
-      .anticon,
-      .iconfont,
-      .message-tokens {
-        color: var(--chat-text-user);
-      }
-      .message-action-button:hover {
-        background-color: var(--color-white-soft);
-      }
-    }
-    code {
-      color: var(--color-text);
-    }
-  }
 `
 
 const Main = styled(Flex)`

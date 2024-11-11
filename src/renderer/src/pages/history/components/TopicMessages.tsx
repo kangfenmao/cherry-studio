@@ -1,6 +1,7 @@
 import { ArrowRightOutlined, MessageOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import useScrollPosition from '@renderer/hooks/useScrollPosition'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { getAssistantById } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { locateToMessage } from '@renderer/services/MessagesService'
@@ -20,6 +21,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 const TopicMessages: FC<Props> = ({ topic, ...props }) => {
   const navigate = useNavigate()
   const { handleScroll, containerRef } = useScrollPosition('TopicMessages')
+  const { messageStyle } = useSettings()
 
   const isEmpty = (topic?.messages || []).length === 0
 
@@ -34,7 +36,7 @@ const TopicMessages: FC<Props> = ({ topic, ...props }) => {
   }
 
   return (
-    <MessagesContainer {...props} ref={containerRef} onScroll={handleScroll}>
+    <MessagesContainer {...props} ref={containerRef} onScroll={handleScroll} className={messageStyle}>
       <ContainerWrapper style={{ paddingTop: 30, paddingBottom: 30 }}>
         {topic?.messages.map((message) => (
           <div key={message.id} style={{ position: 'relative' }}>
