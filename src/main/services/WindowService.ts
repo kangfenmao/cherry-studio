@@ -166,11 +166,10 @@ export class WindowService {
   }
 
   private setupWindowLifecycleEvents(mainWindow: BrowserWindow) {
+    if (!configManager.isTray() && isTilingWindowManager()) {
+      app.quit()
+    }
     mainWindow.on('close', (event) => {
-      if (!configManager.isTray() && isTilingWindowManager()) {
-        app.quit()
-      }
-
       if (!app.isQuitting) {
         event.preventDefault()
         mainWindow.hide()
@@ -181,7 +180,7 @@ export class WindowService {
   public showMainWindow() {
     if (this.mainWindow) {
       if (this.mainWindow.isMinimized()) {
-        this.mainWindow.restore()
+        return this.mainWindow.restore()
       }
       this.mainWindow.show()
       this.mainWindow.focus()

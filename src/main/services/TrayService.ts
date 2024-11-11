@@ -58,7 +58,10 @@ export class TrayService {
       }
     ])
 
-    this.tray.setContextMenu(contextMenu)
+    if (process.platform === 'linux') {
+      this.tray.setContextMenu(contextMenu)
+    }
+
     this.tray.setToolTip('Cherry Studio')
 
     this.tray.on('right-click', () => {

@@ -1,6 +1,10 @@
 function isTilingWindowManager() {
-  if (process.platform !== 'linux') {
+  if (process.platform === 'darwin') {
     return false
+  }
+
+  if (process.platform !== 'linux') {
+    return true
   }
 
   const desktopEnv = process.env.XDG_CURRENT_DESKTOP?.toLowerCase()

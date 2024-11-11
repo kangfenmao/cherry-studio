@@ -27,7 +27,7 @@ export class ConfigManager {
   }
 
   isTray(): boolean {
-    return !!this.store.get('tray', false)
+    return !!this.store.get('tray', true)
   }
 
   setTray(value: boolean) {

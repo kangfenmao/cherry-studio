@@ -673,6 +673,10 @@ const migrateConfig = {
   '39': (state: RootState) => {
     state.settings.codeStyle = 'auto'
     return state
+  },
+  '40': (state: RootState) => {
+    state.settings.tray = true
+    return state
   }
 }
 
