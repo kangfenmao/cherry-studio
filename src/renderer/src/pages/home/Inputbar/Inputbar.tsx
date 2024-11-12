@@ -7,6 +7,7 @@ import {
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
+import { PicCenterOutlined } from '@ant-design/icons'
 import { documentExts, imageExts, textExts } from '@renderer/config/constant'
 import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
@@ -342,6 +343,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
               </ToolbarButton>
             </Tooltip>
             <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
+            <ToolbarButton type="text" onClick={onNewContext}>
+              <Tooltip placement="top" title={t('chat.input.new.context')}>
+                <PicCenterOutlined />
+              </Tooltip>
+            </ToolbarButton>
             <Tooltip placement="top" title={expended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
               <ToolbarButton type="text" onClick={onToggleExpended}>
                 {expended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
