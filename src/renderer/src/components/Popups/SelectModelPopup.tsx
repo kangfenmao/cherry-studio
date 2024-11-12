@@ -221,6 +221,11 @@ const StyledMenu = styled(Menu)`
     height: 36px;
     line-height: 36px;
 
+    &.ant-menu-item-selected {
+      background-color: var(--color-background-mute) !important;
+      color: var(--color-text-primary) !important;
+    }
+
     &:not([data-menu-id^='pinned-']) {
       .pin-icon {
         opacity: 0;

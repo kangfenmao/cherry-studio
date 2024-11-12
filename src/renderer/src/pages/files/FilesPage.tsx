@@ -38,19 +38,20 @@ const FilesPage: FC = () => {
     {
       title: t('files.name'),
       dataIndex: 'file',
-      key: 'file'
+      key: 'file',
+      width: '300px'
     },
     {
       title: t('files.size'),
       dataIndex: 'size',
       key: 'size',
-      width: '100px'
+      width: '80px'
     },
     {
       title: t('files.count'),
       dataIndex: 'count',
       key: 'count',
-      width: '100px'
+      width: '60px'
     },
     {
       title: t('files.created_at'),

@@ -82,6 +82,18 @@ const SettingsTab: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
+        <SettingRowTitleSmall>{t('message.message.style')}</SettingRowTitleSmall>
+        <Select
+          value={messageStyle}
+          onChange={(value) => dispatch(setMessageStyle(value))}
+          style={{ width: 135 }}
+          size="small">
+          <Select.Option value="plain">{t('message.message.style.plain')}</Select.Option>
+          <Select.Option value="bubble">{t('message.message.style.bubble')}</Select.Option>
+        </Select>
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
         <SettingRowTitleSmall>{t('message.message.code_style')}</SettingRowTitleSmall>
         <Select
           value={codeStyle}
@@ -93,18 +105,6 @@ const SettingsTab: FC = () => {
               {theme}
             </Select.Option>
           ))}
-        </Select>
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitleSmall>{t('message.message.style')}</SettingRowTitleSmall>
-        <Select
-          value={messageStyle}
-          onChange={(value) => dispatch(setMessageStyle(value))}
-          style={{ width: 135 }}
-          size="small">
-          <Select.Option value="plain">{t('message.message.style.plain')}</Select.Option>
-          <Select.Option value="bubble">{t('message.message.style.bubble')}</Select.Option>
         </Select>
       </SettingRow>
       <SettingDivider />
