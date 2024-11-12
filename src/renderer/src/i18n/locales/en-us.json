@@ -320,10 +320,6 @@
       "about.updateError": "Update error",
       "about.checkUpdate": "Check Update",
       "about.downloading": "Downloading...",
-      "provider.delete.title": "Delete Provider",
-      "provider.delete.content": "Are you sure you want to delete this provider?",
-      "provider.edit.name": "Provider Name",
-      "provider.edit.name.placeholder": "Example: OpenAI",
       "about.title": "About",
       "about.releases.title": "Release Notes",
       "about.releases.button": "Releases",
@@ -377,7 +373,11 @@
         "check_all_keys": "Check All Keys",
         "remove_invalid_keys": "Remove Invalid Keys",
         "remove_duplicate_keys": "Remove Duplicate Keys",
-        "not_checked": "Not Checked"
+        "not_checked": "Not Checked",
+        "delete.title": "Delete Provider",
+        "delete.content": "Are you sure you want to delete this provider?",
+        "edit.name": "Provider Name",
+        "edit.name.placeholder": "Example: OpenAI"
       }
     },
     "translate": {

@@ -140,7 +140,9 @@ const ProvidersList: FC = () => {
         </Scrollbar>
         {!dragging && (
           <AddButtonWrapper>
-            <Button type="dashed" style={{ width: '100%' }} icon={<PlusOutlined />} onClick={onAddProvider} />
+            <Button style={{ width: '100%' }} icon={<PlusOutlined />} onClick={onAddProvider}>
+              {t('button.add')}
+            </Button>
           </AddButtonWrapper>
         )}
       </ProviderListContainer>

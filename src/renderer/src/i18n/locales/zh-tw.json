@@ -308,10 +308,6 @@
       "about.updateError": "更新錯誤",
       "about.checkUpdate": "檢查更新",
       "about.downloading": "正在下載...",
-      "provider.delete.title": "刪除提供者",
-      "provider.delete.content": "確定要刪除此提供者嗎？",
-      "provider.edit.name": "提供者名稱",
-      "provider.edit.name.placeholder": "例如：OpenAI",
       "about.title": "關於我們",
       "about.releases.title": "更新日誌",
       "about.releases.button": "查看",
@@ -365,7 +361,11 @@
         "check_all_keys": "檢查所有密鑰",
         "remove_invalid_keys": "刪除無效密鑰",
         "remove_duplicate_keys": "移除重複密鑰",
-        "not_checked": "未檢查"
+        "not_checked": "未檢查",
+        "delete.title": "刪除提供者",
+        ".delete.content": "確定要刪除此提供者嗎？",
+        "edit.name": "提供者名稱",
+        "edit.name.placeholder": "例如：OpenAI"
       }
     },
     "translate": {

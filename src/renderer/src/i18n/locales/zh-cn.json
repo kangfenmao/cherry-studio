@@ -308,10 +308,6 @@
       "about.updateError": "更新出错",
       "about.checkUpdate": "检查更新",
       "about.downloading": "正在下载更新...",
-      "provider.delete.title": "删除提供商",
-      "provider.delete.content": "确定要删除此模型提供商吗?",
-      "provider.edit.name": "模型提供商名称",
-      "provider.edit.name.placeholder": "例如 OpenAI",
       "about.title": "关于我们",
       "about.releases.title": "更新日志",
       "about.releases.button": "查看",
@@ -365,7 +361,11 @@
         "check_all_keys": "检查所有密钥",
         "remove_invalid_keys": "删除无效密钥",
         "remove_duplicate_keys": "移除重复密钥",
-        "not_checked": "未检查"
+        "not_checked": "未检查",
+        "delete.title": "删除提供商",
+        "delete.content": "确定要删除此模型提供商吗?",
+        "edit.name": "模型提供商名称",
+        "edit.name.placeholder": "例如 OpenAI"
       }
     },
     "translate": {
