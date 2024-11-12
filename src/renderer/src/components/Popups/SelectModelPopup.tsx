@@ -63,11 +63,8 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
 
   const filteredItems: MenuItem[] = providers
     .filter((p) => p.models && p.models.length > 0)
-    .map((p) => ({
-      key: p.id,
-      label: p.isSystem ? t(`provider.${p.id}`) : p.name,
-      type: 'group',
-      children: reverse(sortBy(p.models, 'name'))
+    .map((p) => {
+      const filteredModels = reverse(sortBy(p.models, 'name'))
         .filter((m) =>
           [m.name + m.provider + t('provider.' + p.id)].join('').toLowerCase().includes(searchText.toLowerCase())
         )
@@ -98,7 +95,18 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
             setOpen(false)
           }
         }))
-    }))
+
+      // Only return the group if it has filtered models
+      return filteredModels.length > 0
+        ? {
+            key: p.id,
+            label: p.isSystem ? t(`provider.${p.id}`) : p.name,
+            type: 'group',
+            children: filteredModels
+          }
+        : null
+    })
+    .filter(Boolean) as MenuItem[] // Filter out null items
 
   if (pinnedModels.length > 0 && searchText.length === 0) {
     const pinnedItems = providers
