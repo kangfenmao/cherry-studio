@@ -143,7 +143,8 @@
     },
     "model": {
       "stream_output": "串流輸出",
-      "search": "搜尋模型..."
+      "search": "搜尋模型...",
+      "pinned": "已固定"
     },
     "paintings": {
       "title": "繪圖",

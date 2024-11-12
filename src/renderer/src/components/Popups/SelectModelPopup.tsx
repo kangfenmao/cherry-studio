@@ -1,7 +1,8 @@
-import { SearchOutlined } from '@ant-design/icons'
+import { PushpinOutlined, SearchOutlined } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { TopView } from '@renderer/components/TopView'
 import { getModelLogo, isVisionModel } from '@renderer/config/models'
+import db from '@renderer/databases'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId } from '@renderer/services/ModelService'
 import { Model } from '@renderer/types'
@@ -30,6 +31,35 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
   const [searchText, setSearchText] = useState('')
   const inputRef = useRef<InputRef>(null)
   const { providers } = useProviders()
+  const [pinnedModels, setPinnedModels] = useState<string[]>([])
+
+  useEffect(() => {
+    const loadPinnedModels = async () => {
+      const setting = await db.settings.get('pinned:models')
+      const savedPinnedModels = setting?.value || []
+
+      // Filter out invalid pinned models
+      const allModelIds = providers.flatMap((p) => p.models || []).map((m) => getModelUniqId(m))
+      const validPinnedModels = savedPinnedModels.filter((id) => allModelIds.includes(id))
+
+      // Update storage if there were invalid models
+      if (validPinnedModels.length !== savedPinnedModels.length) {
+        await db.settings.put({ id: 'pinned:models', value: validPinnedModels })
+      }
+
+      setPinnedModels(validPinnedModels)
+    }
+    loadPinnedModels()
+  }, [providers])
+
+  const togglePin = async (modelId: string) => {
+    const newPinnedModels = pinnedModels.includes(modelId)
+      ? pinnedModels.filter((id) => id !== modelId)
+      : [...pinnedModels, modelId]
+
+    await db.settings.put({ id: 'pinned:models', value: newPinnedModels })
+    setPinnedModels(newPinnedModels)
+  }
 
   const filteredItems: MenuItem[] = providers
     .filter((p) => p.models && p.models.length > 0)
@@ -45,7 +75,17 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
           key: getModelUniqId(m),
           label: (
             <ModelItem>
-              {m?.name} {isVisionModel(m) && <VisionIcon />}
+              <span>
+                {m?.name} {isVisionModel(m) && <VisionIcon />}
+              </span>
+              <PinIcon
+                onClick={(e) => {
+                  e.stopPropagation()
+                  togglePin(getModelUniqId(m))
+                }}
+                isPinned={pinnedModels.includes(getModelUniqId(m))}>
+                <PushpinOutlined />
+              </PinIcon>
             </ModelItem>
           ),
           icon: (
@@ -59,7 +99,46 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
           }
         }))
     }))
-    .filter((item) => item.children && item.children.length > 0) as MenuItem[]
+
+  if (pinnedModels.length > 0 && searchText.length === 0) {
+    const pinnedItems = providers
+      .flatMap((p) => p.models || [])
+      .filter((m) => pinnedModels.includes(getModelUniqId(m)))
+      .map((m) => ({
+        key: getModelUniqId(m),
+        label: (
+          <ModelItem>
+            {m?.name} {isVisionModel(m) && <VisionIcon />}
+            <PinIcon
+              onClick={(e) => {
+                e.stopPropagation()
+                togglePin(getModelUniqId(m))
+              }}
+              isPinned={true}>
+              <PushpinOutlined />
+            </PinIcon>
+          </ModelItem>
+        ),
+        icon: (
+          <Avatar src={getModelLogo(m?.id || '')} size={24}>
+            {first(m?.name)}
+          </Avatar>
+        ),
+        onClick: () => {
+          resolve(m)
+          setOpen(false)
+        }
+      }))
+
+    if (pinnedItems.length > 0) {
+      filteredItems.unshift({
+        key: 'pinned',
+        label: t('model.pinned'),
+        type: 'group',
+        children: pinnedItems
+      } as MenuItem)
+    }
+  }
 
   const onCancel = () => {
     setOpen(false)
@@ -141,6 +220,18 @@ const StyledMenu = styled(Menu)`
   .ant-menu-item {
     height: 36px;
     line-height: 36px;
+
+    &:not([data-menu-id^='pinned-']) {
+      .pin-icon {
+        opacity: 0;
+      }
+
+      &:hover {
+        .pin-icon {
+          opacity: 0.3;
+        }
+      }
+    }
   }
 `
 
@@ -148,6 +239,8 @@ const ModelItem = styled.div`
   display: flex;
   align-items: center;
   font-size: 14px;
+  position: relative;
+  width: 100%;
 `
 
 const EmptyState = styled.div`
@@ -169,8 +262,23 @@ const SearchIcon = styled.div`
   margin-right: 2px;
 `
 
+const PinIcon = styled.span.attrs({ className: 'pin-icon' })<{ isPinned: boolean }>`
+  margin-left: auto;
+  padding: 0 8px;
+  opacity: ${(props) => (props.isPinned ? 1 : 'inherit')};
+  transition: opacity 0.2s;
+  position: absolute;
+  right: 0;
+  color: ${(props) => (props.isPinned ? 'var(--color-primary)' : 'inherit')};
+  transform: ${(props) => (props.isPinned ? 'rotate(-45deg)' : 'none')};
+
+  &:hover {
+    opacity: 1 !important;
+    color: ${(props) => (props.isPinned ? 'var(--color-primary)' : 'inherit')};
+  }
+`
+
 export default class SelectModelPopup {
-  static topviewId = 0
   static hide() {
     TopView.hide('SelectModelPopup')
   }
