@@ -1,6 +1,8 @@
+import { isMac } from '@main/constant'
 import { locales } from '@main/utils/locales'
 import { app, Menu, nativeImage, nativeTheme, Tray } from 'electron'
 
+import icon from '../../../build/tray_icon.png?asset'
 import iconDark from '../../../build/tray_icon_dark.png?asset'
 import iconLight from '../../../build/tray_icon_light.png?asset'
 import { configManager } from './ConfigManager'
@@ -15,15 +17,11 @@ export class TrayService {
   }
 
   private createTray() {
-    const iconPath = nativeTheme.shouldUseDarkColors ? iconLight : iconDark
+    const iconPath = isMac ? (nativeTheme.shouldUseDarkColors ? iconLight : iconDark) : icon
     const tray = new Tray(iconPath)
 
     if (process.platform === 'win32') {
       tray.setImage(iconPath)
-      nativeTheme.on('updated', () => {
-        const newIconPath = nativeTheme.shouldUseDarkColors ? iconLight : iconDark
-        tray.setImage(newIconPath)
-      })
     } else if (process.platform === 'darwin') {
       const image = nativeImage.createFromPath(iconPath)
       const resizedImage = image.resize({ width: 16, height: 16 })
@@ -33,12 +31,6 @@ export class TrayService {
       const image = nativeImage.createFromPath(iconPath)
       const resizedImage = image.resize({ width: 16, height: 16 })
       tray.setImage(resizedImage)
-      nativeTheme.on('updated', () => {
-        const newIconPath = nativeTheme.shouldUseDarkColors ? iconLight : iconDark
-        const newImage = nativeImage.createFromPath(newIconPath)
-        const newResizedImage = newImage.resize({ width: 16, height: 16 })
-        tray.setImage(newResizedImage)
-      })
     }
 
     this.tray = tray
