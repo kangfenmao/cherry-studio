@@ -1,5 +1,5 @@
 import { is } from '@electron-toolkit/utils'
-import { isTilingWindowManager } from '@main/utils/windowUtil'
+import { isLinux, isWin } from '@main/constant'
 import { app, BrowserWindow, Menu, MenuItem, shell } from 'electron'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
@@ -167,9 +167,14 @@ export class WindowService {
 
   private setupWindowLifecycleEvents(mainWindow: BrowserWindow) {
     mainWindow.on('close', (event) => {
-      if (!configManager.isTray() && isTilingWindowManager()) {
+      const notInTray = !configManager.isTray()
+
+      // Windows and Linux
+      if ((isWin || isLinux) && notInTray) {
         return app.quit()
       }
+
+      // Mac
       if (!app.isQuitting) {
         event.preventDefault()
         mainWindow.hide()

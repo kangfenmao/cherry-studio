@@ -1,3 +1,7 @@
+export const isMac = process.platform === 'darwin'
+export const isWin = process.platform === 'win32'
+export const isLinux = process.platform === 'linux'
+
 export const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
 export const videoExts = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv']
 export const audioExts = ['.mp3', '.wav', '.ogg', '.flac', '.aac']

@@ -3,7 +3,6 @@ import { app, BrowserWindow } from 'electron'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import { registerIpc } from './ipc'
-import { configManager } from './services/ConfigManager'
 import { registerZoomShortcut } from './services/ShortcutService'
 import { TrayService } from './services/TrayService'
 import { windowService } from './services/WindowService'
@@ -63,12 +62,6 @@ if (!app.requestSingleInstanceLock()) {
 
   app.on('before-quit', () => {
     app.isQuitting = true
-  })
-
-  app.on('window-all-closed', () => {
-    if (!configManager.isTray()) {
-      app.quit()
-    }
   })
 
   // In this file you can include the rest of your app"s specific main process
