@@ -332,7 +332,7 @@
       "about.license.button": "License",
       "about.contact.button": "Email",
       "proxy.title": "Proxy Address",
-      "tray.title": "Tray Icon",
+      "tray.title": "Enable System Tray Icon",
       "theme.title": "Theme",
       "theme.dark": "Dark",
       "theme.light": "Light",

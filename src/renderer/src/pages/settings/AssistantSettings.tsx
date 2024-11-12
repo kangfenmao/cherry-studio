@@ -1,15 +1,16 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
+import { TopView } from '@renderer/components/TopView'
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { AssistantSettings as AssistantSettingsType } from '@renderer/types'
-import { Button, Col, Input, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
+import { Button, Col, Input, InputNumber, Modal, Row, Slider, Switch, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingSubtitle, SettingTitle } from '.'
+import { SettingContainer, SettingSubtitle } from '.'
 
 const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()
@@ -66,9 +67,7 @@ const AssistantSettings: FC = () => {
   }
 
   return (
-    <SettingContainer>
-      <SettingTitle>{t('settings.assistant.title')}</SettingTitle>
-      <SettingDivider />
+    <SettingContainer style={{ height: 'auto' }}>
       <SettingSubtitle style={{ marginTop: 0 }}>{t('common.name')}</SettingSubtitle>
       <Input
         placeholder={t('common.assistant') + t('common.name')}
@@ -202,6 +201,61 @@ const AssistantSettings: FC = () => {
   )
 }
 
+interface Props {
+  resolve: (data: any) => void
+}
+
+const PopupContainer: React.FC<Props> = ({ resolve }) => {
+  const [open, setOpen] = useState(true)
+  const { t } = useTranslation()
+
+  const onOk = () => {
+    setOpen(false)
+  }
+
+  const onCancel = () => {
+    setOpen(false)
+  }
+
+  const onClose = () => {
+    resolve({})
+  }
+
+  return (
+    <Modal
+      title={t('settings.assistant.title')}
+      open={open}
+      onOk={onOk}
+      onCancel={onCancel}
+      afterClose={onClose}
+      centered
+      width={800}
+      footer={null}>
+      <AssistantSettings />
+    </Modal>
+  )
+}
+
+export default class AssistantSettingsPopup {
+  static topviewId = 0
+  static hide() {
+    TopView.hide('AssistantSettingsPopup')
+  }
+  static show() {
+    return new Promise<any>((resolve) => {
+      TopView.show(
+        <PopupContainer
+          resolve={(v) => {
+            resolve(v)
+            this.hide()
+          }}
+        />,
+        'AssistantSettingsPopup'
+      )
+    })
+  }
+}
+
 const Label = styled.p`
   margin: 0;
   font-size: 14px;
@@ -213,5 +267,3 @@ const QuestionIcon = styled(QuestionCircleOutlined)`
   cursor: pointer;
   color: var(--color-text-3);
 `
-
-export default AssistantSettings

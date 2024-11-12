@@ -1,14 +1,16 @@
-import { EditOutlined, MessageOutlined, TranslationOutlined } from '@ant-design/icons'
+import { EditOutlined, MessageOutlined, SettingOutlined, TranslationOutlined } from '@ant-design/icons'
+import { HStack } from '@renderer/components/Layout'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId, hasModel } from '@renderer/services/ModelService'
 import { Model } from '@renderer/types'
-import { Select } from 'antd'
+import { Button, Select } from 'antd'
 import { find, sortBy } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SettingContainer, SettingDivider, SettingTitle } from '.'
+import AssistantSettingsPopup from './AssistantSettings'
 
 const ModelSettings: FC = () => {
   const { defaultModel, topicNamingModel, translateModel, setDefaultModel, setTopicNamingModel, setTranslateModel } =
@@ -52,14 +54,17 @@ const ModelSettings: FC = () => {
         </div>
       </SettingTitle>
       <SettingDivider />
-      <Select
-        value={defaultModelValue}
-        defaultValue={defaultModelValue}
-        style={{ width: 360 }}
-        onChange={(value) => setDefaultModel(find(allModels, JSON.parse(value)) as Model)}
-        options={selectOptions}
-        placeholder={t('settings.models.empty')}
-      />
+      <HStack alignItems="center">
+        <Select
+          value={defaultModelValue}
+          defaultValue={defaultModelValue}
+          style={{ width: 360 }}
+          onChange={(value) => setDefaultModel(find(allModels, JSON.parse(value)) as Model)}
+          options={selectOptions}
+          placeholder={t('settings.models.empty')}
+        />
+        <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={() => AssistantSettingsPopup.show()} />
+      </HStack>
       <div style={{ height: 30 }} />
       <SettingTitle>
         <div>
