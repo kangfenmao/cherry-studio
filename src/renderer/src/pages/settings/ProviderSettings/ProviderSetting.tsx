@@ -143,7 +143,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <Input.Password
           value={apiKey}
           placeholder={t('settings.provider.api_key')}
-          onChange={(e) => setApiKey(e.target.value.replaceAll('，', ','))}
+          onChange={(e) => setApiKey(e.target.value.replaceAll('，', ',').replaceAll(' ', ''))}
           onBlur={onUpdateApiKey}
           spellCheck={false}
           type="password"
