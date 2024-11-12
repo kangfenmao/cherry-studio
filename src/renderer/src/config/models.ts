@@ -135,8 +135,10 @@ const visionAllowedModels = [
   'qwen-vl',
   'qwen2-vl',
   'internvl2',
+  'grok',
   'gpt-4(?:-[\\w-]+)',
-  'gpt-4o(?:-[\\w-]+)?'
+  'gpt-4o(?:-[\\w-]+)?',
+  'chatgpt-4o(?:-[\\w-]+)?'
 ]
 
 const visionExcludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
