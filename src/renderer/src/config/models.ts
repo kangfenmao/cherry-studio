@@ -329,6 +329,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'GPT 4o'
     },
     {
+      id: 'chatgpt-4o-latest',
+      provider: 'openai',
+      name: ' GPT-4o-latest',
+      group: 'GPT 4o'
+    },
+    {
       id: 'gpt-4-turbo',
       provider: 'openai',
       name: ' GPT-4 Turbo',
@@ -339,12 +345,6 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       provider: 'openai',
       name: ' GPT-4',
       group: 'GPT 4'
-    },
-    {
-      id: 'gpt-3.5-turbo',
-      provider: 'openai',
-      name: ' GPT-3.5-turbo',
-      group: 'GPT 3.5'
     },
     {
       id: 'o1-mini',
