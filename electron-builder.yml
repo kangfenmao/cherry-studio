@@ -63,5 +63,10 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复 Windows 窗口最小化后进入任务栏问题
-    增加 API 密钥批量检查功能
+    增加最小化到托盘功能 @injurka
+    托盘图标使用彩色图标
+    修复 Mermaid png 格式图表无法下载问题
+    选择模型弹窗支持固定一些常用模型
+    默认助手合并到模型设置里
+    设置面板移除模型相关设置项
+    修复一些视觉模型不能识别问题
