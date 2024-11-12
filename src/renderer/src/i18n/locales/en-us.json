@@ -378,7 +378,8 @@
         "delete.title": "Delete Provider",
         "delete.content": "Are you sure you want to delete this provider?",
         "edit.name": "Provider Name",
-        "edit.name.placeholder": "Example: OpenAI"
+        "edit.name.placeholder": "Example: OpenAI",
+        "no_models": "Please add models first before checking the API connection"
       }
     },
     "translate": {

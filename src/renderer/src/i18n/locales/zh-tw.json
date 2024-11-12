@@ -366,7 +366,8 @@
         "delete.title": "刪除提供者",
         ".delete.content": "確定要刪除此提供者嗎？",
         "edit.name": "提供者名稱",
-        "edit.name.placeholder": "例如：OpenAI"
+        "edit.name.placeholder": "例如：OpenAI",
+        "no_models": "請先添加模型再檢查 API 連接"
       }
     },
     "translate": {

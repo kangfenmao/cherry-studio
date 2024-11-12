@@ -366,7 +366,8 @@
         "delete.title": "删除提供商",
         "delete.content": "确定要删除此模型提供商吗?",
         "edit.name": "模型提供商名称",
-        "edit.name.placeholder": "例如 OpenAI"
+        "edit.name.placeholder": "例如 OpenAI",
+        "no_models": "请先添加模型再检查 API 连接"
       }
     },
     "translate": {

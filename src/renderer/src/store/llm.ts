@@ -339,7 +339,7 @@ const settingsSlice = createSlice({
       state.providers = action.payload
     },
     addProvider: (state, action: PayloadAction<Provider>) => {
-      state.providers.push(action.payload)
+      state.providers.unshift(action.payload)
     },
     removeProvider: (state, action: PayloadAction<Provider>) => {
       state.providers = state.providers.filter((p) => p.id !== action.payload.id)

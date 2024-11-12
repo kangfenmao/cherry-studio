@@ -46,6 +46,7 @@ const ProvidersList: FC = () => {
       enabled: true,
       isSystem: false
     } as Provider
+
     addProvider(provider)
     setSelectedProvider(provider)
   }

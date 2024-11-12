@@ -65,6 +65,16 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add.add_model'), provider })
 
   const onCheckApi = async () => {
+    if (isEmpty(models)) {
+      window.message.error({
+        key: 'no-models',
+        style: { marginTop: '3vh' },
+        duration: 5,
+        content: t('settings.provider.no_models')
+      })
+      return
+    }
+
     if (apiKey.includes(',')) {
       const keys = apiKey
         .split(',')
@@ -149,7 +159,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
-        <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi}>
+        <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi} disabled={!apiHost}>
           {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : t('settings.provider.check')}
         </Button>
       </Space.Compact>
