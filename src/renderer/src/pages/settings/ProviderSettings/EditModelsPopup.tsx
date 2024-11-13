@@ -1,7 +1,7 @@
 import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import WebSearchIcon from '@renderer/components/Icons/WebSearchIcon'
-import { getModelLogo, isVisionModel, isWebSearchModel, SYSTEM_MODELS } from '@renderer/config/models'
+import { getModelLogo, isEmbeddingModel, isVisionModel, isWebSearchModel, SYSTEM_MODELS } from '@renderer/config/models'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/ApiService'
 import { Model, Provider } from '@renderer/types'
@@ -132,6 +132,11 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
                       {isFreeModel(model) && (
                         <Tag style={{ marginLeft: 10 }} color="green">
                           Free
+                        </Tag>
+                      )}
+                      {isEmbeddingModel(model) && (
+                        <Tag style={{ marginLeft: 10 }} color="orange">
+                          Embed
                         </Tag>
                       )}
                       {!isEmpty(model.description) && (

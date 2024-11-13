@@ -25,7 +25,7 @@ import { estimateTextTokens as estimateTxtTokens } from '@renderer/services/Toke
 import { translateText } from '@renderer/services/TranslateService'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
-import { Assistant, FileType, Message, Topic } from '@renderer/types'
+import { Assistant, FileType, KnowledgeBase, Message, Topic } from '@renderer/types'
 import { delay, getFileExtension, uuid } from '@renderer/utils'
 import { documentExts, imageExts, textExts } from '@shared/config/constant'
 import { Button, Popconfirm, Tooltip } from 'antd'
@@ -38,6 +38,7 @@ import styled from 'styled-components'
 
 import AttachmentButton from './AttachmentButton'
 import AttachmentPreview from './AttachmentPreview'
+import KnowledgeBaseButton from './KnowledgeBaseButton'
 import SendMessageButton from './SendMessageButton'
 import TokenCount from './TokenCount'
 
@@ -48,6 +49,7 @@ interface Props {
 
 let _text = ''
 let _files: FileType[] = []
+let _base: KnowledgeBase
 
 const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
@@ -78,6 +80,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const [spaceClickCount, setSpaceClickCount] = useState(0)
   const spaceClickTimer = useRef<NodeJS.Timeout>()
   const [isTranslating, setIsTranslating] = useState(false)
+  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<KnowledgeBase>(_base)
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
@@ -90,6 +93,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
 
   _text = text
   _files = files
+  _base = selectedKnowledgeBase
 
   const sendMessage = useCallback(async () => {
     if (generating) {
@@ -111,6 +115,10 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
       status: 'success'
     }
 
+    if (selectedKnowledgeBase) {
+      message.knowledgeBaseIds = [selectedKnowledgeBase.id]
+    }
+
     if (files.length > 0) {
       message.files = await FileManager.uploadFiles(files)
     }
@@ -123,7 +131,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     setTimeout(() => resizeTextArea(), 0)
 
     setExpend(false)
-  }, [assistant.id, assistant.topics, generating, files, text])
+  }, [assistant.id, assistant.topics, generating, files, text, selectedKnowledgeBase])
 
   const translate = async () => {
     if (isTranslating) {
@@ -374,6 +382,10 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
 
   const textareaRows = window.innerHeight >= 1000 || isBubbleStyle ? 2 : 1
 
+  const handleKnowledgeBaseSelect = (base?: KnowledgeBase) => {
+    setSelectedKnowledgeBase(base)
+  }
+
   return (
     <Container onDragOver={handleDragOver} onDrop={handleDrop}>
       <AttachmentPreview files={files} setFiles={setFiles} />
@@ -438,6 +450,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                 <ControlOutlined />
               </ToolbarButton>
             </Tooltip>
+            <KnowledgeBaseButton selectedBase={selectedKnowledgeBase} onSelect={handleKnowledgeBaseSelect} />
             <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
             <ToolbarButton type="text" onClick={onNewContext}>
               <Tooltip placement="top" title={t('chat.input.new.context')}>

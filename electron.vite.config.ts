@@ -4,12 +4,32 @@ import { resolve } from 'path'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()],
+    plugins: [
+      externalizeDepsPlugin({
+        exclude: [
+          '@llm-tools/embedjs',
+          '@llm-tools/embedjs-lancedb',
+          '@llm-tools/embedjs-ollama',
+          '@llm-tools/embedjs-openai',
+          '@llm-tools/embedjs-loader-web',
+          '@llm-tools/embedjs-loader-markdown',
+          '@llm-tools/embedjs-loader-msoffice',
+          '@llm-tools/embedjs-loader-xml',
+          '@llm-tools/embedjs-loader-pdf',
+          '@lancedb/lancedb'
+        ]
+      })
+    ],
     resolve: {
       alias: {
         '@main': resolve('src/main'),
         '@types': resolve('src/renderer/src/types'),
         '@shared': resolve('packages/shared')
+      }
+    },
+    build: {
+      rollupOptions: {
+        external: ['@lancedb/lancedb', '@llm-tools/embedjs-loader-sitemap']
       }
     }
   },

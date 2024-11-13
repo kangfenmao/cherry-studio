@@ -81,6 +81,7 @@
       "input.translate": "翻译成英文",
       "input.upload": "上传图片或文档",
       "input.web_search": "开启网络搜索",
+      "input.knowledge_base": "知识库",
       "message.new.branch": "新分支",
       "message.new.branch.created": "新分支已创建",
       "message.regenerate.model": "切换模型",
@@ -148,7 +149,8 @@
       "warning": "警告",
       "you": "用户",
       "clear": "清除",
-      "add": "添加"
+      "add": "添加",
+      "footnotes": "引用内容"
     },
     "error": {
       "backup.file_format": "备份文件格式错误",
@@ -390,7 +392,7 @@
       "messages.input.paste_long_text_as_file": "长文本粘贴为文件",
       "messages.input.send_shortcuts": "发送快捷键",
       "messages.input.show_estimated_tokens": "显示预估 Token 数",
-      "messages.metrics": "首字时延 {{time_first_token_millsec}}ms • 每秒 {{token_speed}} token • ",
+      "messages.metrics": "首字时延 {{time_first_token_millsec}}ms | 每秒 {{token_speed}} tokens",
       "messages.input.title": "输入设置",
       "messages.markdown_rendering_input_message": "Markdown 渲染输入消息",
       "messages.math_engine": "数学公式引擎",
@@ -510,7 +512,43 @@
     },
     "words": {
       "knowledgeGraph": "知识图谱",
-      "visualization": "可视化"
+      "visualization": "可视化",
+      "show_window": "显示窗口",
+      "quit": "退出"
+    },
+    "knowledge_base": {
+      "title": "知识库",
+      "search": "搜索知识库",
+      "empty": "暂无知识库",
+      "drag_file": "拖拽文件到这里",
+      "file_hint": "支持 pdf, docx, txt, md 格式",
+      "add": {
+        "title": "添加知识库"
+      },
+      "notes": "笔记",
+      "notes_placeholder": "输入此知识库的附加信息或上下文...",
+      "delete": "删除",
+      "rename": "重命名",
+      "urls": "网站",
+      "add_url": "添加网址",
+      "url_placeholder": "请输入网址",
+      "invalid_url": "无效的网址",
+      "add_file": "添加文件",
+      "status": "状态",
+      "index_all": "索引全部",
+      "index_started": "索引开始",
+      "cancel_index": "取消索引",
+      "index_cancelled": "索引已取消",
+      "status_pending": "等待中",
+      "status_processing": "处理中",
+      "status_completed": "已完成",
+      "status_failed": "失败",
+      "url_added": "网址已添加",
+      "query": "查询",
+      "search_placeholder": "输入查询内容",
+      "add_note": "添加笔记",
+      "no_bases": "暂无知识库",
+      "clear_selection": "清除选择"
     }
   }
 }

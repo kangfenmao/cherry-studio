@@ -13,6 +13,7 @@ import {
   ChatCompletionMessageParam
 } from 'openai/resources'
 
+import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
 
 export default class OpenAIProvider extends BaseProvider {
@@ -53,7 +54,7 @@ export default class OpenAIProvider extends BaseProvider {
     if (!message.files) {
       return {
         role: message.role,
-        content: message.content
+        content: await this.getMessageContentWithKnowledgeBase(message)
       }
     }
 
@@ -149,18 +150,17 @@ export default class OpenAIProvider extends BaseProvider {
     })
 
     if (!isSupportStreamOutput) {
-      let time_completion_millsec = new Date().getTime() - start_time_millsec
+      const time_completion_millsec = new Date().getTime() - start_time_millsec
       return onChunk({
         text: stream.choices[0].message?.content || '',
         usage: stream.usage,
         metrics: {
           completion_tokens: stream.usage?.completion_tokens,
-          time_completion_millsec: time_completion_millsec,
-          time_first_token_sec: 0,
+          time_completion_millsec,
+          time_first_token_millsec: 0
         }
       })
     }
-
 
     for await (const chunk of stream) {
       if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
@@ -169,14 +169,14 @@ export default class OpenAIProvider extends BaseProvider {
       if (time_first_token_millsec == 0) {
         time_first_token_millsec = new Date().getTime() - start_time_millsec
       }
-      let time_completion_millsec = new Date().getTime() - start_time_millsec
+      const time_completion_millsec = new Date().getTime() - start_time_millsec
       onChunk({
         text: chunk.choices[0]?.delta?.content || '',
         usage: chunk.usage,
         metrics: {
           completion_tokens: chunk.usage?.completion_tokens,
-          time_completion_millsec: time_completion_millsec,
-          time_first_token_millsec: time_first_token_millsec,
+          time_completion_millsec,
+          time_first_token_millsec
         }
       })
     }
@@ -302,13 +302,7 @@ export default class OpenAIProvider extends BaseProvider {
 
   public async models(): Promise<OpenAI.Models.Model[]> {
     try {
-      const query: Record<string, any> = {}
-
-      if (this.provider.id === 'silicon') {
-        query.type = 'text'
-      }
-
-      const response = await this.sdk.models.list({ query })
+      const response = await this.sdk.models.list()
 
       if (this.provider.id === 'github') {
         // @ts-ignore key is not typed

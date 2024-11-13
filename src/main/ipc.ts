@@ -11,6 +11,7 @@ import BackupManager from './services/BackupManager'
 import { configManager } from './services/ConfigManager'
 import { ExportService } from './services/ExportService'
 import FileStorage from './services/FileStorage'
+import KnowledgeService from './services/KnowledgeService'
 import { registerShortcuts, unregisterAllShortcuts } from './services/ShortcutService'
 import { windowService } from './services/WindowService'
 import { compress, decompress } from './utils/zip'
@@ -144,4 +145,12 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
       registerShortcuts(mainWindow)
     }
   })
+
+  // knowledge base
+  ipcMain.handle('knowledge-base:create', KnowledgeService.create)
+  ipcMain.handle('knowledge-base:reset', KnowledgeService.reset)
+  ipcMain.handle('knowledge-base:delete', KnowledgeService.delete)
+  ipcMain.handle('knowledge-base:add', KnowledgeService.add)
+  ipcMain.handle('knowledge-base:remove', KnowledgeService.remove)
+  ipcMain.handle('knowledge-base:search', KnowledgeService.search)
 }

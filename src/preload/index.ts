@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { Shortcut, WebDavConfig } from '@types'
+import { FileType, RagAppRequestParams, Shortcut, WebDavConfig } from '@types'
 import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
@@ -50,6 +50,18 @@ const api = {
   openPath: (path: string) => ipcRenderer.invoke('open:path', path),
   shortcuts: {
     update: (shortcuts: Shortcut[]) => ipcRenderer.invoke('shortcuts:update', shortcuts)
+  },
+  knowledgeBase: {
+    create: ({ id, model, apiKey, baseURL }: RagAppRequestParams) =>
+      ipcRenderer.invoke('knowledge-base:create', { id, model, apiKey, baseURL }),
+    reset: ({ config }: { config: RagAppRequestParams }) => ipcRenderer.invoke('knowledge-base:reset', { config }),
+    delete: (id: string) => ipcRenderer.invoke('knowledge-base:delete', id),
+    add: ({ data, config }: { data: string | FileType; config: RagAppRequestParams }) =>
+      ipcRenderer.invoke('knowledge-base:add', { data, config }),
+    remove: ({ uniqueId, config }: { uniqueId: string; config: RagAppRequestParams }) =>
+      ipcRenderer.invoke('knowledge-base:remove', { uniqueId, config }),
+    search: ({ search, config }: { search: string; config: RagAppRequestParams }) =>
+      ipcRenderer.invoke('knowledge-base:search', { search, config })
   }
 }
 

@@ -9,6 +9,7 @@ import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/t
 import { first, flatten, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
+import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
 
 export default class AnthropicProvider extends BaseProvider {

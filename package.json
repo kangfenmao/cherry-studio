@@ -11,9 +11,11 @@
       "local",
       "packages/*"
     ],
-    "nohoist": [
-      "packages/database"
-    ]
+    "installConfig": {
+      "hoistingLimits": [
+        "packages/database"
+      ]
+    }
   },
   "scripts": {
     "format": "prettier --write .",
@@ -38,7 +40,19 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
+    "@llm-tools/embedjs": "^0.1.24",
+    "@llm-tools/embedjs-lancedb": "^0.1.24",
+    "@llm-tools/embedjs-loader-csv": "^0.1.24",
+    "@llm-tools/embedjs-loader-markdown": "^0.1.24",
+    "@llm-tools/embedjs-loader-msoffice": "^0.1.24",
+    "@llm-tools/embedjs-loader-pdf": "^0.1.24",
+    "@llm-tools/embedjs-loader-web": "^0.1.24",
+    "@llm-tools/embedjs-loader-xml": "^0.1.24",
+    "@llm-tools/embedjs-ollama": "^0.1.24",
+    "@llm-tools/embedjs-openai": "^0.1.24",
+    "@types/react-infinite-scroll-component": "^5.0.0",
     "adm-zip": "^0.5.16",
+    "apache-arrow": "^18.0.0",
     "docx": "^9.0.2",
     "electron-log": "^5.1.5",
     "electron-store": "^8.2.0",
@@ -124,7 +138,8 @@
     "react-dom": "^17.0.0 || ^18.0.0"
   },
   "resolutions": {
-    "@electron/notarize@npm:2.2.1": "patch:@electron/notarize@npm%3A2.3.2#~/.yarn/patches/@electron-notarize-npm-2.3.2-535908a4bd.patch"
+    "@electron/notarize@npm:2.2.1": "patch:@electron/notarize@npm%3A2.3.2#~/.yarn/patches/@electron-notarize-npm-2.3.2-535908a4bd.patch",
+    "pdf-parse@npm:1.1.1": "patch:pdf-parse@npm%3A1.1.1#~/.yarn/patches/pdf-parse-npm-1.1.1-04a6109b2a.patch"
   },
   "packageManager": "yarn@4.5.0"
 }

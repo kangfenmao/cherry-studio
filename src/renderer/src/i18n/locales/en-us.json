@@ -81,6 +81,7 @@
       "input.translate": "Translate to English",
       "input.upload": "Upload image or document file",
       "input.web_search": "Enable web search",
+      "input.knowledge_base": "Knowledge Base",
       "message.new.branch": "New Branch",
       "message.new.branch.created": "New Branch Created",
       "message.regenerate.model": "Switch Model",
@@ -390,7 +391,7 @@
       "messages.input.paste_long_text_as_file": "Paste long text as file",
       "messages.input.send_shortcuts": "Send shortcuts",
       "messages.input.show_estimated_tokens": "Show estimated tokens",
-      "messages.metrics": "{{time_first_token_millsec}}ms to first token • {{token_speed}} tok/sec • ",
+      "messages.metrics": "{{time_first_token_millsec}}ms to first token | {{token_speed}} tok/sec",
       "messages.input.title": "Input Settings",
       "messages.markdown_rendering_input_message": "Markdown render input msg",
       "messages.math_engine": "Math render engine",
@@ -522,7 +523,43 @@
     },
     "words": {
       "knowledgeGraph": "Knowledge Graph",
-      "visualization": "Visualization"
+      "visualization": "Visualization",
+      "show_window": "Show Window",
+      "quit": "Quit"
+    },
+    "knowledge_base": {
+      "title": "Knowledge Base",
+      "search": "Search knowledge base",
+      "empty": "No knowledge base found",
+      "drag_file": "Drag file here",
+      "file_hint": "Support pdf, docx, txt and md",
+      "add": {
+        "title": "Add Knowledge Base"
+      },
+      "notes": "Notes",
+      "notes_placeholder": "Enter additional information or context for this knowledge base...",
+      "delete": "Delete",
+      "rename": "Rename",
+      "urls": "URLs",
+      "add_url": "Add URL",
+      "url_placeholder": "Enter URL",
+      "invalid_url": "Invalid URL",
+      "add_file": "Add File",
+      "status": "Status",
+      "index_all": "Index All",
+      "index_started": "Indexing started",
+      "cancel_index": "Cancel Indexing",
+      "index_cancelled": "Indexing cancelled",
+      "status_pending": "Pending",
+      "status_processing": "Processing",
+      "status_completed": "Completed",
+      "status_failed": "Failed",
+      "url_added": "URL added",
+      "query": "Query",
+      "search_placeholder": "Enter text to search",
+      "add_note": "Add Note",
+      "no_bases": "No knowledge bases available",
+      "clear_selection": "Clear selection"
     }
   }
 }

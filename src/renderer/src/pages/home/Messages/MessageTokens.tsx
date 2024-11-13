@@ -29,6 +29,7 @@ const MessgeTokens: React.FC<{ message: Message; isLastMessage: boolean }> = ({ 
 
   if (message.role === 'assistant') {
     let metrixs = ''
+
     if (message?.metrics?.completion_tokens && message?.metrics?.time_completion_millsec) {
       metrixs = t('settings.messages.metrics', {
         time_first_token_millsec: message?.metrics?.time_first_token_millsec,
@@ -37,10 +38,13 @@ const MessgeTokens: React.FC<{ message: Message; isLastMessage: boolean }> = ({ 
         )
       })
     }
+
     return (
       <MessageMetadata className="message-tokens" onClick={locateMessage}>
-        {metrixs !== '' ? metrixs : ''}
-        Tokens: {message?.usage?.total_tokens} ↑ {message?.usage?.prompt_tokens} ↓ {message?.usage?.completion_tokens}
+        <span className="metrics">{metrixs}</span>
+        <span className="tokens">
+          Tokens: {message?.usage?.total_tokens} ↑{message?.usage?.prompt_tokens} ↓{message?.usage?.completion_tokens}
+        </span>
       </MessageMetadata>
     )
   }
@@ -54,6 +58,25 @@ const MessageMetadata = styled.div`
   user-select: text;
   margin: 2px 0;
   cursor: pointer;
+  text-align: right;
+
+  .metrics {
+    display: none;
+  }
+
+  .tokens {
+    display: block;
+  }
+
+  &:hover {
+    .metrics {
+      display: block;
+    }
+
+    .tokens {
+      display: none;
+    }
+  }
 `
 
 export default MessgeTokens

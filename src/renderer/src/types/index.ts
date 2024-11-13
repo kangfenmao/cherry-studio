@@ -48,6 +48,7 @@ export type Message = {
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
   metrics?: Metrics
+  knowledgeBaseIds?: string[]
   type: 'text' | '@' | 'clear'
   isPreset?: boolean
 }
@@ -178,4 +179,47 @@ export interface Shortcut {
   editable: boolean
   enabled: boolean
   system: boolean
+}
+
+export type ProcessingStatus = 'pending' | 'processing' | 'completed' | 'failed'
+
+export type ProcessingItem = {
+  id: string
+  type: 'file' | 'url' | 'note'
+  status: ProcessingStatus
+  progress?: number
+  error?: string
+  createdAt: number
+  updatedAt: number
+  sourceId: string // file id, url, or note id
+  baseId: string
+  retryCount?: number
+}
+
+export type KnowledgeItem = {
+  id: string
+  baseId?: string
+  uniqueId?: string
+  type: 'file' | 'url' | 'note'
+  content: string | FileType // for files: FileType, for urls: string, for notes: string
+  created_at: number
+  updated_at: number
+}
+
+export interface KnowledgeBase {
+  id: string
+  name: string
+  model: Model
+  description?: string
+  items: KnowledgeItem[]
+  created_at: number
+  updated_at: number
+  processingQueue: ProcessingItem[]
+}
+
+export type RagAppRequestParams = {
+  id: string
+  model: string
+  apiKey: string
+  baseURL: string
 }

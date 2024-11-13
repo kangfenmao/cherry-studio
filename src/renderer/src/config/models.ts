@@ -153,7 +153,7 @@ export const VISION_REGEX = new RegExp(
 
 const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview/i
 const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|base|retrieval|uae-)/i
-const NOT_SUPPORTED_REGEX = /(?:^text-|embed|tts|rerank|whisper|speech|davinci|babbage|bge-|base|retrieval|uae-)/i
+const NOT_SUPPORTED_REGEX = /(?:^tts|rerank|whisper|speech)/i
 
 export function getModelLogo(modelId: string) {
   const isLight = true
