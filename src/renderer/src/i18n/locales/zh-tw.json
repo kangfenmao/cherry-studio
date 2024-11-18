@@ -370,6 +370,15 @@
         "add.name.placeholder": "例如：OpenAI",
         "add.type": "提供商類型",
         "no_models": "請先添加模型再檢查 API 連接"
+      },
+      "proxy": {
+        "title": "代理設定",
+        "mode": {
+          "title": "代理模式",
+          "system": "系統代理",
+          "custom": "自定義代理",
+          "none": "不使用代理"
+        }
       }
     },
     "translate": {

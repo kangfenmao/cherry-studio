@@ -26,7 +26,21 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     filesPath: path.join(app.getPath('userData'), 'Data', 'Files')
   }))
 
-  ipcMain.handle('app:proxy', (_, proxy: string) => session.defaultSession.setProxy(proxy ? { proxyRules: proxy } : {}))
+  ipcMain.handle('app:proxy', async (_, proxy: string) => {
+    if (proxy === 'system') {
+      await session.defaultSession.setProxy({ mode: 'system' })
+      const webviewSession = session.fromPartition('persist:webview')
+      await webviewSession.setProxy({ mode: 'system' })
+    } else if (proxy) {
+      await session.defaultSession.setProxy({ proxyRules: proxy })
+      const webviewSession = session.fromPartition('persist:webview')
+      await webviewSession.setProxy({ proxyRules: proxy })
+    } else {
+      await session.defaultSession.setProxy({})
+      const webviewSession = session.fromPartition('persist:webview')
+      await webviewSession.setProxy({})
+    }
+  })
   ipcMain.handle('app:reload', () => mainWindow.reload())
   ipcMain.handle('open:website', (_, url: string) => shell.openExternal(url))
 

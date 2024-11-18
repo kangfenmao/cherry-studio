@@ -3,7 +3,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
 import { setLanguage } from '@renderer/store/settings'
-import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
+import { setProxyMode, setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
 import { LanguageVarious, ThemeMode } from '@renderer/types'
 import { isValidProxyUrl } from '@renderer/utils'
 import { Input, Select, Space, Switch } from 'antd'
@@ -21,7 +21,8 @@ const GeneralSettings: FC = () => {
     setTray,
     tray,
     windowStyle,
-    setWindowStyle
+    setWindowStyle,
+    proxyMode: storeProxyMode
   } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
 
@@ -48,6 +49,23 @@ const GeneralSettings: FC = () => {
 
     dispatch(_setProxyUrl(proxyUrl))
     window.api.setProxy(proxyUrl)
+  }
+
+  const proxyModeOptions = [
+    { value: 'system', label: t('settings.proxy.mode.system') },
+    { value: 'custom', label: t('settings.proxy.mode.custom') },
+    { value: 'none', label: t('settings.proxy.mode.none') }
+  ]
+
+  const onProxyModeChange = (mode: 'system' | 'custom' | 'none') => {
+    dispatch(setProxyMode(mode))
+    if (mode === 'system') {
+      window.api.setProxy('system')
+      dispatch(_setProxyUrl(undefined))
+    } else if (mode === 'none') {
+      window.api.setProxy(undefined)
+      dispatch(_setProxyUrl(undefined))
+    }
   }
 
   const languagesOptions: { value: LanguageVarious; label: string; flag: string }[] = [
@@ -109,16 +127,25 @@ const GeneralSettings: FC = () => {
       )}
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
-        <Input
-          placeholder="socks5://127.0.0.1:6153"
-          value={proxyUrl}
-          onChange={(e) => setProxyUrl(e.target.value)}
-          style={{ width: 180 }}
-          onBlur={() => onSetProxyUrl()}
-          type="url"
-        />
+        <SettingRowTitle>{t('settings.proxy.mode.title')}</SettingRowTitle>
+        <Select value={storeProxyMode} style={{ width: 180 }} onChange={onProxyModeChange} options={proxyModeOptions} />
       </SettingRow>
+      {storeProxyMode === 'custom' && (
+        <>
+          <SettingDivider />
+          <SettingRow>
+            <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
+            <Input
+              placeholder="socks5://127.0.0.1:6153"
+              value={proxyUrl}
+              onChange={(e) => setProxyUrl(e.target.value)}
+              style={{ width: 180 }}
+              onBlur={() => onSetProxyUrl()}
+              type="url"
+            />
+          </SettingRow>
+        </>
+      )}
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.tray.title')}</SettingRowTitle>

@@ -8,6 +8,7 @@ export interface SettingsState {
   showTopics: boolean
   sendMessageShortcut: SendMessageShortcut
   language: LanguageVarious
+  proxyMode: 'system' | 'custom' | 'none'
   proxyUrl?: string
   userName: string
   showMessageDivider: boolean
@@ -39,6 +40,7 @@ const initialState: SettingsState = {
   showTopics: true,
   sendMessageShortcut: 'Enter',
   language: navigator.language as LanguageVarious,
+  proxyMode: 'none',
   proxyUrl: undefined,
   userName: '',
   showMessageDivider: false,
@@ -85,6 +87,9 @@ const settingsSlice = createSlice({
     },
     setLanguage: (state, action: PayloadAction<LanguageVarious>) => {
       state.language = action.payload
+    },
+    setProxyMode: (state, action: PayloadAction<'system' | 'custom' | 'none'>) => {
+      state.proxyMode = action.payload
     },
     setProxyUrl: (state, action: PayloadAction<string | undefined>) => {
       state.proxyUrl = action.payload
@@ -166,6 +171,7 @@ export const {
   toggleShowTopics,
   setSendMessageShortcut,
   setLanguage,
+  setProxyMode,
   setProxyUrl,
   setUserName,
   setShowMessageDivider,

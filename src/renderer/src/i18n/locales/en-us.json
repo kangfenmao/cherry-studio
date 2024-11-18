@@ -382,6 +382,15 @@
         "add.name.placeholder": "Example: OpenAI",
         "add.type": "Provider Type",
         "no_models": "Please add models first before checking the API connection"
+      },
+      "proxy": {
+        "title": "Proxy Settings",
+        "mode": {
+          "title": "Proxy Mode",
+          "system": "System Proxy",
+          "custom": "Custom Proxy",
+          "none": "No Proxy"
+        }
       }
     },
     "translate": {
