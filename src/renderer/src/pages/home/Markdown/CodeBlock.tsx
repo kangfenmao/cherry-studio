@@ -1,4 +1,4 @@
-import { CheckOutlined } from '@ant-design/icons'
+import { CheckOutlined, DownOutlined, RightOutlined } from '@ant-design/icons'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useSyntaxHighlighter } from '@renderer/context/SyntaxHighlighterProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -15,6 +15,36 @@ interface CodeBlockProps {
   [key: string]: any
 }
 
+const CollapseIcon: React.FC<{ expanded: boolean; onClick: () => void }> = ({ expanded, onClick }) => {
+  return expanded ? (
+    <DownOutlined style={{ cursor: 'pointer' }} onClick={onClick} />
+  ) : (
+    <RightOutlined style={{ cursor: 'pointer' }} onClick={onClick} />
+  )
+}
+
+const ExpandButton: React.FC<{
+  isExpanded: boolean
+  onClick: () => void
+  showButton: boolean
+}> = ({ isExpanded, onClick, showButton }) => {
+  if (!showButton) return null
+
+  return (
+    <div
+      style={{
+        textAlign: 'center',
+        cursor: 'pointer',
+        padding: '8px',
+        color: 'var(--color-text-3)',
+        borderTop: '0.5px solid var(--color-code-background)'
+      }}
+      onClick={onClick}>
+      {isExpanded ? '收起' : '展开'}
+    </div>
+  )
+}
+
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
   const showFooterCopyButton = children && children.length > 500
@@ -22,6 +52,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const language = match?.[1] ?? 'text'
   const [html, setHtml] = useState<string>('')
   const { codeToHtml } = useSyntaxHighlighter()
+  const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
     const loadHighlightedCode = async () => {
@@ -38,7 +69,10 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   return match ? (
     <div className="code-block">
       <CodeHeader>
-        <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <CollapseIcon expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
+          <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
+        </div>
         <CopyButton text={children} />
       </CodeHeader>
       <CodeContent
@@ -49,8 +83,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
           marginTop: 0,
-          fontSize
+          fontSize,
+          maxHeight: isExpanded ? 'none' : '300px',
+          overflow: 'hidden',
+          position: 'relative'
         }}
+      />
+      <ExpandButton
+        isExpanded={isExpanded}
+        onClick={() => setIsExpanded(!isExpanded)}
+        showButton={!isExpanded || showFooterCopyButton}
       />
       {showFooterCopyButton && (
         <CodeFooter>
