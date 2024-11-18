@@ -1,35 +1,39 @@
 import { BrowserWindow, globalShortcut } from 'electron'
 
+import { configManager } from './ConfigManager'
+
 export function registerZoomShortcut(mainWindow: BrowserWindow) {
+  // 初始化缩放值
+  const initialZoom = configManager.getZoomFactor()
+  mainWindow.webContents.setZoomFactor(initialZoom)
+
   const registerShortcuts = () => {
-    // 注册放大快捷键 (Ctrl+Plus 或 Cmd+Plus)
     globalShortcut.register('CommandOrControl+=', () => {
       if (mainWindow) {
         const currentZoom = mainWindow.webContents.getZoomFactor()
         const newZoom = currentZoom + 0.1
-        // Prevent zoom factor from exceeding reasonable limits
         if (newZoom <= 5.0) {
           mainWindow.webContents.setZoomFactor(newZoom)
+          configManager.setZoomFactor(newZoom) // 保存新的缩放值
         }
       }
     })
 
-    // 注册缩小快捷键 (Ctrl+Minus 或 Cmd+Minus)
     globalShortcut.register('CommandOrControl+-', () => {
       if (mainWindow) {
         const currentZoom = mainWindow.webContents.getZoomFactor()
         const newZoom = currentZoom - 0.1
-        // Prevent zoom factor from going below 0.1
         if (newZoom >= 0.1) {
           mainWindow.webContents.setZoomFactor(newZoom)
+          configManager.setZoomFactor(newZoom) // 保存新的缩放值
         }
       }
     })
 
-    // 注册重置缩放快捷键 (Ctrl+0 或 Cmd+0)
     globalShortcut.register('CommandOrControl+0', () => {
       if (mainWindow) {
         mainWindow.webContents.setZoomFactor(1)
+        configManager.setZoomFactor(1) // 保存默认缩放值
       }
     })
   }

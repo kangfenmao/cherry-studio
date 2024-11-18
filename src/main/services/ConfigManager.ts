@@ -35,6 +35,15 @@ export class ConfigManager {
     this.notifySubscribers('tray', value)
   }
 
+  getZoomFactor(): number {
+    return this.store.get('zoomFactor', 1) as number
+  }
+
+  setZoomFactor(factor: number) {
+    this.store.set('zoomFactor', factor)
+    this.notifySubscribers('zoomFactor', factor)
+  }
+
   subscribe<T>(key: string, callback: (newValue: T) => void) {
     if (!this.subscribers.has(key)) {
       this.subscribers.set(key, [])
