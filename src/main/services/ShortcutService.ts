@@ -7,40 +7,40 @@ export function registerZoomShortcut(mainWindow: BrowserWindow) {
   const initialZoom = configManager.getZoomFactor()
   mainWindow.webContents.setZoomFactor(initialZoom)
 
+  const handleZoom = (delta: number) => {
+    if (mainWindow) {
+      const currentZoom = mainWindow.webContents.getZoomFactor()
+      const newZoom = currentZoom + delta
+      if (newZoom >= 0.1 && newZoom <= 5.0) {
+        mainWindow.webContents.setZoomFactor(newZoom)
+        configManager.setZoomFactor(newZoom)
+      }
+    }
+  }
+
   const registerShortcuts = () => {
-    globalShortcut.register('CommandOrControl+=', () => {
-      if (mainWindow) {
-        const currentZoom = mainWindow.webContents.getZoomFactor()
-        const newZoom = currentZoom + 0.1
-        if (newZoom <= 5.0) {
-          mainWindow.webContents.setZoomFactor(newZoom)
-          configManager.setZoomFactor(newZoom) // 保存新的缩放值
-        }
-      }
-    })
+    // 放大快捷键
+    globalShortcut.register('CommandOrControl+=', () => handleZoom(0.1))
+    globalShortcut.register('CommandOrControl+numadd', () => handleZoom(0.1))
 
-    globalShortcut.register('CommandOrControl+-', () => {
-      if (mainWindow) {
-        const currentZoom = mainWindow.webContents.getZoomFactor()
-        const newZoom = currentZoom - 0.1
-        if (newZoom >= 0.1) {
-          mainWindow.webContents.setZoomFactor(newZoom)
-          configManager.setZoomFactor(newZoom) // 保存新的缩放值
-        }
-      }
-    })
+    // 缩小快捷键
+    globalShortcut.register('CommandOrControl+-', () => handleZoom(-0.1))
+    globalShortcut.register('CommandOrControl+numsub', () => handleZoom(-0.1))
 
+    // 重置快捷键
     globalShortcut.register('CommandOrControl+0', () => {
       if (mainWindow) {
         mainWindow.webContents.setZoomFactor(1)
-        configManager.setZoomFactor(1) // 保存默认缩放值
+        configManager.setZoomFactor(1)
       }
     })
   }
 
   const unregisterShortcuts = () => {
     globalShortcut.unregister('CommandOrControl+=')
+    globalShortcut.unregister('CommandOrControl+numadd')
     globalShortcut.unregister('CommandOrControl+-')
+    globalShortcut.unregister('CommandOrControl+numsub')
     globalShortcut.unregister('CommandOrControl+0')
   }
 
