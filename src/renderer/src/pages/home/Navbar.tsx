@@ -8,7 +8,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, Topic } from '@renderer/types'
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 import styled from 'styled-components'
 
 import SelectModelButton from './components/SelectModelButton'
@@ -25,10 +25,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   const { topicPosition } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
 
-  const addNewTopic = useCallback(() => {
-    EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)
-    setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-  }, [])
+  const addNewTopic = () => EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)
 
   return (
     <Navbar>

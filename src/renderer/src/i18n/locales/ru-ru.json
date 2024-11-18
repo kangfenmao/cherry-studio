@@ -288,7 +288,7 @@
       "data.webdav.backup.button": "Резервное копирование на WebDAV",
       "data.webdav.restore.button": "Восстановление с WebDAV",
       "advanced.title": "Расширенные настройки",
-      "advanced.click_assistant_switch_to_topics": "Автоматически переключаться на топик",
+      "advanced.auto_switch_to_topics": "Автоматически переключаться на топик",
       "provider.api_key": "Ключ API",
       "provider.api_key.tip": "Несколько ключей, разделенных запятыми",
       "provider.check": "Проверить",

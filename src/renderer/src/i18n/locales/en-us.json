@@ -288,7 +288,7 @@
       "data.webdav.backup.button": "Backup to WebDAV",
       "data.webdav.restore.button": "Restore from WebDAV",
       "advanced.title": "Advanced Settings",
-      "advanced.click_assistant_switch_to_topics": "Auto switch to topic",
+      "advanced.auto_switch_to_topics": "Auto switch to topic",
       "provider.api_key": "API Key",
       "provider.api_key.tip": "Multiple keys separated by commas",
       "provider.check": "Check",

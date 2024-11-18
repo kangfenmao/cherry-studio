@@ -210,7 +210,7 @@ const SettingsTab: FC = () => {
       {topicPosition === 'left' && (
         <>
           <SettingRow>
-            <SettingRowTitle>{t('settings.advanced.click_assistant_switch_to_topics')}</SettingRowTitle>
+            <SettingRowTitle>{t('settings.advanced.auto_switch_to_topics')}</SettingRowTitle>
             <Switch
               size="small"
               checked={clickAssistantToShowTopic}

@@ -48,7 +48,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic, model, setModel } = useAssistant(assistant.id)
-  const { sendMessageShortcut, fontSize, pasteLongTextAsFile, showInputEstimatedTokens } = useSettings()
+  const { sendMessageShortcut, fontSize, pasteLongTextAsFile, showInputEstimatedTokens, clickAssistantToShowTopic } =
+    useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const [contextCount, setContextCount] = useState(0)
@@ -144,7 +145,9 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
     addTopic(topic)
     setActiveTopic(topic)
-  }, [addTopic, assistant, setActiveTopic, setModel])
+
+    clickAssistantToShowTopic && setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
+  }, [addTopic, assistant, clickAssistantToShowTopic, setActiveTopic, setModel])
 
   const clearTopic = async () => {
     if (generating) {
