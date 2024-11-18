@@ -11,8 +11,12 @@ import FireworksProviderLogo from '@renderer/assets/images/providers/fireworks.p
 import GithubProviderLogo from '@renderer/assets/images/providers/github.png'
 import GoogleProviderLogo from '@renderer/assets/images/providers/google.png'
 import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.png'
+import GrokProviderLogo from '@renderer/assets/images/providers/grok.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
+import HyperbolicProviderLogo from '@renderer/assets/images/providers/hyperbolic.png'
+import JinaProviderLogo from '@renderer/assets/images/providers/jina.png'
 import MinimaxProviderLogo from '@renderer/assets/images/providers/minimax.png'
+import MistralProviderLogo from '@renderer/assets/images/providers/mistral.png'
 import MoonshotProviderLogo from '@renderer/assets/images/providers/moonshot.png'
 import NvidiaProviderLogo from '@renderer/assets/images/providers/nvidia.png'
 import OcoolAiProviderLogo from '@renderer/assets/images/providers/ocoolai.png'
@@ -24,10 +28,6 @@ import StepProviderLogo from '@renderer/assets/images/providers/step.png'
 import TogetherProviderLogo from '@renderer/assets/images/providers/together.png'
 import ZeroOneProviderLogo from '@renderer/assets/images/providers/zero-one.png'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
-import GrokProviderLogo from '@renderer/assets/images/providers/grok.png'
-import HyperbolicProviderLogo from '@renderer/assets/images/providers/hyperbolic.png'
-import MistralProviderLogo from '@renderer/assets/images/providers/mistral.png'
-import JinaProviderLogo from '@renderer/assets/images/providers/jina.png'
 
 export function getProviderLogo(providerId: string) {
   switch (providerId) {
@@ -326,6 +326,7 @@ export const PROVIDER_CONFIG = {
     },
     websites: {
       official: 'https://app.hyperbolic.xyz',
+      apiKey: 'https://app.hyperbolic.xyz/settings',
       docs: 'https://docs.hyperbolic.xyz',
       models: 'https://app.hyperbolic.xyz/models'
     }
@@ -336,6 +337,7 @@ export const PROVIDER_CONFIG = {
     },
     websites: {
       official: 'https://mistral.ai',
+      apiKey: 'https://console.mistral.ai/api-keys/',
       docs: 'https://docs.mistral.ai',
       models: 'https://docs.mistral.ai/getting-started/models/models_overview'
     }
@@ -346,6 +348,7 @@ export const PROVIDER_CONFIG = {
     },
     websites: {
       official: 'https://jina.ai',
+      apiKey: 'https://jina.ai/',
       docs: 'https://jina.ai',
       models: 'https://jina.ai'
     }

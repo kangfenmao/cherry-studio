@@ -377,8 +377,10 @@
         "not_checked": "Не проверено",
         "delete.title": "Удалить провайдер",
         "delete.content": "Вы уверены, что хотите удалить этот провайдер?",
-        "edit.name": "Имя провайдера",
-        "edit.name.placeholder": "Пример: OpenAI",
+        "add.title": "Добавить провайдер",
+        "add.name": "Имя провайдера",
+        "add.name.placeholder": "Пример: OpenAI",
+        "add.type": "Тип провайдера",
         "no_models": "Пожалуйста, добавьте модели перед проверкой соединения с API"
       }
     },

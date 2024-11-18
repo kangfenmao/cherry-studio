@@ -31,15 +31,16 @@ const ProvidersList: FC = () => {
   }
 
   const onAddProvider = async () => {
-    const prividerName = await AddProviderPopup.show()
+    const { name: prividerName, type } = await AddProviderPopup.show()
 
-    if (!prividerName) {
+    if (!prividerName.trim()) {
       return
     }
 
     const provider = {
       id: uuid(),
-      name: prividerName,
+      name: prividerName.trim(),
+      type,
       apiKey: '',
       apiHost: '',
       models: [],
@@ -58,8 +59,8 @@ const ProvidersList: FC = () => {
         key: 'edit',
         icon: <EditOutlined />,
         async onClick() {
-          const name = await AddProviderPopup.show(provider)
-          name && updateProvider({ ...provider, name })
+          const { name, type } = await AddProviderPopup.show(provider)
+          name && updateProvider({ ...provider, name, type })
         }
       },
       {

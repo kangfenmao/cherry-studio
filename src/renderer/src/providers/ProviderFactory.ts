@@ -7,7 +7,7 @@ import OpenAIProvider from './OpenAIProvider'
 
 export default class ProviderFactory {
   static create(provider: Provider): BaseProvider {
-    switch (provider.id) {
+    switch (provider.type) {
       case 'anthropic':
         return new AnthropicProvider(provider)
       case 'gemini':
@@ -19,5 +19,5 @@ export default class ProviderFactory {
 }
 
 export function isOpenAIProvider(provider: Provider) {
-  return !['anthropic', 'gemini'].includes(provider.id)
+  return !['anthropic', 'gemini'].includes(provider.type)
 }

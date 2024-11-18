@@ -677,6 +677,18 @@ const migrateConfig = {
   '40': (state: RootState) => {
     state.settings.tray = true
     return state
+  },
+  '41': (state: RootState) => {
+    state.llm.providers.forEach((provider) => {
+      if (provider.id === 'gemini') {
+        provider.type = 'gemini'
+      } else if (provider.id === 'anthropic') {
+        provider.type = 'anthropic'
+      } else {
+        provider.type = 'openai'
+      }
+    })
+    return state
   }
 }
 

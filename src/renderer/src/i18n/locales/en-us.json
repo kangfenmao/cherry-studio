@@ -377,8 +377,10 @@
         "not_checked": "Not Checked",
         "delete.title": "Delete Provider",
         "delete.content": "Are you sure you want to delete this provider?",
-        "edit.name": "Provider Name",
-        "edit.name.placeholder": "Example: OpenAI",
+        "add.title": "Add Provider",
+        "add.name": "Provider Name",
+        "add.name.placeholder": "Example: OpenAI",
+        "add.type": "Provider Type",
         "no_models": "Please add models first before checking the API connection"
       }
     },

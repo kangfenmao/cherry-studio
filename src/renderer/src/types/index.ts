@@ -66,6 +66,7 @@ export type User = {
 
 export type Provider = {
   id: string
+  type: ProviderType
   name: string
   apiKey: string
   apiHost: string
@@ -74,6 +75,8 @@ export type Provider = {
   enabled?: boolean
   isSystem?: boolean
 }
+
+export type ProviderType = 'openai' | 'anthropic' | 'gemini'
 
 export type Model = {
   id: string
