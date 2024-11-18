@@ -129,6 +129,7 @@ const visionAllowedModels = [
   'moondream',
   'minicpm',
   'gemini-1\\.5',
+  'gemini-exp',
   'claude-3',
   'vision',
   'glm-4v',
