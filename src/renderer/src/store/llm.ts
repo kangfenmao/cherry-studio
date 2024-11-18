@@ -349,7 +349,8 @@ const settingsSlice = createSlice({
         p.id === action.payload.providerId
           ? {
               ...p,
-              models: uniqBy(p.models.concat(action.payload.model), 'id')
+              models: uniqBy(p.models.concat(action.payload.model), 'id'),
+              enabled: true
             }
           : p
       )

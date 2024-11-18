@@ -142,7 +142,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           )}
         </Flex>
         <Switch
-          defaultValue={provider.enabled}
+          value={provider.enabled}
           key={provider.id}
           onChange={(enabled) => updateProvider({ ...provider, apiKey, apiHost, enabled })}
         />
