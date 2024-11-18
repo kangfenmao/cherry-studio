@@ -190,6 +190,7 @@ export function getModelLogo(modelId: string) {
     palm: isLight ? PalmModelLogo : PalmModelLogoDark,
     step: isLight ? StepModelLogo : StepModelLogoDark,
     hailuo: isLight ? HailuoModelLogo : HailuoModelLogoDark,
+    doubao: isLight ? DoubaoModelLogo : DoubaoModelLogoDark,
     'ep-202': isLight ? DoubaoModelLogo : DoubaoModelLogoDark,
     cohere: isLight ? CohereModelLogo : CohereModelLogoDark,
     command: isLight ? CohereModelLogo : CohereModelLogoDark,
