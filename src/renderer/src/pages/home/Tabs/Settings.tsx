@@ -6,6 +6,7 @@ import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@r
 import { useAppDispatch } from '@renderer/store'
 import {
   setClickAssistantToShowTopic,
+  setCodeCollapsible,
   setCodeShowLineNumbers,
   setCodeStyle,
   setFontSize,
@@ -39,6 +40,7 @@ const SettingsTab: FC = () => {
     pasteLongTextAsFile,
     renderInputMessageAsMarkdown,
     codeShowLineNumbers,
+    codeCollapsible,
     mathEngine,
     topicPosition,
     showTopicTime,
@@ -79,6 +81,11 @@ const SettingsTab: FC = () => {
           checked={codeShowLineNumbers}
           onChange={(checked) => dispatch(setCodeShowLineNumbers(checked))}
         />
+      </SettingRow>
+      <SettingDivider />
+      <SettingRow>
+        <SettingRowTitleSmall>{t('chat.settings.code_collapsible')}</SettingRowTitleSmall>
+        <Switch size="small" checked={codeCollapsible} onChange={(checked) => dispatch(setCodeCollapsible(checked))} />
       </SettingRow>
       <SettingDivider />
       <SettingRow>

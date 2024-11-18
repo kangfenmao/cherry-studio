@@ -113,6 +113,7 @@
       "settings.set_as_default": "設為預設助手",
       "settings.max": "最大",
       "settings.show_line_numbers": "代码顯示行號",
+      "settings.code_collapsible": "代码块可折叠",
       "suggestions.title": "建議的問題",
       "add.assistant.title": "添加助手",
       "message.new.context": "新上下文",

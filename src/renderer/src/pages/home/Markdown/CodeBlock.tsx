@@ -2,7 +2,7 @@ import { CheckOutlined, DownOutlined, RightOutlined } from '@ant-design/icons'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useSyntaxHighlighter } from '@renderer/context/SyntaxHighlighterProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -16,10 +16,10 @@ interface CodeBlockProps {
 }
 
 const CollapseIcon: React.FC<{ expanded: boolean; onClick: () => void }> = ({ expanded, onClick }) => {
-  return expanded ? (
-    <DownOutlined style={{ cursor: 'pointer' }} onClick={onClick} />
-  ) : (
-    <RightOutlined style={{ cursor: 'pointer' }} onClick={onClick} />
+  return (
+    <CollapseIconWrapper onClick={onClick}>
+      {expanded ? <DownOutlined style={{ fontSize: 12 }} /> : <RightOutlined style={{ fontSize: 12 }} />}
+    </CollapseIconWrapper>
   )
 }
 
@@ -31,28 +31,22 @@ const ExpandButton: React.FC<{
   if (!showButton) return null
 
   return (
-    <div
-      style={{
-        textAlign: 'center',
-        cursor: 'pointer',
-        padding: '8px',
-        color: 'var(--color-text-3)',
-        borderTop: '0.5px solid var(--color-code-background)'
-      }}
-      onClick={onClick}>
-      {isExpanded ? '收起' : '展开'}
-    </div>
+    <ExpandButtonWrapper onClick={onClick}>
+      <div className="button-text">{isExpanded ? '收起' : '展开'}</div>
+    </ExpandButtonWrapper>
   )
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
   const showFooterCopyButton = children && children.length > 500
-  const { codeShowLineNumbers, fontSize } = useSettings()
+  const { codeShowLineNumbers, fontSize, codeCollapsible } = useSettings()
   const language = match?.[1] ?? 'text'
   const [html, setHtml] = useState<string>('')
   const { codeToHtml } = useSyntaxHighlighter()
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(!codeCollapsible)
+  const [shouldShowExpandButton, setShouldShowExpandButton] = useState(false)
+  const codeContentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const loadHighlightedCode = async () => {
@@ -62,6 +56,24 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
     loadHighlightedCode()
   }, [children, language, codeToHtml])
 
+  useEffect(() => {
+    if (codeContentRef.current) {
+      setShouldShowExpandButton(codeContentRef.current.scrollHeight > 350)
+    }
+  }, [html])
+
+  useEffect(() => {
+    if (!codeCollapsible) {
+      setIsExpanded(true)
+      setShouldShowExpandButton(false)
+    } else {
+      setIsExpanded(!codeCollapsible)
+      if (codeContentRef.current) {
+        setShouldShowExpandButton(codeContentRef.current.scrollHeight > 350)
+      }
+    }
+  }, [codeCollapsible])
+
   if (language === 'mermaid') {
     return <Mermaid chart={children} />
   }
@@ -70,12 +82,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
     <div className="code-block">
       <CodeHeader>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CollapseIcon expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
+          {codeCollapsible && <CollapseIcon expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />}
           <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
         </div>
         <CopyButton text={children} />
       </CodeHeader>
       <CodeContent
+        ref={codeContentRef}
         isShowLineNumbers={codeShowLineNumbers}
         dangerouslySetInnerHTML={{ __html: html }}
         style={{
@@ -83,17 +96,19 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
           marginTop: 0,
-          fontSize,
-          maxHeight: isExpanded ? 'none' : '300px',
-          overflow: 'hidden',
+          fontSize: fontSize - 1,
+          maxHeight: codeCollapsible && !isExpanded ? '350px' : 'none',
+          overflow: codeCollapsible && !isExpanded ? 'auto' : 'visible',
           position: 'relative'
         }}
       />
-      <ExpandButton
-        isExpanded={isExpanded}
-        onClick={() => setIsExpanded(!isExpanded)}
-        showButton={!isExpanded || showFooterCopyButton}
-      />
+      {codeCollapsible && (
+        <ExpandButton
+          isExpanded={isExpanded}
+          onClick={() => setIsExpanded(!isExpanded)}
+          showButton={shouldShowExpandButton}
+        />
+      )}
       {showFooterCopyButton && (
         <CodeFooter>
           <CopyButton text={children} style={{ marginTop: -40, marginRight: 10 }} />
@@ -185,6 +200,47 @@ const CodeFooter = styled.div`
     transition: color 0.3s;
   }
   .copy:hover {
+    color: var(--color-text-1);
+  }
+`
+
+const ExpandButtonWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  height: 30px;
+  margin-top: -30px;
+
+  .button-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 8px;
+    color: var(--color-text-3);
+    z-index: 1;
+    transition: color 0.2s;
+    font-size: 12px;
+  }
+
+  &:hover .button-text {
+    color: var(--color-text-1);
+  }
+`
+
+const CollapseIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-text-3);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-background-soft);
     color: var(--color-text-1);
   }
 `

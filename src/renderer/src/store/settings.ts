@@ -25,6 +25,7 @@ export interface SettingsState {
   manualUpdateCheck: boolean
   renderInputMessageAsMarkdown: boolean
   codeShowLineNumbers: boolean
+  codeCollapsible: boolean
   mathEngine: 'MathJax' | 'KaTeX'
   messageStyle: 'plain' | 'bubble'
   codeStyle: CodeStyleVarious
@@ -57,6 +58,7 @@ const initialState: SettingsState = {
   manualUpdateCheck: false,
   renderInputMessageAsMarkdown: true,
   codeShowLineNumbers: false,
+  codeCollapsible: false,
   mathEngine: 'MathJax',
   messageStyle: 'plain',
   codeStyle: 'auto',
@@ -128,6 +130,9 @@ const settingsSlice = createSlice({
     setPasteLongTextAsFile: (state, action: PayloadAction<boolean>) => {
       state.pasteLongTextAsFile = action.payload
     },
+    setRenderInputMessageAsMarkdown: (state, action: PayloadAction<boolean>) => {
+      state.renderInputMessageAsMarkdown = action.payload
+    },
     setClickAssistantToShowTopic: (state, action: PayloadAction<boolean>) => {
       state.clickAssistantToShowTopic = action.payload
     },
@@ -146,11 +151,11 @@ const settingsSlice = createSlice({
     setWebdavPath: (state, action: PayloadAction<string>) => {
       state.webdavPath = action.payload
     },
-    setRenderInputMessageAsMarkdown: (state, action: PayloadAction<boolean>) => {
-      state.renderInputMessageAsMarkdown = action.payload
-    },
     setCodeShowLineNumbers: (state, action: PayloadAction<boolean>) => {
       state.codeShowLineNumbers = action.payload
+    },
+    setCodeCollapsible: (state, action: PayloadAction<boolean>) => {
+      state.codeCollapsible = action.payload
     },
     setMathEngine: (state, action: PayloadAction<'MathJax' | 'KaTeX'>) => {
       state.mathEngine = action.payload
@@ -192,6 +197,7 @@ export const {
   setWebdavPass,
   setWebdavPath,
   setCodeShowLineNumbers,
+  setCodeCollapsible,
   setMathEngine,
   setMessageStyle,
   setCodeStyle

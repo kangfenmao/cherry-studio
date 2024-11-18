@@ -113,6 +113,7 @@
       "settings.set_as_default": "Применить к ассистенту по умолчанию",
       "settings.max": "Максимум",
       "settings.show_line_numbers": "Показать номера строк в коде",
+      "settings.code_collapsible": "Блок кода свернут",
       "suggestions.title": "Предложенные вопросы",
       "add.assistant.title": "Добавить ассистента",
       "message.new.context": "Новый контекст",

@@ -113,6 +113,7 @@
       "settings.set_as_default": "Apply to default assistant",
       "settings.max": "Max",
       "settings.show_line_numbers": "Show Line Numbers in Code",
+      "settings.code_collapsible": "Code block collapsible",
       "suggestions.title": "Suggested Questions",
       "add.assistant.title": "Add Assistant",
       "message.new.context": "New Context",
