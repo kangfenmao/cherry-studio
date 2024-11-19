@@ -32,11 +32,11 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       onCancel={onCancel}
       afterClose={onClose}
       title={null}
-      width="80vw"
+      width="75vw"
       transitionName="ant-move-down"
       styles={{
         content: { padding: 0, border: '1px solid var(--color-border)' },
-        body: { height: '80vh' }
+        body: { height: '85vh' }
       }}
       footer={null}>
       <HistoryPage />

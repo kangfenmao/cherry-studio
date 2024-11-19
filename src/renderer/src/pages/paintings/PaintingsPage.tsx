@@ -442,8 +442,10 @@ const InputContainer = styled.div`
   min-height: 95px;
   max-height: 95px;
   position: relative;
-  border-top: 1px solid var(--color-border-soft);
+  border: 1px solid var(--color-border-soft);
   transition: all 0.3s ease;
+  margin: 0 20px 15px 20px;
+  border-radius: 10px;
 `
 
 const Textarea = styled(TextArea)`

@@ -5,7 +5,7 @@ import useScrollPosition from '@renderer/hooks/useScrollPosition'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { getAssistantById } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { locateToMessage } from '@renderer/services/MessagesService'
+import { isGenerating, locateToMessage } from '@renderer/services/MessagesService'
 import NavigationService from '@renderer/services/NavigationService'
 import { Topic } from '@renderer/types'
 import { Button, Divider, Empty } from 'antd'
@@ -30,7 +30,8 @@ const TopicMessages: FC<Props> = ({ topic, ...props }) => {
     return null
   }
 
-  const onContinueChat = (topic: Topic) => {
+  const onContinueChat = async (topic: Topic) => {
+    await isGenerating()
     SearchPopup.hide()
     const assistant = getAssistantById(topic.assistantId)
     navigate('/', { state: { assistant, topic } })

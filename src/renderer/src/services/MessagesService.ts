@@ -1,6 +1,8 @@
 import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import { DEFAULT_CONTEXTCOUNT } from '@renderer/config/constant'
 import { getTopicById } from '@renderer/hooks/useTopic'
+import i18n from '@renderer/i18n'
+import store from '@renderer/store'
 import { Assistant, Message, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { isEmpty, takeRight } from 'lodash'
@@ -43,11 +45,23 @@ export function deleteMessageFiles(message: Message) {
   message.files && FileManager.deleteFiles(message.files)
 }
 
+export function isGenerating() {
+  return new Promise((resolve, reject) => {
+    const generating = store.getState().runtime.generating
+    generating && window.message.warning({ content: i18n.t('message.switch.disabled'), key: 'switch-assistant' })
+    generating ? reject(false) : resolve(true)
+  })
+}
+
 export async function locateToMessage(navigate: NavigateFunction, message: Message) {
+  await isGenerating()
+
   SearchPopup.hide()
   const assistant = getAssistantById(message.assistantId)
   const topic = await getTopicById(message.topicId)
+
   navigate('/', { state: { assistant, topic } })
+
   setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
   setTimeout(() => EventEmitter.emit(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id), 300)
 }
