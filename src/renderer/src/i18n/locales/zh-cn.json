@@ -336,6 +336,9 @@
       "topic.position.right": "右侧",
       "topic.show.time": "显示话题时间",
       "display.title": "显示设置",
+      "data.title": "数据目录",
+      "data.app_data": "应用数据",
+      "data.app_logs": "应用日志",
       "shortcuts": {
         "title": "快捷方式",
         "action": "操作",

@@ -45,7 +45,8 @@ const api = {
   },
   export: {
     toWord: (markdown: string, fileName: string) => ipcRenderer.invoke('export:word', markdown, fileName)
-  }
+  },
+  openPath: (path: string) => ipcRenderer.invoke('open:path', path)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

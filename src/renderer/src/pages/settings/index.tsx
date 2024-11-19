@@ -21,8 +21,9 @@ export const SettingTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  font-weight: 900;
   user-select: none;
+  font-size: 16px;
+  font-weight: bold;
 `
 
 export const SettingSubtitle = styled.div`
@@ -42,6 +43,7 @@ export const SettingRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  min-height: 32px;
 `
 
 export const SettingRowTitle = styled.div`
@@ -66,4 +68,11 @@ export const SettingHelpText = styled.div`
 export const SettingHelpLink = styled(Link)`
   font-size: 11px;
   padding: 0 5px;
+`
+
+export const SettingGroup = styled.div`
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 0.5px solid var(--color-border);
+  padding: 16px;
 `

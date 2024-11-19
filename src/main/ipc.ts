@@ -2,6 +2,7 @@ import path from 'node:path'
 
 import { ThemeMode } from '@types'
 import { BrowserWindow, ipcMain, session, shell } from 'electron'
+import log from 'electron-log'
 
 import { titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
@@ -23,7 +24,9 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     version: app.getVersion(),
     isPackaged: app.isPackaged,
     appPath: app.getAppPath(),
-    filesPath: path.join(app.getPath('userData'), 'Data', 'Files')
+    filesPath: path.join(app.getPath('userData'), 'Data', 'Files'),
+    appDataPath: app.getPath('userData'),
+    logsPath: log.transports.file.getFile().path
   }))
 
   ipcMain.handle('app:proxy', async (_, proxy: string) => {
@@ -110,4 +113,9 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   // export
   ipcMain.handle('export:word', exportService.exportToWord)
+
+  // open path
+  ipcMain.handle('open:path', async (_, path: string) => {
+    await shell.openPath(path)
+  })
 }

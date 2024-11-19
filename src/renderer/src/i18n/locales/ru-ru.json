@@ -348,6 +348,9 @@
       "topic.position.right": "Справа",
       "topic.show.time": "Показывать время топика",
       "display.title": "Настройки отображения",
+      "data.title": "Каталог данных",
+      "data.app_data": "Данные приложения",
+      "data.app_logs": "Логи приложения",
       "shortcuts": {
         "title": "Горячие клавиши",
         "action": "Действие",

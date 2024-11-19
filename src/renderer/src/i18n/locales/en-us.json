@@ -348,6 +348,9 @@
       "topic.position.right": "Right",
       "topic.show.time": "Show Topic Time",
       "display.title": "Display Settings",
+      "data.title": "Data Directory",
+      "data.app_data": "App Data",
+      "data.app_logs": "App Logs",
       "shortcuts": {
         "title": "Keyboard Shortcuts",
         "action": "Action",

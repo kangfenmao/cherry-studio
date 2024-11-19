@@ -149,3 +149,12 @@ export type WebDavConfig = {
   webdavPass: string
   webdavPath: string
 }
+
+export type AppInfo = {
+  version: string
+  isPackaged: boolean
+  appPath: string
+  appDataPath: string
+  filesPath: string
+  logsPath: string
+}

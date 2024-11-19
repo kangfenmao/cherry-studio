@@ -1,7 +1,7 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 import { FileType } from '@renderer/types'
 import { WebDavConfig } from '@renderer/types'
-import { LanguageVarious } from '@renderer/types'
+import { AppInfo, LanguageVarious } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
 import { Readable } from 'stream'
 
@@ -9,12 +9,7 @@ declare global {
   interface Window {
     electron: ElectronAPI
     api: {
-      getAppInfo: () => Promise<{
-        version: string
-        isPackaged: boolean
-        appPath: string
-        filesPath: string
-      }>
+      getAppInfo: () => Promise<AppInfo>
       checkForUpdate: () => void
       openWebsite: (url: string) => void
       setProxy: (proxy: string | undefined) => void
@@ -57,6 +52,7 @@ declare global {
       export: {
         toWord: (markdown: string, fileName: string) => Promise<void>
       }
+      openPath: (path: string) => Promise<void>
     }
   }
 }

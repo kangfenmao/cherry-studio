@@ -336,6 +336,9 @@
       "topic.position.right": "右側",
       "topic.show.time": "顯示話題時間",
       "display.title": "顯示設定",
+      "data.title": "數據目錄",
+      "data.app_data": "應用數據",
+      "data.app_logs": "應用日誌",
       "shortcuts": {
         "title": "快速方式",
         "action": "操作",

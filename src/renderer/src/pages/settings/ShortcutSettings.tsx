@@ -96,8 +96,13 @@ const ShortcutSettings: FC = () => {
 }
 
 const Table = styled(AntTable)`
+  .ant-table {
+    background: transparent;
+  }
+
   .ant-table-cell {
     padding: 14px 0 !important;
+    background: transparent !important;
   }
 `
 
