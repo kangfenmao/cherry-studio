@@ -126,12 +126,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   }
 
   return (
-    <SettingContainer
-      style={
-        theme === 'dark'
-          ? { backgroundColor: 'var(--color-background)' }
-          : { backgroundColor: 'var(--color-background-mute)' }
-      }>
+    <SettingContainer theme={theme}>
       <SettingTitle>
         <Flex align="center">
           <span>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</span>

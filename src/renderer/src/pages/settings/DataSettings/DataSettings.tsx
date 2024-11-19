@@ -1,5 +1,6 @@
 import { FileSearchOutlined, FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack, VStack } from '@renderer/components/Layout'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { backup, reset, restore } from '@renderer/services/BackupService'
 import { AppInfo } from '@renderer/types'
 import { Button, Typography } from 'antd'
@@ -14,12 +15,14 @@ import WebDavSettings from './WebDavSettings'
 const DataSettings: FC = () => {
   const { t } = useTranslation()
   const [appInfo, setAppInfo] = useState<AppInfo>()
+  const { theme } = useTheme()
 
   useEffect(() => {
     window.api.getAppInfo().then(setAppInfo)
   }, [])
 
-  const handleOpenPath = (path: string) => {
+  const handleOpenPath = (path?: string) => {
+    if (!path) return
     if (path?.endsWith('log')) {
       const dirPath = path.split(/[/\\]/).slice(0, -1).join('/')
       window.api.openPath(dirPath)
@@ -29,8 +32,8 @@ const DataSettings: FC = () => {
   }
 
   return (
-    <SettingContainer>
-      <SettingGroup>
+    <SettingContainer theme={theme}>
+      <SettingGroup theme={theme}>
         <SettingTitle>{t('settings.data')}</SettingTitle>
         <SettingDivider />
         <SettingRow>
@@ -63,10 +66,10 @@ const DataSettings: FC = () => {
           </HStack>
         </SettingRow>
       </SettingGroup>
-      <SettingGroup>
+      <SettingGroup theme={theme}>
         <WebDavSettings />
       </SettingGroup>
-      <SettingGroup>
+      <SettingGroup theme={theme}>
         <SettingTitle>{t('settings.data.title')}</SettingTitle>
         <SettingDivider />
         <SettingRow>

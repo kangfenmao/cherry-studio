@@ -1,15 +1,17 @@
+import { ThemeMode } from '@renderer/types'
 import { Divider } from 'antd'
 import Link from 'antd/es/typography/Link'
 import styled from 'styled-components'
 
-export const SettingContainer = styled.div`
+export const SettingContainer = styled.div<{ theme?: ThemeMode }>`
   display: flex;
   flex-direction: column;
   flex: 1;
   height: calc(100vh - var(--navbar-height));
-  padding: 15px;
+  padding: 20px;
   overflow-y: scroll;
   font-family: Ubuntu;
+  background: ${(props) => (props.theme === 'dark' ? 'transparent' : 'var(--color-background-soft)')};
 
   &::-webkit-scrollbar {
     display: none;
@@ -22,7 +24,7 @@ export const SettingTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   user-select: none;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 `
 
@@ -32,6 +34,12 @@ export const SettingSubtitle = styled.div`
   margin: 15px 0 0 0;
   user-select: none;
   font-weight: bold;
+`
+
+export const SettingDescription = styled.div`
+  font-size: 12px;
+  color: var(--color-text-3);
+  margin-top: 10px;
 `
 
 export const SettingDivider = styled(Divider)`
@@ -70,9 +78,10 @@ export const SettingHelpLink = styled(Link)`
   padding: 0 5px;
 `
 
-export const SettingGroup = styled.div`
-  margin-bottom: 16px;
+export const SettingGroup = styled.div<{ theme?: ThemeMode }>`
+  margin-bottom: 20px;
   border-radius: 8px;
   border: 0.5px solid var(--color-border);
   padding: 16px;
+  background: ${(props) => (props.theme === 'dark' ? 'var(--color-background-soft)' : 'var(--color-background)')};
 `

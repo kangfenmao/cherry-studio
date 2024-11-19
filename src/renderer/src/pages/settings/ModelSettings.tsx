@@ -1,5 +1,6 @@
 import { EditOutlined, MessageOutlined, SettingOutlined, TranslationOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId, hasModel } from '@renderer/services/ModelService'
@@ -9,7 +10,7 @@ import { find, sortBy } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SettingContainer, SettingDivider, SettingTitle } from '.'
+import { SettingContainer, SettingDescription, SettingDivider, SettingGroup, SettingTitle } from '.'
 import AssistantSettingsPopup from './AssistantSettings'
 
 const ModelSettings: FC = () => {
@@ -17,6 +18,7 @@ const ModelSettings: FC = () => {
     useDefaultModel()
   const { providers } = useProviders()
   const allModels = providers.map((p) => p.models).flat()
+  const { theme } = useTheme()
   const { t } = useTranslation()
 
   const selectOptions = providers
@@ -46,57 +48,64 @@ const ModelSettings: FC = () => {
   )
 
   return (
-    <SettingContainer>
-      <SettingTitle>
-        <div>
-          <MessageOutlined style={iconStyle} />
-          {t('settings.models.default_assistant_model')}
-        </div>
-      </SettingTitle>
-      <SettingDivider />
-      <HStack alignItems="center">
+    <SettingContainer theme={theme}>
+      <SettingGroup theme={theme}>
+        <SettingTitle>
+          <div>
+            <MessageOutlined style={iconStyle} />
+            {t('settings.models.default_assistant_model')}
+          </div>
+        </SettingTitle>
+        <SettingDivider />
+        <HStack alignItems="center">
+          <Select
+            value={defaultModelValue}
+            defaultValue={defaultModelValue}
+            style={{ width: 360 }}
+            onChange={(value) => setDefaultModel(find(allModels, JSON.parse(value)) as Model)}
+            options={selectOptions}
+            placeholder={t('settings.models.empty')}
+          />
+          <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={() => AssistantSettingsPopup.show()} />
+        </HStack>
+        <SettingDescription>{t('settings.models.default_assistant_model_description')}</SettingDescription>
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle>
+          <div>
+            <EditOutlined style={iconStyle} />
+            {t('settings.models.topic_naming_model')}
+          </div>
+        </SettingTitle>
+        <SettingDivider />
         <Select
-          value={defaultModelValue}
-          defaultValue={defaultModelValue}
+          value={defaultTopicNamingModel}
+          defaultValue={defaultTopicNamingModel}
           style={{ width: 360 }}
-          onChange={(value) => setDefaultModel(find(allModels, JSON.parse(value)) as Model)}
+          onChange={(value) => setTopicNamingModel(find(allModels, JSON.parse(value)) as Model)}
           options={selectOptions}
           placeholder={t('settings.models.empty')}
         />
-        <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={() => AssistantSettingsPopup.show()} />
-      </HStack>
-      <div style={{ height: 30 }} />
-      <SettingTitle>
-        <div>
-          <EditOutlined style={iconStyle} />
-          {t('settings.models.topic_naming_model')}
-        </div>
-      </SettingTitle>
-      <SettingDivider />
-      <Select
-        value={defaultTopicNamingModel}
-        defaultValue={defaultTopicNamingModel}
-        style={{ width: 360 }}
-        onChange={(value) => setTopicNamingModel(find(allModels, JSON.parse(value)) as Model)}
-        options={selectOptions}
-        placeholder={t('settings.models.empty')}
-      />
-      <div style={{ height: 30 }} />
-      <SettingTitle>
-        <div>
-          <TranslationOutlined style={iconStyle} />
-          {t('settings.models.translate_model')}
-        </div>
-      </SettingTitle>
-      <SettingDivider />
-      <Select
-        value={defaultTranslateModel}
-        defaultValue={defaultTranslateModel}
-        style={{ width: 360 }}
-        onChange={(value) => setTranslateModel(find(allModels, JSON.parse(value)) as Model)}
-        options={selectOptions}
-        placeholder={t('settings.models.empty')}
-      />
+        <SettingDescription>{t('settings.models.topic_naming_model_description')}</SettingDescription>
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle>
+          <div>
+            <TranslationOutlined style={iconStyle} />
+            {t('settings.models.translate_model')}
+          </div>
+        </SettingTitle>
+        <SettingDivider />
+        <Select
+          value={defaultTranslateModel}
+          defaultValue={defaultTranslateModel}
+          style={{ width: 360 }}
+          onChange={(value) => setTranslateModel(find(allModels, JSON.parse(value)) as Model)}
+          options={selectOptions}
+          placeholder={t('settings.models.empty')}
+        />
+        <SettingDescription>{t('settings.models.translate_model_description')}</SettingDescription>
+      </SettingGroup>
     </SettingContainer>
   )
 }

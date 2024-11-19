@@ -51,42 +51,42 @@ const Sidebar: FC = () => {
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus onClick={MinApp.onClose}>
-          <Tooltip title={t('assistants.title')} mouseEnterDelay={0.5} placement="right">
+          <Tooltip title={t('assistants.title')} mouseEnterDelay={0.8} placement="right">
             <StyledLink onClick={() => to('/')}>
               <Icon className={isRoute('/')}>
                 <i className="iconfont icon-chat" />
               </Icon>
             </StyledLink>
           </Tooltip>
-          <Tooltip title={t('agents.title')} mouseEnterDelay={0.5} placement="right">
+          <Tooltip title={t('agents.title')} mouseEnterDelay={0.8} placement="right">
             <StyledLink onClick={() => to('/agents')}>
               <Icon className={isRoutes('/agents')}>
                 <i className="iconfont icon-business-smart-assistant" />
               </Icon>
             </StyledLink>
           </Tooltip>
-          <Tooltip title={t('paintings.title')} mouseEnterDelay={0.5} placement="right">
+          <Tooltip title={t('paintings.title')} mouseEnterDelay={0.8} placement="right">
             <StyledLink onClick={() => to('/paintings')}>
               <Icon className={isRoute('/paintings')}>
                 <PictureOutlined style={{ fontSize: 16 }} />
               </Icon>
             </StyledLink>
           </Tooltip>
-          <Tooltip title={t('translate.title')} mouseEnterDelay={0.5} placement="right">
+          <Tooltip title={t('translate.title')} mouseEnterDelay={0.8} placement="right">
             <StyledLink onClick={() => to('/translate')}>
               <Icon className={isRoute('/translate')}>
                 <TranslationOutlined />
               </Icon>
             </StyledLink>
           </Tooltip>
-          <Tooltip title={t('minapp.title')} mouseEnterDelay={0.5} placement="right">
+          <Tooltip title={t('minapp.title')} mouseEnterDelay={0.8} placement="right">
             <StyledLink onClick={() => to('/apps')}>
               <Icon className={isRoute('/apps')}>
                 <i className="iconfont icon-appstore" />
               </Icon>
             </StyledLink>
           </Tooltip>
-          <Tooltip title={t('files.title')} mouseEnterDelay={0.5} placement="right">
+          <Tooltip title={t('files.title')} mouseEnterDelay={0.8} placement="right">
             <StyledLink onClick={() => to('/files')}>
               <Icon className={isRoute('/files')}>
                 <FolderOutlined />
@@ -96,7 +96,7 @@ const Sidebar: FC = () => {
         </Menus>
       </MainMenus>
       <Menus onClick={MinApp.onClose}>
-        <Tooltip title={t('settings.theme.title')} mouseEnterDelay={0.5} placement="right">
+        <Tooltip title={t('settings.theme.title')} mouseEnterDelay={0.8} placement="right">
           <Icon onClick={() => toggleTheme()}>
             {theme === 'dark' ? (
               <i className="iconfont icon-theme icon-dark1" />
@@ -105,7 +105,7 @@ const Sidebar: FC = () => {
             )}
           </Icon>
         </Tooltip>
-        <Tooltip title={t('settings.title')} mouseEnterDelay={0.5} placement="right">
+        <Tooltip title={t('settings.title')} mouseEnterDelay={0.8} placement="right">
           <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
             <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
               <i className="iconfont icon-setting" />
@@ -183,7 +183,8 @@ const Icon = styled.div`
     background-color: var(--color-active);
     .iconfont,
     .anticon {
-      color: var(--color-icon-white);
+      color: var(--color-primary);
+      font-weight: bold;
     }
   }
 `

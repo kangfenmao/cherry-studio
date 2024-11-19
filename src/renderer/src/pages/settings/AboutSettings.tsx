@@ -3,6 +3,7 @@ import { FileProtectOutlined, GlobalOutlined, MailOutlined, SoundOutlined } from
 import { HStack } from '@renderer/components/Layout'
 import MinApp from '@renderer/components/MinApp'
 import { APP_NAME, AppLogo } from '@renderer/config/env'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
 import { setManualUpdateCheck } from '@renderer/store/settings'
@@ -15,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingRow, SettingTitle } from '.'
+import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingTitle } from '.'
 
 const AboutSettings: FC = () => {
   const [version, setVersion] = useState('')
@@ -24,6 +25,7 @@ const AboutSettings: FC = () => {
   const [checkUpdateLoading, setCheckUpdateLoading] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const { manualUpdateCheck } = useSettings()
+  const { theme } = useTheme()
   const dispatch = useAppDispatch()
 
   const onCheckUpdate = debounce(
@@ -104,102 +106,104 @@ const AboutSettings: FC = () => {
   }, [t])
 
   return (
-    <SettingContainer>
-      <SettingTitle>
-        {t('settings.about.title')}
-        <HStack alignItems="center">
-          <Link to="https://github.com/kangfenmao/cherry-studio">
-            <GithubOutlined style={{ marginRight: 4, color: 'var(--color-text)', fontSize: 20 }} />
-          </Link>
-        </HStack>
-      </SettingTitle>
-      <SettingDivider />
-      <AboutHeader>
-        <Row align="middle">
-          <AvatarWrapper onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio')}>
-            {percent > 0 && (
-              <ProgressCircle
-                type="circle"
-                size={84}
-                percent={percent}
-                showInfo={false}
-                strokeLinecap="butt"
-                strokeColor="#67ad5b"
-              />
-            )}
-            <Avatar src={AppLogo} size={80} style={{ minHeight: 80 }} />
-          </AvatarWrapper>
-          <VersionWrapper>
-            <Title>{APP_NAME}</Title>
-            <Description>{t('settings.about.description')}</Description>
-            <Tag
-              onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}
-              color="cyan"
-              style={{ marginTop: 8, cursor: 'pointer' }}>
-              v{version}
-            </Tag>
-          </VersionWrapper>
-        </Row>
-        <CheckUpdateButton onClick={onCheckUpdate} loading={checkUpdateLoading}>
-          {downloading ? t('settings.about.downloading') : t('settings.about.checkUpdate')}
-        </CheckUpdateButton>
-      </AboutHeader>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('settings.general.manually_check_update.title')}</SettingRowTitle>
-        <Switch value={manualUpdateCheck} onChange={(v) => dispatch(setManualUpdateCheck(v))} />
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>
-          <SoundOutlined />
-          {t('settings.about.releases.title')}
-        </SettingRowTitle>
-        <Button
-          onClick={() =>
-            MinApp.start({
-              name: t('settings.about.releases.title'),
-              url: 'https://github.com/kangfenmao/cherry-studio/releases',
-              logo: AppLogo
-            })
-          }>
-          {t('settings.about.releases.button')}
-        </Button>
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>
-          <GlobalOutlined />
-          {t('settings.about.website.title')}
-        </SettingRowTitle>
-        <Button onClick={() => onOpenWebsite('https://cherry-ai.com')}>{t('settings.about.website.button')}</Button>
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>
-          <GithubOutlined />
-          {t('settings.about.feedback.title')}
-        </SettingRowTitle>
-        <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues/new')}>
-          {t('settings.about.feedback.button')}
-        </Button>
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>
-          <FileProtectOutlined />
-          {t('settings.about.license.title')}
-        </SettingRowTitle>
-        <Button onClick={showLicense}>{t('settings.about.license.button')}</Button>
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>
-          <MailOutlined /> {t('settings.about.contact.title')}
-        </SettingRowTitle>
-        <Button onClick={mailto}>{t('settings.about.contact.button')}</Button>
-      </SettingRow>
-      <SettingDivider />
+    <SettingContainer theme={theme}>
+      <SettingGroup theme={theme}>
+        <SettingTitle>
+          {t('settings.about.title')}
+          <HStack alignItems="center">
+            <Link to="https://github.com/kangfenmao/cherry-studio">
+              <GithubOutlined style={{ marginRight: 4, color: 'var(--color-text)', fontSize: 20 }} />
+            </Link>
+          </HStack>
+        </SettingTitle>
+        <SettingDivider />
+        <AboutHeader>
+          <Row align="middle">
+            <AvatarWrapper onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio')}>
+              {percent > 0 && (
+                <ProgressCircle
+                  type="circle"
+                  size={84}
+                  percent={percent}
+                  showInfo={false}
+                  strokeLinecap="butt"
+                  strokeColor="#67ad5b"
+                />
+              )}
+              <Avatar src={AppLogo} size={80} style={{ minHeight: 80 }} />
+            </AvatarWrapper>
+            <VersionWrapper>
+              <Title>{APP_NAME}</Title>
+              <Description>{t('settings.about.description')}</Description>
+              <Tag
+                onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/releases')}
+                color="cyan"
+                style={{ marginTop: 8, cursor: 'pointer' }}>
+                v{version}
+              </Tag>
+            </VersionWrapper>
+          </Row>
+          <CheckUpdateButton onClick={onCheckUpdate} loading={checkUpdateLoading}>
+            {downloading ? t('settings.about.downloading') : t('settings.about.checkUpdate')}
+          </CheckUpdateButton>
+        </AboutHeader>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.general.manually_check_update.title')}</SettingRowTitle>
+          <Switch value={manualUpdateCheck} onChange={(v) => dispatch(setManualUpdateCheck(v))} />
+        </SettingRow>
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingRow>
+          <SettingRowTitle>
+            <SoundOutlined />
+            {t('settings.about.releases.title')}
+          </SettingRowTitle>
+          <Button
+            onClick={() =>
+              MinApp.start({
+                name: t('settings.about.releases.title'),
+                url: 'https://github.com/kangfenmao/cherry-studio/releases',
+                logo: AppLogo
+              })
+            }>
+            {t('settings.about.releases.button')}
+          </Button>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>
+            <GlobalOutlined />
+            {t('settings.about.website.title')}
+          </SettingRowTitle>
+          <Button onClick={() => onOpenWebsite('https://cherry-ai.com')}>{t('settings.about.website.button')}</Button>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>
+            <GithubOutlined />
+            {t('settings.about.feedback.title')}
+          </SettingRowTitle>
+          <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues/new')}>
+            {t('settings.about.feedback.button')}
+          </Button>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>
+            <FileProtectOutlined />
+            {t('settings.about.license.title')}
+          </SettingRowTitle>
+          <Button onClick={showLicense}>{t('settings.about.license.button')}</Button>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>
+            <MailOutlined /> {t('settings.about.contact.title')}
+          </SettingRowTitle>
+          <Button onClick={mailto}>{t('settings.about.contact.button')}</Button>
+        </SettingRow>
+      </SettingGroup>
     </SettingContainer>
   )
 }

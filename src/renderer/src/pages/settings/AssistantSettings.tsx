@@ -2,6 +2,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { TopView } from '@renderer/components/TopView'
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { AssistantSettings as AssistantSettingsType } from '@renderer/types'
 import { Button, Col, Input, InputNumber, Modal, Row, Slider, Switch, Tooltip } from 'antd'
@@ -18,6 +19,7 @@ const AssistantSettings: FC = () => {
   const [contextCount, setContextCount] = useState(defaultAssistant.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(defaultAssistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(defaultAssistant?.settings?.maxTokens ?? 0)
+  const { theme } = useTheme()
 
   const { t } = useTranslation()
 
@@ -67,7 +69,7 @@ const AssistantSettings: FC = () => {
   }
 
   return (
-    <SettingContainer style={{ height: 'auto' }}>
+    <SettingContainer style={{ height: 'auto', background: 'transparent', padding: 0 }} theme={theme}>
       <SettingSubtitle style={{ marginTop: 0 }}>{t('common.name')}</SettingSubtitle>
       <Input
         placeholder={t('common.assistant') + t('common.name')}

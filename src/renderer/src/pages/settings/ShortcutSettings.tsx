@@ -1,11 +1,12 @@
 import { isMac } from '@renderer/config/constant'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { Switch, Table as AntTable, Tag } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingTitle } from '.'
+import { SettingContainer, SettingDivider, SettingGroup, SettingTitle } from '.'
 
 interface ShortcutItem {
   key: string
@@ -16,6 +17,7 @@ interface ShortcutItem {
 
 const ShortcutSettings: FC = () => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const commandKey = isMac ? '⌘' : 'Ctrl'
 
@@ -81,16 +83,18 @@ const ShortcutSettings: FC = () => {
   ]
 
   return (
-    <SettingContainer>
-      <SettingTitle>{t('settings.shortcuts.title')}</SettingTitle>
-      <SettingDivider style={{ marginBottom: 0 }} />
-      <Table
-        columns={columns as ColumnsType<unknown>}
-        dataSource={shortcuts}
-        pagination={false}
-        size="middle"
-        showHeader={false}
-      />
+    <SettingContainer theme={theme}>
+      <SettingGroup theme={theme}>
+        <SettingTitle>{t('settings.shortcuts.title')}</SettingTitle>
+        <SettingDivider style={{ marginBottom: 0 }} />
+        <Table
+          columns={columns as ColumnsType<unknown>}
+          dataSource={shortcuts}
+          pagination={false}
+          size="middle"
+          showHeader={false}
+        />
+      </SettingGroup>
     </SettingContainer>
   )
 }
