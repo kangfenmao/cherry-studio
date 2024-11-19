@@ -38,6 +38,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
         content: { padding: 0, border: '1px solid var(--color-border)' },
         body: { height: '85vh' }
       }}
+      centered
       footer={null}>
       <HistoryPage />
     </Modal>

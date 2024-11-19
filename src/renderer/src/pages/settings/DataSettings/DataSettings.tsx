@@ -1,12 +1,11 @@
 import { FileSearchOutlined, FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
-import { HStack, VStack } from '@renderer/components/Layout'
+import { HStack } from '@renderer/components/Layout'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { backup, reset, restore } from '@renderer/services/BackupService'
 import { AppInfo } from '@renderer/types'
 import { Button, Typography } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '..'
@@ -35,15 +34,6 @@ const DataSettings: FC = () => {
     <SettingContainer theme={theme}>
       <SettingGroup theme={theme}>
         <SettingTitle>{t('settings.data')}</SettingTitle>
-        <SettingDivider />
-        <SettingRow>
-          <SettingRowTitle>{t('settings.data.webdav.title')}</SettingRowTitle>
-          <VStack gap="5px">
-            <Link to="/settings/data/webdav" style={{ color: 'var(--color-text-2)' }}>
-              <Button>{t('settings.general.view_webdav_settings')}</Button>
-            </Link>
-          </VStack>
-        </SettingRow>
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>

@@ -133,7 +133,7 @@ const MenuIcon = styled.div`
   height: 36px;
   border-radius: 50%;
   &:hover {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background);
     .anticon {
       color: var(--color-text-1);
     }

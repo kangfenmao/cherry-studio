@@ -183,8 +183,7 @@ const Icon = styled.div`
     background-color: var(--color-active);
     .iconfont,
     .anticon {
-      color: var(--color-primary);
-      font-weight: bold;
+      color: var(--color-icon-white);
     }
   }
 `
