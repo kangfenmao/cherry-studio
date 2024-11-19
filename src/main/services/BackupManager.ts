@@ -1,10 +1,9 @@
 import { WebDavConfig } from '@types'
-import archiver from 'archiver'
+import AdmZip from 'adm-zip'
 import { app } from 'electron'
 import Logger from 'electron-log'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import * as unzipper from 'unzipper'
 
 import WebDav from './WebDav'
 
@@ -26,7 +25,6 @@ class BackupManager {
     destinationPath: string = this.backupDir
   ): Promise<string> {
     try {
-      // 创建临时目录
       await fs.ensureDir(this.tempDir)
 
       // 将 data 写入临时文件
@@ -38,21 +36,16 @@ class BackupManager {
       const tempDataDir = path.join(this.tempDir, 'Data')
       await fs.copy(sourcePath, tempDataDir)
 
-      // 创建 zip 文件
-      const output = fs.createWriteStream(path.join(destinationPath, fileName))
-      const archive = archiver('zip', { zlib: { level: 9 } })
-
-      archive.pipe(output)
-      archive.directory(this.tempDir, false)
-      await archive.finalize()
+      // 使用 adm-zip 创建压缩文件
+      const zip = new AdmZip()
+      zip.addLocalFolder(this.tempDir)
+      const backupedFilePath = path.join(destinationPath, fileName)
+      zip.writeZip(backupedFilePath)
 
       // 清理临时目录
       await fs.remove(this.tempDir)
 
       Logger.log('Backup completed successfully')
-
-      const backupedFilePath = path.join(destinationPath, fileName)
-
       return backupedFilePath
     } catch (error) {
       Logger.error('Backup failed:', error)
@@ -61,31 +54,43 @@ class BackupManager {
   }
 
   async restore(_: Electron.IpcMainInvokeEvent, backupPath: string): Promise<string> {
-    // 创建临时目录
-    await fs.ensureDir(this.tempDir)
+    try {
+      // 创建临时目录
+      await fs.ensureDir(this.tempDir)
 
-    // 解压备份文件到临时目录
-    await fs
-      .createReadStream(backupPath)
-      .pipe(unzipper.Extract({ path: this.tempDir }))
-      .promise()
+      Logger.log('[backup] step 1: unzip backup file', this.tempDir)
 
-    // 读取 data.json
-    const dataPath = path.join(this.tempDir, 'data.json')
-    const data = await fs.readFile(dataPath, 'utf-8')
+      // 使用 adm-zip 解压
+      const zip = new AdmZip(backupPath)
+      zip.extractAllTo(this.tempDir, true) // true 表示覆盖已存在的文件
 
-    // 恢复 Data 目录
-    const sourcePath = path.join(this.tempDir, 'Data')
-    const destPath = path.join(app.getPath('userData'), 'Data')
-    await fs.remove(destPath)
-    await fs.copy(sourcePath, destPath)
+      Logger.log('[backup] step 2: read data.json')
 
-    // 清理临时目录
-    await fs.remove(this.tempDir)
+      // 读取 data.json
+      const dataPath = path.join(this.tempDir, 'data.json')
+      const data = await fs.readFile(dataPath, 'utf-8')
 
-    Logger.log('Restore completed successfully')
+      Logger.log('[backup] step 3: restore Data directory')
 
-    return data
+      // 恢复 Data 目录
+      const sourcePath = path.join(this.tempDir, 'Data')
+      const destPath = path.join(app.getPath('userData'), 'Data')
+      await fs.remove(destPath)
+      await fs.copy(sourcePath, destPath)
+
+      Logger.log('[backup] step 4: clean up temp directory')
+
+      // 清理临时目录
+      await fs.remove(this.tempDir)
+
+      Logger.log('[backup] step 5: Restore completed successfully')
+
+      return data
+    } catch (error) {
+      Logger.error('[backup] Restore failed:', error)
+      await fs.remove(this.tempDir).catch(() => {})
+      throw error
+    }
   }
 
   async backupToWebdav(_: Electron.IpcMainInvokeEvent, data: string, webdavConfig: WebDavConfig) {
