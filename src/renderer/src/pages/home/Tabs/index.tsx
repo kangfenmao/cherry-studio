@@ -6,7 +6,7 @@ import { useShowTopics } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Segmented, SegmentedProps } from 'antd'
+import { Segmented as AntSegmented, SegmentedProps } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -98,7 +98,6 @@ const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant,
       {showTab && (
         <Segmented
           value={tab}
-          className="segmented-tab"
           style={{
             borderRadius: 0,
             padding: '10px 0',
@@ -164,6 +163,38 @@ const TabContent = styled.div`
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+`
+
+const Segmented = styled(AntSegmented)`
+  .ant-segmented-item {
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px;
+  }
+  .ant-segmented-item-selected {
+    background-color: var(--color-background-mute);
+  }
+  .ant-segmented-item-label {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 13px;
+    height: 100%;
+  }
+  .iconfont {
+    font-size: 13px;
+    margin-left: -2px;
+  }
+  .anticon-setting {
+    font-size: 12px;
+  }
+  .icon-business-smart-assistant {
+    margin-right: -2px;
+  }
+  .ant-segmented-item-icon + * {
+    margin-left: 4px;
+  }
 `
 
 export default HomeTabs
