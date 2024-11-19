@@ -36,7 +36,7 @@ const Markdown: FC<Props> = ({ message }) => {
   }, [message.content, message.status, t])
 
   const rehypePlugins = useMemo(() => {
-    const hasUnsafeElements = /<(input|textarea|select)/i.test(messageContent)
+    const hasUnsafeElements = /<(input|textarea|select|menuitem)/i.test(messageContent)
     return hasUnsafeElements ? [rehypeMath] : [rehypeRaw, rehypeMath]
   }, [messageContent, rehypeMath])
 
