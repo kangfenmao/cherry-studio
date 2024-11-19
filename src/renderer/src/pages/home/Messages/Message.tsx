@@ -65,7 +65,7 @@ const MessageItem: FC<Props> = ({
   const onEditMessage = useCallback(
     (msg: Message) => {
       setMessage(msg)
-      const messages = onGetMessages?.().map((m) => (m.id === message.id ? message : m))
+      const messages = onGetMessages?.().map((m) => (m.id === message.id ? msg : m))
       messages && onSetMessages?.(messages)
       topic && db.topics.update(topic.id, { messages })
     },
