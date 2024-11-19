@@ -10,7 +10,7 @@ import { find, sortBy } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SettingContainer, SettingDescription, SettingDivider, SettingGroup, SettingTitle } from '.'
+import { SettingContainer, SettingDescription, SettingGroup, SettingTitle } from '.'
 import AssistantSettingsPopup from './AssistantSettings'
 
 const ModelSettings: FC = () => {
@@ -50,13 +50,12 @@ const ModelSettings: FC = () => {
   return (
     <SettingContainer theme={theme}>
       <SettingGroup theme={theme}>
-        <SettingTitle>
+        <SettingTitle style={{ marginBottom: 12 }}>
           <div>
             <MessageOutlined style={iconStyle} />
             {t('settings.models.default_assistant_model')}
           </div>
         </SettingTitle>
-        <SettingDivider />
         <HStack alignItems="center">
           <Select
             value={defaultModelValue}
@@ -71,13 +70,12 @@ const ModelSettings: FC = () => {
         <SettingDescription>{t('settings.models.default_assistant_model_description')}</SettingDescription>
       </SettingGroup>
       <SettingGroup theme={theme}>
-        <SettingTitle>
+        <SettingTitle style={{ marginBottom: 12 }}>
           <div>
             <EditOutlined style={iconStyle} />
             {t('settings.models.topic_naming_model')}
           </div>
         </SettingTitle>
-        <SettingDivider />
         <Select
           value={defaultTopicNamingModel}
           defaultValue={defaultTopicNamingModel}
@@ -89,13 +87,12 @@ const ModelSettings: FC = () => {
         <SettingDescription>{t('settings.models.topic_naming_model_description')}</SettingDescription>
       </SettingGroup>
       <SettingGroup theme={theme}>
-        <SettingTitle>
+        <SettingTitle style={{ marginBottom: 12 }}>
           <div>
             <TranslationOutlined style={iconStyle} />
             {t('settings.models.translate_model')}
           </div>
         </SettingTitle>
-        <SettingDivider />
         <Select
           value={defaultTranslateModel}
           defaultValue={defaultTranslateModel}

@@ -84,7 +84,7 @@ const ShortcutSettings: FC = () => {
 
   return (
     <SettingContainer theme={theme}>
-      <SettingGroup theme={theme}>
+      <SettingGroup theme={theme} style={{ paddingBottom: 0 }}>
         <SettingTitle>{t('settings.shortcuts.title')}</SettingTitle>
         <SettingDivider style={{ marginBottom: 0 }} />
         <Table
@@ -107,6 +107,10 @@ const Table = styled(AntTable)`
   .ant-table-cell {
     padding: 14px 0 !important;
     background: transparent !important;
+  }
+
+  .ant-table-tbody > tr:last-child > td {
+    border-bottom: none;
   }
 `
 
