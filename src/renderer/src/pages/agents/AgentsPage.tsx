@@ -44,16 +44,23 @@ const AgentsPage: FC = () => {
   const { t, i18n } = useTranslation()
 
   const filteredAgentGroups = useMemo(() => {
-    const groups = { 我的: [] }
+    const groups: Record<string, Agent[]> = {
+      我的: [],
+      精选: agentGroups['精选'] || []
+    }
 
     if (!search.trim()) {
       Object.entries(agentGroups).forEach(([group, agents]) => {
-        groups[group] = agents
+        if (group !== '精选') {
+          groups[group] = agents
+        }
       })
       return groups
     }
 
     Object.entries(agentGroups).forEach(([group, agents]) => {
+      if (group === '精选') return
+
       const filteredAgents = agents.filter(
         (agent) =>
           agent.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -111,9 +118,7 @@ const AgentsPage: FC = () => {
   )
 
   const tabItems = useMemo(() => {
-    let groups = Object.keys(filteredAgentGroups)
-
-    groups = groups.includes('精选') ? [groups[0], '精选', ...groups.filter((g) => g !== '精选')] : groups
+    const groups = Object.keys(filteredAgentGroups)
 
     return groups.map((group, i) => {
       const id = String(i + 1)
@@ -250,6 +255,12 @@ const Tabs = styled(TabsAntd)`
     font-size: 13px;
     justify-content: left;
     padding: 7px 12px !important;
+    .ant-tabs-tab-btn {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
     &:hover {
       color: var(--color-text) !important;
       background-color: var(--color-background-soft);
