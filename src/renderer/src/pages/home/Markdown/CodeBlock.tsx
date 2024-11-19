@@ -82,7 +82,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
     <div className="code-block">
       <CodeHeader>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {codeCollapsible && <CollapseIcon expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />}
+          {codeCollapsible && shouldShowExpandButton && (
+            <CollapseIcon expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)} />
+          )}
           <CodeLanguage>{'<' + match[1].toUpperCase() + '>'}</CodeLanguage>
         </div>
         <CopyButton text={children} />
@@ -207,8 +209,8 @@ const CodeFooter = styled.div`
 const ExpandButtonWrapper = styled.div`
   position: relative;
   cursor: pointer;
-  height: 30px;
-  margin-top: -30px;
+  height: 25px;
+  margin-top: -25px;
 
   .button-text {
     position: absolute;
