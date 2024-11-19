@@ -181,7 +181,7 @@ const ProviderListItem = styled.div`
   align-items: center;
   padding: 5px 8px;
   width: 100%;
-  cursor: pointer;
+  cursor: grab;
   border-radius: 5px;
   font-size: 14px;
   transition: all 0.2s ease-in-out;

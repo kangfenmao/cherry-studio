@@ -56,7 +56,7 @@ const initialState: SettingsState = {
   pasteLongTextAsFile: false,
   clickAssistantToShowTopic: false,
   manualUpdateCheck: false,
-  renderInputMessageAsMarkdown: true,
+  renderInputMessageAsMarkdown: false,
   codeShowLineNumbers: false,
   codeCollapsible: false,
   mathEngine: 'MathJax',
