@@ -1,3 +1,4 @@
+import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import { DEFAULT_CONTEXTCOUNT } from '@renderer/config/constant'
 import { getTopicById } from '@renderer/hooks/useTopic'
 import { Assistant, Message, Topic } from '@renderer/types'
@@ -43,6 +44,7 @@ export function deleteMessageFiles(message: Message) {
 }
 
 export async function locateToMessage(navigate: NavigateFunction, message: Message) {
+  SearchPopup.hide()
   const assistant = getAssistantById(message.assistantId)
   const topic = await getTopicById(message.topicId)
   navigate('/', { state: { assistant, topic } })

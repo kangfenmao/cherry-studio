@@ -1,9 +1,10 @@
 import { useAssistants } from '@renderer/hooks/useAssistant'
 import { useShowAssistants } from '@renderer/hooks/useStore'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
+import NavigationService from '@renderer/services/NavigationService'
 import { Assistant } from '@renderer/types'
-import { FC, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { FC, useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Chat from './Chat'
@@ -14,6 +15,7 @@ let _activeAssistant: Assistant
 
 const HomePage: FC = () => {
   const { assistants } = useAssistants()
+  const navigate = useNavigate()
 
   const location = useLocation()
   const state = location.state
@@ -23,6 +25,15 @@ const HomePage: FC = () => {
   const { showAssistants } = useShowAssistants()
 
   _activeAssistant = activeAssistant
+
+  useEffect(() => {
+    NavigationService.setNavigate(navigate)
+  }, [navigate])
+
+  useEffect(() => {
+    state?.assistant && setActiveAssistant(state?.assistant)
+    state?.topic && setActiveTopic(state?.topic)
+  }, [state])
 
   return (
     <Container>

@@ -1,7 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined } from '@ant-design/icons'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { TopView } from '@renderer/components/TopView'
-import { useTheme } from '@renderer/context/ThemeProvider'
 import { checkApi } from '@renderer/services/ApiService'
 import { Button, List, Modal, Space, Spin, Typography } from 'antd'
 import { useState } from 'react'
@@ -30,7 +29,6 @@ const PopupContainer: React.FC<Props> = ({ title, provider, apiKeys, resolve }) 
     return Array.from(uniqueKeys).map((key) => ({ key }))
   })
   const { t } = useTranslation()
-  const { theme } = useTheme()
   const [isChecking, setIsChecking] = useState(false)
 
   const checkAllKeys = async () => {
@@ -79,11 +77,6 @@ const PopupContainer: React.FC<Props> = ({ title, provider, apiKeys, resolve }) 
       afterClose={onClose}
       centered
       maskClosable={false}
-      maskProps={{
-        style: {
-          backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.9)'
-        }
-      }}
       footer={
         <Space style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Space>

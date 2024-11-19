@@ -1,7 +1,6 @@
 import { ArrowLeftOutlined, EnterOutlined, SearchOutlined } from '@ant-design/icons'
-import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { Message, Topic } from '@renderer/types'
-import { Divider, Input } from 'antd'
+import { Input } from 'antd'
 import { last } from 'lodash'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -59,44 +58,38 @@ const TopicsPage: FC = () => {
 
   return (
     <Container>
-      <Navbar>
-        <NavbarCenter style={{ borderRight: 'none', justifyContent: 'flex-start' }}>{t('history.title')} </NavbarCenter>
-      </Navbar>
-      <ContentContainer id="content-container">
-        <Header>
-          {stack.length > 1 && (
-            <HeaderLeft>
-              <MenuIcon onClick={goBack}>
-                <ArrowLeftOutlined />
-              </MenuIcon>
-            </HeaderLeft>
-          )}
-          <SearchInput
-            placeholder={t('history.search.placeholder')}
-            type="search"
-            value={search}
-            allowClear
-            onChange={(e) => setSearch(e.target.value.trimStart())}
-            suffix={search.length >= 2 ? <EnterOutlined /> : <SearchOutlined />}
-            onPressEnter={onSearch}
-          />
-        </Header>
-        <Divider style={{ margin: 0 }} />
-        <TopicsHistory
-          keywords={search}
-          onClick={onTopicClick as any}
-          onSearch={onSearch}
-          style={{ display: isShow('topics') }}
+      <Header>
+        {stack.length > 1 && (
+          <HeaderLeft>
+            <MenuIcon onClick={goBack}>
+              <ArrowLeftOutlined />
+            </MenuIcon>
+          </HeaderLeft>
+        )}
+        <SearchInput
+          placeholder={t('history.search.placeholder')}
+          type="search"
+          value={search}
+          allowClear
+          onChange={(e) => setSearch(e.target.value.trimStart())}
+          suffix={search.length >= 2 ? <EnterOutlined /> : <SearchOutlined />}
+          onPressEnter={onSearch}
         />
-        <TopicMessages topic={topic} style={{ display: isShow('topic') }} />
-        <SearchResults
-          keywords={isShow('search') ? search : ''}
-          onMessageClick={onMessageClick}
-          onTopicClick={onTopicClick}
-          style={{ display: isShow('search') }}
-        />
-        <SearchMessage message={message} style={{ display: isShow('message') }} />
-      </ContentContainer>
+      </Header>
+      <TopicsHistory
+        keywords={search}
+        onClick={onTopicClick as any}
+        onSearch={onSearch}
+        style={{ display: isShow('topics') }}
+      />
+      <TopicMessages topic={topic} style={{ display: isShow('topic') }} />
+      <SearchResults
+        keywords={isShow('search') ? search : ''}
+        onMessageClick={onMessageClick}
+        onTopicClick={onTopicClick}
+        style={{ display: isShow('search') }}
+      />
+      <SearchMessage message={message} style={{ display: isShow('message') }} />
     </Container>
   )
 }
@@ -108,24 +101,17 @@ const Container = styled.div`
   height: 100%;
 `
 
-const ContentContainer = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  overflow-y: scroll;
-`
-
 const Header = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 8px 20px;
-  padding-top: 10px;
+  padding: 10px 0;
   width: 100%;
   position: relative;
+  background-color: var(--color-background-mute);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 `
 
 const HeaderLeft = styled.div`

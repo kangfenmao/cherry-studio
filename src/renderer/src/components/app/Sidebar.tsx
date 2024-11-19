@@ -1,4 +1,4 @@
-import { FileSearchOutlined, FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
+import { FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import { useTheme } from '@renderer/context/ThemeProvider'
@@ -90,13 +90,6 @@ const Sidebar: FC = () => {
             <StyledLink onClick={() => to('/files')}>
               <Icon className={isRoute('/files')}>
                 <FolderOutlined />
-              </Icon>
-            </StyledLink>
-          </Tooltip>
-          <Tooltip title={t('history.title')} mouseEnterDelay={0.5} placement="right">
-            <StyledLink onClick={() => to('/messages')}>
-              <Icon className={isRoutes('/messages')}>
-                <FileSearchOutlined />
               </Icon>
             </StyledLink>
           </Tooltip>

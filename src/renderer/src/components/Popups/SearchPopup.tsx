@@ -1,18 +1,14 @@
+import HistoryPage from '@renderer/pages/history/HistoryPage'
 import { Modal } from 'antd'
 import { useState } from 'react'
 
-import { Box } from '../Layout'
 import { TopView } from '../TopView'
 
-interface ShowParams {
-  title: string
-}
-
-interface Props extends ShowParams {
+interface Props {
   resolve: (data: any) => void
 }
 
-const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
+const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const [open, setOpen] = useState(true)
 
   const onOk = () => {
@@ -27,39 +23,42 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
     resolve({})
   }
 
-  TemplatePopup.hide = onCancel
+  SearchPopup.hide = onCancel
 
   return (
     <Modal
-      title={title}
       open={open}
       onOk={onOk}
       onCancel={onCancel}
       afterClose={onClose}
-      transitionName="ant-move-down">
-      <Box mb={8}>Name</Box>
+      title={null}
+      width="80vw"
+      transitionName="ant-move-down"
+      styles={{
+        content: { padding: 0, border: '1px solid var(--color-border)' },
+        body: { height: '80vh' }
+      }}
+      footer={null}>
+      <HistoryPage />
     </Modal>
   )
 }
 
-const TopViewKey = 'TemplatePopup'
-
-export default class TemplatePopup {
+export default class SearchPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide(TopViewKey)
+    TopView.hide('SearchPopup')
   }
-  static show(props: ShowParams) {
+  static show() {
     return new Promise<any>((resolve) => {
       TopView.show(
         <PopupContainer
-          {...props}
           resolve={(v) => {
             resolve(v)
-            TopView.hide(TopViewKey)
+            TopView.hide('SearchPopup')
           }}
         />,
-        TopViewKey
+        'SearchPopup'
       )
     })
   }
