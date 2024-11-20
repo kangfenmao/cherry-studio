@@ -43,7 +43,7 @@ export class WindowService {
       show: true,
       autoHideMenuBar: true,
       transparent: isMac,
-      vibrancy: 'fullscreen-ui',
+      vibrancy: 'sidebar',
       visualEffectState: 'active',
       titleBarStyle: 'hidden',
       titleBarOverlay: theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight,
