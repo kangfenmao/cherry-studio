@@ -24,21 +24,20 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
             trackBg: 'transparent',
             itemSelectedBg: isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
             boxShadowTertiary: undefined,
-            borderRadiusLG: 6,
-            borderRadiusSM: 6,
-            borderRadiusXS: 6
+            borderRadiusLG: 12,
+            borderRadiusSM: 12,
+            borderRadiusXS: 12
           },
           Menu: {
             activeBarBorderWidth: 0,
             darkItemBg: 'transparent'
           },
           Modal: {
-            colorBgMask: isDarkTheme ? 'rgba(0, 0, 0, 0.85)' : 'rgba(255, 255, 255, 0.9)'
+            colorBgMask: isDarkTheme ? 'rgba(0, 0, 0, 0.85)' : 'rgba(255, 255, 255, 0.8)'
           }
         },
         token: {
-          colorPrimary: '#00b96b',
-          borderRadius: 6
+          colorPrimary: '#00b96b'
         }
       }}>
       {children}

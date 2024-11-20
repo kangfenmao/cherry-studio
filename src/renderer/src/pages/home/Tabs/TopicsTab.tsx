@@ -38,6 +38,8 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const generating = useAppSelector((state) => state.runtime.generating)
   const { showTopicTime, topicPosition } = useSettings()
 
+  const borderRadius = showTopicTime ? 12 : 17
+
   const onDeleteTopic = useCallback(
     (topic: Topic) => {
       if (generating) {
@@ -190,7 +192,10 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
           const isActive = topic.id === activeTopic?.id
           return (
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
-              <TopicListItem className={isActive ? 'active' : ''} onClick={() => onSwitchTopic(topic)}>
+              <TopicListItem
+                className={isActive ? 'active' : ''}
+                style={{ borderRadius }}
+                onClick={() => onSwitchTopic(topic)}>
                 <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
                 {showTopicTime && <TopicTime>{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>}
                 {isActive && (
@@ -225,7 +230,7 @@ const Container = styled(Scrollbar)`
 const TopicListItem = styled.div`
   padding: 7px 12px;
   margin: 0 10px;
-  border-radius: 6px;
+  border-radius: 17px;
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;

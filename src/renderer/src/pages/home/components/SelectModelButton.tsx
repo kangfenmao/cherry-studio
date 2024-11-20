@@ -44,6 +44,7 @@ const DropdownButton = styled(Button)`
   border-radius: 15px;
   padding: 12px 8px 12px 3px;
   -webkit-app-region: none;
+  box-shadow: none;
 `
 
 const ModelName = styled.span`

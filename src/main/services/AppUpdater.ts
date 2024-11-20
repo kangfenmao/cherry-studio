@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import logger from 'electron-log'
 import { AppUpdater as _AppUpdater, autoUpdater, UpdateInfo } from 'electron-updater'
 
@@ -47,6 +47,7 @@ export default class AppUpdater {
         })
         .then(({ response }) => {
           if (response === 1) {
+            app.isQuitting = true
             setImmediate(() => autoUpdater.quitAndInstall())
           }
         })
