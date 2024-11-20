@@ -137,6 +137,7 @@ const visionAllowedModels = [
   'qwen2-vl',
   'internvl2',
   'grok',
+  'pixtral',
   'gpt-4(?:-[\\w-]+)',
   'gpt-4o(?:-[\\w-]+)?',
   'chatgpt-4o(?:-[\\w-]+)?'
