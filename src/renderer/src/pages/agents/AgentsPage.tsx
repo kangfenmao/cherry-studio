@@ -253,7 +253,7 @@ const Tabs = styled(TabsAntd)`
   }
   .ant-tabs-tab {
     margin: 0 !important;
-    border-radius: 20px;
+    border-radius: 7px;
     margin-bottom: 5px !important;
     font-size: 13px;
     justify-content: left;

@@ -693,6 +693,12 @@ const migrateConfig = {
   '42': (state: RootState) => {
     state.settings.proxyMode = state.settings.proxyUrl ? 'custom' : 'none'
     return state
+  },
+  '43': (state: RootState) => {
+    if (state.settings.proxyMode === 'none') {
+      state.settings.proxyMode = 'system'
+    }
+    return state
   }
 }
 

@@ -9,7 +9,7 @@
   --color-white-soft: rgba(255, 255, 255, 0.8);
   --color-white-mute: rgba(255, 255, 255, 0.94);
 
-  --color-black: #0f0f0f;
+  --color-black: #121212;
   --color-black-soft: #191919;
   --color-black-mute: #242424;
 
@@ -40,6 +40,7 @@
   --color-code-background: #323232;
   --color-hover: rgba(40, 40, 40, 1);
   --color-active: rgba(55, 55, 55, 1);
+  --color-frame-border: #333;
 
   --navbar-background-mac: rgba(30, 30, 30, 0.6);
   --navbar-background: rgba(30, 30, 30);
@@ -95,6 +96,7 @@ body[theme-mode='light'] {
   --color-code-background: #e3e3e3;
   --color-hover: var(--color-white-mute);
   --color-active: var(--color-white-soft);
+  --color-frame-border: #ddd;
 
   --navbar-background-mac: rgba(255, 255, 255, 0.6);
   --navbar-background: rgba(255, 255, 255);

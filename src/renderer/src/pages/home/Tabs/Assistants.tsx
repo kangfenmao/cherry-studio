@@ -187,7 +187,7 @@ const Assistants: FC<Props> = ({
             suffix={<CommandKey>⌘+K</CommandKey>}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ borderRadius: 16, borderWidth: 0.5 }}
+            style={{ borderWidth: 0.5 }}
             onKeyDown={onSearch}
             ref={searchRef}
             onFocus={() => dispatch(setSearching(true))}
@@ -248,10 +248,10 @@ const AssistantItem = styled.div`
   justify-content: space-between;
   padding: 7px 12px;
   position: relative;
-  border-radius: 17px;
   margin: 0 10px;
   padding-right: 35px;
   font-family: Ubuntu;
+  border-radius: 6px;
   cursor: pointer;
   .iconfont {
     opacity: 0;
@@ -318,8 +318,8 @@ const TopicCount = styled.div`
 `
 
 const SearchContainer = styled.div`
-  margin: 0 10px;
-  margin-bottom: 10px;
+  margin: 12px 10px;
+  margin-top: 2px;
 `
 
 const CommandKey = styled.div`

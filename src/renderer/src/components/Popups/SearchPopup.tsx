@@ -35,7 +35,10 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       width="920px"
       transitionName="ant-move-down"
       styles={{
-        content: { padding: 0, border: '1px solid var(--color-border)' },
+        content: {
+          padding: 0,
+          border: `1px solid var(--color-frame-border)`
+        },
         body: { height: '85vh' }
       }}
       centered

@@ -41,7 +41,7 @@ const initialState: SettingsState = {
   showTopics: true,
   sendMessageShortcut: 'Enter',
   language: navigator.language as LanguageVarious,
-  proxyMode: 'none',
+  proxyMode: 'system',
   proxyUrl: undefined,
   userName: '',
   showMessageDivider: false,

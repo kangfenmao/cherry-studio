@@ -81,7 +81,7 @@ const Container = styled.div`
   text-align: center;
   gap: 10px;
   background-color: var(--color-background);
-  border-radius: 15px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -94,8 +94,8 @@ const Container = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     background: var(--color-background-soft);
     transition: all 0.5s ease;
     border-bottom: none;
@@ -133,7 +133,7 @@ const CardInfo = styled.div`
   align-items: center;
   gap: 5px;
   transition: all 0.5s ease;
-  padding: 0 15px;
+  padding: 0 8px;
   width: 100%;
 `
 
