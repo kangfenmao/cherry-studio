@@ -31,9 +31,6 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
           Menu: {
             activeBarBorderWidth: 0,
             darkItemBg: 'transparent'
-          },
-          Modal: {
-            colorBgMask: isDarkTheme ? 'rgba(0, 0, 0, 0.85)' : 'rgba(255, 255, 255, 0.8)'
           }
         },
         token: {
