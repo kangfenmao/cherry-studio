@@ -119,7 +119,7 @@ const HeaderLeft = styled.div`
   flex-direction: row;
   align-items: center;
   position: absolute;
-  top: 8px;
+  top: 12px;
   left: 15px;
 `
 
@@ -129,8 +129,8 @@ const MenuIcon = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
   &:hover {
     background-color: var(--color-background);
