@@ -11,9 +11,9 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import Assistants from './Assistants'
-import Settings from './Settings'
-import Topics from './Topics'
+import Assistants from './AssistantsTab'
+import Settings from './SettingsTab'
+import Topics from './TopicsTab'
 
 interface Props {
   activeAssistant: Assistant

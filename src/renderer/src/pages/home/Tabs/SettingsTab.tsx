@@ -391,7 +391,6 @@ const SettingsTab: FC<Props> = (props) => {
           <SettingRowTitle>{t('settings.topic.show.time')}</SettingRowTitle>
           <Switch size="small" checked={showTopicTime} onChange={(checked) => dispatch(setShowTopicTime(checked))} />
         </SettingRow>
-        <SettingDivider />
       </SettingGroup>
     </Container>
   )
@@ -427,7 +426,8 @@ export const SettingGroup = styled.div<{ theme?: ThemeMode }>`
   margin-top: 0;
   border-radius: 8px;
   margin-bottom: 10px;
-  background: var(--color-background-soft);
+  border: 0.5px solid var(--color-border);
+  background: var(--color-group-background);
 `
 
 export default SettingsTab

@@ -41,6 +41,7 @@
   --color-hover: rgba(40, 40, 40, 1);
   --color-active: rgba(55, 55, 55, 1);
   --color-frame-border: #333;
+  --color-group-background: var(--color-background-soft);
 
   --navbar-background-mac: rgba(30, 30, 30, 0.6);
   --navbar-background: rgba(30, 30, 30);
@@ -97,6 +98,7 @@ body[theme-mode='light'] {
   --color-hover: var(--color-white-mute);
   --color-active: var(--color-white-soft);
   --color-frame-border: #ddd;
+  --color-group-background: var(--color-white);
 
   --navbar-background-mac: rgba(255, 255, 255, 0.6);
   --navbar-background: rgba(255, 255, 255);

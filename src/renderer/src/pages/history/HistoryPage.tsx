@@ -112,6 +112,7 @@ const Header = styled.div`
   background-color: var(--color-background-mute);
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  border-bottom: 0.5px solid var(--color-frame-border);
 `
 
 const HeaderLeft = styled.div`
