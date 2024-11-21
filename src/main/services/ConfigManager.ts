@@ -2,6 +2,8 @@ import { LanguageVarious, ThemeMode } from '@types'
 import { app } from 'electron'
 import Store from 'electron-store'
 
+import { locales } from '../utils/locales'
+
 export class ConfigManager {
   private store: Store
   private subscribers: Map<string, Array<(newValue: any) => void>> = new Map()
@@ -11,7 +13,8 @@ export class ConfigManager {
   }
 
   getLanguage(): LanguageVarious {
-    return this.store.get('language', app.getLocale()) as LanguageVarious
+    const locale = Object.keys(locales).includes(app.getLocale()) ? app.getLocale() : 'en-US'
+    return this.store.get('language', locale) as LanguageVarious
   }
 
   setLanguage(theme: LanguageVarious) {

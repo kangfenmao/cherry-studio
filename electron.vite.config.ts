@@ -21,6 +21,9 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    optimizeDeps: {
+      exclude: ['chunk-KNVOMWSO.js']
+    }
   }
 })
