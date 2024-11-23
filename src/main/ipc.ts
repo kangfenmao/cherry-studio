@@ -1,7 +1,7 @@
 import path from 'node:path'
 
 import { ThemeMode } from '@types'
-import { BrowserWindow, ipcMain, session, shell } from 'electron'
+import { BrowserWindow, ipcMain, ProxyConfig, session, shell } from 'electron'
 import log from 'electron-log'
 
 import { titleBarOverlayDark, titleBarOverlayLight } from './config'
@@ -30,20 +30,12 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   }))
 
   ipcMain.handle('app:proxy', async (_, proxy: string) => {
-    if (proxy === 'system') {
-      await session.defaultSession.setProxy({ mode: 'system' })
-      const webviewSession = session.fromPartition('persist:webview')
-      await webviewSession.setProxy({ mode: 'system' })
-    } else if (proxy) {
-      await session.defaultSession.setProxy({ proxyRules: proxy })
-      const webviewSession = session.fromPartition('persist:webview')
-      await webviewSession.setProxy({ proxyRules: proxy })
-    } else {
-      await session.defaultSession.setProxy({})
-      const webviewSession = session.fromPartition('persist:webview')
-      await webviewSession.setProxy({})
-    }
+    const sessions = [session.defaultSession, session.fromPartition('persist:webview')]
+    const proxyConfig: ProxyConfig =
+      proxy === 'system' ? { mode: 'system' } : proxy ? { proxyRules: proxy } : { mode: 'direct' }
+    await Promise.all(sessions.map((session) => session.setProxy(proxyConfig)))
   })
+
   ipcMain.handle('app:reload', () => mainWindow.reload())
   ipcMain.handle('open:website', (_, url: string) => shell.openExternal(url))
 
