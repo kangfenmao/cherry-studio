@@ -63,6 +63,5 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复系统代理默认设置问题
-    恢复设置面板模型参数选项
-    界面样式微调
+    修复代理设置问题
+    修复系统语言导致的各种运行错误
