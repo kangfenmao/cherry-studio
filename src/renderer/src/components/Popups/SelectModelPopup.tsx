@@ -168,7 +168,15 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
       onCancel={onCancel}
       afterClose={onClose}
       transitionName="ant-move-down"
-      styles={{ content: { borderRadius: 20, padding: 0, overflow: 'hidden', paddingBottom: 20 } }}
+      styles={{
+        content: {
+          borderRadius: 20,
+          padding: 0,
+          overflow: 'hidden',
+          paddingBottom: 20,
+          border: '1px solid var(--color-border)'
+        }
+      }}
       closeIcon={null}
       footer={null}>
       <HStack style={{ padding: '0 12px', marginTop: 5 }}>

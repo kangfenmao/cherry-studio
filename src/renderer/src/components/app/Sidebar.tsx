@@ -127,7 +127,6 @@ const Container = styled.div`
   height: ${isMac ? 'calc(100vh - var(--navbar-height))' : '100vh'};
   -webkit-app-region: drag !important;
   margin-top: ${isMac ? 'var(--navbar-height)' : 0};
-  transition: background-color 0.3s ease;
 `
 
 const AvatarImg = styled(Avatar)`
@@ -158,14 +157,12 @@ const Icon = styled.div`
   align-items: center;
   border-radius: 50%;
   margin-bottom: 5px;
-  transition: background-color 0.2s ease;
   -webkit-app-region: none;
-  transition: all 0.2s ease;
+  border: 0.5px solid transparent;
   .iconfont,
   .anticon {
     color: var(--color-icon);
     font-size: 20px;
-    transition: color 0.2s ease;
     text-decoration: none;
   }
   .anticon {
@@ -181,6 +178,7 @@ const Icon = styled.div`
   }
   &.active {
     background-color: var(--color-active);
+    border: 0.5px solid var(--color-border);
     .iconfont,
     .anticon {
       color: var(--color-icon-white);

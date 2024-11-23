@@ -38,7 +38,6 @@ const NavbarContainer = styled.div`
   max-height: var(--navbar-height);
   margin-left: ${isMac ? 'calc(var(--sidebar-width) * -1)' : 0};
   padding-left: ${isMac ? 'var(--sidebar-width)' : 0};
-  transition: background-color 0.3s ease;
   -webkit-app-region: drag;
 `
 

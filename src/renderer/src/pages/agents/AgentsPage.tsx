@@ -253,11 +253,12 @@ const Tabs = styled(TabsAntd)`
   }
   .ant-tabs-tab {
     margin: 0 !important;
-    border-radius: 7px;
+    border-radius: 16px;
     margin-bottom: 5px !important;
     font-size: 13px;
     justify-content: left;
-    padding: 7px 12px !important;
+    padding: 7px 15px !important;
+    border: 0.5px solid transparent;
     .ant-tabs-tab-btn {
       white-space: nowrap;
       overflow: hidden;
@@ -270,8 +271,9 @@ const Tabs = styled(TabsAntd)`
     }
   }
   .ant-tabs-tab-active {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
     border-right: none;
+    border: 0.5px solid var(--color-border);
   }
   .ant-tabs-content-holder {
     border-left: 0.5px solid var(--color-border);

@@ -124,7 +124,7 @@ const ProvidersList: FC = () => {
                                   {provider.isSystem ? t(`provider.${provider.id}`) : provider.name}
                                 </ProviderItemName>
                                 {provider.enabled && (
-                                  <Tag color="green" style={{ marginLeft: 'auto' }}>
+                                  <Tag color="green" style={{ marginLeft: 'auto', borderRadius: 16 }}>
                                     ON
                                   </Tag>
                                 )}
@@ -182,14 +182,16 @@ const ProviderListItem = styled.div`
   padding: 5px 8px;
   width: 100%;
   cursor: grab;
-  border-radius: 5px;
+  border-radius: 16px;
   font-size: 14px;
   transition: all 0.2s ease-in-out;
+  border: 0.5px solid transparent;
   &:hover {
     background: var(--color-background-soft);
   }
   &.active {
-    background: var(--color-background-mute);
+    background: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
     font-weight: bold !important;
   }
 `

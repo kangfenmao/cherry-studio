@@ -116,9 +116,10 @@ const MenuItem = styled.li`
   padding: 6px 10px;
   width: 100%;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 16px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
+  border: 0.5px solid transparent;
   .anticon {
     font-size: 16px;
     opacity: 0.8;
@@ -133,7 +134,8 @@ const MenuItem = styled.li`
     background: var(--color-background-soft);
   }
   &.active {
-    background: var(--color-background-mute);
+    background: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
   }
 `
 

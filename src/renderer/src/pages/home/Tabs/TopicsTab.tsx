@@ -197,7 +197,9 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
                 style={{ borderRadius }}
                 onClick={() => onSwitchTopic(topic)}>
                 <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
-                {showTopicTime && <TopicTime>{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>}
+                {showTopicTime && (
+                  <TopicTime className="time">{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>
+                )}
                 {isActive && (
                   <MenuButton
                     className="menu"
@@ -224,13 +226,13 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 const Container = styled(Scrollbar)`
   display: flex;
   flex-direction: column;
-  padding-top: 10px;
+  padding-top: 11px;
 `
 
 const TopicListItem = styled.div`
   padding: 7px 12px;
   margin: 0 10px;
-  border-radius: 17px;
+  border-radius: 16px;
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;
@@ -239,6 +241,7 @@ const TopicListItem = styled.div`
   position: relative;
   font-family: Ubuntu;
   cursor: pointer;
+  border: 0.5px solid transparent;
   .menu {
     opacity: 0;
     color: var(--color-text-3);
@@ -246,17 +249,16 @@ const TopicListItem = styled.div`
   &:hover {
     background-color: var(--color-background-soft);
     .name {
-      opacity: 1;
     }
   }
   &.active {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
     .name {
-      opacity: 1;
     }
     .menu {
       opacity: 1;
-      background-color: var(--color-background-mute);
+      background-color: var(--color-background-soft);
       &:hover {
         color: var(--color-text-2);
       }

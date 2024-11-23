@@ -45,11 +45,12 @@ const DropdownButton = styled(Button)`
   padding: 12px 8px 12px 3px;
   -webkit-app-region: none;
   box-shadow: none;
+  background-color: transparent;
+  border: 1px solid transparent;
 `
 
 const ModelName = styled.span`
   margin-left: -2px;
-  font-weight: bolder;
 `
 
 export default SelectModelButton

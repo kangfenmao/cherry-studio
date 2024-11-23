@@ -150,10 +150,9 @@ const Assistants: FC<Props> = ({
                 <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
                 {isCurrent && (
                   <ArrowRightButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
-                    <i className="iconfont icon-gridlines" />
+                    <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>
                   </ArrowRightButton>
                 )}
-                {false && <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>}
               </AssistantItem>
             </Dropdown>
           )
@@ -175,7 +174,7 @@ const Assistants: FC<Props> = ({
 const Container = styled(Scrollbar)`
   display: flex;
   flex-direction: column;
-  padding-top: 10px;
+  padding-top: 11px;
 `
 
 const AssistantItem = styled.div`
@@ -187,7 +186,8 @@ const AssistantItem = styled.div`
   margin: 0 10px;
   padding-right: 35px;
   font-family: Ubuntu;
-  border-radius: 17px;
+  border-radius: 16px;
+  border: 0.5px solid transparent;
   cursor: pointer;
   .iconfont {
     opacity: 0;
@@ -197,15 +197,9 @@ const AssistantItem = styled.div`
     background-color: var(--color-background-soft);
   }
   &.active {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
     .name {
-    }
-    .topics-count {
-      display: none;
-    }
-    .iconfont {
-      opacity: 1;
-      color: var(--color-text-2);
     }
   }
 `
@@ -228,24 +222,16 @@ const ArrowRightButton = styled.div`
   height: 22px;
   min-width: 22px;
   min-height: 22px;
-  border-radius: 4px;
+  border-radius: 11px;
   position: absolute;
   background-color: var(--color-background);
   right: 9px;
   top: 6px;
-  .iconfont {
-    font-size: 12px;
-  }
 `
 
 const TopicCount = styled.div`
-  color: var(--color-text-2);
+  color: var(--color-text);
   font-size: 10px;
-  margin-right: 3px;
-  background-color: var(--color-background-mute);
-  opacity: 0.8;
-  width: 20px;
-  height: 20px;
   border-radius: 10px;
   display: flex;
   flex-direction: row;

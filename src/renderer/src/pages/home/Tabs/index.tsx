@@ -168,11 +168,15 @@ const TabContent = styled.div`
 const Segmented = styled(AntSegmented)`
   .ant-segmented-item {
     overflow: hidden;
+    transition: none !important;
     height: 30px;
     line-height: 30px;
+    background-color: transparent;
   }
   .ant-segmented-item-selected {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
+    transition: none !important;
   }
   .ant-segmented-item-label {
     align-items: center;
@@ -194,6 +198,11 @@ const Segmented = styled(AntSegmented)`
   }
   .ant-segmented-item-icon + * {
     margin-left: 4px;
+  }
+  .ant-segmented-thumb {
+    transition: none !important;
+    background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
   }
 `
 

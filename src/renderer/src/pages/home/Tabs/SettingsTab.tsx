@@ -387,6 +387,7 @@ const Container = styled(Scrollbar)`
   flex-direction: column;
   padding: 0 10px;
   padding-right: 5px;
+  padding-top: 2px;
 `
 
 const Label = styled.p`

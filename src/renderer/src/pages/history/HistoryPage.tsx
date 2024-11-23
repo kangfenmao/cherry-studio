@@ -106,7 +106,7 @@ const Header = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 12px 0;
   width: 100%;
   position: relative;
   background-color: var(--color-background-mute);

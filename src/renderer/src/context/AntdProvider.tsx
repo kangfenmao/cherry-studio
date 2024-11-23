@@ -24,9 +24,9 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
             trackBg: 'transparent',
             itemSelectedBg: isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
             boxShadowTertiary: undefined,
-            borderRadiusLG: 12,
-            borderRadiusSM: 12,
-            borderRadiusXS: 12
+            borderRadiusLG: 16,
+            borderRadiusSM: 16,
+            borderRadiusXS: 16
           },
           Menu: {
             activeBarBorderWidth: 0,
