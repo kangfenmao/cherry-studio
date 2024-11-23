@@ -239,21 +239,6 @@ const SettingsTab: FC<Props> = (props) => {
         </SettingRow>
         <SettingDivider />
         <SettingRow>
-          <SettingRowTitleSmall>{t('message.message.code_style')}</SettingRowTitleSmall>
-          <Select
-            value={codeStyle}
-            onChange={(value) => dispatch(setCodeStyle(value))}
-            style={{ width: 135 }}
-            size="small">
-            {codeThemes.map((theme) => (
-              <Select.Option key={theme} value={theme}>
-                {theme}
-              </Select.Option>
-            ))}
-          </Select>
-        </SettingRow>
-        <SettingDivider />
-        <SettingRow>
           <SettingRowTitleSmall>{t('message.message.style')}</SettingRowTitleSmall>
           <Select
             value={messageStyle}
