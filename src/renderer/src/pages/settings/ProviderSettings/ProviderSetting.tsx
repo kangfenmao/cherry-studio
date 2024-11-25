@@ -11,10 +11,13 @@ import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { getModelLogo, isVisionModel, VISION_REGEX } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
+import { useAssistants } from '@renderer/hooks/useAssistant'
 import { useProvider } from '@renderer/hooks/useProvider'
 import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/ApiService'
+import { useAppDispatch } from '@renderer/store'
+import { setModel } from '@renderer/store/assistants'
 import { Model, ModelType, Provider } from '@renderer/types'
 import { Avatar, Button, Card, Checkbox, Divider, Flex, Input, Popover, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
@@ -49,8 +52,10 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const [apiValid, setApiValid] = useState(false)
   const [apiChecking, setApiChecking] = useState(false)
   const { updateProvider, models, removeModel } = useProvider(provider.id)
+  const { assistants } = useAssistants()
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const dispatch = useAppDispatch()
 
   const modelGroups = groupBy(models, 'group')
 
@@ -133,7 +138,19 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       }
       return m
     })
+
     updateProvider({ ...provider, models: updatedModels })
+
+    assistants.forEach((assistant) => {
+      if (assistant?.model?.id === model.id && assistant.model.provider === provider.id) {
+        dispatch(
+          setModel({
+            assistantId: assistant.id,
+            model: { ...model, type: types }
+          })
+        )
+      }
+    })
   }
 
   const modelTypeContent = (model: Model) => (

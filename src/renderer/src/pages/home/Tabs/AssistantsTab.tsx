@@ -149,9 +149,9 @@ const Assistants: FC<Props> = ({
               <AssistantItem onClick={() => onSwitchAssistant(assistant)} className={isCurrent ? 'active' : ''}>
                 <AssistantName className="name">{assistant.name || t('chat.default.name')}</AssistantName>
                 {isCurrent && (
-                  <ArrowRightButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
+                  <MenuButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
                     <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>
-                  </ArrowRightButton>
+                  </MenuButton>
                 )}
               </AssistantItem>
             </Dropdown>
@@ -213,12 +213,12 @@ const AssistantName = styled.div`
   font-size: 13px;
 `
 
-const ArrowRightButton = styled.div`
+const MenuButton = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 22px;
+  min-width: 22px;
   height: 22px;
   min-width: 22px;
   min-height: 22px;
