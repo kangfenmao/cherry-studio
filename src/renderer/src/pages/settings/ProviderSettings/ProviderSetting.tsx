@@ -198,7 +198,11 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
-        <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi} disabled={!apiHost}>
+        <Button
+          type={apiValid ? 'primary' : 'default'}
+          ghost={apiValid}
+          onClick={onCheckApi}
+          disabled={!apiHost || apiChecking}>
           {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : t('settings.provider.check')}
         </Button>
       </Space.Compact>
