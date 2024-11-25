@@ -4,18 +4,19 @@ import {
   ExportOutlined,
   LoadingOutlined,
   MinusCircleOutlined,
-  PlusOutlined
+  PlusOutlined,
+  SettingOutlined
 } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
-import { getModelLogo, isVisionModel } from '@renderer/config/models'
+import { getModelLogo, isVisionModel, VISION_REGEX } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useProvider } from '@renderer/hooks/useProvider'
 import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/ApiService'
-import { Provider } from '@renderer/types'
-import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
+import { Model, ModelType, Provider } from '@renderer/types'
+import { Avatar, Button, Card, Checkbox, Divider, Flex, Input, Popover, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
 import { groupBy, isEmpty } from 'lodash'
 import { FC, useEffect, useState } from 'react'
@@ -125,6 +126,26 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     return (apiHost.endsWith('/') ? apiHost : `${apiHost}/v1/`) + 'chat/completions'
   }
 
+  const onUpdateModelTypes = (model: Model, types: ModelType[]) => {
+    const updatedModels = models.map((m) => {
+      if (m.id === model.id) {
+        return { ...m, type: types }
+      }
+      return m
+    })
+    updateProvider({ ...provider, models: updatedModels })
+  }
+
+  const modelTypeContent = (model: Model) => (
+    <div>
+      <Checkbox.Group
+        value={model.type}
+        onChange={(types) => onUpdateModelTypes(model, types as ModelType[])}
+        options={[{ label: t('model.type.vision'), value: 'vision', disabled: VISION_REGEX.test(model.id) }]}
+      />
+    </div>
+  )
+
   return (
     <SettingContainer theme={theme}>
       <SettingTitle>
@@ -211,6 +232,9 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
                   {model.name[0].toUpperCase()}
                 </Avatar>
                 {model.name} {isVisionModel(model) && <VisionIcon />}
+                <Popover content={modelTypeContent(model)} title={t('model.type.select')} trigger="click">
+                  <SettingIcon />
+                </Popover>
               </ModelListHeader>
               <RemoveIcon onClick={() => removeModel(model)} />
             </ModelListItem>
@@ -263,6 +287,16 @@ const RemoveIcon = styled(MinusCircleOutlined)`
   color: var(--color-error);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+`
+
+const SettingIcon = styled(SettingOutlined)`
+  margin-left: 10px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    color: var(--color-text-2);
+  }
 `
 
 export default ProviderSetting

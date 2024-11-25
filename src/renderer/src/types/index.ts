@@ -78,6 +78,8 @@ export type Provider = {
 
 export type ProviderType = 'openai' | 'anthropic' | 'gemini'
 
+export type ModelType = 'text' | 'vision'
+
 export type Model = {
   id: string
   provider: string
@@ -85,6 +87,7 @@ export type Model = {
   group: string
   owned_by?: string
   description?: string
+  type?: ModelType[]
 }
 
 export type Suggestion = {

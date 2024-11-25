@@ -145,7 +145,12 @@
     "model": {
       "stream_output": "Stream Output",
       "search": "Search models...",
-      "pinned": "Pinned"
+      "pinned": "Pinned",
+      "type": {
+        "text": "Text",
+        "vision": "Vision",
+        "select": "Select Model Types"
+      }
     },
     "paintings": {
       "title": "Images",

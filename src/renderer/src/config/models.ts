@@ -145,7 +145,7 @@ const visionAllowedModels = [
 
 const visionExcludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
 
-const VISION_REGEX = new RegExp(
+export const VISION_REGEX = new RegExp(
   `\\b(?!(?:${visionExcludedModels.join('|')})\\b)(${visionAllowedModels.join('|')})\\b`,
   'i'
 )
@@ -1044,7 +1044,7 @@ export function isEmbeddingModel(model: Model): boolean {
 }
 
 export function isVisionModel(model: Model): boolean {
-  return VISION_REGEX.test(model.id)
+  return VISION_REGEX.test(model.id) || model.type?.includes('vision') || false
 }
 
 export function isSupportedModel(model: OpenAI.Models.Model): boolean {

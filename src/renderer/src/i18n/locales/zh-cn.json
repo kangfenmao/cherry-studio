@@ -145,7 +145,12 @@
     "model": {
       "stream_output": "流式输出",
       "search": "搜索模型...",
-      "pinned": "已固定"
+      "pinned": "已固定",
+      "type": {
+        "text": "文本",
+        "vision": "图像",
+        "select": "选择模型类型"
+      }
     },
     "paintings": {
       "title": "图片",
@@ -316,7 +321,7 @@
       "about.title": "关于我们",
       "about.releases.title": "更新日志",
       "about.releases.button": "查看",
-      "about.website.title": "官方网站",
+      "about.website.title": "官方网���",
       "about.website.button": "查看",
       "about.feedback.title": "意见反馈",
       "about.feedback.button": "反馈",
