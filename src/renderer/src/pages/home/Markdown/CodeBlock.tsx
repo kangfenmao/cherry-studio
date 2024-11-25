@@ -39,7 +39,6 @@ const ExpandButton: React.FC<{
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
-  const showFooterCopyButton = children && children.length > 500
   const { codeShowLineNumbers, fontSize, codeCollapsible } = useSettings()
   const language = match?.[1] ?? 'text'
   const [html, setHtml] = useState<string>('')
@@ -47,6 +46,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const [isExpanded, setIsExpanded] = useState(!codeCollapsible)
   const [shouldShowExpandButton, setShouldShowExpandButton] = useState(false)
   const codeContentRef = useRef<HTMLDivElement>(null)
+
+  const showFooterCopyButton = children && children.length > 500 && !codeCollapsible
 
   useEffect(() => {
     const loadHighlightedCode = async () => {
@@ -196,6 +197,7 @@ const CodeFooter = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  position: relative;
   .copy {
     cursor: pointer;
     color: var(--color-text-3);
