@@ -23,7 +23,10 @@ export function getDefaultTranslateAssistant(targetLanguage: string, text: strin
   const translateModel = getTranslateModel()
   const assistant: Assistant = getDefaultAssistant()
   assistant.model = translateModel
-  assistant.prompt = `Translate from input language to ${targetLanguage}, provide the translation result directly without any explanation, keep original format. If the target language is the same as the source language, do not translate. The text to be translated is as follows:\n\n ${text}`
+  assistant.prompt = store
+    .getState()
+    .settings.translateModelPrompt.replace('{{target_language}}', targetLanguage)
+    .replace('{{text}}', text)
   return assistant
 }
 

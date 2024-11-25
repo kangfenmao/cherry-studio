@@ -1,4 +1,5 @@
 import { SYSTEM_MODELS } from '@renderer/config/models'
+import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
@@ -698,6 +699,10 @@ const migrateConfig = {
     if (state.settings.proxyMode === 'none') {
       state.settings.proxyMode = 'system'
     }
+    return state
+  },
+  '44': (state: RootState) => {
+    state.settings.translateModelPrompt = TRANSLATE_PROMPT
     return state
   }
 }

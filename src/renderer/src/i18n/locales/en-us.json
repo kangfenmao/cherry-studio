@@ -32,7 +32,8 @@
       "chat": "Chat",
       "close": "Close",
       "cancel": "Cancel",
-      "download": "Download"
+      "download": "Download",
+      "reset": "Reset"
     },
     "button": {
       "add": "Add",
@@ -312,6 +313,8 @@
       "models.add.group_name": "Group Name",
       "models.add.group_name.tooltip": "Optional e.g. ChatGPT",
       "models.add.group_name.placeholder": "Optional e.g. ChatGPT",
+      "models.translate_model_prompt_title": "Translate Model Prompt",
+      "models.translate_model_prompt_message": "Please enter the translate model prompt",
       "models.empty": "No models found",
       "assistant.title": "Default Assistant",
       "assistant.model_params": "Model Parameters",

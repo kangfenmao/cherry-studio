@@ -11,7 +11,7 @@ import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { getModelLogo, isVisionModel, VISION_REGEX } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
-import { useAssistants } from '@renderer/hooks/useAssistant'
+import { useAssistants, useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProvider } from '@renderer/hooks/useProvider'
 import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
@@ -56,6 +56,8 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const dispatch = useAppDispatch()
+
+  const { defaultModel, setDefaultModel } = useDefaultModel()
 
   const modelGroups = groupBy(models, 'group')
 
@@ -151,6 +153,10 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         )
       }
     })
+
+    if (defaultModel?.id === model.id && defaultModel?.provider === provider.id) {
+      setDefaultModel({ ...defaultModel, type: types })
+    }
   }
 
   const modelTypeContent = (model: Model) => (

@@ -1,11 +1,16 @@
-import { EditOutlined, MessageOutlined, SettingOutlined, TranslationOutlined } from '@ant-design/icons'
+import { EditOutlined, MessageOutlined, RedoOutlined, SettingOutlined, TranslationOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
+import PromptPopup from '@renderer/components/Popups/PromptPopup'
+import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { getModelUniqId, hasModel } from '@renderer/services/ModelService'
+import { useAppDispatch } from '@renderer/store'
+import { setTranslateModelPrompt } from '@renderer/store/settings'
 import { Model } from '@renderer/types'
-import { Button, Select } from 'antd'
+import { Button, Select, Tooltip } from 'antd'
 import { find, sortBy } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +25,9 @@ const ModelSettings: FC = () => {
   const allModels = providers.map((p) => p.models).flat()
   const { theme } = useTheme()
   const { t } = useTranslation()
+  const { translateModelPrompt } = useSettings()
+
+  const dispatch = useAppDispatch()
 
   const selectOptions = providers
     .filter((p) => p.models.length > 0)
@@ -46,6 +54,24 @@ const ModelSettings: FC = () => {
     () => (hasModel(translateModel) ? getModelUniqId(translateModel) : undefined),
     [translateModel]
   )
+
+  const onUpdateTranslateModel = async () => {
+    const prompt = await PromptPopup.show({
+      title: t('settings.models.translate_model_prompt_title'),
+      message: t('settings.models.translate_model_prompt_message'),
+      defaultValue: translateModelPrompt,
+      inputProps: {
+        rows: 10
+      }
+    })
+    if (prompt) {
+      dispatch(setTranslateModelPrompt(prompt))
+    }
+  }
+
+  const onResetTranslatePrompt = () => {
+    dispatch(setTranslateModelPrompt(TRANSLATE_PROMPT))
+  }
 
   return (
     <SettingContainer theme={theme}>
@@ -93,14 +119,22 @@ const ModelSettings: FC = () => {
             {t('settings.models.translate_model')}
           </div>
         </SettingTitle>
-        <Select
-          value={defaultTranslateModel}
-          defaultValue={defaultTranslateModel}
-          style={{ width: 360 }}
-          onChange={(value) => setTranslateModel(find(allModels, JSON.parse(value)) as Model)}
-          options={selectOptions}
-          placeholder={t('settings.models.empty')}
-        />
+        <HStack alignItems="center">
+          <Select
+            value={defaultTranslateModel}
+            defaultValue={defaultTranslateModel}
+            style={{ width: 360 }}
+            onChange={(value) => setTranslateModel(find(allModels, JSON.parse(value)) as Model)}
+            options={selectOptions}
+            placeholder={t('settings.models.empty')}
+          />
+          <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={onUpdateTranslateModel} />
+          {translateModelPrompt !== TRANSLATE_PROMPT && (
+            <Tooltip title={t('common.reset')}>
+              <Button icon={<RedoOutlined />} style={{ marginLeft: 8 }} onClick={onResetTranslatePrompt}></Button>
+            </Tooltip>
+          )}
+        </HStack>
         <SettingDescription>{t('settings.models.translate_model_description')}</SettingDescription>
       </SettingGroup>
     </SettingContainer>

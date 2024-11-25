@@ -32,7 +32,8 @@
       "chat": "聊天",
       "close": "關閉",
       "cancel": "取消",
-      "download": "下載"
+      "download": "下載",
+      "reset": "重置"
     },
     "button": {
       "add": "添加",
@@ -300,6 +301,8 @@
       "models.add.group_name": "群組名稱",
       "models.add.group_name.tooltip": "可選，例如 ChatGPT",
       "models.add.group_name.placeholder": "可選，例如 ChatGPT",
+      "models.translate_model_prompt_title": "翻譯模型提示詞",
+      "models.translate_model_prompt_message": "請輸入翻譯模型提示詞",
       "models.empty": "找不到模型",
       "assistant.title": "預設助手",
       "assistant.model_params": "模型參數",

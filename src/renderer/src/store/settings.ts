@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import { CodeStyleVarious, LanguageVarious, ThemeMode } from '@renderer/types'
 
 export type SendMessageShortcut = 'Enter' | 'Shift+Enter'
@@ -34,6 +35,7 @@ export interface SettingsState {
   webdavUser: string
   webdavPass: string
   webdavPath: string
+  translateModelPrompt: string
 }
 
 const initialState: SettingsState = {
@@ -65,7 +67,8 @@ const initialState: SettingsState = {
   webdavHost: '',
   webdavUser: '',
   webdavPass: '',
-  webdavPath: '/cherry-studio'
+  webdavPath: '/cherry-studio',
+  translateModelPrompt: TRANSLATE_PROMPT
 }
 
 const settingsSlice = createSlice({
@@ -165,6 +168,9 @@ const settingsSlice = createSlice({
     },
     setCodeStyle: (state, action: PayloadAction<CodeStyleVarious>) => {
       state.codeStyle = action.payload
+    },
+    setTranslateModelPrompt: (state, action: PayloadAction<string>) => {
+      state.translateModelPrompt = action.payload
     }
   }
 })
@@ -200,7 +206,8 @@ export const {
   setCodeCollapsible,
   setMathEngine,
   setMessageStyle,
-  setCodeStyle
+  setCodeStyle,
+  setTranslateModelPrompt
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

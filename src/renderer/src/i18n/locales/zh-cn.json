@@ -32,7 +32,8 @@
       "chat": "聊天",
       "close": "关闭",
       "cancel": "取消",
-      "download": "下载"
+      "download": "下载",
+      "reset": "重置"
     },
     "button": {
       "add": "添加",
@@ -300,6 +301,8 @@
       "models.add.group_name": "分组名称",
       "models.add.group_name.tooltip": "例如 ChatGPT",
       "models.add.group_name.placeholder": "例如 ChatGPT",
+      "models.translate_model_prompt_title": "翻译模型提示词",
+      "models.translate_model_prompt_message": "请输入翻译模型提示词",
       "models.empty": "没有模型",
       "assistant.title": "默认助手",
       "assistant.model_params": "模型参数",
