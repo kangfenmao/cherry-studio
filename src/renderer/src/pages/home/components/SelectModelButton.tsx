@@ -51,6 +51,7 @@ const DropdownButton = styled(Button)`
 
 const ModelName = styled.span`
   margin-left: -2px;
+  font-weight: 500;
 `
 
 export default SelectModelButton

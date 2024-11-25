@@ -32,9 +32,22 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const agents = useMemo(() => {
     const allAgents = [...userAgents, ...systemAgents] as Agent[]
     const list = [defaultAssistant, ...allAgents.filter((agent) => !assistants.map((a) => a.id).includes(agent.id))]
-    return searchText
+    const filtered = searchText
       ? list.filter((agent) => agent.name.toLowerCase().includes(searchText.trim().toLocaleLowerCase()))
       : list
+
+    if (searchText.trim()) {
+      const newAgent: Agent = {
+        id: 'new',
+        name: searchText.trim(),
+        prompt: '',
+        topics: [],
+        type: 'assistant',
+        emoji: '⭐️'
+      }
+      return [newAgent, ...filtered]
+    }
+    return filtered
   }, [assistants, defaultAssistant, searchText, userAgents])
 
   const onCreateAssistant = async (agent: Agent) => {
@@ -72,7 +85,14 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       onCancel={onCancel}
       afterClose={onClose}
       transitionName="ant-move-up"
-      styles={{ content: { borderRadius: 20, padding: 0, overflow: 'hidden', paddingBottom: 20 } }}
+      styles={{
+        content: {
+          borderRadius: 20,
+          padding: 0,
+          overflow: 'hidden',
+          paddingBottom: 20
+        }
+      }}
       closeIcon={null}
       footer={null}>
       <HStack style={{ padding: '0 12px', marginTop: 5 }}>
@@ -105,6 +125,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
             </HStack>
             {agent.id === 'default' && <Tag color="green">{t('agents.tag.system')}</Tag>}
             {agent.type === 'agent' && <Tag color="orange">{t('agents.tag.agent')}</Tag>}
+            {agent.id === 'new' && <Tag color="green">{t('agents.tag.new')}</Tag>}
           </AgentItem>
         ))}
       </Container>
@@ -148,7 +169,7 @@ const SearchIcon = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-background-soft);
+  background-color: var(--color-background-mute);
   margin-right: 2px;
 `
 

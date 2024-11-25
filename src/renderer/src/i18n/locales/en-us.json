@@ -200,6 +200,7 @@
       "tag.default": "Default",
       "tag.system": "System",
       "tag.agent": "Agent",
+      "tag.new": "New",
       "edit.message.title": "Preset messages",
       "edit.message.add.title": "Add",
       "edit.message.group.title": "Message Group",

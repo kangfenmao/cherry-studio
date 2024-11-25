@@ -200,6 +200,7 @@
       "tag.default": "По умолчанию",
       "tag.system": "Система",
       "tag.agent": "Агент",
+      "tag.new": "Новый",
       "edit.message.title": "Предустановленные сообщения",
       "edit.message.add.title": "Добавить",
       "edit.message.group.title": "Группа сообщений",
