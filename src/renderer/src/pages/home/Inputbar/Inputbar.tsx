@@ -133,6 +133,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }
 
   const addNewTopic = useCallback(async () => {
+    if (generating) {
+      window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
+      return
+    }
+
     const topic = getDefaultTopic(assistant.id)
 
     await db.topics.add({ id: topic.id, messages: [] })
@@ -147,7 +152,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setActiveTopic(topic)
 
     clickAssistantToShowTopic && setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-  }, [addTopic, assistant, clickAssistantToShowTopic, setActiveTopic, setModel])
+  }, [addTopic, assistant, clickAssistantToShowTopic, generating, setActiveTopic, setModel, t])
 
   const clearTopic = async () => {
     if (generating) {
