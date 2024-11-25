@@ -13,6 +13,7 @@ const api = {
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('app:set-theme', theme),
   openWebsite: (url: string) => ipcRenderer.invoke('open:website', url),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
+  clearCache: () => ipcRenderer.invoke('app:clear-cache'),
   zip: {
     compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
     decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text)

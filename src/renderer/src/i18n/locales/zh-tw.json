@@ -259,7 +259,6 @@
     "settings": {
       "title": "設定",
       "general": "一般設定",
-      "data": "數據設定",
       "model": "預設模型",
       "assistant": "預設助手",
       "about": "關於與回饋",
@@ -283,15 +282,6 @@
       "general.reset.title": "資料重置",
       "general.reset.button": "重置",
       "general.manually_check_update.title": "關閉更新檢查",
-      "data.webdav.title": "WebDAV",
-      "data.webdav.host": "WebDAV 主機位址",
-      "data.webdav.host.placeholder": "http://localhost:8080",
-      "data.webdav.user": "WebDAV 使用者名稱",
-      "data.webdav.password": "WebDAV 密碼",
-      "data.webdav.path": "WebDAV Path",
-      "data.webdav.path.placeholder": "/backup",
-      "data.webdav.backup.button": "從 WebDAV 備份",
-      "data.webdav.restore.button": "從 WebDAV 恢復",
       "advanced.title": "進階設定",
       "advanced.auto_switch_to_topics": "自動切換到話題",
       "models.default_assistant_model": "預設助手模型",
@@ -344,9 +334,6 @@
       "topic.position.right": "右側",
       "topic.show.time": "顯示話題時間",
       "display.title": "顯示設定",
-      "data.title": "數據目錄",
-      "data.app_data": "應用數據",
-      "data.app_logs": "應用日誌",
       "shortcuts": {
         "title": "快速方式",
         "action": "操作",
@@ -390,6 +377,28 @@
           "system": "系統代理",
           "custom": "自定義代理",
           "none": "不使用代理"
+        }
+      },
+      "data": {
+        "title": "數據設定",
+        "webdav.title": "WebDAV",
+        "webdav.host": "WebDAV 主機位址",
+        "webdav.host.placeholder": "http://localhost:8080",
+        "webdav.user": "WebDAV 使用者名稱",
+        "webdav.password": "WebDAV 密碼",
+        "webdav.path": "WebDAV Path",
+        "webdav.path.placeholder": "/backup",
+        "webdav.backup.button": "從 WebDAV 備份",
+        "webdav.restore.button": "從 WebDAV 恢復",
+        "data.title": "數據目錄",
+        "data.app_data": "應用數據",
+        "data.app_logs": "應用日誌",
+        "clear_cache": {
+          "title": "清除緩存",
+          "button": "清除緩存",
+          "confirm": "清除緩存將刪除應用緩存數據，包括小程序數據。此操作不可恢復，是否繼續？",
+          "success": "緩存清除成功",
+          "error": "清除緩存失敗"
         }
       }
     },

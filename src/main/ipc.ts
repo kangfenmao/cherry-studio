@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import path from 'node:path'
 
 import { ThemeMode } from '@types'
@@ -54,6 +55,28 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     configManager.setTheme(theme)
     mainWindow?.setTitleBarOverlay &&
       mainWindow.setTitleBarOverlay(theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight)
+  })
+
+  // clear cache
+  ipcMain.handle('app:clear-cache', async () => {
+    const sessions = [session.defaultSession, session.fromPartition('persist:webview')]
+
+    try {
+      await Promise.all(
+        sessions.map(async (session) => {
+          await session.clearCache()
+          await session.clearStorageData({
+            storages: ['cookies', 'filesystem', 'shadercache', 'websql', 'serviceworkers', 'cachestorage']
+          })
+        })
+      )
+      await fileManager.clearTemp()
+      await fs.writeFileSync(log.transports.file.getFile().path, '')
+      return { success: true }
+    } catch (error: any) {
+      log.error('Failed to clear cache:', error)
+      return { success: false, error: error.message }
+    }
   })
 
   // check for update

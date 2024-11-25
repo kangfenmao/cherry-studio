@@ -57,7 +57,7 @@ const SettingsPage: FC = () => {
           <MenuItemLink to="/settings/data">
             <MenuItem className={isRoute('/settings/data')}>
               <SaveOutlined />
-              {t('settings.data')}
+              {t('settings.data.title')}
             </MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/about">

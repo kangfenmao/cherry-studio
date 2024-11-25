@@ -259,7 +259,6 @@
     "settings": {
       "title": "Настройки",
       "general": "Общие настройки",
-      "data": "Настройки данных",
       "model": "Модель по умолчанию",
       "assistant": "Ассистент по умолчанию",
       "about": "О программе и обратная связь",
@@ -283,15 +282,6 @@
       "general.reset.title": "Сброс данных",
       "general.reset.button": "Сброс",
       "general.manually_check_update.title": "Отключить проверку обновлений",
-      "data.webdav.title": "WebDAV",
-      "data.webdav.host": "Хост WebDAV",
-      "data.webdav.host.placeholder": "http://localhost:8080",
-      "data.webdav.user": "Пользователь WebDAV",
-      "data.webdav.password": "Пароль WebDAV",
-      "data.webdav.path": "Путь WebDAV",
-      "data.webdav.path.placeholder": "/backup",
-      "data.webdav.backup.button": "Резервное копирование на WebDAV",
-      "data.webdav.restore.button": "Восстановление с WebDAV",
       "advanced.title": "Расширенные настройки",
       "advanced.auto_switch_to_topics": "Автоматически переключаться на топик",
       "provider.api_key": "Ключ API",
@@ -356,9 +346,6 @@
       "topic.position.right": "Справа",
       "topic.show.time": "Показывать время топика",
       "display.title": "Настройки отображения",
-      "data.title": "Каталог данных",
-      "data.app_data": "Данные приложения",
-      "data.app_logs": "Логи приложения",
       "shortcuts": {
         "title": "Горячие клавиши",
         "action": "Действие",
@@ -402,6 +389,28 @@
           "system": "Системный прокси",
           "custom": "Пользовательский прокси",
           "none": "Не использовать прокси"
+        }
+      },
+      "data": {
+        "title": "Настройки данных",
+        "webdav.title": "WebDAV",
+        "webdav.host": "Хост WebDAV",
+        "webdav.host.placeholder": "http://localhost:8080",
+        "webdav.user": "Пользователь WebDAV",
+        "webdav.password": "Пароль WebDAV",
+        "webdav.path": "Путь WebDAV",
+        "webdav.path.placeholder": "/backup",
+        "webdav.backup.button": "Резервное копирование на WebDAV",
+        "webdav.restore.button": "Восстановление с WebDAV",
+        "data.title": "Каталог данных",
+        "app_data": "Данные приложения",
+        "app_logs": "Логи приложения",
+        "clear_cache": {
+          "title": "Очистка кэша",
+          "button": "Очистка кэша",
+          "confirm": "Очистка кэша удалит данные приложения. Это действие необратимо, продолжить?",
+          "success": "Кэш очищен",
+          "error": "Ошибка при очистке кэша"
         }
       }
     },

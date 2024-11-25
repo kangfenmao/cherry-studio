@@ -267,6 +267,11 @@ class FileStorage {
     await this.initStorageDir()
   }
 
+  public clearTemp = async (): Promise<void> => {
+    await fs.promises.rmdir(this.tempDir, { recursive: true })
+    await fs.promises.mkdir(this.tempDir, { recursive: true })
+  }
+
   public open = async (
     _: Electron.IpcMainInvokeEvent,
     options: OpenDialogOptions

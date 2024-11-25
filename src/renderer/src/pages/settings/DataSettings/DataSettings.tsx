@@ -3,7 +3,7 @@ import { HStack } from '@renderer/components/Layout'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { backup, reset, restore } from '@renderer/services/BackupService'
 import { AppInfo } from '@renderer/types'
-import { Button, Typography } from 'antd'
+import { Button, message, Modal, Typography } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -30,10 +30,30 @@ const DataSettings: FC = () => {
     }
   }
 
+  const handleClearCache = () => {
+    Modal.confirm({
+      title: t('settings.data.clear_cache.title'),
+      content: t('settings.data.clear_cache.confirm'),
+      okText: t('settings.data.clear_cache.button'),
+      centered: true,
+      okButtonProps: {
+        danger: true
+      },
+      onOk: async () => {
+        try {
+          await window.api.clearCache()
+          message.success(t('settings.data.clear_cache.success'))
+        } catch (error) {
+          message.error(t('settings.data.clear_cache.error'))
+        }
+      }
+    })
+  }
+
   return (
     <SettingContainer theme={theme}>
       <SettingGroup theme={theme}>
-        <SettingTitle>{t('settings.data')}</SettingTitle>
+        <SettingTitle>{t('settings.data.title')}</SettingTitle>
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
@@ -60,7 +80,7 @@ const DataSettings: FC = () => {
         <WebDavSettings />
       </SettingGroup>
       <SettingGroup theme={theme}>
-        <SettingTitle>{t('settings.data.title')}</SettingTitle>
+        <SettingTitle>{t('settings.data.data.title')}</SettingTitle>
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>{t('settings.data.app_data')}</SettingRowTitle>
@@ -75,6 +95,15 @@ const DataSettings: FC = () => {
           <HStack alignItems="center" gap="5px">
             <Typography.Text style={{ color: 'var(--color-text-3)' }}>{appInfo?.logsPath}</Typography.Text>
             <StyledIcon onClick={() => handleOpenPath(appInfo?.logsPath)} />
+          </HStack>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.data.clear_cache.title')}</SettingRowTitle>
+          <HStack gap="5px">
+            <Button onClick={handleClearCache} danger>
+              {t('settings.data.clear_cache.button')}
+            </Button>
           </HStack>
         </SettingRow>
       </SettingGroup>

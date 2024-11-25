@@ -259,7 +259,6 @@
     "settings": {
       "title": "设置",
       "general": "常规设置",
-      "data": "数据设置",
       "model": "默认模型",
       "assistant": "默认助手",
       "about": "关于我们",
@@ -283,15 +282,6 @@
       "general.reset.button": "重置",
       "general.view_webdav_settings": "查看 WebDAV 设置",
       "general.manually_check_update.title": "关闭更新检测",
-      "data.webdav.title": "WebDAV",
-      "data.webdav.host": "WebDAV 地址",
-      "data.webdav.host.placeholder": "http://localhost:8080",
-      "data.webdav.user": "WebDAV 用户名",
-      "data.webdav.password": "WebDAV 密码",
-      "data.webdav.path": "WebDAV 路径",
-      "data.webdav.path.placeholder": "/backup",
-      "data.webdav.backup.button": "备份到 WebDAV",
-      "data.webdav.restore.button": "从 WebDAV 恢复",
       "advanced.title": "高级设置",
       "advanced.auto_switch_to_topics": "自动切换到话题",
       "models.default_assistant_model": "默认助手模型",
@@ -321,7 +311,7 @@
       "about.title": "关于我们",
       "about.releases.title": "更新日志",
       "about.releases.button": "查看",
-      "about.website.title": "官方网���",
+      "about.website.title": "官方网站",
       "about.website.button": "查看",
       "about.feedback.title": "意见反馈",
       "about.feedback.button": "反馈",
@@ -344,9 +334,6 @@
       "topic.position.right": "右侧",
       "topic.show.time": "显示话题时间",
       "display.title": "显示设置",
-      "data.title": "数据目录",
-      "data.app_data": "应用数据",
-      "data.app_logs": "应用日志",
       "shortcuts": {
         "title": "快捷方式",
         "action": "操作",
@@ -390,6 +377,28 @@
           "system": "系统代理",
           "custom": "自定义代理",
           "none": "不使用代理"
+        }
+      },
+      "data": {
+        "title": "数据设置",
+        "webdav.title": "WebDAV",
+        "webdav.host": "WebDAV 地址",
+        "webdav.host.placeholder": "http://localhost:8080",
+        "webdav.user": "WebDAV 用户名",
+        "webdav.password": "WebDAV 密码",
+        "webdav.path": "WebDAV 路径",
+        "webdav.path.placeholder": "/backup",
+        "webdav.backup.button": "备份到 WebDAV",
+        "webdav.restore.button": "从 WebDAV 恢复",
+        "data.title": "数据目录",
+        "app_data": "应用数据",
+        "app_logs": "应用日志",
+        "clear_cache": {
+          "title": "清除缓存",
+          "button": "清除缓存",
+          "confirm": "清除缓存将删除应用缓存的数据，包括小程序数据。此操作不可恢复，是否继续？",
+          "success": "缓存清除成功",
+          "error": "清除缓存失败"
         }
       }
     },

@@ -259,7 +259,6 @@
     "settings": {
       "title": "Settings",
       "general": "General Settings",
-      "data": "Data Settings",
       "model": "Default Model",
       "assistant": "Default Assistant",
       "about": "About & Feedback",
@@ -283,15 +282,6 @@
       "general.reset.title": "Data Reset",
       "general.reset.button": "Reset",
       "general.manually_check_update.title": "Turn off update checking",
-      "data.webdav.title": "WebDAV",
-      "data.webdav.host": "WebDAV Host",
-      "data.webdav.host.placeholder": "http://localhost:8080",
-      "data.webdav.user": "WebDAV User",
-      "data.webdav.password": "WebDAV Password",
-      "data.webdav.path": "WebDAV Path",
-      "data.webdav.path.placeholder": "/backup",
-      "data.webdav.backup.button": "Backup to WebDAV",
-      "data.webdav.restore.button": "Restore from WebDAV",
       "advanced.title": "Advanced Settings",
       "advanced.auto_switch_to_topics": "Auto switch to topic",
       "provider.api_key": "API Key",
@@ -356,9 +346,6 @@
       "topic.position.right": "Right",
       "topic.show.time": "Show Topic Time",
       "display.title": "Display Settings",
-      "data.title": "Data Directory",
-      "data.app_data": "App Data",
-      "data.app_logs": "App Logs",
       "shortcuts": {
         "title": "Keyboard Shortcuts",
         "action": "Action",
@@ -402,6 +389,28 @@
           "system": "System Proxy",
           "custom": "Custom Proxy",
           "none": "No Proxy"
+        }
+      },
+      "data": {
+        "title": "Data Settings",
+        "webdav.title": "WebDAV",
+        "webdav.host": "WebDAV Host",
+        "webdav.host.placeholder": "http://localhost:8080",
+        "webdav.user": "WebDAV User",
+        "webdav.password": "WebDAV Password",
+        "webdav.path": "WebDAV Path",
+        "webdav.path.placeholder": "/backup",
+        "webdav.backup.button": "Backup to WebDAV",
+        "webdav.restore.button": "Restore from WebDAV",
+        "data.title": "Data Directory",
+        "app_data": "App Data",
+        "app_logs": "App Logs",
+        "clear_cache": {
+          "title": "Clear Cache",
+          "button": "Clear Cache",
+          "confirm": "Clearing the cache will delete application cache data, including minapp data. This action is irreversible, continue?",
+          "success": "Cache cleared",
+          "error": "Error clearing cache"
         }
       }
     },

@@ -18,6 +18,7 @@ declare global {
       setTheme: (theme: 'light' | 'dark') => void
       minApp: (options: { url: string; windowOptions?: Electron.BrowserWindowConstructorOptions }) => void
       reload: () => void
+      clearCache: () => Promise<{ success: boolean; error?: string }>
       zip: {
         compress: (text: string) => Promise<Buffer>
         decompress: (text: Buffer) => Promise<string>
