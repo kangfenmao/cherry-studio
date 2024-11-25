@@ -32,8 +32,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('app:proxy', async (_, proxy: string) => {
     const sessions = [session.defaultSession, session.fromPartition('persist:webview')]
-    const proxyConfig: ProxyConfig =
-      proxy === 'system' ? { mode: 'system' } : proxy ? { proxyRules: proxy } : { mode: 'direct' }
+    const proxyConfig: ProxyConfig = proxy === 'system' ? { mode: 'system' } : proxy ? { proxyRules: proxy } : {}
     await Promise.all(sessions.map((session) => session.setProxy(proxyConfig)))
   })
 
