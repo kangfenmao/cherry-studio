@@ -89,7 +89,7 @@
       "topics.export.image": "导出为图片",
       "topics.export.md": "导出为 Markdown",
       "topics.export.word": "导出为 Word",
-      "input.new_topic": "新话题",
+      "input.new_topic": "新话题 {{Command}}+N",
       "input.topics": " 话题 ",
       "input.clear": "清空消息",
       "input.new.context": "清除上下文",

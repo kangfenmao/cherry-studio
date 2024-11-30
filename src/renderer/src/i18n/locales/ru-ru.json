@@ -89,7 +89,7 @@
       "topics.export.image": "Экспорт как изображение",
       "topics.export.md": "Экспорт как markdown",
       "topics.export.word": "Экспорт как Word",
-      "input.new_topic": "Новый топик",
+      "input.new_topic": "Новый топик {{Command}}+N",
       "input.topics": " Топики ",
       "input.clear": "Очистить",
       "input.new.context": "Очистить контекст",

@@ -8,7 +8,7 @@ import {
   QuestionCircleOutlined
 } from '@ant-design/icons'
 import { PicCenterOutlined } from '@ant-design/icons'
-import { documentExts, imageExts, textExts } from '@renderer/config/constant'
+import { documentExts, imageExts, isMac, textExts } from '@renderer/config/constant'
 import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -322,7 +322,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
         />
         <Toolbar>
           <ToolbarMenu>
-            <Tooltip placement="top" title={t('chat.input.new_topic')} arrow>
+            <Tooltip placement="top" title={t('chat.input.new_topic', { Command: isMac ? '⌘' : 'Ctrl' })} arrow>
               <ToolbarButton type="text" onClick={addNewTopic}>
                 <FormOutlined />
               </ToolbarButton>

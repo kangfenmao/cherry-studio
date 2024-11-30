@@ -89,7 +89,7 @@
       "topics.export.image": "Export as image",
       "topics.export.md": "Export as markdown",
       "topics.export.word": "Export as Word",
-      "input.new_topic": "New Topic",
+      "input.new_topic": "New Topic {{Command}}+N",
       "input.topics": " Topics ",
       "input.clear": "Clear",
       "input.new.context": "Clear Context",
