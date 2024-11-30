@@ -53,7 +53,7 @@ const initialState: SettingsState = {
   theme: ThemeMode.auto,
   windowStyle: 'transparent',
   fontSize: 14,
-  topicPosition: 'left',
+  topicPosition: 'right',
   showTopicTime: false,
   pasteLongTextAsFile: false,
   clickAssistantToShowTopic: false,
