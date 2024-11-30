@@ -232,23 +232,6 @@ const PaintingsPage: FC = () => {
     setCurrentImageIndex(0)
   }
 
-  const handleTranslation = async (translatedText: string) => {
-    const currentText = textareaRef.current?.resizableTextArea?.textArea?.value
-
-    if (currentText) {
-      await navigator.clipboard.writeText(currentText)
-
-      const confirmed = await window.modal.confirm({
-        content: t('translate.confirm'),
-        centered: true
-      })
-
-      if (confirmed) {
-        updatePaintingState({ prompt: translatedText })
-      }
-    }
-  }
-
   return (
     <Container>
       <Navbar>
@@ -385,7 +368,7 @@ const PaintingsPage: FC = () => {
               <ToolbarMenu>
                 <TranslateButton
                   text={textareaRef.current?.resizableTextArea?.textArea?.value}
-                  onTranslated={handleTranslation}
+                  onTranslated={(translatedText) => updatePaintingState({ prompt: translatedText })}
                   disabled={isLoading}
                   style={{ marginRight: 6, borderRadius: '50%' }}
                 />

@@ -104,6 +104,7 @@
       "input.upload": "Upload image or document file",
       "input.context_count.tip": "Context Count",
       "input.estimated_tokens.tip": "Estimated tokens",
+      "input.translate": "Translate to English",
       "settings.temperature": "Temperature",
       "settings.temperature.tip": "Lower values make the model more creative and unpredictable, while higher values make it more deterministic and precise.",
       "settings.context_count": "Context",
@@ -350,6 +351,7 @@
       "topic.position.right": "Right",
       "topic.show.time": "Show Topic Time",
       "display.title": "Display Settings",
+      "input.auto_translate_with_space": "Quickly translate with 3 spaces",
       "shortcuts": {
         "title": "Keyboard Shortcuts",
         "action": "Action",
@@ -425,7 +427,10 @@
       "error.not_configured": "Translation model is not configured",
       "input.placeholder": "Enter text to translate",
       "output.placeholder": "Translation",
-      "confirm": "Original text has been copied to clipboard. Do you want to replace it with the translated text?"
+      "confirm": {
+        "title": "Translation Confirmation",
+        "content": "Translation will replace the original text, continue?"
+      }
     },
     "languages": {
       "english": "English",

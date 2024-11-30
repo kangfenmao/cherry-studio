@@ -104,6 +104,7 @@
       "input.upload": "上传图片或文档",
       "input.context_count.tip": "上下文数",
       "input.estimated_tokens.tip": "预估 token 数",
+      "input.translate": "翻译成英文",
       "settings.temperature": "模型温度",
       "settings.temperature.tip": "模型生成文本的随机程度。值越大，回复内容越赋有多样性、创造性、随机性；设为 0 根据事实回答。日常聊天建议设置为 0.7",
       "settings.context_count": "上下文数",
@@ -338,6 +339,7 @@
       "topic.position.right": "右侧",
       "topic.show.time": "显示话题时间",
       "display.title": "显示设置",
+      "input.auto_translate_with_space": "快速敲击3次空格翻译",
       "shortcuts": {
         "title": "快捷方式",
         "action": "操作",
@@ -413,7 +415,10 @@
       "error.not_configured": "翻译模型未配置",
       "input.placeholder": "输入文本进行翻译",
       "output.placeholder": "翻译",
-      "confirm": "原文已复制到剪贴板，是否用翻译后的文本替换？"
+      "confirm": {
+        "title": "翻译确认",
+        "content": "翻译后将覆盖原文，是否继续？"
+      }
     },
     "languages": {
       "english": "英文",

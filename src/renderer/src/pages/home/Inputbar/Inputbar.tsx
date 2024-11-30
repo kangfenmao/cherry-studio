@@ -8,6 +8,7 @@ import {
   QuestionCircleOutlined
 } from '@ant-design/icons'
 import { PicCenterOutlined } from '@ant-design/icons'
+import TranslateButton from '@renderer/components/TranslateButton'
 import { documentExts, imageExts, isMac, textExts } from '@renderer/config/constant'
 import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
@@ -19,6 +20,7 @@ import { addAssistantMessagesToTopic, getDefaultTopic } from '@renderer/services
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import FileManager from '@renderer/services/FileManager'
 import { estimateTextTokens as estimateTxtTokens } from '@renderer/services/TokenService'
+import { translateText } from '@renderer/services/TranslateService'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, Message, Topic } from '@renderer/types'
@@ -48,8 +50,15 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
   const { addTopic, model, setModel } = useAssistant(assistant.id)
-  const { sendMessageShortcut, fontSize, pasteLongTextAsFile, showInputEstimatedTokens, clickAssistantToShowTopic } =
-    useSettings()
+  const {
+    sendMessageShortcut,
+    fontSize,
+    pasteLongTextAsFile,
+    showInputEstimatedTokens,
+    clickAssistantToShowTopic,
+    language,
+    autoTranslateWithSpace
+  } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const [contextCount, setContextCount] = useState(0)
@@ -62,6 +71,9 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   const { searching } = useRuntime()
   const { isBubbleStyle } = useMessageStyle()
   const dispatch = useAppDispatch()
+  const [spaceClickCount, setSpaceClickCount] = useState(0)
+  const spaceClickTimer = useRef<NodeJS.Timeout>()
+  const [isTranslating, setIsTranslating] = useState(false)
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
@@ -109,8 +121,46 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setExpend(false)
   }, [assistant.id, assistant.topics, generating, files, text])
 
+  const translate = async () => {
+    if (isTranslating) {
+      return
+    }
+
+    try {
+      setIsTranslating(true)
+      setText(await translateText(text, 'english'))
+      setTimeout(() => resizeTextArea(), 0)
+    } catch (error) {
+      console.error('Translation failed:', error)
+    } finally {
+      setIsTranslating(false)
+    }
+  }
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isEnterPressed = event.keyCode == 13
+
+    if (autoTranslateWithSpace) {
+      if (event.key === ' ') {
+        setSpaceClickCount((prev) => prev + 1)
+
+        if (spaceClickTimer.current) {
+          clearTimeout(spaceClickTimer.current)
+        }
+
+        spaceClickTimer.current = setTimeout(() => {
+          setSpaceClickCount(0)
+        }, 200)
+
+        if (spaceClickCount === 2) {
+          console.log('Triple space detected - trigger translation')
+          setSpaceClickCount(0)
+          setIsTranslating(true)
+          translate()
+          return
+        }
+      }
+    }
 
     if (expended) {
       if (event.key === 'Escape') {
@@ -261,6 +311,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     })
   }
 
+  const onTranslated = (translatedText: string) => {
+    setText(translatedText)
+    setTimeout(() => resizeTextArea(), 0)
+  }
+
   // Command or Ctrl + N create new topic
   useEffect(() => {
     const onKeydown = (e) => {
@@ -297,6 +352,14 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     textareaRef.current?.focus()
   }, [assistant])
 
+  useEffect(() => {
+    return () => {
+      if (spaceClickTimer.current) {
+        clearTimeout(spaceClickTimer.current)
+      }
+    }
+  }, [])
+
   return (
     <Container onDragOver={handleDragOver} onDrop={handleDrop}>
       <AttachmentPreview files={files} setFiles={setFiles} />
@@ -305,7 +368,7 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={t('chat.input.placeholder')}
+          placeholder={isTranslating ? t('chat.input.translating') : t('chat.input.placeholder')}
           autoFocus
           contextMenu="true"
           variant="borderless"
@@ -370,6 +433,9 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
             />
           </ToolbarMenu>
           <ToolbarMenu>
+            {!language.startsWith('en') && (
+              <TranslateButton text={text} onTranslated={onTranslated} isLoading={isTranslating} />
+            )}
             {generating && (
               <Tooltip placement="top" title={t('chat.input.pause')} arrow>
                 <ToolbarButton type="text" onClick={onPause} style={{ marginRight: -2, marginTop: 1 }}>

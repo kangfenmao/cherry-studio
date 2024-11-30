@@ -104,6 +104,7 @@
       "input.upload": "上傳圖片或文檔",
       "input.context_count.tip": "上下文數量",
       "input.estimated_tokens.tip": "預估 Token 數",
+      "input.translate": "翻譯成英文",
       "settings.temperature": "溫度",
       "settings.temperature.tip": "較低的值使模型更具創造性和不可預測性，較高的值則使其更具確定性和精確性。",
       "settings.context_count": "上下文",
@@ -338,6 +339,7 @@
       "topic.position.right": "右側",
       "topic.show.time": "顯示話題時間",
       "display.title": "顯示設定",
+      "input.auto_translate_with_space": "快速敲擊3次空格翻譯",
       "shortcuts": {
         "title": "快速方式",
         "action": "操作",
@@ -413,7 +415,10 @@
       "error.not_configured": "翻譯模型未配置",
       "input.placeholder": "輸入文字進行翻譯",
       "output.placeholder": "翻譯",
-      "confirm": "原文已複製到剪貼簿，是否用翻譯後的文字替換？"
+      "confirm": {
+        "title": "翻譯確認",
+        "content": "翻譯後將覆蓋原文，是否繼續？"
+      }
     },
     "languages": {
       "english": "英文",

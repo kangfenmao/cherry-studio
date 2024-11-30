@@ -36,6 +36,7 @@ export interface SettingsState {
   webdavPass: string
   webdavPath: string
   translateModelPrompt: string
+  autoTranslateWithSpace: boolean
 }
 
 const initialState: SettingsState = {
@@ -68,7 +69,8 @@ const initialState: SettingsState = {
   webdavUser: '',
   webdavPass: '',
   webdavPath: '/cherry-studio',
-  translateModelPrompt: TRANSLATE_PROMPT
+  translateModelPrompt: TRANSLATE_PROMPT,
+  autoTranslateWithSpace: false
 }
 
 const settingsSlice = createSlice({
@@ -171,6 +173,9 @@ const settingsSlice = createSlice({
     },
     setTranslateModelPrompt: (state, action: PayloadAction<string>) => {
       state.translateModelPrompt = action.payload
+    },
+    setAutoTranslateWithSpace: (state, action: PayloadAction<boolean>) => {
+      state.autoTranslateWithSpace = action.payload
     }
   }
 })
@@ -207,7 +212,8 @@ export const {
   setMathEngine,
   setMessageStyle,
   setCodeStyle,
-  setTranslateModelPrompt
+  setTranslateModelPrompt,
+  setAutoTranslateWithSpace
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

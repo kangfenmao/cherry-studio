@@ -8,6 +8,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@renderer/pages/settings'
 import { useAppDispatch } from '@renderer/store'
 import {
+  setAutoTranslateWithSpace,
   setClickAssistantToShowTopic,
   setCodeCollapsible,
   setCodeShowLineNumbers,
@@ -60,6 +61,7 @@ const SettingsTab: FC<Props> = (props) => {
     topicPosition,
     showTopicTime,
     clickAssistantToShowTopic,
+    autoTranslateWithSpace,
     setTopicPosition
   } = useSettings()
 
@@ -329,6 +331,15 @@ const SettingsTab: FC<Props> = (props) => {
         </SettingRow>
         <SettingDivider />
         <SettingRow>
+          <SettingRowTitleSmall>{t('settings.input.auto_translate_with_space')}</SettingRowTitleSmall>
+          <Switch
+            size="small"
+            checked={autoTranslateWithSpace}
+            onChange={(checked) => dispatch(setAutoTranslateWithSpace(checked))}
+          />
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
           <SettingRowTitleSmall>{t('settings.messages.input.send_shortcuts')}</SettingRowTitleSmall>
           <Select
             size="small"
@@ -342,8 +353,9 @@ const SettingsTab: FC<Props> = (props) => {
             style={{ width: 135 }}
           />
         </SettingRow>
-        <SettingDivider />
-        <SettingSubtitle>{t('settings.display.title')}</SettingSubtitle>
+      </SettingGroup>
+      <SettingGroup>
+        <SettingSubtitle style={{ marginTop: 0 }}>{t('settings.display.title')}</SettingSubtitle>
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
