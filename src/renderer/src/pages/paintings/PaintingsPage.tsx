@@ -1,4 +1,4 @@
-import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { PlusOutlined, QuestionCircleOutlined, RedoOutlined } from '@ant-design/icons'
 import ImageSize1_1 from '@renderer/assets/images/paintings/image-size-1-1.svg'
 import ImageSize1_2 from '@renderer/assets/images/paintings/image-size-1-2.svg'
 import ImageSize3_2 from '@renderer/assets/images/paintings/image-size-3-2.svg'
@@ -308,7 +308,12 @@ const PaintingsPage: FC = () => {
           <Input
             value={painting.seed}
             onChange={(e) => updatePaintingState({ seed: e.target.value })}
-            suffix={<RefreshIcon onClick={() => updatePaintingState({ seed: '' })} />}
+            suffix={
+              <RedoOutlined
+                onClick={() => updatePaintingState({ seed: Math.floor(Math.random() * 1000000).toString() })}
+                style={{ cursor: 'pointer', color: 'var(--color-text-2)' }}
+              />
+            }
           />
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
@@ -502,7 +507,7 @@ const InfoIcon = styled(QuestionCircleOutlined)`
   }
 `
 
-const RefreshIcon = styled.span`
+const RefreshIcon = styled(RedoOutlined)`
   cursor: pointer;
 `
 
