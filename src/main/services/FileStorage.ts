@@ -1,5 +1,5 @@
-import { documentExts, imageExts } from '@main/constant'
 import { getFileType } from '@main/utils/file'
+import { documentExts, imageExts } from '@shared/config/constant'
 import { FileType } from '@types'
 import * as crypto from 'crypto'
 import {

@@ -7,8 +7,9 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     resolve: {
       alias: {
+        '@main': resolve('src/main'),
         '@types': resolve('src/renderer/src/types'),
-        '@main': resolve('src/main')
+        '@shared': resolve('packages/shared')
       }
     }
   },
@@ -16,14 +17,15 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
+    plugins: [react()],
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        '@shared': resolve('packages/shared')
       }
     },
-    plugins: [react()],
     optimizeDeps: {
-      exclude: ['chunk-KNVOMWSO.js', 'chunk-2NJP6ETL.js']
+      exclude: []
     }
   }
 })

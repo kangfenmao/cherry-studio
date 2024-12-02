@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
-import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { translateText } from '@renderer/services/TranslateService'
 import { Message, Model } from '@renderer/types'
@@ -37,7 +36,6 @@ const MessageMenubar: FC<Props> = (props) => {
   const { message, index, model, isLastMessage, isAssistantMessage, setModel, onEditMessage, onDeleteMessage } = props
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
-  const { translateModel } = useDefaultModel()
   const [isTranslating, setIsTranslating] = useState(false)
 
   const isUserMessage = message.role === 'user'

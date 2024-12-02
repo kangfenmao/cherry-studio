@@ -165,7 +165,7 @@ export type AppInfo = {
 
 export interface Shortcut {
   key: string
-  name: string
   shortcut: string[]
+  editable: boolean
   enabled: boolean
 }

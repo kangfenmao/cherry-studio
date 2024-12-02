@@ -1,6 +1,5 @@
 import { Shortcut } from '@types'
 import { BrowserWindow, globalShortcut } from 'electron'
-import Logger from 'electron-log'
 
 import { configManager } from './ConfigManager'
 
@@ -9,9 +8,9 @@ let showAppAccelerator: string | null = null
 function getShortcutHandler(shortcut: Shortcut) {
   switch (shortcut.key) {
     case 'zoom_in':
-      return () => handleZoom(0.1)
+      return (window: BrowserWindow) => handleZoom(0.1)(window)
     case 'zoom_out':
-      return () => handleZoom(-0.1)
+      return (window: BrowserWindow) => handleZoom(-0.1)(window)
     case 'zoom_reset':
       return (window: BrowserWindow) => {
         window.webContents.setZoomFactor(1)
@@ -46,7 +45,7 @@ function handleZoom(delta: number) {
   }
 }
 
-function registerWindowShortcuts(window: BrowserWindow) {
+export function registerShortcuts(window: BrowserWindow) {
   window.webContents.setZoomFactor(configManager.getZoomFactor())
 
   const register = () => {
@@ -56,10 +55,15 @@ function registerWindowShortcuts(window: BrowserWindow) {
     if (!shortcuts) return
 
     shortcuts.forEach((shortcut) => {
-      if (!shortcut.enabled || shortcut.shortcut.length === 0) return
+      if (!shortcut.enabled || shortcut.shortcut.length === 0) {
+        return
+      }
 
       const handler = getShortcutHandler(shortcut)
-      if (!handler) return
+
+      if (!handler) {
+        return
+      }
 
       const accelerator = formatShortcutKey(shortcut.shortcut)
 
@@ -67,7 +71,22 @@ function registerWindowShortcuts(window: BrowserWindow) {
         showAppAccelerator = accelerator
       }
 
-      Logger.info(`Register shortcut: ${accelerator}`)
+      if (shortcut.key.includes('zoom')) {
+        switch (shortcut.key) {
+          case 'zoom_in':
+            globalShortcut.register('CommandOrControl+=', () => handler(window))
+            globalShortcut.register('CommandOrControl+numadd', () => handler(window))
+            return
+          case 'zoom_out':
+            globalShortcut.register('CommandOrControl+-', () => handler(window))
+            globalShortcut.register('CommandOrControl+numsub', () => handler(window))
+            return
+          case 'zoom_reset':
+            globalShortcut.register('CommandOrControl+0', () => handler(window))
+            return
+        }
+      }
+
       globalShortcut.register(accelerator, () => handler(window))
     })
   }
@@ -79,9 +98,7 @@ function registerWindowShortcuts(window: BrowserWindow) {
 
     if (showAppAccelerator) {
       const handler = getShortcutHandler({ key: 'show_app' } as Shortcut)
-      if (handler) {
-        globalShortcut.register(showAppAccelerator, () => handler(window))
-      }
+      handler && globalShortcut.register(showAppAccelerator, () => handler(window))
     }
   }
 
@@ -91,10 +108,6 @@ function registerWindowShortcuts(window: BrowserWindow) {
   if (!window.isDestroyed() && window.isFocused()) {
     register()
   }
-}
-
-export function registerShortcuts(mainWindow: BrowserWindow) {
-  registerWindowShortcuts(mainWindow)
 }
 
 export function unregisterAllShortcuts() {

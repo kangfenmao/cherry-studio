@@ -1,23 +1,17 @@
-import { UndoOutlined } from '@ant-design/icons'
+import { ClearOutlined, UndoOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { isMac } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { initialState, resetShortcuts, updateShortcut } from '@renderer/store/shortcuts'
-import { Button, Input, InputRef, Table as AntTable } from 'antd'
+import { initialState, resetShortcuts, toggleShortcut, updateShortcut } from '@renderer/store/shortcuts'
+import { Shortcut } from '@renderer/types'
+import { Button, Input, InputRef, Switch, Table as AntTable, Tooltip } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { FC, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingTitle } from '.'
-
-interface ShortcutItem {
-  key: string
-  name: string
-  shortcut: string[]
-  enabled: boolean
-}
 
 const ShortcutSettings: FC = () => {
   const { t } = useTranslation()
@@ -27,7 +21,7 @@ const ShortcutSettings: FC = () => {
   const inputRefs = useRef<Record<string, InputRef>>({})
   const [editingKey, setEditingKey] = useState<string | null>(null)
 
-  const handleClear = (record: ShortcutItem) => {
+  const handleClear = (record: Shortcut) => {
     dispatch(
       updateShortcut({
         ...record,
@@ -36,19 +30,19 @@ const ShortcutSettings: FC = () => {
     )
   }
 
-  const handleAddShortcut = (record: ShortcutItem) => {
+  const handleAddShortcut = (record: Shortcut) => {
     setEditingKey(record.key)
     setTimeout(() => {
       inputRefs.current[record.key]?.focus()
     }, 0)
   }
 
-  const isShortcutModified = (record: ShortcutItem) => {
+  const isShortcutModified = (record: Shortcut) => {
     const defaultShortcut = initialState.shortcuts.find((s) => s.key === record.key)
     return defaultShortcut?.shortcut.join('+') !== record.shortcut.join('+')
   }
 
-  const handleResetShortcut = (record: ShortcutItem) => {
+  const handleResetShortcut = (record: Shortcut) => {
     const defaultShortcut = initialState.shortcuts.find((s) => s.key === record.key)
     if (defaultShortcut) {
       dispatch(
@@ -95,6 +89,8 @@ const ShortcutSettings: FC = () => {
             return isMac ? '⌥' : 'Alt'
           case 'Shift':
             return isMac ? '⇧' : 'Shift'
+          case 'CommandOrControl':
+            return isMac ? '⌘' : 'Ctrl'
           case ' ':
             return 'Space'
           default:
@@ -104,7 +100,8 @@ const ShortcutSettings: FC = () => {
       .join(' + ')
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent, record: ShortcutItem) => {
+  const handleKeyDown = (e: React.KeyboardEvent, record: Shortcut) => {
+    console.debug('handleKeyDown', e, record)
     e.preventDefault()
 
     const keys: string[] = []
@@ -114,6 +111,8 @@ const ShortcutSettings: FC = () => {
     if (e.shiftKey) keys.push('Shift')
 
     const key = e.key
+
+    console.debug('key', key)
 
     if (!['Control', 'Alt', 'Shift', 'Meta'].includes(key)) {
       keys.push(key.toUpperCase())
@@ -144,7 +143,7 @@ const ShortcutSettings: FC = () => {
     })
   }
 
-  const columns: ColumnsType<ShortcutItem> = [
+  const columns: ColumnsType<Shortcut> = [
     {
       title: t('settings.shortcuts.action'),
       dataIndex: 'name',
@@ -155,14 +154,16 @@ const ShortcutSettings: FC = () => {
       dataIndex: 'shortcut',
       key: 'shortcut',
       align: 'right',
-      render: (shortcut: string[], record: ShortcutItem) => {
+      render: (shortcut: string[], record: Shortcut) => {
         const isEditing = editingKey === record.key
+        const shortcutConfig = shortcuts.find((s) => s.key === record.key)
+        const isEditable = shortcutConfig?.editable !== false
 
         return (
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <div style={{ position: 'relative', flex: 1 }}>
+          <HStack style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
+            <HStack alignItems="center" style={{ position: 'relative' }}>
               {isEditing ? (
-                <Input
+                <ShortcutInput
                   ref={(el) => el && (inputRefs.current[record.key] = el)}
                   value={formatShortcut(shortcut)}
                   placeholder={t('settings.shortcuts.press_shortcut')}
@@ -173,39 +174,51 @@ const ShortcutSettings: FC = () => {
                       setEditingKey(null)
                     }
                   }}
-                  style={{ width: '120px' }}
-                  suffix={
-                    isShortcutModified(record) && (
-                      <UndoOutlined
-                        className="shortcut-undo-icon"
-                        style={{
-                          position: 'absolute',
-                          right: '8px',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          cursor: 'pointer',
-                          color: '#999'
-                        }}
-                        onClick={() => {
-                          handleResetShortcut(record)
-                          setEditingKey(null)
-                        }}
-                      />
-                    )
-                  }
                 />
               ) : (
-                <div style={{ cursor: 'pointer', padding: '4px 11px' }} onClick={() => handleAddShortcut(record)}>
+                <ShortcutText isEditable={isEditable} onClick={() => isEditable && handleAddShortcut(record)}>
                   {shortcut.length > 0 ? formatShortcut(shortcut) : t('settings.shortcuts.press_shortcut')}
-                </div>
+                </ShortcutText>
               )}
-            </div>
-            <Button onClick={() => (shortcut ? handleClear(record) : handleAddShortcut(record))}>
-              {shortcut ? t('common.clear') : t('common.add')}
-            </Button>
-          </div>
+            </HStack>
+          </HStack>
         )
       }
+    },
+    {
+      title: t('settings.shortcuts.actions'),
+      key: 'actions',
+      align: 'right',
+      width: '70px',
+      render: (record: Shortcut) => (
+        <HStack style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Tooltip title={t('settings.shortcuts.reset_to_default')}>
+            <Button
+              icon={<UndoOutlined />}
+              size="small"
+              onClick={() => handleResetShortcut(record)}
+              disabled={!isShortcutModified(record)}
+            />
+          </Tooltip>
+          <Tooltip title={t('settings.shortcuts.clear_shortcut')}>
+            <Button
+              icon={<ClearOutlined />}
+              size="small"
+              onClick={() => handleClear(record)}
+              disabled={record.shortcut.length === 0 || !record.editable}
+            />
+          </Tooltip>
+        </HStack>
+      )
+    },
+    {
+      title: t('settings.shortcuts.enabled'),
+      key: 'enabled',
+      align: 'right',
+      width: '50px',
+      render: (record: Shortcut) => (
+        <Switch size="small" checked={record.enabled} onChange={() => dispatch(toggleShortcut(record.key))} />
+      )
     }
   ]
 
@@ -216,7 +229,7 @@ const ShortcutSettings: FC = () => {
         <SettingDivider style={{ marginBottom: 0 }} />
         <Table
           columns={columns as ColumnsType<unknown>}
-          dataSource={shortcuts.map((s) => ({ ...s, name: t(s.name) }))}
+          dataSource={shortcuts.map((s) => ({ ...s, name: t(`settings.shortcuts.${s.key}`) }))}
           pagination={false}
           size="middle"
           showHeader={false}
@@ -243,6 +256,17 @@ const Table = styled(AntTable)`
   .ant-table-tbody > tr:last-child > td {
     border-bottom: none;
   }
+`
+
+const ShortcutInput = styled(Input)`
+  width: 120px;
+  text-align: center;
+`
+
+const ShortcutText = styled.span<{ isEditable: boolean }>`
+  cursor: ${({ isEditable }) => (isEditable ? 'pointer' : 'not-allowed')};
+  padding: 4px 11px;
+  opacity: ${({ isEditable }) => (isEditable ? 1 : 0.5)};
 `
 
 export default ShortcutSettings

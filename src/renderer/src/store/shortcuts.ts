@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { isMac } from '@renderer/config/constant'
 import { Shortcut } from '@renderer/types'
+import { ZOOM_SHORTCUTS } from '@shared/config/constant'
 
 export interface ShortcutsState {
   shortcuts: Shortcut[]
@@ -8,34 +9,17 @@ export interface ShortcutsState {
 
 const initialState: ShortcutsState = {
   shortcuts: [
+    ...ZOOM_SHORTCUTS,
     {
       key: 'new_topic',
-      name: 'settings.shortcuts.new_topic',
       shortcut: [isMac ? 'Command' : 'Ctrl', 'N'],
-      enabled: true
-    },
-    {
-      key: 'zoom_in',
-      name: 'settings.shortcuts.zoom_in',
-      shortcut: [isMac ? 'Command' : 'Ctrl', '='],
-      enabled: true
-    },
-    {
-      key: 'zoom_out',
-      name: 'settings.shortcuts.zoom_out',
-      shortcut: [isMac ? 'Command' : 'Ctrl', '-'],
-      enabled: true
-    },
-    {
-      key: 'zoom_reset',
-      name: 'settings.shortcuts.zoom_reset',
-      shortcut: [isMac ? 'Command' : 'Ctrl', '0'],
+      editable: true,
       enabled: true
     },
     {
       key: 'show_app',
-      name: 'settings.shortcuts.show_app',
-      shortcut: [isMac ? 'Command' : 'Ctrl', 'Shift', 'A'],
+      shortcut: [],
+      editable: true,
       enabled: true
     }
   ]
@@ -44,7 +28,6 @@ const initialState: ShortcutsState = {
 const getSerializableShortcuts = (shortcuts: Shortcut[]) => {
   return shortcuts.map((shortcut) => ({
     key: shortcut.key,
-    name: shortcut.name,
     shortcut: [...shortcut.shortcut],
     enabled: shortcut.enabled
   }))

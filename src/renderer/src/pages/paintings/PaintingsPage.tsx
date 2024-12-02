@@ -490,8 +490,4 @@ const InfoIcon = styled(QuestionCircleOutlined)`
   }
 `
 
-const RefreshIcon = styled(RedoOutlined)`
-  cursor: pointer;
-`
-
 export default PaintingsPage

@@ -5,20 +5,19 @@
     "src/main/**/*",
     "src/preload/**/*",
     "src/main/env.d.ts",
-    "src/renderer/src/types/index.ts"
+    "src/renderer/src/types/index.ts",
+    "packages/shared/**/*"
   ],
   "compilerOptions": {
     "composite": true,
     "types": [
       "electron-vite/node"
     ],
+    "baseUrl": ".",
     "paths": {
-      "@types": [
-        "./src/renderer/src/types/index.ts"
-      ],
-      "@main/*": [
-        "./src/main/*"
-      ]
+      "@main/*": ["src/main/*"],
+      "@types": ["src/renderer/src/types/index.ts"],
+      "@shared/*": ["packages/shared/*"]
     }
   }
 }

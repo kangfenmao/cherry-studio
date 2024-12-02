@@ -1,4 +1,5 @@
-import { LanguageVarious, ThemeMode } from '@types'
+import { ZOOM_SHORTCUTS } from '@shared/config/constant'
+import { LanguageVarious, Shortcut, ThemeMode } from '@types'
 import { app } from 'electron'
 import Store from 'electron-store'
 
@@ -72,7 +73,7 @@ export class ConfigManager {
   }
 
   getShortcuts() {
-    return this.store.get('shortcuts') as Shortcut[] | undefined
+    return this.store.get('shortcuts', ZOOM_SHORTCUTS) as Shortcut[] | []
   }
 
   setShortcuts(shortcuts: Shortcut[]) {

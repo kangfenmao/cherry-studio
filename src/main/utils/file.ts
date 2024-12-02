@@ -1,6 +1,5 @@
-import { audioExts, documentExts, imageExts, textExts, videoExts } from '@main/constant'
-
-import { FileTypes } from '../../renderer/src/types'
+import { audioExts, documentExts, imageExts, textExts, videoExts } from '@shared/config/constant'
+import { FileTypes } from '@types'
 
 export function getFileType(ext: string): FileTypes {
   ext = ext.toLowerCase()

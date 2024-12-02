@@ -458,7 +458,9 @@
         "reset_defaults": "Сбросить настройки по умолчанию",
         "reset_defaults_confirm": "Вы уверены, что хотите сбросить все горячие клавиши?",
         "press_shortcut": "Нажмите сочетание клавиш",
-        "alt_warning": "Mac не поддерживает Alt"
+        "alt_warning": "Mac не поддерживает Alt",
+        "reset_to_default": "Сбросить настройки по умолчанию",
+        "clear_shortcut": "Очистить сочетание клавиш"
       },
       "theme.auto": "Автоматически",
       "theme.dark": "Темная",

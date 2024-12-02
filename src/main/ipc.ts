@@ -138,6 +138,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   // shortcuts
   ipcMain.handle('shortcuts:update', (_, shortcuts: Shortcut[]) => {
     configManager.setShortcuts(shortcuts)
+    log.info('[ipc] shortcuts updated', shortcuts)
     // Refresh shortcuts registration
     if (mainWindow) {
       unregisterAllShortcuts()

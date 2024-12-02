@@ -49,7 +49,12 @@ export const useShortcut = (
     },
     {
       enableOnFormTags: options.enableOnFormTags,
-      description: options.description || shortcutConfig?.name
+      description: options.description || shortcutConfig?.key
     }
   )
+}
+
+export function useShortcuts() {
+  const shortcuts = useAppSelector((state) => state.shortcuts.shortcuts)
+  return { shortcuts }
 }
