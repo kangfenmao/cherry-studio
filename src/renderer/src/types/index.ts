@@ -37,6 +37,7 @@ export type Message = {
   assistantId: string
   role: 'user' | 'assistant'
   content: string
+  translatedContent?: string
   topicId: string
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'paused' | 'error'

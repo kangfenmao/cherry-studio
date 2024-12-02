@@ -6,11 +6,14 @@ import {
   MenuOutlined,
   QuestionCircleOutlined,
   SaveOutlined,
-  SyncOutlined
+  SyncOutlined,
+  TranslationOutlined
 } from '@ant-design/icons'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
+import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
+import { translateText } from '@renderer/services/TranslateService'
 import { Message, Model } from '@renderer/types'
 import { removeTrailingDoubleSpaces } from '@renderer/utils'
 import { Dropdown, Popconfirm, Tooltip } from 'antd'
@@ -34,6 +37,8 @@ const MessageMenubar: FC<Props> = (props) => {
   const { message, index, model, isLastMessage, isAssistantMessage, setModel, onEditMessage, onDeleteMessage } = props
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
+  const { translateModel } = useDefaultModel()
+  const [isTranslating, setIsTranslating] = useState(false)
 
   const isUserMessage = message.role === 'user'
   const canRegenerate = isLastMessage && isAssistantMessage
@@ -66,6 +71,28 @@ const MessageMenubar: FC<Props> = (props) => {
     editedText && onEditMessage?.({ ...message, content: editedText })
   }, [message, onEditMessage])
 
+  const handleTranslate = async (language: string) => {
+    if (isTranslating) return
+
+    onEditMessage?.({ ...message, translatedContent: t('translate.processing') })
+
+    setIsTranslating(true)
+
+    try {
+      const translatedText = await translateText(message.content, language)
+      onEditMessage?.({ ...message, translatedContent: translatedText })
+    } catch (error) {
+      console.error('Translation failed:', error)
+      window.message.error({
+        content: t('translate.error.failed'),
+        key: 'translate-message'
+      })
+      onEditMessage?.({ ...message, translatedContent: undefined })
+    } finally {
+      setIsTranslating(false)
+    }
+  }
+
   const dropdownItems = useMemo(
     () => [
       {
@@ -82,9 +109,51 @@ const MessageMenubar: FC<Props> = (props) => {
         key: 'edit',
         icon: <EditOutlined />,
         onClick: onEdit
+      },
+      {
+        label: t('chat.translate'),
+        key: 'translate',
+        icon: isTranslating ? <SyncOutlined spin /> : <TranslationOutlined />,
+        children: [
+          {
+            label: '🇨🇳 ' + t('languages.chinese'),
+            key: 'translate-chinese',
+            onClick: () => handleTranslate('chinese')
+          },
+          {
+            label: '🇹🇼 ' + t('languages.chinese-traditional'),
+            key: 'translate-chinese-traditional',
+            onClick: () => handleTranslate('chinese-traditional')
+          },
+          {
+            label: '🇬🇧 ' + t('languages.english'),
+            key: 'translate-english',
+            onClick: () => handleTranslate('english')
+          },
+          {
+            label: '🇯🇵 ' + t('languages.japanese'),
+            key: 'translate-japanese',
+            onClick: () => handleTranslate('japanese')
+          },
+          {
+            label: '🇰🇷 ' + t('languages.korean'),
+            key: 'translate-korean',
+            onClick: () => handleTranslate('korean')
+          },
+          {
+            label: '🇷🇺 ' + t('languages.russian'),
+            key: 'translate-russian',
+            onClick: () => handleTranslate('russian')
+          },
+          {
+            label: '✖ ' + t('translate.close'),
+            key: 'translate-close',
+            onClick: () => onEditMessage?.({ ...message, translatedContent: undefined })
+          }
+        ]
       }
     ],
-    [message.content, message.createdAt, onEdit, t]
+    [handleTranslate, isTranslating, message, onEdit, onEditMessage, t]
   )
 
   const onSelectModel = async () => {

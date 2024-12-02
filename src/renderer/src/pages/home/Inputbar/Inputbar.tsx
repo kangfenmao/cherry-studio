@@ -353,6 +353,10 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
   }, [assistant])
 
   useEffect(() => {
+    setTimeout(() => resizeTextArea(), 0)
+  }, [])
+
+  useEffect(() => {
     return () => {
       if (spaceClickTimer.current) {
         clearTimeout(spaceClickTimer.current)
