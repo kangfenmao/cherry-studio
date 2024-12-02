@@ -456,7 +456,9 @@
         "zoom_reset": "Reset Zoom",
         "show_app": "Show App",
         "reset_defaults": "Reset Defaults",
-        "press_shortcut": "Press Shortcut"
+        "reset_defaults_confirm": "Are you sure you want to reset all shortcuts?",
+        "press_shortcut": "Press Shortcut",
+        "alt_warning": "Mac does not support the Alt key"
       },
       "theme.auto": "Auto",
       "theme.dark": "Dark",

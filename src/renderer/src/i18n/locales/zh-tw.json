@@ -444,7 +444,9 @@
         "zoom_reset": "重置縮放",
         "show_app": "顯示應用",
         "reset_defaults": "重置預設快捷鍵",
-        "press_shortcut": "按下快捷鍵"
+        "reset_defaults_confirm": "確定要重置所有快捷鍵嗎？",
+        "press_shortcut": "按下快捷鍵",
+        "alt_warning": "Mac 系統不支持 Alt 鍵"
       },
       "theme.auto": "自動",
       "theme.dark": "深色主題",

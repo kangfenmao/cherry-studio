@@ -1,4 +1,5 @@
 import { UndoOutlined } from '@ant-design/icons'
+import { HStack } from '@renderer/components/Layout'
 import { isMac } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
@@ -62,6 +63,15 @@ const ShortcutSettings: FC = () => {
   const isValidShortcut = (keys: string[]): boolean => {
     const hasModifier = keys.some((key) => ['Control', 'Ctrl', 'Command', 'Alt', 'Shift'].includes(key))
     const hasNonModifier = keys.some((key) => !['Control', 'Ctrl', 'Command', 'Alt', 'Shift'].includes(key))
+
+    if (isMac && keys.includes('Alt')) {
+      window.message.warning({
+        content: t('settings.shortcuts.alt_warning'),
+        key: 'shortcut-alt-warning'
+      })
+      return false
+    }
+
     return hasModifier && hasNonModifier && keys.length >= 2
   }
 
@@ -104,6 +114,7 @@ const ShortcutSettings: FC = () => {
     if (e.shiftKey) keys.push('Shift')
 
     const key = e.key
+
     if (!['Control', 'Alt', 'Shift', 'Meta'].includes(key)) {
       keys.push(key.toUpperCase())
     }
@@ -123,6 +134,14 @@ const ShortcutSettings: FC = () => {
       })
     )
     setEditingKey(null)
+  }
+
+  const handleResetAllShortcuts = () => {
+    window.modal.confirm({
+      title: t('settings.shortcuts.reset_defaults_confirm'),
+      centered: true,
+      onOk: () => dispatch(resetShortcuts())
+    })
   }
 
   const columns: ColumnsType<ShortcutItem> = [
@@ -203,9 +222,9 @@ const ShortcutSettings: FC = () => {
           showHeader={false}
         />
         <SettingDivider style={{ marginBottom: 0 }} />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '16px 0' }}>
-          <Button onClick={() => dispatch(resetShortcuts())}>{t('settings.shortcuts.reset_defaults')}</Button>
-        </div>
+        <HStack justifyContent="flex-end" padding="16px 0">
+          <Button onClick={handleResetAllShortcuts}>{t('settings.shortcuts.reset_defaults')}</Button>
+        </HStack>
       </SettingGroup>
     </SettingContainer>
   )
