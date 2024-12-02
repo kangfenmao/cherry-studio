@@ -162,3 +162,10 @@ export type AppInfo = {
   filesPath: string
   logsPath: string
 }
+
+export interface Shortcut {
+  key: string
+  name: string
+  shortcut: string[]
+  enabled: boolean
+}

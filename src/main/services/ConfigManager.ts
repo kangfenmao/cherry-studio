@@ -70,6 +70,15 @@ export class ConfigManager {
       subscribers.forEach((subscriber) => subscriber(newValue))
     }
   }
+
+  getShortcuts() {
+    return this.store.get('shortcuts') as Shortcut[] | undefined
+  }
+
+  setShortcuts(shortcuts: Shortcut[]) {
+    this.store.set('shortcuts', shortcuts)
+    this.notifySubscribers('shortcuts', shortcuts)
+  }
 }
 
 export const configManager = new ConfigManager()

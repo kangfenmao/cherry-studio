@@ -23,7 +23,7 @@ export default defineConfig({
     },
     plugins: [react()],
     optimizeDeps: {
-      exclude: ['chunk-KNVOMWSO.js']
+      exclude: ['chunk-KNVOMWSO.js', 'chunk-2NJP6ETL.js']
     }
   }
 })

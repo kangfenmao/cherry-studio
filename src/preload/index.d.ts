@@ -54,6 +54,9 @@ declare global {
         toWord: (markdown: string, fileName: string) => Promise<void>
       }
       openPath: (path: string) => Promise<void>
+      shortcuts: {
+        update: (shortcuts: Shortcut[]) => Promise<void>
+      }
     }
   }
 }

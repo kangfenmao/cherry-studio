@@ -3,7 +3,7 @@ import { app, BrowserWindow } from 'electron'
 import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 import { registerIpc } from './ipc'
-import { registerZoomShortcut } from './services/ShortcutService'
+import { registerShortcuts } from './services/ShortcutService'
 import { TrayService } from './services/TrayService'
 import { windowService } from './services/WindowService'
 import { updateUserDataPath } from './utils/upgrade'
@@ -35,7 +35,7 @@ if (!app.requestSingleInstanceLock()) {
       }
     })
 
-    registerZoomShortcut(mainWindow)
+    registerShortcuts(mainWindow)
 
     registerIpc(mainWindow, app)
 

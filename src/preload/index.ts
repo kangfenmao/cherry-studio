@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { WebDavConfig } from '@types'
+import { Shortcut, WebDavConfig } from '@types'
 import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
@@ -47,7 +47,10 @@ const api = {
   export: {
     toWord: (markdown: string, fileName: string) => ipcRenderer.invoke('export:word', markdown, fileName)
   },
-  openPath: (path: string) => ipcRenderer.invoke('open:path', path)
+  openPath: (path: string) => ipcRenderer.invoke('open:path', path),
+  shortcuts: {
+    update: (shortcuts: Shortcut[]) => ipcRenderer.invoke('shortcuts:update', shortcuts)
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

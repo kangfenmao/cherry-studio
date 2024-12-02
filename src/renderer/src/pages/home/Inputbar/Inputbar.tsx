@@ -15,6 +15,7 @@ import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useRuntime } from '@renderer/hooks/useRuntime'
 import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
+import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { useShowTopics } from '@renderer/hooks/useStore'
 import { addAssistantMessagesToTopic, getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
@@ -316,20 +317,13 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
     setTimeout(() => resizeTextArea(), 0)
   }
 
-  // Command or Ctrl + N create new topic
-  useEffect(() => {
-    const onKeydown = (e) => {
-      if (!generating) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-          addNewTopic()
-          EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)
-          textareaRef.current?.focus()
-        }
-      }
+  useShortcut('new_topic', () => {
+    if (!generating) {
+      addNewTopic()
+      EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)
+      textareaRef.current?.focus()
     }
-    document.addEventListener('keydown', onKeydown)
-    return () => document.removeEventListener('keydown', onKeydown)
-  }, [addNewTopic, generating])
+  })
 
   useEffect(() => {
     const _setEstimateTokenCount = debounce(setEstimateTokenCount, 100, { leading: false, trailing: true })

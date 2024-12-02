@@ -1,70 +1,103 @@
+import { Shortcut } from '@types'
 import { BrowserWindow, globalShortcut } from 'electron'
+import Logger from 'electron-log'
 
 import { configManager } from './ConfigManager'
 
-export function registerZoomShortcut(mainWindow: BrowserWindow) {
-  // 初始化缩放值
-  const initialZoom = configManager.getZoomFactor()
-  mainWindow.webContents.setZoomFactor(initialZoom)
+let showAppAccelerator: string | null = null
 
-  const handleZoom = (delta: number) => {
-    if (mainWindow) {
-      const currentZoom = mainWindow.webContents.getZoomFactor()
-      const newZoom = currentZoom + delta
-      if (newZoom >= 0.1 && newZoom <= 5.0) {
-        mainWindow.webContents.setZoomFactor(newZoom)
-        configManager.setZoomFactor(newZoom)
-      }
-    }
-  }
-
-  const registerShortcuts = () => {
-    // 放大快捷键
-    globalShortcut.register('CommandOrControl+=', () => handleZoom(0.1))
-    globalShortcut.register('CommandOrControl+numadd', () => handleZoom(0.1))
-
-    // 缩小快捷键
-    globalShortcut.register('CommandOrControl+-', () => handleZoom(-0.1))
-    globalShortcut.register('CommandOrControl+numsub', () => handleZoom(-0.1))
-
-    // 重置快捷键
-    globalShortcut.register('CommandOrControl+0', () => {
-      if (mainWindow) {
-        mainWindow.webContents.setZoomFactor(1)
+function getShortcutHandler(shortcut: Shortcut) {
+  switch (shortcut.key) {
+    case 'zoom_in':
+      return () => handleZoom(0.1)
+    case 'zoom_out':
+      return () => handleZoom(-0.1)
+    case 'zoom_reset':
+      return (window: BrowserWindow) => {
+        window.webContents.setZoomFactor(1)
         configManager.setZoomFactor(1)
       }
+    case 'show_app':
+      return (window: BrowserWindow) => {
+        if (window.isVisible()) {
+          window.hide()
+        } else {
+          window.show()
+          window.focus()
+        }
+      }
+    default:
+      return null
+  }
+}
+
+function formatShortcutKey(shortcut: string[]): string {
+  return shortcut.join('+')
+}
+
+function handleZoom(delta: number) {
+  return (window: BrowserWindow) => {
+    const currentZoom = window.webContents.getZoomFactor()
+    const newZoom = currentZoom + delta
+    if (newZoom >= 0.1 && newZoom <= 5.0) {
+      window.webContents.setZoomFactor(newZoom)
+      configManager.setZoomFactor(newZoom)
+    }
+  }
+}
+
+function registerWindowShortcuts(window: BrowserWindow) {
+  window.webContents.setZoomFactor(configManager.getZoomFactor())
+
+  const register = () => {
+    if (window.isDestroyed()) return
+
+    const shortcuts = configManager.getShortcuts()
+    if (!shortcuts) return
+
+    shortcuts.forEach((shortcut) => {
+      if (!shortcut.enabled || shortcut.shortcut.length === 0) return
+
+      const handler = getShortcutHandler(shortcut)
+      if (!handler) return
+
+      const accelerator = formatShortcutKey(shortcut.shortcut)
+
+      if (shortcut.key === 'show_app') {
+        showAppAccelerator = accelerator
+      }
+
+      Logger.info(`Register shortcut: ${accelerator}`)
+      globalShortcut.register(accelerator, () => handler(window))
     })
   }
 
-  const unregisterShortcuts = () => {
-    globalShortcut.unregister('CommandOrControl+=')
-    globalShortcut.unregister('CommandOrControl+numadd')
-    globalShortcut.unregister('CommandOrControl+-')
-    globalShortcut.unregister('CommandOrControl+numsub')
-    globalShortcut.unregister('CommandOrControl+0')
-  }
+  const unregister = () => {
+    if (window.isDestroyed()) return
 
-  // Add check for window destruction
-  if (mainWindow.isDestroyed()) {
-    return
-  }
+    globalShortcut.unregisterAll()
 
-  // When window gains focus, register shortcuts
-  mainWindow.on('focus', () => {
-    if (!mainWindow.isDestroyed()) {
-      registerShortcuts()
+    if (showAppAccelerator) {
+      const handler = getShortcutHandler({ key: 'show_app' } as Shortcut)
+      if (handler) {
+        globalShortcut.register(showAppAccelerator, () => handler(window))
+      }
     }
-  })
-
-  // When window loses focus, unregister shortcuts
-  mainWindow.on('blur', () => {
-    if (!mainWindow.isDestroyed()) {
-      unregisterShortcuts()
-    }
-  })
-
-  // Initial registration (if window is already focused)
-  if (!mainWindow.isDestroyed() && mainWindow.isFocused()) {
-    registerShortcuts()
   }
+
+  window.on('focus', () => register())
+  window.on('blur', () => unregister())
+
+  if (!window.isDestroyed() && window.isFocused()) {
+    register()
+  }
+}
+
+export function registerShortcuts(mainWindow: BrowserWindow) {
+  registerWindowShortcuts(mainWindow)
+}
+
+export function unregisterAllShortcuts() {
+  showAppAccelerator = null
+  globalShortcut.unregisterAll()
 }

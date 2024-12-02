@@ -142,7 +142,9 @@
       "select": "Select",
       "topics": "Topics",
       "warning": "Warning",
-      "you": "You"
+      "you": "You",
+      "clear": "Clear",
+      "add": "Add"
     },
     "error": {
       "backup.file_format": "Backup file format error",
@@ -451,7 +453,10 @@
         "title": "Keyboard Shortcuts",
         "zoom_in": "Zoom In",
         "zoom_out": "Zoom Out",
-        "zoom_reset": "Reset Zoom"
+        "zoom_reset": "Reset Zoom",
+        "show_app": "Show App",
+        "reset_defaults": "Reset Defaults",
+        "press_shortcut": "Press Shortcut"
       },
       "theme.auto": "Auto",
       "theme.dark": "Dark",

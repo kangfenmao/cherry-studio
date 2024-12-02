@@ -142,7 +142,9 @@
       "select": "選擇",
       "topics": "話題",
       "warning": "警告",
-      "you": "您"
+      "you": "您",
+      "clear": "清除",
+      "add": "添加"
     },
     "error": {
       "backup.file_format": "備份文件格式錯誤",
@@ -439,7 +441,10 @@
         "title": "快速方式",
         "zoom_in": "放大界面",
         "zoom_out": "縮小界面",
-        "zoom_reset": "重置縮放"
+        "zoom_reset": "重置縮放",
+        "show_app": "顯示應用",
+        "reset_defaults": "重置預設快捷鍵",
+        "press_shortcut": "按下快捷鍵"
       },
       "theme.auto": "自動",
       "theme.dark": "深色主題",

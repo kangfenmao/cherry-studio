@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { ThemeMode } from '@types'
+import { Shortcut, ThemeMode } from '@types'
 import { BrowserWindow, ipcMain, ProxyConfig, session, shell } from 'electron'
 import log from 'electron-log'
 
@@ -11,6 +11,7 @@ import BackupManager from './services/BackupManager'
 import { configManager } from './services/ConfigManager'
 import { ExportService } from './services/ExportService'
 import FileStorage from './services/FileStorage'
+import { registerShortcuts, unregisterAllShortcuts } from './services/ShortcutService'
 import { windowService } from './services/WindowService'
 import { compress, decompress } from './utils/zip'
 
@@ -132,5 +133,15 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   // open path
   ipcMain.handle('open:path', async (_, path: string) => {
     await shell.openPath(path)
+  })
+
+  // shortcuts
+  ipcMain.handle('shortcuts:update', (_, shortcuts: Shortcut[]) => {
+    configManager.setShortcuts(shortcuts)
+    // Refresh shortcuts registration
+    if (mainWindow) {
+      unregisterAllShortcuts()
+      registerShortcuts(mainWindow)
+    }
   })
 }

@@ -142,7 +142,9 @@
       "select": "选择",
       "topics": "话题",
       "warning": "警告",
-      "you": "用户"
+      "you": "用户",
+      "clear": "清除",
+      "add": "添加"
     },
     "error": {
       "backup.file_format": "备份文件格式错误",
@@ -436,10 +438,13 @@
         "action": "操作",
         "key": "按键",
         "new_topic": "新建话题",
-        "title": "快捷方式",
+        "title": "快捷键",
         "zoom_in": "放大界面",
         "zoom_out": "缩小界面",
-        "zoom_reset": "重置缩放"
+        "zoom_reset": "重置缩放",
+        "show_app": "显示应用",
+        "reset_defaults": "重置默认快捷键",
+        "press_shortcut": "按下快捷键"
       },
       "theme.auto": "跟随系统",
       "theme.dark": "深色主题",
