@@ -33,6 +33,7 @@ let _agentGroups: Record<string, Agent[]> = {}
 
 const AgentsPage: FC = () => {
   const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
 
   const agentGroups = useMemo(() => {
     if (Object.keys(_agentGroups).length === 0) {
@@ -154,6 +155,14 @@ const AgentsPage: FC = () => {
     })
   }, [filteredAgentGroups, getLocalizedGroupName, onAddAgentConfirm, search])
 
+  const handleSearch = () => {
+    if (searchInput.trim() === '') {
+      setSearch('')
+    } else {
+      setSearch(searchInput)
+    }
+  }
+
   return (
     <Container>
       <Navbar>
@@ -166,10 +175,12 @@ const AgentsPage: FC = () => {
             size="small"
             variant="filled"
             allowClear
-            suffix={<SearchOutlined />}
-            value={search}
+            onClear={() => setSearch('')}
+            suffix={<SearchOutlined onClick={handleSearch} />}
+            value={searchInput}
             maxLength={50}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onPressEnter={handleSearch}
           />
           <div style={{ width: 80 }} />
         </NavbarCenter>
@@ -182,8 +193,8 @@ const AgentsPage: FC = () => {
                 <Row gutter={[20, 20]}>
                   {Object.values(filteredAgentGroups)
                     .flat()
-                    .map((agent, index) => (
-                      <Col span={6} key={index}>
+                    .map((agent, index, array) => (
+                      <Col span={array.length === 1 ? 8 : 6} key={index}>
                         <AgentCard
                           onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent as any))}
                           agent={agent as any}
@@ -193,7 +204,7 @@ const AgentsPage: FC = () => {
                 </Row>
               </TabContent>
             ) : (
-              <Tabs tabPosition="right" animated items={tabItems} />
+              <Tabs tabPosition="right" animated items={tabItems} $language={i18n.language} />
             )
           ) : (
             <EmptyView>
@@ -253,7 +264,7 @@ const EmptyView = styled.div`
   color: var(--color-text-secondary);
 `
 
-const Tabs = styled(TabsAntd)`
+const Tabs = styled(TabsAntd)<{ $language: string }>`
   display: flex;
   flex: 1;
   flex-direction: row-reverse;
@@ -261,8 +272,8 @@ const Tabs = styled(TabsAntd)`
     padding-right: 0 !important;
   }
   .ant-tabs-nav {
-    min-width: 140px;
-    max-width: 140px;
+    min-width: ${({ $language }) => ($language.startsWith('zh') ? '100px' : '140px')};
+    max-width: ${({ $language }) => ($language.startsWith('zh') ? '100px' : '140px')};
   }
   .ant-tabs-nav-list {
     padding: 10px 8px;
@@ -278,6 +289,7 @@ const Tabs = styled(TabsAntd)`
     justify-content: left;
     padding: 7px 15px !important;
     border: 0.5px solid transparent;
+    justify-content: ${({ $language }) => ($language.startsWith('zh') ? 'center' : 'flex-start')};
     .ant-tabs-tab-btn {
       white-space: nowrap;
       overflow: hidden;
