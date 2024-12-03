@@ -67,12 +67,18 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   )
 
   const autoRenameTopic = useCallback(async () => {
+    const _topic = getTopic(assistant, topic.id)
+
+    // If the topic auto naming is not enabled, use the first message content as the topic name
     if (!enableTopicNaming) {
+      const topicName = messages[0].content.substring(0, 50)
+      const data = { ..._topic, name: topicName } as Topic
+      setActiveTopic(data)
+      updateTopic(data)
       return
     }
 
-    const _topic = getTopic(assistant, topic.id)
-
+    // Auto rename the topic
     if (_topic && _topic.name === t('chat.default.topic.name') && messages.length >= 2) {
       const summaryText = await fetchMessagesSummary({ messages, assistant })
       if (summaryText) {
