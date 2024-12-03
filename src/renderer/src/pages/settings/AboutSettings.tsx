@@ -184,7 +184,7 @@ const AboutSettings: FC = () => {
             <GithubOutlined />
             {t('settings.about.feedback.title')}
           </SettingRowTitle>
-          <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues/new')}>
+          <Button onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio/issues/new/choose')}>
             {t('settings.about.feedback.button')}
           </Button>
         </SettingRow>
