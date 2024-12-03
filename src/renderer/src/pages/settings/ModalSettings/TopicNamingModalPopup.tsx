@@ -2,20 +2,15 @@ import { HStack } from '@renderer/components/Layout'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
 import { setEnableTopicNaming } from '@renderer/store/settings'
-import { Divider, Modal, Switch, Typography } from 'antd'
+import { Divider, Modal, Switch } from 'antd'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { TopView } from '../../../components/TopView'
 
 interface Props {
   resolve: (data: any) => void
 }
-
-const Title = styled(Typography.Title)`
-  margin-bottom: 16px;
-`
 
 const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const [open, setOpen] = useState(true)
