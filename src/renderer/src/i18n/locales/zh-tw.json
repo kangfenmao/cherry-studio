@@ -150,7 +150,11 @@
       "backup.file_format": "備份文件格式錯誤",
       "chat.response": "出現錯誤。如果尚未配置 API 密鑰，請前往設定 > 模型提供者中配置密鑰",
       "no_api_key": "API 密鑰未配置",
-      "provider_disabled": "模型提供商未啟用"
+      "provider_disabled": "模型提供商未啟用",
+      "render": {
+        "title": "渲染錯誤",
+        "description": "渲染公式失敗，請檢查公式格式是否正確"
+      }
     },
     "export": {
       "assistant": "助手",

@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import MessageContent from './MessageContent'
+import MessageErrorBoundary from './MessageErrorBoundary'
 import MessageHeader from './MessageHeader'
 import MessageMenubar from './MessageMenubar'
 import MessageTokens from './MessageTokens'
@@ -151,7 +152,9 @@ const MessageItem: FC<Props> = ({
       <MessageContentContainer
         className="message-content-container"
         style={{ fontFamily, fontSize, background: messageBackground }}>
-        <MessageContent message={message} model={model} />
+        <MessageErrorBoundary>
+          <MessageContent message={message} model={model} />
+        </MessageErrorBoundary>
         {showMenubar && (
           <MessageFooter
             style={{
