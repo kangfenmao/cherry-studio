@@ -58,19 +58,21 @@ const AgentsPage: FC = () => {
       return groups
     }
 
-    Object.entries(agentGroups).forEach(([group, agents]) => {
-      if (group === '精选') return
+    const uniqueAgents = new Map<string, Agent>()
 
-      const filteredAgents = agents.filter(
-        (agent) =>
-          agent.name.toLowerCase().includes(search.toLowerCase()) ||
-          agent.description?.toLowerCase().includes(search.toLowerCase())
-      )
-      if (filteredAgents.length > 0) {
-        groups[group] = filteredAgents
-      }
+    Object.entries(agentGroups).forEach(([, agents]) => {
+      agents.forEach((agent) => {
+        if (
+          (agent.name.toLowerCase().includes(search.toLowerCase()) ||
+            agent.description?.toLowerCase().includes(search.toLowerCase())) &&
+          !uniqueAgents.has(agent.name)
+        ) {
+          uniqueAgents.set(agent.name, agent)
+        }
+      })
     })
-    return groups
+
+    return { 搜索结果: Array.from(uniqueAgents.values()) }
   }, [agentGroups, search])
 
   const getAgentName = (agent: Agent) => {
@@ -174,8 +176,25 @@ const AgentsPage: FC = () => {
       </Navbar>
       <ContentContainer id="content-container">
         <AssistantsContainer>
-          {tabItems.length > 0 ? (
-            <Tabs tabPosition="right" animated items={tabItems} />
+          {Object.values(filteredAgentGroups).flat().length > 0 ? (
+            search.trim() ? (
+              <TabContent>
+                <Row gutter={[20, 20]}>
+                  {Object.values(filteredAgentGroups)
+                    .flat()
+                    .map((agent, index) => (
+                      <Col span={6} key={index}>
+                        <AgentCard
+                          onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent as any))}
+                          agent={agent as any}
+                        />
+                      </Col>
+                    ))}
+                </Row>
+              </TabContent>
+            ) : (
+              <Tabs tabPosition="right" animated items={tabItems} />
+            )
           ) : (
             <EmptyView>
               <Empty description={t('agents.search.no_results')} />
