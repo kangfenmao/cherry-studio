@@ -21,10 +21,17 @@ export const translateText = async (text: string, targetLanguage: string) => {
   const message = getUserMessage({
     assistant,
     topic: getDefaultTopic('default'),
-    type: 'text'
+    type: 'text',
+    content: text
   })
 
   const translatedText = await fetchTranslate({ message, assistant })
 
-  return translatedText
+  const trimmedText = translatedText.trim()
+
+  if (!trimmedText) {
+    return Promise.reject(new Error(i18n.t('translate.error.failed')))
+  }
+
+  return trimmedText
 }

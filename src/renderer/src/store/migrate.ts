@@ -708,6 +708,16 @@ const migrateConfig = {
   '45': (state: RootState) => {
     state.settings.enableTopicNaming = true
     return state
+  },
+  '46': (state: RootState) => {
+    if (
+      state.settings.translateModelPrompt.includes(
+        'If the target language is the same as the source language, do not translate'
+      )
+    ) {
+      state.settings.translateModelPrompt = TRANSLATE_PROMPT
+    }
+    return state
   }
 }
 

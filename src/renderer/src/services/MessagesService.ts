@@ -69,11 +69,13 @@ export async function locateToMessage(navigate: NavigateFunction, message: Messa
 export function getUserMessage({
   assistant,
   topic,
-  type
+  type,
+  content
 }: {
   assistant: Assistant
   topic: Topic
   type: Message['type']
+  content?: string
 }): Message {
   const defaultModel = getDefaultModel()
   const model = assistant.model || defaultModel
@@ -81,7 +83,7 @@ export function getUserMessage({
   return {
     id: uuid(),
     role: 'user',
-    content: '',
+    content: content || '',
     assistantId: assistant.id,
     topicId: topic.id,
     modelId: model.id,

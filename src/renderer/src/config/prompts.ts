@@ -48,4 +48,4 @@ export const SUMMARIZE_PROMPT =
   '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，不要使用标点符号和其他特殊符号。'
 
 export const TRANSLATE_PROMPT =
-  'Translate from input language to {{target_language}}, provide the translation result directly without any explanation, keep original format. If the target language is the same as the source language, do not translate. The text to be translated is as follows:\n\n{{text}}'
+  'You are a translation expert. Translate from input language to {{target_language}}, provide the translation result directly without any explanation and keep original format. Do not translate if the target language is the same as the source language.'

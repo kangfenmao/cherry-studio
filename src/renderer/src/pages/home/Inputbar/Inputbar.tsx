@@ -130,7 +130,8 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
 
     try {
       setIsTranslating(true)
-      setText(await translateText(text, 'english'))
+      const translatedText = await translateText(text, 'english')
+      translatedText && setText(translatedText)
       setTimeout(() => resizeTextArea(), 0)
     } catch (error) {
       console.error('Translation failed:', error)

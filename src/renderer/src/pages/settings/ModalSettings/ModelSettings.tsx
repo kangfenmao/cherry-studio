@@ -90,6 +90,7 @@ const ModelSettings: FC = () => {
             style={{ width: 360 }}
             onChange={(value) => setDefaultModel(find(allModels, JSON.parse(value)) as Model)}
             options={selectOptions}
+            showSearch
             placeholder={t('settings.models.empty')}
           />
           <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={() => AssistantSettingsPopup.show()} />
@@ -110,6 +111,7 @@ const ModelSettings: FC = () => {
             style={{ width: 360 }}
             onChange={(value) => setTopicNamingModel(find(allModels, JSON.parse(value)) as Model)}
             options={selectOptions}
+            showSearch
             placeholder={t('settings.models.empty')}
           />
           <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={TopicNamingModalPopup.show} />
@@ -130,6 +132,7 @@ const ModelSettings: FC = () => {
             style={{ width: 360 }}
             onChange={(value) => setTranslateModel(find(allModels, JSON.parse(value)) as Model)}
             options={selectOptions}
+            showSearch
             placeholder={t('settings.models.empty')}
           />
           <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={onUpdateTranslateModel} />
