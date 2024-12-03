@@ -63,11 +63,7 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    输入内容支持快速翻译成英文
-    输出内容支持翻译成其他语言
-    快速敲击3次空格翻译
-    支持自定义快捷键
-    支持关闭对话自动重命名
-    修复 Gemini 自定义域名不生效问题
-    画图支持生成 Seed 种子词
-    修复 Markdown 渲染错误导致应用崩溃
+    修复快捷翻译部分模型无法正常使用问题
+    改进智能体页面搜索功能
+    改进重新回复按钮功能
+    重新生成的图标修改为@符号
