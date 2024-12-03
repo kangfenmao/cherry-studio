@@ -74,11 +74,7 @@ export async function fetchChatCompletion({
     }
   } catch (error: any) {
     message.status = 'error'
-    try {
-      message.content = '```json\n' + JSON.stringify(error, null, 2) + '\n```'
-    } catch (e) {
-      message.content = 'Error: ' + error.message
-    }
+    message.content = formatErrorMessage(error)
   }
 
   timer && clearInterval(timer)
@@ -229,5 +225,17 @@ export async function fetchModels(provider: Provider) {
     return await AI.models()
   } catch (error) {
     return []
+  }
+}
+
+function formatErrorMessage(error: any): string {
+  try {
+    return (
+      '```json\n' +
+      JSON.stringify(error?.response?.data || error?.response || error?.request || error, null, 2) +
+      '\n```'
+    )
+  } catch (e) {
+    return 'Error: ' + error.message
   }
 }
