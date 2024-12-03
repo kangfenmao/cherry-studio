@@ -240,7 +240,8 @@
       "topic.added": "New topic added",
       "upgrade.success.button": "Restart",
       "upgrade.success.content": "Please restart the application to complete the upgrade",
-      "upgrade.success.title": "Upgrade successfully"
+      "upgrade.success.title": "Upgrade successfully",
+      "regenerate.confirm": "Regenerating will replace current message"
     },
     "minapp": {
       "title": "MinApp"

@@ -272,8 +272,8 @@ const Tabs = styled(TabsAntd)<{ $language: string }>`
     padding-right: 0 !important;
   }
   .ant-tabs-nav {
-    min-width: ${({ $language }) => ($language.startsWith('zh') ? '100px' : '140px')};
-    max-width: ${({ $language }) => ($language.startsWith('zh') ? '100px' : '140px')};
+    min-width: ${({ $language }) => ($language.startsWith('zh') ? '110px' : '140px')};
+    max-width: ${({ $language }) => ($language.startsWith('zh') ? '110px' : '140px')};
   }
   .ant-tabs-nav-list {
     padding: 10px 8px;

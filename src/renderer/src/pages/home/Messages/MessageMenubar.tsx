@@ -23,6 +23,7 @@ import styled from 'styled-components'
 
 interface Props {
   message: Message
+  assistantModel?: Model
   model?: Model
   index?: number
   isLastMessage: boolean
@@ -33,7 +34,17 @@ interface Props {
 }
 
 const MessageMenubar: FC<Props> = (props) => {
-  const { message, index, model, isLastMessage, isAssistantMessage, setModel, onEditMessage, onDeleteMessage } = props
+  const {
+    message,
+    index,
+    model,
+    isLastMessage,
+    isAssistantMessage,
+    assistantModel,
+    setModel,
+    onEditMessage,
+    onDeleteMessage
+  } = props
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const [isTranslating, setIsTranslating] = useState(false)
@@ -157,9 +168,19 @@ const MessageMenubar: FC<Props> = (props) => {
     [handleTranslate, isTranslating, message, onEdit, onEditMessage, t]
   )
 
-  const onSelectModel = async () => {
+  const onAtModelRegenerate = async () => {
     const selectedModel = await SelectModelPopup.show({ model })
     selectedModel && onRegenerate(selectedModel)
+  }
+
+  const onDeleteAndRegenerate = () => {
+    onEditMessage?.({
+      ...message,
+      content: '',
+      status: 'sending',
+      modelId: assistantModel?.id || model?.id,
+      translatedContent: undefined
+    })
   }
 
   return (
@@ -177,10 +198,22 @@ const MessageMenubar: FC<Props> = (props) => {
           {copied && <CheckOutlined style={{ color: 'var(--color-primary)' }} />}
         </ActionButton>
       </Tooltip>
+      {isAssistantMessage && (
+        <Popconfirm
+          title={t('message.regenerate.confirm')}
+          okButtonProps={{ danger: true }}
+          destroyTooltipOnHide
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          onConfirm={onDeleteAndRegenerate}>
+          <ActionButton className="message-action-button">
+            <SyncOutlined />
+          </ActionButton>
+        </Popconfirm>
+      )}
       {canRegenerate && (
         <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-          <ActionButton className="message-action-button" onClick={onSelectModel}>
-            <SyncOutlined />
+          <ActionButton className="message-action-button" onClick={onAtModelRegenerate}>
+            <i className="iconfont icon-at1"></i>
           </ActionButton>
         </Tooltip>
       )}
@@ -246,6 +279,9 @@ const ActionButton = styled.div`
   }
   &:hover {
     color: var(--color-text-1);
+  }
+  .icon-at1 {
+    font-size: 16px;
   }
 `
 

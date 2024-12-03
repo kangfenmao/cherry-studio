@@ -240,7 +240,8 @@
       "topic.added": "Новый топик добавлен",
       "upgrade.success.button": "Перезапустить",
       "upgrade.success.content": "Пожалуйста, перезапустите приложение для завершения обновления",
-      "upgrade.success.title": "Обновление успешно"
+      "upgrade.success.title": "Обновление успешно",
+      "regenerate.confirm": "Перегенерация заменит текущее сообщение"
     },
     "minapp": {
       "title": "Встроенные приложения"

@@ -240,7 +240,8 @@
       "topic.added": "话题添加成功",
       "upgrade.success.button": "重启",
       "upgrade.success.content": "重启用以完成升级",
-      "upgrade.success.title": "升级成功"
+      "upgrade.success.title": "升级成功",
+      "regenerate.confirm": "重新生成会覆盖当前消息"
     },
     "minapp": {
       "title": "小程序"

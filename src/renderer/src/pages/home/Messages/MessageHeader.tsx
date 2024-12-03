@@ -9,7 +9,7 @@ import { Assistant, Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar } from 'antd'
 import dayjs from 'dayjs'
-import { CSSProperties, FC, useCallback, useMemo } from 'react'
+import { CSSProperties, FC, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -19,18 +19,19 @@ interface Props {
   model?: Model
 }
 
-const MessageHeader: FC<Props> = ({ assistant, model, message }) => {
+const getAvatarSource = (isLocalAi: boolean, modelId: string | undefined) => {
+  if (isLocalAi) return AppLogo
+  return modelId ? getModelLogo(modelId) : undefined
+}
+
+const MessageHeader: FC<Props> = memo(({ assistant, model, message }) => {
   const avatar = useAvatar()
   const { theme } = useTheme()
   const { userName } = useSettings()
   const { t } = useTranslation()
   const { isBubbleStyle } = useMessageStyle()
 
-  const avatarSource = useMemo(() => {
-    if (isLocalAi) return AppLogo
-    return message.modelId ? getModelLogo(message.modelId) : undefined
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.modelId, theme])
+  const avatarSource = useMemo(() => getAvatarSource(isLocalAi, message.modelId), [message.modelId])
 
   const getUserName = useCallback(() => {
     if (isLocalAi && message.role !== 'user') return APP_NAME
@@ -43,7 +44,7 @@ const MessageHeader: FC<Props> = ({ assistant, model, message }) => {
   const avatarName = useMemo(() => firstLetter(assistant?.name).toUpperCase(), [assistant?.name])
   const username = useMemo(() => removeLeadingEmoji(getUserName()), [getUserName])
 
-  const showMiniApp = () => model?.provider && startMinAppById(model?.provider)
+  const showMiniApp = useCallback(() => model?.provider && startMinAppById(model.provider), [model?.provider])
 
   const avatarStyle: CSSProperties | undefined = isBubbleStyle
     ? {
@@ -83,7 +84,9 @@ const MessageHeader: FC<Props> = ({ assistant, model, message }) => {
       </AvatarWrapper>
     </Container>
   )
-}
+})
+
+MessageHeader.displayName = 'MessageHeader'
 
 const Container = styled.div`
   display: flex;

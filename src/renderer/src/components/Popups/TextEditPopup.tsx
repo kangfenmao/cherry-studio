@@ -49,6 +49,8 @@ const PopupContainer: React.FC<Props> = ({ text, textareaProps, modalProps, reso
     setTimeout(resizeTextArea, 0)
   }, [])
 
+  TextEditPopup.hide = onCancel
+
   return (
     <Modal
       title={t('common.edit')}
@@ -75,10 +77,12 @@ const PopupContainer: React.FC<Props> = ({ text, textareaProps, modalProps, reso
   )
 }
 
+const TopViewKey = 'TextEditPopup'
+
 export default class TextEditPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide('TextEditPopup')
+    TopView.hide(TopViewKey)
   }
   static show(props: ShowParams) {
     return new Promise<any>((resolve) => {
@@ -87,10 +91,10 @@ export default class TextEditPopup {
           {...props}
           resolve={(v) => {
             resolve(v)
-            this.hide()
+            TopView.hide(TopViewKey)
           }}
         />,
-        'TextEditPopup'
+        TopViewKey
       )
     })
   }

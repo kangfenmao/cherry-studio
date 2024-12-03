@@ -30,6 +30,9 @@ interface Props {
   onDeleteMessage?: (message: Message) => void
 }
 
+const getMessageBackground = (isBubbleStyle: boolean, isAssistantMessage: boolean) =>
+  isBubbleStyle ? (isAssistantMessage ? 'var(--chat-background-assistant)' : 'var(--chat-background-user)') : undefined
+
 const MessageItem: FC<Props> = ({
   message: _message,
   topic,
@@ -57,37 +60,33 @@ const MessageItem: FC<Props> = ({
   }, [messageFont])
 
   const messageBorder = showMessageDivider ? undefined : 'none'
-  const messageBackground = isBubbleStyle
-    ? isAssistantMessage
-      ? 'var(--chat-background-assistant)'
-      : 'var(--chat-background-user)'
-    : undefined
+  const messageBackground = getMessageBackground(isBubbleStyle, isAssistantMessage)
 
   const onEditMessage = useCallback(
     (msg: Message) => {
       setMessage(msg)
-      const messages = onGetMessages?.().map((m) => (m.id === message.id ? msg : m))
+      const messages = onGetMessages?.()?.map((m) => (m.id === message.id ? msg : m))
       messages && onSetMessages?.(messages)
       topic && db.topics.update(topic.id, { messages })
     },
-    [message, onGetMessages, onSetMessages, topic]
+    [message.id, onGetMessages, onSetMessages, topic]
   )
 
+  const messageHighlightHandler = (highlight: boolean = true) => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollIntoView({ behavior: 'smooth' })
+      if (highlight) {
+        setTimeout(() => {
+          const classList = messageContainerRef.current?.classList
+          classList?.add('message-highlight')
+          setTimeout(() => classList?.remove('message-highlight'), 2500)
+        }, 500)
+      }
+    }
+  }
+
   useEffect(() => {
-    const unsubscribes = [
-      EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, (highlight: boolean = true) => {
-        if (messageContainerRef.current) {
-          messageContainerRef.current.scrollIntoView({ behavior: 'smooth' })
-          if (highlight) {
-            setTimeout(() => {
-              const classList = messageContainerRef.current?.classList
-              classList?.add('message-highlight')
-              setTimeout(() => classList?.remove('message-highlight'), 2500)
-            }, 500)
-          }
-        }
-      })
-    ]
+    const unsubscribes = [EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, messageHighlightHandler)]
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [message])
 
@@ -105,11 +104,16 @@ const MessageItem: FC<Props> = ({
 
   useEffect(() => {
     if (topic && onGetMessages && onSetMessages) {
-      if (message.status === 'sending' && index === 0) {
+      if (message.status === 'sending') {
         const messages = onGetMessages()
         fetchChatCompletion({
           message,
-          messages: messages.filter((m) => !m.status.includes('ing')),
+          messages: messages
+            .filter((m) => !m.status.includes('ing'))
+            .slice(
+              0,
+              messages.findIndex((m) => m.id === message.id)
+            ),
           assistant,
           topic,
           onResponse: (msg) => {
@@ -124,7 +128,7 @@ const MessageItem: FC<Props> = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [message.status])
 
   if (hidePresetMessages && message.isPreset) {
     return null
@@ -148,7 +152,7 @@ const MessageItem: FC<Props> = ({
       })}
       ref={messageContainerRef}
       style={isBubbleStyle ? { alignItems: isAssistantMessage ? 'start' : 'end' } : undefined}>
-      <MessageHeader message={message} assistant={assistant} model={model} />
+      <MessageHeader message={message} assistant={assistant} model={model} key={message.modelId} />
       <MessageContentContainer
         className="message-content-container"
         style={{ fontFamily, fontSize, background: messageBackground }}>
@@ -164,6 +168,7 @@ const MessageItem: FC<Props> = ({
             <MessageTokens message={message} isLastMessage={isLastMessage} />
             <MessageMenubar
               message={message}
+              assistantModel={assistant.model}
               model={model}
               index={index}
               isLastMessage={isLastMessage}
