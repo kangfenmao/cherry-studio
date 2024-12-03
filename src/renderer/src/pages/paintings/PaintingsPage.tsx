@@ -15,9 +15,11 @@ import { useTheme } from '@renderer/context/ThemeProvider'
 import { usePaintings } from '@renderer/hooks/usePaintings'
 import { useAllProviders } from '@renderer/hooks/useProvider'
 import { useRuntime } from '@renderer/hooks/useRuntime'
+import { useSettings } from '@renderer/hooks/useSettings'
 import AiProvider from '@renderer/providers/AiProvider'
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import FileManager from '@renderer/services/FileManager'
+import { translateText } from '@renderer/services/TranslateService'
 import { useAppDispatch } from '@renderer/store'
 import { DEFAULT_PAINTING } from '@renderer/store/paintings'
 import { setGenerating } from '@renderer/store/runtime'
@@ -25,7 +27,7 @@ import { FileType, Painting } from '@renderer/types'
 import { getErrorMessage } from '@renderer/utils'
 import { Button, Input, InputNumber, Radio, Select, Slider, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -232,6 +234,59 @@ const PaintingsPage: FC = () => {
     setCurrentImageIndex(0)
   }
 
+  const { autoTranslateWithSpace } = useSettings()
+  const [spaceClickCount, setSpaceClickCount] = useState(0)
+  const [isTranslating, setIsTranslating] = useState(false)
+  const spaceClickTimer = useRef<NodeJS.Timeout>()
+
+  const translate = async () => {
+    if (isTranslating) {
+      return
+    }
+
+    if (!painting.prompt) {
+      return
+    }
+
+    try {
+      setIsTranslating(true)
+      const translatedText = await translateText(painting.prompt, 'english')
+      updatePaintingState({ prompt: translatedText })
+    } catch (error) {
+      console.error('Translation failed:', error)
+    } finally {
+      setIsTranslating(false)
+    }
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (autoTranslateWithSpace && event.key === ' ') {
+      setSpaceClickCount((prev) => prev + 1)
+
+      if (spaceClickTimer.current) {
+        clearTimeout(spaceClickTimer.current)
+      }
+
+      spaceClickTimer.current = setTimeout(() => {
+        setSpaceClickCount(0)
+      }, 200)
+
+      if (spaceClickCount === 2) {
+        setSpaceClickCount(0)
+        setIsTranslating(true)
+        translate()
+      }
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (spaceClickTimer.current) {
+        clearTimeout(spaceClickTimer.current)
+      }
+    }
+  }, [])
+
   return (
     <Container>
       <Navbar>
@@ -362,14 +417,16 @@ const PaintingsPage: FC = () => {
               disabled={isLoading}
               value={painting.prompt}
               onChange={(e) => updatePaintingState({ prompt: e.target.value })}
-              placeholder={t('paintings.prompt_placeholder')}
+              placeholder={isTranslating ? t('paintings.translating') : t('paintings.prompt_placeholder')}
+              onKeyDown={handleKeyDown}
             />
             <Toolbar>
               <ToolbarMenu>
                 <TranslateButton
                   text={textareaRef.current?.resizableTextArea?.textArea?.value}
                   onTranslated={(translatedText) => updatePaintingState({ prompt: translatedText })}
-                  disabled={isLoading}
+                  disabled={isLoading || isTranslating}
+                  isLoading={isTranslating}
                   style={{ marginRight: 6, borderRadius: '50%' }}
                 />
                 <SendMessageButton sendMessage={onGenerate} disabled={isLoading} />

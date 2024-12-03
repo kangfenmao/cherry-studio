@@ -69,27 +69,30 @@ const MessageMenubar: FC<Props> = (props) => {
     editedText && onEditMessage?.({ ...message, content: editedText })
   }, [message, onEditMessage])
 
-  const handleTranslate = async (language: string) => {
-    if (isTranslating) return
+  const handleTranslate = useCallback(
+    async (language: string) => {
+      if (isTranslating) return
 
-    onEditMessage?.({ ...message, translatedContent: t('translate.processing') })
+      onEditMessage?.({ ...message, translatedContent: t('translate.processing') })
 
-    setIsTranslating(true)
+      setIsTranslating(true)
 
-    try {
-      const translatedText = await translateText(message.content, language)
-      onEditMessage?.({ ...message, translatedContent: translatedText })
-    } catch (error) {
-      console.error('Translation failed:', error)
-      window.message.error({
-        content: t('translate.error.failed'),
-        key: 'translate-message'
-      })
-      onEditMessage?.({ ...message, translatedContent: undefined })
-    } finally {
-      setIsTranslating(false)
-    }
-  }
+      try {
+        const translatedText = await translateText(message.content, language)
+        onEditMessage?.({ ...message, translatedContent: translatedText })
+      } catch (error) {
+        console.error('Translation failed:', error)
+        window.message.error({
+          content: t('translate.error.failed'),
+          key: 'translate-message'
+        })
+        onEditMessage?.({ ...message, translatedContent: undefined })
+      } finally {
+        setIsTranslating(false)
+      }
+    },
+    [isTranslating, message, onEditMessage, t]
+  )
 
   const dropdownItems = useMemo(
     () => [
