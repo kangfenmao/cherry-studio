@@ -397,6 +397,8 @@
       "models.translate_model_description": "翻譯服務使用的模型",
       "models.translate_model_prompt_message": "請輸入翻譯模型提示詞",
       "models.translate_model_prompt_title": "翻譯模型提示詞",
+      "models.topic_naming_model_setting_title": "話題命名模型設定",
+      "models.enable_topic_naming": "話題自動重命名",
       "provider": {
         "add.name": "提供者名稱",
         "add.name.placeholder": "例如：OpenAI",

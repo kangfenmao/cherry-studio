@@ -15,8 +15,9 @@ import { find, sortBy } from 'lodash'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SettingContainer, SettingDescription, SettingGroup, SettingTitle } from '.'
-import AssistantSettingsPopup from './AssistantSettings'
+import { SettingContainer, SettingDescription, SettingGroup, SettingTitle } from '..'
+import AssistantSettingsPopup from '../AssistantSettings'
+import TopicNamingModalPopup from './TopicNamingModalPopup'
 
 const ModelSettings: FC = () => {
   const { defaultModel, topicNamingModel, translateModel, setDefaultModel, setTopicNamingModel, setTranslateModel } =
@@ -102,14 +103,17 @@ const ModelSettings: FC = () => {
             {t('settings.models.topic_naming_model')}
           </div>
         </SettingTitle>
-        <Select
-          value={defaultTopicNamingModel}
-          defaultValue={defaultTopicNamingModel}
-          style={{ width: 360 }}
-          onChange={(value) => setTopicNamingModel(find(allModels, JSON.parse(value)) as Model)}
-          options={selectOptions}
-          placeholder={t('settings.models.empty')}
-        />
+        <HStack alignItems="center">
+          <Select
+            value={defaultTopicNamingModel}
+            defaultValue={defaultTopicNamingModel}
+            style={{ width: 360 }}
+            onChange={(value) => setTopicNamingModel(find(allModels, JSON.parse(value)) as Model)}
+            options={selectOptions}
+            placeholder={t('settings.models.empty')}
+          />
+          <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={TopicNamingModalPopup.show} />
+        </HStack>
         <SettingDescription>{t('settings.models.topic_naming_model_description')}</SettingDescription>
       </SettingGroup>
       <SettingGroup theme={theme}>

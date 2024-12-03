@@ -37,6 +37,7 @@ export interface SettingsState {
   webdavPath: string
   translateModelPrompt: string
   autoTranslateWithSpace: boolean
+  enableTopicNaming: boolean
 }
 
 const initialState: SettingsState = {
@@ -70,7 +71,8 @@ const initialState: SettingsState = {
   webdavPass: '',
   webdavPath: '/cherry-studio',
   translateModelPrompt: TRANSLATE_PROMPT,
-  autoTranslateWithSpace: false
+  autoTranslateWithSpace: false,
+  enableTopicNaming: true
 }
 
 const settingsSlice = createSlice({
@@ -176,6 +178,9 @@ const settingsSlice = createSlice({
     },
     setAutoTranslateWithSpace: (state, action: PayloadAction<boolean>) => {
       state.autoTranslateWithSpace = action.payload
+    },
+    setEnableTopicNaming: (state, action: PayloadAction<boolean>) => {
+      state.enableTopicNaming = action.payload
     }
   }
 })
@@ -213,7 +218,8 @@ export const {
   setMessageStyle,
   setCodeStyle,
   setTranslateModelPrompt,
-  setAutoTranslateWithSpace
+  setAutoTranslateWithSpace,
+  setEnableTopicNaming
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import AboutSettings from './AboutSettings'
 import DataSettings from './DataSettings/DataSettings'
 import GeneralSettings from './GeneralSettings'
-import ModelSettings from './ModelSettings'
+import ModelSettings from './ModalSettings/ModelSettings'
 import ProvidersList from './ProviderSettings'
 import ShortcutSettings from './ShortcutSettings'
 

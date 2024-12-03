@@ -397,6 +397,8 @@
       "models.translate_model_description": "Модель, используемая для сервиса перевода",
       "models.translate_model_prompt_message": "Введите модель перевода",
       "models.translate_model_prompt_title": "Модель перевода",
+      "models.topic_naming_model_setting_title": "Настройки модели именования топика",
+      "models.enable_topic_naming": "Автоматическое переименование топика",
       "provider": {
         "add.name": "Имя провайдера",
         "add.name.placeholder": "Пример: OpenAI",

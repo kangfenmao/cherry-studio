@@ -397,6 +397,8 @@
       "models.translate_model_description": "Model used for translation service",
       "models.translate_model_prompt_message": "Please enter the translate model prompt",
       "models.translate_model_prompt_title": "Translate Model Prompt",
+      "models.topic_naming_model_setting_title": "Topic Naming Model Settings",
+      "models.enable_topic_naming": "Topic Auto Naming",
       "provider": {
         "add.name": "Provider Name",
         "add.name.placeholder": "Example: OpenAI",

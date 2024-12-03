@@ -704,6 +704,10 @@ const migrateConfig = {
   '44': (state: RootState) => {
     state.settings.translateModelPrompt = TRANSLATE_PROMPT
     return state
+  },
+  '45': (state: RootState) => {
+    state.settings.enableTopicNaming = true
+    return state
   }
 }
 
