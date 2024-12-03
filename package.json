@@ -89,7 +89,6 @@
     "eslint-plugin-unused-imports": "^4.0.0",
     "gpt-tokens": "^1.3.10",
     "i18next": "^23.11.5",
-    "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mime": "^4.0.4",
     "openai": "patch:openai@npm%3A4.71.1#~/.yarn/patches/openai-npm-4.71.1-b5940d6401.patch",
