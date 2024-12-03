@@ -169,6 +169,10 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     </div>
   )
 
+  const formatApiKeys = (value: string) => {
+    return value.replaceAll('，', ',').replaceAll(' ', ',').replaceAll(' ', '').replaceAll('\n', ',')
+  }
+
   return (
     <SettingContainer theme={theme}>
       <SettingTitle>
@@ -192,7 +196,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <Input.Password
           value={apiKey}
           placeholder={t('settings.provider.api_key')}
-          onChange={(e) => setApiKey(e.target.value.replaceAll('，', ',').replaceAll(' ', ''))}
+          onChange={(e) => setApiKey(formatApiKeys(e.target.value))}
           onBlur={onUpdateApiKey}
           spellCheck={false}
           type="password"

@@ -55,7 +55,7 @@ export function registerShortcuts(window: BrowserWindow) {
     if (!shortcuts) return
 
     shortcuts.forEach((shortcut) => {
-      if (!shortcut.enabled || shortcut.shortcut.length === 0) {
+      if (shortcut.shortcut.length === 0) {
         return
       }
 
@@ -74,20 +74,22 @@ export function registerShortcuts(window: BrowserWindow) {
       if (shortcut.key.includes('zoom')) {
         switch (shortcut.key) {
           case 'zoom_in':
-            globalShortcut.register('CommandOrControl+=', () => handler(window))
-            globalShortcut.register('CommandOrControl+numadd', () => handler(window))
+            globalShortcut.register('CommandOrControl+=', () => shortcut.enabled && handler(window))
+            globalShortcut.register('CommandOrControl+numadd', () => shortcut.enabled && handler(window))
             return
           case 'zoom_out':
-            globalShortcut.register('CommandOrControl+-', () => handler(window))
-            globalShortcut.register('CommandOrControl+numsub', () => handler(window))
+            globalShortcut.register('CommandOrControl+-', () => shortcut.enabled && handler(window))
+            globalShortcut.register('CommandOrControl+numsub', () => shortcut.enabled && handler(window))
             return
           case 'zoom_reset':
-            globalShortcut.register('CommandOrControl+0', () => handler(window))
+            globalShortcut.register('CommandOrControl+0', () => shortcut.enabled && handler(window))
             return
         }
       }
 
-      globalShortcut.register(accelerator, () => handler(window))
+      if (shortcut.enabled) {
+        globalShortcut.register(accelerator, () => handler(window))
+      }
     })
   }
 
