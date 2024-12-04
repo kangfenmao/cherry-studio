@@ -1,0 +1,44 @@
+name: ❓ 提问
+description: 提出一个问题或寻求帮助
+title: '[问题]: '
+labels: ['question']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您的提问！请尽可能详细地描述您的问题，这样我们才能更好地帮助您。
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 您的问题
+      description: 请详细描述您的问题
+      placeholder: 请尽可能清楚地说明您的问题...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 相关背景
+      description: 请提供一些背景信息，帮助我们更好地理解您的问题
+      placeholder: 例如：使用场景、已尝试的解决方案等
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充信息
+      description: 任何其他相关的信息、截图或代码示例
+      render: shell
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      description: 这个问题对您来说有多紧急？
+      options:
+        - 低 (有空再看)
+        - 中 (希望尽快得到答复)
+        - 高 (阻碍工作进行)
+    validations:
+      required: true
