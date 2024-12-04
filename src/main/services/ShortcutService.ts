@@ -1,5 +1,6 @@
 import { Shortcut } from '@types'
 import { BrowserWindow, globalShortcut } from 'electron'
+import Logger from 'electron-log'
 
 import { configManager } from './ConfigManager'
 
@@ -55,40 +56,55 @@ export function registerShortcuts(window: BrowserWindow) {
     if (!shortcuts) return
 
     shortcuts.forEach((shortcut) => {
-      if (shortcut.shortcut.length === 0) {
-        return
-      }
-
-      const handler = getShortcutHandler(shortcut)
-
-      if (!handler) {
-        return
-      }
-
-      const accelerator = formatShortcutKey(shortcut.shortcut)
-
-      if (shortcut.key === 'show_app') {
-        showAppAccelerator = accelerator
-      }
-
-      if (shortcut.key.includes('zoom')) {
-        switch (shortcut.key) {
-          case 'zoom_in':
-            globalShortcut.register('CommandOrControl+=', () => shortcut.enabled && handler(window))
-            globalShortcut.register('CommandOrControl+numadd', () => shortcut.enabled && handler(window))
-            return
-          case 'zoom_out':
-            globalShortcut.register('CommandOrControl+-', () => shortcut.enabled && handler(window))
-            globalShortcut.register('CommandOrControl+numsub', () => shortcut.enabled && handler(window))
-            return
-          case 'zoom_reset':
-            globalShortcut.register('CommandOrControl+0', () => shortcut.enabled && handler(window))
-            return
+      try {
+        if (shortcut.shortcut.length === 0) {
+          return
         }
-      }
 
-      if (shortcut.enabled) {
-        globalShortcut.register(accelerator, () => handler(window))
+        const handler = getShortcutHandler(shortcut)
+        if (!handler) {
+          return
+        }
+
+        const accelerator = formatShortcutKey(shortcut.shortcut)
+
+        if (shortcut.key === 'show_app') {
+          showAppAccelerator = accelerator
+        }
+
+        if (shortcut.key.includes('zoom')) {
+          switch (shortcut.key) {
+            case 'zoom_in':
+              try {
+                globalShortcut.register('CommandOrControl+=', () => shortcut.enabled && handler(window))
+                globalShortcut.register('CommandOrControl+numadd', () => shortcut.enabled && handler(window))
+              } catch (error) {
+                Logger.error('[ShortcutService] Failed to register zoom in shortcuts:', error)
+              }
+              return
+            case 'zoom_out':
+              try {
+                globalShortcut.register('CommandOrControl+-', () => shortcut.enabled && handler(window))
+                globalShortcut.register('CommandOrControl+numsub', () => shortcut.enabled && handler(window))
+              } catch (error) {
+                Logger.error('[ShortcutService] Failed to register zoom out shortcuts:', error)
+              }
+              return
+            case 'zoom_reset':
+              try {
+                globalShortcut.register('CommandOrControl+0', () => shortcut.enabled && handler(window))
+              } catch (error) {
+                Logger.error('[ShortcutService] Failed to register zoom reset shortcut:', error)
+              }
+              return
+          }
+        }
+
+        if (shortcut.enabled) {
+          globalShortcut.register(accelerator, () => handler(window))
+        }
+      } catch (error) {
+        Logger.error(`[ShortcutService] Failed to register shortcut ${shortcut.key}:`, error)
       }
     })
   }

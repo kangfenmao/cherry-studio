@@ -101,7 +101,6 @@ const ShortcutSettings: FC = () => {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent, record: Shortcut) => {
-    console.debug('handleKeyDown', e, record)
     e.preventDefault()
 
     const keys: string[] = []
@@ -112,9 +111,7 @@ const ShortcutSettings: FC = () => {
 
     const key = e.key
 
-    console.debug('key', key)
-
-    if (!['Control', 'Alt', 'Shift', 'Meta'].includes(key)) {
+    if (!['Control', 'Alt', 'Shift', 'Meta', 'Process'].includes(key) && key.length === 1) {
       keys.push(key.toUpperCase())
     }
 
@@ -126,12 +123,7 @@ const ShortcutSettings: FC = () => {
       return
     }
 
-    dispatch(
-      updateShortcut({
-        ...record,
-        shortcut: keys
-      })
-    )
+    dispatch(updateShortcut({ ...record, shortcut: keys }))
     setEditingKey(null)
   }
 

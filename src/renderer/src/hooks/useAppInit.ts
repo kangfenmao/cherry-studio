@@ -1,10 +1,9 @@
-import { isMac, isWindows } from '@renderer/config/constant'
+import { isMac } from '@renderer/config/constant'
 import { isLocalAi } from '@renderer/config/env'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar, setFilesPath } from '@renderer/store/runtime'
-import { updateShortcut } from '@renderer/store/shortcuts'
 import { runAsyncFunction } from '@renderer/utils'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect } from 'react'
@@ -12,7 +11,6 @@ import { useEffect } from 'react'
 import { useDefaultModel } from './useAssistant'
 import { useRuntime } from './useRuntime'
 import { useSettings } from './useSettings'
-import { useShortcuts } from './useShortcuts'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
@@ -20,7 +18,6 @@ export function useAppInit() {
   const { minappShow } = useRuntime()
   const { setDefaultModel, setTopicNamingModel, setTranslateModel } = useDefaultModel()
   const avatar = useLiveQuery(() => db.settings.get('image://avatar'))
-  const { shortcuts } = useShortcuts()
 
   useEffect(() => {
     avatar?.value && dispatch(setAvatar(avatar.value))
@@ -72,15 +69,4 @@ export function useAppInit() {
       dispatch(setFilesPath(info.filesPath))
     })
   }, [dispatch])
-
-  useEffect(() => {
-    if (isWindows) {
-      shortcuts.forEach((shortcut) => {
-        if (shortcut.shortcut[0] === 'Command') {
-          shortcut.shortcut[0] = 'Ctrl'
-          dispatch(updateShortcut(shortcut))
-        }
-      })
-    }
-  }, [dispatch, shortcuts])
 }
