@@ -168,7 +168,7 @@ const MessageItem: FC<Props> = ({
             <MessageTokens message={message} isLastMessage={isLastMessage} />
             <MessageMenubar
               message={message}
-              assistantModel={assistant.model}
+              assistantModel={assistant?.model}
               model={model}
               index={index}
               isLastMessage={isLastMessage}

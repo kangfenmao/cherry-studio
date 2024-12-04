@@ -63,7 +63,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复快捷翻译部分模型无法正常使用问题
-    改进智能体页面搜索功能
-    改进重新回复按钮功能
-    重新生成的图标修改为@符号
+    修复删除助手会导致应用崩溃的问题
