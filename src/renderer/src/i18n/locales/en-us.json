@@ -465,7 +465,7 @@
         "reset_defaults": "Reset Defaults",
         "reset_defaults_confirm": "Are you sure you want to reset all shortcuts?",
         "press_shortcut": "Press Shortcut",
-        "alt_warning": "Mac does not support the Alt key",
+        "alt_warning": "Mac does not support Option + letters as shortcuts",
         "reset_to_default": "Reset to Default",
         "clear_shortcut": "Clear Shortcut"
       },

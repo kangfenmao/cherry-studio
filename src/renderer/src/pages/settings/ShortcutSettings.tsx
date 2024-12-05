@@ -1,6 +1,6 @@
 import { ClearOutlined, UndoOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
-import { isMac } from '@renderer/config/constant'
+import { isMac, isWindows } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import { initialState, resetShortcuts, toggleShortcut, updateShortcut } from '@renderer/store/shortcuts'
@@ -84,7 +84,7 @@ const ShortcutSettings: FC = () => {
           case 'Ctrl':
             return isMac ? '⌃' : 'Ctrl'
           case 'Command':
-            return '⌘'
+            return isMac ? '⌘' : isWindows ? 'Win' : 'Super'
           case 'Alt':
             return isMac ? '⌥' : 'Alt'
           case 'Shift':
@@ -111,7 +111,7 @@ const ShortcutSettings: FC = () => {
 
     const key = e.key
 
-    if (!['Control', 'Alt', 'Shift', 'Meta', 'Process'].includes(key) && key.length === 1) {
+    if (key.length === 1 && !['Control', 'Alt', 'Shift', 'Meta'].includes(key)) {
       keys.push(key.toUpperCase())
     }
 

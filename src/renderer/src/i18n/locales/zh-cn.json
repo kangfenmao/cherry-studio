@@ -453,7 +453,7 @@
         "reset_defaults": "重置默认快捷键",
         "reset_defaults_confirm": "确定要重置所有快捷键吗？",
         "press_shortcut": "按下快捷键",
-        "alt_warning": "Mac 系统不支持 Alt 键",
+        "alt_warning": "Mac 系统不能使用 Option + 字母作为快捷键",
         "reset_to_default": "重置为默认",
         "clear_shortcut": "清除快捷键"
       },

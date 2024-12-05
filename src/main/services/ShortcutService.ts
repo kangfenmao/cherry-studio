@@ -62,6 +62,7 @@ export function registerShortcuts(window: BrowserWindow) {
         }
 
         const handler = getShortcutHandler(shortcut)
+
         if (!handler) {
           return
         }
@@ -75,27 +76,15 @@ export function registerShortcuts(window: BrowserWindow) {
         if (shortcut.key.includes('zoom')) {
           switch (shortcut.key) {
             case 'zoom_in':
-              try {
-                globalShortcut.register('CommandOrControl+=', () => shortcut.enabled && handler(window))
-                globalShortcut.register('CommandOrControl+numadd', () => shortcut.enabled && handler(window))
-              } catch (error) {
-                Logger.error('[ShortcutService] Failed to register zoom in shortcuts:', error)
-              }
+              globalShortcut.register('CommandOrControl+=', () => shortcut.enabled && handler(window))
+              globalShortcut.register('CommandOrControl+numadd', () => shortcut.enabled && handler(window))
               return
             case 'zoom_out':
-              try {
-                globalShortcut.register('CommandOrControl+-', () => shortcut.enabled && handler(window))
-                globalShortcut.register('CommandOrControl+numsub', () => shortcut.enabled && handler(window))
-              } catch (error) {
-                Logger.error('[ShortcutService] Failed to register zoom out shortcuts:', error)
-              }
+              globalShortcut.register('CommandOrControl+-', () => shortcut.enabled && handler(window))
+              globalShortcut.register('CommandOrControl+numsub', () => shortcut.enabled && handler(window))
               return
             case 'zoom_reset':
-              try {
-                globalShortcut.register('CommandOrControl+0', () => shortcut.enabled && handler(window))
-              } catch (error) {
-                Logger.error('[ShortcutService] Failed to register zoom reset shortcut:', error)
-              }
+              globalShortcut.register('CommandOrControl+0', () => shortcut.enabled && handler(window))
               return
           }
         }
@@ -104,7 +93,7 @@ export function registerShortcuts(window: BrowserWindow) {
           globalShortcut.register(accelerator, () => handler(window))
         }
       } catch (error) {
-        Logger.error(`[ShortcutService] Failed to register shortcut ${shortcut.key}:`, error)
+        Logger.error(`[ShortcutService] Failed to register shortcut ${shortcut.key}`)
       }
     })
   }
@@ -112,11 +101,15 @@ export function registerShortcuts(window: BrowserWindow) {
   const unregister = () => {
     if (window.isDestroyed()) return
 
-    globalShortcut.unregisterAll()
+    try {
+      globalShortcut.unregisterAll()
 
-    if (showAppAccelerator) {
-      const handler = getShortcutHandler({ key: 'show_app' } as Shortcut)
-      handler && globalShortcut.register(showAppAccelerator, () => handler(window))
+      if (showAppAccelerator) {
+        const handler = getShortcutHandler({ key: 'show_app' } as Shortcut)
+        handler && globalShortcut.register(showAppAccelerator, () => handler(window))
+      }
+    } catch (error) {
+      Logger.error('[ShortcutService] Failed to unregister shortcuts')
     }
   }
 
@@ -129,6 +122,10 @@ export function registerShortcuts(window: BrowserWindow) {
 }
 
 export function unregisterAllShortcuts() {
-  showAppAccelerator = null
-  globalShortcut.unregisterAll()
+  try {
+    showAppAccelerator = null
+    globalShortcut.unregisterAll()
+  } catch (error) {
+    Logger.error('[ShortcutService] Failed to unregister all shortcuts')
+  }
 }
