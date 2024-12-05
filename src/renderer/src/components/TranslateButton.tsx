@@ -53,7 +53,8 @@ const TranslateButton: FC<Props> = ({ text, onTranslated, disabled, style, isLoa
       const message = getUserMessage({
         assistant,
         topic: getDefaultTopic('default'),
-        type: 'text'
+        type: 'text',
+        content: text
       })
 
       const translatedText = await fetchTranslate({ message, assistant })

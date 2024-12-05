@@ -35,7 +35,7 @@ interface Props {
 
 const SettingsTab: FC<Props> = (props) => {
   const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
-  const { messageStyle, codeStyle, fontSize } = useSettings()
+  const { messageStyle, codeStyle, fontSize, language } = useSettings()
 
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setContextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
@@ -330,15 +330,19 @@ const SettingsTab: FC<Props> = (props) => {
           />
         </SettingRow>
         <SettingDivider />
-        <SettingRow>
-          <SettingRowTitleSmall>{t('settings.input.auto_translate_with_space')}</SettingRowTitleSmall>
-          <Switch
-            size="small"
-            checked={autoTranslateWithSpace}
-            onChange={(checked) => dispatch(setAutoTranslateWithSpace(checked))}
-          />
-        </SettingRow>
-        <SettingDivider />
+        {!language.startsWith('en') && (
+          <>
+            <SettingRow>
+              <SettingRowTitleSmall>{t('settings.input.auto_translate_with_space')}</SettingRowTitleSmall>
+              <Switch
+                size="small"
+                checked={autoTranslateWithSpace}
+                onChange={(checked) => dispatch(setAutoTranslateWithSpace(checked))}
+              />
+            </SettingRow>
+            <SettingDivider />
+          </>
+        )}
         <SettingRow>
           <SettingRowTitleSmall>{t('settings.messages.input.send_shortcuts')}</SettingRowTitleSmall>
           <Select
