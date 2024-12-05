@@ -8,7 +8,7 @@ export default class AppUpdater {
   constructor(mainWindow: BrowserWindow) {
     logger.transports.file.level = 'debug'
     autoUpdater.logger = logger
-    autoUpdater.forceDevUpdateConfig = true
+    autoUpdater.forceDevUpdateConfig = !app.isPackaged
     autoUpdater.autoDownload = true
 
     // 检测下载错误
@@ -36,12 +36,13 @@ export default class AppUpdater {
 
     // 更新下载进度
     autoUpdater.on('download-progress', (progress) => {
-      logger.info('下载进度', progress)
       mainWindow.webContents.send('download-progress', progress)
     })
 
     // 当需要更新的内容下载完成后
     autoUpdater.on('update-downloaded', (releaseInfo: UpdateInfo) => {
+      mainWindow.webContents.send('update-downloaded')
+
       logger.info('下载完成，询问用户是否更新', releaseInfo)
 
       dialog
@@ -58,6 +59,8 @@ export default class AppUpdater {
           if (response === 1) {
             app.isQuitting = true
             setImmediate(() => autoUpdater.quitAndInstall())
+          } else {
+            mainWindow.webContents.send('update-downloaded-cancelled')
           }
         })
     })

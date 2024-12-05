@@ -83,6 +83,7 @@ const AboutSettings: FC = () => {
       }),
       ipcRenderer.on('update-available', () => {
         setCheckUpdateLoading(false)
+        setDownloading(true)
       }),
       ipcRenderer.on('download-update', () => {
         setCheckUpdateLoading(false)
@@ -90,6 +91,10 @@ const AboutSettings: FC = () => {
       }),
       ipcRenderer.on('download-progress', (_, progress: ProgressInfo) => {
         setPercent(progress.percent)
+        setDownloading(progress.percent < 100)
+      }),
+      ipcRenderer.on('update-downloaded', () => {
+        setDownloading(false)
       }),
       ipcRenderer.on('update-error', (_, error) => {
         setCheckUpdateLoading(false)
@@ -143,7 +148,10 @@ const AboutSettings: FC = () => {
               </Tag>
             </VersionWrapper>
           </Row>
-          <CheckUpdateButton onClick={onCheckUpdate} loading={checkUpdateLoading}>
+          <CheckUpdateButton
+            onClick={onCheckUpdate}
+            loading={checkUpdateLoading}
+            disabled={downloading || checkUpdateLoading}>
             {downloading ? t('settings.about.downloading') : t('settings.about.checkUpdate')}
           </CheckUpdateButton>
         </AboutHeader>
