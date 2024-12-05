@@ -56,7 +56,7 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
 
     try {
       if (!highlighter.getLoadedLanguages().includes(language as BundledLanguage)) {
-        if (language in bundledLanguages) {
+        if (language in bundledLanguages || language === 'text') {
           await highlighter.loadLanguage(language as BundledLanguage)
           console.log(`Loaded language: ${language}`)
         } else {
