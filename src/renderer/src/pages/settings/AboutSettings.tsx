@@ -9,10 +9,11 @@ import { useAppDispatch } from '@renderer/store'
 import { setManualUpdateCheck } from '@renderer/store/settings'
 import { runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Progress, Row, Switch, Tag } from 'antd'
-import { ProgressInfo } from 'electron-updater'
+import { ProgressInfo, UpdateInfo } from 'electron-updater'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import Markdown from 'react-markdown'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -81,9 +82,19 @@ const AboutSettings: FC = () => {
         setCheckUpdateLoading(false)
         window.message.success(t('settings.about.updateNotAvailable'))
       }),
-      ipcRenderer.on('update-available', () => {
+      ipcRenderer.on('update-available', (_, releaseInfo: UpdateInfo) => {
         setCheckUpdateLoading(false)
         setDownloading(true)
+        window.modal.info({
+          title: t('settings.about.updateAvailable', { version: releaseInfo.version }),
+          content: (
+            <Markdown>
+              {typeof releaseInfo.releaseNotes === 'string'
+                ? releaseInfo.releaseNotes
+                : releaseInfo.releaseNotes?.map((note) => note.note).join('\n')}
+            </Markdown>
+          )
+        })
       }),
       ipcRenderer.on('download-update', () => {
         setCheckUpdateLoading(false)

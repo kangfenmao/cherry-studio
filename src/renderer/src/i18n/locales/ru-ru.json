@@ -328,6 +328,7 @@
       "about.releases.button": "Релизы",
       "about.releases.title": "Заметки о релизах",
       "about.title": "О программе",
+      "about.updateAvailable": "Найдено новое обновление {{version}}",
       "about.updateError": "Ошибка обновления",
       "about.updateNotAvailable": "Вы используете последнюю версию",
       "about.website.button": "Сайт",

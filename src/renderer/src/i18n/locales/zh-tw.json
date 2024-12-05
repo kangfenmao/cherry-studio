@@ -328,6 +328,7 @@
       "about.releases.button": "查看",
       "about.releases.title": "更新日誌",
       "about.title": "關於我們",
+      "about.updateAvailable": "發現新版本 {{version}}",
       "about.updateError": "更新錯誤",
       "about.updateNotAvailable": "您正在使用最新版本",
       "about.website.button": "網站",

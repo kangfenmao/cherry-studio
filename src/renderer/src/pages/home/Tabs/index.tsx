@@ -169,8 +169,8 @@ const Segmented = styled(AntSegmented)`
   .ant-segmented-item {
     overflow: hidden;
     transition: none !important;
-    height: 30px;
-    line-height: 30px;
+    height: 34px;
+    line-height: 34px;
     background-color: transparent;
   }
   .ant-segmented-item-selected {

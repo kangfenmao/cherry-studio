@@ -6,7 +6,8 @@ export default class AppUpdater {
   autoUpdater: _AppUpdater = autoUpdater
 
   constructor(mainWindow: BrowserWindow) {
-    logger.transports.file.level = 'debug'
+    logger.transports.file.level = 'info'
+
     autoUpdater.logger = logger
     autoUpdater.forceDevUpdateConfig = !app.isPackaged
     autoUpdater.autoDownload = true
@@ -18,15 +19,8 @@ export default class AppUpdater {
     })
 
     autoUpdater.on('update-available', (releaseInfo: UpdateInfo) => {
-      autoUpdater.logger?.info('检测到新版本，开始自动下载')
+      logger.info('检测到新版本', releaseInfo)
       mainWindow.webContents.send('update-available', releaseInfo)
-
-      dialog.showMessageBox({
-        type: 'info',
-        title: '正在下载新版本',
-        message: `新版本 ${releaseInfo.version}`,
-        detail: this.formatReleaseNotes(releaseInfo.releaseNotes)
-      })
     })
 
     // 检测到不需要更新时

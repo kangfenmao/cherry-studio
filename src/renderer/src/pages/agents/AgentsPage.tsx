@@ -194,7 +194,7 @@ const AgentsPage: FC = () => {
                   {Object.values(filteredAgentGroups)
                     .flat()
                     .map((agent, index, array) => (
-                      <Col span={array.length === 1 ? 8 : 6} key={index}>
+                      <Col span={array.length === 1 ? 12 : 6} key={index}>
                         <AgentCard
                           onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent as any))}
                           agent={agent as any}

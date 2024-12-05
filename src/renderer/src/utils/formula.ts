@@ -43,17 +43,3 @@ export function extractTitle(html: string): string | null {
 
   return null
 }
-
-export function addPlaintextToCodeBlock(markdown: string): string {
-  // 修改正则表达式以匹配代码块的开始和结束，包括前后的换行符
-  const codeBlockRegex = /(^|\n)```([\w]*)\n([\s\S]*?)\n```/g
-
-  return markdown.replace(codeBlockRegex, (match, newline, language, code) => {
-    // 如果没有指定语言，使用 text
-    if (!language) {
-      return `${newline}\`\`\`text\n${code}\n\`\`\``
-    }
-    // 如果指定了语言，保持原样
-    return match
-  })
-}
