@@ -1,5 +1,5 @@
-import { documentExts, imageExts } from '@main/constant'
 import { getFileType } from '@main/utils/file'
+import { documentExts, imageExts } from '@shared/config/constant'
 import { FileType } from '@types'
 import * as crypto from 'crypto'
 import {
@@ -265,6 +265,11 @@ class FileStorage {
   public clear = async (): Promise<void> => {
     await fs.promises.rmdir(this.storageDir, { recursive: true })
     await this.initStorageDir()
+  }
+
+  public clearTemp = async (): Promise<void> => {
+    await fs.promises.rmdir(this.tempDir, { recursive: true })
+    await fs.promises.mkdir(this.tempDir, { recursive: true })
   }
 
   public open = async (

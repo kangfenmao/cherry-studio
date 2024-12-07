@@ -18,6 +18,9 @@ import CodeBlock from './CodeBlock'
 import ImagePreview from './ImagePreview'
 import Link from './Link'
 
+const ALLOWED_ELEMENTS =
+  /<(style|p|div|span|b|i|strong|em|ul|ol|li|table|tr|td|th|thead|tbody|h[1-6]|blockquote|pre|code|br|hr)/i
+
 interface Props {
   message: Message
 }
@@ -36,8 +39,8 @@ const Markdown: FC<Props> = ({ message }) => {
   }, [message.content, message.status, t])
 
   const rehypePlugins = useMemo(() => {
-    const hasUnsafeElements = /<(input|textarea|select)/i.test(messageContent)
-    return hasUnsafeElements ? [rehypeMath] : [rehypeRaw, rehypeMath]
+    const hasElements = ALLOWED_ELEMENTS.test(messageContent)
+    return hasElements ? [rehypeRaw, rehypeMath] : [rehypeMath]
   }, [messageContent, rehypeMath])
 
   if (message.role === 'user' && !renderInputMessageAsMarkdown) {

@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'iconfont'; /* Project id 4563475 */
-  src: url('iconfont.woff2?t=1725606177995') format('woff2');
+  font-family: 'iconfont'; /* Project id 4753420 */
+  src: url('iconfont.woff2?t=1733224456443') format('woff2');
 }
 
 .iconfont {
@@ -9,6 +9,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-at1:before {
+  content: '\e7df';
+}
+
+.icon-at:before {
+  content: '\e630';
 }
 
 .icon-a-darkmode:before {
@@ -25,10 +33,6 @@
 
 .icon-gridlines:before {
   content: '\e942';
-}
-
-.icon-grid-row-2copy:before {
-  content: '\e681';
 }
 
 .icon-inbox:before {
@@ -69,10 +73,6 @@
 
 .icon-show-sidebar:before {
   content: '\e944';
-}
-
-.icon-a-addchat:before {
-  content: '\e658';
 }
 
 .icon-appstore:before {

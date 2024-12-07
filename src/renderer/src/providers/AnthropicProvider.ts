@@ -16,7 +16,7 @@ export default class AnthropicProvider extends BaseProvider {
 
   constructor(provider: Provider) {
     super(provider)
-    this.sdk = new Anthropic({ apiKey: provider.apiKey, baseURL: this.getBaseURL() })
+    this.sdk = new Anthropic({ apiKey: this.apiKey, baseURL: this.getBaseURL() })
   }
 
   public getBaseURL(): string {

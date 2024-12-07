@@ -33,6 +33,7 @@ let _agentGroups: Record<string, Agent[]> = {}
 
 const AgentsPage: FC = () => {
   const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
 
   const agentGroups = useMemo(() => {
     if (Object.keys(_agentGroups).length === 0) {
@@ -44,26 +45,35 @@ const AgentsPage: FC = () => {
   const { t, i18n } = useTranslation()
 
   const filteredAgentGroups = useMemo(() => {
-    const groups = { 我的: [] }
+    const groups: Record<string, Agent[]> = {
+      我的: [],
+      精选: agentGroups['精选'] || []
+    }
 
     if (!search.trim()) {
       Object.entries(agentGroups).forEach(([group, agents]) => {
-        groups[group] = agents
+        if (group !== '精选') {
+          groups[group] = agents
+        }
       })
       return groups
     }
 
-    Object.entries(agentGroups).forEach(([group, agents]) => {
-      const filteredAgents = agents.filter(
-        (agent) =>
-          agent.name.toLowerCase().includes(search.toLowerCase()) ||
-          agent.description?.toLowerCase().includes(search.toLowerCase())
-      )
-      if (filteredAgents.length > 0) {
-        groups[group] = filteredAgents
-      }
+    const uniqueAgents = new Map<string, Agent>()
+
+    Object.entries(agentGroups).forEach(([, agents]) => {
+      agents.forEach((agent) => {
+        if (
+          (agent.name.toLowerCase().includes(search.toLowerCase()) ||
+            agent.description?.toLowerCase().includes(search.toLowerCase())) &&
+          !uniqueAgents.has(agent.name)
+        ) {
+          uniqueAgents.set(agent.name, agent)
+        }
+      })
     })
-    return groups
+
+    return { 搜索结果: Array.from(uniqueAgents.values()) }
   }, [agentGroups, search])
 
   const getAgentName = (agent: Agent) => {
@@ -111,9 +121,7 @@ const AgentsPage: FC = () => {
   )
 
   const tabItems = useMemo(() => {
-    let groups = Object.keys(filteredAgentGroups)
-
-    groups = groups.includes('办公') ? [groups[0], '办公', ...groups.slice(1)] : groups
+    const groups = Object.keys(filteredAgentGroups)
 
     return groups.map((group, i) => {
       const id = String(i + 1)
@@ -133,7 +141,10 @@ const AgentsPage: FC = () => {
               ) : (
                 filteredAgentGroups[group]?.map((agent, index) => (
                   <Col span={6} key={group + index}>
-                    <AgentCard onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent))} agent={agent as any} />
+                    <AgentCard
+                      onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent as any))}
+                      agent={agent as any}
+                    />
                   </Col>
                 ))
               )}
@@ -143,6 +154,14 @@ const AgentsPage: FC = () => {
       }
     })
   }, [filteredAgentGroups, getLocalizedGroupName, onAddAgentConfirm, search])
+
+  const handleSearch = () => {
+    if (searchInput.trim() === '') {
+      setSearch('')
+    } else {
+      setSearch(searchInput)
+    }
+  }
 
   return (
     <Container>
@@ -156,18 +175,37 @@ const AgentsPage: FC = () => {
             size="small"
             variant="filled"
             allowClear
-            suffix={<SearchOutlined />}
-            value={search}
+            onClear={() => setSearch('')}
+            suffix={<SearchOutlined onClick={handleSearch} />}
+            value={searchInput}
             maxLength={50}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onPressEnter={handleSearch}
           />
           <div style={{ width: 80 }} />
         </NavbarCenter>
       </Navbar>
       <ContentContainer id="content-container">
         <AssistantsContainer>
-          {tabItems.length > 0 ? (
-            <Tabs tabPosition="right" animated items={tabItems} />
+          {Object.values(filteredAgentGroups).flat().length > 0 ? (
+            search.trim() ? (
+              <TabContent>
+                <Row gutter={[20, 20]}>
+                  {Object.values(filteredAgentGroups)
+                    .flat()
+                    .map((agent, index, array) => (
+                      <Col span={array.length === 1 ? 12 : 6} key={index}>
+                        <AgentCard
+                          onClick={() => onAddAgentConfirm(getAgentFromSystemAgent(agent as any))}
+                          agent={agent as any}
+                        />
+                      </Col>
+                    ))}
+                </Row>
+              </TabContent>
+            ) : (
+              <Tabs tabPosition="right" animated items={tabItems} $language={i18n.language} />
+            )
           ) : (
             <EmptyView>
               <Empty description={t('agents.search.no_results')} />
@@ -226,7 +264,7 @@ const EmptyView = styled.div`
   color: var(--color-text-secondary);
 `
 
-const Tabs = styled(TabsAntd)`
+const Tabs = styled(TabsAntd)<{ $language: string }>`
   display: flex;
   flex: 1;
   flex-direction: row-reverse;
@@ -234,8 +272,8 @@ const Tabs = styled(TabsAntd)`
     padding-right: 0 !important;
   }
   .ant-tabs-nav {
-    min-width: 140px;
-    max-width: 140px;
+    min-width: ${({ $language }) => ($language.startsWith('zh') ? '110px' : '140px')};
+    max-width: ${({ $language }) => ($language.startsWith('zh') ? '110px' : '140px')};
   }
   .ant-tabs-nav-list {
     padding: 10px 8px;
@@ -245,19 +283,28 @@ const Tabs = styled(TabsAntd)`
   }
   .ant-tabs-tab {
     margin: 0 !important;
-    border-radius: 20px;
+    border-radius: 16px;
     margin-bottom: 5px !important;
     font-size: 13px;
     justify-content: left;
-    padding: 7px 12px !important;
+    padding: 7px 15px !important;
+    border: 0.5px solid transparent;
+    justify-content: ${({ $language }) => ($language.startsWith('zh') ? 'center' : 'flex-start')};
+    .ant-tabs-tab-btn {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
     &:hover {
       color: var(--color-text) !important;
       background-color: var(--color-background-soft);
     }
   }
   .ant-tabs-tab-active {
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
     border-right: none;
+    border: 0.5px solid var(--color-border);
   }
   .ant-tabs-content-holder {
     border-left: 0.5px solid var(--color-border);

@@ -14,7 +14,7 @@ import { useSettings } from './useSettings'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
-  const { proxyUrl, language, windowStyle, manualUpdateCheck } = useSettings()
+  const { proxyUrl, language, windowStyle, manualUpdateCheck, proxyMode } = useSettings()
   const { minappShow } = useRuntime()
   const { setDefaultModel, setTopicNamingModel, setTranslateModel } = useDefaultModel()
   const avatar = useLiveQuery(() => db.settings.get('image://avatar'))
@@ -35,8 +35,14 @@ export function useAppInit() {
   }, [])
 
   useEffect(() => {
-    proxyUrl && window.api.setProxy(proxyUrl)
-  }, [proxyUrl])
+    if (proxyMode === 'system') {
+      window.api.setProxy('system')
+    } else if (proxyMode === 'custom') {
+      proxyUrl && window.api.setProxy(proxyUrl)
+    } else {
+      window.api.setProxy('')
+    }
+  }, [proxyUrl, proxyMode])
 
   useEffect(() => {
     i18n.changeLanguage(language || navigator.language || 'en-US')

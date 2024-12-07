@@ -31,6 +31,7 @@ const Container = styled.div`
   margin: 0 20px 0 20px;
   border-radius: 6px;
   cursor: pointer;
+  border: 0.5px solid var(--color-border);
 `
 
 const Text = styled.div`

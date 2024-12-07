@@ -6,10 +6,12 @@ import OpenAI from 'openai'
 export default abstract class BaseProvider {
   protected provider: Provider
   protected host: string
+  protected apiKey: string
 
   constructor(provider: Provider) {
     this.provider = provider
     this.host = this.getBaseURL()
+    this.apiKey = this.getApiKey()
   }
 
   public getBaseURL(): string {
@@ -17,9 +19,31 @@ export default abstract class BaseProvider {
     return host.endsWith('/') ? host : `${host}/v1/`
   }
 
-  public getHeaders() {
+  public getApiKey() {
+    const keys = this.provider.apiKey.split(',').map((key) => key.trim())
+    const keyName = `provider:${this.provider.id}:last_used_key`
+
+    if (keys.length === 1) {
+      return keys[0]
+    }
+
+    const lastUsedKey = window.keyv.get(keyName)
+    if (!lastUsedKey) {
+      window.keyv.set(keyName, keys[0])
+      return keys[0]
+    }
+
+    const currentIndex = keys.indexOf(lastUsedKey)
+    const nextIndex = (currentIndex + 1) % keys.length
+    const nextKey = keys[nextIndex]
+    window.keyv.set(keyName, nextKey)
+
+    return nextKey
+  }
+
+  public defaultHeaders() {
     return {
-      'X-Api-Key': this.provider.apiKey
+      'X-Api-Key': this.apiKey
     }
   }
 

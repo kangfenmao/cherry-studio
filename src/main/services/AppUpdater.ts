@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import logger from 'electron-log'
 import { AppUpdater as _AppUpdater, autoUpdater, UpdateInfo } from 'electron-updater'
 
@@ -6,10 +6,11 @@ export default class AppUpdater {
   autoUpdater: _AppUpdater = autoUpdater
 
   constructor(mainWindow: BrowserWindow) {
-    logger.transports.file.level = 'debug'
+    logger.transports.file.level = 'info'
+
     autoUpdater.logger = logger
-    autoUpdater.forceDevUpdateConfig = true
-    autoUpdater.autoDownload = false
+    autoUpdater.forceDevUpdateConfig = !app.isPackaged
+    autoUpdater.autoDownload = true
 
     // 检测下载错误
     autoUpdater.on('error', (error) => {
@@ -18,40 +19,8 @@ export default class AppUpdater {
     })
 
     autoUpdater.on('update-available', (releaseInfo: UpdateInfo) => {
-      autoUpdater.logger?.info('检测到新版本，确认是否下载')
+      logger.info('检测到新版本', releaseInfo)
       mainWindow.webContents.send('update-available', releaseInfo)
-
-      const releaseNotes = releaseInfo.releaseNotes
-      let releaseContent = ''
-
-      if (releaseNotes) {
-        if (typeof releaseNotes === 'string') {
-          releaseContent = <string>releaseNotes
-        } else if (releaseNotes instanceof Array) {
-          releaseNotes.forEach((releaseNote) => {
-            releaseContent += `${releaseNote}\n`
-          })
-        }
-      } else {
-        releaseContent = '暂无更新说明'
-      }
-
-      // 弹框确认是否下载更新（releaseContent是更新日志）
-      dialog
-        .showMessageBox({
-          type: 'info',
-          title: '应用有新的更新',
-          detail: releaseContent,
-          message: '发现新版本，是否现在更新？',
-          buttons: ['下次再说', '更新']
-        })
-        .then(({ response }) => {
-          if (response === 1) {
-            logger.info('用户选择更新，准备下载更新')
-            mainWindow.webContents.send('download-update')
-            autoUpdater.downloadUpdate()
-          }
-        })
     })
 
     // 检测到不需要更新时
@@ -61,23 +30,52 @@ export default class AppUpdater {
 
     // 更新下载进度
     autoUpdater.on('download-progress', (progress) => {
-      logger.info('下载进度', progress)
       mainWindow.webContents.send('download-progress', progress)
     })
 
     // 当需要更新的内容下载完成后
-    autoUpdater.on('update-downloaded', () => {
-      logger.info('下载完成，准备更新')
+    autoUpdater.on('update-downloaded', (releaseInfo: UpdateInfo) => {
+      mainWindow.webContents.send('update-downloaded')
+
+      logger.info('下载完成，询问用户是否更新', releaseInfo)
+
       dialog
         .showMessageBox({
+          type: 'info',
           title: '安装更新',
-          message: '更新下载完毕，应用将重启并进行安装'
+          message: `新版本 ${releaseInfo.version} 已准备就绪`,
+          detail: this.formatReleaseNotes(releaseInfo.releaseNotes),
+          buttons: ['稍后安装', '立即安装'],
+          defaultId: 1,
+          cancelId: 0
         })
-        .then(() => {
-          setImmediate(() => autoUpdater.quitAndInstall())
+        .then(({ response }) => {
+          if (response === 1) {
+            app.isQuitting = true
+            setImmediate(() => autoUpdater.quitAndInstall())
+          } else {
+            mainWindow.webContents.send('update-downloaded-cancelled')
+          }
         })
     })
 
     this.autoUpdater = autoUpdater
   }
+
+  private formatReleaseNotes(releaseNotes: string | ReleaseNoteInfo[] | null | undefined): string {
+    if (!releaseNotes) {
+      return '暂无更新说明'
+    }
+
+    if (typeof releaseNotes === 'string') {
+      return releaseNotes
+    }
+
+    return releaseNotes.map((note) => note.note).join('\n')
+  }
+}
+
+interface ReleaseNoteInfo {
+  readonly version: string
+  readonly note: string | null
 }

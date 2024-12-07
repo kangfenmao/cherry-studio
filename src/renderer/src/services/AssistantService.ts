@@ -1,4 +1,4 @@
-import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
@@ -23,7 +23,10 @@ export function getDefaultTranslateAssistant(targetLanguage: string, text: strin
   const translateModel = getTranslateModel()
   const assistant: Assistant = getDefaultAssistant()
   assistant.model = translateModel
-  assistant.prompt = `Translate from input language to ${targetLanguage}, provide the translation result directly without any explanation, keep original format. If the target language is the same as the source language, do not translate. The text to be translated is as follows:\n\n ${text}`
+  assistant.prompt = store
+    .getState()
+    .settings.translateModelPrompt.replace('{{target_language}}', targetLanguage)
+    .replace('{{text}}', text)
   return assistant
 }
 
@@ -77,7 +80,7 @@ export function getProviderByModelId(modelId?: string) {
 }
 
 export const getAssistantSettings = (assistant: Assistant): AssistantSettings => {
-  const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONEXTCOUNT
+  const contextCount = assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT
   const getAssistantMaxTokens = () => {
     if (assistant.settings?.enableMaxTokens) {
       const maxTokens = assistant.settings.maxTokens

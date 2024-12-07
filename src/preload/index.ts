@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { WebDavConfig } from '@types'
+import { Shortcut, WebDavConfig } from '@types'
 import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
@@ -8,9 +8,12 @@ const api = {
   reload: () => ipcRenderer.invoke('app:reload'),
   setProxy: (proxy: string) => ipcRenderer.invoke('app:proxy', proxy),
   checkForUpdate: () => ipcRenderer.invoke('app:check-for-update'),
+  setLanguage: (lang: string) => ipcRenderer.invoke('app:set-language', lang),
+  setTray: (isActive: boolean) => ipcRenderer.invoke('app:set-tray', isActive),
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('app:set-theme', theme),
   openWebsite: (url: string) => ipcRenderer.invoke('open:website', url),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
+  clearCache: () => ipcRenderer.invoke('app:clear-cache'),
   zip: {
     compress: (text: string) => ipcRenderer.invoke('zip:compress', text),
     decompress: (text: Buffer) => ipcRenderer.invoke('zip:decompress', text)
@@ -43,6 +46,10 @@ const api = {
   },
   export: {
     toWord: (markdown: string, fileName: string) => ipcRenderer.invoke('export:word', markdown, fileName)
+  },
+  openPath: (path: string) => ipcRenderer.invoke('open:path', path),
+  shortcuts: {
+    update: (shortcuts: Shortcut[]) => ipcRenderer.invoke('shortcuts:update', shortcuts)
   }
 }
 

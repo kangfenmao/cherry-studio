@@ -1,0 +1,44 @@
+name: ❓ Question
+description: Ask a question or seek help
+title: '[Question]: '
+labels: ['question']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for asking a question! Please provide as much detail as possible so we can better assist you.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: Please describe your question in detail
+      placeholder: Please explain your question as clearly as possible...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Please provide some background information to help us better understand your question
+      placeholder: "For example: use case, solutions you've tried, etc."
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Any other relevant information, screenshots, or code examples
+      render: shell
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is this question for you?
+      options:
+        - Low (Can wait)
+        - Medium (Would like a response soon)
+        - High (Blocking progress)
+    validations:
+      required: true

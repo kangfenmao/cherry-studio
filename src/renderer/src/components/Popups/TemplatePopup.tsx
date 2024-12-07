@@ -27,17 +27,28 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
     resolve({})
   }
 
+  TemplatePopup.hide = onCancel
+
   return (
-    <Modal title={title} open={open} onOk={onOk} onCancel={onCancel} afterClose={onClose}>
+    <Modal
+      title={title}
+      open={open}
+      onOk={onOk}
+      onCancel={onCancel}
+      afterClose={onClose}
+      transitionName="ant-move-down"
+      centered>
       <Box mb={8}>Name</Box>
     </Modal>
   )
 }
 
+const TopViewKey = 'TemplatePopup'
+
 export default class TemplatePopup {
   static topviewId = 0
   static hide() {
-    TopView.hide('TemplatePopup')
+    TopView.hide(TopViewKey)
   }
   static show(props: ShowParams) {
     return new Promise<any>((resolve) => {
@@ -46,10 +57,10 @@ export default class TemplatePopup {
           {...props}
           resolve={(v) => {
             resolve(v)
-            this.hide()
+            TopView.hide(TopViewKey)
           }}
         />,
-        'TemplatePopup'
+        TopViewKey
       )
     })
   }

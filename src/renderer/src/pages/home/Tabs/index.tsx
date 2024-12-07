@@ -6,14 +6,14 @@ import { useShowTopics } from '@renderer/hooks/useStore'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, Topic } from '@renderer/types'
 import { uuid } from '@renderer/utils'
-import { Segmented, SegmentedProps } from 'antd'
+import { Segmented as AntSegmented, SegmentedProps } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import Assistants from './Assistants'
-import Settings from './Settings'
-import Topics from './Topics'
+import Assistants from './AssistantsTab'
+import Settings from './SettingsTab'
+import Topics from './TopicsTab'
 
 interface Props {
   activeAssistant: Assistant
@@ -98,7 +98,6 @@ const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant,
       {showTab && (
         <Segmented
           value={tab}
-          className="segmented-tab"
           style={{
             borderRadius: 0,
             padding: '10px 0',
@@ -164,6 +163,47 @@ const TabContent = styled.div`
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+`
+
+const Segmented = styled(AntSegmented)`
+  .ant-segmented-item {
+    overflow: hidden;
+    transition: none !important;
+    height: 34px;
+    line-height: 34px;
+    background-color: transparent;
+  }
+  .ant-segmented-item-selected {
+    background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
+    transition: none !important;
+  }
+  .ant-segmented-item-label {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 13px;
+    height: 100%;
+  }
+  .iconfont {
+    font-size: 13px;
+    margin-left: -2px;
+  }
+  .anticon-setting {
+    font-size: 12px;
+  }
+  .icon-business-smart-assistant {
+    margin-right: -2px;
+  }
+  .ant-segmented-item-icon + * {
+    margin-left: 4px;
+  }
+  .ant-segmented-thumb {
+    transition: none !important;
+    background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
+  }
 `
 
 export default HomeTabs

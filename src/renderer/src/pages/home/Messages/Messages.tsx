@@ -35,7 +35,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
   const { updateTopic, addTopic } = useAssistant(assistant.id)
-  const { showTopics, topicPosition, showAssistants } = useSettings()
+  const { showTopics, topicPosition, showAssistants, enableTopicNaming } = useSettings()
 
   const messagesRef = useRef(messages)
   messagesRef.current = messages
@@ -68,6 +68,17 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
 
   const autoRenameTopic = useCallback(async () => {
     const _topic = getTopic(assistant, topic.id)
+
+    // If the topic auto naming is not enabled, use the first message content as the topic name
+    if (!enableTopicNaming) {
+      const topicName = messages[0].content.substring(0, 50)
+      const data = { ..._topic, name: topicName } as Topic
+      setActiveTopic(data)
+      updateTopic(data)
+      return
+    }
+
+    // Auto rename the topic
     if (_topic && _topic.name === t('chat.default.topic.name') && messages.length >= 2) {
       const summaryText = await fetchMessagesSummary({ messages, assistant })
       if (summaryText) {
@@ -76,7 +87,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         updateTopic(data)
       }
     }
-  }, [assistant, messages, setActiveTopic, topic.id, updateTopic])
+  }, [assistant, enableTopicNaming, messages, setActiveTopic, topic.id, updateTopic])
 
   const onDeleteMessage = useCallback(
     (message: Message) => {
@@ -219,6 +230,7 @@ const Container = styled(Scrollbar)`
   padding: 10px 0;
   padding-bottom: 20px;
   overflow-x: hidden;
+  background-color: var(--color-background);
 `
 
 export default Messages

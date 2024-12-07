@@ -114,7 +114,15 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
           <BeatLoader color="var(--color-text-2)" size="10" style={{ marginTop: 15 }} />
         </EmptyView>
       )}
-      {opened && <webview src={app.url} ref={webviewRef} style={WebviewStyle} allowpopups={'true' as any} />}
+      {opened && (
+        <webview
+          src={app.url}
+          ref={webviewRef}
+          style={WebviewStyle}
+          allowpopups={'true' as any}
+          partition="persist:webview"
+        />
+      )}
     </Drawer>
   )
 }

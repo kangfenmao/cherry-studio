@@ -2,7 +2,6 @@ import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import dayjs from 'dayjs'
-import localforage from 'localforage'
 
 export async function backup() {
   const filename = `cherry-studio.${dayjs().format('YYYYMMDDHHmm')}.zip`
@@ -49,7 +48,6 @@ export async function reset() {
         centered: true,
         onOk: async () => {
           await localStorage.clear()
-          await localforage.clear()
           await clearDatabase()
           await window.api.file.clear()
           window.api.reload()

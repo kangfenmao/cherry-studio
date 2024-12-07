@@ -9,11 +9,11 @@ import {
   setWebdavPath as _setWebdavPath,
   setWebdavUser as _setWebdavUser
 } from '@renderer/store/settings'
-import { Breadcrumb, Button, Input } from 'antd'
+import { Button, Input } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '..'
+import { SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '..'
 
 const WebDavSettings: FC = () => {
   const {
@@ -58,19 +58,8 @@ const WebDavSettings: FC = () => {
   }
 
   return (
-    <SettingContainer>
-      <Breadcrumb
-        items={[
-          {
-            title: t('settings.data'),
-            href: '#/settings/data'
-          },
-          {
-            title: t('settings.data.webdav.title')
-          }
-        ]}
-      />
-      <SettingTitle style={{ marginTop: 20 }}>{t('settings.data.webdav.title')}</SettingTitle>
+    <>
+      <SettingTitle>{t('settings.data.webdav.title')}</SettingTitle>
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.data.webdav.host')}</SettingRowTitle>
@@ -129,8 +118,7 @@ const WebDavSettings: FC = () => {
           </Button>
         </HStack>
       </SettingRow>
-      <SettingDivider />
-    </SettingContainer>
+    </>
   )
 }
 

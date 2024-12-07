@@ -1,38 +1,45 @@
 import { isMac } from '@renderer/config/constant'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
-import { setClickAssistantToShowTopic, setLanguage, setShowTopicTime } from '@renderer/store/settings'
-import { setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
-import { ThemeMode } from '@renderer/types'
+import { setLanguage } from '@renderer/store/settings'
+import { setProxyMode, setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
+import { LanguageVarious, ThemeMode } from '@renderer/types'
 import { isValidProxyUrl } from '@renderer/utils'
-import { Input, Select, Switch } from 'antd'
+import { Input, Select, Space, Switch } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '.'
+import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '.'
 
 const GeneralSettings: FC = () => {
   const {
     language,
     proxyUrl: storeProxyUrl,
-    theme,
-    windowStyle,
-    topicPosition,
-    showTopicTime,
-    clickAssistantToShowTopic,
     setTheme,
+    theme,
+    setTray,
+    tray,
+    windowStyle,
     setWindowStyle,
-    setTopicPosition
+    proxyMode: storeProxyMode
   } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
+  const { theme: themeMode } = useTheme()
+
+  const updateTray = (value: boolean) => {
+    setTray(value)
+    window.api.setTray(value)
+  }
 
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
 
-  const onSelectLanguage = (value: string) => {
+  const onSelectLanguage = (value: LanguageVarious) => {
     dispatch(setLanguage(value))
     localStorage.setItem('language', value)
+    window.api.setLanguage(value)
     i18n.changeLanguage(value)
   }
 
@@ -46,97 +53,113 @@ const GeneralSettings: FC = () => {
     window.api.setProxy(proxyUrl)
   }
 
+  const proxyModeOptions = [
+    { value: 'system', label: t('settings.proxy.mode.system') },
+    { value: 'custom', label: t('settings.proxy.mode.custom') },
+    { value: 'none', label: t('settings.proxy.mode.none') }
+  ]
+
+  const onProxyModeChange = (mode: 'system' | 'custom' | 'none') => {
+    dispatch(setProxyMode(mode))
+    if (mode === 'system') {
+      window.api.setProxy('system')
+      dispatch(_setProxyUrl(undefined))
+    } else if (mode === 'none') {
+      window.api.setProxy(undefined)
+      dispatch(_setProxyUrl(undefined))
+    }
+  }
+
+  const languagesOptions: { value: LanguageVarious; label: string; flag: string }[] = [
+    { value: 'zh-CN', label: '中文', flag: '🇨🇳' },
+    { value: 'zh-TW', label: '中文（繁体）', flag: '🇹🇼' },
+    { value: 'en-US', label: 'English', flag: '🇺🇸' },
+    { value: 'ru-RU', label: 'Russian', flag: '🇷🇺' }
+  ]
+
   return (
-    <SettingContainer>
-      <SettingTitle>{t('settings.general.title')}</SettingTitle>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('common.language')}</SettingRowTitle>
-        <Select
-          defaultValue={language || 'en-US'}
-          style={{ width: 180 }}
-          onChange={onSelectLanguage}
-          options={[
-            { value: 'zh-CN', label: '中文' },
-            { value: 'zh-TW', label: '中文（繁体）' },
-            { value: 'en-US', label: 'English' }
-          ]}
-        />
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('settings.theme.title')}</SettingRowTitle>
-        <Select
-          defaultValue={theme}
-          style={{ width: 180 }}
-          onChange={setTheme}
-          options={[
-            { value: ThemeMode.light, label: t('settings.theme.light') },
-            { value: ThemeMode.dark, label: t('settings.theme.dark') },
-            { value: ThemeMode.auto, label: t('settings.theme.auto') }
-          ]}
-        />
-      </SettingRow>
-      {isMac && (
-        <>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
-            <Select
-              defaultValue={windowStyle || 'opaque'}
-              style={{ width: 180 }}
-              onChange={setWindowStyle}
-              options={[
-                { value: 'transparent', label: t('settings.theme.window.style.transparent') },
-                { value: 'opaque', label: t('settings.theme.window.style.opaque') }
-              ]}
-            />
-          </SettingRow>
-        </>
-      )}
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
-        <Input
-          placeholder="socks5://127.0.0.1:6153"
-          value={proxyUrl}
-          onChange={(e) => setProxyUrl(e.target.value)}
-          style={{ width: 180 }}
-          onBlur={() => onSetProxyUrl()}
-          type="url"
-        />
-      </SettingRow>
-      <SettingDivider />
-      <SettingRow>
-        <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
-        <Select
-          defaultValue={topicPosition || 'right'}
-          style={{ width: 180 }}
-          onChange={setTopicPosition}
-          options={[
-            { value: 'left', label: t('settings.topic.position.left') },
-            { value: 'right', label: t('settings.topic.position.right') }
-          ]}
-        />
-      </SettingRow>
-      <SettingDivider />
-      {topicPosition === 'left' && (
-        <>
-          <SettingRow style={{ minHeight: 32 }}>
-            <SettingRowTitle>{t('settings.advanced.click_assistant_switch_to_topics')}</SettingRowTitle>
-            <Switch
-              checked={clickAssistantToShowTopic}
-              onChange={(checked) => dispatch(setClickAssistantToShowTopic(checked))}
-            />
-          </SettingRow>
-          <SettingDivider />
-        </>
-      )}
-      <SettingRow>
-        <SettingRowTitle>{t('settings.topic.show.time')}</SettingRowTitle>
-        <Switch checked={showTopicTime} onChange={(checked) => dispatch(setShowTopicTime(checked))} />
-      </SettingRow>
-      <SettingDivider />
+    <SettingContainer theme={themeMode}>
+      <SettingGroup theme={theme}>
+        <SettingTitle>{t('settings.general.title')}</SettingTitle>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('common.language')}</SettingRowTitle>
+          <Select defaultValue={language || 'en-US'} style={{ width: 180 }} onChange={onSelectLanguage}>
+            {languagesOptions.map((lang) => (
+              <Select.Option key={lang.value} value={lang.value}>
+                <Space.Compact direction="horizontal" block>
+                  <Space.Compact block>{lang.label}</Space.Compact>
+                  <span role="img" aria-label={lang.flag}>
+                    {lang.flag}
+                  </span>
+                </Space.Compact>
+              </Select.Option>
+            ))}
+          </Select>
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.theme.title')}</SettingRowTitle>
+          <Select
+            defaultValue={theme}
+            style={{ width: 180 }}
+            onChange={setTheme}
+            options={[
+              { value: ThemeMode.light, label: t('settings.theme.light') },
+              { value: ThemeMode.dark, label: t('settings.theme.dark') },
+              { value: ThemeMode.auto, label: t('settings.theme.auto') }
+            ]}
+          />
+        </SettingRow>
+        {isMac && (
+          <>
+            <SettingDivider />
+            <SettingRow>
+              <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
+              <Select
+                defaultValue={windowStyle || 'opaque'}
+                style={{ width: 180 }}
+                onChange={setWindowStyle}
+                options={[
+                  { value: 'transparent', label: t('settings.theme.window.style.transparent') },
+                  { value: 'opaque', label: t('settings.theme.window.style.opaque') }
+                ]}
+              />
+            </SettingRow>
+          </>
+        )}
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.proxy.mode.title')}</SettingRowTitle>
+          <Select
+            value={storeProxyMode}
+            style={{ width: 180 }}
+            onChange={onProxyModeChange}
+            options={proxyModeOptions}
+          />
+        </SettingRow>
+        {storeProxyMode === 'custom' && (
+          <>
+            <SettingDivider />
+            <SettingRow>
+              <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
+              <Input
+                placeholder="socks5://127.0.0.1:6153"
+                value={proxyUrl}
+                onChange={(e) => setProxyUrl(e.target.value)}
+                style={{ width: 180 }}
+                onBlur={() => onSetProxyUrl()}
+                type="url"
+              />
+            </SettingRow>
+          </>
+        )}
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.tray.title')}</SettingRowTitle>
+          <Switch checked={tray} onChange={(checked) => updateTray(checked)} />
+        </SettingRow>
+      </SettingGroup>
     </SettingContainer>
   )
 }

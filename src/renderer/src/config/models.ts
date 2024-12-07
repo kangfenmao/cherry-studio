@@ -129,19 +129,23 @@ const visionAllowedModels = [
   'moondream',
   'minicpm',
   'gemini-1\\.5',
+  'gemini-exp',
   'claude-3',
   'vision',
   'glm-4v',
   'qwen-vl',
   'qwen2-vl',
   'internvl2',
+  'grok',
+  'pixtral',
   'gpt-4(?:-[\\w-]+)',
-  'gpt-4o(?:-[\\w-]+)?'
+  'gpt-4o(?:-[\\w-]+)?',
+  'chatgpt-4o(?:-[\\w-]+)?'
 ]
 
 const visionExcludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
 
-const VISION_REGEX = new RegExp(
+export const VISION_REGEX = new RegExp(
   `\\b(?!(?:${visionExcludedModels.join('|')})\\b)(${visionAllowedModels.join('|')})\\b`,
   'i'
 )
@@ -187,6 +191,7 @@ export function getModelLogo(modelId: string) {
     palm: isLight ? PalmModelLogo : PalmModelLogoDark,
     step: isLight ? StepModelLogo : StepModelLogoDark,
     hailuo: isLight ? HailuoModelLogo : HailuoModelLogoDark,
+    doubao: isLight ? DoubaoModelLogo : DoubaoModelLogoDark,
     'ep-202': isLight ? DoubaoModelLogo : DoubaoModelLogoDark,
     cohere: isLight ? CohereModelLogo : CohereModelLogoDark,
     command: isLight ? CohereModelLogo : CohereModelLogoDark,
@@ -327,6 +332,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'GPT 4o'
     },
     {
+      id: 'chatgpt-4o-latest',
+      provider: 'openai',
+      name: ' GPT-4o-latest',
+      group: 'GPT 4o'
+    },
+    {
       id: 'gpt-4-turbo',
       provider: 'openai',
       name: ' GPT-4 Turbo',
@@ -337,12 +348,6 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       provider: 'openai',
       name: ' GPT-4',
       group: 'GPT 4'
-    },
-    {
-      id: 'gpt-3.5-turbo',
-      provider: 'openai',
-      name: ' GPT-3.5-turbo',
-      group: 'GPT 3.5'
     },
     {
       id: 'o1-mini',
@@ -1039,7 +1044,7 @@ export function isEmbeddingModel(model: Model): boolean {
 }
 
 export function isVisionModel(model: Model): boolean {
-  return VISION_REGEX.test(model.id)
+  return VISION_REGEX.test(model.id) || model.type?.includes('vision') || false
 }
 
 export function isSupportedModel(model: OpenAI.Models.Model): boolean {

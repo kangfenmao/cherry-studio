@@ -4,17 +4,22 @@ import {
   ExportOutlined,
   LoadingOutlined,
   MinusCircleOutlined,
-  PlusOutlined
+  PlusOutlined,
+  SettingOutlined
 } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
-import { getModelLogo, isVisionModel } from '@renderer/config/models'
+import { getModelLogo, isVisionModel, VISION_REGEX } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
+import { useAssistants, useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProvider } from '@renderer/hooks/useProvider'
+import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/ApiService'
-import { Provider } from '@renderer/types'
-import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
+import { useAppDispatch } from '@renderer/store'
+import { setModel } from '@renderer/store/assistants'
+import { Model, ModelType, Provider } from '@renderer/types'
+import { Avatar, Button, Card, Checkbox, Divider, Flex, Input, Popover, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
 import { groupBy, isEmpty } from 'lodash'
 import { FC, useEffect, useState } from 'react'
@@ -30,6 +35,7 @@ import {
   SettingTitle
 } from '..'
 import AddModelPopup from './AddModelPopup'
+import ApiCheckPopup from './ApiCheckPopup'
 import EditModelsPopup from './EditModelsPopup'
 import GraphRAGSettings from './GraphRAGSettings'
 import OllamSettings from './OllamaSettings'
@@ -46,8 +52,12 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const [apiValid, setApiValid] = useState(false)
   const [apiChecking, setApiChecking] = useState(false)
   const { updateProvider, models, removeModel } = useProvider(provider.id)
+  const { assistants } = useAssistants()
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const dispatch = useAppDispatch()
+
+  const { defaultModel, setDefaultModel } = useDefaultModel()
 
   const modelGroups = groupBy(models, 'group')
 
@@ -63,11 +73,44 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const onAddModel = () => AddModelPopup.show({ title: t('settings.models.add.add_model'), provider })
 
   const onCheckApi = async () => {
-    setApiChecking(true)
-    const valid = await checkApi({ ...provider, apiKey, apiHost })
-    setApiValid(valid)
-    setApiChecking(false)
-    setTimeout(() => setApiValid(false), 3000)
+    if (isEmpty(models)) {
+      window.message.error({
+        key: 'no-models',
+        style: { marginTop: '3vh' },
+        duration: 5,
+        content: t('settings.provider.no_models')
+      })
+      return
+    }
+
+    if (apiKey.includes(',')) {
+      const keys = apiKey
+        .split(',')
+        .map((k) => k.trim())
+        .filter((k) => k)
+      const result = await ApiCheckPopup.show({
+        title: t('settings.provider.check_multiple_keys'),
+        provider: { ...provider, apiHost },
+        apiKeys: keys
+      })
+
+      if (result?.validKeys) {
+        setApiKey(result.validKeys.join(','))
+        updateProvider({ ...provider, apiKey: result.validKeys.join(',') })
+      }
+    } else {
+      setApiChecking(true)
+      const valid = await checkApi({ ...provider, apiKey, apiHost })
+      window.message[valid ? 'success' : 'error']({
+        key: 'api-check',
+        style: { marginTop: '3vh' },
+        duration: valid ? 2 : 8,
+        content: valid ? i18n.t('message.api.connection.success') : i18n.t('message.api.connection.failed')
+      })
+      setApiValid(valid)
+      setApiChecking(false)
+      setTimeout(() => setApiValid(false), 3000)
+    }
   }
 
   const providerConfig = PROVIDER_CONFIG[provider.id]
@@ -90,13 +133,48 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     return (apiHost.endsWith('/') ? apiHost : `${apiHost}/v1/`) + 'chat/completions'
   }
 
+  const onUpdateModelTypes = (model: Model, types: ModelType[]) => {
+    const updatedModels = models.map((m) => {
+      if (m.id === model.id) {
+        return { ...m, type: types }
+      }
+      return m
+    })
+
+    updateProvider({ ...provider, models: updatedModels })
+
+    assistants.forEach((assistant) => {
+      if (assistant?.model?.id === model.id && assistant.model.provider === provider.id) {
+        dispatch(
+          setModel({
+            assistantId: assistant.id,
+            model: { ...model, type: types }
+          })
+        )
+      }
+    })
+
+    if (defaultModel?.id === model.id && defaultModel?.provider === provider.id) {
+      setDefaultModel({ ...defaultModel, type: types })
+    }
+  }
+
+  const modelTypeContent = (model: Model) => (
+    <div>
+      <Checkbox.Group
+        value={model.type}
+        onChange={(types) => onUpdateModelTypes(model, types as ModelType[])}
+        options={[{ label: t('model.type.vision'), value: 'vision', disabled: VISION_REGEX.test(model.id) }]}
+      />
+    </div>
+  )
+
+  const formatApiKeys = (value: string) => {
+    return value.replaceAll('，', ',').replaceAll(' ', ',').replaceAll(' ', '').replaceAll('\n', ',')
+  }
+
   return (
-    <SettingContainer
-      style={
-        theme === 'dark'
-          ? { backgroundColor: 'var(--color-background)' }
-          : { backgroundColor: 'var(--color-background-mute)' }
-      }>
+    <SettingContainer theme={theme}>
       <SettingTitle>
         <Flex align="center">
           <span>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</span>
@@ -107,7 +185,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           )}
         </Flex>
         <Switch
-          defaultValue={provider.enabled}
+          value={provider.enabled}
           key={provider.id}
           onChange={(enabled) => updateProvider({ ...provider, apiKey, apiHost, enabled })}
         />
@@ -118,21 +196,26 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <Input.Password
           value={apiKey}
           placeholder={t('settings.provider.api_key')}
-          onChange={(e) => setApiKey(e.target.value)}
+          onChange={(e) => setApiKey(formatApiKeys(e.target.value))}
           onBlur={onUpdateApiKey}
           spellCheck={false}
           type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
-        <Button type={apiValid ? 'primary' : 'default'} ghost={apiValid} onClick={onCheckApi}>
+        <Button
+          type={apiValid ? 'primary' : 'default'}
+          ghost={apiValid}
+          onClick={onCheckApi}
+          disabled={!apiHost || apiChecking}>
           {apiChecking ? <LoadingOutlined spin /> : apiValid ? <CheckOutlined /> : t('settings.provider.check')}
         </Button>
       </Space.Compact>
       {apiKeyWebsite && (
-        <SettingHelpTextRow>
+        <SettingHelpTextRow style={{ justifyContent: 'space-between' }}>
           <SettingHelpLink target="_blank" href={apiKeyWebsite}>
             {t('settings.provider.get_api_key')}
           </SettingHelpLink>
+          <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
         </SettingHelpTextRow>
       )}
       <SettingSubtitle>{t('settings.provider.api_host')}</SettingSubtitle>
@@ -180,6 +263,9 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
                   {model.name[0].toUpperCase()}
                 </Avatar>
                 {model.name} {isVisionModel(model) && <VisionIcon />}
+                <Popover content={modelTypeContent(model)} title={t('model.type.select')} trigger="click">
+                  <SettingIcon />
+                </Popover>
               </ModelListHeader>
               <RemoveIcon onClick={() => removeModel(model)} />
             </ModelListItem>
@@ -232,6 +318,16 @@ const RemoveIcon = styled(MinusCircleOutlined)`
   color: var(--color-error);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+`
+
+const SettingIcon = styled(SettingOutlined)`
+  margin-left: 10px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    color: var(--color-text-2);
+  }
 `
 
 export default ProviderSetting

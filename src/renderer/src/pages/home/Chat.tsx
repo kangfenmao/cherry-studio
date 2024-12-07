@@ -24,7 +24,7 @@ const Chat: FC<Props> = (props) => {
 
   return (
     <Container id="chat" className={messageStyle}>
-      <Main vertical flex={1} justify="space-between">
+      <Main id="chat-main" vertical flex={1} justify="space-between">
         <Messages
           key={props.activeTopic.id}
           assistant={assistant}
@@ -52,35 +52,6 @@ const Container = styled.div`
   height: 100%;
   flex: 1;
   justify-content: space-between;
-  &.bubble {
-    background-color: var(--chat-background);
-    .system-prompt {
-      background-color: var(--chat-background-assistant);
-    }
-    .message-content-container {
-      margin: 5px 0;
-      border-radius: 8px;
-      padding: 10px 15px 0 15px;
-    }
-    .message-user {
-      .markdown,
-      .anticon,
-      .iconfont,
-      .message-tokens {
-        color: var(--chat-text-user);
-      }
-      .message-action-button:hover {
-        background-color: var(--color-white-soft);
-      }
-    }
-    #inputbar {
-      border-radius: 0;
-      margin: 0;
-      border: none;
-      border-top: 1px solid var(--color-border-mute);
-      background: var(--color-background);
-    }
-  }
 `
 
 const Main = styled(Flex)`

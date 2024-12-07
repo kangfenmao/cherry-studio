@@ -1,7 +1,7 @@
-import { ArrowUpOutlined, MenuOutlined, PicCenterOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined, MenuOutlined } from '@ant-design/icons'
 import { HStack, VStack } from '@renderer/components/Layout'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { Divider, Popover, Tooltip } from 'antd'
+import { Divider, Popover } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ type Props = {
   ToolbarButton: any
 } & React.HTMLAttributes<HTMLDivElement>
 
-const TokenCount: FC<Props> = ({ estimateTokenCount, inputTokenCount, contextCount, ToolbarButton, ...props }) => {
+const TokenCount: FC<Props> = ({ estimateTokenCount, inputTokenCount, contextCount }) => {
   const { t } = useTranslation()
   const { showInputEstimatedTokens } = useSettings()
 
@@ -38,21 +38,14 @@ const TokenCount: FC<Props> = ({ estimateTokenCount, inputTokenCount, contextCou
   }
 
   return (
-    <>
-      <ToolbarButton type="text" onClick={props.onClick}>
-        <Tooltip placement="top" title={t('chat.input.new.context')}>
-          <PicCenterOutlined />
-        </Tooltip>
-      </ToolbarButton>
-      <Container>
-        <Popover content={PopoverContent}>
-          <MenuOutlined /> {contextCount}
-          <Divider type="vertical" style={{ marginTop: 0, marginLeft: 5, marginRight: 5 }} />
-          <ArrowUpOutlined />
-          {inputTokenCount} / {estimateTokenCount}
-        </Popover>
-      </Container>
-    </>
+    <Container>
+      <Popover content={PopoverContent}>
+        <MenuOutlined /> {contextCount}
+        <Divider type="vertical" style={{ marginTop: 0, marginLeft: 5, marginRight: 5 }} />
+        <ArrowUpOutlined />
+        {inputTokenCount} / {estimateTokenCount}
+      </Popover>
+    </Container>
   )
 }
 

@@ -98,10 +98,6 @@
     white-space: pre;
   }
 
-  code {
-    font-family: 'Courier New', Courier, monospace;
-  }
-
   p code,
   li code {
     background: var(--color-background-mute);
@@ -111,11 +107,18 @@
     white-space: pre;
   }
 
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+
   pre {
     border-radius: 5px;
     overflow-x: auto;
     font-family: 'Fira Code', 'Courier New', Courier, monospace;
     background-color: var(--color-background-mute);
+    &:has(> .mermaid) {
+      background-color: transparent;
+    }
     &:not(pre pre) {
       > code:not(pre pre > code) {
         padding: 15px;

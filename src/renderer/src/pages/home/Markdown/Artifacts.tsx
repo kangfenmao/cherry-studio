@@ -32,10 +32,10 @@ const Artifacts: FC<Props> = ({ html }) => {
 
   return (
     <Container>
-      <Button type="primary" icon={<ExpandOutlined />} onClick={onPreview}>
+      <Button type="primary" icon={<ExpandOutlined />} onClick={onPreview} size="small">
         {t('chat.artifacts.button.preview')}
       </Button>
-      <Button icon={<DownloadOutlined />} onClick={onDownload}>
+      <Button icon={<DownloadOutlined />} onClick={onDownload} size="small">
         {t('chat.artifacts.button.download')}
       </Button>
     </Container>

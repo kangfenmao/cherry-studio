@@ -38,19 +38,20 @@ const FilesPage: FC = () => {
     {
       title: t('files.name'),
       dataIndex: 'file',
-      key: 'file'
+      key: 'file',
+      width: '300px'
     },
     {
       title: t('files.size'),
       dataIndex: 'size',
       key: 'size',
-      width: '100px'
+      width: '80px'
     },
     {
       title: t('files.count'),
       dataIndex: 'count',
       key: 'count',
-      width: '100px'
+      width: '60px'
     },
     {
       title: t('files.created_at'),
@@ -219,7 +220,7 @@ const ImageInfo = styled.div`
 const SideNav = styled.div`
   width: var(--assistants-width);
   border-right: 0.5px solid var(--color-border);
-  padding: 15px;
+  padding: 7px 12px;
 
   .ant-menu {
     border-inline-end: none !important;
@@ -227,18 +228,22 @@ const SideNav = styled.div`
   }
 
   .ant-menu-item {
-    height: 40px;
-    line-height: 40px;
+    height: 36px;
+    line-height: 36px;
     margin: 4px 0;
     width: 100%;
+    border-radius: 16px;
+    border: 0.5px solid transparent;
 
     &:hover {
-      background-color: var(--color-background-soft);
+      background-color: var(--color-background-soft) !important;
     }
 
     &.ant-menu-item-selected {
       background-color: var(--color-background-soft);
       color: var(--color-primary);
+      border: 0.5px solid var(--color-border);
+      color: var(--color-text);
     }
   }
 `

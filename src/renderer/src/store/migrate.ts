@@ -1,4 +1,5 @@
 import { SYSTEM_MODELS } from '@renderer/config/models'
+import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
@@ -656,19 +657,67 @@ const migrateConfig = {
             models: SYSTEM_MODELS.mistral,
             isSystem: true,
             enabled: false
-          },
-          {
-            id: 'jina',
-            name: 'Jina',
-            apiKey: '',
-            apiHost: 'https://api.jina.ai',
-            models: SYSTEM_MODELS.jina,
-            isSystem: true,
-            enabled: false
           }
+          // {
+          //   id: 'jina',
+          //   name: 'Jina',
+          //   apiKey: '',
+          //   apiHost: 'https://api.jina.ai',
+          //   models: SYSTEM_MODELS.jina,
+          //   isSystem: true,
+          //   enabled: false
+          // }
         ]
       }
     }
+  },
+  '39': (state: RootState) => {
+    state.settings.codeStyle = 'auto'
+    return state
+  },
+  '40': (state: RootState) => {
+    state.settings.tray = true
+    return state
+  },
+  '41': (state: RootState) => {
+    state.llm.providers.forEach((provider) => {
+      if (provider.id === 'gemini') {
+        provider.type = 'gemini'
+      } else if (provider.id === 'anthropic') {
+        provider.type = 'anthropic'
+      } else {
+        provider.type = 'openai'
+      }
+    })
+    return state
+  },
+  '42': (state: RootState) => {
+    state.settings.proxyMode = state.settings.proxyUrl ? 'custom' : 'none'
+    return state
+  },
+  '43': (state: RootState) => {
+    if (state.settings.proxyMode === 'none') {
+      state.settings.proxyMode = 'system'
+    }
+    return state
+  },
+  '44': (state: RootState) => {
+    state.settings.translateModelPrompt = TRANSLATE_PROMPT
+    return state
+  },
+  '45': (state: RootState) => {
+    state.settings.enableTopicNaming = true
+    return state
+  },
+  '46': (state: RootState) => {
+    if (
+      state.settings.translateModelPrompt.includes(
+        'If the target language is the same as the source language, do not translate'
+      )
+    ) {
+      state.settings.translateModelPrompt = TRANSLATE_PROMPT
+    }
+    return state
   }
 }
 

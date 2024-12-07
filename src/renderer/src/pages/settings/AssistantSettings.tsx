@@ -1,22 +1,25 @@
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
-import { DEFAULT_CONEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { TopView } from '@renderer/components/TopView'
+import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { useDefaultAssistant } from '@renderer/hooks/useAssistant'
 import { AssistantSettings as AssistantSettingsType } from '@renderer/types'
-import { Button, Col, Input, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
+import { Button, Col, Input, InputNumber, Modal, Row, Slider, Switch, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { FC, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingDivider, SettingSubtitle, SettingTitle } from '.'
+import { SettingContainer, SettingSubtitle } from '.'
 
 const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()
   const [temperature, setTemperature] = useState(defaultAssistant.settings?.temperature ?? DEFAULT_TEMPERATURE)
-  const [contextCount, setConextCount] = useState(defaultAssistant.settings?.contextCount ?? DEFAULT_CONEXTCOUNT)
+  const [contextCount, setContextCount] = useState(defaultAssistant.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(defaultAssistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(defaultAssistant?.settings?.maxTokens ?? 0)
+  const { theme } = useTheme()
 
   const { t } = useTranslation()
 
@@ -34,27 +37,22 @@ const AssistantSettings: FC = () => {
     })
   }
 
-  const onTemperatureChange = (value) => {
-    if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ temperature: value })
+  const handleChange =
+    (setter: Dispatch<SetStateAction<number>>, updater: (value: number) => void) => (value: number | null) => {
+      if (!!value && !isNaN(value)) {
+        setter(value)
+        updater(value)
+      }
     }
-  }
-
-  const onConextCountChange = (value) => {
-    if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ contextCount: value })
-    }
-  }
-
-  const onMaxTokensChange = (value) => {
-    if (!isNaN(value as number)) {
-      onUpdateAssistantSettings({ maxTokens: value })
-    }
-  }
+  const onTemperatureChange = handleChange(setTemperature, (value) => onUpdateAssistantSettings({ temperature: value }))
+  const onContextCountChange = handleChange(setContextCount, (value) =>
+    onUpdateAssistantSettings({ contextCount: value })
+  )
+  const onMaxTokensChange = handleChange(setMaxTokens, (value) => onUpdateAssistantSettings({ maxTokens: value }))
 
   const onReset = () => {
     setTemperature(DEFAULT_TEMPERATURE)
-    setConextCount(DEFAULT_CONEXTCOUNT)
+    setContextCount(DEFAULT_CONTEXTCOUNT)
     setEnableMaxTokens(false)
     setMaxTokens(0)
     updateDefaultAssistant({
@@ -62,7 +60,7 @@ const AssistantSettings: FC = () => {
       settings: {
         ...defaultAssistant.settings,
         temperature: DEFAULT_TEMPERATURE,
-        contextCount: DEFAULT_CONEXTCOUNT,
+        contextCount: DEFAULT_CONTEXTCOUNT,
         enableMaxTokens: false,
         maxTokens: DEFAULT_MAX_TOKENS,
         streamOutput: true
@@ -71,9 +69,7 @@ const AssistantSettings: FC = () => {
   }
 
   return (
-    <SettingContainer>
-      <SettingTitle>{t('settings.assistant.title')}</SettingTitle>
-      <SettingDivider />
+    <SettingContainer style={{ height: 'auto', background: 'transparent', padding: 0 }} theme={theme}>
       <SettingSubtitle style={{ marginTop: 0 }}>{t('common.name')}</SettingSubtitle>
       <Input
         placeholder={t('common.assistant') + t('common.name')}
@@ -130,8 +126,8 @@ const AssistantSettings: FC = () => {
         </Col>
       </Row>
       <Row align="middle">
-        <Label>{t('chat.settings.conext_count')}</Label>
-        <Tooltip title={t('chat.settings.conext_count.tip')}>
+        <Label>{t('chat.settings.context_count')}</Label>
+        <Tooltip title={t('chat.settings.context_count.tip')}>
           <QuestionIcon />
         </Tooltip>
       </Row>
@@ -141,8 +137,8 @@ const AssistantSettings: FC = () => {
             min={0}
             max={20}
             marks={{ 0: '0', 5: '5', 10: '10', 15: '15', 20: t('chat.settings.max') }}
-            onChange={setConextCount}
-            onChangeComplete={onConextCountChange}
+            onChange={setContextCount}
+            onChangeComplete={onContextCountChange}
             value={typeof contextCount === 'number' ? contextCount : 0}
             step={1}
           />
@@ -153,7 +149,7 @@ const AssistantSettings: FC = () => {
             max={20}
             step={1}
             value={contextCount}
-            onChange={onConextCountChange}
+            onChange={onContextCountChange}
             style={{ width: '100%' }}
           />
         </Col>
@@ -192,6 +188,7 @@ const AssistantSettings: FC = () => {
         </Col>
         <Col span={3}>
           <InputNumber
+            disabled={!enableMaxTokens}
             min={0}
             max={32000}
             step={100}
@@ -206,6 +203,61 @@ const AssistantSettings: FC = () => {
   )
 }
 
+interface Props {
+  resolve: (data: any) => void
+}
+
+const PopupContainer: React.FC<Props> = ({ resolve }) => {
+  const [open, setOpen] = useState(true)
+  const { t } = useTranslation()
+
+  const onOk = () => {
+    setOpen(false)
+  }
+
+  const onCancel = () => {
+    setOpen(false)
+  }
+
+  const onClose = () => {
+    resolve({})
+  }
+
+  return (
+    <Modal
+      title={t('settings.assistant.title')}
+      open={open}
+      onOk={onOk}
+      onCancel={onCancel}
+      afterClose={onClose}
+      centered
+      width={800}
+      footer={null}>
+      <AssistantSettings />
+    </Modal>
+  )
+}
+
+export default class AssistantSettingsPopup {
+  static topviewId = 0
+  static hide() {
+    TopView.hide('AssistantSettingsPopup')
+  }
+  static show() {
+    return new Promise<any>((resolve) => {
+      TopView.show(
+        <PopupContainer
+          resolve={(v) => {
+            resolve(v)
+            this.hide()
+          }}
+        />,
+        'AssistantSettingsPopup'
+      )
+    })
+  }
+}
+
 const Label = styled.p`
   margin: 0;
   font-size: 14px;
@@ -217,5 +269,3 @@ const QuestionIcon = styled(QuestionCircleOutlined)`
   cursor: pointer;
   color: var(--color-text-3);
 `
-
-export default AssistantSettings

@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import { BuiltinTheme } from 'shiki'
 
 export type Assistant = {
   id: string
@@ -36,6 +37,7 @@ export type Message = {
   assistantId: string
   role: 'user' | 'assistant'
   content: string
+  translatedContent?: string
   topicId: string
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'paused' | 'error'
@@ -65,6 +67,7 @@ export type User = {
 
 export type Provider = {
   id: string
+  type: ProviderType
   name: string
   apiKey: string
   apiHost: string
@@ -74,6 +77,10 @@ export type Provider = {
   isSystem?: boolean
 }
 
+export type ProviderType = 'openai' | 'anthropic' | 'gemini'
+
+export type ModelType = 'text' | 'vision'
+
 export type Model = {
   id: string
   provider: string
@@ -81,6 +88,7 @@ export type Model = {
   group: string
   owned_by?: string
   description?: string
+  type?: ModelType[]
 }
 
 export type Suggestion = {
@@ -136,10 +144,28 @@ export enum ThemeMode {
   dark = 'dark',
   auto = 'auto'
 }
+export type LanguageVarious = 'zh-CN' | 'zh-TW' | 'en-US' | 'ru-RU'
+export type CodeStyleVarious = BuiltinTheme | 'auto'
 
 export type WebDavConfig = {
   webdavHost: string
   webdavUser: string
   webdavPass: string
   webdavPath: string
+}
+
+export type AppInfo = {
+  version: string
+  isPackaged: boolean
+  appPath: string
+  appDataPath: string
+  filesPath: string
+  logsPath: string
+}
+
+export interface Shortcut {
+  key: string
+  shortcut: string[]
+  editable: boolean
+  enabled: boolean
 }

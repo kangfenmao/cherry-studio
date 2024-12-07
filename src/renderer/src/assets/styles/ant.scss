@@ -42,35 +42,6 @@
   -webkit-app-region: no-drag;
 }
 
-.segmented-tab {
-  .ant-segmented-item {
-    overflow: hidden;
-  }
-  .ant-segmented-item-selected {
-    background-color: var(--color-background-mute);
-  }
-  .ant-segmented-item-label {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    font-size: 13px;
-  }
-  .iconfont {
-    font-size: 13px;
-    margin-left: -2px;
-  }
-  .anticon-setting {
-    font-size: 12px;
-  }
-  .icon-business-smart-assistant {
-    margin-right: -2px;
-  }
-  .ant-segmented-item-icon + * {
-    margin-left: 4px;
-  }
-}
-
 .message-attachments {
   .ant-upload-list-item:hover {
     background-color: initial !important;

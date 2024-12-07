@@ -1,4 +1,5 @@
-import { Input, InputProps, Modal } from 'antd'
+import { Input, Modal } from 'antd'
+import { TextAreaProps } from 'antd/es/input'
 import { useState } from 'react'
 
 import { Box } from '../Layout'
@@ -9,7 +10,7 @@ interface PromptPopupShowParams {
   message: string
   defaultValue?: string
   inputPlaceholder?: string
-  inputProps?: InputProps
+  inputProps?: TextAreaProps
 }
 
 interface Props extends PromptPopupShowParams {
@@ -42,13 +43,14 @@ const PromptPopupContainer: React.FC<Props> = ({
   return (
     <Modal title={title} open={open} onOk={onOk} onCancel={handleCancel} afterClose={onClose} centered>
       <Box mb={8}>{message}</Box>
-      <Input
+      <Input.TextArea
         placeholder={inputPlaceholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         allowClear
         autoFocus
         onPressEnter={onOk}
+        rows={1}
         {...inputProps}
       />
     </Modal>

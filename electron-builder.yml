@@ -63,6 +63,6 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    支持聊天气泡样式和简洁样式切换
-    支持导出对话为 Word 文档
-    错误修复
+    修复快捷键设置错误导致的无法启动问题
+    修复翻译按钮无法正常输出内容问题
+    修复检测更新按钮逻辑错误

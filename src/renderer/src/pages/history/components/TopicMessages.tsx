@@ -1,14 +1,16 @@
 import { ArrowRightOutlined, MessageOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
+import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import useScrollPosition from '@renderer/hooks/useScrollPosition'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { getAssistantById } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { locateToMessage } from '@renderer/services/MessagesService'
+import { isGenerating, locateToMessage } from '@renderer/services/MessagesService'
+import NavigationService from '@renderer/services/NavigationService'
 import { Topic } from '@renderer/types'
 import { Button, Divider, Empty } from 'antd'
 import { t } from 'i18next'
 import { FC } from 'react'
-import { useNavigate } from 'react-router'
 import styled from 'styled-components'
 
 import { default as MessageItem } from '../../home/Messages/Message'
@@ -18,8 +20,9 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const TopicMessages: FC<Props> = ({ topic, ...props }) => {
-  const navigate = useNavigate()
+  const navigate = NavigationService.navigate!
   const { handleScroll, containerRef } = useScrollPosition('TopicMessages')
+  const { messageStyle } = useSettings()
 
   const isEmpty = (topic?.messages || []).length === 0
 
@@ -27,14 +30,16 @@ const TopicMessages: FC<Props> = ({ topic, ...props }) => {
     return null
   }
 
-  const onContinueChat = (topic: Topic) => {
+  const onContinueChat = async (topic: Topic) => {
+    await isGenerating()
+    SearchPopup.hide()
     const assistant = getAssistantById(topic.assistantId)
     navigate('/', { state: { assistant, topic } })
     setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 100)
   }
 
   return (
-    <MessagesContainer {...props} ref={containerRef} onScroll={handleScroll}>
+    <MessagesContainer {...props} ref={containerRef} onScroll={handleScroll} className={messageStyle}>
       <ContainerWrapper style={{ paddingTop: 30, paddingBottom: 30 }}>
         {topic?.messages.map((message) => (
           <div key={message.id} style={{ position: 'relative' }}>

@@ -74,7 +74,8 @@ const AssistantSettingPopupContainer: React.FC<Props> = ({ resolve, ...props }) 
         content: {
           padding: 0,
           overflow: 'hidden',
-          background: 'var(--color-background)'
+          background: 'var(--color-background)',
+          border: `1px solid var(--color-frame-border)`
         },
         header: { padding: '10px 15px', borderBottom: '0.5px solid var(--color-border)', margin: 0 }
       }}
@@ -142,10 +143,11 @@ const StyledModal = styled(Modal)`
   }
   .ant-menu-item {
     height: 36px;
-    border-radius: 6px;
     color: var(--color-text-2);
     display: flex;
     align-items: center;
+    border: 0.5px solid transparent;
+    border-radius: 6px;
     .ant-menu-title-content {
       line-height: 36px;
     }
@@ -156,6 +158,7 @@ const StyledModal = styled(Modal)`
   }
   .ant-menu-item-selected {
     background-color: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
     .ant-menu-title-content {
       color: var(--color-text-1);
       font-weight: 500;

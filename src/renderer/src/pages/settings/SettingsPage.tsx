@@ -1,11 +1,4 @@
-import {
-  CloudOutlined,
-  InfoCircleOutlined,
-  MacCommandOutlined,
-  MessageOutlined,
-  SaveOutlined,
-  SettingOutlined
-} from '@ant-design/icons'
+import { CloudOutlined, InfoCircleOutlined, MacCommandOutlined, SaveOutlined, SettingOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { isLocalAi } from '@renderer/config/env'
 import { FC } from 'react'
@@ -14,10 +7,9 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import AboutSettings from './AboutSettings'
-import AssistantSettings from './AssistantSettings'
 import DataSettings from './DataSettings/DataSettings'
 import GeneralSettings from './GeneralSettings'
-import ModelSettings from './ModelSettings'
+import ModelSettings from './ModalSettings/ModelSettings'
 import ProvidersList from './ProviderSettings'
 import ShortcutSettings from './ShortcutSettings'
 
@@ -39,7 +31,7 @@ const SettingsPage: FC = () => {
               <MenuItemLink to="/settings/provider">
                 <MenuItem className={isRoute('/settings/provider')}>
                   <CloudOutlined />
-                  {t('settings.provider')}
+                  {t('settings.provider.title')}
                 </MenuItem>
               </MenuItemLink>
               <MenuItemLink to="/settings/model">
@@ -50,12 +42,6 @@ const SettingsPage: FC = () => {
               </MenuItemLink>
             </>
           )}
-          <MenuItemLink to="/settings/assistant">
-            <MenuItem className={isRoute('/settings/assistant')}>
-              <MessageOutlined />
-              {t('settings.assistant')}
-            </MenuItem>
-          </MenuItemLink>
           <MenuItemLink to="/settings/general">
             <MenuItem className={isRoute('/settings/general')}>
               <SettingOutlined />
@@ -71,7 +57,7 @@ const SettingsPage: FC = () => {
           <MenuItemLink to="/settings/data">
             <MenuItem className={isRoute('/settings/data')}>
               <SaveOutlined />
-              {t('settings.data')}
+              {t('settings.data.title')}
             </MenuItem>
           </MenuItemLink>
           <MenuItemLink to="/settings/about">
@@ -85,7 +71,6 @@ const SettingsPage: FC = () => {
           <Routes>
             <Route path="provider" element={<ProvidersList />} />
             <Route path="model" element={<ModelSettings />} />
-            <Route path="assistant" element={<AssistantSettings />} />
             <Route path="general/*" element={<GeneralSettings />} />
             <Route path="data/*" element={<DataSettings />} />
             <Route path="shortcut" element={<ShortcutSettings />} />
@@ -131,9 +116,10 @@ const MenuItem = styled.li`
   padding: 6px 10px;
   width: 100%;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 16px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
+  border: 0.5px solid transparent;
   .anticon {
     font-size: 16px;
     opacity: 0.8;
@@ -148,7 +134,8 @@ const MenuItem = styled.li`
     background: var(--color-background-soft);
   }
   &.active {
-    background: var(--color-background-mute);
+    background: var(--color-background-soft);
+    border: 0.5px solid var(--color-border);
   }
 `
 

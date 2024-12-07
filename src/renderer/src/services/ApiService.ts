@@ -74,11 +74,7 @@ export async function fetchChatCompletion({
     }
   } catch (error: any) {
     message.status = 'error'
-    try {
-      message.content = '```json\n' + JSON.stringify(error, null, 2) + '\n```'
-    } catch (e) {
-      message.content = 'Error: ' + error.message
-    }
+    message.content = formatErrorMessage(error)
   }
 
   timer && clearInterval(timer)
@@ -163,8 +159,6 @@ export async function fetchSuggestions({
   messages: Message[]
   assistant: Assistant
 }): Promise<Suggestion[]> {
-  const provider = getAssistantProvider(assistant)
-  const AI = new AiProvider(provider)
   const model = assistant.model
 
   if (!model) {
@@ -178,6 +172,9 @@ export async function fetchSuggestions({
   if (model.id.endsWith('global')) {
     return []
   }
+
+  const provider = getAssistantProvider(assistant)
+  const AI = new AiProvider(provider)
 
   try {
     return await AI.suggestions(filterMessages(messages), assistant)
@@ -212,13 +209,6 @@ export async function checkApi(provider: Provider) {
 
   const { valid } = await AI.check()
 
-  window.message[valid ? 'success' : 'error']({
-    key: 'api-check',
-    style: { marginTop: '3vh' },
-    duration: valid ? 2 : 8,
-    content: valid ? i18n.t('message.api.connection.success') : i18n.t('message.api.connection.failed')
-  })
-
   return valid
 }
 
@@ -235,5 +225,17 @@ export async function fetchModels(provider: Provider) {
     return await AI.models()
   } catch (error) {
     return []
+  }
+}
+
+function formatErrorMessage(error: any): string {
+  try {
+    return (
+      '```json\n' +
+      JSON.stringify(error?.response?.data || error?.response || error?.request || error, null, 2) +
+      '\n```'
+    )
+  } catch (e) {
+    return 'Error: ' + error.message
   }
 }

@@ -1,14 +1,14 @@
-import { FormOutlined } from '@ant-design/icons'
+import { SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import { HStack } from '@renderer/components/Layout'
+import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, Topic } from '@renderer/types'
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 import styled from 'styled-components'
 
 import SelectModelButton from './components/SelectModelButton'
@@ -25,11 +25,6 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   const { topicPosition } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
 
-  const addNewTopic = useCallback(() => {
-    EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)
-    setTimeout(() => EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR), 0)
-  }, [])
-
   return (
     <Navbar>
       {showAssistants && (
@@ -37,8 +32,8 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
             <i className="iconfont icon-hide-sidebar" />
           </NewButton>
-          <NewButton onClick={addNewTopic}>
-            <FormOutlined />
+          <NewButton onClick={() => SearchPopup.show()}>
+            <SearchOutlined />
           </NewButton>
         </NavbarLeft>
       )}
@@ -106,7 +101,6 @@ const TitleText = styled.span`
   margin-left: 5px;
   font-family: Ubuntu;
   font-size: 13px;
-  font-weight: 500;
 `
 
 export default HeaderNavbar

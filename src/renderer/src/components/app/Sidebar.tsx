@@ -1,10 +1,11 @@
-import { FileSearchOutlined, FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
+import { FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { Tooltip } from 'antd'
 import { Avatar } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -50,57 +51,67 @@ const Sidebar: FC = () => {
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
         <Menus onClick={MinApp.onClose}>
-          <StyledLink onClick={() => to('/')}>
-            <Icon className={isRoute('/')}>
-              <i className="iconfont icon-chat" />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/agents')}>
-            <Icon className={isRoutes('/agents')}>
-              <i className="iconfont icon-business-smart-assistant" />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/paintings')}>
-            <Icon className={isRoute('/paintings')}>
-              <PictureOutlined style={{ fontSize: 16 }} />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/translate')}>
-            <Icon className={isRoute('/translate')}>
-              <TranslationOutlined />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/apps')}>
-            <Icon className={isRoute('/apps')}>
-              <i className="iconfont icon-appstore" />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/files')}>
-            <Icon className={isRoute('/files')}>
-              <FolderOutlined />
-            </Icon>
-          </StyledLink>
-          <StyledLink onClick={() => to('/messages')}>
-            <Icon className={isRoutes('/messages')}>
-              <FileSearchOutlined />
-            </Icon>
-          </StyledLink>
+          <Tooltip title={t('assistants.title')} mouseEnterDelay={0.8} placement="right">
+            <StyledLink onClick={() => to('/')}>
+              <Icon className={isRoute('/')}>
+                <i className="iconfont icon-chat" />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('agents.title')} mouseEnterDelay={0.8} placement="right">
+            <StyledLink onClick={() => to('/agents')}>
+              <Icon className={isRoutes('/agents')}>
+                <i className="iconfont icon-business-smart-assistant" />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('paintings.title')} mouseEnterDelay={0.8} placement="right">
+            <StyledLink onClick={() => to('/paintings')}>
+              <Icon className={isRoute('/paintings')}>
+                <PictureOutlined style={{ fontSize: 16 }} />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('translate.title')} mouseEnterDelay={0.8} placement="right">
+            <StyledLink onClick={() => to('/translate')}>
+              <Icon className={isRoute('/translate')}>
+                <TranslationOutlined />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('minapp.title')} mouseEnterDelay={0.8} placement="right">
+            <StyledLink onClick={() => to('/apps')}>
+              <Icon className={isRoute('/apps')}>
+                <i className="iconfont icon-appstore" />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
+          <Tooltip title={t('files.title')} mouseEnterDelay={0.8} placement="right">
+            <StyledLink onClick={() => to('/files')}>
+              <Icon className={isRoute('/files')}>
+                <FolderOutlined />
+              </Icon>
+            </StyledLink>
+          </Tooltip>
         </Menus>
       </MainMenus>
       <Menus onClick={MinApp.onClose}>
-        <Icon onClick={() => toggleTheme()}>
-          {theme === 'dark' ? (
-            <i className="iconfont icon-theme icon-dark1" />
-          ) : (
-            <i className="iconfont icon-theme icon-theme-light" />
-          )}
-        </Icon>
-
-        <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
-          <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
-            <i className="iconfont icon-setting" />
+        <Tooltip title={t('settings.theme.title')} mouseEnterDelay={0.8} placement="right">
+          <Icon onClick={() => toggleTheme()}>
+            {theme === 'dark' ? (
+              <i className="iconfont icon-theme icon-dark1" />
+            ) : (
+              <i className="iconfont icon-theme icon-theme-light" />
+            )}
           </Icon>
-        </StyledLink>
+        </Tooltip>
+        <Tooltip title={t('settings.title')} mouseEnterDelay={0.8} placement="right">
+          <StyledLink onClick={() => to(isLocalAi ? '/settings/assistant' : '/settings/provider')}>
+            <Icon className={pathname.startsWith('/settings') ? 'active' : ''}>
+              <i className="iconfont icon-setting" />
+            </Icon>
+          </StyledLink>
+        </Tooltip>
       </Menus>
     </Container>
   )
@@ -116,7 +127,6 @@ const Container = styled.div`
   height: ${isMac ? 'calc(100vh - var(--navbar-height))' : '100vh'};
   -webkit-app-region: drag !important;
   margin-top: ${isMac ? 'var(--navbar-height)' : 0};
-  transition: background-color 0.3s ease;
 `
 
 const AvatarImg = styled(Avatar)`
@@ -147,14 +157,12 @@ const Icon = styled.div`
   align-items: center;
   border-radius: 50%;
   margin-bottom: 5px;
-  transition: background-color 0.2s ease;
   -webkit-app-region: none;
-  transition: all 0.2s ease;
+  border: 0.5px solid transparent;
   .iconfont,
   .anticon {
     color: var(--color-icon);
     font-size: 20px;
-    transition: color 0.2s ease;
     text-decoration: none;
   }
   .anticon {
@@ -170,6 +178,7 @@ const Icon = styled.div`
   }
   &.active {
     background-color: var(--color-active);
+    border: 0.5px solid var(--color-border);
     .iconfont,
     .anticon {
       color: var(--color-icon-white);

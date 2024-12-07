@@ -1,7 +1,7 @@
 import { PaperClipOutlined } from '@ant-design/icons'
-import { documentExts, imageExts, textExts } from '@renderer/config/constant'
 import { isVisionModel } from '@renderer/config/models'
 import { FileType, Model } from '@renderer/types'
+import { documentExts, imageExts, textExts } from '@shared/config/constant'
 import { Tooltip } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
