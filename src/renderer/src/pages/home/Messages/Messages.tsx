@@ -17,8 +17,10 @@ import { estimateHistoryTokens } from '@renderer/services/TokenService'
 import { Assistant, Message, Model, Topic } from '@renderer/types'
 import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
 import { t } from 'i18next'
-import { flatten, last, reverse, take } from 'lodash'
+import { flatten, last, take } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import BeatLoader from 'react-spinners/BeatLoader'
 import styled from 'styled-components'
 
 import Suggestions from '../components/Suggestions'
@@ -31,13 +33,53 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
+interface LoaderProps {
+  $loading: boolean
+}
+
+const LoaderContainer = styled.div<LoaderProps>`
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  background: var(--color-background);
+  opacity: ${(props) => (props.$loading ? 1 : 0)};
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+`
+
+const ScrollContainer = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+`
+
+interface ContainerProps {
+  right?: boolean
+}
+
+const Container = styled(Scrollbar)<ContainerProps>`
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 10px 0;
+  padding-bottom: 20px;
+  overflow-x: hidden;
+  background-color: var(--color-background);
+`
+
 const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [messages, setMessages] = useState<Message[]>([])
+  const [displayMessages, setDisplayMessages] = useState<Message[]>([])
+  const [hasMore, setHasMore] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+
   const containerRef = useRef<HTMLDivElement>(null)
+  const messagesRef = useRef(messages)
   const { updateTopic, addTopic } = useAssistant(assistant.id)
   const { showTopics, topicPosition, showAssistants, enableTopicNaming } = useSettings()
 
-  const messagesRef = useRef(messages)
+  const INITIAL_MESSAGES_COUNT = 30
+  const LOAD_MORE_COUNT = 20
+
   messagesRef.current = messages
 
   const maxWidth = useMemo(() => {
@@ -158,7 +200,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         setActiveTopic(newTopic)
         autoRenameTopic()
 
-        // 由于复制了消息，消息中附带的文件的总数变了，需要更新
+        // 由于复制了消���，消息中附带的文件的总数变了，需要更新
         const filesArr = branchMessages.map((m) => m.files)
         const files = flatten(filesArr).filter(Boolean)
         files.map(async (f) => {
@@ -197,7 +239,31 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     })
   }, [assistant, messages])
 
-  const memoizedMessages = useMemo(() => reverse([...messages]), [messages])
+  // 初始化显示最新的消息
+  useEffect(() => {
+    if (messages.length > 0) {
+      const reversedMessages = [...messages].reverse()
+      setDisplayMessages(reversedMessages.slice(0, INITIAL_MESSAGES_COUNT))
+      setHasMore(messages.length > INITIAL_MESSAGES_COUNT)
+    }
+  }, [messages])
+
+  // 加载更多历史消息
+  const loadMoreMessages = useCallback(() => {
+    if (!hasMore || isLoadingMore) return
+
+    setIsLoadingMore(true)
+
+    setTimeout(() => {
+      const currentLength = displayMessages.length
+      const reversedMessages = [...messages].reverse()
+      const moreMessages = reversedMessages.slice(currentLength, currentLength + LOAD_MORE_COUNT)
+
+      setDisplayMessages((prev) => [...prev, ...moreMessages])
+      setHasMore(currentLength + LOAD_MORE_COUNT < messages.length)
+      setIsLoadingMore(false)
+    }, 300)
+  }, [displayMessages, hasMore, isLoadingMore, messages])
 
   return (
     <Container
@@ -207,30 +273,34 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       ref={containerRef}
       right={topicPosition === 'left'}>
       <Suggestions assistant={assistant} messages={messages} />
-      {memoizedMessages.map((message, index) => (
-        <MessageItem
-          key={message.id}
-          message={message}
-          topic={topic}
-          index={index}
-          hidePresetMessages={assistant.settings?.hideMessages}
-          onSetMessages={setMessages}
-          onDeleteMessage={onDeleteMessage}
-          onGetMessages={onGetMessages}
-        />
-      ))}
+      <InfiniteScroll
+        dataLength={displayMessages.length}
+        next={loadMoreMessages}
+        hasMore={hasMore}
+        loader={null}
+        inverse={true}
+        scrollableTarget="messages">
+        <ScrollContainer>
+          <LoaderContainer $loading={isLoadingMore}>
+            <BeatLoader size={8} color="var(--color-text-2)" />
+          </LoaderContainer>
+          {displayMessages.map((message, index) => (
+            <MessageItem
+              key={message.id}
+              message={message}
+              topic={topic}
+              index={index}
+              hidePresetMessages={assistant.settings?.hideMessages}
+              onSetMessages={setMessages}
+              onDeleteMessage={onDeleteMessage}
+              onGetMessages={onGetMessages}
+            />
+          ))}
+        </ScrollContainer>
+      </InfiniteScroll>
       <Prompt assistant={assistant} key={assistant.prompt} />
     </Container>
   )
 }
-
-const Container = styled(Scrollbar)`
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 10px 0;
-  padding-bottom: 20px;
-  overflow-x: hidden;
-  background-color: var(--color-background);
-`
 
 export default Messages
