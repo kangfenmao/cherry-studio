@@ -3,7 +3,7 @@ import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { Assistant } from '@renderer/types'
-import { runAsyncFunction, uuid } from '@renderer/utils'
+import { getDefaultGroupName, runAsyncFunction, uuid } from '@renderer/utils'
 import { isEmpty } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
@@ -717,6 +717,14 @@ const migrateConfig = {
     ) {
       state.settings.translateModelPrompt = TRANSLATE_PROMPT
     }
+    return state
+  },
+  '47': (state: RootState) => {
+    state.llm.providers.forEach((provider) => {
+      provider.models.forEach((model) => {
+        model.group = getDefaultGroupName(model.id)
+      })
+    })
     return state
   }
 }

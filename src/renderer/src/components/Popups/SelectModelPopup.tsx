@@ -7,7 +7,7 @@ import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId } from '@renderer/services/ModelService'
 import { Model } from '@renderer/types'
 import { Avatar, Divider, Empty, Input, InputRef, Menu, MenuProps, Modal } from 'antd'
-import { first, reverse, sortBy } from 'lodash'
+import { first, sortBy } from 'lodash'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -47,7 +47,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
         await db.settings.put({ id: 'pinned:models', value: validPinnedModels })
       }
 
-      setPinnedModels(validPinnedModels)
+      setPinnedModels(sortBy(validPinnedModels, ['group', 'name']))
     }
     loadPinnedModels()
   }, [providers])
@@ -58,13 +58,13 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
       : [...pinnedModels, modelId]
 
     await db.settings.put({ id: 'pinned:models', value: newPinnedModels })
-    setPinnedModels(newPinnedModels)
+    setPinnedModels(sortBy(newPinnedModels, ['group', 'name']))
   }
 
   const filteredItems: MenuItem[] = providers
     .filter((p) => p.models && p.models.length > 0)
     .map((p) => {
-      const filteredModels = reverse(sortBy(p.models, 'name'))
+      const filteredModels = sortBy(p.models, ['group', 'name'])
         .filter((m) =>
           [m.name + m.provider + t('provider.' + p.id)].join('').toLowerCase().includes(searchText.toLowerCase())
         )
