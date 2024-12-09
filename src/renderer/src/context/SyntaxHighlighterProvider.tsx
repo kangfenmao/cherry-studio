@@ -54,13 +54,15 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
   const codeToHtml = async (code: string, language: string) => {
     if (!highlighter) return ''
 
+    const escapedCode = code.replace(/[<>]/g, (char) => ({ '<': '&lt;', '>': '&gt;' })[char]!)
+
     try {
       if (!highlighter.getLoadedLanguages().includes(language as BundledLanguage)) {
         if (language in bundledLanguages || language === 'text') {
           await highlighter.loadLanguage(language as BundledLanguage)
           console.log(`Loaded language: ${language}`)
         } else {
-          return `<pre style="padding: 10px"><code>${code}</code></pre>`
+          return `<pre style="padding: 10px"><code>${escapedCode}</code></pre>`
         }
       }
 
@@ -70,7 +72,7 @@ export const SyntaxHighlighterProvider: React.FC<PropsWithChildren> = ({ childre
       })
     } catch (error) {
       console.warn(`Error highlighting code for language '${language}':`, error)
-      return `<pre style="padding: 10px"><code>${code}</code></pre>`
+      return `<pre style="padding: 10px"><code>${escapedCode}</code></pre>`
     }
   }
 
