@@ -165,7 +165,7 @@ export function getModelLogo(modelId: string) {
     pixtral: isLight ? PixtralModelLogo : PixtralModelLogoDark,
     jina: isLight ? JinaModelLogo : JinaModelLogoDark,
     abab: isLight ? MinimaxModelLogo : MinimaxModelLogoDark,
-    'o1-': isLight ? ChatGPTo1ModelLogo : ChatGPTo1ModelLogoDark,
+    o1: isLight ? ChatGPTo1ModelLogo : ChatGPTo1ModelLogoDark,
     'gpt-3': isLight ? ChatGPT35ModelLogo : ChatGPT35ModelLogoDark,
     'gpt-4': isLight ? ChatGPT4ModelLogo : ChatGPT4ModelLogoDark,
     gpts: isLight ? ChatGPT4ModelLogo : ChatGPT4ModelLogoDark,
