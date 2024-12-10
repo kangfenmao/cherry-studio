@@ -77,8 +77,8 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const { updateTopic, addTopic } = useAssistant(assistant.id)
   const { showTopics, topicPosition, showAssistants, enableTopicNaming } = useSettings()
 
-  const INITIAL_MESSAGES_COUNT = 30
-  const LOAD_MORE_COUNT = 20
+  const INITIAL_MESSAGES_COUNT = 15
+  const LOAD_MORE_COUNT = 15
 
   messagesRef.current = messages
 

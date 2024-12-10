@@ -62,6 +62,11 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复快捷键设置错误导致的无法启动问题
-    修复翻译按钮无法正常输出内容问题
-    修复检测更新按钮逻辑错误
+    历史消息懒加载 by @1355873789
+    更快的应用更新下载速度 by @1355873789
+    更加清晰的模型分组
+    修复部分代码块无法正常显示问题
+    增加应用更新内容显示
+    消息发送增加 Ctrl + Enter 快捷键
+    清除上下文消息点击可以撤销
+    增加 Top-P 设置选项
