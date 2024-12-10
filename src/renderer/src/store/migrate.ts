@@ -1,3 +1,4 @@
+import { isMac } from '@renderer/config/constant'
 import { SYSTEM_MODELS } from '@renderer/config/models'
 import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import db from '@renderer/databases'
@@ -724,6 +725,26 @@ const migrateConfig = {
       provider.models.forEach((model) => {
         model.group = getDefaultGroupName(model.id)
       })
+    })
+    return state
+  },
+  '48': (state: RootState) => {
+    state.shortcuts.shortcuts.forEach((shortcut) => {
+      shortcut.system = shortcut.key !== 'new_topic'
+    })
+    state.shortcuts.shortcuts.push({
+      key: 'toggle_show_assistants',
+      shortcut: [isMac ? 'Command' : 'Ctrl', '['],
+      editable: true,
+      enabled: true,
+      system: false
+    })
+    state.shortcuts.shortcuts.push({
+      key: 'toggle_show_topics',
+      shortcut: [isMac ? 'Command' : 'Ctrl', ']'],
+      editable: true,
+      enabled: true,
+      system: false
     })
     return state
   }

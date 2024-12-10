@@ -6,7 +6,9 @@ import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, Topic } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
@@ -24,6 +26,18 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
   const { topicPosition } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
+
+  useShortcut('toggle_show_assistants', () => {
+    toggleShowAssistants()
+  })
+
+  useShortcut('toggle_show_topics', () => {
+    if (topicPosition === 'right') {
+      toggleShowTopics()
+    } else {
+      EventEmitter.emit(EVENT_NAMES.SHOW_TOPIC_SIDEBAR)
+    }
+  })
 
   return (
     <Navbar>

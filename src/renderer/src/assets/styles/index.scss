@@ -107,12 +107,6 @@ body[theme-mode='light'] {
   --chat-background-user: #95ec69;
   --chat-background-assistant: #ffffff;
   --chat-text-user: var(--color-text);
-
-  #content-container {
-    box-shadow:
-      0 4px 24px -4px rgba(0, 0, 0, 0.08),
-      0 2px 12px -2px rgba(0, 0, 0, 0.06);
-  }
 }
 
 *,
@@ -173,15 +167,13 @@ body,
 #content-container {
   background-color: var(--color-background);
   border-top: 0.5px solid var(--color-border);
-  box-shadow:
-    0 4px 28px -4px rgba(0, 0, 0, 0.3),
-    0 2px 16px -2px rgba(0, 0, 0, 0.25);
 }
 
 body[os='mac'] {
   #content-container {
     border-top-left-radius: 12px;
     border-left: 0.5px solid var(--color-border);
+    box-shadow: -2px 0px 24px -4px rgba(0, 0, 0, 0.1);
   }
 }
 

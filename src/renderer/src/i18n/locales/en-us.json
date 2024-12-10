@@ -471,7 +471,9 @@
         "press_shortcut": "Press Shortcut",
         "alt_warning": "Mac does not support Option + letters as shortcuts",
         "reset_to_default": "Reset to Default",
-        "clear_shortcut": "Clear Shortcut"
+        "clear_shortcut": "Clear Shortcut",
+        "toggle_show_assistants": "Toggle Assistants",
+        "toggle_show_topics": "Toggle Topics"
       },
       "theme.auto": "Auto",
       "theme.dark": "Dark",

@@ -11,16 +11,32 @@ const initialState: ShortcutsState = {
   shortcuts: [
     ...ZOOM_SHORTCUTS,
     {
-      key: 'new_topic',
-      shortcut: [isMac ? 'Command' : 'Ctrl', 'N'],
-      editable: true,
-      enabled: true
-    },
-    {
       key: 'show_app',
       shortcut: [],
       editable: true,
-      enabled: true
+      enabled: true,
+      system: true
+    },
+    {
+      key: 'new_topic',
+      shortcut: [isMac ? 'Command' : 'Ctrl', 'N'],
+      editable: true,
+      enabled: true,
+      system: false
+    },
+    {
+      key: 'toggle_show_assistants',
+      shortcut: [isMac ? 'Command' : 'Ctrl', '['],
+      editable: true,
+      enabled: true,
+      system: false
+    },
+    {
+      key: 'toggle_show_topics',
+      shortcut: [isMac ? 'Command' : 'Ctrl', ']'],
+      editable: true,
+      enabled: true,
+      system: false
     }
   ]
 }
@@ -29,7 +45,8 @@ const getSerializableShortcuts = (shortcuts: Shortcut[]) => {
   return shortcuts.map((shortcut) => ({
     key: shortcut.key,
     shortcut: [...shortcut.shortcut],
-    enabled: shortcut.enabled
+    enabled: shortcut.enabled,
+    system: shortcut.system
   }))
 }
 

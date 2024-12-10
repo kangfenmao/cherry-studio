@@ -77,7 +77,10 @@ export class ConfigManager {
   }
 
   setShortcuts(shortcuts: Shortcut[]) {
-    this.store.set('shortcuts', shortcuts)
+    this.store.set(
+      'shortcuts',
+      shortcuts.filter((shortcut) => shortcut.system)
+    )
     this.notifySubscribers('shortcuts', shortcuts)
   }
 }

@@ -169,4 +169,5 @@ export interface Shortcut {
   shortcut: string[]
   editable: boolean
   enabled: boolean
+  system: boolean
 }

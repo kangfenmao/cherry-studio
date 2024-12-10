@@ -62,6 +62,7 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
+    增加快捷键切换助手和话题显示
     历史消息懒加载 by @1355873789
     更快的应用更新下载速度 by @1355873789
     更加清晰的模型分组

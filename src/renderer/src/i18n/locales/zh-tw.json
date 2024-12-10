@@ -459,7 +459,9 @@
         "press_shortcut": "按下快捷鍵",
         "alt_warning": "Mac 不能使用 Option + 字母作為快捷鍵",
         "reset_to_default": "重置為預設",
-        "clear_shortcut": "清除快捷鍵"
+        "clear_shortcut": "清除快捷鍵",
+        "toggle_show_assistants": "切換助手顯示",
+        "toggle_show_topics": "切換話題顯示"
       },
       "theme.auto": "自動",
       "theme.dark": "深色主題",
