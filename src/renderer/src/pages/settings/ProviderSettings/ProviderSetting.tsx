@@ -177,7 +177,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     <SettingContainer theme={theme}>
       <SettingTitle>
         <Flex align="center">
-          <span>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</span>
+          <ProviderName>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</ProviderName>
           {officialWebsite! && (
             <Link target="_blank" href={providerConfig.websites.official}>
               <ExportOutlined style={{ marginLeft: '8px', color: 'var(--color-text)', fontSize: '12px' }} />
@@ -255,7 +255,12 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       )}
       <SettingSubtitle style={{ marginBottom: 5 }}>{t('common.models')}</SettingSubtitle>
       {Object.keys(modelGroups).map((group) => (
-        <Card key={group} type="inner" title={group} style={{ marginBottom: '10px' }} size="small">
+        <Card
+          key={group}
+          type="inner"
+          title={group}
+          style={{ marginBottom: '10px', border: '0.5px solid var(--color-border)' }}
+          size="small">
           {modelGroups[group].map((model) => (
             <ModelListItem key={model.id}>
               <ModelListHeader>
@@ -328,6 +333,11 @@ const SettingIcon = styled(SettingOutlined)`
   &:hover {
     color: var(--color-text-2);
   }
+`
+
+const ProviderName = styled.span`
+  font-size: 14px;
+  font-weight: 500;
 `
 
 export default ProviderSetting

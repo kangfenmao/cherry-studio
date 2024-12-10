@@ -9,6 +9,7 @@ export const SettingContainer = styled.div<{ theme?: ThemeMode }>`
   flex: 1;
   height: calc(100vh - var(--navbar-height));
   padding: 20px;
+  padding-top: 15px;
   overflow-y: scroll;
   font-family: Ubuntu;
   background: ${(props) => (props.theme === 'dark' ? 'transparent' : 'var(--color-background-soft)')};
