@@ -3,14 +3,15 @@ import { isLocalAi } from '@renderer/config/env'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
-import { setAvatar, setFilesPath } from '@renderer/store/runtime'
-import { runAsyncFunction } from '@renderer/utils'
+import { setAvatar, setFilesPath, setUpdateState } from '@renderer/store/runtime'
+import { delay, runAsyncFunction } from '@renderer/utils'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect } from 'react'
 
 import { useDefaultModel } from './useAssistant'
 import { useRuntime } from './useRuntime'
 import { useSettings } from './useSettings'
+import useUpdateHandler from './useUpdateHandler'
 
 export function useAppInit() {
   const dispatch = useAppDispatch()
@@ -18,6 +19,8 @@ export function useAppInit() {
   const { minappShow } = useRuntime()
   const { setDefaultModel, setTopicNamingModel, setTranslateModel } = useDefaultModel()
   const avatar = useLiveQuery(() => db.settings.get('image://avatar'))
+
+  useUpdateHandler()
 
   useEffect(() => {
     avatar?.value && dispatch(setAvatar(avatar.value))
@@ -28,11 +31,12 @@ export function useAppInit() {
     runAsyncFunction(async () => {
       const { isPackaged } = await window.api.getAppInfo()
       if (isPackaged && !manualUpdateCheck) {
-        setTimeout(window.api.checkForUpdate, 3000)
+        await delay(2)
+        const { updateInfo } = await window.api.checkForUpdate()
+        dispatch(setUpdateState({ info: updateInfo }))
       }
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch, manualUpdateCheck])
 
   useEffect(() => {
     if (proxyMode === 'system') {

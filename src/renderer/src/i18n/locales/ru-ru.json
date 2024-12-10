@@ -316,6 +316,7 @@
     "settings": {
       "about": "О программе и обратная связь",
       "about.checkUpdate": "Проверить обновления",
+      "about.checkUpdate.available": "Обновить",
       "about.checkingUpdate": "Проверка обновлений...",
       "about.contact.button": "Электронная почта",
       "about.contact.title": "Контакты",

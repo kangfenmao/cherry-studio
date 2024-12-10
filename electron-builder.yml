@@ -55,9 +55,8 @@ appImage:
   artifactName: ${productName}-${version}-${arch}.${ext}
 npmRebuild: false
 publish:
-  provider: github
-  repo: cherry-studio
-  owner: kangfenmao
+  provider: generic
+  url: https://cherrystudio.ocool.online
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
 afterSign: scripts/notarize.js

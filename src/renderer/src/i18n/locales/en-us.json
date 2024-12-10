@@ -316,6 +316,7 @@
     "settings": {
       "about": "About & Feedback",
       "about.checkUpdate": "Check Update",
+      "about.checkUpdate.available": "Update",
       "about.checkingUpdate": "Checking for updates...",
       "about.contact.button": "Email",
       "about.contact.title": "Contact",

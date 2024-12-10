@@ -3,6 +3,7 @@ import { FileType } from '@renderer/types'
 import { WebDavConfig } from '@renderer/types'
 import { AppInfo, LanguageVarious } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
+import type { UpdateInfo } from 'electron-updater'
 import { Readable } from 'stream'
 
 declare global {
@@ -10,7 +11,7 @@ declare global {
     electron: ElectronAPI
     api: {
       getAppInfo: () => Promise<AppInfo>
-      checkForUpdate: () => void
+      checkForUpdate: () => Promise<{ currentVersion: string; updateInfo: UpdateInfo | null }>
       openWebsite: (url: string) => void
       setProxy: (proxy: string | undefined) => void
       setLanguage: (theme: LanguageVarious) => void

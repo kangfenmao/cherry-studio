@@ -1,15 +1,17 @@
 import { GithubOutlined } from '@ant-design/icons'
 import { FileProtectOutlined, GlobalOutlined, MailOutlined, SoundOutlined } from '@ant-design/icons'
+import IndicatorLight from '@renderer/components/IndicatorLight'
 import { HStack } from '@renderer/components/Layout'
 import MinApp from '@renderer/components/MinApp'
 import { APP_NAME, AppLogo } from '@renderer/config/env'
 import { useTheme } from '@renderer/context/ThemeProvider'
+import { useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
+import { setUpdateState } from '@renderer/store/runtime'
 import { setManualUpdateCheck } from '@renderer/store/settings'
 import { runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Progress, Row, Switch, Tag } from 'antd'
-import { ProgressInfo, UpdateInfo } from 'electron-updater'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,17 +24,18 @@ import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingTitl
 const AboutSettings: FC = () => {
   const [version, setVersion] = useState('')
   const { t } = useTranslation()
-  const [percent, setPercent] = useState(0)
-  const [checkUpdateLoading, setCheckUpdateLoading] = useState(false)
-  const [downloading, setDownloading] = useState(false)
   const { manualUpdateCheck } = useSettings()
   const { theme } = useTheme()
   const dispatch = useAppDispatch()
+  const { update } = useRuntime()
 
   const onCheckUpdate = debounce(
     async () => {
-      if (checkUpdateLoading || downloading) return
-      setCheckUpdateLoading(true)
+      if (update.checking || update.downloading) {
+        return
+      }
+
+      dispatch(setUpdateState({ checking: true }))
 
       try {
         await window.api.checkForUpdate()
@@ -40,7 +43,7 @@ const AboutSettings: FC = () => {
         window.message.error(t('settings.about.updateError'))
       }
 
-      setCheckUpdateLoading(false)
+      dispatch(setUpdateState({ checking: false }))
     },
     2000,
     { leading: true, trailing: false }
@@ -75,52 +78,6 @@ const AboutSettings: FC = () => {
     })
   }, [])
 
-  useEffect(() => {
-    const ipcRenderer = window.electron.ipcRenderer
-    const removers = [
-      ipcRenderer.on('update-not-available', () => {
-        setCheckUpdateLoading(false)
-        window.message.success(t('settings.about.updateNotAvailable'))
-      }),
-      ipcRenderer.on('update-available', (_, releaseInfo: UpdateInfo) => {
-        setCheckUpdateLoading(false)
-        setDownloading(true)
-        window.modal.info({
-          title: t('settings.about.updateAvailable', { version: releaseInfo.version }),
-          content: (
-            <Markdown>
-              {typeof releaseInfo.releaseNotes === 'string'
-                ? releaseInfo.releaseNotes
-                : releaseInfo.releaseNotes?.map((note) => note.note).join('\n')}
-            </Markdown>
-          )
-        })
-      }),
-      ipcRenderer.on('download-update', () => {
-        setCheckUpdateLoading(false)
-        setDownloading(true)
-      }),
-      ipcRenderer.on('download-progress', (_, progress: ProgressInfo) => {
-        setPercent(progress.percent)
-        setDownloading(progress.percent < 100)
-      }),
-      ipcRenderer.on('update-downloaded', () => {
-        setDownloading(false)
-      }),
-      ipcRenderer.on('update-error', (_, error) => {
-        setCheckUpdateLoading(false)
-        setDownloading(false)
-        setPercent(0)
-        window.modal.info({
-          title: t('settings.about.updateError'),
-          content: error?.message || t('settings.about.updateError'),
-          icon: null
-        })
-      })
-    ]
-    return () => removers.forEach((remover) => remover())
-  }, [t])
-
   return (
     <SettingContainer theme={theme}>
       <SettingGroup theme={theme}>
@@ -136,11 +93,11 @@ const AboutSettings: FC = () => {
         <AboutHeader>
           <Row align="middle">
             <AvatarWrapper onClick={() => onOpenWebsite('https://github.com/kangfenmao/cherry-studio')}>
-              {percent > 0 && (
+              {update.downloadProgress > 0 && (
                 <ProgressCircle
                   type="circle"
                   size={84}
-                  percent={percent}
+                  percent={update.downloadProgress}
                   showInfo={false}
                   strokeLinecap="butt"
                   strokeColor="#67ad5b"
@@ -161,9 +118,13 @@ const AboutSettings: FC = () => {
           </Row>
           <CheckUpdateButton
             onClick={onCheckUpdate}
-            loading={checkUpdateLoading}
-            disabled={downloading || checkUpdateLoading}>
-            {downloading ? t('settings.about.downloading') : t('settings.about.checkUpdate')}
+            loading={update.checking}
+            disabled={update.downloading || update.checking}>
+            {update.downloading
+              ? t('settings.about.downloading')
+              : update.available
+                ? t('settings.about.checkUpdate.available')
+                : t('settings.about.checkUpdate')}
           </CheckUpdateButton>
         </AboutHeader>
         <SettingDivider />
@@ -172,6 +133,23 @@ const AboutSettings: FC = () => {
           <Switch value={manualUpdateCheck} onChange={(v) => dispatch(setManualUpdateCheck(v))} />
         </SettingRow>
       </SettingGroup>
+      {update.info && (
+        <SettingGroup theme={theme}>
+          <SettingRow>
+            <SettingRowTitle>
+              {t('settings.about.updateAvailable', { version: update.info.version })}
+              <IndicatorLight color="green" />
+            </SettingRowTitle>
+          </SettingRow>
+          <UpdateNotesWrapper>
+            <Markdown>
+              {typeof update.info.releaseNotes === 'string'
+                ? update.info.releaseNotes.replaceAll('\n', '\n\n')
+                : update.info.releaseNotes?.map((note) => note.note).join('\n')}
+            </Markdown>
+          </UpdateNotesWrapper>
+        </SettingGroup>
+      )}
       <SettingGroup theme={theme}>
         <SettingRow>
           <SettingRowTitle>
@@ -282,6 +260,19 @@ export const SettingRowTitle = styled.div`
   .anticon {
     font-size: 16px;
     color: var(--color-text-1);
+  }
+`
+
+const UpdateNotesWrapper = styled.div`
+  padding: 12px 0;
+  margin: 8px 0;
+  background-color: var(--color-bg-2);
+  border-radius: 6px;
+
+  p {
+    margin: 0;
+    color: var(--color-text-2);
+    font-size: 14px;
   }
 `
 

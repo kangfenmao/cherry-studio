@@ -316,6 +316,7 @@
     "settings": {
       "about": "關於與回饋",
       "about.checkUpdate": "檢查更新",
+      "about.checkUpdate.available": "立即更新",
       "about.checkingUpdate": "正在檢查更新...",
       "about.contact.button": "郵件",
       "about.contact.title": "聯繫方式",

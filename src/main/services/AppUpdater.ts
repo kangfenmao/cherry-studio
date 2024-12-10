@@ -2,6 +2,8 @@ import { app, BrowserWindow, dialog } from 'electron'
 import logger from 'electron-log'
 import { AppUpdater as _AppUpdater, autoUpdater, UpdateInfo } from 'electron-updater'
 
+import icon from '../../../build/icon.png?asset'
+
 export default class AppUpdater {
   autoUpdater: _AppUpdater = autoUpdater
 
@@ -43,6 +45,7 @@ export default class AppUpdater {
         .showMessageBox({
           type: 'info',
           title: '安装更新',
+          icon,
           message: `新版本 ${releaseInfo.version} 已准备就绪`,
           detail: this.formatReleaseNotes(releaseInfo.releaseNotes),
           buttons: ['稍后安装', '立即安装'],
