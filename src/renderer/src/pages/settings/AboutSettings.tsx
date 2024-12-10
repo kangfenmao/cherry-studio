@@ -10,7 +10,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
 import { setUpdateState } from '@renderer/store/runtime'
 import { setManualUpdateCheck } from '@renderer/store/settings'
-import { runAsyncFunction } from '@renderer/utils'
+import { compareVersions, runAsyncFunction } from '@renderer/utils'
 import { Avatar, Button, Progress, Row, Switch, Tag } from 'antd'
 import { debounce } from 'lodash'
 import { FC, useEffect, useState } from 'react'
@@ -70,6 +70,8 @@ const AboutSettings: FC = () => {
       logo: AppLogo
     })
   }
+
+  const hasNewVersion = update?.info?.version && version ? compareVersions(update.info.version, version) > 0 : false
 
   useEffect(() => {
     runAsyncFunction(async () => {
@@ -133,7 +135,7 @@ const AboutSettings: FC = () => {
           <Switch value={manualUpdateCheck} onChange={(v) => dispatch(setManualUpdateCheck(v))} />
         </SettingRow>
       </SettingGroup>
-      {update.info && (
+      {hasNewVersion && update.info && (
         <SettingGroup theme={theme}>
           <SettingRow>
             <SettingRowTitle>
@@ -208,7 +210,9 @@ const AboutSettings: FC = () => {
           <SettingRowTitle>
             <TwitterOutlined />X
           </SettingRowTitle>
-          <Button onClick={() => onOpenWebsite('https://x.com/kangfenmao')}>@kangfenmao</Button>
+          <Button onClick={() => onOpenWebsite('https://x.com/kangfenmao')}>
+            {t('settings.about.website.button')}
+          </Button>
         </SettingRow>
         <SettingDivider />
         <SettingRow>
@@ -216,7 +220,9 @@ const AboutSettings: FC = () => {
             <SendOutlined />
             Telegram
           </SettingRowTitle>
-          <Button onClick={() => onOpenWebsite('https://t.me/CherryStudioAI')}>@CherryStudioAI</Button>
+          <Button onClick={() => onOpenWebsite('https://t.me/CherryStudioAI')}>
+            {t('settings.about.website.button')}
+          </Button>
         </SettingRow>
       </SettingGroup>
     </SettingContainer>

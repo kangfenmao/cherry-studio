@@ -77,8 +77,8 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const { updateTopic, addTopic } = useAssistant(assistant.id)
   const { showTopics, topicPosition, showAssistants, enableTopicNaming } = useSettings()
 
-  const INITIAL_MESSAGES_COUNT = 15
-  const LOAD_MORE_COUNT = 15
+  const INITIAL_MESSAGES_COUNT = 20
+  const LOAD_MORE_COUNT = 20
 
   messagesRef.current = messages
 
@@ -158,6 +158,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {
         setMessages([])
+        setDisplayMessages([])
         const defaultTopic = getDefaultTopic(assistant.id)
         updateTopic({ ...topic, name: defaultTopic.name, messages: [] })
         TopicManager.clearTopicMessages(topic.id)
