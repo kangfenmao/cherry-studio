@@ -136,9 +136,11 @@ const MessageItem: FC<Props> = ({
 
   if (message.type === 'clear') {
     return (
-      <Divider dashed style={{ padding: '0 20px' }} plain>
-        {t('chat.message.new.context')}
-      </Divider>
+      <NewContextMessage onClick={() => EventEmitter.emit(EVENT_NAMES.NEW_CONTEXT)}>
+        <Divider dashed style={{ padding: '0 20px' }} plain>
+          {t('chat.message.new.context')}
+        </Divider>
+      </NewContextMessage>
     )
   }
 
@@ -226,6 +228,10 @@ const MessageFooter = styled.div`
   margin-top: 2px;
   border-top: 1px dotted var(--color-border);
   gap: 20px;
+`
+
+const NewContextMessage = styled.div`
+  cursor: pointer;
 `
 
 export default memo(MessageItem)
