@@ -62,7 +62,8 @@ const ModelSettings: FC = () => {
       message: t('settings.models.translate_model_prompt_message'),
       defaultValue: translateModelPrompt,
       inputProps: {
-        rows: 10
+        rows: 10,
+        onPressEnter: () => {}
       }
     })
     if (prompt) {
