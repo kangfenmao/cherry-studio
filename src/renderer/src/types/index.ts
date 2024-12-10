@@ -23,6 +23,7 @@ export type AssistantMessage = {
 export type AssistantSettings = {
   contextCount: number
   temperature: number
+  topP: number
   maxTokens: number | undefined
   enableMaxTokens: boolean
   streamOutput: boolean

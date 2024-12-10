@@ -16,7 +16,7 @@ import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SettingContainer, SettingDescription, SettingGroup, SettingTitle } from '..'
-import AssistantSettingsPopup from '../AssistantSettings'
+import DefaultAssistantSettings from './DefaultAssistantSettings'
 import TopicNamingModalPopup from './TopicNamingModalPopup'
 
 const ModelSettings: FC = () => {
@@ -93,7 +93,7 @@ const ModelSettings: FC = () => {
             showSearch
             placeholder={t('settings.models.empty')}
           />
-          <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={() => AssistantSettingsPopup.show()} />
+          <Button icon={<SettingOutlined />} style={{ marginLeft: 8 }} onClick={DefaultAssistantSettings.show} />
         </HStack>
         <SettingDescription>{t('settings.models.default_assistant_model_description')}</SettingDescription>
       </SettingGroup>

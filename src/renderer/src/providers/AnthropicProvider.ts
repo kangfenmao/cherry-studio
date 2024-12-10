@@ -78,6 +78,7 @@ export default class AnthropicProvider extends BaseProvider {
       messages: userMessages,
       max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
       temperature: assistant?.settings?.temperature,
+      top_p: assistant?.settings?.topP,
       system: assistant.prompt
     }
 

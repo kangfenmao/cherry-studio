@@ -86,7 +86,8 @@ export default class GeminiProvider extends BaseProvider {
         systemInstruction: assistant.prompt,
         generationConfig: {
           maxOutputTokens: maxTokens,
-          temperature: assistant?.settings?.temperature
+          temperature: assistant?.settings?.temperature,
+          topP: assistant?.settings?.topP
         },
         safetySettings: [
           { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },

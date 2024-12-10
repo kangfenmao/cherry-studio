@@ -11,7 +11,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SettingContainer, SettingSubtitle } from '.'
+import { SettingContainer, SettingSubtitle } from '..'
 
 const AssistantSettings: FC = () => {
   const { defaultAssistant, updateDefaultAssistant } = useDefaultAssistant()
@@ -19,6 +19,7 @@ const AssistantSettings: FC = () => {
   const [contextCount, setContextCount] = useState(defaultAssistant.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(defaultAssistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(defaultAssistant?.settings?.maxTokens ?? 0)
+  const [topP, setTopP] = useState(defaultAssistant.settings?.topP ?? 1)
   const { theme } = useTheme()
 
   const { t } = useTranslation()
@@ -32,7 +33,8 @@ const AssistantSettings: FC = () => {
         contextCount: settings.contextCount ?? contextCount,
         enableMaxTokens: settings.enableMaxTokens ?? enableMaxTokens,
         maxTokens: settings.maxTokens ?? maxTokens,
-        streamOutput: settings.streamOutput ?? true
+        streamOutput: settings.streamOutput ?? true,
+        topP: settings.topP ?? topP
       }
     })
   }
@@ -49,12 +51,14 @@ const AssistantSettings: FC = () => {
     onUpdateAssistantSettings({ contextCount: value })
   )
   const onMaxTokensChange = handleChange(setMaxTokens, (value) => onUpdateAssistantSettings({ maxTokens: value }))
+  const onTopPChange = handleChange(setTopP, (value) => onUpdateAssistantSettings({ topP: value }))
 
   const onReset = () => {
     setTemperature(DEFAULT_TEMPERATURE)
     setContextCount(DEFAULT_CONTEXTCOUNT)
     setEnableMaxTokens(false)
     setMaxTokens(0)
+    setTopP(1)
     updateDefaultAssistant({
       ...defaultAssistant,
       settings: {
@@ -63,7 +67,8 @@ const AssistantSettings: FC = () => {
         contextCount: DEFAULT_CONTEXTCOUNT,
         enableMaxTokens: false,
         maxTokens: DEFAULT_MAX_TOKENS,
-        streamOutput: true
+        streamOutput: true,
+        topP: 1
       }
     })
   }
@@ -123,6 +128,28 @@ const AssistantSettings: FC = () => {
             onChange={onTemperatureChange}
             style={{ width: '100%' }}
           />
+        </Col>
+      </Row>
+      <Row align="middle">
+        <Label>{t('chat.settings.top_p')}</Label>
+        <Tooltip title={t('chat.settings.top_p.tip')}>
+          <QuestionIcon />
+        </Tooltip>
+      </Row>
+      <Row align="middle" style={{ marginBottom: 10 }} gutter={20}>
+        <Col span={21}>
+          <Slider
+            min={0}
+            max={1}
+            onChange={setTopP}
+            onChangeComplete={onTopPChange}
+            value={typeof topP === 'number' ? topP : 1}
+            marks={{ 0: '0', 0.5: '0.5', 1: '1' }}
+            step={0.1}
+          />
+        </Col>
+        <Col span={3}>
+          <InputNumber min={0} max={1} step={0.01} value={topP} onChange={onTopPChange} style={{ width: '100%' }} />
         </Col>
       </Row>
       <Row align="middle">
@@ -223,6 +250,8 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
     resolve({})
   }
 
+  DefaultAssistantSettingsPopup.hide = onCancel
+
   return (
     <Modal
       title={t('settings.assistant.title')}
@@ -238,10 +267,12 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   )
 }
 
-export default class AssistantSettingsPopup {
+const TopViewKey = 'DefaultAssistantSettingsPopup'
+
+export default class DefaultAssistantSettingsPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide('AssistantSettingsPopup')
+    TopView.hide(TopViewKey)
   }
   static show() {
     return new Promise<any>((resolve) => {
@@ -249,10 +280,10 @@ export default class AssistantSettingsPopup {
         <PopupContainer
           resolve={(v) => {
             resolve(v)
-            this.hide()
+            TopView.hide(TopViewKey)
           }}
         />,
-        'AssistantSettingsPopup'
+        TopViewKey
       )
     })
   }

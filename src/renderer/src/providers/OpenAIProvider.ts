@@ -146,6 +146,7 @@ export default class OpenAIProvider extends BaseProvider {
         Boolean
       ) as ChatCompletionMessageParam[],
       temperature: isOpenAIo1 ? 1 : assistant?.settings?.temperature,
+      top_p: assistant?.settings?.topP,
       max_tokens: maxTokens,
       keep_alive: this.keepAliveTime,
       stream: isSupportStreamOutput
