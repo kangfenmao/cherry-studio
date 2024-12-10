@@ -183,6 +183,11 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
       sendMessage()
       return event.preventDefault()
     }
+
+    if (sendMessageShortcut === 'Ctrl+Enter' && isEnterPressed && event.ctrlKey) {
+      sendMessage()
+      return event.preventDefault()
+    }
   }
 
   const addNewTopic = useCallback(async () => {
