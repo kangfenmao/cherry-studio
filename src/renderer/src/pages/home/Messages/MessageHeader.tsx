@@ -35,9 +35,9 @@ const MessageHeader: FC<Props> = memo(({ assistant, model, message }) => {
 
   const getUserName = useCallback(() => {
     if (isLocalAi && message.role !== 'user') return APP_NAME
-    if (message.role === 'assistant') return model?.name || model?.id || ''
+    if (message.role === 'assistant') return model?.name || model?.id || message.modelId || ''
     return userName || t('common.you')
-  }, [message.role, model?.id, model?.name, t, userName])
+  }, [message.modelId, message.role, model?.id, model?.name, t, userName])
 
   const isAssistantMessage = message.role === 'assistant'
 
