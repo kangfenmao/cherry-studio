@@ -169,18 +169,10 @@ body,
   border-top: 0.5px solid var(--color-border);
 }
 
-body[os='mac'] {
-  #content-container {
-    border-top-left-radius: 12px;
-    border-left: 0.5px solid var(--color-border);
-    box-shadow: -2px 0px 20px -4px rgba(0, 0, 0, 0.08);
-  }
-}
-
-body[os='windows'] {
-  #app-sidebar {
-    border-right: 0.5px solid var(--color-border);
-  }
+#content-container {
+  border-top-left-radius: 12px;
+  border-left: 0.5px solid var(--color-border);
+  box-shadow: -2px 0px 20px -4px rgba(0, 0, 0, 0.08);
 }
 
 .loader {
