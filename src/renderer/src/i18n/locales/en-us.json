@@ -80,6 +80,7 @@
       "input.topics": " Topics ",
       "input.translate": "Translate to English",
       "input.upload": "Upload image or document file",
+      "input.web_search": "Enable web search",
       "message.new.branch": "New Branch",
       "message.new.branch.created": "New Branch Created",
       "message.new.context": "New Context",

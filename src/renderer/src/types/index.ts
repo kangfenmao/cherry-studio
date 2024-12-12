@@ -13,6 +13,7 @@ export type Assistant = {
   defaultModel?: Model
   settings?: Partial<AssistantSettings>
   messages?: AssistantMessage[]
+  enableWebSearch?: boolean
 }
 
 export type AssistantMessage = {

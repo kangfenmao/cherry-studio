@@ -4,13 +4,14 @@ import {
   FormOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
+  GlobalOutlined,
   PauseCircleOutlined,
   QuestionCircleOutlined
 } from '@ant-design/icons'
 import { PicCenterOutlined } from '@ant-design/icons'
 import TranslateButton from '@renderer/components/TranslateButton'
 import { isMac } from '@renderer/config/constant'
-import { isVisionModel } from '@renderer/config/models'
+import { isVisionModel, isWebSearchModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useRuntime } from '@renderer/hooks/useRuntime'
@@ -48,10 +49,10 @@ interface Props {
 let _text = ''
 let _files: FileType[] = []
 
-const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
+const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
   const [inputFocus, setInputFocus] = useState(false)
-  const { addTopic, model, setModel } = useAssistant(assistant.id)
+  const { assistant, addTopic, model, setModel, updateAssistant } = useAssistant(_assistant.id)
   const {
     sendMessageShortcut,
     fontSize,
@@ -400,6 +401,17 @@ const Inputbar: FC<Props> = ({ assistant, setActiveTopic }) => {
                 <FormOutlined />
               </ToolbarButton>
             </Tooltip>
+            {isWebSearchModel(model) && (
+              <Tooltip placement="top" title={t('chat.input.web_search')} arrow>
+                <ToolbarButton
+                  type="text"
+                  onClick={() => updateAssistant({ ...assistant, enableWebSearch: !assistant.enableWebSearch })}>
+                  <GlobalOutlined
+                    style={{ color: assistant.enableWebSearch ? 'var(--color-link)' : 'var(--color-icon)' }}
+                  />
+                </ToolbarButton>
+              </Tooltip>
+            )}
             <Tooltip placement="top" title={t('chat.input.clear')} arrow>
               <Popconfirm
                 title={t('chat.input.clear.content')}

@@ -1056,3 +1056,7 @@ export function isVisionModel(model: Model): boolean {
 export function isSupportedModel(model: OpenAI.Models.Model): boolean {
   return !NOT_SUPPORTED_REGEX.test(model.id)
 }
+
+export function isWebSearchModel(model: Model): boolean {
+  return model?.provider === 'gemini' && model?.id === 'gemini-2.0-flash-exp'
+}

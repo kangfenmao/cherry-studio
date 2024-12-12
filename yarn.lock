@@ -798,10 +798,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@google/generative-ai@npm:^0.16.0":
-  version: 0.16.1
-  resolution: "@google/generative-ai@npm:0.16.1"
-  checksum: 10c0/bad13a040e210a48a44272b81ef78213d23c17491ff3cb0a937952518c79e96005b78d8c3324342b5b8613b6b13f56fe9bc53447c5d2c7da4a9cd26c6a8d7de4
+"@google/generative-ai@npm:^0.21.0":
+  version: 0.21.0
+  resolution: "@google/generative-ai@npm:0.21.0"
+  checksum: 10c0/cff5946c5964f2380e5097d82bd563d79be27a1a5ac604aaaad3f9ba3382992e4f0a371bd255baabfba4e5bdf296d8ce1410cbd65424afa98e64b2590fe49f3b
   languageName: node
   linkType: hard
 
@@ -2341,7 +2341,7 @@ __metadata:
     "@electron-toolkit/preload": "npm:^3.0.0"
     "@electron-toolkit/tsconfig": "npm:^1.0.1"
     "@electron-toolkit/utils": "npm:^3.0.0"
-    "@google/generative-ai": "npm:^0.16.0"
+    "@google/generative-ai": "npm:^0.21.0"
     "@hello-pangea/dnd": "npm:^16.6.0"
     "@kangfenmao/keyv-storage": "npm:^0.1.0"
     "@reduxjs/toolkit": "npm:^2.2.5"

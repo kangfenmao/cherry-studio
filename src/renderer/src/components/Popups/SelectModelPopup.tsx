@@ -1,7 +1,7 @@
 import { PushpinOutlined, SearchOutlined } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { TopView } from '@renderer/components/TopView'
-import { getModelLogo, isVisionModel } from '@renderer/config/models'
+import { getModelLogo, isVisionModel, isWebSearchModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId } from '@renderer/services/ModelService'
@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import WebSearchIcon from '../Icons/WebSearchIcon'
 import { HStack } from '../Layout'
 import Scrollbar from '../Scrollbar'
 
@@ -73,7 +74,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
           label: (
             <ModelItem>
               <span>
-                {m?.name} {isVisionModel(m) && <VisionIcon />}
+                {m?.name} {isVisionModel(m) && <VisionIcon />} {isWebSearchModel(m) && <WebSearchIcon />}
               </span>
               <PinIcon
                 onClick={(e) => {

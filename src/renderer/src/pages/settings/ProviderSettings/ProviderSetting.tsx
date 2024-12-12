@@ -8,7 +8,8 @@ import {
   SettingOutlined
 } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
-import { getModelLogo, isVisionModel, VISION_REGEX } from '@renderer/config/models'
+import WebSearchIcon from '@renderer/components/Icons/WebSearchIcon'
+import { getModelLogo, isVisionModel, isWebSearchModel, VISION_REGEX } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAssistants, useDefaultModel } from '@renderer/hooks/useAssistant'
@@ -261,20 +262,24 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           title={group}
           style={{ marginBottom: '10px', border: '0.5px solid var(--color-border)' }}
           size="small">
-          {modelGroups[group].map((model) => (
-            <ModelListItem key={model.id}>
-              <ModelListHeader>
-                <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
-                  {model.name[0].toUpperCase()}
-                </Avatar>
-                {model.name} {isVisionModel(model) && <VisionIcon />}
-                <Popover content={modelTypeContent(model)} title={t('model.type.select')} trigger="click">
-                  <SettingIcon />
-                </Popover>
-              </ModelListHeader>
-              <RemoveIcon onClick={() => removeModel(model)} />
-            </ModelListItem>
-          ))}
+          {modelGroups[group].map((model) => {
+            console.debug(model)
+            return (
+              <ModelListItem key={model.id}>
+                <ModelListHeader>
+                  <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
+                    {model.name[0].toUpperCase()}
+                  </Avatar>
+                  {model.name} {isVisionModel(model) && <VisionIcon />}
+                  {isWebSearchModel(model) && <WebSearchIcon />}
+                  <Popover content={modelTypeContent(model)} title={t('model.type.select')} trigger="click">
+                    <SettingIcon />
+                  </Popover>
+                </ModelListHeader>
+                <RemoveIcon onClick={() => removeModel(model)} />
+              </ModelListItem>
+            )
+          })}
         </Card>
       ))}
       {docsWebsite && (
