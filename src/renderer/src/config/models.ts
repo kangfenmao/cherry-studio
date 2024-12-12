@@ -121,6 +121,7 @@ import WenxinModelLogo from '@renderer/assets/images/models/wenxin.png'
 import WenxinModelLogoDark from '@renderer/assets/images/models/wenxin_dark.png'
 import YiModelLogo from '@renderer/assets/images/models/yi.png'
 import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
+import { getProviderByModel } from '@renderer/services/AssistantService'
 import { Model } from '@renderer/types'
 import OpenAI from 'openai'
 
@@ -1058,5 +1059,6 @@ export function isSupportedModel(model: OpenAI.Models.Model): boolean {
 }
 
 export function isWebSearchModel(model: Model): boolean {
-  return model?.provider === 'gemini' && model?.id === 'gemini-2.0-flash-exp'
+  const provider = getProviderByModel(model)
+  return (provider.id === 'gemini' || provider?.type === 'gemini') && model?.id === 'gemini-2.0-flash-exp'
 }

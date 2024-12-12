@@ -1,7 +1,13 @@
 import { CheckOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
-import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
+import {
+  DEFAULT_CONTEXTCOUNT,
+  DEFAULT_MAX_TOKENS,
+  DEFAULT_TEMPERATURE,
+  isMac,
+  isWindows
+} from '@renderer/config/constant'
 import { codeThemes } from '@renderer/context/SyntaxHighlighterProvider'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -351,9 +357,9 @@ const SettingsTab: FC<Props> = (props) => {
             menuItemSelectedIcon={<CheckOutlined />}
             options={[
               { value: 'Enter', label: 'Enter' },
-              { value: 'Shift+Enter', label: `Shift + Enter` },
-              { value: 'Ctrl+Enter', label: `Ctrl + Enter` },
-              { value: 'Command+Enter', label: `CommandOrControl + Enter` }
+              { value: 'Shift+Enter', label: 'Shift + Enter' },
+              { value: 'Ctrl+Enter', label: 'Ctrl + Enter' },
+              { value: 'Command+Enter', label: `${isMac ? '⌘' : isWindows ? 'Win' : 'Super'} + Enter` }
             ]}
             onChange={(value) => setSendMessageShortcut(value)}
             style={{ width: 135 }}

@@ -712,7 +712,7 @@ const migrateConfig = {
   },
   '46': (state: RootState) => {
     if (
-      state.settings.translateModelPrompt.includes(
+      state.settings?.translateModelPrompt?.includes(
         'If the target language is the same as the source language, do not translate'
       )
     ) {
@@ -729,23 +729,25 @@ const migrateConfig = {
     return state
   },
   '48': (state: RootState) => {
-    state.shortcuts.shortcuts.forEach((shortcut) => {
-      shortcut.system = shortcut.key !== 'new_topic'
-    })
-    state.shortcuts.shortcuts.push({
-      key: 'toggle_show_assistants',
-      shortcut: [isMac ? 'Command' : 'Ctrl', '['],
-      editable: true,
-      enabled: true,
-      system: false
-    })
-    state.shortcuts.shortcuts.push({
-      key: 'toggle_show_topics',
-      shortcut: [isMac ? 'Command' : 'Ctrl', ']'],
-      editable: true,
-      enabled: true,
-      system: false
-    })
+    if (state.shortcuts) {
+      state.shortcuts.shortcuts.forEach((shortcut) => {
+        shortcut.system = shortcut.key !== 'new_topic'
+      })
+      state.shortcuts.shortcuts.push({
+        key: 'toggle_show_assistants',
+        shortcut: [isMac ? 'Command' : 'Ctrl', '['],
+        editable: true,
+        enabled: true,
+        system: false
+      })
+      state.shortcuts.shortcuts.push({
+        key: 'toggle_show_topics',
+        shortcut: [isMac ? 'Command' : 'Ctrl', ']'],
+        editable: true,
+        enabled: true,
+        system: false
+      })
+    }
     return state
   }
 }
