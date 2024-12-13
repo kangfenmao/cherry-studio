@@ -465,16 +465,15 @@ __metadata:
   linkType: hard
 
 "@electron/asar@npm:^3.2.1":
-  version: 3.2.13
-  resolution: "@electron/asar@npm:3.2.13"
+  version: 3.2.17
+  resolution: "@electron/asar@npm:3.2.17"
   dependencies:
-    "@types/glob": "npm:^7.1.0"
     commander: "npm:^5.0.0"
     glob: "npm:^7.1.6"
     minimatch: "npm:^3.0.4"
   bin:
     asar: bin/asar.js
-  checksum: 10c0/b25b978b6f378713a6caf1f038d8ee6c83a255a26f5a1d7fc404eaddc6561c6f6204ec13b21c8e81072d8e9bc627f11b914cf98b793949fca45565d03ac6a73a
+  checksum: 10c0/5dc29c6167951ca92ced43a99cdca15477bf6ee7ce72c5f0c6feb3f43f382ad2940fbde8d07071691e303fea6d1d6fcd5d3873a50375c828c18da54b28403fba
   languageName: node
   linkType: hard
 
@@ -1894,16 +1893,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/glob@npm:^7.1.0":
-  version: 7.2.0
-  resolution: "@types/glob@npm:7.2.0"
-  dependencies:
-    "@types/minimatch": "npm:*"
-    "@types/node": "npm:*"
-  checksum: 10c0/a8eb5d5cb5c48fc58c7ca3ff1e1ddf771ee07ca5043da6e4871e6757b4472e2e73b4cfef2644c38983174a4bc728c73f8da02845c28a1212f98cabd293ecae98
-  languageName: node
-  linkType: hard
-
 "@types/hast@npm:^3.0.0, @types/hast@npm:^3.0.4":
   version: 3.0.4
   resolution: "@types/hast@npm:3.0.4"
@@ -2009,13 +1998,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/minimatch@npm:*":
-  version: 5.1.2
-  resolution: "@types/minimatch@npm:5.1.2"
-  checksum: 10c0/83cf1c11748891b714e129de0585af4c55dd4c2cafb1f1d5233d79246e5e1e19d1b5ad9e8db449667b3ffa2b6c80125c429dbee1054e9efb45758dbc4e118562
-  languageName: node
-  linkType: hard
-
 "@types/ms@npm:*":
   version: 0.7.34
   resolution: "@types/ms@npm:0.7.34"
@@ -2055,6 +2037,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/36e6bc9eb47213ce94a868dad9504465ad89fba6af9f7954e22bb27fb17a32ac495f263d0cf4fdaee74becd7b2629609a446ec8c2b59b7a07bd587567c8a4782
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.9.0":
+  version: 20.17.10
+  resolution: "@types/node@npm:20.17.10"
+  dependencies:
+    undici-types: "npm:~6.19.2"
+  checksum: 10c0/458ec725319e57d4692cbb56d81f1a90f9074cef9ec185c59e6f6c557a3d2ded57c5e443b1e82eba923d53dda4db18797fb131ee6e46fdb3d7d2f54d54aaebe3
   languageName: node
   linkType: hard
 
@@ -2364,14 +2355,14 @@ __metadata:
     dexie-react-hooks: "npm:^1.1.7"
     docx: "npm:^9.0.2"
     dotenv-cli: "npm:^7.4.2"
-    electron: "npm:^28.3.3"
-    electron-builder: "npm:^24.9.1"
+    electron: "npm:^33.2.1"
+    electron-builder: "npm:^24.13.3"
     electron-devtools-installer: "npm:^3.2.0"
     electron-icon-builder: "npm:^2.0.1"
     electron-log: "npm:^5.1.5"
     electron-store: "npm:^8.2.0"
     electron-updater: "npm:^6.3.9"
-    electron-vite: "npm:^2.0.0"
+    electron-vite: "npm:^2.3.0"
     electron-window-state: "npm:^5.0.3"
     emittery: "npm:^1.0.3"
     emoji-picker-element: "npm:^1.22.1"
@@ -2388,7 +2379,7 @@ __metadata:
     markdown-it: "npm:^14.1.0"
     mime: "npm:^4.0.4"
     officeparser: "npm:^4.1.1"
-    openai: "npm:^4.76.2"
+    openai: "patch:openai@npm%3A4.76.2#~/.yarn/patches/openai-npm-4.76.2-8ff1374617.patch"
     prettier: "npm:^3.2.4"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -4327,7 +4318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-builder@npm:^24.9.1":
+"electron-builder@npm:^24.13.3":
   version: 24.13.3
   resolution: "electron-builder@npm:24.13.3"
   dependencies:
@@ -4429,7 +4420,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-vite@npm:^2.0.0":
+"electron-vite@npm:^2.3.0":
   version: 2.3.0
   resolution: "electron-vite@npm:2.3.0"
   dependencies:
@@ -4461,16 +4452,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^28.3.3":
-  version: 28.3.3
-  resolution: "electron@npm:28.3.3"
+"electron@npm:^33.2.1":
+  version: 33.3.0
+  resolution: "electron@npm:33.3.0"
   dependencies:
     "@electron/get": "npm:^2.0.0"
-    "@types/node": "npm:^18.11.18"
+    "@types/node": "npm:^20.9.0"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10c0/e9ff47ed18379f9bdefc49e34f676eb83dde118de83d27e9e98760d02d41dd118b90d854d983831ccf7b8b4fe311966d8c95e43f52b4fb7089a84863e4373e10
+  checksum: 10c0/ce381fb63da60b52b131aea473568aad2bff58cc3d8fd6fc68b4d0c0d5485e381e1a576727477ce901f4bd017baaa9e66f3f04da6ff698229343193258a8d38e
   languageName: node
   linkType: hard
 
@@ -8717,7 +8708,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openai@npm:^4.76.2":
+"openai@npm:4.76.2":
   version: 4.76.2
   resolution: "openai@npm:4.76.2"
   dependencies:
@@ -8736,6 +8727,28 @@ __metadata:
   bin:
     openai: bin/cli
   checksum: 10c0/d78af0c2dd64ad24a2ce92deb92656b742b8120012e554fd562095f237ce06d84764217e040b437f955c6f26b7675f9321862a8937c8537f28ed6ead4b674559
+  languageName: node
+  linkType: hard
+
+"openai@patch:openai@npm%3A4.76.2#~/.yarn/patches/openai-npm-4.76.2-8ff1374617.patch":
+  version: 4.76.2
+  resolution: "openai@patch:openai@npm%3A4.76.2#~/.yarn/patches/openai-npm-4.76.2-8ff1374617.patch::version=4.76.2&hash=849914"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+  peerDependencies:
+    zod: ^3.23.8
+  peerDependenciesMeta:
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 10c0/09b66166fd3661b9b418addf0f3a7bc75434ee9163d4b3f89bb41e70cd9a366943c2e324ef5a05cf375831b27aee6516b96779b78f1e3d605ae605865384c1c2
   languageName: node
   linkType: hard
 
@@ -11847,7 +11860,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.3.3, typescript@npm:^5.6.2":
+"typescript@npm:^5.3.3":
+  version: 5.7.2
+  resolution: "typescript@npm:5.7.2"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/a873118b5201b2ef332127ef5c63fb9d9c155e6fdbe211cbd9d8e65877283797cca76546bad742eea36ed7efbe3424a30376818f79c7318512064e8625d61622
+  languageName: node
+  linkType: hard
+
+"typescript@npm:^5.6.2":
   version: 5.6.2
   resolution: "typescript@npm:5.6.2"
   bin:
@@ -11857,7 +11880,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.3.3#optional!builtin<compat/typescript>":
+  version: 5.7.2
+  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=8c6c40"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/c891ccf04008bc1305ba34053db951f8a4584b4a1bf2f68fd972c4a354df3dc5e62c8bfed4f6ac2d12e5b3b1c49af312c83a651048f818cd5b4949d17baacd79
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.6.2#optional!builtin<compat/typescript>":
   version: 5.6.2
   resolution: "typescript@patch:typescript@npm%3A5.6.2#optional!builtin<compat/typescript>::version=5.6.2&hash=8c6c40"
   bin:
