@@ -54,11 +54,13 @@ export default function useUpdateHandler() {
             downloadProgress: 0
           })
         )
-        window.modal.info({
-          title: t('settings.about.updateError'),
-          content: error?.message || t('settings.about.updateError'),
-          icon: null
-        })
+        if (window.location.hash.includes('settings/about')) {
+          window.modal.info({
+            title: t('settings.about.updateError'),
+            content: error?.message || t('settings.about.updateError'),
+            icon: null
+          })
+        }
       })
     ]
     return () => removers.forEach((remover) => remover())

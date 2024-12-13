@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { setShowTopics, toggleShowAssistants, toggleShowTopics } from '@renderer/store/settings'
+import { setShowAssistants, setShowTopics, toggleShowAssistants, toggleShowTopics } from '@renderer/store/settings'
 
 export function useShowAssistants() {
   const showAssistants = useAppSelector((state) => state.settings.showAssistants)
@@ -7,6 +7,7 @@ export function useShowAssistants() {
 
   return {
     showAssistants,
+    setShowAssistants: (show: boolean) => dispatch(setShowAssistants(show)),
     toggleShowAssistants: () => dispatch(toggleShowAssistants())
   }
 }
