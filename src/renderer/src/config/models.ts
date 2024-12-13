@@ -1060,5 +1060,10 @@ export function isSupportedModel(model: OpenAI.Models.Model): boolean {
 
 export function isWebSearchModel(model: Model): boolean {
   const provider = getProviderByModel(model)
+
+  if (!provider) {
+    return false
+  }
+
   return (provider.id === 'gemini' || provider?.type === 'gemini') && model?.id === 'gemini-2.0-flash-exp'
 }
