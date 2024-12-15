@@ -62,7 +62,4 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复对话消息无法删除问题
-    支持 Gemini 模型联网搜索
-    发送消息增加 Command + Enter 快捷键 by @duanyongcheng
-    Windows 版本样式优化
+    修复部分场景下应用崩溃问题
