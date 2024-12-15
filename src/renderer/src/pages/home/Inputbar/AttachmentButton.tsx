@@ -20,10 +20,6 @@ const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) 
     : [...documentExts, ...textExts]
 
   const onSelectFile = async () => {
-    if (files.length > 0) {
-      return setFiles([])
-    }
-
     const _files = await window.api.file.select({
       properties: ['openFile', 'multiSelections'],
       filters: [
@@ -34,7 +30,9 @@ const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) 
       ]
     })
 
-    _files && setFiles(_files)
+    if (_files) {
+      setFiles([...files, ..._files])
+    }
   }
 
   return (
