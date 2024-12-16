@@ -39,13 +39,6 @@ export default class OpenAIProvider extends BaseProvider {
     })
   }
 
-  private isSupportStreamOutput(modelId: string): boolean {
-    if (modelId.includes('o1-')) {
-      return false
-    }
-    return true
-  }
-
   private get isNotSupportFiles() {
     const providers = ['deepseek', 'baichuan', 'minimax', 'doubao']
     return providers.includes(this.provider.id)
@@ -137,7 +130,7 @@ export default class OpenAIProvider extends BaseProvider {
     }
 
     const isOpenAIo1 = model.id.includes('o1-')
-    const isSupportStreamOutput = streamOutput && this.isSupportStreamOutput(model.id)
+    const isSupportStreamOutput = streamOutput
 
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({
