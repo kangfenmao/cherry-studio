@@ -94,6 +94,12 @@
     background-color: var(--color-border);
   }
 
+  .katex-display {
+    span {
+      white-space: pre;
+    }
+  }
+
   span {
     white-space: pre-wrap;
   }
