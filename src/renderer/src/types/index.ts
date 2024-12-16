@@ -47,8 +47,15 @@ export type Message = {
   files?: FileType[]
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
+  metrics?: Metrics
   type: 'text' | '@' | 'clear'
   isPreset?: boolean
+}
+
+export type Metrics = {
+  completion_tokens?: number
+  time_completion_millsec?: number
+  time_first_token_millsec?: number
 }
 
 export type Topic = {

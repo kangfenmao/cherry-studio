@@ -1,6 +1,9 @@
+import { Metrics } from "@renderer/types"
+
 interface ChunkCallbackData {
   text?: string
   usage?: OpenAI.Completions.CompletionUsage
+  metrics?: Metrics
 }
 
 interface CompletionsParams {

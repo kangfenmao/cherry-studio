@@ -57,9 +57,10 @@ export async function fetchChatCompletion({
       messages,
       assistant,
       onFilterMessages: (messages) => (_messages = messages),
-      onChunk: ({ text, usage }) => {
+      onChunk: ({ text, usage, metrics }) => {
         message.content = message.content + text || ''
         message.usage = usage
+        message.metrics = metrics
         onResponse({ ...message, status: 'pending' })
       }
     })

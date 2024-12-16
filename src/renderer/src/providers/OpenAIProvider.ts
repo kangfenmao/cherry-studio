@@ -132,6 +132,9 @@ export default class OpenAIProvider extends BaseProvider {
     const isOpenAIo1 = model.id.includes('o1-')
     const isSupportStreamOutput = streamOutput
 
+    let time_first_token_millsec = 0
+    const start_time_millsec = new Date().getTime()
+
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({
       model: model.id,
@@ -146,20 +149,35 @@ export default class OpenAIProvider extends BaseProvider {
     })
 
     if (!isSupportStreamOutput) {
+      let time_completion_millsec = new Date().getTime() - start_time_millsec
       return onChunk({
         text: stream.choices[0].message?.content || '',
-        usage: stream.usage
+        usage: stream.usage,
+        metrics: {
+          completion_tokens: stream.usage?.completion_tokens,
+          time_completion_millsec: time_completion_millsec,
+          time_first_token_sec: 0,
+        }
       })
     }
+
 
     for await (const chunk of stream) {
       if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
         break
       }
-
+      if (time_first_token_millsec == 0) {
+        time_first_token_millsec = new Date().getTime() - start_time_millsec
+      }
+      let time_completion_millsec = new Date().getTime() - start_time_millsec
       onChunk({
         text: chunk.choices[0]?.delta?.content || '',
-        usage: chunk.usage
+        usage: chunk.usage,
+        metrics: {
+          completion_tokens: chunk.usage?.completion_tokens,
+          time_completion_millsec: time_completion_millsec,
+          time_first_token_millsec: time_first_token_millsec,
+        }
       })
     }
   }
