@@ -15,6 +15,7 @@ import PoeAppLogo from '@renderer/assets/images/apps/poe.webp'
 import ZhipuProviderLogo from '@renderer/assets/images/apps/qingyan.png'
 import SensetimeAppLogo from '@renderer/assets/images/apps/sensetime.png'
 import SparkDeskAppLogo from '@renderer/assets/images/apps/sparkdesk.png'
+import ThinkAnyLogo from '@renderer/assets/images/apps/thinkany.webp'
 import TiangongAiLogo from '@renderer/assets/images/apps/tiangong.png'
 import WanZhiAppLogo from '@renderer/assets/images/apps/wanzhi.jpg'
 import TencentYuanbaoAppLogo from '@renderer/assets/images/apps/yuanbao.png'
@@ -215,6 +216,12 @@ const _apps: MinAppType[] = [
     logo: NamiAiSearchLogo,
     url: 'https://www.n.cn/',
     bodered: true
+  },
+  {
+    id: 'thinkany',
+    name: 'ThinkAny',
+    logo: ThinkAnyLogo,
+    url: 'https://thinkany.ai/'
   }
 ]
 

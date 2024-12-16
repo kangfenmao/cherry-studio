@@ -262,24 +262,21 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           title={group}
           style={{ marginBottom: '10px', border: '0.5px solid var(--color-border)' }}
           size="small">
-          {modelGroups[group].map((model) => {
-            console.debug(model)
-            return (
-              <ModelListItem key={model.id}>
-                <ModelListHeader>
-                  <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
-                    {model.name[0].toUpperCase()}
-                  </Avatar>
-                  {model.name} {isVisionModel(model) && <VisionIcon />}
-                  {isWebSearchModel(model) && <WebSearchIcon />}
-                  <Popover content={modelTypeContent(model)} title={t('model.type.select')} trigger="click">
-                    <SettingIcon />
-                  </Popover>
-                </ModelListHeader>
-                <RemoveIcon onClick={() => removeModel(model)} />
-              </ModelListItem>
-            )
-          })}
+          {modelGroups[group].map((model) => (
+            <ModelListItem key={model.id}>
+              <ModelListHeader>
+                <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
+                  {model.name[0].toUpperCase()}
+                </Avatar>
+                {model.name} {isVisionModel(model) && <VisionIcon />}
+                {isWebSearchModel(model) && <WebSearchIcon />}
+                <Popover content={modelTypeContent(model)} title={t('model.type.select')} trigger="click">
+                  <SettingIcon />
+                </Popover>
+              </ModelListHeader>
+              <RemoveIcon onClick={() => removeModel(model)} />
+            </ModelListItem>
+          ))}
         </Card>
       ))}
       {docsWebsite && (
