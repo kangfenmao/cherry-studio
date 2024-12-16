@@ -6,7 +6,7 @@ import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/ApiService'
 import { Model, Provider } from '@renderer/types'
 import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/utils'
-import { Avatar, Button, Empty, Flex, Modal, Tag } from 'antd'
+import { Avatar, Button, Empty, Flex, Modal, Popover, Tag } from 'antd'
 import Search from 'antd/es/input/Search'
 import { groupBy, isEmpty, uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
@@ -134,7 +134,15 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
                           Free
                         </Tag>
                       )}
-                      {!isEmpty(model.description) && <Question onClick={() => onShowModelInfo(model)} />}
+                      {!isEmpty(model.description) && (
+                        <Popover
+                          trigger="click"
+                          title={model.name}
+                          content={model.description}
+                          overlayStyle={{ maxWidth: 600 }}>
+                          <Question />
+                        </Popover>
+                      )}
                     </ListItemName>
                   </ListItemHeader>
                   {hasModel ? (
@@ -151,16 +159,6 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
       </ListContainer>
     </Modal>
   )
-}
-
-const onShowModelInfo = (model: Model) => {
-  window.modal.info({
-    title: model.name,
-    content: model?.description,
-    icon: null,
-    maskClosable: true,
-    width: 600
-  })
 }
 
 const SearchContainer = styled.div`

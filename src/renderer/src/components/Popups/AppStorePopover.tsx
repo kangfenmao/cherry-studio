@@ -5,6 +5,7 @@ import { Popover } from 'antd'
 import { Empty } from 'antd'
 import { isEmpty } from 'lodash'
 import { FC, useState } from 'react'
+import { useHotkeys } from 'react-hotkeys-hook'
 import styled from 'styled-components'
 
 import Scrollbar from '../Scrollbar'
@@ -16,6 +17,10 @@ interface Props {
 const AppStorePopover: FC<Props> = ({ children }) => {
   const [open, setOpen] = useState(false)
   const apps = getAllMinApps()
+
+  useHotkeys('esc', () => {
+    setOpen(false)
+  })
 
   const handleClose = () => {
     setOpen(false)

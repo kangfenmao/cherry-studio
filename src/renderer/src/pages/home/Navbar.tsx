@@ -71,12 +71,12 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
         </HStack>
         <HStack alignItems="center">
           <AppStorePopover>
-            <NavbarIcon style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 4 : 0 }}>
+            <NavbarIcon>
               <i className="iconfont icon-appstore" />
             </NavbarIcon>
           </AppStorePopover>
           {topicPosition === 'right' && (
-            <NavbarIcon onClick={toggleShowTopics}>
+            <NavbarIcon onClick={toggleShowTopics} style={{ marginLeft: isMac ? 5 : 10 }}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
             </NavbarIcon>
           )}
