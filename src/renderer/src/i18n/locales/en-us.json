@@ -244,7 +244,8 @@
       "upgrade.success.button": "Restart",
       "upgrade.success.content": "Please restart the application to complete the upgrade",
       "upgrade.success.title": "Upgrade successfully",
-      "regenerate.confirm": "Regenerating will replace current message"
+      "regenerate.confirm": "Regenerating will replace current message",
+      "copy.success": "Copied!"
     },
     "minapp": {
       "title": "MinApp"

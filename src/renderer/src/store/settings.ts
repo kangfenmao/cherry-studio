@@ -51,7 +51,7 @@ const initialState: SettingsState = {
   proxyMode: 'system',
   proxyUrl: undefined,
   userName: '',
-  showMessageDivider: false,
+  showMessageDivider: true,
   messageFont: 'system',
   showInputEstimatedTokens: false,
   tray: true,

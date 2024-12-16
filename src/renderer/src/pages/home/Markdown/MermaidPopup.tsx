@@ -17,6 +17,7 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
   const [open, setOpen] = useState(true)
   const { t } = useTranslation()
   const mermaidId = `mermaid-popup-${Date.now()}`
+  const [activeTab, setActiveTab] = useState('preview')
 
   const onOk = () => {
     setOpen(false)
@@ -86,6 +87,11 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
     }
   }
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(chart)
+    window.message.success(t('message.copy.success'))
+  }
+
   useEffect(() => {
     window?.mermaid?.contentLoaded()
   }, [])
@@ -101,11 +107,18 @@ const PopupContainer: React.FC<Props> = ({ resolve, chart }) => {
       centered
       footer={[
         <Space key="download-buttons">
-          <Button onClick={() => handleDownload('svg')}>{t('mermaid.download.svg')}</Button>
-          <Button onClick={() => handleDownload('png')}>{t('mermaid.download.png')}</Button>
+          {activeTab === 'source' && <Button onClick={() => handleCopy()}>{t('common.copy')}</Button>}
+          {activeTab === 'preview' && (
+            <>
+              <Button onClick={() => handleDownload('svg')}>{t('mermaid.download.svg')}</Button>
+              <Button onClick={() => handleDownload('png')}>{t('mermaid.download.png')}</Button>
+            </>
+          )}
         </Space>
       ]}>
       <Tabs
+        activeKey={activeTab}
+        onChange={(key) => setActiveTab(key)}
         items={[
           {
             key: 'preview',

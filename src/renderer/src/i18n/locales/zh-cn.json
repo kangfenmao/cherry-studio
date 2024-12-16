@@ -244,7 +244,8 @@
       "upgrade.success.button": "重启",
       "upgrade.success.content": "重启用以完成升级",
       "upgrade.success.title": "升级成功",
-      "regenerate.confirm": "重新生成会覆盖当前消息"
+      "regenerate.confirm": "重新生成会覆盖当前消息",
+      "copy.success": "复制成功"
     },
     "minapp": {
       "title": "小程序"
