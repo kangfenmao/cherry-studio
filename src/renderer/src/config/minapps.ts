@@ -1,5 +1,3 @@
-import AiAssistantAppLogo from '@renderer/assets/images/apps/360-ai.png'
-import AiSearchAppLogo from '@renderer/assets/images/apps/ai-search.png'
 import BaiduAiAppLogo from '@renderer/assets/images/apps/baidu-ai.png'
 import BaicuanAppLogo from '@renderer/assets/images/apps/baixiaoying.webp'
 import BoltAppLogo from '@renderer/assets/images/apps/bolt.svg'
@@ -11,6 +9,7 @@ import GeminiAppLogo from '@renderer/assets/images/apps/gemini.png'
 import HuggingChatLogo from '@renderer/assets/images/apps/huggingchat.svg'
 import KimiAppLogo from '@renderer/assets/images/apps/kimi.jpg'
 import MetasoAppLogo from '@renderer/assets/images/apps/metaso.webp'
+import NamiAiSearchLogo from '@renderer/assets/images/apps/nm.webp'
 import PerplexityAppLogo from '@renderer/assets/images/apps/perplexity.webp'
 import PoeAppLogo from '@renderer/assets/images/apps/poe.webp'
 import ZhipuProviderLogo from '@renderer/assets/images/apps/qingyan.png'
@@ -120,19 +119,6 @@ const _apps: MinAppType[] = [
     logo: ClaudeAppLogo
   },
   {
-    id: '360-ai-so',
-    name: '360AI搜索',
-    logo: AiSearchAppLogo,
-    url: 'https://so.360.com/'
-  },
-  {
-    id: '360-ai-bot',
-    name: 'AI 助手',
-    logo: AiAssistantAppLogo,
-    url: 'https://bot.360.com/',
-    bodered: true
-  },
-  {
     id: 'baidu-ai-chat',
     name: '文心一言',
     logo: BaiduAiAppLogo,
@@ -211,6 +197,12 @@ const _apps: MinAppType[] = [
     bodered: true
   },
   {
+    id: 'duckduckgo',
+    name: 'DuckDuckGo',
+    logo: DuckDuckGoAppLogo,
+    url: 'https://duck.ai'
+  },
+  {
     id: 'bolt',
     name: 'bolt',
     logo: BoltAppLogo,
@@ -218,10 +210,11 @@ const _apps: MinAppType[] = [
     bodered: true
   },
   {
-    id: 'duckduckgo',
-    name: 'DuckDuckGo',
-    logo: DuckDuckGoAppLogo,
-    url: 'https://duck.ai'
+    id: 'nm',
+    name: '纳米AI搜索',
+    logo: NamiAiSearchLogo,
+    url: 'https://www.n.cn/',
+    bodered: true
   }
 ]
 
