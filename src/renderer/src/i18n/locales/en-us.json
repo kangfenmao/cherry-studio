@@ -481,7 +481,8 @@
         "reset_to_default": "Reset to Default",
         "clear_shortcut": "Clear Shortcut",
         "toggle_show_assistants": "Toggle Assistants",
-        "toggle_show_topics": "Toggle Topics"
+        "toggle_show_topics": "Toggle Topics",
+        "copy_last_message": "Copy Last Message"
       },
       "theme.auto": "Auto",
       "theme.dark": "Dark",

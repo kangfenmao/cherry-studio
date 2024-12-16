@@ -74,8 +74,8 @@ const ContentContainer = styled.div`
 
 const AppsContainer = styled.div`
   display: flex;
-  min-width: 900px;
-  max-width: 900px;
+  min-width: 950px;
+  max-width: 950px;
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;

@@ -753,6 +753,15 @@ const migrateConfig = {
   '49': (state: RootState) => {
     state.settings.showMinappIcon = true
     state.settings.showFilesIcon = true
+    if (state.shortcuts) {
+      state.shortcuts.shortcuts.push({
+        key: 'copy_last_message',
+        shortcut: [isMac ? 'Command' : 'Ctrl', 'Shift', 'C'],
+        editable: true,
+        enabled: false,
+        system: false
+      })
+    }
     return state
   }
 }

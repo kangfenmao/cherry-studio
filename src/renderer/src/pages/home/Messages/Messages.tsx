@@ -2,6 +2,7 @@ import Scrollbar from '@renderer/components/Scrollbar'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { getTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/ApiService'
 import { getDefaultTopic } from '@renderer/services/AssistantService'
@@ -265,6 +266,14 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       setIsLoadingMore(false)
     }, 300)
   }, [displayMessages, hasMore, isLoadingMore, messages])
+
+  useShortcut('copy_last_message', () => {
+    const lastMessage = last(messages)
+    if (lastMessage) {
+      navigator.clipboard.writeText(lastMessage.content)
+      window.message.success(t('message.copy.success'))
+    }
+  })
 
   return (
     <Container

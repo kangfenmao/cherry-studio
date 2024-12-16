@@ -469,7 +469,8 @@
         "reset_to_default": "重置為預設",
         "clear_shortcut": "清除快捷鍵",
         "toggle_show_assistants": "切換助手顯示",
-        "toggle_show_topics": "切換話題顯示"
+        "toggle_show_topics": "切換話題顯示",
+        "copy_last_message": "複製上一条消息"
       },
       "theme.auto": "自動",
       "theme.dark": "深色主題",
