@@ -62,4 +62,14 @@ electronDownload:
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复部分场景下应用崩溃问题
+    增加小程序快捷入口
+    增加ThinkAny、纳米搜索小程序
+    优化 Markdown 列表显示
+    可以多次点击上传文件按钮上传文件
+    大屏幕默认使用更大的输入框
+    设置中增加显示设置模块
+    支持 SVG 预览
+    Mermaid 图表支持复制源码
+    增加复制最后一条消息快捷键
+    o1模型默认开启流式输出
+    长文本粘贴为文件支持修改阈值

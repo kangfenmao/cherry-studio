@@ -755,13 +755,16 @@ const migrateConfig = {
     state.settings.showFilesIcon = true
     state.settings.pasteLongTextThreshold = 1500
     if (state.shortcuts) {
-      state.shortcuts.shortcuts.push({
-        key: 'copy_last_message',
-        shortcut: [isMac ? 'Command' : 'Ctrl', 'Shift', 'C'],
-        editable: true,
-        enabled: false,
-        system: false
-      })
+      state.shortcuts.shortcuts = [
+        ...state.shortcuts.shortcuts,
+        {
+          key: 'copy_last_message',
+          shortcut: [isMac ? 'Command' : 'Ctrl', 'Shift', 'C'],
+          editable: true,
+          enabled: false,
+          system: false
+        }
+      ]
     }
     return state
   }
