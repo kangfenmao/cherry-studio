@@ -22,7 +22,7 @@ const Sidebar: FC = () => {
   const { generating } = useRuntime()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { windowStyle } = useSettings()
+  const { windowStyle, showMinappIcon, showFilesIcon } = useSettings()
   const { theme, toggleTheme } = useTheme()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
@@ -79,20 +79,24 @@ const Sidebar: FC = () => {
               </Icon>
             </StyledLink>
           </Tooltip>
-          <Tooltip title={t('minapp.title')} mouseEnterDelay={0.8} placement="right">
-            <StyledLink onClick={() => to('/apps')}>
-              <Icon className={isRoute('/apps')}>
-                <i className="iconfont icon-appstore" />
-              </Icon>
-            </StyledLink>
-          </Tooltip>
-          <Tooltip title={t('files.title')} mouseEnterDelay={0.8} placement="right">
-            <StyledLink onClick={() => to('/files')}>
-              <Icon className={isRoute('/files')}>
-                <FolderOutlined />
-              </Icon>
-            </StyledLink>
-          </Tooltip>
+          {showMinappIcon && (
+            <Tooltip title={t('minapp.title')} mouseEnterDelay={0.8} placement="right">
+              <StyledLink onClick={() => to('/apps')}>
+                <Icon className={isRoute('/apps')}>
+                  <i className="iconfont icon-appstore" />
+                </Icon>
+              </StyledLink>
+            </Tooltip>
+          )}
+          {showFilesIcon && (
+            <Tooltip title={t('files.title')} mouseEnterDelay={0.8} placement="right">
+              <StyledLink onClick={() => to('/files')}>
+                <Icon className={isRoute('/files')}>
+                  <FolderOutlined />
+                </Icon>
+              </StyledLink>
+            </Tooltip>
+          )}
         </Menus>
       </MainMenus>
       <Menus onClick={MinApp.onClose}>

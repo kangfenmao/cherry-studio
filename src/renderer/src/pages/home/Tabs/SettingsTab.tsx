@@ -15,7 +15,6 @@ import { SettingDivider, SettingRow, SettingRowTitle, SettingSubtitle } from '@r
 import { useAppDispatch } from '@renderer/store'
 import {
   setAutoTranslateWithSpace,
-  setClickAssistantToShowTopic,
   setCodeCollapsible,
   setCodeShowLineNumbers,
   setCodeStyle,
@@ -26,8 +25,7 @@ import {
   setPasteLongTextAsFile,
   setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
-  setShowMessageDivider,
-  setShowTopicTime
+  setShowMessageDivider
 } from '@renderer/store/settings'
 import { Assistant, AssistantSettings, ThemeMode } from '@renderer/types'
 import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
@@ -64,11 +62,7 @@ const SettingsTab: FC<Props> = (props) => {
     codeShowLineNumbers,
     codeCollapsible,
     mathEngine,
-    topicPosition,
-    showTopicTime,
-    clickAssistantToShowTopic,
-    autoTranslateWithSpace,
-    setTopicPosition
+    autoTranslateWithSpace
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
@@ -364,41 +358,6 @@ const SettingsTab: FC<Props> = (props) => {
             onChange={(value) => setSendMessageShortcut(value)}
             style={{ width: 135 }}
           />
-        </SettingRow>
-      </SettingGroup>
-      <SettingGroup>
-        <SettingSubtitle style={{ marginTop: 0 }}>{t('settings.display.title')}</SettingSubtitle>
-        <SettingDivider />
-        <SettingRow>
-          <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
-          <Select
-            defaultValue={topicPosition || 'right'}
-            style={{ width: 135 }}
-            onChange={setTopicPosition}
-            size="small"
-            options={[
-              { value: 'left', label: t('settings.topic.position.left') },
-              { value: 'right', label: t('settings.topic.position.right') }
-            ]}
-          />
-        </SettingRow>
-        <SettingDivider />
-        {topicPosition === 'left' && (
-          <>
-            <SettingRow>
-              <SettingRowTitle>{t('settings.advanced.auto_switch_to_topics')}</SettingRowTitle>
-              <Switch
-                size="small"
-                checked={clickAssistantToShowTopic}
-                onChange={(checked) => dispatch(setClickAssistantToShowTopic(checked))}
-              />
-            </SettingRow>
-            <SettingDivider />
-          </>
-        )}
-        <SettingRow>
-          <SettingRowTitle>{t('settings.topic.show.time')}</SettingRowTitle>
-          <Switch size="small" checked={showTopicTime} onChange={(checked) => dispatch(setShowTopicTime(checked))} />
         </SettingRow>
       </SettingGroup>
     </Container>

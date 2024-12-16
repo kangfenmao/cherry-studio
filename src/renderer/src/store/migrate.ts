@@ -749,6 +749,11 @@ const migrateConfig = {
       })
     }
     return state
+  },
+  '49': (state: RootState) => {
+    state.settings.showMinappIcon = true
+    state.settings.showFilesIcon = true
+    return state
   }
 }
 

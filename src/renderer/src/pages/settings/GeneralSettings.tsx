@@ -1,11 +1,10 @@
-import { isMac } from '@renderer/config/constant'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { useAppDispatch } from '@renderer/store'
 import { setLanguage } from '@renderer/store/settings'
 import { setProxyMode, setProxyUrl as _setProxyUrl } from '@renderer/store/settings'
-import { LanguageVarious, ThemeMode } from '@renderer/types'
+import { LanguageVarious } from '@renderer/types'
 import { isValidProxyUrl } from '@renderer/utils'
 import { Input, Select, Space, Switch } from 'antd'
 import { FC, useState } from 'react'
@@ -14,17 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '.'
 
 const GeneralSettings: FC = () => {
-  const {
-    language,
-    proxyUrl: storeProxyUrl,
-    setTheme,
-    theme,
-    setTray,
-    tray,
-    windowStyle,
-    setWindowStyle,
-    proxyMode: storeProxyMode
-  } = useSettings()
+  const { language, proxyUrl: storeProxyUrl, theme, setTray, tray, proxyMode: storeProxyMode } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const { theme: themeMode } = useTheme()
 
@@ -97,37 +86,6 @@ const GeneralSettings: FC = () => {
             ))}
           </Select>
         </SettingRow>
-        <SettingDivider />
-        <SettingRow>
-          <SettingRowTitle>{t('settings.theme.title')}</SettingRowTitle>
-          <Select
-            defaultValue={theme}
-            style={{ width: 180 }}
-            onChange={setTheme}
-            options={[
-              { value: ThemeMode.light, label: t('settings.theme.light') },
-              { value: ThemeMode.dark, label: t('settings.theme.dark') },
-              { value: ThemeMode.auto, label: t('settings.theme.auto') }
-            ]}
-          />
-        </SettingRow>
-        {isMac && (
-          <>
-            <SettingDivider />
-            <SettingRow>
-              <SettingRowTitle>{t('settings.theme.window.style.title')}</SettingRowTitle>
-              <Select
-                defaultValue={windowStyle || 'opaque'}
-                style={{ width: 180 }}
-                onChange={setWindowStyle}
-                options={[
-                  { value: 'transparent', label: t('settings.theme.window.style.transparent') },
-                  { value: 'opaque', label: t('settings.theme.window.style.opaque') }
-                ]}
-              />
-            </SettingRow>
-          </>
-        )}
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>{t('settings.proxy.mode.title')}</SettingRowTitle>
