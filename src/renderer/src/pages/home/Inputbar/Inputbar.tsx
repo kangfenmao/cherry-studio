@@ -371,6 +371,8 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     }
   }, [])
 
+  const textareaRows = window.innerHeight >= 1000 || isBubbleStyle ? 2 : 1
+
   return (
     <Container onDragOver={handleDragOver} onDrop={handleDrop}>
       <AttachmentPreview files={files} setFiles={setFiles} />
@@ -383,7 +385,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
           autoFocus
           contextMenu="true"
           variant="borderless"
-          rows={isBubbleStyle ? 2 : 1}
+          rows={textareaRows}
           ref={textareaRef}
           style={{ fontSize }}
           styles={{ textarea: TextareaStyle }}
@@ -479,7 +481,7 @@ const Container = styled.div`
 `
 
 const InputBarContainer = styled.div`
-  border: 1px solid var(--color-border-soft);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
   margin: 0 20px 15px 20px;
