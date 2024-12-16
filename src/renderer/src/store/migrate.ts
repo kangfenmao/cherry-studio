@@ -753,6 +753,7 @@ const migrateConfig = {
   '49': (state: RootState) => {
     state.settings.showMinappIcon = true
     state.settings.showFilesIcon = true
+    state.settings.pasteLongTextThreshold = 1500
     if (state.shortcuts) {
       state.shortcuts.shortcuts.push({
         key: 'copy_last_message',

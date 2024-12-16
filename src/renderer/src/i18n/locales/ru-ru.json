@@ -395,6 +395,7 @@
       "messages.model.title": "Настройки модели",
       "messages.title": "Настройки сообщений",
       "messages.use_serif_font": "Использовать serif шрифт",
+      "messages.input.paste_long_text_threshold": "Длина вставки длинного текста",
       "model": "Модель по умолчанию",
       "models.add.add_model": "Добавить модель",
       "models.add.group_name": "Имя группы",

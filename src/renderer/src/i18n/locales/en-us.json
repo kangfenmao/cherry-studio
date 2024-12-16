@@ -395,6 +395,7 @@
       "messages.model.title": "Model Settings",
       "messages.title": "Message Settings",
       "messages.use_serif_font": "Use serif font",
+      "messages.input.paste_long_text_threshold": "Paste long text length",
       "model": "Default Model",
       "models.add.add_model": "Add Model",
       "models.add.group_name": "Group Name",

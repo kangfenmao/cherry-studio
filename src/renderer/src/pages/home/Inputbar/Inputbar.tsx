@@ -57,6 +57,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     sendMessageShortcut,
     fontSize,
     pasteLongTextAsFile,
+    pasteLongTextThreshold,
     showInputEstimatedTokens,
     clickAssistantToShowTopic,
     language,
@@ -291,7 +292,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
         const item = event.clipboardData?.items[0]
         if (item && item.kind === 'string' && item.type === 'text/plain') {
           item.getAsString(async (pasteText) => {
-            if (pasteText.length > 1500) {
+            if (pasteText.length > pasteLongTextThreshold) {
               const tempFilePath = await window.api.file.create('pasted_text.txt')
               await window.api.file.write(tempFilePath, pasteText)
               const selectedFile = await window.api.file.get(tempFilePath)
@@ -303,7 +304,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
         }
       }
     },
-    [pasteLongTextAsFile, supportExts, text]
+    [pasteLongTextAsFile, pasteLongTextThreshold, supportExts, text]
   )
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {

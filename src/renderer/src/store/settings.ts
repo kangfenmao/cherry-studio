@@ -22,6 +22,7 @@ export interface SettingsState {
   topicPosition: 'left' | 'right'
   showTopicTime: boolean
   pasteLongTextAsFile: boolean
+  pasteLongTextThreshold: number
   clickAssistantToShowTopic: boolean
   manualUpdateCheck: boolean
   renderInputMessageAsMarkdown: boolean
@@ -61,6 +62,7 @@ const initialState: SettingsState = {
   topicPosition: 'left',
   showTopicTime: false,
   pasteLongTextAsFile: false,
+  pasteLongTextThreshold: 1500,
   clickAssistantToShowTopic: false,
   manualUpdateCheck: false,
   renderInputMessageAsMarkdown: false,
@@ -192,6 +194,9 @@ const settingsSlice = createSlice({
     },
     setShowFilesIcon: (state, action: PayloadAction<boolean>) => {
       state.showFilesIcon = action.payload
+    },
+    setPasteLongTextThreshold: (state, action: PayloadAction<number>) => {
+      state.pasteLongTextThreshold = action.payload
     }
   }
 })
@@ -232,7 +237,8 @@ export const {
   setAutoTranslateWithSpace,
   setEnableTopicNaming,
   setShowMinappIcon,
-  setShowFilesIcon
+  setShowFilesIcon,
+  setPasteLongTextThreshold
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

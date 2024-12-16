@@ -23,12 +23,13 @@ import {
   setMessageFont,
   setMessageStyle,
   setPasteLongTextAsFile,
+  setPasteLongTextThreshold,
   setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
   setShowMessageDivider
 } from '@renderer/store/settings'
 import { Assistant, AssistantSettings, ThemeMode } from '@renderer/types'
-import { Col, Row, Select, Slider, Switch, Tooltip } from 'antd'
+import { Col, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -62,7 +63,8 @@ const SettingsTab: FC<Props> = (props) => {
     codeShowLineNumbers,
     codeCollapsible,
     mathEngine,
-    autoTranslateWithSpace
+    autoTranslateWithSpace,
+    pasteLongTextThreshold
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
@@ -320,6 +322,23 @@ const SettingsTab: FC<Props> = (props) => {
             onChange={(checked) => dispatch(setPasteLongTextAsFile(checked))}
           />
         </SettingRow>
+        {pasteLongTextAsFile && (
+          <>
+            <SettingDivider />
+            <SettingRow>
+              <SettingRowTitleSmall>{t('settings.messages.input.paste_long_text_threshold')}</SettingRowTitleSmall>
+              <InputNumber
+                size="small"
+                min={500}
+                max={10000}
+                step={100}
+                value={pasteLongTextThreshold}
+                onChange={(value) => dispatch(setPasteLongTextThreshold(value ?? 500))}
+                style={{ width: 80 }}
+              />
+            </SettingRow>
+          </>
+        )}
         <SettingDivider />
         <SettingRow>
           <SettingRowTitleSmall>{t('settings.messages.markdown_rendering_input_message')}</SettingRowTitleSmall>

@@ -395,6 +395,7 @@
       "messages.model.title": "模型設定",
       "messages.title": "訊息設定",
       "messages.use_serif_font": "使用襯線字體",
+      "messages.input.paste_long_text_threshold": "長文本長度",
       "model": "預設模型",
       "models.add.add_model": "添加模型",
       "models.add.group_name": "群組名稱",
