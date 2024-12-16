@@ -43,3 +43,16 @@ export function extractTitle(html: string): string | null {
 
   return null
 }
+
+export function removeSvgEmptyLines(text: string): string {
+  // 用正则表达式匹配 <svg> 标签内的内容
+  const svgPattern = /(<svg[\s\S]*?<\/svg>)/g
+
+  return text.replace(svgPattern, (svgMatch) => {
+    // 将 SVG 内容按行分割,过滤掉空行,然后重新组合
+    return svgMatch
+      .split('\n')
+      .filter((line) => line.trim() !== '')
+      .join('\n')
+  })
+}

@@ -8,6 +8,7 @@ import styled from 'styled-components'
 
 import Artifacts from './Artifacts'
 import Mermaid from './Mermaid'
+import SvgPreview from './SvgPreview'
 
 interface CodeBlockProps {
   children: string
@@ -79,8 +80,20 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
     return <Mermaid chart={children} />
   }
 
+  if (language === 'svg') {
+    return (
+      <CodeBlockWrapper className="code-block">
+        <CodeHeader>
+          <CodeLanguage>{'<SVG>'}</CodeLanguage>
+          <CopyButton text={children} />
+        </CodeHeader>
+        <SvgPreview>{children}</SvgPreview>
+      </CodeBlockWrapper>
+    )
+  }
+
   return match ? (
-    <div className="code-block">
+    <CodeBlockWrapper className="code-block">
       <CodeHeader>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {codeCollapsible && shouldShowExpandButton && (
@@ -118,7 +131,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
         </CodeFooter>
       )}
       {language === 'html' && children?.includes('</html>') && <Artifacts html={children} />}
-    </div>
+    </CodeBlockWrapper>
   ) : (
     <code className={className}>{children}</code>
   )
@@ -141,6 +154,8 @@ const CopyButton: React.FC<{ text: string; style?: React.CSSProperties }> = ({ t
     <CopyIcon className="copy" style={style} onClick={onCopy} />
   )
 }
+
+const CodeBlockWrapper = styled.div``
 
 const CodeContent = styled.div<{ isShowLineNumbers: boolean }>`
   .shiki {
