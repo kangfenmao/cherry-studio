@@ -124,6 +124,7 @@ const TitleText = styled.span`
   margin-left: 5px;
   font-family: Ubuntu;
   font-size: 13px;
+  user-select: none;
 `
 
 export default HeaderNavbar

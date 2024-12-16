@@ -227,6 +227,7 @@ const Container = styled(Scrollbar)`
   display: flex;
   flex-direction: column;
   padding-top: 11px;
+  user-select: none;
 `
 
 const TopicListItem = styled.div`

@@ -172,6 +172,7 @@ const Segmented = styled(AntSegmented)`
     height: 34px;
     line-height: 34px;
     background-color: transparent;
+    user-select: none;
   }
   .ant-segmented-item-selected {
     background-color: var(--color-background-soft);

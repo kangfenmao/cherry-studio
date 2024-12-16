@@ -290,6 +290,7 @@ const Tabs = styled(TabsAntd)<{ $language: string }>`
     padding: 7px 15px !important;
     border: 0.5px solid transparent;
     justify-content: ${({ $language }) => ($language.startsWith('zh') ? 'center' : 'flex-start')};
+    user-select: none;
     .ant-tabs-tab-btn {
       white-space: nowrap;
       overflow: hidden;

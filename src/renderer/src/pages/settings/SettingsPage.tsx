@@ -115,6 +115,7 @@ const SettingMenus = styled.ul`
   min-width: var(--settings-width);
   border-right: 0.5px solid var(--color-border);
   padding: 10px;
+  user-select: none;
 `
 
 const MenuItemLink = styled(Link)`

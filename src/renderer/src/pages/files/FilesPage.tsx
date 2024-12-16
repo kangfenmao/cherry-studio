@@ -221,6 +221,7 @@ const SideNav = styled.div`
   width: var(--assistants-width);
   border-right: 0.5px solid var(--color-border);
   padding: 7px 12px;
+  user-select: none;
 
   .ant-menu {
     border-inline-end: none !important;
