@@ -5,16 +5,26 @@ import styled from 'styled-components'
 
 interface Props {
   app: MinAppType
+  onClick?: () => void
+  size?: number
 }
 
-const App: FC<Props> = ({ app }) => {
-  const onClick = () => {
+const App: FC<Props> = ({ app, onClick, size = 60 }) => {
+  const handleClick = () => {
     MinApp.start(app)
+    onClick?.()
   }
 
   return (
-    <Container onClick={onClick}>
-      <AppIcon src={app.logo} style={{ border: app.bodered ? '0.5px solid var(--color-border)' : 'none' }} />
+    <Container onClick={handleClick}>
+      <AppIcon
+        src={app.logo}
+        style={{
+          border: app.bodered ? '0.5px solid var(--color-border)' : 'none',
+          width: `${size}px`,
+          height: `${size}px`
+        }}
+      />
       <AppTitle>{app.name}</AppTitle>
     </Container>
   )
@@ -26,12 +36,9 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  width: 65px;
 `
 
 const AppIcon = styled.img`
-  width: 60px;
-  height: 60px;
   border-radius: 16px;
   user-select: none;
   -webkit-user-drag: none;
@@ -43,6 +50,7 @@ const AppTitle = styled.div`
   color: var(--color-text-soft);
   text-align: center;
   user-select: none;
+  white-space: nowrap;
 `
 
 export default App

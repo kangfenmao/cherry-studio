@@ -2,6 +2,7 @@ import { SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import { HStack } from '@renderer/components/Layout'
+import AppStorePopover from '@renderer/components/Popups/AppStorePopover'
 import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import { isMac, isWindows } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
@@ -43,22 +44,22 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
     <Navbar>
       {showAssistants && (
         <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
-          <NewButton onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
+          <NavbarIcon onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
             <i className="iconfont icon-hide-sidebar" />
-          </NewButton>
-          <NewButton onClick={() => SearchPopup.show()}>
+          </NavbarIcon>
+          <NavbarIcon onClick={() => SearchPopup.show()}>
             <SearchOutlined />
-          </NewButton>
+          </NavbarIcon>
         </NavbarLeft>
       )}
       <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12, flex: 1 }}>
         <HStack alignItems="center">
           {!showAssistants && (
-            <NewButton
+            <NavbarIcon
               onClick={() => toggleShowAssistants()}
               style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 4 : 0 }}>
               <i className="iconfont icon-show-sidebar" />
-            </NewButton>
+            </NavbarIcon>
           )}
           <TitleText
             style={{ marginRight: 10, cursor: 'pointer' }}
@@ -69,10 +70,15 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <SelectModelButton assistant={assistant} />
         </HStack>
         <HStack alignItems="center">
+          <AppStorePopover>
+            <NavbarIcon style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 4 : 0 }}>
+              <i className="iconfont icon-appstore" />
+            </NavbarIcon>
+          </AppStorePopover>
           {topicPosition === 'right' && (
-            <NewButton onClick={toggleShowTopics}>
+            <NavbarIcon onClick={toggleShowTopics}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
-            </NewButton>
+            </NavbarIcon>
           )}
         </HStack>
       </NavbarRight>
@@ -80,7 +86,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   )
 }
 
-export const NewButton = styled.div`
+export const NavbarIcon = styled.div`
   -webkit-app-region: none;
   border-radius: 8px;
   height: 30px;
@@ -98,6 +104,9 @@ export const NewButton = styled.div`
       font-size: 20px;
     }
     &.icon-a-darkmode {
+      font-size: 20px;
+    }
+    &.icon-appstore {
       font-size: 20px;
     }
   }
