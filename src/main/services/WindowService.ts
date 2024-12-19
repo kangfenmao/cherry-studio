@@ -123,6 +123,10 @@ export class WindowService {
 
   private setupWebContentsHandlers(mainWindow: BrowserWindow) {
     mainWindow.webContents.on('will-navigate', (event, url) => {
+      if (url.includes('localhost:5173')) {
+        return
+      }
+
       event.preventDefault()
       shell.openExternal(url)
     })

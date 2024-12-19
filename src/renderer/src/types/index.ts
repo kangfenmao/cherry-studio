@@ -183,27 +183,18 @@ export interface Shortcut {
 
 export type ProcessingStatus = 'pending' | 'processing' | 'completed' | 'failed'
 
-export type ProcessingItem = {
-  id: string
-  type: 'file' | 'url' | 'note'
-  status: ProcessingStatus
-  progress?: number
-  error?: string
-  createdAt: number
-  updatedAt: number
-  sourceId: string // file id, url, or note id
-  baseId: string
-  retryCount?: number
-}
-
 export type KnowledgeItem = {
   id: string
   baseId?: string
   uniqueId?: string
-  type: 'file' | 'url' | 'note'
-  content: string | FileType // for files: FileType, for urls: string, for notes: string
+  type: 'file' | 'url' | 'note' | 'sitemap'
+  content: string | FileType
   created_at: number
   updated_at: number
+  processingStatus?: ProcessingStatus
+  processingProgress?: number
+  processingError?: string
+  retryCount?: number
 }
 
 export interface KnowledgeBase {
@@ -214,7 +205,6 @@ export interface KnowledgeBase {
   items: KnowledgeItem[]
   created_at: number
   updated_at: number
-  processingQueue: ProcessingItem[]
 }
 
 export type RagAppRequestParams = {

@@ -1,20 +1,21 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { db } from '@renderer/databases/index'
-import { RootState, useAppSelector } from '@renderer/store'
+import KnowledgeQueue from '@renderer/queue/KnowledgeQueue'
+import FileManager from '@renderer/services/FileManager'
+import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
+import { RootState } from '@renderer/store'
 import {
+  addBase,
   addItem,
-  addProcessingItem,
-  clearAllItems,
-  clearCompletedItems,
+  clearAllProcessing,
+  clearCompletedProcessing,
+  deleteBase,
   removeItem as removeItemAction,
-  removeProcessingItem,
   renameBase,
-  selectProcessingItemBySource,
-  selectProcessingItemsByType,
   updateBase,
   updateFiles as updateFilesAction,
-  updateNotes,
-  updateProcessingStatus
+  updateItemProcessingStatus,
+  updateNotes
 } from '@renderer/store/knowledge'
 import { FileType, KnowledgeBase, ProcessingStatus } from '@renderer/types'
 import { KnowledgeItem } from '@renderer/types'
@@ -26,7 +27,6 @@ import { v4 as uuidv4 } from 'uuid'
 export const useKnowledge = (baseId: string) => {
   const dispatch = useDispatch()
   const base = useSelector((state: RootState) => state.knowledge.bases.find((b) => b.id === baseId))
-  const knowledgeState = useAppSelector((state: RootState) => state.knowledge)
 
   // 重命名知识库
   const renameKnowledgeBase = (name: string) => {
@@ -41,27 +41,37 @@ export const useKnowledge = (baseId: string) => {
   // 添加文件列表
   const addFiles = (files: FileType[]) => {
     for (const file of files) {
-      const newItem = {
+      const newItem: KnowledgeItem = {
         id: uuidv4(),
         type: 'file' as const,
         content: file,
         created_at: Date.now(),
-        updated_at: Date.now()
+        updated_at: Date.now(),
+        processingStatus: 'pending',
+        processingProgress: 0,
+        processingError: '',
+        retryCount: 0
       }
       dispatch(addItem({ baseId, item: newItem }))
     }
+    setTimeout(() => KnowledgeQueue.checkAllBases(), 0)
   }
 
   // 添加URL
   const addUrl = (url: string) => {
-    const newUrlItem = {
+    const newUrlItem: KnowledgeItem = {
       id: uuidv4(),
       type: 'url' as const,
       content: url,
       created_at: Date.now(),
-      updated_at: Date.now()
+      updated_at: Date.now(),
+      processingStatus: 'pending',
+      processingProgress: 0,
+      processingError: '',
+      retryCount: 0
     }
     dispatch(addItem({ baseId, item: newUrlItem }))
+    setTimeout(() => KnowledgeQueue.checkAllBases(), 0)
   }
 
   // 添加笔记
@@ -85,10 +95,15 @@ export const useKnowledge = (baseId: string) => {
       type: 'note',
       content: '', // store中不需要存储实际内容
       created_at: Date.now(),
-      updated_at: Date.now()
+      updated_at: Date.now(),
+      processingStatus: 'pending',
+      processingProgress: 0,
+      processingError: '',
+      retryCount: 0
     }
 
     dispatch(updateNotes({ baseId, item: noteRef }))
+    setTimeout(() => KnowledgeQueue.checkAllBases(), 0)
   }
 
   // 更新文件列表
@@ -101,6 +116,7 @@ export const useKnowledge = (baseId: string) => {
       updated_at: Date.now()
     }))
     dispatch(updateFilesAction({ baseId, items: newItems }))
+    setTimeout(() => KnowledgeQueue.checkAllBases(), 0)
   }
 
   // 更新笔记内容
@@ -115,6 +131,7 @@ export const useKnowledge = (baseId: string) => {
       await db.knowledge_notes.put(updatedNote)
       dispatch(updateNotes({ baseId, item: updatedNote }))
     }
+    setTimeout(() => KnowledgeQueue.checkAllBases(), 0)
   }
 
   // 获取笔记内容
@@ -123,47 +140,23 @@ export const useKnowledge = (baseId: string) => {
   }
 
   // 移除项目
-  const removeItem = (item: KnowledgeItem) => {
+  const removeItem = async (item: KnowledgeItem) => {
     dispatch(removeItemAction({ baseId, item }))
-  }
-
-  // 添加文件到处理队列
-  const addFileToQueue = (itemId: string) => {
-    dispatch(
-      addProcessingItem({
-        baseId,
-        type: 'file',
-        sourceId: itemId
-      })
-    )
-  }
-
-  // 添加URL到处理队列
-  const addUrlToQueue = (itemId: string) => {
-    dispatch(
-      addProcessingItem({
-        baseId,
-        type: 'url',
-        sourceId: itemId
-      })
-    )
-  }
-
-  // 添加笔记到处理队列
-  const addNoteToQueue = (itemId: string) => {
-    dispatch(
-      addProcessingItem({
-        baseId,
-        type: 'note',
-        sourceId: itemId
-      })
-    )
+    if (base) {
+      const config = getRagAppRequestParams(base)
+      if (item?.uniqueId) {
+        await window.api.knowledgeBase.remove({ uniqueId: item.uniqueId, config })
+      }
+      if (item.type === 'file' && typeof item.content === 'object') {
+        await FileManager.deleteFile(item.content.id)
+      }
+    }
   }
 
   // 更新处理状态
   const updateItemStatus = (itemId: string, status: ProcessingStatus, progress?: number, error?: string) => {
     dispatch(
-      updateProcessingStatus({
+      updateItemProcessingStatus({
         baseId,
         itemId,
         status,
@@ -173,38 +166,46 @@ export const useKnowledge = (baseId: string) => {
     )
   }
 
-  // 获取特定源的处理状态
-  const getProcessingStatus = (sourceId: string) => {
-    return selectProcessingItemBySource(knowledgeState, baseId, sourceId)
+  // 获取特定项目的处理状态
+  const getProcessingStatus = (itemId: string) => {
+    return base?.items.find((item) => item.id === itemId)?.processingStatus
   }
 
   // 获取特定类型的所有处理项
   const getProcessingItemsByType = (type: 'file' | 'url' | 'note') => {
-    return selectProcessingItemsByType(knowledgeState, baseId, type)
-  }
-
-  // 从队列中移除项目
-  const removeFromQueue = (itemId: string) => {
-    dispatch(
-      removeProcessingItem({
-        baseId,
-        itemId
-      })
-    )
+    return base?.items.filter((item) => item.type === type && item.processingStatus !== undefined) || []
   }
 
   // 清除已完成的项目
   const clearCompleted = () => {
-    dispatch(clearCompletedItems({ baseId }))
+    dispatch(clearCompletedProcessing({ baseId }))
   }
 
-  // 清除所有队列项目
+  // 清除所有处理状态
   const clearAll = () => {
-    dispatch(clearAllItems({ baseId }))
+    dispatch(clearAllProcessing({ baseId }))
+  }
+
+  // 添加 Sitemap
+  const addSitemap = (url: string) => {
+    const newSitemapItem: KnowledgeItem = {
+      id: uuidv4(),
+      type: 'sitemap' as const,
+      content: url,
+      created_at: Date.now(),
+      updated_at: Date.now(),
+      processingStatus: 'pending',
+      processingProgress: 0,
+      processingError: '',
+      retryCount: 0
+    }
+    dispatch(addItem({ baseId, item: newSitemapItem }))
+    setTimeout(() => KnowledgeQueue.checkAllBases(), 0)
   }
 
   const fileItems = base?.items.filter((item) => item.type === 'file') || []
   const urlItems = base?.items.filter((item) => item.type === 'url') || []
+  const sitemapItems = base?.items.filter((item) => item.type === 'sitemap') || []
   const [noteItems, setNoteItems] = useState<KnowledgeItem[]>([])
 
   useEffect(() => {
@@ -224,24 +225,46 @@ export const useKnowledge = (baseId: string) => {
     base,
     fileItems,
     urlItems,
+    sitemapItems,
     noteItems,
     renameKnowledgeBase,
     updateKnowledgeBase,
     addFiles,
     addUrl,
+    addSitemap,
     addNote,
     updateFiles,
     updateNoteContent,
     getNoteContent,
-    addFileToQueue,
-    addUrlToQueue,
-    addNoteToQueue,
     updateItemStatus,
     getProcessingStatus,
     getProcessingItemsByType,
-    removeFromQueue,
     clearCompleted,
     clearAll,
     removeItem
+  }
+}
+
+export const useKnowledgeBases = () => {
+  const dispatch = useDispatch()
+  const bases = useSelector((state: RootState) => state.knowledge.bases)
+
+  const addKnowledgeBase = (base: KnowledgeBase) => {
+    dispatch(addBase(base))
+  }
+
+  const renameKnowledgeBase = (baseId: string, name: string) => {
+    dispatch(renameBase({ baseId, name }))
+  }
+
+  const deleteKnowledgeBase = (baseId: string) => {
+    dispatch(deleteBase({ baseId }))
+  }
+
+  return {
+    bases,
+    addKnowledgeBase,
+    renameKnowledgeBase,
+    deleteKnowledgeBase
   }
 }

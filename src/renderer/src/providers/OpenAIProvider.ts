@@ -50,11 +50,12 @@ export default class OpenAIProvider extends BaseProvider {
     model: Model
   ): Promise<OpenAI.Chat.Completions.ChatCompletionMessageParam> {
     const isVision = isVisionModel(model)
+    const content = await this.getMessageContent(message)
 
     if (!message.files) {
       return {
         role: message.role,
-        content: await this.getMessageContentWithKnowledgeBase(message)
+        content
       }
     }
 
@@ -74,21 +75,21 @@ export default class OpenAIProvider extends BaseProvider {
 
           return {
             role: message.role,
-            content: message.content + divider + text
+            content: content + divider + text
           }
         }
       }
 
       return {
         role: message.role,
-        content: message.content
+        content
       }
     }
 
     const parts: ChatCompletionContentPart[] = [
       {
         type: 'text',
-        text: message.content
+        text: content
       }
     ]
 

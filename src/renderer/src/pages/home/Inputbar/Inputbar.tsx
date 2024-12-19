@@ -49,7 +49,7 @@ interface Props {
 
 let _text = ''
 let _files: FileType[] = []
-let _base: KnowledgeBase
+let _base: KnowledgeBase | undefined
 
 const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const [text, setText] = useState(_text)
@@ -80,7 +80,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const [spaceClickCount, setSpaceClickCount] = useState(0)
   const spaceClickTimer = useRef<NodeJS.Timeout>()
   const [isTranslating, setIsTranslating] = useState(false)
-  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<KnowledgeBase>(_base)
+  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<KnowledgeBase | undefined>(_base)
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
@@ -450,8 +450,19 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                 <ControlOutlined />
               </ToolbarButton>
             </Tooltip>
-            <KnowledgeBaseButton selectedBase={selectedKnowledgeBase} onSelect={handleKnowledgeBaseSelect} />
-            <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
+            <KnowledgeBaseButton
+              selectedBase={selectedKnowledgeBase}
+              onSelect={handleKnowledgeBaseSelect}
+              ToolbarButton={ToolbarButton}
+              disabled={files.length > 0}
+            />
+            <AttachmentButton
+              model={model}
+              files={files}
+              setFiles={setFiles}
+              ToolbarButton={ToolbarButton}
+              disabled={!!selectedKnowledgeBase}
+            />
             <ToolbarButton type="text" onClick={onNewContext}>
               <Tooltip placement="top" title={t('chat.input.new.context')}>
                 <PicCenterOutlined />

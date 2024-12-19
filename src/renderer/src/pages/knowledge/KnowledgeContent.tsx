@@ -2,10 +2,10 @@ import {
   DeleteOutlined,
   EditOutlined,
   FileTextOutlined,
+  GlobalOutlined,
   LinkOutlined,
   PlusOutlined,
-  SearchOutlined,
-  StopOutlined
+  SearchOutlined
 } from '@ant-design/icons'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
@@ -18,8 +18,8 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import KnowledgeSearchPopup from './KnowledgeSearchPopup'
-import StatusIcon from './StatusIcon'
+import KnowledgeSearchPopup from './components/KnowledgeSearchPopup'
+import StatusIcon from './components/StatusIcon'
 
 const { Dragger } = Upload
 const { Title } = Typography
@@ -35,15 +35,13 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
     noteItems,
     fileItems,
     urlItems,
+    sitemapItems,
     addFiles,
     updateNoteContent,
     addUrl,
+    addSitemap,
     removeItem,
     getProcessingStatus,
-    addFileToQueue,
-    addNoteToQueue,
-    addUrlToQueue,
-    clearAll,
     addNote
   } = useKnowledge(selectedBase.id || '')
 
@@ -109,21 +107,34 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
     }
   }
 
+  const handleAddSitemap = async () => {
+    const url = await PromptPopup.show({
+      title: t('knowledge_base.add_sitemap'),
+      message: '',
+      inputPlaceholder: t('knowledge_base.sitemap_placeholder'),
+      inputProps: {
+        maxLength: 1000,
+        rows: 1
+      }
+    })
+
+    if (url) {
+      try {
+        new URL(url)
+        if (sitemapItems.find((item) => item.content === url)) {
+          message.success(t('knowledge_base.sitemap_added'))
+          return
+        }
+        addSitemap(url)
+      } catch (e) {
+        console.error('Invalid Sitemap URL:', url)
+      }
+    }
+  }
+
   const handleAddNote = async () => {
     const note = await TextEditPopup.show({ text: '', textareaProps: { rows: 20 } })
     note && addNote(note)
-  }
-
-  const handleIndexAll = async () => {
-    fileItems.forEach((item) => !item.uniqueId && addFileToQueue(item.id))
-    urlItems.forEach((item) => !item.uniqueId && addUrlToQueue(item.id))
-    noteItems.forEach((note) => !note.uniqueId && addNoteToQueue(note.id))
-    message.success(t('knowledge_base.index_started'))
-  }
-
-  const handleCancelIndex = () => {
-    clearAll()
-    message.success(t('knowledge_base.index_cancelled'))
   }
 
   const handleEditNote = async (note: any) => {
@@ -200,6 +211,33 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
 
       <ContentSection>
         <TitleWrapper>
+          <Title level={5}>{t('knowledge_base.sitemaps')}</Title>
+          <Button icon={<PlusOutlined />} onClick={handleAddSitemap}>
+            {t('knowledge_base.add_sitemap')}
+          </Button>
+        </TitleWrapper>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {sitemapItems.map((item) => (
+            <ItemCard key={item.id}>
+              <ItemContent>
+                <ItemInfo>
+                  <GlobalOutlined style={{ fontSize: '16px' }} />
+                  <a href={item.content as string} target="_blank" rel="noopener noreferrer">
+                    {item.content as string}
+                  </a>
+                </ItemInfo>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <StatusIcon sourceId={item.id} base={base} getProcessingStatus={getProcessingStatus} />
+                  <Button type="text" danger onClick={() => removeItem(item)} icon={<DeleteOutlined />} />
+                </div>
+              </ItemContent>
+            </ItemCard>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection>
+        <TitleWrapper>
           <Title level={5}>{t('knowledge_base.notes')}</Title>
           <Button icon={<PlusOutlined />} onClick={handleAddNote}>
             {t('knowledge_base.add_note')}
@@ -222,19 +260,9 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
           ))}
         </div>
       </ContentSection>
-
       <IndexSection>
-        <Button type="primary" onClick={handleIndexAll} icon={<FileTextOutlined />}>
-          {t('knowledge_base.index_all')}
-        </Button>
-        <Button onClick={handleCancelIndex} icon={<StopOutlined />} style={{ marginLeft: '10px' }}>
-          {t('knowledge_base.cancel_index')}
-        </Button>
-        <Button
-          onClick={() => KnowledgeSearchPopup.show({ base })}
-          icon={<SearchOutlined />}
-          style={{ marginLeft: '10px' }}>
-          {t('knowledge_base.query')}
+        <Button type="primary" onClick={() => KnowledgeSearchPopup.show({ base })} icon={<SearchOutlined />}>
+          {t('knowledge_base.search')}
         </Button>
       </IndexSection>
       <div style={{ minHeight: '20px' }} />
@@ -321,7 +349,7 @@ const ItemInfo = styled.div`
 const IndexSection = styled.div`
   margin-top: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 `
 
 export default KnowledgeContent

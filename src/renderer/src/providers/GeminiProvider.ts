@@ -17,6 +17,7 @@ import axios from 'axios'
 import { first, isEmpty, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
+import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
 
 export default class GeminiProvider extends BaseProvider {
@@ -34,7 +35,7 @@ export default class GeminiProvider extends BaseProvider {
   private async getMessageContents(message: Message): Promise<Content> {
     const role = message.role === 'user' ? 'user' : 'model'
 
-    const parts: Part[] = [{ text: message.content }]
+    const parts: Part[] = [{ text: await this.getMessageContent(message) }]
 
     for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
@@ -107,29 +108,47 @@ export default class GeminiProvider extends BaseProvider {
     const chat = geminiModel.startChat({ history })
     const messageContents = await this.getMessageContents(userLastMessage!)
 
+    const start_time_millsec = new Date().getTime()
+
     if (!streamOutput) {
       const { response } = await chat.sendMessage(messageContents.parts)
+      const time_completion_millsec = new Date().getTime() - start_time_millsec
       onChunk({
         text: response.candidates?.[0].content.parts[0].text,
         usage: {
           prompt_tokens: response.usageMetadata?.promptTokenCount || 0,
           completion_tokens: response.usageMetadata?.candidatesTokenCount || 0,
           total_tokens: response.usageMetadata?.totalTokenCount || 0
+        },
+        metrics: {
+          completion_tokens: response.usageMetadata?.candidatesTokenCount,
+          time_completion_millsec,
+          time_first_token_millsec: 0
         }
       })
       return
     }
 
     const userMessagesStream = await chat.sendMessageStream(messageContents.parts)
+    let time_first_token_millsec = 0
 
     for await (const chunk of userMessagesStream.stream) {
       if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break
+      if (time_first_token_millsec == 0) {
+        time_first_token_millsec = new Date().getTime() - start_time_millsec
+      }
+      const time_completion_millsec = new Date().getTime() - start_time_millsec
       onChunk({
         text: chunk.text(),
         usage: {
           prompt_tokens: chunk.usageMetadata?.promptTokenCount || 0,
           completion_tokens: chunk.usageMetadata?.candidatesTokenCount || 0,
           total_tokens: chunk.usageMetadata?.totalTokenCount || 0
+        },
+        metrics: {
+          completion_tokens: chunk.usageMetadata?.candidatesTokenCount,
+          time_completion_millsec,
+          time_first_token_millsec
         }
       })
     }

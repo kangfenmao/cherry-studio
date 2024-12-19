@@ -1,4 +1,4 @@
-import { BookOutlined, FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
+import { FileSearchOutlined, FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import { useTheme } from '@renderer/context/ThemeProvider'
@@ -91,7 +91,7 @@ const Sidebar: FC = () => {
           <Tooltip title={t('knowledge_base.title')} mouseEnterDelay={0.5} placement="right">
             <StyledLink onClick={() => to('/knowledge')}>
               <Icon className={isRoute('/knowledge')}>
-                <BookOutlined />
+                <FileSearchOutlined />
               </Icon>
             </StyledLink>
           </Tooltip>

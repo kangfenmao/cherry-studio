@@ -529,7 +529,7 @@
       "notes_placeholder": "输入此知识库的附加信息或上下文...",
       "delete": "删除",
       "rename": "重命名",
-      "urls": "网站",
+      "urls": "网址",
       "add_url": "添加网址",
       "url_placeholder": "请输入网址",
       "invalid_url": "无效的网址",
@@ -544,11 +544,13 @@
       "status_completed": "已完成",
       "status_failed": "失败",
       "url_added": "网址已添加",
-      "query": "查询",
       "search_placeholder": "输入查询内容",
       "add_note": "添加笔记",
       "no_bases": "暂无知识库",
-      "clear_selection": "清除选择"
+      "clear_selection": "清除选择",
+      "delete_confirm": "确定要删除此知识库吗?",
+      "sitemaps": "站点地图",
+      "add_sitemap": "添加站点地图"
     }
   }
 }

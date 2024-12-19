@@ -543,11 +543,13 @@
       "status_completed": "已完成",
       "status_failed": "失敗",
       "url_added": "網址已添加",
-      "query": "查詢",
       "search_placeholder": "輸入查詢內容",
       "add_note": "添加筆記",
       "no_bases": "暫無知識庫",
-      "clear_selection": "清除選擇"
+      "clear_selection": "清除選擇",
+      "delete_confirm": "確定要刪除此知識庫嗎?",
+      "sitemaps": "站點地圖",
+      "add_sitemap": "添加站點地圖"
     }
   }
 }

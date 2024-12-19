@@ -1,4 +1,4 @@
-import { BookOutlined } from '@ant-design/icons'
+import { FileSearchOutlined } from '@ant-design/icons'
 import { useAppSelector } from '@renderer/store'
 import { KnowledgeBase } from '@renderer/types'
 import { Button, Popover, Tooltip } from 'antd'
@@ -9,6 +9,8 @@ import styled from 'styled-components'
 interface Props {
   selectedBase?: KnowledgeBase
   onSelect: (base?: KnowledgeBase) => void
+  disabled?: boolean
+  ToolbarButton?: any
 }
 
 const KnowledgeBaseSelector: FC<Props> = ({ selectedBase, onSelect }) => {
@@ -42,14 +44,14 @@ const KnowledgeBaseSelector: FC<Props> = ({ selectedBase, onSelect }) => {
   )
 }
 
-const KnowledgeBaseButton: FC<Props> = ({ selectedBase, onSelect }) => {
+const KnowledgeBaseButton: FC<Props> = ({ selectedBase, onSelect, disabled, ToolbarButton }) => {
   const { t } = useTranslation()
 
   if (selectedBase) {
     return (
       <Tooltip placement="top" title={t('chat.input.knowledge_base')} arrow>
         <ToolbarButton type="text" onClick={() => onSelect(undefined)}>
-          <BookOutlined style={{ color: selectedBase ? 'var(--color-link)' : 'var(--color-icon)' }} />
+          <FileSearchOutlined style={{ color: selectedBase ? 'var(--color-link)' : 'var(--color-icon)' }} />
         </ToolbarButton>
       </Tooltip>
     )
@@ -61,8 +63,8 @@ const KnowledgeBaseButton: FC<Props> = ({ selectedBase, onSelect }) => {
         placement="top"
         content={<KnowledgeBaseSelector selectedBase={selectedBase} onSelect={onSelect} />}
         trigger="click">
-        <ToolbarButton type="text" onClick={() => selectedBase && onSelect(undefined)}>
-          <BookOutlined style={{ color: selectedBase ? 'var(--color-link)' : 'var(--color-icon)' }} />
+        <ToolbarButton type="text" onClick={() => selectedBase && onSelect(undefined)} disabled={disabled}>
+          <FileSearchOutlined style={{ color: selectedBase ? 'var(--color-link)' : 'var(--color-icon)' }} />
         </ToolbarButton>
       </Popover>
     </Tooltip>
@@ -76,42 +78,6 @@ const SelectorContainer = styled.div`
 
 const EmptyMessage = styled.div`
   padding: 8px;
-`
-
-const ToolbarButton = styled(Button)`
-  width: 30px;
-  height: 30px;
-  font-size: 17px;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  color: var(--color-icon);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  &.anticon,
-  &.iconfont {
-    transition: all 0.3s ease;
-    color: var(--color-icon);
-  }
-  &:hover {
-    background-color: var(--color-background-soft);
-    .anticon,
-    .iconfont {
-      color: var(--color-text-1);
-    }
-  }
-  &.active {
-    background-color: var(--color-primary) !important;
-    .anticon,
-    .iconfont {
-      color: var(--color-white-soft);
-    }
-    &:hover {
-      background-color: var(--color-primary);
-    }
-  }
 `
 
 export default KnowledgeBaseButton

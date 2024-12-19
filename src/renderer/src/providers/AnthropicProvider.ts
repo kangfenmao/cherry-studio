@@ -25,7 +25,12 @@ export default class AnthropicProvider extends BaseProvider {
   }
 
   private async getMessageParam(message: Message): Promise<MessageParam> {
-    const parts: MessageParam['content'] = [{ type: 'text', text: message.content }]
+    const parts: MessageParam['content'] = [
+      {
+        type: 'text',
+        text: await this.getMessageContent(message)
+      }
+    ]
 
     for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
@@ -83,11 +88,20 @@ export default class AnthropicProvider extends BaseProvider {
       system: assistant.prompt
     }
 
+    let time_first_token_millsec = 0
+    const start_time_millsec = new Date().getTime()
+
     if (!streamOutput) {
       const message = await this.sdk.messages.create({ ...body, stream: false })
+      const time_completion_millsec = new Date().getTime() - start_time_millsec
       return onChunk({
         text: message.content[0].type === 'text' ? message.content[0].text : '',
-        usage: message.usage
+        usage: message.usage,
+        metrics: {
+          completion_tokens: message.usage.output_tokens,
+          time_completion_millsec,
+          time_first_token_millsec: 0
+        }
       })
     }
 
@@ -99,7 +113,18 @@ export default class AnthropicProvider extends BaseProvider {
             stream.controller.abort()
             return resolve()
           }
-          onChunk({ text })
+          if (time_first_token_millsec == 0) {
+            time_first_token_millsec = new Date().getTime() - start_time_millsec
+          }
+          const time_completion_millsec = new Date().getTime() - start_time_millsec
+          onChunk({
+            text,
+            metrics: {
+              completion_tokens: undefined,
+              time_completion_millsec,
+              time_first_token_millsec
+            }
+          })
         })
         .on('finalMessage', (message) => {
           onChunk({
@@ -108,6 +133,11 @@ export default class AnthropicProvider extends BaseProvider {
               prompt_tokens: message.usage.input_tokens,
               completion_tokens: message.usage.output_tokens,
               total_tokens: sum(Object.values(message.usage))
+            },
+            metrics: {
+              completion_tokens: message.usage.output_tokens,
+              time_completion_millsec: new Date().getTime() - start_time_millsec,
+              time_first_token_millsec
             }
           })
           resolve()

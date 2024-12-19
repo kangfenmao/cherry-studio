@@ -1,6 +1,6 @@
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import { Center } from '@renderer/components/Layout'
-import { KnowledgeBase, ProcessingItem } from '@renderer/types'
+import { KnowledgeBase, ProcessingStatus } from '@renderer/types'
 import { Tooltip } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,13 +9,14 @@ import styled from 'styled-components'
 interface StatusIconProps {
   sourceId: string
   base: KnowledgeBase
-  getProcessingStatus: (sourceId: string) => ProcessingItem | undefined
+  getProcessingStatus: (sourceId: string) => ProcessingStatus | undefined
 }
 
 const StatusIcon: FC<StatusIconProps> = ({ sourceId, base, getProcessingStatus }) => {
   const { t } = useTranslation()
   const status = getProcessingStatus(sourceId)
   const item = base.items.find((item) => item.id === sourceId)
+  const errorText = item?.processingError
 
   if (!status) {
     if (item?.uniqueId) {
@@ -34,7 +35,7 @@ const StatusIcon: FC<StatusIconProps> = ({ sourceId, base, getProcessingStatus }
     )
   }
 
-  switch (status.status) {
+  switch (status) {
     case 'pending':
       return (
         <Tooltip title={t('knowledge_base.status_pending')} placement="left">
@@ -55,7 +56,7 @@ const StatusIcon: FC<StatusIconProps> = ({ sourceId, base, getProcessingStatus }
       )
     case 'failed':
       return (
-        <Tooltip title={t('knowledge_base.status_failed')} placement="left">
+        <Tooltip title={errorText || t('knowledge_base.status_failed')} placement="left">
           <CloseCircleOutlined style={{ color: '#ff4d4f' }} />
         </Tooltip>
       )

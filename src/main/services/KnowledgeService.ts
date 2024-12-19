@@ -11,7 +11,6 @@ import { WebLoader } from '@llm-tools/embedjs-loader-web'
 import { OpenAiEmbeddings } from '@llm-tools/embedjs-openai'
 import { FileType, RagAppRequestParams } from '@types'
 import { app } from 'electron'
-import Logger from 'electron-log'
 
 class KnowledgeService {
   private storageDir = path.join(app.getPath('userData'), 'Data', 'KnowledgeBase')
@@ -27,7 +26,6 @@ class KnowledgeService {
   }
 
   private getRagApplication = async ({ id, model, apiKey, baseURL }: RagAppRequestParams): Promise<RAGApplication> => {
-    Logger.log('getRagApplication', { id, model, apiKey, baseURL })
     return new RAGApplicationBuilder()
       .setModel('NO_MODEL')
       .setEmbeddingModel(
@@ -82,7 +80,7 @@ class KnowledgeService {
       return await ragApplication.addLoader(new DocxLoader({ filePathOrUrl: data.path }) as any)
     }
 
-    if (data.ext === '.md') {
+    if (data.ext === '.md' || data.ext === '.mdx') {
       return await ragApplication.addLoader(new MarkdownLoader({ filePathOrUrl: data.path }) as any)
     }
 

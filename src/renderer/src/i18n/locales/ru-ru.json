@@ -555,11 +555,13 @@
       "status_completed": "Завершено",
       "status_failed": "Ошибка",
       "url_added": "URL добавлен",
-      "query": "Поиск",
       "search_placeholder": "Введите текст для поиска",
       "add_note": "Добавить запись",
       "no_bases": "База знаний не найдена",
-      "clear_selection": "Очистить выбор"
+      "clear_selection": "Очистить выбор",
+      "delete_confirm": "Вы уверены, что хотите удалить эту базу знаний?",
+      "sitemaps": "Карта сайта",
+      "add_sitemap": "Добавить карту сайта"
     }
   }
 }

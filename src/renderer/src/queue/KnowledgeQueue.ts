@@ -2,13 +2,13 @@ import { AddLoaderReturn } from '@llm-tools/embedjs-interfaces'
 import db from '@renderer/databases'
 import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
-import { removeProcessingItem, updateBaseItemUniqueId, updateProcessingStatus } from '@renderer/store/knowledge'
-import { ProcessingItem } from '@renderer/types'
+import { clearCompletedProcessing, updateBaseItemUniqueId, updateItemProcessingStatus } from '@renderer/store/knowledge'
+import { KnowledgeItem } from '@renderer/types'
 
 class KnowledgeQueue {
   private processing: Map<string, boolean> = new Map()
   private pollingInterval: NodeJS.Timeout | null = null
-  private readonly POLLING_INTERVAL = 5000
+  // private readonly POLLING_INTERVAL = 5000
   private readonly MAX_RETRIES = 3
 
   constructor() {
@@ -21,10 +21,10 @@ class KnowledgeQueue {
 
     const state = store.getState()
     state.knowledge.bases.forEach((base) => {
-      base.processingQueue.forEach((item) => {
-        if (item.status === 'processing') {
+      base.items.forEach((item) => {
+        if (item.processingStatus === 'processing') {
           store.dispatch(
-            updateProcessingStatus({
+            updateItemProcessingStatus({
               baseId: base.id,
               itemId: item.id,
               status: 'pending',
@@ -35,9 +35,9 @@ class KnowledgeQueue {
       })
     })
 
-    this.pollingInterval = setInterval(() => {
-      this.checkAllBases()
-    }, this.POLLING_INTERVAL)
+    // this.pollingInterval = setInterval(() => {
+    //   this.checkAllBases()
+    // }, this.POLLING_INTERVAL)
   }
 
   private stopPolling(): void {
@@ -47,26 +47,20 @@ class KnowledgeQueue {
     }
   }
 
-  private async checkAllBases(): Promise<void> {
+  public async checkAllBases(): Promise<void> {
     const state = store.getState()
     const bases = state.knowledge.bases
 
-    console.log('[KnowledgeQueue] Checking all bases for pending items...')
-
     await Promise.all(
       bases.map(async (base) => {
-        const processableItems = base.processingQueue.filter((item) => {
-          if (item.status === 'failed') {
+        const processableItems = base.items.filter((item) => {
+          if (item.processingStatus === 'failed') {
             return !item.retryCount || item.retryCount < this.MAX_RETRIES
           }
-          return item.status === 'pending'
+          return item.processingStatus === 'pending'
         })
 
         const hasProcessableItems = processableItems.length > 0
-
-        console.log(
-          `[KnowledgeQueue] Base ${base.id}: ${hasProcessableItems ? 'has processable items' : 'no processable items'}`
-        )
 
         if (hasProcessableItems && !this.processing.get(base.id)) {
           await this.processQueue(base.id)
@@ -91,11 +85,11 @@ class KnowledgeQueue {
         throw new Error('Knowledge base not found')
       }
 
-      const processableItems = base.processingQueue.filter((item) => {
-        if (item.status === 'failed') {
+      const processableItems = base.items.filter((item) => {
+        if (item.processingStatus === 'failed') {
           return !item.retryCount || item.retryCount < this.MAX_RETRIES
         }
-        return item.status === 'pending'
+        return item.processingStatus === 'pending'
       })
 
       for (const item of processableItems) {
@@ -124,7 +118,7 @@ class KnowledgeQueue {
     }
   }
 
-  private async processItem(baseId: string, item: ProcessingItem): Promise<void> {
+  private async processItem(baseId: string, item: KnowledgeItem): Promise<void> {
     try {
       if (item.retryCount && item.retryCount >= this.MAX_RETRIES) {
         console.log(`[KnowledgeQueue] Item ${item.id} has reached max retries, skipping`)
@@ -132,9 +126,9 @@ class KnowledgeQueue {
       }
 
       console.log(`[KnowledgeQueue] Starting to process item ${item.id} (${item.type})`)
-      // Update status to processing
+
       store.dispatch(
-        updateProcessingStatus({
+        updateItemProcessingStatus({
           baseId,
           itemId: item.id,
           status: 'processing',
@@ -149,10 +143,10 @@ class KnowledgeQueue {
       }
 
       const requestParams = getRagAppRequestParams(base)
-      const sourceItem = base.items.find((i) => i.id === item.sourceId)
+      const sourceItem = base.items.find((i) => i.id === item.id)
 
       if (!sourceItem) {
-        throw new Error(`[KnowledgeQueue] Source item ${item.sourceId} not found in base ${baseId}`)
+        throw new Error(`[KnowledgeQueue] Source item ${item.id} not found in base ${baseId}`)
       }
 
       let result: AddLoaderReturn | null = null
@@ -169,10 +163,15 @@ class KnowledgeQueue {
           result = await window.api.knowledgeBase.add({ data: sourceItem.content, config: requestParams })
           console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
           break
+        case 'sitemap':
+          console.log(`[KnowledgeQueue] Processing Sitemap: ${sourceItem.content}`)
+          result = await window.api.knowledgeBase.add({ data: sourceItem.content, config: requestParams })
+          console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
+          break
         case 'note':
           console.log(`[KnowledgeQueue] Processing note: ${sourceItem.content}`)
-          note = await db.knowledge_notes.get(item.sourceId)
-          if (!note) throw new Error(`Source note ${item.sourceId} not found`)
+          note = await db.knowledge_notes.get(item.id)
+          if (!note) throw new Error(`Source note ${item.id} not found`)
           content = note.content as string
           result = await window.api.knowledgeBase.add({ data: content, config: requestParams })
           console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
@@ -181,36 +180,31 @@ class KnowledgeQueue {
 
       console.log(`[KnowledgeQueue] Successfully completed processing item ${item.id}`)
 
-      // Mark as completed
       store.dispatch(
-        updateProcessingStatus({
+        updateItemProcessingStatus({
           baseId,
           itemId: item.id,
           status: 'completed'
         })
       )
 
-      // Update uniqueId
       if (result) {
         store.dispatch(
           updateBaseItemUniqueId({
             baseId,
-            itemId: item.sourceId,
+            itemId: item.id,
             uniqueId: result.uniqueId
           })
         )
       }
 
-      console.debug(`[KnowledgeQueue] Updated uniqueId for item ${item.sourceId} in base ${baseId}`)
+      console.debug(`[KnowledgeQueue] Updated uniqueId for item ${item.id} in base ${baseId}`)
 
-      // Remove from queue after successful processing
-      setTimeout(() => {
-        store.dispatch(removeProcessingItem({ baseId, itemId: item.id }))
-      }, 1000)
+      setTimeout(() => store.dispatch(clearCompletedProcessing({ baseId })), 1000)
     } catch (error) {
       console.error(`[KnowledgeQueue] Error processing item ${item.id}:`, error)
       store.dispatch(
-        updateProcessingStatus({
+        updateItemProcessingStatus({
           baseId,
           itemId: item.id,
           status: 'failed',

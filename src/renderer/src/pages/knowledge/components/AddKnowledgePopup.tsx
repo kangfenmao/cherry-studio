@@ -1,16 +1,15 @@
 import { TopView } from '@renderer/components/TopView'
 import { isEmbeddingModel } from '@renderer/config/models'
+import { useKnowledgeBases } from '@renderer/hooks/useknowledge'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
 import { getModelUniqId } from '@renderer/services/ModelService'
-import { addBase } from '@renderer/store/knowledge'
 import { Model } from '@renderer/types'
 import { Form, Input, Modal, Select } from 'antd'
 import { find, sortBy } from 'lodash'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 
 interface ShowParams {
   title: string
@@ -29,8 +28,8 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
   const [open, setOpen] = useState(true)
   const [form] = Form.useForm<FormData>()
   const { t } = useTranslation()
-  const dispatch = useDispatch()
   const { providers } = useProviders()
+  const { addKnowledgeBase } = useKnowledgeBases()
   const allModels = providers
     .map((p) => p.models)
     .flat()
@@ -61,14 +60,13 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
           name: values.name,
           model: selectedModel,
           items: [],
-          processingQueue: [],
           created_at: Date.now(),
           updated_at: Date.now()
         }
 
         await window.api.knowledgeBase.create(getRagAppRequestParams(newBase))
 
-        dispatch(addBase(newBase as any))
+        addKnowledgeBase(newBase as any)
         setOpen(false)
         resolve(newBase)
       }

@@ -3,35 +3,35 @@ import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import ListItem from '@renderer/components/ListItem'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
-import { RootState } from '@renderer/store'
-import { deleteBase, renameBase } from '@renderer/store/knowledge'
+import { useKnowledgeBases } from '@renderer/hooks/useknowledge'
 import { KnowledgeBase } from '@renderer/types'
 import { Dropdown, Empty, MenuProps } from 'antd'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import AddKnowledgePopup from './AddKnowledgePopup'
+import AddKnowledgePopup from './components/AddKnowledgePopup'
 import KnowledgeContent from './KnowledgeContent'
 
 const KnowledgePage: FC = () => {
   const { t } = useTranslation()
-  const { bases } = useSelector((state: RootState) => state.knowledge)
+  const { bases, renameKnowledgeBase, deleteKnowledgeBase } = useKnowledgeBases()
   const [selectedBase, setSelectedBase] = useState<KnowledgeBase>()
-  const dispatch = useDispatch()
 
   const handleAddKnowledge = async () => {
-    await AddKnowledgePopup.show({
-      title: t('knowledge_base.add.title')
-    })
+    await AddKnowledgePopup.show({ title: t('knowledge_base.add.title') })
   }
 
   useEffect(() => {
     if (bases.length > 0) {
-      setSelectedBase(bases[0])
+      if (!selectedBase) {
+        return setSelectedBase(bases[0])
+      }
+      if (selectedBase && !bases.includes(selectedBase)) {
+        return setSelectedBase(bases[0])
+      }
     }
-  }, [bases])
+  }, [bases, selectedBase])
 
   const getMenuItems = useCallback(
     (base: KnowledgeBase) => {
@@ -47,7 +47,7 @@ const KnowledgePage: FC = () => {
               defaultValue: base.name || ''
             })
             if (name && base.name !== name) {
-              dispatch(renameBase({ baseId: base.id, name }))
+              renameKnowledgeBase(base.id, name)
             }
           }
         },
@@ -58,14 +58,20 @@ const KnowledgePage: FC = () => {
           key: 'delete',
           icon: <DeleteOutlined />,
           onClick: () => {
-            dispatch(deleteBase({ baseId: base.id }))
+            window.modal.confirm({
+              title: t('knowledge_base.delete_confirm'),
+              centered: true,
+              onOk: () => {
+                deleteKnowledgeBase(base.id)
+              }
+            })
           }
         }
       ]
 
       return menus
     },
-    [dispatch, t]
+    [deleteKnowledgeBase, renameKnowledgeBase, t]
   )
 
   return (

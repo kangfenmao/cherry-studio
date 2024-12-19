@@ -19,6 +19,24 @@ export default abstract class BaseProvider {
     this.apiKey = this.getApiKey()
   }
 
+  abstract completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void>
+  abstract translate(message: Message, assistant: Assistant): Promise<string>
+  abstract summaries(messages: Message[], assistant: Assistant): Promise<string>
+  abstract suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]>
+  abstract generateText({ prompt, content }: { prompt: string; content: string }): Promise<string>
+  abstract check(): Promise<{ valid: boolean; error: Error | null }>
+  abstract models(): Promise<OpenAI.Models.Model[]>
+  abstract generateImage(_params: {
+    prompt: string
+    negativePrompt: string
+    imageSize: string
+    batchSize: number
+    seed?: string
+    numInferenceSteps: number
+    guidanceScale: number
+    signal?: AbortSignal
+  }): Promise<string[]>
+
   public getBaseURL(): string {
     const host = this.provider.apiHost
     return host.endsWith('/') ? host : `${host}/v1/`
@@ -63,7 +81,7 @@ export default abstract class BaseProvider {
     }
   }
 
-  public async getMessageContentWithKnowledgeBase(message: Message) {
+  public async getMessageContent(message: Message) {
     if (!message.knowledgeBaseIds) {
       return message.content
     }
@@ -81,8 +99,6 @@ export default abstract class BaseProvider {
       config: getRagAppRequestParams(base)
     })
 
-    console.debug('searchResults', searchResults)
-
     const references = take(searchResults, 5)
       .map((item, index) => {
         let sourceUrl = ''
@@ -93,16 +109,15 @@ export default abstract class BaseProvider {
         if (baseItem) {
           switch (baseItem.type) {
             case 'file':
-              sourceUrl = `file://${(baseItem?.content as FileType).path}`
+              // sourceUrl = `file://${encodeURIComponent((baseItem?.content as FileType).path)}`
               sourceName = (baseItem?.content as FileType).origin_name
               break
             case 'url':
               sourceUrl = baseItem.content as string
-              sourceName = ''
+              sourceName = baseItem.content as string
               break
             case 'note':
-              sourceUrl = ''
-              sourceName = ''
+              sourceName = baseItem.content as string
               break
           }
         }
@@ -118,26 +133,9 @@ source_url: ${sourceUrl}
       })
       .join('\n\n')
 
-    const prompt = `回答问题请参考以下内容，并使用类似 [^1] content [source_name](source_url) 的脚注格式引用数据来源，脚注内容可以点击跳转。当 source_name 为空的时候可以使用 content 作为脚注内容。`
+    const prompt =
+      '回答问题请参考以下内容，并使用类似 [^1]: source 的脚注格式引用数据来源, source 根据 source_type 决定'
 
     return [message.content, prompt, references].join('\n\n')
   }
-
-  abstract completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void>
-  abstract translate(message: Message, assistant: Assistant): Promise<string>
-  abstract summaries(messages: Message[], assistant: Assistant): Promise<string>
-  abstract suggestions(messages: Message[], assistant: Assistant): Promise<Suggestion[]>
-  abstract generateText({ prompt, content }: { prompt: string; content: string }): Promise<string>
-  abstract check(): Promise<{ valid: boolean; error: Error | null }>
-  abstract models(): Promise<OpenAI.Models.Model[]>
-  abstract generateImage(_params: {
-    prompt: string
-    negativePrompt: string
-    imageSize: string
-    batchSize: number
-    seed?: string
-    numInferenceSteps: number
-    guidanceScale: number
-    signal?: AbortSignal
-  }): Promise<string[]>
 }
