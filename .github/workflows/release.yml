@@ -20,7 +20,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-13, macos-latest, windows-latest, ubuntu-latest]
+        # windows-latest, ubuntu-latest
+        os: [macos-13, macos-latest]
         arch: [x64, arm64]
         exclude:
           - os: windows-latest
@@ -54,7 +55,7 @@ jobs:
           ARCH: ${{ matrix.arch }}
 
       - name: Build Mac
-        if: matrix.os == 'macos-13'
+        if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
         run: yarn build:mac
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
