@@ -7,9 +7,10 @@ import { LanceDb } from '@llm-tools/embedjs-lancedb'
 import { MarkdownLoader } from '@llm-tools/embedjs-loader-markdown'
 import { DocxLoader } from '@llm-tools/embedjs-loader-msoffice'
 import { PdfLoader } from '@llm-tools/embedjs-loader-pdf'
+import { SitemapLoader } from '@llm-tools/embedjs-loader-sitemap'
 import { WebLoader } from '@llm-tools/embedjs-loader-web'
 import { OpenAiEmbeddings } from '@llm-tools/embedjs-openai'
-import { FileType, RagAppRequestParams } from '@types'
+import { FileType, KnowledgeBaseParams, KnowledgeItem } from '@types'
 import { app } from 'electron'
 
 class KnowledgeService {
@@ -25,7 +26,7 @@ class KnowledgeService {
     }
   }
 
-  private getRagApplication = async ({ id, model, apiKey, baseURL }: RagAppRequestParams): Promise<RAGApplication> => {
+  private getRagApplication = async ({ id, model, apiKey, baseURL }: KnowledgeBaseParams): Promise<RAGApplication> => {
     return new RAGApplicationBuilder()
       .setModel('NO_MODEL')
       .setEmbeddingModel(
@@ -42,13 +43,13 @@ class KnowledgeService {
 
   public create = async (
     _: Electron.IpcMainInvokeEvent,
-    { id, model, apiKey, baseURL }: RagAppRequestParams
+    { id, model, apiKey, baseURL }: KnowledgeBaseParams
   ): Promise<void> => {
     this.getRagApplication({ id, model, apiKey, baseURL })
   }
 
-  public reset = async (_: Electron.IpcMainInvokeEvent, { config }: { config: RagAppRequestParams }): Promise<void> => {
-    const ragApplication = await this.getRagApplication(config)
+  public reset = async (_: Electron.IpcMainInvokeEvent, { base }: { base: KnowledgeBaseParams }): Promise<void> => {
+    const ragApplication = await this.getRagApplication(base)
     await ragApplication.reset()
   }
 
@@ -61,27 +62,41 @@ class KnowledgeService {
 
   public add = async (
     _: Electron.IpcMainInvokeEvent,
-    { data, config }: { data: string | FileType; config: RagAppRequestParams }
+    { base, item }: { base: KnowledgeBaseParams; item: KnowledgeItem }
   ): Promise<AddLoaderReturn> => {
-    const ragApplication = await this.getRagApplication(config)
+    const ragApplication = await this.getRagApplication(base)
 
-    if (typeof data === 'string') {
-      if (data.startsWith('http')) {
-        return await ragApplication.addLoader(new WebLoader({ urlOrContent: data }))
+    if (item.type === 'url') {
+      const content = item.content as string
+      if (content.startsWith('http')) {
+        return await ragApplication.addLoader(new WebLoader({ urlOrContent: content }))
       }
-      return await ragApplication.addLoader(new TextLoader({ text: data }))
     }
 
-    if (data.ext === '.pdf') {
-      return await ragApplication.addLoader(new PdfLoader({ filePathOrUrl: data.path }) as any)
+    if (item.type === 'sitemap') {
+      const content = item.content as string
+      return await ragApplication.addLoader(new SitemapLoader({ url: content }))
     }
 
-    if (data.ext === '.docx') {
-      return await ragApplication.addLoader(new DocxLoader({ filePathOrUrl: data.path }) as any)
+    if (item.type === 'note') {
+      const content = item.content as string
+      return await ragApplication.addLoader(new TextLoader({ text: content }))
     }
 
-    if (data.ext === '.md' || data.ext === '.mdx') {
-      return await ragApplication.addLoader(new MarkdownLoader({ filePathOrUrl: data.path }) as any)
+    if (item.type === 'file') {
+      const file = item.content as FileType
+
+      if (file.ext === '.pdf') {
+        return await ragApplication.addLoader(new PdfLoader({ filePathOrUrl: file.path }) as any)
+      }
+
+      if (file.ext === '.docx') {
+        return await ragApplication.addLoader(new DocxLoader({ filePathOrUrl: file.path }) as any)
+      }
+
+      if (file.ext.startsWith('.md')) {
+        return await ragApplication.addLoader(new MarkdownLoader({ filePathOrUrl: file.path }) as any)
+      }
     }
 
     return { entriesAdded: 0, uniqueId: '', loaderType: '' }
@@ -89,17 +104,17 @@ class KnowledgeService {
 
   public remove = async (
     _: Electron.IpcMainInvokeEvent,
-    { uniqueId, config }: { uniqueId: string; config: RagAppRequestParams }
+    { uniqueId, base }: { uniqueId: string; base: KnowledgeBaseParams }
   ): Promise<void> => {
-    const ragApplication = await this.getRagApplication(config)
+    const ragApplication = await this.getRagApplication(base)
     await ragApplication.deleteLoader(uniqueId)
   }
 
   public search = async (
     _: Electron.IpcMainInvokeEvent,
-    { search, config }: { search: string; config: RagAppRequestParams }
+    { search, base }: { search: string; base: KnowledgeBaseParams }
   ): Promise<ExtractChunkData[]> => {
-    const ragApplication = await this.getRagApplication(config)
+    const ragApplication = await this.getRagApplication(base)
     return await ragApplication.search(search)
   }
 }

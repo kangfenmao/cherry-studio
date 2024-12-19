@@ -2,7 +2,7 @@
 import { db } from '@renderer/databases/index'
 import KnowledgeQueue from '@renderer/queue/KnowledgeQueue'
 import FileManager from '@renderer/services/FileManager'
-import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
+import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import { RootState } from '@renderer/store'
 import {
   addBase,
@@ -143,9 +143,8 @@ export const useKnowledge = (baseId: string) => {
   const removeItem = async (item: KnowledgeItem) => {
     dispatch(removeItemAction({ baseId, item }))
     if (base) {
-      const config = getRagAppRequestParams(base)
       if (item?.uniqueId) {
-        await window.api.knowledgeBase.remove({ uniqueId: item.uniqueId, config })
+        await window.api.knowledgeBase.remove({ uniqueId: item.uniqueId, base: getKnowledgeBaseParams(base) })
       }
       if (item.type === 'file' && typeof item.content === 'object') {
         await FileManager.deleteFile(item.content.id)

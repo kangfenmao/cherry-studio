@@ -1,6 +1,6 @@
 import { AddLoaderReturn } from '@llm-tools/embedjs-interfaces'
 import db from '@renderer/databases'
-import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
+import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
 import { clearCompletedProcessing, updateBaseItemUniqueId, updateItemProcessingStatus } from '@renderer/store/knowledge'
 import { KnowledgeItem } from '@renderer/types'
@@ -142,7 +142,7 @@ class KnowledgeQueue {
         throw new Error(`[KnowledgeQueue] Knowledge base ${baseId} not found`)
       }
 
-      const requestParams = getRagAppRequestParams(base)
+      const baseParams = getKnowledgeBaseParams(base)
       const sourceItem = base.items.find((i) => i.id === item.id)
 
       if (!sourceItem) {
@@ -155,26 +155,22 @@ class KnowledgeQueue {
       switch (item.type) {
         case 'file':
           console.log(`[KnowledgeQueue] Processing file: ${sourceItem.content}`)
-          result = await window.api.knowledgeBase.add({ data: sourceItem.content, config: requestParams })
-          console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
+          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
           break
         case 'url':
           console.log(`[KnowledgeQueue] Processing URL: ${sourceItem.content}`)
-          result = await window.api.knowledgeBase.add({ data: sourceItem.content, config: requestParams })
-          console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
+          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
           break
         case 'sitemap':
           console.log(`[KnowledgeQueue] Processing Sitemap: ${sourceItem.content}`)
-          result = await window.api.knowledgeBase.add({ data: sourceItem.content, config: requestParams })
-          console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
+          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
           break
         case 'note':
           console.log(`[KnowledgeQueue] Processing note: ${sourceItem.content}`)
           note = await db.knowledge_notes.get(item.id)
           if (!note) throw new Error(`Source note ${item.id} not found`)
           content = note.content as string
-          result = await window.api.knowledgeBase.add({ data: content, config: requestParams })
-          console.log(`[KnowledgeQueue] Result: ${JSON.stringify(result)}`)
+          result = await window.api.knowledgeBase.add({ base: baseParams, item: { ...sourceItem, content } })
           break
       }
 

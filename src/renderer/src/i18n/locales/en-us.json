@@ -560,8 +560,9 @@
       "no_bases": "No knowledge bases available",
       "clear_selection": "Clear selection",
       "delete_confirm": "Are you sure you want to delete this knowledge base?",
-      "sitemaps": "Site Maps",
-      "add_sitemap": "Add Site Map"
+      "sitemaps": "Websites",
+      "add_sitemap": "Website Map",
+      "sitemap_placeholder": "Enter Website Map URL"
     }
   }
 }

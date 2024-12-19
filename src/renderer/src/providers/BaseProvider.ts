@@ -1,5 +1,5 @@
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
-import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
+import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
 import { Assistant, FileType, Message, Provider, Suggestion } from '@renderer/types'
 import { delay } from '@renderer/utils'
@@ -96,7 +96,7 @@ export default abstract class BaseProvider {
 
     const searchResults = await window.api.knowledgeBase.search({
       search: message.content,
-      config: getRagAppRequestParams(base)
+      base: getKnowledgeBaseParams(base)
     })
 
     const references = take(searchResults, 5)

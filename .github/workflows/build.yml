@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-13, macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-13, macos-latest]
         arch: [x64, arm64]
         exclude:
           - os: windows-latest

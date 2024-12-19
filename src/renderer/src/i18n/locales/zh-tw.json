@@ -548,8 +548,9 @@
       "no_bases": "暫無知識庫",
       "clear_selection": "清除選擇",
       "delete_confirm": "確定要刪除此知識庫嗎?",
-      "sitemaps": "站點地圖",
-      "add_sitemap": "添加站點地圖"
+      "sitemaps": "網站",
+      "add_sitemap": "網站地圖",
+      "sitemap_placeholder": "請輸入網站地圖 URL"
     }
   }
 }

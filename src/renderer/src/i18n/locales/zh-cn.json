@@ -549,8 +549,9 @@
       "no_bases": "暂无知识库",
       "clear_selection": "清除选择",
       "delete_confirm": "确定要删除此知识库吗?",
-      "sitemaps": "站点地图",
-      "add_sitemap": "添加站点地图"
+      "sitemaps": "网站",
+      "add_sitemap": "站点地图",
+      "sitemap_placeholder": "请输入站点地图 URL"
     }
   }
 }

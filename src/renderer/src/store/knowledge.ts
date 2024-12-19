@@ -48,12 +48,20 @@ const knowledgeSlice = createSlice({
       if (base) {
         if (action.payload.item.type === 'note') {
           base.items.push(action.payload.item)
-        } else if (action.payload.item.type === 'url') {
+        }
+        if (action.payload.item.type === 'url') {
           const urlExists = base.items.some((item) => item.content === action.payload.item.content)
           if (!urlExists) {
             base.items.push(action.payload.item)
           }
-        } else if (action.payload.item.type === 'file') {
+        }
+        if (action.payload.item.type === 'sitemap') {
+          const sitemapExists = base.items.some((item) => item.content === action.payload.item.content)
+          if (!sitemapExists) {
+            base.items.push(action.payload.item)
+          }
+        }
+        if (action.payload.item.type === 'file') {
           action.payload.item.created_at = new Date(action.payload.item.created_at).getTime()
           action.payload.item.updated_at = new Date(action.payload.item.updated_at).getTime()
           base.items.push(action.payload.item)

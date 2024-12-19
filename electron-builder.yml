@@ -13,6 +13,7 @@ files:
   - '!local'
 asarUnpack:
   - resources/**
+  - '**/*.{node,dll,metal,exp,lib}'
 win:
   executableName: Cherry Studio
 nsis:
