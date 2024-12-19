@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { FileType, RagAppRequestParams, Shortcut, WebDavConfig } from '@types'
+import { KnowledgeBaseParams, KnowledgeItem, Shortcut, WebDavConfig } from '@types'
 import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
@@ -52,16 +52,16 @@ const api = {
     update: (shortcuts: Shortcut[]) => ipcRenderer.invoke('shortcuts:update', shortcuts)
   },
   knowledgeBase: {
-    create: ({ id, model, apiKey, baseURL }: RagAppRequestParams) =>
+    create: ({ id, model, apiKey, baseURL }: KnowledgeBaseParams) =>
       ipcRenderer.invoke('knowledge-base:create', { id, model, apiKey, baseURL }),
-    reset: ({ config }: { config: RagAppRequestParams }) => ipcRenderer.invoke('knowledge-base:reset', { config }),
+    reset: ({ base }: { base: KnowledgeBaseParams }) => ipcRenderer.invoke('knowledge-base:reset', { base }),
     delete: (id: string) => ipcRenderer.invoke('knowledge-base:delete', id),
-    add: ({ data, config }: { data: string | FileType; config: RagAppRequestParams }) =>
-      ipcRenderer.invoke('knowledge-base:add', { data, config }),
-    remove: ({ uniqueId, config }: { uniqueId: string; config: RagAppRequestParams }) =>
-      ipcRenderer.invoke('knowledge-base:remove', { uniqueId, config }),
-    search: ({ search, config }: { search: string; config: RagAppRequestParams }) =>
-      ipcRenderer.invoke('knowledge-base:search', { search, config })
+    add: ({ base, item }: { base: KnowledgeBaseParams; item: KnowledgeItem }) =>
+      ipcRenderer.invoke('knowledge-base:add', { base, item }),
+    remove: ({ uniqueId, base }: { uniqueId: string; base: KnowledgeBaseParams }) =>
+      ipcRenderer.invoke('knowledge-base:remove', { uniqueId, base }),
+    search: ({ search, base }: { search: string; base: KnowledgeBaseParams }) =>
+      ipcRenderer.invoke('knowledge-base:search', { search, base })
   }
 }
 

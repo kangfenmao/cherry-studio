@@ -1,6 +1,6 @@
 import { ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { TopView } from '@renderer/components/TopView'
-import { getRagAppRequestParams } from '@renderer/services/KnowledgeService'
+import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import { KnowledgeBase } from '@renderer/types'
 import { Input, List, Modal, Spin, Typography } from 'antd'
 import { useState } from 'react'
@@ -37,7 +37,7 @@ const PopupContainer: React.FC<Props> = ({ base, resolve }) => {
     try {
       const searchResults = await window.api.knowledgeBase.search({
         search: value,
-        config: getRagAppRequestParams(base)
+        base: getKnowledgeBaseParams(base)
       })
       setResults(searchResults)
     } catch (error) {

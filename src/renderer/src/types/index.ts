@@ -197,6 +197,8 @@ export type KnowledgeItem = {
   retryCount?: number
 }
 
+export type KnowledgeItemType = 'file' | 'url' | 'note' | 'sitemap'
+
 export interface KnowledgeBase {
   id: string
   name: string
@@ -207,7 +209,7 @@ export interface KnowledgeBase {
   updated_at: number
 }
 
-export type RagAppRequestParams = {
+export type KnowledgeBaseParams = {
   id: string
   model: string
   apiKey: string

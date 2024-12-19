@@ -11,6 +11,7 @@ files:
   - '!src'
   - '!scripts'
   - '!local'
+  - '!node_modules/@electron/rebuild'
 asarUnpack:
   - resources/**
 win:

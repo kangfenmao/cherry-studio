@@ -27,7 +27,7 @@ const KnowledgePage: FC = () => {
       if (!selectedBase) {
         return setSelectedBase(bases[0])
       }
-      if (selectedBase && !bases.includes(selectedBase)) {
+      if (selectedBase && !bases.find((base) => base.id === selectedBase.id)) {
         return setSelectedBase(bases[0])
       }
     }

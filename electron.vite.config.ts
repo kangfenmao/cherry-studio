@@ -16,6 +16,7 @@ export default defineConfig({
           '@llm-tools/embedjs-loader-msoffice',
           '@llm-tools/embedjs-loader-xml',
           '@llm-tools/embedjs-loader-pdf',
+          '@llm-tools/embedjs-loader-sitemap',
           '@lancedb/lancedb'
         ]
       })
@@ -29,7 +30,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ['@lancedb/lancedb', '@llm-tools/embedjs-loader-sitemap']
+        external: ['@lancedb/lancedb']
       }
     }
   },

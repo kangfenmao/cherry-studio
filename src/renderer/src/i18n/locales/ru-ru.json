@@ -560,8 +560,9 @@
       "no_bases": "База знаний не найдена",
       "clear_selection": "Очистить выбор",
       "delete_confirm": "Вы уверены, что хотите удалить эту базу знаний?",
-      "sitemaps": "Карта сайта",
-      "add_sitemap": "Добавить карту сайта"
+      "sitemaps": "Сайты",
+      "add_sitemap": "Карта сайта",
+      "sitemap_placeholder": "Введите URL карты сайта"
     }
   }
 }

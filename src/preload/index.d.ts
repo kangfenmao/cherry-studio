@@ -2,7 +2,7 @@ import { ElectronAPI } from '@electron-toolkit/preload'
 import { AddLoaderReturn, ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { FileType } from '@renderer/types'
 import { WebDavConfig } from '@renderer/types'
-import { AppInfo, LanguageVarious, RagAppRequestParams } from '@renderer/types'
+import { AppInfo, KnowledgeBaseParams, KnowledgeItem, LanguageVarious } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
 import type { UpdateInfo } from 'electron-updater'
 import { Readable } from 'stream'
@@ -60,12 +60,12 @@ declare global {
         update: (shortcuts: Shortcut[]) => Promise<void>
       }
       knowledgeBase: {
-        create: ({ id, model, apiKey, baseURL }: RagAppRequestParams) => Promise<void>
-        reset: ({ config }: { config: RagAppRequestParams }) => Promise<void>
+        create: ({ id, model, apiKey, baseURL }: KnowledgeBaseParams) => Promise<void>
+        reset: ({ base }: { base: KnowledgeBaseParams }) => Promise<void>
         delete: (id: string) => Promise<void>
-        add: ({ data, config }: { data: string | FileType; config: RagAppRequestParams }) => Promise<AddLoaderReturn>
-        remove: ({ uniqueId, config }: { uniqueId: string; config: RagAppRequestParams }) => Promise<void>
-        search: ({ search, config }: { search: string; config: RagAppRequestParams }) => Promise<ExtractChunkData[]>
+        add: ({ base, item }: { base: KnowledgeBaseParams; item: KnowledgeItem }) => Promise<AddLoaderReturn>
+        remove: ({ uniqueId, base }: { uniqueId: string; base: KnowledgeBaseParams }) => Promise<void>
+        search: ({ search, base }: { search: string; base: KnowledgeBaseParams }) => Promise<ExtractChunkData[]>
       }
     }
   }
