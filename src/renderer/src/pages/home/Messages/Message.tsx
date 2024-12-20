@@ -192,6 +192,9 @@ const MessageContainer = styled.div`
   padding: 15px 20px 0 20px;
   position: relative;
   transition: background-color 0.3s ease;
+  max-width: 780px;
+  width: 100%;
+  margin: 0 auto;
   &.message-highlight {
     background-color: var(--color-primary-mute);
   }
