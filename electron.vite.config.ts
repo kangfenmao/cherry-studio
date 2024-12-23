@@ -35,7 +35,8 @@ export default defineConfig({
     build: {
       rollupOptions: {
         external: ['@libsql/client']
-      }
+      },
+      minify: true
     }
   },
   preload: {
@@ -51,6 +52,9 @@ export default defineConfig({
     },
     optimizeDeps: {
       exclude: ['chunk-7UIZINC5.js', 'chunk-7OJJKI46.js']
+    },
+    build: {
+      minify: true
     }
   }
 })

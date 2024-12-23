@@ -106,7 +106,7 @@ export default abstract class BaseProvider {
       return {
         id: index,
         content: item.pageContent,
-        url: sourceUrl,
+        url: encodeURIComponent(sourceUrl),
         type: baseItem?.type
       }
     })

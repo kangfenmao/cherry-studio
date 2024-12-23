@@ -15,11 +15,18 @@ files:
   - '!packages'
   - '!stats.html'
   - '!*.md'
+  - '!**/*.{map,ts,tsx,jsx,less,scss,sass,css.d.ts,d.cts,d.mts,md,markdown,yaml,yml}'
+  - '!**/{test,tests,__tests__,coverage}/**'
+  - '!**/*.{spec,test}.{js,jsx,ts,tsx}'
+  - '!**/*.min.*.map'
+  - '!**/*.d.ts'
+  - '!**/{.DS_Store,Thumbs.db}'
+  - '!**/{LICENSE,LICENSE.txt,LICENSE-MIT.txt,*.LICENSE.txt,NOTICE.txt,README.md,CHANGELOG.md}'
   - '!node_modules/rollup-plugin-visualizer'
   - '!node_modules/js-tiktoken'
-  - '!node_modules/node_modules/pdf-parse/lib/pdf.js/v1.9.426'
-  - '!node_modules/node_modules/pdf-parse/lib/pdf.js/v1.10.88'
-  - '!node_modules/node_modules/pdf-parse/lib/pdf.js/v2.0.550'
+  - '!node_modules/pdf-parse/lib/pdf.js/{v1.9.426,v1.10.88,v2.0.550}'
+  - '!node_modules/mammoth/{mammoth.browser.js,mammoth.browser.min.js}'
+  - '!node_modules/html2canvas/dist/{html2canvas.min.js,html2canvas.esm.js}'
 
 asarUnpack:
   - resources/**
@@ -70,7 +77,8 @@ publish:
   url: https://cherrystudio.ocool.online
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
-afterSign: scripts/notarize.js
+afterPack: scripts/removeLocales.js
+# afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
     增加小程序快捷入口
