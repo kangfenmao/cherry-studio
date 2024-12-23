@@ -1,4 +1,4 @@
-import { SearchOutlined } from '@ant-design/icons'
+import { FormOutlined, SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
 import AssistantSettingsPopup from '@renderer/components/AssistantSettings'
 import { HStack } from '@renderer/components/Layout'
@@ -47,8 +47,8 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <NavbarIcon onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
             <i className="iconfont icon-hide-sidebar" />
           </NavbarIcon>
-          <NavbarIcon onClick={() => SearchPopup.show()}>
-            <SearchOutlined />
+          <NavbarIcon onClick={() => EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)}>
+            <FormOutlined />
           </NavbarIcon>
         </NavbarLeft>
       )}
@@ -70,6 +70,9 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <SelectModelButton assistant={assistant} />
         </HStack>
         <HStack alignItems="center">
+          <NavbarIcon onClick={() => SearchPopup.show()}>
+            <SearchOutlined />
+          </NavbarIcon>
           <AppStorePopover>
             <NavbarIcon>
               <i className="iconfont icon-appstore" />

@@ -43,11 +43,23 @@ const knowledgeSlice = createSlice({
       }
     },
 
+    updateBases(state, action: PayloadAction<KnowledgeBase[]>) {
+      state.bases = action.payload
+    },
+
     addItem(state, action: PayloadAction<{ baseId: string; item: KnowledgeItem }>) {
       const base = state.bases.find((b) => b.id === action.payload.baseId)
       if (base) {
-        if (action.payload.item.type === 'note') {
+        if (action.payload.item.type === 'file') {
+          action.payload.item.created_at = new Date(action.payload.item.created_at).getTime()
+          action.payload.item.updated_at = new Date(action.payload.item.updated_at).getTime()
           base.items.push(action.payload.item)
+        }
+        if (action.payload.item.type === 'directory') {
+          const directoryExists = base.items.some((item) => item.content === action.payload.item.content)
+          if (!directoryExists) {
+            base.items.push(action.payload.item)
+          }
         }
         if (action.payload.item.type === 'url') {
           const urlExists = base.items.some((item) => item.content === action.payload.item.content)
@@ -61,9 +73,7 @@ const knowledgeSlice = createSlice({
             base.items.push(action.payload.item)
           }
         }
-        if (action.payload.item.type === 'file') {
-          action.payload.item.created_at = new Date(action.payload.item.created_at).getTime()
-          action.payload.item.updated_at = new Date(action.payload.item.updated_at).getTime()
+        if (action.payload.item.type === 'note') {
           base.items.push(action.payload.item)
         }
         base.updated_at = Date.now()
@@ -79,12 +89,10 @@ const knowledgeSlice = createSlice({
       }
     },
 
-    updateFiles(state, action: PayloadAction<{ baseId: string; items: KnowledgeItem[] }>) {
+    addFiles(state, action: PayloadAction<{ baseId: string; items: KnowledgeItem[] }>) {
       const base = state.bases.find((b) => b.id === action.payload.baseId)
       if (base) {
-        // 保留非文件类型的项目
-        const nonFileItems = base.items.filter((item) => item.type !== 'file')
-        base.items = [...nonFileItems, ...action.payload.items]
+        base.items = [...base.items, ...action.payload.items]
         base.updated_at = Date.now()
       }
     },
@@ -170,8 +178,9 @@ export const {
   deleteBase,
   renameBase,
   updateBase,
+  updateBases,
   addItem,
-  updateFiles,
+  addFiles,
   updateNotes,
   removeItem,
   updateItemProcessingStatus,

@@ -151,9 +151,9 @@ export const VISION_REGEX = new RegExp(
   'i'
 )
 
-const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview/i
-const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|base|retrieval|uae-)/i
-const NOT_SUPPORTED_REGEX = /(?:^tts|rerank|whisper|speech)/i
+export const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview/i
+export const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|base|retrieval|uae-|gte-)/i
+export const NOT_SUPPORTED_REGEX = /(?:^tts|rerank|whisper|speech)/i
 
 export function getModelLogo(modelId: string) {
   const isLight = true
@@ -1047,18 +1047,38 @@ export function isTextToImageModel(model: Model): boolean {
 }
 
 export function isEmbeddingModel(model: Model): boolean {
-  return EMBEDDING_REGEX.test(model.id)
+  if (!model) {
+    return false
+  }
+
+  if (['anthropic'].includes(model?.provider)) {
+    return false
+  }
+
+  return EMBEDDING_REGEX.test(model.id) || model.type?.includes('embedding') || false
 }
 
 export function isVisionModel(model: Model): boolean {
+  if (!model) {
+    return false
+  }
+
   return VISION_REGEX.test(model.id) || model.type?.includes('vision') || false
 }
 
 export function isSupportedModel(model: OpenAI.Models.Model): boolean {
+  if (!model) {
+    return false
+  }
+
   return !NOT_SUPPORTED_REGEX.test(model.id)
 }
 
 export function isWebSearchModel(model: Model): boolean {
+  if (!model) {
+    return false
+  }
+
   const provider = getProviderByModel(model)
 
   if (!provider) {

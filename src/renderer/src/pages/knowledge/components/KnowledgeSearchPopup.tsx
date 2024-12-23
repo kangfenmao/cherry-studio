@@ -1,4 +1,4 @@
-import { ExtractChunkData } from '@llm-tools/embedjs-interfaces'
+import type { ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { TopView } from '@renderer/components/TopView'
 import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import { KnowledgeBase } from '@renderer/types'

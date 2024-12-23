@@ -2,6 +2,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   FileTextOutlined,
+  FolderOutlined,
   GlobalOutlined,
   LinkOutlined,
   PlusOutlined,
@@ -10,7 +11,7 @@ import {
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
-import { useKnowledge } from '@renderer/hooks/useknowledge'
+import { useKnowledge } from '@renderer/hooks/useKnowledge'
 import FileManager from '@renderer/services/FileManager'
 import { FileType, FileTypes, KnowledgeBase } from '@renderer/types'
 import { Button, Card, message, Typography, Upload } from 'antd'
@@ -28,6 +29,32 @@ interface KnowledgeContentProps {
   selectedBase: KnowledgeBase
 }
 
+const fileTypes = ['.pdf', '.docx', '.pptx', '.xlsx', '.txt', '.md', '.mdx']
+
+const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
+
+const FlexAlignCenter = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`
+
+const ClickableSpan = styled.span`
+  cursor: pointer;
+`
+
+const FileIcon = styled(FileTextOutlined)`
+  font-size: 16px;
+`
+
+const BottomSpacer = styled.div`
+  min-height: 20px;
+`
+
 const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   const { t } = useTranslation()
   const {
@@ -36,13 +63,15 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
     fileItems,
     urlItems,
     sitemapItems,
+    directoryItems,
     addFiles,
     updateNoteContent,
     addUrl,
     addSitemap,
     removeItem,
     getProcessingStatus,
-    addNote
+    addNote,
+    addDirectory
   } = useKnowledge(selectedBase.id || '')
 
   if (!base) {
@@ -53,12 +82,10 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
     const input = document.createElement('input')
     input.type = 'file'
     input.multiple = true
-    input.accept = '.pdf,.txt,.docx,.md'
+    input.accept = fileTypes.join(',')
     input.onchange = (e) => {
       const files = (e.target as HTMLInputElement).files
-      if (files) {
-        handleDrop(Array.from(files))
-      }
+      files && handleDrop(Array.from(files))
     }
     input.click()
   }
@@ -142,6 +169,12 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
     editedText && updateNoteContent(note.id, editedText)
   }
 
+  const handleAddDirectory = async () => {
+    const path = await window.api.file.selectFolder()
+    console.log('[KnowledgeContent] Selected directory:', path)
+    path && addDirectory(path)
+  }
+
   return (
     <MainContent>
       <FileSection>
@@ -155,10 +188,12 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
           showUploadList={false}
           customRequest={({ file }) => handleDrop([file as File])}
           multiple={true}
-          accept=".pdf,.txt,.docx,.md"
+          accept={fileTypes.join(',')}
           style={{ marginTop: 10, background: 'transparent' }}>
           <p className="ant-upload-text">{t('knowledge_base.drag_file')}</p>
-          <p className="ant-upload-hint">{t('knowledge_base.file_hint')}</p>
+          <p className="ant-upload-hint">
+            {t('knowledge_base.file_hint', { file_types: fileTypes.join(', ').replaceAll('.', '') })}
+          </p>
         </Dragger>
       </FileSection>
 
@@ -169,13 +204,13 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
             <ItemCard key={item.id}>
               <ItemContent>
                 <ItemInfo>
-                  <FileTextOutlined style={{ fontSize: '16px' }} />
-                  <span>{file.origin_name}</span>
+                  <FileIcon />
+                  <ClickableSpan onClick={() => window.api.file.openPath(file.path)}>{file.origin_name}</ClickableSpan>
                 </ItemInfo>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <FlexAlignCenter>
                   <StatusIcon sourceId={item.id} base={base} getProcessingStatus={getProcessingStatus} />
                   <Button type="text" danger onClick={() => removeItem(item)} icon={<DeleteOutlined />} />
-                </div>
+                </FlexAlignCenter>
               </ItemContent>
             </ItemCard>
           )
@@ -184,29 +219,56 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
 
       <ContentSection>
         <TitleWrapper>
+          <Title level={5}>{t('knowledge_base.directories')}</Title>
+          <Button icon={<PlusOutlined />} onClick={handleAddDirectory}>
+            {t('knowledge_base.add_directory')}
+          </Button>
+        </TitleWrapper>
+        <FlexColumn>
+          {directoryItems.map((item) => (
+            <ItemCard key={item.id}>
+              <ItemContent>
+                <ItemInfo>
+                  <FolderOutlined />
+                  <ClickableSpan onClick={() => window.api.file.openPath(item.content as string)}>
+                    {item.content as string}
+                  </ClickableSpan>
+                </ItemInfo>
+                <FlexAlignCenter>
+                  <StatusIcon sourceId={item.id} base={base} getProcessingStatus={getProcessingStatus} />
+                  <Button type="text" danger onClick={() => removeItem(item)} icon={<DeleteOutlined />} />
+                </FlexAlignCenter>
+              </ItemContent>
+            </ItemCard>
+          ))}
+        </FlexColumn>
+      </ContentSection>
+
+      <ContentSection>
+        <TitleWrapper>
           <Title level={5}>{t('knowledge_base.urls')}</Title>
           <Button icon={<PlusOutlined />} onClick={handleAddUrl}>
             {t('knowledge_base.add_url')}
           </Button>
         </TitleWrapper>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <FlexColumn>
           {urlItems.map((item) => (
             <ItemCard key={item.id}>
               <ItemContent>
                 <ItemInfo>
-                  <LinkOutlined style={{ fontSize: '16px' }} />
+                  <LinkOutlined />
                   <a href={item.content as string} target="_blank" rel="noopener noreferrer">
                     {item.content as string}
                   </a>
                 </ItemInfo>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <FlexAlignCenter>
                   <StatusIcon sourceId={item.id} base={base} getProcessingStatus={getProcessingStatus} />
                   <Button type="text" danger onClick={() => removeItem(item)} icon={<DeleteOutlined />} />
-                </div>
+                </FlexAlignCenter>
               </ItemContent>
             </ItemCard>
           ))}
-        </div>
+        </FlexColumn>
       </ContentSection>
 
       <ContentSection>
@@ -216,24 +278,24 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
             {t('knowledge_base.add_sitemap')}
           </Button>
         </TitleWrapper>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <FlexColumn>
           {sitemapItems.map((item) => (
             <ItemCard key={item.id}>
               <ItemContent>
                 <ItemInfo>
-                  <GlobalOutlined style={{ fontSize: '16px' }} />
+                  <GlobalOutlined />
                   <a href={item.content as string} target="_blank" rel="noopener noreferrer">
                     {item.content as string}
                   </a>
                 </ItemInfo>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <FlexAlignCenter>
                   <StatusIcon sourceId={item.id} base={base} getProcessingStatus={getProcessingStatus} />
                   <Button type="text" danger onClick={() => removeItem(item)} icon={<DeleteOutlined />} />
-                </div>
+                </FlexAlignCenter>
               </ItemContent>
             </ItemCard>
           ))}
-        </div>
+        </FlexColumn>
       </ContentSection>
 
       <ContentSection>
@@ -243,29 +305,31 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
             {t('knowledge_base.add_note')}
           </Button>
         </TitleWrapper>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <FlexColumn>
           {noteItems.map((note) => (
             <ItemCard key={note.id}>
               <ItemContent>
                 <ItemInfo onClick={() => handleEditNote(note)} style={{ cursor: 'pointer' }}>
                   <span>{(note.content as string).slice(0, 50)}...</span>
                 </ItemInfo>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <FlexAlignCenter>
                   <Button type="text" onClick={() => handleEditNote(note)} icon={<EditOutlined />} />
                   <StatusIcon sourceId={note.id} base={base} getProcessingStatus={getProcessingStatus} />
                   <Button type="text" danger onClick={() => removeItem(note)} icon={<DeleteOutlined />} />
-                </div>
+                </FlexAlignCenter>
               </ItemContent>
             </ItemCard>
           ))}
-        </div>
+        </FlexColumn>
       </ContentSection>
+
       <IndexSection>
         <Button type="primary" onClick={() => KnowledgeSearchPopup.show({ base })} icon={<SearchOutlined />}>
           {t('knowledge_base.search')}
         </Button>
       </IndexSection>
-      <div style={{ minHeight: '20px' }} />
+
+      <BottomSpacer />
     </MainContent>
   )
 }

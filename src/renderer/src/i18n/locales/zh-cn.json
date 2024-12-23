@@ -253,16 +253,6 @@
     "minapp": {
       "title": "小程序"
     },
-    "model": {
-      "pinned": "已固定",
-      "search": "搜索模型...",
-      "stream_output": "流式输出",
-      "type": {
-        "select": "选择模型类型",
-        "text": "文本",
-        "vision": "图像"
-      }
-    },
     "ollama": {
       "keep_alive_time.description": "对话后模型在内存中保持的时间（默认：5分钟）",
       "keep_alive_time.placeholder": "分钟",
@@ -521,7 +511,7 @@
       "search": "搜索知识库",
       "empty": "暂无知识库",
       "drag_file": "拖拽文件到这里",
-      "file_hint": "支持 pdf, docx, txt, md 格式",
+      "file_hint": "支持 {{file_types}} 格式",
       "add": {
         "title": "添加知识库"
       },
@@ -551,7 +541,26 @@
       "delete_confirm": "确定要删除此知识库吗?",
       "sitemaps": "网站",
       "add_sitemap": "站点地图",
-      "sitemap_placeholder": "请输入站点地图 URL"
+      "sitemap_placeholder": "请输入站点地图 URL",
+      "directories": "目录",
+      "add_directory": "添加目录",
+      "directory_placeholder": "请输入目录路径"
+    },
+    "models": {
+      "pinned": "已固定",
+      "search": "搜索模型...",
+      "stream_output": "流式输出",
+      "type": {
+        "select": "选择模型类型",
+        "text": "文本",
+        "vision": "图像",
+        "embedding": "嵌入"
+      },
+      "all": "全部",
+      "vision": "视觉模型",
+      "websearch": "网络搜索模型",
+      "free": "免费模型",
+      "embedding": "嵌入模型"
     }
   }
 }

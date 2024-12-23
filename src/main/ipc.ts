@@ -101,6 +101,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   // file
   ipcMain.handle('file:open', fileManager.open)
+  ipcMain.handle('file:openPath', fileManager.openPath)
   ipcMain.handle('file:save', fileManager.save)
   ipcMain.handle('file:select', fileManager.selectFile)
   ipcMain.handle('file:upload', fileManager.uploadFile)

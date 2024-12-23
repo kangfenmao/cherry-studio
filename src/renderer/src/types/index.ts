@@ -89,7 +89,7 @@ export type Provider = {
 
 export type ProviderType = 'openai' | 'anthropic' | 'gemini'
 
-export type ModelType = 'text' | 'vision'
+export type ModelType = 'text' | 'vision' | 'embedding'
 
 export type Model = {
   id: string
@@ -183,11 +183,13 @@ export interface Shortcut {
 
 export type ProcessingStatus = 'pending' | 'processing' | 'completed' | 'failed'
 
+export type KnowledgeItemType = 'file' | 'url' | 'note' | 'sitemap' | 'directory'
+
 export type KnowledgeItem = {
   id: string
   baseId?: string
   uniqueId?: string
-  type: 'file' | 'url' | 'note' | 'sitemap'
+  type: KnowledgeItemType
   content: string | FileType
   created_at: number
   updated_at: number
@@ -196,8 +198,6 @@ export type KnowledgeItem = {
   processingError?: string
   retryCount?: number
 }
-
-export type KnowledgeItemType = 'file' | 'url' | 'note' | 'sitemap'
 
 export interface KnowledgeBase {
   id: string

@@ -1,6 +1,6 @@
 import { TopView } from '@renderer/components/TopView'
 import { isEmbeddingModel } from '@renderer/config/models'
-import { useKnowledgeBases } from '@renderer/hooks/useknowledge'
+import { useKnowledgeBases } from '@renderer/hooks/useKnowledge'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import { getModelUniqId } from '@renderer/services/ModelService'

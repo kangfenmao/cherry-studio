@@ -1,6 +1,11 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import { resolve } from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
+
+const visualizerPlugin = (type: 'renderer' | 'main') => {
+  return process.env[`VISUALIZER_${type.toUpperCase()}`] ? [visualizer({ open: true })] : []
+}
 
 export default defineConfig({
   main: {
@@ -8,8 +13,6 @@ export default defineConfig({
       externalizeDepsPlugin({
         exclude: [
           '@llm-tools/embedjs',
-          '@llm-tools/embedjs-lancedb',
-          '@llm-tools/embedjs-ollama',
           '@llm-tools/embedjs-openai',
           '@llm-tools/embedjs-loader-web',
           '@llm-tools/embedjs-loader-markdown',
@@ -17,9 +20,10 @@ export default defineConfig({
           '@llm-tools/embedjs-loader-xml',
           '@llm-tools/embedjs-loader-pdf',
           '@llm-tools/embedjs-loader-sitemap',
-          '@lancedb/lancedb'
+          '@llm-tools/embedjs-libsql'
         ]
-      })
+      }),
+      ...visualizerPlugin('main')
     ],
     resolve: {
       alias: {
@@ -30,7 +34,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ['@lancedb/lancedb']
+        external: ['@libsql/client']
       }
     }
   },
@@ -38,7 +42,7 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
-    plugins: [react()],
+    plugins: [react(), ...visualizerPlugin('renderer')],
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),

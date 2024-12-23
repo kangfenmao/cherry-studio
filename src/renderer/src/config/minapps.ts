@@ -221,7 +221,8 @@ const _apps: MinAppType[] = [
     id: 'thinkany',
     name: 'ThinkAny',
     logo: ThinkAnyLogo,
-    url: 'https://thinkany.ai/'
+    url: 'https://thinkany.ai/',
+    bodered: true
   }
 ]
 

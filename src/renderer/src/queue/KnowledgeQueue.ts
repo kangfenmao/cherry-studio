@@ -1,4 +1,4 @@
-import { AddLoaderReturn } from '@llm-tools/embedjs-interfaces'
+import type { AddLoaderReturn } from '@llm-tools/embedjs-interfaces'
 import db from '@renderer/databases'
 import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
@@ -98,8 +98,7 @@ class KnowledgeQueue {
           break
         }
 
-        console.log(`[KnowledgeQueue] Processing item ${item.id} (${item.type}) in base ${baseId}`)
-        await this.processItem(baseId, item)
+        this.processItem(baseId, item)
       }
     } finally {
       console.log(`[KnowledgeQueue] Finished processing queue for base ${baseId}`)
@@ -152,25 +151,18 @@ class KnowledgeQueue {
       let result: AddLoaderReturn | null = null
       let note, content
 
+      console.log(`[KnowledgeQueue] Processing item: ${sourceItem.content}`)
+
       switch (item.type) {
-        case 'file':
-          console.log(`[KnowledgeQueue] Processing file: ${sourceItem.content}`)
-          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
-          break
-        case 'url':
-          console.log(`[KnowledgeQueue] Processing URL: ${sourceItem.content}`)
-          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
-          break
-        case 'sitemap':
-          console.log(`[KnowledgeQueue] Processing Sitemap: ${sourceItem.content}`)
-          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
-          break
         case 'note':
-          console.log(`[KnowledgeQueue] Processing note: ${sourceItem.content}`)
           note = await db.knowledge_notes.get(item.id)
-          if (!note) throw new Error(`Source note ${item.id} not found`)
-          content = note.content as string
-          result = await window.api.knowledgeBase.add({ base: baseParams, item: { ...sourceItem, content } })
+          if (note) {
+            content = note.content as string
+            result = await window.api.knowledgeBase.add({ base: baseParams, item: { ...sourceItem, content } })
+          }
+          break
+        default:
+          result = await window.api.knowledgeBase.add({ base: baseParams, item: sourceItem })
           break
       }
 

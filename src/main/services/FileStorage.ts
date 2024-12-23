@@ -8,7 +8,8 @@ import {
   OpenDialogOptions,
   OpenDialogReturnValue,
   SaveDialogOptions,
-  SaveDialogReturnValue
+  SaveDialogReturnValue,
+  shell
 } from 'electron'
 import logger from 'electron-log'
 import * as fs from 'fs'
@@ -298,6 +299,10 @@ class FileStorage {
       logger.error('[IPC - Error]', 'An error occurred opening the file:', err)
       return null
     }
+  }
+
+  public openPath = async (_: Electron.IpcMainInvokeEvent, path: string): Promise<void> => {
+    shell.openPath(path).catch((err) => logger.error('[IPC - Error] Failed to open file:', err))
   }
 
   public save = async (

@@ -1,7 +1,8 @@
+import { REFERENCE_PROMPT } from '@renderer/config/prompts'
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
-import { Assistant, FileType, Message, Provider, Suggestion } from '@renderer/types'
+import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import { delay } from '@renderer/utils'
 import { take } from 'lodash'
 import OpenAI from 'openai'
@@ -88,7 +89,6 @@ export default abstract class BaseProvider {
 
     const knowledgeId = message.knowledgeBaseIds[0]
     const base = store.getState().knowledge.bases.find((kb) => kb.id === knowledgeId)
-    console.debug('knowledge', base)
 
     if (!base) {
       return message.content
@@ -99,43 +99,20 @@ export default abstract class BaseProvider {
       base: getKnowledgeBaseParams(base)
     })
 
-    const references = take(searchResults, 5)
-      .map((item, index) => {
-        let sourceUrl = ''
-        let sourceName = ''
+    const references = take(searchResults, 6).map((item, index) => {
+      const sourceUrl = item.metadata.source
+      const baseItem = base.items.find((i) => i.uniqueId === item.metadata.uniqueLoaderId)
 
-        const baseItem = base.items.find((i) => i.uniqueId === item.metadata.uniqueLoaderId)
+      return {
+        id: index,
+        content: item.pageContent,
+        url: sourceUrl,
+        type: baseItem?.type
+      }
+    })
 
-        if (baseItem) {
-          switch (baseItem.type) {
-            case 'file':
-              // sourceUrl = `file://${encodeURIComponent((baseItem?.content as FileType).path)}`
-              sourceName = (baseItem?.content as FileType).origin_name
-              break
-            case 'url':
-              sourceUrl = baseItem.content as string
-              sourceName = baseItem.content as string
-              break
-            case 'note':
-              sourceName = baseItem.content as string
-              break
-          }
-        }
+    const referencesContent = JSON.stringify(references, null, 2)
 
-        return `
----
-id: ${index}
-content: ${item.pageContent}
-source_type: ${baseItem?.type}
-source_name: ${sourceName}
-source_url: ${sourceUrl}
-`
-      })
-      .join('\n\n')
-
-    const prompt =
-      '回答问题请参考以下内容，并使用类似 [^1]: source 的脚注格式引用数据来源, source 根据 source_type 决定'
-
-    return [message.content, prompt, references].join('\n\n')
+    return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', referencesContent)
   }
 }

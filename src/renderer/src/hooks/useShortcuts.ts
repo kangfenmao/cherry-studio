@@ -37,8 +37,10 @@ export const useShortcut = (
 
   const shortcutConfig = shortcuts.find((s) => s.key === shortcutKey)
 
+  console.log(shortcutConfig)
+
   useHotkeys(
-    shortcutConfig?.enabled ? formatShortcut(shortcutConfig.shortcut) : '',
+    shortcutConfig?.enabled ? formatShortcut(shortcutConfig.shortcut) : 'none',
     (e) => {
       if (options.preventDefault) {
         e.preventDefault()
@@ -49,7 +51,8 @@ export const useShortcut = (
     },
     {
       enableOnFormTags: options.enableOnFormTags,
-      description: options.description || shortcutConfig?.key
+      description: options.description || shortcutConfig?.key,
+      enabled: !!shortcutConfig?.enabled
     }
   )
 }

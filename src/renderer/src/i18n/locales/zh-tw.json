@@ -252,16 +252,6 @@
     "minapp": {
       "title": "小程序"
     },
-    "model": {
-      "pinned": "已固定",
-      "search": "搜尋模型...",
-      "stream_output": "串流輸出",
-      "type": {
-        "select": "選擇模型類型",
-        "text": "文字",
-        "vision": "圖像"
-      }
-    },
     "ollama": {
       "keep_alive_time.description": "對話後模型在記憶體中保持的時間（預設為 5 分鐘）。",
       "keep_alive_time.placeholder": "分鐘",
@@ -520,7 +510,7 @@
       "search": "搜尋知識庫",
       "empty": "暫無知識庫",
       "drag_file": "拖拽文件到這裡",
-      "file_hint": "支持 pdf, docx, txt, md 格式",
+      "file_hint": "支持 {{file_types}} 格式",
       "add": {
         "title": "添加知識庫"
       },
@@ -550,7 +540,26 @@
       "delete_confirm": "確定要刪除此知識庫嗎?",
       "sitemaps": "網站",
       "add_sitemap": "網站地圖",
-      "sitemap_placeholder": "請輸入網站地圖 URL"
+      "sitemap_placeholder": "請輸入網站地圖 URL",
+      "directories": "目錄",
+      "add_directory": "添加目錄",
+      "directory_placeholder": "請輸入目錄路徑"
+    },
+    "models": {
+      "pinned": "已固定",
+      "search": "搜尋模型...",
+      "stream_output": "串流輸出",
+      "type": {
+        "select": "選擇模型類型",
+        "text": "文字",
+        "vision": "圖像",
+        "embedding": "嵌入"
+      },
+      "all": "全部",
+      "vision": "視覺模型",
+      "websearch": "網路搜索模型",
+      "free": "免費模型",
+      "embedding": "嵌入模型"
     }
   }
 }

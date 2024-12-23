@@ -1,7 +1,7 @@
 import { Assistant, FileType, FileTypes, Message } from '@renderer/types'
-import { GPTTokens } from 'gpt-tokens'
 import { flatten, takeRight } from 'lodash'
 import { CompletionUsage } from 'openai/resources'
+import { approximateTokenSize } from 'tokenx'
 
 import { getAssistantSettings } from './AssistantService'
 import { filterContextMessages, filterMessages } from './MessagesService'
@@ -45,12 +45,7 @@ async function getMessageParam(message: Message): Promise<MessageItem[]> {
 }
 
 export function estimateTextTokens(text: string) {
-  const { usedTokens } = new GPTTokens({
-    model: 'gpt-4o',
-    messages: [{ role: 'user', content: text }]
-  })
-
-  return usedTokens - 7
+  return approximateTokenSize(text)
 }
 
 export function estimateImageTokens(file: FileType) {
@@ -58,11 +53,6 @@ export function estimateImageTokens(file: FileType) {
 }
 
 export async function estimateMessageUsage(message: Message): Promise<CompletionUsage> {
-  const { usedTokens, promptUsedTokens, completionUsedTokens } = new GPTTokens({
-    model: 'gpt-4o',
-    messages: await getMessageParam(message)
-  })
-
   let imageTokens = 0
 
   if (message.files) {
@@ -74,10 +64,12 @@ export async function estimateMessageUsage(message: Message): Promise<Completion
     }
   }
 
+  const tokens = estimateTextTokens(message.content)
+
   return {
-    prompt_tokens: promptUsedTokens,
-    completion_tokens: completionUsedTokens,
-    total_tokens: usedTokens + (imageTokens ? imageTokens - 7 : 0)
+    prompt_tokens: tokens,
+    completion_tokens: tokens,
+    total_tokens: tokens + (imageTokens ? imageTokens - 7 : 0)
   }
 }
 
@@ -121,16 +113,10 @@ export async function estimateHistoryTokens(assistant: Assistant, msgs: Message[
     allMessages = allMessages.concat(items)
   }
 
-  const { usedTokens } = new GPTTokens({
-    model: 'gpt-4o',
-    messages: [
-      {
-        role: 'system',
-        content: assistant.prompt
-      },
-      ...flatten(allMessages)
-    ]
-  })
+  const prompt = assistant.prompt
+  const input = flatten(allMessages)
+    .map((m) => m.content)
+    .join('\n')
 
-  return usedTokens - 7 + uasageTokens
+  return estimateTextTokens(prompt + input) + uasageTokens
 }

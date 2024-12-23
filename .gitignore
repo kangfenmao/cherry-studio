@@ -36,6 +36,7 @@ node_modules
 dist
 out
 build/icons
+stats.html
 
 # ENV
 .env

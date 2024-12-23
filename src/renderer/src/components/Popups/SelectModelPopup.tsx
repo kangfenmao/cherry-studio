@@ -1,7 +1,7 @@
 import { PushpinOutlined, SearchOutlined } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import { TopView } from '@renderer/components/TopView'
-import { getModelLogo, isVisionModel, isWebSearchModel } from '@renderer/config/models'
+import { getModelLogo, isEmbeddingModel, isVisionModel, isWebSearchModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useProviders } from '@renderer/hooks/useProvider'
 import { getModelUniqId } from '@renderer/services/ModelService'
@@ -66,6 +66,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
     .filter((p) => p.models && p.models.length > 0)
     .map((p) => {
       const filteredModels = sortBy(p.models, ['group', 'name'])
+        .filter((m) => !isEmbeddingModel(m))
         .filter((m) =>
           [m.name + m.provider + t('provider.' + p.id)].join('').toLowerCase().includes(searchText.toLowerCase())
         )
@@ -142,7 +143,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
     if (pinnedItems.length > 0) {
       filteredItems.unshift({
         key: 'pinned',
-        label: t('model.pinned'),
+        label: t('models.pinned'),
         type: 'group',
         children: pinnedItems
       } as MenuItem)
@@ -188,7 +189,7 @@ const PopupContainer: React.FC<PopupContainerProps> = ({ model, resolve }) => {
             </SearchIcon>
           }
           ref={inputRef}
-          placeholder={t('model.search')}
+          placeholder={t('models.search')}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           allowClear

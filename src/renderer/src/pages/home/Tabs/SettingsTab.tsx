@@ -162,7 +162,7 @@ const SettingsTab: FC<Props> = (props) => {
           </Col>
         </Row>
         <SettingRow>
-          <SettingRowTitleSmall>{t('model.stream_output')}</SettingRowTitleSmall>
+          <SettingRowTitleSmall>{t('models.stream_output')}</SettingRowTitleSmall>
           <Switch
             size="small"
             checked={streamOutput}

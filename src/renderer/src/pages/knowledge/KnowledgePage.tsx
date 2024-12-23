@@ -1,9 +1,10 @@
 import { DeleteOutlined, EditOutlined, FileTextOutlined, PlusOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
+import DragableList from '@renderer/components/DragableList'
 import ListItem from '@renderer/components/ListItem'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
-import { useKnowledgeBases } from '@renderer/hooks/useknowledge'
+import { useKnowledgeBases } from '@renderer/hooks/useKnowledge'
 import { KnowledgeBase } from '@renderer/types'
 import { Dropdown, Empty, MenuProps } from 'antd'
 import { FC, useCallback, useEffect, useState } from 'react'
@@ -15,8 +16,9 @@ import KnowledgeContent from './KnowledgeContent'
 
 const KnowledgePage: FC = () => {
   const { t } = useTranslation()
-  const { bases, renameKnowledgeBase, deleteKnowledgeBase } = useKnowledgeBases()
+  const { bases, renameKnowledgeBase, deleteKnowledgeBase, updateKnowledgeBases } = useKnowledgeBases()
   const [selectedBase, setSelectedBase] = useState<KnowledgeBase>()
+  const [isDragging, setIsDragging] = useState(false)
 
   const handleAddKnowledge = async () => {
     await AddKnowledgePopup.show({ title: t('knowledge_base.add.title') })
@@ -82,24 +84,33 @@ const KnowledgePage: FC = () => {
       <ContentContainer id="content-container">
         <SideNav>
           <ScrollContainer>
-            {bases.map((base) => (
-              <Dropdown menu={{ items: getMenuItems(base) }} trigger={['contextMenu']} key={base.id}>
-                <div>
-                  <ListItem
-                    active={selectedBase?.id === base.id}
-                    icon={<FileTextOutlined />}
-                    title={base.name}
-                    onClick={() => setSelectedBase(base)}
-                  />
-                </div>
-              </Dropdown>
-            ))}
-            <AddKnowledgeItem onClick={handleAddKnowledge}>
-              <AddKnowledgeName>
-                <PlusOutlined style={{ color: 'var(--color-text-2)', marginRight: 4 }} />
-                {t('button.add')}
-              </AddKnowledgeName>
-            </AddKnowledgeItem>
+            <DragableList
+              list={bases}
+              onUpdate={updateKnowledgeBases}
+              style={{ marginBottom: 0, paddingBottom: isDragging ? 50 : 0 }}
+              onDragStart={() => setIsDragging(true)}
+              onDragEnd={() => setIsDragging(false)}>
+              {(base) => (
+                <Dropdown menu={{ items: getMenuItems(base) }} trigger={['contextMenu']} key={base.id}>
+                  <div>
+                    <ListItem
+                      active={selectedBase?.id === base.id}
+                      icon={<FileTextOutlined />}
+                      title={base.name}
+                      onClick={() => setSelectedBase(base)}
+                    />
+                  </div>
+                </Dropdown>
+              )}
+            </DragableList>
+            {!isDragging && (
+              <AddKnowledgeItem onClick={handleAddKnowledge}>
+                <AddKnowledgeName>
+                  <PlusOutlined style={{ color: 'var(--color-text-2)', marginRight: 4 }} />
+                  {t('button.add')}
+                </AddKnowledgeName>
+              </AddKnowledgeItem>
+            )}
             <div style={{ minHeight: '10px' }}></div>
           </ScrollContainer>
         </SideNav>
