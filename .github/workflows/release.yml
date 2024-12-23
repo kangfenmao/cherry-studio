@@ -2,11 +2,6 @@ name: Release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version (e.g. v1.2.3)'
-        required: true
-        type: string
   push:
     tags:
       - v*.*.*
@@ -20,8 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        # windows-latest, ubuntu-latest
-        os: [macos-13, macos-latest]
+        os: [macos-13, macos-latest, windows-latest, ubuntu-latest]
         arch: [x64, arm64]
         exclude:
           - os: windows-latest
@@ -41,6 +35,9 @@ jobs:
           node-version: 20
           arch: ${{ matrix.arch }}
 
+      - name: Install corepack
+        run: corepack enable && corepack prepare yarn@4.3.1 --activate
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
@@ -55,9 +52,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Install corepack
-        run: corepack enable && corepack prepare yarn@4.3.1 --activate
-
       - name: Install Dependencies
         run: yarn install
 
@@ -70,7 +64,7 @@ jobs:
 
       - name: Build Mac
         if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
-        run: yarn build:mac
+        run: yarn build:mac && mv dist/latest-mac.yml dist/latest-mac-${{ matrix.arch }}.yml
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
