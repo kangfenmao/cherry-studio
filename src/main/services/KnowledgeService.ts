@@ -27,6 +27,7 @@ class KnowledgeService {
   }
 
   private getRagApplication = async ({ id, model, apiKey, baseURL }: KnowledgeBaseParams): Promise<RAGApplication> => {
+    console.debug('getRagApplication', path.join(this.storageDir, id))
     return new RAGApplicationBuilder()
       .setModel('NO_MODEL')
       .setEmbeddingModel(

@@ -95,7 +95,8 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
 
         <Form.Item
           name="model"
-          label={t('common.model')}
+          label={t('models.embedding_model')}
+          tooltip={{ title: t('models.embedding_model_tooltip'), placement: 'right' }}
           rules={[{ required: true, message: t('message.error.enter.model') }]}>
           <Select style={{ width: '100%' }} options={selectOptions} placeholder={t('settings.models.empty')} />
         </Form.Item>

@@ -575,7 +575,9 @@
       "vision": "Vision",
       "websearch": "WebSearch",
       "free": "Free",
-      "embedding": "Embedding"
+      "embedding": "Embedding",
+      "embedding_model": "Embedding Model",
+      "embedding_model_tooltip": "Add in Settings->Model Provider->Manage"
     }
   }
 }
