@@ -58,7 +58,7 @@ export async function reset() {
 }
 
 // 备份到 webdav
-export async function backupToWebdav({ showMessage = true }: { showMessage?: boolean }) {
+export async function backupToWebdav({ showMessage = true }: { showMessage?: boolean } = {}) {
   const { webdavHost, webdavUser, webdavPass, webdavPath } = store.getState().settings
 
   const backupData = await getBackupData()
@@ -130,8 +130,6 @@ export function startAutoSync() {
         window.message.error({ content: i18n.t('message.backup.failed'), key: 'webdav-sync' })
       }
     }
-
-    performBackup()
 
     syncInterval = setInterval(performBackup, webdavSyncInterval * 60 * 1000)
 

@@ -19,5 +19,6 @@ declare global {
     modal: HookAPI
     keyv: KeyvStorage
     mermaid: any
+    store: any
   }
 }

@@ -265,22 +265,10 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   ollama: [],
   silicon: [
     {
-      id: 'Qwen/Qwen2.5-72B-Instruct',
+      id: 'deepseek-ai/DeepSeek-V2.5',
+      name: 'deepseek-ai/DeepSeek-V2.5',
       provider: 'silicon',
-      name: 'Qwen2.5-72B-Instruct',
-      group: 'Qwen2.5'
-    },
-    {
-      id: 'Qwen/Qwen2.5-32B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2.5-32B-Instruct',
-      group: 'Qwen2.5'
-    },
-    {
-      id: 'Qwen/Qwen2.5-14B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2.5-14B-Instruct',
-      group: 'Qwen2.5'
+      group: 'deepseek-ai'
     },
     {
       id: 'Qwen/Qwen2.5-7B-Instruct',
@@ -289,79 +277,17 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'Qwen2.5'
     },
     {
-      id: 'Qwen/Qwen2-7B-Instruct',
+      id: 'meta-llama/Llama-3.3-70B-Instruct',
+      name: 'meta-llama/Llama-3.3-70B-Instruct',
       provider: 'silicon',
-      name: 'Qwen2-7B-Instruct',
-      group: 'Qwen2'
-    },
-    {
-      id: 'Qwen/Qwen2-72B-Instruct',
-      provider: 'silicon',
-      name: 'Qwen2-72B-Instruct',
-      group: 'Qwen2'
-    },
-    {
-      id: 'THUDM/glm-4-9b-chat',
-      provider: 'silicon',
-      name: 'GLM-4-9B-Chat',
-      group: 'GLM'
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-V2-Chat',
-      provider: 'silicon',
-      name: 'DeepSeek-V2-Chat',
-      group: 'DeepSeek'
-    },
-    {
-      id: 'deepseek-ai/DeepSeek-Coder-V2-Instruct',
-      provider: 'silicon',
-      name: 'DeepSeek-Coder-V2-Instruct',
-      group: 'DeepSeek'
+      group: 'meta-llama'
     }
   ],
   openai: [
-    {
-      id: 'gpt-4o',
-      provider: 'openai',
-      name: ' GPT-4o',
-      group: 'GPT 4o'
-    },
-    {
-      id: 'gpt-4o-mini',
-      provider: 'openai',
-      name: ' GPT-4o-mini',
-      group: 'GPT 4o'
-    },
-    {
-      id: 'chatgpt-4o-latest',
-      provider: 'openai',
-      name: ' GPT-4o-latest',
-      group: 'GPT 4o'
-    },
-    {
-      id: 'gpt-4-turbo',
-      provider: 'openai',
-      name: ' GPT-4 Turbo',
-      group: 'GPT 4'
-    },
-    {
-      id: 'gpt-4',
-      provider: 'openai',
-      name: ' GPT-4',
-      group: 'GPT 4'
-    },
-    {
-      id: 'o1-mini',
-      provider: 'openai',
-      name: ' o1-mini',
-      group: 'o1'
-    },
-    {
-      id: 'o1-preview',
-      provider: 'openai',
-      name: ' o1-preview',
-      group: 'o1'
-    }
+    { id: 'gpt-4o', provider: 'openai', name: ' GPT-4o', group: 'GPT 4o' },
+    { id: 'gpt-4o-mini', provider: 'openai', name: ' GPT-4o-mini', group: 'GPT 4o' },
+    { id: 'o1-mini', provider: 'openai', name: ' o1-mini', group: 'o1' },
+    { id: 'o1-preview', provider: 'openai', name: ' o1-preview', group: 'o1' }
   ],
   'azure-openai': [
     {
@@ -385,10 +311,10 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'Gemini 1.5'
     },
     {
-      id: 'gemini-1.5-pro-exp-0801',
+      id: 'gemini-1.5-pro',
+      name: 'Gemini 1.5 Pro',
       provider: 'gemini',
-      name: 'Gemini 1.5 Pro Experimental 0801',
-      group: 'Gemini 1.5'
+      group: 'gemini-1.5'
     }
   ],
   anthropic: [
@@ -421,14 +347,8 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
     {
       id: 'deepseek-chat',
       provider: 'deepseek',
-      name: 'DeepSeek Chat',
-      group: 'DeepSeek Chat'
-    },
-    {
-      id: 'deepseek-coder',
-      provider: 'deepseek',
-      name: 'DeepSeek Coder',
-      group: 'DeepSeek Coder'
+      name: 'DeepSeek V2.5',
+      group: 'DeepSeek V2.5'
     }
   ],
   together: [
@@ -588,42 +508,10 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
     }
   ],
   yi: [
-    {
-      id: 'yi-large',
-      provider: 'yi',
-      name: 'Yi-Large',
-      group: 'Yi'
-    },
-    {
-      id: 'yi-large-turbo',
-      provider: 'yi',
-      name: 'Yi-Large-Turbo',
-      group: 'Yi'
-    },
-    {
-      id: 'yi-large-rag',
-      provider: 'yi',
-      name: 'Yi-Large-Rag',
-      group: 'Yi'
-    },
-    {
-      id: 'yi-medium',
-      provider: 'yi',
-      name: 'Yi-Medium',
-      group: 'Yi'
-    },
-    {
-      id: 'yi-medium-200k',
-      provider: 'yi',
-      name: 'Yi-Medium-200k',
-      group: 'Yi'
-    },
-    {
-      id: 'yi-spark',
-      provider: 'yi',
-      name: 'Yi-Spark',
-      group: 'Yi'
-    }
+    { id: 'yi-lightning', name: 'yi-lightning', provider: 'yi', group: 'yi-lightning', owned_by: '01.ai' },
+    { id: 'yi-medium', name: 'yi-medium', provider: 'yi', group: 'yi-medium', owned_by: '01.ai' },
+    { id: 'yi-large', name: 'yi-large', provider: 'yi', group: 'yi-large', owned_by: '01.ai' },
+    { id: 'yi-vision', name: 'yi-vision', provider: 'yi', group: 'yi-vision', owned_by: '01.ai' }
   ],
   zhipu: [
     {
@@ -677,22 +565,11 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   ],
   moonshot: [
     {
-      id: 'moonshot-v1-8k',
+      id: 'moonshot-v1-auto',
+      name: 'moonshot-v1-auto',
       provider: 'moonshot',
-      name: 'Moonshot V1 8k',
-      group: 'Moonshot V1'
-    },
-    {
-      id: 'moonshot-v1-32k',
-      provider: 'moonshot',
-      name: 'Moonshot V1 32k',
-      group: 'Moonshot V1'
-    },
-    {
-      id: 'moonshot-v1-128k',
-      provider: 'moonshot',
-      name: 'Moonshot V1 128k',
-      group: 'Moonshot V1'
+      group: 'moonshot-v1',
+      owned_by: 'moonshot'
     }
   ],
   baichuan: [
@@ -716,24 +593,11 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
     }
   ],
   bailian: [
-    {
-      id: 'qwen-turbo',
-      provider: 'dashscope',
-      name: 'Qwen Turbo',
-      group: 'Qwen'
-    },
-    {
-      id: 'qwen-plus',
-      provider: 'dashscope',
-      name: 'Qwen Plus',
-      group: 'Qwen'
-    },
-    {
-      id: 'qwen-max',
-      provider: 'dashscope',
-      name: 'Qwen Max',
-      group: 'Qwen'
-    }
+    { id: 'qwen-vl-plus', name: 'qwen-vl-plus', provider: 'dashscope', group: 'qwen-vl', owned_by: 'system' },
+    { id: 'qwen-coder-plus', name: 'qwen-coder-plus', provider: 'dashscope', group: 'qwen-coder', owned_by: 'system' },
+    { id: 'qwen-turbo', name: 'qwen-turbo', provider: 'dashscope', group: 'qwen-turbo', owned_by: 'system' },
+    { id: 'qwen-plus', name: 'qwen-plus', provider: 'dashscope', group: 'qwen-plus', owned_by: 'system' },
+    { id: 'qwen-max', name: 'qwen-max', provider: 'dashscope', group: 'qwen-max', owned_by: 'system' }
   ],
   stepfun: [
     {
