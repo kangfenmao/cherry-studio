@@ -543,6 +543,7 @@
       "index_started": "Индексирование началось",
       "cancel_index": "Отменить индексирование",
       "index_cancelled": "Индексирование отменено",
+      "status_new": "Добавлено",
       "status_pending": "Ожидание",
       "status_processing": "Обработка",
       "status_completed": "Завершено",

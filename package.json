@@ -49,7 +49,7 @@
     "@electron-toolkit/utils": "^3.0.0",
     "@electron/notarize": "^2.5.0",
     "@llm-tools/embedjs": "^0.1.25",
-    "@llm-tools/embedjs-libsql": "^0.1.25",
+    "@llm-tools/embedjs-libsql": "patch:@llm-tools/embedjs-libsql@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-libsql-npm-0.1.25-fad000d74c.patch",
     "@llm-tools/embedjs-loader-csv": "^0.1.25",
     "@llm-tools/embedjs-loader-markdown": "^0.1.25",
     "@llm-tools/embedjs-loader-msoffice": "^0.1.25",
@@ -146,7 +146,8 @@
     "react-dom": "^17.0.0 || ^18.0.0"
   },
   "resolutions": {
-    "pdf-parse@npm:1.1.1": "patch:pdf-parse@npm%3A1.1.1#~/.yarn/patches/pdf-parse-npm-1.1.1-04a6109b2a.patch"
+    "pdf-parse@npm:1.1.1": "patch:pdf-parse@npm%3A1.1.1#~/.yarn/patches/pdf-parse-npm-1.1.1-04a6109b2a.patch",
+    "@llm-tools/embedjs-utils@npm:0.1.25": "patch:@llm-tools/embedjs-utils@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-utils-npm-0.1.25-fd8fe8a193.patch"
   },
   "packageManager": "yarn@4.5.0"
 }

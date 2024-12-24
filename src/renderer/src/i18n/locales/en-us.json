@@ -543,6 +543,7 @@
       "index_started": "Indexing started",
       "cancel_index": "Cancel Indexing",
       "index_cancelled": "Indexing cancelled",
+      "status_new": "Added",
       "status_pending": "Pending",
       "status_processing": "Processing",
       "status_completed": "Completed",

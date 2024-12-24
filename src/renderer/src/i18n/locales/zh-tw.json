@@ -531,6 +531,7 @@
       "index_started": "索引開始",
       "cancel_index": "取消索引",
       "index_cancelled": "索引已取消",
+      "status_new": "已添加",
       "status_pending": "等待中",
       "status_processing": "處理中",
       "status_completed": "已完成",
