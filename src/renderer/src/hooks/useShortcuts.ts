@@ -37,8 +37,6 @@ export const useShortcut = (
 
   const shortcutConfig = shortcuts.find((s) => s.key === shortcutKey)
 
-  console.log(shortcutConfig)
-
   useHotkeys(
     shortcutConfig?.enabled ? formatShortcut(shortcutConfig.shortcut) : 'none',
     (e) => {

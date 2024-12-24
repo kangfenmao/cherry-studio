@@ -1,7 +1,7 @@
 import { FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import { useSettings } from '@renderer/hooks/useSettings'
-import { backupToWebdav, restoreFromWebdav, startAutoSync, stopAutoSync } from '@renderer/services/BackupService'
+import { backupToWebdav, restoreFromWebdav } from '@renderer/services/BackupService'
 import { useAppDispatch } from '@renderer/store'
 import {
   setWebdavAutoSync,
@@ -63,15 +63,11 @@ const WebDavSettings: FC = () => {
     await restoreFromWebdav()
     setRestoring(false)
   }
+
   const onToggleAutoSync = (checked: boolean) => {
     dispatch(setWebdavAutoSync(checked))
-
-    if (checked) {
-      startAutoSync()
-    } else {
-      stopAutoSync()
-    }
   }
+
   const onSyncIntervalChange = (value: number) => {
     setSyncInterval(value)
     dispatch(_setWebdavSyncInterval(value))
@@ -138,7 +134,7 @@ const WebDavSettings: FC = () => {
             disabled={!webdavHost}
           />
           <Select
-            value={syncInterval}
+            value={syncInterval || 5}
             onChange={onSyncIntervalChange}
             disabled={!webdavHost || !autoSync}
             style={{ width: 120 }}>

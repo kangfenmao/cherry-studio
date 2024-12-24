@@ -58,7 +58,7 @@ export async function reset() {
 }
 
 // 备份到 webdav
-export async function backupToWebdav() {
+export async function backupToWebdav({ showMessage = true }: { showMessage?: boolean }) {
   const { webdavHost, webdavUser, webdavPass, webdavPath } = store.getState().settings
 
   const backupData = await getBackupData()
@@ -72,16 +72,17 @@ export async function backupToWebdav() {
       webdavPath
     })
     if (success) {
-      window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
+      showMessage && window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
     } else {
-      window.message.error({ content: i18n.t('message.backup.failed'), key: 'backup' })
+      showMessage && window.message.error({ content: i18n.t('message.backup.failed'), key: 'backup' })
     }
   } catch (error: any) {
     console.error('[backup] backupToWebdav: Error uploading file to WebDAV:', error)
-    window.modal.error({
-      title: i18n.t('message.backup.failed'),
-      content: error.message
-    })
+    showMessage &&
+      window.modal.error({
+        title: i18n.t('message.backup.failed'),
+        content: error.message
+      })
   }
 }
 
@@ -122,24 +123,19 @@ export function startAutoSync() {
     const performBackup = async () => {
       try {
         console.log('[AutoSync] Performing backup...')
-        await backupToWebdav()
-        window.message.success({
-          content: i18n.t('message.backup.start.success'),
-          key: 'webdav-sync'
-        })
+        await backupToWebdav({ showMessage: false })
+        window.message.success({ content: i18n.t('message.backup.success'), key: 'webdav-sync' })
       } catch (error) {
         console.error('[AutoSync] Backup failed:', error)
-        window.message.error({
-          content: i18n.t('message.backup.failed'),
-          key: 'webdav-sync'
-        })
+        window.message.error({ content: i18n.t('message.backup.failed'), key: 'webdav-sync' })
       }
     }
 
     performBackup()
 
     syncInterval = setInterval(performBackup, webdavSyncInterval * 60 * 1000)
-    console.log('[AutoSync] Sync interval set up:', syncInterval)
+
+    console.log(`[AutoSync] Sync interval set up: ${webdavSyncInterval} minutes`)
   }
 }
 
