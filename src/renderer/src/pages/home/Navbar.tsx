@@ -74,7 +74,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
             <SearchOutlined />
           </NavbarIcon>
           <AppStorePopover>
-            <NavbarIcon>
+            <NavbarIcon style={{ marginLeft: isMac ? 5 : 10 }}>
               <i className="iconfont icon-appstore" />
             </NavbarIcon>
           </AppStorePopover>

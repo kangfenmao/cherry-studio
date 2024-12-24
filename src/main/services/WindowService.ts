@@ -33,6 +33,7 @@ export class WindowService {
 
     const theme = configManager.getTheme()
     const isMac = process.platform === 'darwin'
+    const isLinux = process.platform === 'linux'
 
     this.mainWindow = new BrowserWindow({
       x: mainWindowState.x,
@@ -46,7 +47,7 @@ export class WindowService {
       transparent: isMac,
       vibrancy: 'under-window',
       visualEffectState: 'active',
-      titleBarStyle: 'hidden',
+      titleBarStyle: isLinux ? 'default' : 'hidden',
       titleBarOverlay: theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight,
       backgroundColor: isMac ? undefined : theme === 'dark' ? '#181818' : '#FFFFFF',
       trafficLightPosition: { x: 8, y: 12 },
