@@ -8,7 +8,7 @@ import {
   RequestOptions,
   TextPart
 } from '@google/generative-ai'
-import { isEmbeddingModel } from '@renderer/config/models'
+import { isEmbeddingModel, isWebSearchModel } from '@renderer/config/models'
 import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
@@ -87,7 +87,7 @@ export default class GeminiProvider extends BaseProvider {
         model: model.id,
         systemInstruction: assistant.prompt,
         // @ts-ignore googleSearch is not a valid tool for Gemini
-        tools: assistant.enableWebSearch ? [{ googleSearch: {} }] : [],
+        tools: assistant.enableWebSearch && isWebSearchModel(model) ? [{ googleSearch: {} }] : [],
         generationConfig: {
           maxOutputTokens: maxTokens,
           temperature: assistant?.settings?.temperature,
