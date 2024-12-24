@@ -1513,7 +1513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@llm-tools/embedjs-libsql@npm:^0.1.25":
+"@llm-tools/embedjs-libsql@npm:0.1.25":
   version: 0.1.25
   resolution: "@llm-tools/embedjs-libsql@npm:0.1.25"
   dependencies:
@@ -1522,6 +1522,18 @@ __metadata:
     "@llm-tools/embedjs-utils": "npm:0.1.25"
     debug: "npm:^4.4.0"
   checksum: 10c0/7a21019ed4d7cb1f8eb21ae9015c31b2e9d5ee517e741b88d5660fb322fc0d6bc163070034036c58e0fc67437dd39aeb3aa30b9874ef1dd553a3c5a2c5bbbe55
+  languageName: node
+  linkType: hard
+
+"@llm-tools/embedjs-libsql@patch:@llm-tools/embedjs-libsql@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-libsql-npm-0.1.25-fad000d74c.patch":
+  version: 0.1.25
+  resolution: "@llm-tools/embedjs-libsql@patch:@llm-tools/embedjs-libsql@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-libsql-npm-0.1.25-fad000d74c.patch::version=0.1.25&hash=7eafdc"
+  dependencies:
+    "@libsql/client": "npm:^0.14.0"
+    "@llm-tools/embedjs-interfaces": "npm:0.1.25"
+    "@llm-tools/embedjs-utils": "npm:0.1.25"
+    debug: "npm:^4.4.0"
+  checksum: 10c0/e7793caaf71fb977409d6ba97cb831d68fe5eff5c2ba8502d112fd0294ff004417c7685f86b1d45993f2722b6007976335413f9966b6b7e4676751ba41272041
   languageName: node
   linkType: hard
 
@@ -1636,6 +1648,15 @@ __metadata:
   dependencies:
     "@llm-tools/embedjs-interfaces": "npm:0.1.25"
   checksum: 10c0/8220181ac574e1088562f1c7913709806e6558ab02a535b888abd6267a4a03f9a45984998fddf07b4930c91a7f829458754f1da7488f453aee824de08958705a
+  languageName: node
+  linkType: hard
+
+"@llm-tools/embedjs-utils@patch:@llm-tools/embedjs-utils@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-utils-npm-0.1.25-fd8fe8a193.patch":
+  version: 0.1.25
+  resolution: "@llm-tools/embedjs-utils@patch:@llm-tools/embedjs-utils@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-utils-npm-0.1.25-fd8fe8a193.patch::version=0.1.25&hash=faf2ca"
+  dependencies:
+    "@llm-tools/embedjs-interfaces": "npm:0.1.25"
+  checksum: 10c0/c639f64a26023b21b2cd8b2bf5007541f4b1382ac3358d9404a531fcee66482ea94fe151b7d39b44a6cb903b975eb379101c4cca896d8a08a070330355e67c19
   languageName: node
   linkType: hard
 
@@ -2740,7 +2761,7 @@ __metadata:
     "@hello-pangea/dnd": "npm:^16.6.0"
     "@kangfenmao/keyv-storage": "npm:^0.1.0"
     "@llm-tools/embedjs": "npm:^0.1.25"
-    "@llm-tools/embedjs-libsql": "npm:^0.1.25"
+    "@llm-tools/embedjs-libsql": "patch:@llm-tools/embedjs-libsql@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-libsql-npm-0.1.25-fad000d74c.patch"
     "@llm-tools/embedjs-loader-csv": "npm:^0.1.25"
     "@llm-tools/embedjs-loader-markdown": "npm:^0.1.25"
     "@llm-tools/embedjs-loader-msoffice": "npm:^0.1.25"

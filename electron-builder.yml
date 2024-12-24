@@ -27,7 +27,6 @@ files:
   - '!node_modules/pdf-parse/lib/pdf.js/{v1.9.426,v1.10.88,v2.0.550}'
   - '!node_modules/mammoth/{mammoth.browser.js,mammoth.browser.min.js}'
   - '!node_modules/html2canvas/dist/{html2canvas.min.js,html2canvas.esm.js}'
-
 asarUnpack:
   - resources/**
   - '**/*.{node,dll,metal,exp,lib}'
@@ -42,17 +41,29 @@ nsis:
   oneClick: false
 mac:
   entitlementsInherit: build/entitlements.mac.plist
+  notarize: false
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  notarize: false
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+    - target: zip
+      arch:
+        - arm64
+        - x64
 dmg:
   artifactName: ${productName}-${version}-${arch}.${ext}
 linux:
   target:
     - target: AppImage
+      arch:
+        - arm64
+        - x64
   maintainer: electronjs.org
   category: Utility
 appImage:
@@ -62,7 +73,7 @@ publish:
   url: https://cherrystudio.ocool.online
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
-afterPack: scripts/removeLocales.js
+afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |

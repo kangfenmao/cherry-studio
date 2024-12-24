@@ -15,15 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-13, macos-latest, windows-latest, ubuntu-latest]
-        arch: [x64, arm64]
-        exclude:
-          - os: windows-latest
-            arch: arm64
-          - os: macos-latest
-            arch: x64
-          - os: macos-13
-            arch: arm64
+        os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -33,7 +25,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          arch: ${{ matrix.arch }}
 
       - name: Install corepack
         run: corepack enable && corepack prepare yarn@4.3.1 --activate
@@ -57,14 +48,18 @@ jobs:
 
       - name: Build Linux
         if: matrix.os == 'ubuntu-latest'
-        run: yarn build:linux
+        run: |
+          yarn download:npm linux
+          yarn build:linux
+
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          ARCH: ${{ matrix.arch }}
 
       - name: Build Mac
-        if: matrix.os == 'macos-13' || matrix.os == 'macos-latest'
-        run: yarn build:mac && mv dist/latest-mac.yml dist/latest-mac-${{ matrix.arch }}.yml
+        if: matrix.os == 'macos-latest'
+        run: |
+          yarn download:npm darwin
+          yarn build:mac
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
@@ -72,17 +67,15 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ vars.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          ARCH: ${{ matrix.arch }}
 
       - name: Build Windows
         if: matrix.os == 'windows-latest'
         run: yarn build:win
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          ARCH: ${{ matrix.arch }}
 
       - name: Replace spaces in filenames
-        run: node scripts/replaceSpaces.js
+        run: node scripts/replace-spaces.js
 
       - name: Release
         uses: softprops/action-gh-release@v2
