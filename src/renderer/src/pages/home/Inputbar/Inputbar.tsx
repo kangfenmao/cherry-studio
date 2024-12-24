@@ -10,13 +10,12 @@ import {
 } from '@ant-design/icons'
 import { PicCenterOutlined } from '@ant-design/icons'
 import TranslateButton from '@renderer/components/TranslateButton'
-import { isMac } from '@renderer/config/constant'
 import { isVisionModel, isWebSearchModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useRuntime } from '@renderer/hooks/useRuntime'
 import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
-import { useShortcut } from '@renderer/hooks/useShortcuts'
+import { useShortcut, useShortcutDisplay } from '@renderer/hooks/useShortcuts'
 import { useShowTopics } from '@renderer/hooks/useStore'
 import { addAssistantMessagesToTopic, getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
@@ -90,6 +89,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     () => (showInputEstimatedTokens ? estimateTextTokens(text) || 0 : 0),
     [estimateTextTokens, showInputEstimatedTokens, text]
   )
+  const newTopicShortcut = useShortcutDisplay('new_topic')
 
   _text = text
   _files = files
@@ -411,7 +411,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
         />
         <Toolbar>
           <ToolbarMenu>
-            <Tooltip placement="top" title={t('chat.input.new_topic', { Command: isMac ? '⌘' : 'Ctrl' })} arrow>
+            <Tooltip placement="top" title={t('chat.input.new_topic', { Command: newTopicShortcut })} arrow>
               <ToolbarButton type="text" onClick={addNewTopic}>
                 <FormOutlined />
               </ToolbarButton>
