@@ -158,7 +158,7 @@ async function getLatestRelease(env) {
     return new Response(
       JSON.stringify({
         error: '获取版本信息失败: ' + error.message,
-        detail: '请稍后再试'
+        detail: '请稍���再试'
       }),
       {
         status: 500,
@@ -507,9 +507,6 @@ async function checkNewRelease(env) {
       await addLog(env, 'INFO', '所有文件完整性检查通过，无需更新')
     }
 
-    // 合并 Mac yml 文件
-    await mergeMacYmlFiles(env)
-
     return hasUpdates ? cacheData : null
   } catch (error) {
     await addLog(env, 'ERROR', '检查新版本失败', error.message)
@@ -529,35 +526,4 @@ async function listAllFiles(env) {
   } while (cursor)
 
   return files
-}
-
-async function mergeMacYmlFiles(env) {
-  try {
-    const macX64Yml = await env.R2_BUCKET.get('latest-mac-x64.yml')
-    const macArm64Yml = await env.R2_BUCKET.get('latest-mac-arm64.yml')
-
-    if (!macX64Yml || !macArm64Yml) {
-      return
-    }
-
-    const x64Content = await macX64Yml.text()
-    const arm64Content = await macArm64Yml.text()
-
-    // 使用正则表达式提取 files 部分
-    const filesRegex = /files:\n(  - url:[\s\S]+?)(?=\npath:)/
-    const x64Files = x64Content.match(filesRegex)[1]
-    const arm64Files = arm64Content.match(filesRegex)[1]
-
-    // 合并内容
-    const mergedContent = arm64Content.replace(filesRegex, `files:\n${arm64Files}\n${x64Files}`)
-
-    // 保存合并后的文件
-    await env.R2_BUCKET.put('latest-mac.yml', mergedContent, {
-      httpMetadata: { contentType: 'application/x-yaml' }
-    })
-
-    await addLog(env, 'INFO', 'Mac yml 文件合并成功')
-  } catch (error) {
-    await addLog(env, 'ERROR', 'Mac yml 文件合并失败', error.message)
-  }
 }
