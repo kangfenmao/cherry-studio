@@ -185,7 +185,6 @@ export async function fetchSuggestions({
 }
 
 export async function checkApi(provider: Provider) {
-  const model = provider.models[0]
   const key = 'api-check'
   const style = { marginTop: '3vh' }
 
@@ -201,7 +200,7 @@ export async function checkApi(provider: Provider) {
     return false
   }
 
-  if (!model) {
+  if (isEmpty(provider.models)) {
     window.message.error({ content: i18n.t('message.error.enter.model'), key, style })
     return false
   }

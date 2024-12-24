@@ -1,11 +1,11 @@
-import { isSupportedModel, isVisionModel } from '@renderer/config/models'
+import { isEmbeddingModel, isSupportedModel, isVisionModel } from '@renderer/config/models'
 import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
-import { takeRight } from 'lodash'
+import { last, takeRight } from 'lodash'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
   ChatCompletionContentPart,
@@ -277,7 +277,11 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   public async check(): Promise<{ valid: boolean; error: Error | null }> {
-    const model = this.provider.models[0]
+    const model = last(this.provider.models.filter((m) => !isEmbeddingModel(m)))
+
+    if (!model) {
+      return { valid: false, error: new Error('No model found') }
+    }
 
     const body = {
       model: model.id,
