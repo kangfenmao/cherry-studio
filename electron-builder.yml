@@ -11,8 +11,26 @@ files:
   - '!src'
   - '!scripts'
   - '!local'
+  - '!docs'
+  - '!packages'
+  - '!stats.html'
+  - '!*.md'
+  - '!**/*.{map,ts,tsx,jsx,less,scss,sass,css.d.ts,d.cts,d.mts,md,markdown,yaml,yml}'
+  - '!**/{test,tests,__tests__,coverage}/**'
+  - '!**/*.{spec,test}.{js,jsx,ts,tsx}'
+  - '!**/*.min.*.map'
+  - '!**/*.d.ts'
+  - '!**/{.DS_Store,Thumbs.db}'
+  - '!**/{LICENSE,LICENSE.txt,LICENSE-MIT.txt,*.LICENSE.txt,NOTICE.txt,README.md,CHANGELOG.md}'
+  - '!node_modules/rollup-plugin-visualizer'
+  - '!node_modules/js-tiktoken'
+  - '!node_modules/pdf-parse/lib/pdf.js/{v1.9.426,v1.10.88,v2.0.550}'
+  - '!node_modules/mammoth/{mammoth.browser.js,mammoth.browser.min.js}'
+  - '!node_modules/html2canvas/dist/{html2canvas.min.js,html2canvas.esm.js}'
+
 asarUnpack:
   - resources/**
+  - '**/*.{node,dll,metal,exp,lib}'
 win:
   executableName: Cherry Studio
 nsis:
@@ -30,46 +48,22 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
-  target:
-    - target: dmg
-      arch:
-        - arm64
-        - x64
-    - target: zip
-      arch:
-        - arm64
-        - x64
 dmg:
   artifactName: ${productName}-${version}-${arch}.${ext}
 linux:
   target:
     - target: AppImage
-      arch:
-        - arm64
-        - x64
-    # - snap
-    # - deb
   maintainer: electronjs.org
   category: Utility
 appImage:
   artifactName: ${productName}-${version}-${arch}.${ext}
-npmRebuild: false
 publish:
   provider: generic
   url: https://cherrystudio.ocool.online
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
+afterPack: scripts/removeLocales.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    增加小程序快捷入口
-    增加ThinkAny、纳米搜索小程序
-    优化 Markdown 列表显示
-    可以多次点击上传文件按钮上传文件
-    大屏幕默认使用更大的输入框
-    设置中增加显示设置模块
-    支持 SVG 预览
-    Mermaid 图表支持复制源码
-    增加复制最后一条消息快捷键
-    o1模型默认开启流式输出
-    长文本粘贴为文件支持修改阈值
+    增加知识库功能

@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload'
-import { Shortcut, WebDavConfig } from '@types'
+import { KnowledgeBaseParams, KnowledgeItem, Shortcut, WebDavConfig } from '@types'
 import { contextBridge, ipcRenderer, OpenDialogOptions } from 'electron'
 
 // Custom APIs for renderer
@@ -36,6 +36,7 @@ const api = {
     create: (fileName: string) => ipcRenderer.invoke('file:create', fileName),
     write: (filePath: string, data: Uint8Array | string) => ipcRenderer.invoke('file:write', filePath, data),
     open: (options?: { decompress: boolean }) => ipcRenderer.invoke('file:open', options),
+    openPath: (path: string) => ipcRenderer.invoke('file:openPath', path),
     save: (path: string, content: string, options?: { compress: boolean }) =>
       ipcRenderer.invoke('file:save', path, content, options),
     selectFolder: () => ipcRenderer.invoke('file:selectFolder'),
@@ -50,6 +51,25 @@ const api = {
   openPath: (path: string) => ipcRenderer.invoke('open:path', path),
   shortcuts: {
     update: (shortcuts: Shortcut[]) => ipcRenderer.invoke('shortcuts:update', shortcuts)
+  },
+  knowledgeBase: {
+    create: ({ id, model, apiKey, baseURL }: KnowledgeBaseParams) =>
+      ipcRenderer.invoke('knowledge-base:create', { id, model, apiKey, baseURL }),
+    reset: ({ base }: { base: KnowledgeBaseParams }) => ipcRenderer.invoke('knowledge-base:reset', { base }),
+    delete: (id: string) => ipcRenderer.invoke('knowledge-base:delete', id),
+    add: ({
+      base,
+      item,
+      forceReload = false
+    }: {
+      base: KnowledgeBaseParams
+      item: KnowledgeItem
+      forceReload?: boolean
+    }) => ipcRenderer.invoke('knowledge-base:add', { base, item, forceReload }),
+    remove: ({ uniqueId, base }: { uniqueId: string; base: KnowledgeBaseParams }) =>
+      ipcRenderer.invoke('knowledge-base:remove', { uniqueId, base }),
+    search: ({ search, base }: { search: string; base: KnowledgeBaseParams }) =>
+      ipcRenderer.invoke('knowledge-base:search', { search, base })
   }
 }
 

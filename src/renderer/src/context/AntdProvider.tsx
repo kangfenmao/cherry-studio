@@ -31,6 +31,13 @@ const AntdProvider: FC<PropsWithChildren> = ({ children }) => {
           Menu: {
             activeBarBorderWidth: 0,
             darkItemBg: 'transparent'
+          },
+          Button: {
+            boxShadow: 'none',
+            boxShadowSecondary: 'none',
+            defaultShadow: 'none',
+            dangerShadow: 'none',
+            primaryShadow: 'none'
           }
         },
         token: {

@@ -81,6 +81,7 @@
       "input.translate": "翻譯成英文",
       "input.upload": "上傳圖片或文檔",
       "input.web_search": "開啟網路搜索",
+      "input.knowledge_base": "知識庫",
       "message.new.branch": "新分支",
       "message.new.branch.created": "新分支已建立",
       "message.regenerate.model": "切換模型",
@@ -130,7 +131,6 @@
       "download": "下載",
       "duplicate": "複製",
       "edit": "編輯",
-      "footnotes": "引用",
       "language": "語言",
       "model": "模型",
       "models": "模型",
@@ -148,7 +148,8 @@
       "warning": "警告",
       "you": "您",
       "clear": "清除",
-      "add": "添加"
+      "add": "添加",
+      "footnotes": "引用"
     },
     "error": {
       "backup.file_format": "備份文件格式錯誤",
@@ -251,16 +252,6 @@
     },
     "minapp": {
       "title": "小程序"
-    },
-    "model": {
-      "pinned": "已固定",
-      "search": "搜尋模型...",
-      "stream_output": "串流輸出",
-      "type": {
-        "select": "選擇模型類型",
-        "text": "文字",
-        "vision": "圖像"
-      }
     },
     "ollama": {
       "keep_alive_time.description": "對話後模型在記憶體中保持的時間（預設為 5 分鐘）。",
@@ -393,6 +384,7 @@
       "messages.input.paste_long_text_as_file": "將長文本貼上為檔案",
       "messages.input.send_shortcuts": "發送快捷鍵",
       "messages.input.show_estimated_tokens": "顯示預估 Token 數",
+      "messages.metrics": "首字時延 {{time_first_token_millsec}}ms | 每秒 {{token_speed}} tokens",
       "messages.input.title": "輸入設定",
       "messages.math_engine": "Markdown 渲染輸入訊息",
       "messages.math_render_engine": "數學公式引擎",
@@ -512,7 +504,65 @@
     },
     "words": {
       "knowledgeGraph": "知識圖譜",
-      "visualization": "可視化"
+      "visualization": "可視化",
+      "show_window": "顯示視窗",
+      "quit": "退出"
+    },
+    "knowledge_base": {
+      "title": "知識庫",
+      "search": "搜尋知識庫",
+      "empty": "暫無知識庫",
+      "drag_file": "拖拽文件到這裡",
+      "file_hint": "支持 {{file_types}} 格式",
+      "add": {
+        "title": "添加知識庫"
+      },
+      "notes": "筆記",
+      "notes_placeholder": "輸入此知識庫的附加資訊或上下文...",
+      "delete": "刪除",
+      "rename": "重命名",
+      "urls": "網址",
+      "add_url": "添加網址",
+      "url_placeholder": "請輸入網址",
+      "invalid_url": "無效的網址",
+      "add_file": "添加文件",
+      "status": "狀態",
+      "index_all": "索引全部",
+      "index_started": "索引開始",
+      "cancel_index": "取消索引",
+      "index_cancelled": "索引已取消",
+      "status_pending": "等待中",
+      "status_processing": "處理中",
+      "status_completed": "已完成",
+      "status_failed": "失敗",
+      "url_added": "網址已添加",
+      "search_placeholder": "輸入查詢內容",
+      "add_note": "添加筆記",
+      "no_bases": "暫無知識庫",
+      "clear_selection": "清除選擇",
+      "delete_confirm": "確定要刪除此知識庫嗎?",
+      "sitemaps": "網站",
+      "add_sitemap": "網站地圖",
+      "sitemap_placeholder": "請輸入網站地圖 URL",
+      "directories": "目錄",
+      "add_directory": "添加目錄",
+      "directory_placeholder": "請輸入目錄路徑"
+    },
+    "models": {
+      "pinned": "已固定",
+      "search": "搜尋模型...",
+      "stream_output": "串流輸出",
+      "type": {
+        "select": "選擇模型類型",
+        "text": "文字",
+        "vision": "圖像",
+        "embedding": "嵌入"
+      },
+      "all": "全部",
+      "vision": "視覺模型",
+      "websearch": "網路搜索模型",
+      "free": "免費模型",
+      "embedding": "嵌入模型"
     }
   }
 }

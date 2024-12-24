@@ -81,6 +81,7 @@
       "input.translate": "Перевести на английский",
       "input.upload": "Загрузить изображение или документ",
       "input.web_search": "Включить веб-поиск",
+      "input.knowledge_base": "База знаний",
       "message.new.branch": "Новая ветка",
       "message.new.branch.created": "Новая ветка создана",
       "message.regenerate.model": "Переключить модель",
@@ -252,16 +253,6 @@
     "minapp": {
       "title": "Встроенные приложения"
     },
-    "model": {
-      "pinned": "Закреплено",
-      "search": "Поиск моделей...",
-      "stream_output": "Потоковый вывод",
-      "type": {
-        "select": "Выберите тип модели",
-        "text": "Текст",
-        "vision": "Изображение"
-      }
-    },
     "ollama": {
       "keep_alive_time.description": "Время в минутах, в течение которого модель остается активной, по умолчанию 5 минут.",
       "keep_alive_time.placeholder": "Минуты",
@@ -393,6 +384,7 @@
       "messages.input.paste_long_text_as_file": "Вставлять длинный текст как файл",
       "messages.input.send_shortcuts": "Горячие клавиши для отправки",
       "messages.input.show_estimated_tokens": "Показывать затраты токенов",
+      "messages.metrics": "{{time_first_token_millsec}}ms до первого токена | {{token_speed}} tok/sec",
       "messages.input.title": "Настройки ввода",
       "messages.markdown_rendering_input_message": "Отображение ввода в формате Markdown",
       "messages.math_engine": "Математический движок",
@@ -524,7 +516,65 @@
     },
     "words": {
       "knowledgeGraph": "Граф знаний",
-      "visualization": "Визуализация"
+      "visualization": "Визуализация",
+      "show_window": "Показать окно",
+      "quit": "Выйти"
+    },
+    "knowledge_base": {
+      "title": "База знаний",
+      "search": "Поиск в базе знаний",
+      "empty": "База знаний не найдена",
+      "drag_file": "Перетащите файл сюда",
+      "file_hint": "Поддерживаются {{file_types}}",
+      "add": {
+        "title": "Добавить базу знаний"
+      },
+      "notes": "Заметки",
+      "notes_placeholder": "Введите дополнительную информацию или контекст для этой базы знаний...",
+      "delete": "Удалить",
+      "rename": "Переименовать",
+      "urls": "URL-адреса",
+      "add_url": "Добавить URL",
+      "url_placeholder": "Введите URL",
+      "invalid_url": "Неверный URL",
+      "add_file": "Добавить файл",
+      "status": "Статус",
+      "index_all": "Индексировать все",
+      "index_started": "Индексирование началось",
+      "cancel_index": "Отменить индексирование",
+      "index_cancelled": "Индексирование отменено",
+      "status_pending": "Ожидание",
+      "status_processing": "Обработка",
+      "status_completed": "Завершено",
+      "status_failed": "Ошибка",
+      "url_added": "URL добавлен",
+      "search_placeholder": "Введите текст для поиска",
+      "add_note": "Добавить запись",
+      "no_bases": "База знаний не найдена",
+      "clear_selection": "Очистить выбор",
+      "delete_confirm": "Вы уверены, что хотите удалить эту базу знаний?",
+      "sitemaps": "Сайты",
+      "add_sitemap": "Карта сайта",
+      "sitemap_placeholder": "Введите URL карты сайта",
+      "directories": "Директории",
+      "add_directory": "Добавить директорию",
+      "directory_placeholder": "Введите путь к директории"
+    },
+    "models": {
+      "pinned": "Закреплено",
+      "search": "Поиск моделей...",
+      "stream_output": "Потоковый вывод",
+      "type": {
+        "select": "Выберите тип модели",
+        "text": "Текст",
+        "vision": "Изображение",
+        "embedding": "Встраиваемые"
+      },
+      "all": "Все",
+      "vision": "Визуальные модели",
+      "websearch": "Веб-поисковые модели",
+      "free": "Бесплатные модели",
+      "embedding": "Встраиваемые модели"
     }
   }
 }

@@ -241,7 +241,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
       )}
       <Divider style={{ margin: '10px 0' }} />
       <SettingRow style={{ minHeight: 30 }}>
-        <Label>{t('model.stream_output')}</Label>
+        <Label>{t('models.stream_output')}</Label>
         <Switch
           checked={streamOutput}
           onChange={(checked) => {

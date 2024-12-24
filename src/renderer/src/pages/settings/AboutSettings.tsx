@@ -1,4 +1,4 @@
-import { GithubOutlined, TwitterOutlined } from '@ant-design/icons'
+import { GithubOutlined, XOutlined } from '@ant-design/icons'
 import { FileProtectOutlined, GlobalOutlined, MailOutlined, SendOutlined, SoundOutlined } from '@ant-design/icons'
 import IndicatorLight from '@renderer/components/IndicatorLight'
 import { HStack } from '@renderer/components/Layout'
@@ -208,7 +208,7 @@ const AboutSettings: FC = () => {
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>
-            <TwitterOutlined />X
+            <XOutlined />X
           </SettingRowTitle>
           <Button onClick={() => onOpenWebsite('https://x.com/kangfenmao')}>
             {t('settings.about.website.button')}

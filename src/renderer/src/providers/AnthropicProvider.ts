@@ -1,14 +1,16 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { MessageCreateParamsNonStreaming, MessageParam } from '@anthropic-ai/sdk/resources'
 import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
+import { isEmbeddingModel } from '@renderer/config/models'
 import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileTypes, Message, Provider, Suggestion } from '@renderer/types'
-import { first, flatten, sum, takeRight } from 'lodash'
+import { first, flatten, last, sum, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
+import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
 
 export default class AnthropicProvider extends BaseProvider {
@@ -24,7 +26,12 @@ export default class AnthropicProvider extends BaseProvider {
   }
 
   private async getMessageParam(message: Message): Promise<MessageParam> {
-    const parts: MessageParam['content'] = [{ type: 'text', text: message.content }]
+    const parts: MessageParam['content'] = [
+      {
+        type: 'text',
+        text: await this.getMessageContent(message)
+      }
+    ]
 
     for (const file of message.files || []) {
       if (file.type === FileTypes.IMAGE) {
@@ -82,11 +89,20 @@ export default class AnthropicProvider extends BaseProvider {
       system: assistant.prompt
     }
 
+    let time_first_token_millsec = 0
+    const start_time_millsec = new Date().getTime()
+
     if (!streamOutput) {
       const message = await this.sdk.messages.create({ ...body, stream: false })
+      const time_completion_millsec = new Date().getTime() - start_time_millsec
       return onChunk({
         text: message.content[0].type === 'text' ? message.content[0].text : '',
-        usage: message.usage
+        usage: message.usage,
+        metrics: {
+          completion_tokens: message.usage.output_tokens,
+          time_completion_millsec,
+          time_first_token_millsec: 0
+        }
       })
     }
 
@@ -98,7 +114,18 @@ export default class AnthropicProvider extends BaseProvider {
             stream.controller.abort()
             return resolve()
           }
-          onChunk({ text })
+          if (time_first_token_millsec == 0) {
+            time_first_token_millsec = new Date().getTime() - start_time_millsec
+          }
+          const time_completion_millsec = new Date().getTime() - start_time_millsec
+          onChunk({
+            text,
+            metrics: {
+              completion_tokens: undefined,
+              time_completion_millsec,
+              time_first_token_millsec
+            }
+          })
         })
         .on('finalMessage', (message) => {
           onChunk({
@@ -107,6 +134,11 @@ export default class AnthropicProvider extends BaseProvider {
               prompt_tokens: message.usage.input_tokens,
               completion_tokens: message.usage.output_tokens,
               total_tokens: sum(Object.values(message.usage))
+            },
+            metrics: {
+              completion_tokens: message.usage.output_tokens,
+              time_completion_millsec: new Date().getTime() - start_time_millsec,
+              time_first_token_millsec
             }
           })
           resolve()
@@ -203,7 +235,11 @@ export default class AnthropicProvider extends BaseProvider {
   }
 
   public async check(): Promise<{ valid: boolean; error: Error | null }> {
-    const model = this.provider.models[0]
+    const model = last(this.provider.models.filter((m) => !isEmbeddingModel(m)))
+
+    if (!model) {
+      return { valid: false, error: new Error('No model found') }
+    }
 
     const body = {
       model: model.id,

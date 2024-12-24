@@ -29,18 +29,24 @@ const MessgeTokens: React.FC<{ message: Message; isLastMessage: boolean }> = ({ 
 
   if (message.role === 'assistant') {
     let metrixs = ''
+    let hasMetrics = false
+
     if (message?.metrics?.completion_tokens && message?.metrics?.time_completion_millsec) {
+      hasMetrics = true
       metrixs = t('settings.messages.metrics', {
         time_first_token_millsec: message?.metrics?.time_first_token_millsec,
         token_speed: (message?.metrics?.completion_tokens / (message?.metrics?.time_completion_millsec / 1000)).toFixed(
-          2
+          0
         )
       })
     }
+
     return (
-      <MessageMetadata className="message-tokens" onClick={locateMessage}>
-        {metrixs !== '' ? metrixs : ''}
-        Tokens: {message?.usage?.total_tokens} ↑ {message?.usage?.prompt_tokens} ↓ {message?.usage?.completion_tokens}
+      <MessageMetadata className={`message-tokens ${hasMetrics ? 'has-metrics' : ''}`} onClick={locateMessage}>
+        <span className="metrics">{metrixs}</span>
+        <span className="tokens">
+          Tokens: {message?.usage?.total_tokens} ↑{message?.usage?.prompt_tokens} ↓{message?.usage?.completion_tokens}
+        </span>
       </MessageMetadata>
     )
   }
@@ -54,6 +60,25 @@ const MessageMetadata = styled.div`
   user-select: text;
   margin: 2px 0;
   cursor: pointer;
+  text-align: right;
+
+  .metrics {
+    display: none;
+  }
+
+  .tokens {
+    display: block;
+  }
+
+  &.has-metrics:hover {
+    .metrics {
+      display: block;
+    }
+
+    .tokens {
+      display: none;
+    }
+  }
 `
 
 export default MessgeTokens

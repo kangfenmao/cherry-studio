@@ -355,11 +355,11 @@ export const PROVIDER_CONFIG = {
   },
   aihubmix: {
     api: {
-      url: 'https://aihubmix.com'
+      url: 'https://aihubmix.com?aff=SJyh'
     },
     websites: {
       official: 'https://aihubmix.com/',
-      apiKey: 'https://aihubmix.com/token',
+      apiKey: 'https://aihubmix.com?aff=SJyh',
       docs: 'https://doc.aihubmix.com/',
       models: 'https://aihubmix.com/models'
     }

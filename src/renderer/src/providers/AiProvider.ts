@@ -3,6 +3,8 @@ import ProviderFactory from '@renderer/providers/ProviderFactory'
 import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
 import OpenAI from 'openai'
 
+import { CompletionsParams } from '.'
+
 export default class AiProvider {
   private sdk: BaseProvider
 
@@ -40,6 +42,10 @@ export default class AiProvider {
 
   public async models(): Promise<OpenAI.Models.Model[]> {
     return this.sdk.models()
+  }
+
+  public getApiKey(): string {
+    return this.sdk.getApiKey()
   }
 
   public async generateImage(params: {

@@ -1,7 +1,8 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import { AddLoaderReturn, ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { FileType } from '@renderer/types'
 import { WebDavConfig } from '@renderer/types'
-import { AppInfo, LanguageVarious } from '@renderer/types'
+import { AppInfo, KnowledgeBaseParams, KnowledgeItem, LanguageVarious } from '@renderer/types'
 import type { OpenDialogOptions } from 'electron'
 import type { UpdateInfo } from 'electron-updater'
 import { Readable } from 'stream'
@@ -41,6 +42,7 @@ declare global {
         create: (fileName: string) => Promise<string>
         write: (filePath: string, data: Uint8Array | string) => Promise<void>
         open: (options?: OpenDialogOptions) => Promise<{ fileName: string; filePath: string; content: Buffer } | null>
+        openPath: (path: string) => Promise<void>
         save: (
           path: string,
           content: string | NodeJS.ArrayBufferView,
@@ -57,6 +59,22 @@ declare global {
       openPath: (path: string) => Promise<void>
       shortcuts: {
         update: (shortcuts: Shortcut[]) => Promise<void>
+      }
+      knowledgeBase: {
+        create: ({ id, model, apiKey, baseURL }: KnowledgeBaseParams) => Promise<void>
+        reset: ({ base }: { base: KnowledgeBaseParams }) => Promise<void>
+        delete: (id: string) => Promise<void>
+        add: ({
+          base,
+          item,
+          forceReload = false
+        }: {
+          base: KnowledgeBaseParams
+          item: KnowledgeItem
+          forceReload?: boolean
+        }) => Promise<AddLoaderReturn>
+        remove: ({ uniqueId, base }: { uniqueId: string; base: KnowledgeBaseParams }) => Promise<void>
+        search: ({ search, base }: { search: string; base: KnowledgeBaseParams }) => Promise<ExtractChunkData[]>
       }
     }
   }

@@ -229,11 +229,24 @@
 
   .footnotes {
     margin-top: 1em;
+    margin-bottom: 1em;
     padding-top: 1em;
-    border-top: 1px solid var(--color-border);
+
+    background-color: var(--color-reference-background);
+    border-radius: 8px;
+    padding: 8px 12px;
+
+    h4 {
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
 
     ol {
       padding-left: 1em;
+      margin: 0;
+      li:last-child {
+        margin-bottom: 0;
+      }
     }
 
     li {

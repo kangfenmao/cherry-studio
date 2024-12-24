@@ -1,12 +1,13 @@
 import { LoadingOutlined, MinusOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import VisionIcon from '@renderer/components/Icons/VisionIcon'
 import WebSearchIcon from '@renderer/components/Icons/WebSearchIcon'
-import { getModelLogo, isVisionModel, isWebSearchModel, SYSTEM_MODELS } from '@renderer/config/models'
+import { Center } from '@renderer/components/Layout'
+import { getModelLogo, isEmbeddingModel, isVisionModel, isWebSearchModel, SYSTEM_MODELS } from '@renderer/config/models'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { fetchModels } from '@renderer/services/ApiService'
 import { Model, Provider } from '@renderer/types'
 import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/utils'
-import { Avatar, Button, Empty, Flex, Modal, Popover, Tag } from 'antd'
+import { Avatar, Button, Empty, Flex, Modal, Popover, Radio, Tag } from 'antd'
 import Search from 'antd/es/input/Search'
 import { groupBy, isEmpty, uniqBy } from 'lodash'
 import { useEffect, useState } from 'react'
@@ -29,14 +30,29 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
   const [listModels, setListModels] = useState<Model[]>([])
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
-  const { t } = useTranslation()
+  const [filterType, setFilterType] = useState<string>('all')
+  const { t, i18n } = useTranslation()
 
   const systemModels = SYSTEM_MODELS[_provider.id] || []
   const allModels = uniqBy([...systemModels, ...listModels, ...models], 'id')
 
-  const list = searchText
-    ? allModels.filter((model) => model.id.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
-    : allModels
+  const list = allModels.filter((model) => {
+    if (searchText && !model.id.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
+      return false
+    }
+    switch (filterType) {
+      case 'vision':
+        return isVisionModel(model)
+      case 'websearch':
+        return isWebSearchModel(model)
+      case 'free':
+        return isFreeModel(model)
+      case 'embedding':
+        return isEmbeddingModel(model)
+      default:
+        return true
+    }
+  })
 
   const modelGroups = groupBy(list, 'group')
 
@@ -89,7 +105,9 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
     return (
       <Flex>
         <ModelHeaderTitle>
-          {provider.isSystem ? t(`provider.${provider.id}`) : provider.name} {t('common.models')}
+          {provider.isSystem ? t(`provider.${provider.id}`) : provider.name}
+          {i18n.language.startsWith('zh') ? '' : ' '}
+          {t('common.models')}
         </ModelHeaderTitle>
         {loading && <LoadingOutlined size={20} />}
       </Flex>
@@ -111,6 +129,15 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
       }}
       centered>
       <SearchContainer>
+        <Center>
+          <Radio.Group value={filterType} onChange={(e) => setFilterType(e.target.value)} buttonStyle="solid">
+            <Radio.Button value="all">{t('models.all')}</Radio.Button>
+            <Radio.Button value="vision">{t('models.vision')}</Radio.Button>
+            <Radio.Button value="websearch">{t('models.websearch')}</Radio.Button>
+            <Radio.Button value="free">{t('models.free')}</Radio.Button>
+            <Radio.Button value="embedding">{t('models.embedding')}</Radio.Button>
+          </Radio.Group>
+        </Center>
         <Search placeholder={t('settings.provider.search_placeholder')} allowClear onSearch={setSearchText} />
       </SearchContainer>
       <ListContainer>
@@ -131,7 +158,12 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
                       {isWebSearchModel(model) && <WebSearchIcon />}
                       {isFreeModel(model) && (
                         <Tag style={{ marginLeft: 10 }} color="green">
-                          Free
+                          {t('models.free')}
+                        </Tag>
+                      )}
+                      {isEmbeddingModel(model) && (
+                        <Tag style={{ marginLeft: 10 }} color="orange">
+                          {t('models.embedding')}
                         </Tag>
                       )}
                       {!isEmpty(model.description) && (
@@ -163,11 +195,16 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
 
 const SearchContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 12px;
   padding: 0 22px;
   padding-bottom: 20px;
+  margin-top: -10px;
+
+  .ant-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
 `
 
 const ListContainer = styled.div`

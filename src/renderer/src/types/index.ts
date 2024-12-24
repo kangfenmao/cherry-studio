@@ -48,6 +48,7 @@ export type Message = {
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
   metrics?: Metrics
+  knowledgeBaseIds?: string[]
   type: 'text' | '@' | 'clear'
   isPreset?: boolean
 }
@@ -88,7 +89,7 @@ export type Provider = {
 
 export type ProviderType = 'openai' | 'anthropic' | 'gemini'
 
-export type ModelType = 'text' | 'vision'
+export type ModelType = 'text' | 'vision' | 'embedding'
 
 export type Model = {
   id: string
@@ -178,4 +179,39 @@ export interface Shortcut {
   editable: boolean
   enabled: boolean
   system: boolean
+}
+
+export type ProcessingStatus = 'pending' | 'processing' | 'completed' | 'failed'
+
+export type KnowledgeItemType = 'file' | 'url' | 'note' | 'sitemap' | 'directory'
+
+export type KnowledgeItem = {
+  id: string
+  baseId?: string
+  uniqueId?: string
+  type: KnowledgeItemType
+  content: string | FileType
+  created_at: number
+  updated_at: number
+  processingStatus?: ProcessingStatus
+  processingProgress?: number
+  processingError?: string
+  retryCount?: number
+}
+
+export interface KnowledgeBase {
+  id: string
+  name: string
+  model: Model
+  description?: string
+  items: KnowledgeItem[]
+  created_at: number
+  updated_at: number
+}
+
+export type KnowledgeBaseParams = {
+  id: string
+  model: string
+  apiKey: string
+  baseURL: string
 }

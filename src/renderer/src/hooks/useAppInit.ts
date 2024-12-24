@@ -73,4 +73,8 @@ export function useAppInit() {
       dispatch(setFilesPath(info.filesPath))
     })
   }, [dispatch])
+
+  useEffect(() => {
+    import('@renderer/queue/KnowledgeQueue')
+  }, [])
 }

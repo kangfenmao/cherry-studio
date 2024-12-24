@@ -11,9 +11,10 @@ interface Props {
   files: FileType[]
   setFiles: (files: FileType[]) => void
   ToolbarButton: any
+  disabled?: boolean
 }
 
-const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) => {
+const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton, disabled }) => {
   const { t } = useTranslation()
   const extensions = isVisionModel(model)
     ? [...imageExts, ...documentExts, ...textExts]
@@ -37,7 +38,7 @@ const AttachmentButton: FC<Props> = ({ model, files, setFiles, ToolbarButton }) 
 
   return (
     <Tooltip placement="top" title={t('chat.input.upload')} arrow>
-      <ToolbarButton type="text" className={files.length ? 'active' : ''} onClick={onSelectFile}>
+      <ToolbarButton type="text" className={files.length ? 'active' : ''} onClick={onSelectFile} disabled={disabled}>
         <PaperClipOutlined style={{ rotate: '135deg' }} />
       </ToolbarButton>
     </Tooltip>

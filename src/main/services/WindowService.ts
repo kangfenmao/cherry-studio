@@ -1,6 +1,7 @@
 import { is } from '@electron-toolkit/utils'
 import { isLinux, isWin } from '@main/constant'
 import { app, BrowserWindow, Menu, MenuItem, shell } from 'electron'
+import Logger from 'electron-log'
 import windowStateKeeper from 'electron-window-state'
 import { join } from 'path'
 
@@ -123,12 +124,25 @@ export class WindowService {
 
   private setupWebContentsHandlers(mainWindow: BrowserWindow) {
     mainWindow.webContents.on('will-navigate', (event, url) => {
+      if (url.includes('localhost:5173')) {
+        return
+      }
+
       event.preventDefault()
       shell.openExternal(url)
     })
 
     mainWindow.webContents.setWindowOpenHandler((details) => {
-      shell.openExternal(details.url)
+      const { url } = details
+
+      if (url.includes('http://file/')) {
+        const fileUrl = url.replace('http://file/', '')
+        const filePath = decodeURIComponent(fileUrl)
+        shell.openPath(filePath).catch((err) => Logger.error('Failed to open file:', err))
+      } else {
+        shell.openExternal(details.url)
+      }
+
       return { action: 'deny' }
     })
 
