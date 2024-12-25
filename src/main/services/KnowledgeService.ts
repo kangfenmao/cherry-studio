@@ -2,7 +2,7 @@ import * as fs from 'node:fs'
 import path from 'node:path'
 
 import { LocalPathLoader, RAGApplication, RAGApplicationBuilder, TextLoader } from '@llm-tools/embedjs'
-import { AddLoaderReturn, ExtractChunkData } from '@llm-tools/embedjs-interfaces'
+import type { AddLoaderReturn, ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { LanceDb } from '@llm-tools/embedjs-lancedb'
 import { MarkdownLoader } from '@llm-tools/embedjs-loader-markdown'
 import { DocxLoader, ExcelLoader, PptLoader } from '@llm-tools/embedjs-loader-msoffice'

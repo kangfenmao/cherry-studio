@@ -1,10 +1,9 @@
 import { REFERENCE_PROMPT } from '@renderer/config/prompts'
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
-import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
+import { getKnowledgeReferences } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { delay } from '@renderer/utils'
-import { take } from 'lodash'
 import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
@@ -95,25 +94,8 @@ export default abstract class BaseProvider {
       return message.content
     }
 
-    const searchResults = await window.api.knowledgeBase.search({
-      search: message.content,
-      base: getKnowledgeBaseParams(base)
-    })
+    const references = await getKnowledgeReferences(base, message)
 
-    const references = take(searchResults, 6).map((item, index) => {
-      const sourceUrl = item.metadata.source
-      const baseItem = base.items.find((i) => i.uniqueId === item.metadata.uniqueLoaderId)
-
-      return {
-        id: index,
-        content: item.pageContent,
-        sourceUrl: sourceUrl.startsWith('http') ? sourceUrl : encodeURIComponent(sourceUrl),
-        type: baseItem?.type
-      }
-    })
-
-    const referencesContent = `\`\`\`json\n${JSON.stringify(references, null, 2)}\n\`\`\``
-
-    return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', referencesContent)
+    return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', references)
   }
 }

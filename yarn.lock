@@ -1640,7 +1640,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@llm-tools/embedjs@npm:^0.1.25":
+"@llm-tools/embedjs@npm:0.1.25":
   version: 0.1.25
   resolution: "@llm-tools/embedjs@npm:0.1.25"
   dependencies:
@@ -1653,6 +1653,22 @@ __metadata:
     mime: "npm:^4.0.6"
     stream-mime-type: "npm:^2.0.0"
   checksum: 10c0/8a6afefbd8e304c037104eddf0fe35086165eb3a381b866e874bf6901c2da8a6dfc76d3d7eb027f7c694a163133154e3be7be777c362119a48925a6b56cce5db
+  languageName: node
+  linkType: hard
+
+"@llm-tools/embedjs@patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch":
+  version: 0.1.25
+  resolution: "@llm-tools/embedjs@patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch::version=0.1.25&hash=7b05b5"
+  dependencies:
+    "@langchain/textsplitters": "npm:^0.1.0"
+    "@llm-tools/embedjs-interfaces": "npm:0.1.25"
+    "@llm-tools/embedjs-utils": "npm:0.1.25"
+    debug: "npm:^4.4.0"
+    langchain: "npm:^0.3.7"
+    md5: "npm:^2.3.0"
+    mime: "npm:^4.0.6"
+    stream-mime-type: "npm:^2.0.0"
+  checksum: 10c0/d0a37a5c7232571a71eff7e90ff4ba612bf33022a6eccd933c3a778844320f427a936d0851aae00092e34407c8c2f3555fe4444c6f2139f978ecfdd42fd89375
   languageName: node
   linkType: hard
 
@@ -2747,7 +2763,7 @@ __metadata:
     "@google/generative-ai": "npm:^0.21.0"
     "@hello-pangea/dnd": "npm:^16.6.0"
     "@kangfenmao/keyv-storage": "npm:^0.1.0"
-    "@llm-tools/embedjs": "npm:^0.1.25"
+    "@llm-tools/embedjs": "patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch"
     "@llm-tools/embedjs-lancedb": "npm:^0.1.25"
     "@llm-tools/embedjs-loader-csv": "npm:^0.1.25"
     "@llm-tools/embedjs-loader-markdown": "npm:^0.1.25"

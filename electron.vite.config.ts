@@ -35,7 +35,8 @@ export default defineConfig({
     build: {
       rollupOptions: {
         external: ['@lancedb/lancedb']
-      }
+      },
+      minify: true
     }
   },
   preload: {
@@ -51,6 +52,9 @@ export default defineConfig({
     },
     optimizeDeps: {
       exclude: []
+    },
+    build: {
+      minify: true
     }
   }
 })
