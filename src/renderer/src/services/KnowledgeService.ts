@@ -12,10 +12,17 @@ export const getKnowledgeBaseParams = (base: KnowledgeBase): KnowledgeBaseParams
     provider.apiKey = 'empty'
   }
 
+  let host = aiProvider.getBaseURL()
+
+  if (host.includes('generativelanguage.googleapis.com')) {
+    host = host + '/v1beta/openai/'
+  }
+
   return {
     id: base.id,
-    model: base.model.name,
+    model: base.model.id,
+    dimensions: base.dimensions,
     apiKey: aiProvider.getApiKey(),
-    baseURL: provider.apiHost + '/v1'
+    baseURL: host
   }
 }

@@ -2,7 +2,7 @@ import { REFERENCE_PROMPT } from '@renderer/config/prompts'
 import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
-import { Assistant, Message, Provider, Suggestion } from '@renderer/types'
+import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { delay } from '@renderer/utils'
 import { take } from 'lodash'
 import OpenAI from 'openai'
@@ -37,6 +37,7 @@ export default abstract class BaseProvider {
     guidanceScale: number
     signal?: AbortSignal
   }): Promise<string[]>
+  abstract getEmbeddingDimensions(model: Model): Promise<number>
 
   public getBaseURL(): string {
     const host = this.provider.apiHost
@@ -106,12 +107,12 @@ export default abstract class BaseProvider {
       return {
         id: index,
         content: item.pageContent,
-        url: encodeURIComponent(sourceUrl),
+        sourceUrl: sourceUrl.startsWith('http') ? sourceUrl : encodeURIComponent(sourceUrl),
         type: baseItem?.type
       }
     })
 
-    const referencesContent = JSON.stringify(references, null, 2)
+    const referencesContent = `\`\`\`json\n${JSON.stringify(references, null, 2)}\n\`\`\``
 
     return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', referencesContent)
   }

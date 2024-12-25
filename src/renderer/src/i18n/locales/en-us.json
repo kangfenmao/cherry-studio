@@ -248,7 +248,8 @@
       "upgrade.success.content": "Please restart the application to complete the upgrade",
       "upgrade.success.title": "Upgrade successfully",
       "regenerate.confirm": "Regenerating will replace current message",
-      "copy.success": "Copied!"
+      "copy.success": "Copied!",
+      "get_embedding_dimensions": "Failed to get embedding dimensions"
     },
     "minapp": {
       "title": "MinApp"
@@ -559,7 +560,9 @@
       "sitemap_placeholder": "Enter Website Map URL",
       "directories": "Directories",
       "add_directory": "Add Directory",
-      "directory_placeholder": "Enter Directory Path"
+      "directory_placeholder": "Enter Directory Path",
+      "model_info": "Model Info",
+      "not_support": "Knowledge base database engine updated, the knowledge base will no longer be supported, please create a new knowledge base"
     },
     "models": {
       "pinned": "Pinned",
@@ -577,7 +580,8 @@
       "free": "Free",
       "embedding": "Embedding",
       "embedding_model": "Embedding Model",
-      "embedding_model_tooltip": "Add in Settings->Model Provider->Manage"
+      "embedding_model_tooltip": "Add in Settings->Model Provider->Manage",
+      "dimensions": "Dimensions {{dimensions}}"
     }
   }
 }

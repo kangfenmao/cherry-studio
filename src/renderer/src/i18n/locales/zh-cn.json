@@ -249,7 +249,8 @@
       "upgrade.success.content": "重启用以完成升级",
       "upgrade.success.title": "升级成功",
       "regenerate.confirm": "重新生成会覆盖当前消息",
-      "copy.success": "复制成功"
+      "copy.success": "复制成功",
+      "get_embedding_dimensions": "获取嵌入维度失败"
     },
     "minapp": {
       "title": "小程序"
@@ -548,7 +549,9 @@
       "sitemap_placeholder": "请输入站点地图 URL",
       "directories": "目录",
       "add_directory": "添加目录",
-      "directory_placeholder": "请输入目录路径"
+      "directory_placeholder": "请输入目录路径",
+      "model_info": "模型信息",
+      "not_support": "知识库数据库引擎已更新，该知识库将不再支持，请重新创建知识库"
     },
     "models": {
       "pinned": "已固定",
@@ -566,7 +569,8 @@
       "free": "免费模型",
       "embedding": "嵌入模型",
       "embedding_model": "嵌入模型",
-      "embedding_model_tooltip": "在设置->模型服务中点击管理按钮添加"
+      "embedding_model_tooltip": "在设置->模型服务中点击管理按钮添加",
+      "dimensions": "{{dimensions}} 维"
     }
   }
 }
