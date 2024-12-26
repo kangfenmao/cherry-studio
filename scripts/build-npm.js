@@ -11,12 +11,20 @@ async function downloadNpm(platform) {
 
   if (!platform || platform === 'linux') {
     downloadNpmPackage(
-      '@libsql/libsql-linux-arm64-gnu',
+      '@libsql/linux-arm64-gnu',
       'https://registry.npmjs.org/@libsql/linux-arm64-gnu/-/linux-arm64-gnu-0.4.7.tgz'
     )
     downloadNpmPackage(
-      '@libsql/libsql-linux-x64-gnu',
+      '@libsql/linux-arm64-musl',
+      'https://registry.npmjs.org/@libsql/linux-arm64-musl/-/linux-arm64-musl-0.4.7.tgz'
+    )
+    downloadNpmPackage(
+      '@libsql/linux-x64-gnu',
       'https://registry.npmjs.org/@libsql/linux-x64-gnu/-/linux-x64-gnu-0.4.7.tgz'
+    )
+    downloadNpmPackage(
+      '@libsql/linux-x64-musl',
+      'https://registry.npmjs.org/@libsql/linux-x64-musl/-/linux-x64-musl-0.4.7.tgz'
     )
   }
 }
