@@ -27,6 +27,13 @@ async function downloadNpm(platform) {
       'https://registry.npmjs.org/@libsql/linux-x64-musl/-/linux-x64-musl-0.4.7.tgz'
     )
   }
+
+  if (!platform || platform === 'windows') {
+    downloadNpmPackage(
+      '@libsql/win32-x64-msvc',
+      'https://registry.npmjs.org/@libsql/win32-x64-msvc/-/win32-x64-msvc-0.4.7.tgz'
+    )
+  }
 }
 
 const platformArg = process.argv[2]

@@ -26,6 +26,11 @@ exports.default = async function (context) {
     const _arch = arch === Arch.arm64 ? ['linux-arm64-gnu', 'linux-arm64-musl'] : ['linux-x64-gnu', 'linux-x64-musl']
     removeDifferentArchNodeFiles(node_modules_path, '@libsql', _arch)
   }
+
+  if (platform === 'windows') {
+    const node_modules_path = path.join(context.appOutDir, 'resources', 'app.asar.unpacked', 'node_modules')
+    removeDifferentArchNodeFiles(node_modules_path, '@libsql', ['win32-x64-msvc'])
+  }
 }
 
 function removeDifferentArchNodeFiles(nodeModulesPath, packageName, arch) {
