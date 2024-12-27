@@ -32,9 +32,11 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
 
   return (
     <DropdownButton size="small" type="default" onClick={onSelectModel}>
-      <ModelAvatar model={model} size={20} />
-      <ModelName>{model ? model.name : t('button.select_model')}</ModelName>
-      {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
+      <ButtonContent>
+        <ModelAvatar model={model} size={20} />
+        <ModelName>{model ? model.name : t('button.select_model')}</ModelName>
+        {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
+      </ButtonContent>
     </DropdownButton>
   )
 }
@@ -47,6 +49,12 @@ const DropdownButton = styled(Button)`
   box-shadow: none;
   background-color: transparent;
   border: 1px solid transparent;
+`
+
+const ButtonContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `
 
 const ModelName = styled.span`

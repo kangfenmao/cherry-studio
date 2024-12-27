@@ -93,7 +93,7 @@
     "@types/react-infinite-scroll-component": "^5.0.0",
     "@types/tinycolor2": "^1",
     "@vitejs/plugin-react": "^4.2.1",
-    "antd": "^5.18.3",
+    "antd": "^5.22.5",
     "axios": "^1.7.3",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.11",

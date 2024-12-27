@@ -152,7 +152,7 @@ export const VISION_REGEX = new RegExp(
 )
 
 export const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview/i
-export const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|base|retrieval|uae-|gte-)/i
+export const EMBEDDING_REGEX = /(?:^text-|embed|rerank|davinci|babbage|bge-|e5-|LLM2Vec|retrieval|uae-|gte-)/i
 export const NOT_SUPPORTED_REGEX = /(?:^tts|rerank|whisper|speech)/i
 
 export function getModelLogo(modelId: string) {
