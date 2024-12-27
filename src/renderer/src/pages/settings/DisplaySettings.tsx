@@ -117,8 +117,8 @@ const DisplaySettings: FC = () => {
         <SettingTitle>{t('settings.display.custom.css')}</SettingTitle>
         <SettingDivider />
         <Input.TextArea
-          value={customCss}
-          onChange={(e) => dispatch(setCustomCss(e.target.value))}
+          defaultValue={customCss}
+          onBlur={(e) => dispatch(setCustomCss(e.target.value))}
           placeholder={t('settings.display.custom.css.placeholder')}
           style={{
             minHeight: 200,
