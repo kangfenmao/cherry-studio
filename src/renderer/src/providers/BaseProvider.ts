@@ -98,4 +98,16 @@ export default abstract class BaseProvider {
 
     return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', references)
   }
+
+  protected getCustomParameters(assistant: Assistant) {
+    return (
+      assistant?.settings?.customParameters?.reduce(
+        (acc, param) => ({
+          ...acc,
+          [param.name]: param.value
+        }),
+        {}
+      ) || {}
+    )
+  }
 }

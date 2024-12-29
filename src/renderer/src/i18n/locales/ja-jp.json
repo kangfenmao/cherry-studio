@@ -568,7 +568,16 @@
       "free": "無料モデル",
       "embedding": "埋め込みモデル",
       "embedding_model": "埋め込みモデル",
-      "embedding_model_tooltip": "設定->モデルサービス->管理で追加"
+      "embedding_model_tooltip": "設定->モデルサービス->管理で追加",
+      "dimensions": "{{dimensions}} 次元",
+      "custom_parameters": "カスタムパラメータ",
+      "add_parameter": "パラメータを追加",
+      "parameter_name": "パラメータ名",
+      "parameter_type": {
+        "string": "テキスト",
+        "number": "数値",
+        "boolean": "真偽値"
+      }
     },
     "prompts": {
       "summarize": "あなたは会話を得意とするアシスタントです。ユーザーの会話を10文字以内のタイトルに要約し、ユーザーの主言語と一致していることを確認してください。句読点や特殊記号は使用しないでください。"

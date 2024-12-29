@@ -586,7 +586,15 @@
       "embedding": "Embedding",
       "embedding_model": "Embedding Model",
       "embedding_model_tooltip": "Add in Settings->Model Provider->Manage",
-      "dimensions": "Dimensions {{dimensions}}"
+      "dimensions": "Dimensions {{dimensions}}",
+      "custom_parameters": "Custom Parameters",
+      "add_parameter": "Add Parameter",
+      "parameter_name": "Parameter Name",
+      "parameter_type": {
+        "string": "Text",
+        "number": "Number",
+        "boolean": "Boolean"
+      }
     },
     "prompts": {
       "summarize": "You are an assistant who is good at conversation. You need to summarize the user's conversation into a title of 10 characters or less, ensuring it matches the user's primary language without using punctuation or other special symbols."

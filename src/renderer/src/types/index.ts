@@ -30,6 +30,11 @@ export type AssistantSettings = {
   streamOutput: boolean
   hideMessages: boolean
   autoResetModel: boolean
+  customParameters?: {
+    name: string
+    value: string | number | boolean
+    type: 'string' | 'number' | 'boolean'
+  }[]
 }
 
 export type Agent = Omit<Assistant, 'model'>

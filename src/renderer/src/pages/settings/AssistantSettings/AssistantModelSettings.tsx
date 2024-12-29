@@ -1,11 +1,11 @@
-import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { DeleteOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
 import { HStack } from '@renderer/components/Layout'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { SettingRow } from '@renderer/pages/settings'
 import { Assistant, AssistantSettings } from '@renderer/types'
-import { Button, Col, Divider, InputNumber, Row, Slider, Switch, Tooltip } from 'antd'
+import { Button, Col, Divider, Input, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -25,6 +25,13 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const [defaultModel, setDefaultModel] = useState(assistant?.defaultModel)
   const [topP, setTopP] = useState(assistant?.settings?.topP ?? 1)
+  const [customParameters, setCustomParameters] = useState<
+    Array<{
+      name: string
+      value: string | number | boolean
+      type: 'string' | 'number' | 'boolean'
+    }>
+  >(assistant?.settings?.customParameters ?? [])
   const { t } = useTranslation()
 
   const onTemperatureChange = (value) => {
@@ -51,6 +58,77 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
     }
   }
 
+  const onAddCustomParameter = () => {
+    const newParam = { name: '', value: '', type: 'string' as const }
+    const newParams = [...customParameters, newParam]
+    setCustomParameters(newParams)
+    updateAssistantSettings({ customParameters: newParams })
+  }
+
+  const onUpdateCustomParameter = (
+    index: number,
+    field: 'name' | 'value' | 'type',
+    value: string | number | boolean
+  ) => {
+    const newParams = [...customParameters]
+    if (field === 'type') {
+      let defaultValue: any = ''
+      switch (value) {
+        case 'number':
+          defaultValue = 0
+          break
+        case 'boolean':
+          defaultValue = false
+          break
+        default:
+          defaultValue = ''
+      }
+      newParams[index] = {
+        ...newParams[index],
+        type: value as any,
+        value: defaultValue
+      }
+    } else {
+      newParams[index] = { ...newParams[index], [field]: value }
+    }
+    setCustomParameters(newParams)
+    updateAssistantSettings({ customParameters: newParams })
+  }
+
+  const renderParameterValueInput = (param: (typeof customParameters)[0], index: number) => {
+    switch (param.type) {
+      case 'number':
+        return (
+          <InputNumber
+            style={{ width: '100%' }}
+            value={param.value as number}
+            onChange={(value) => onUpdateCustomParameter(index, 'value', value || 0)}
+            step={0.01}
+          />
+        )
+      case 'boolean':
+        return (
+          <Switch
+            checked={param.value as boolean}
+            onChange={(checked) => onUpdateCustomParameter(index, 'value', checked)}
+          />
+        )
+      default:
+        return (
+          <Input
+            value={param.value as string}
+            onChange={(e) => onUpdateCustomParameter(index, 'value', e.target.value)}
+          />
+        )
+    }
+  }
+
+  const onDeleteCustomParameter = (index: number) => {
+    const newParams = customParameters.filter((_, i) => i !== index)
+    setCustomParameters(newParams)
+    updateAssistantSettings({ customParameters: newParams })
+  }
+
   const onReset = () => {
     setTemperature(DEFAULT_TEMPERATURE)
     setContextCount(DEFAULT_CONTEXTCOUNT)
@@ -58,13 +136,15 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
     setMaxTokens(0)
     setStreamOutput(true)
     setTopP(1)
+    setCustomParameters([])
     updateAssistantSettings({
       temperature: DEFAULT_TEMPERATURE,
       contextCount: DEFAULT_CONTEXTCOUNT,
       enableMaxTokens: false,
       maxTokens: 0,
       streamOutput: true,
-      topP: 1
+      topP: 1,
+      customParameters: []
     })
   }
 
@@ -249,6 +329,38 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
           }}
         />
       </SettingRow>
+      <Divider style={{ margin: '10px 0' }} />
+      <SettingRow style={{ minHeight: 30 }}>
+        <Label>{t('models.custom_parameters')}</Label>
+        <Button icon={<PlusOutlined />} onClick={onAddCustomParameter}>
+          {t('models.add_parameter')}
+        </Button>
+      </SettingRow>
+      {customParameters.map((param, index) => (
+        <Row key={index} align="middle" gutter={10} style={{ marginTop: 10 }}>
+          <Col span={6}>
+            <Input
+              placeholder={t('models.parameter_name')}
+              value={param.name}
+              onChange={(e) => onUpdateCustomParameter(index, 'name', e.target.value)}
+            />
+          </Col>
+          <Col span={4}>
+            <Select
+              value={param.type}
+              onChange={(value) => onUpdateCustomParameter(index, 'type', value)}
+              style={{ width: '100%' }}>
+              <Select.Option value="string">{t('models.parameter_type.string')}</Select.Option>
+              <Select.Option value="number">{t('models.parameter_type.number')}</Select.Option>
+              <Select.Option value="boolean">{t('models.parameter_type.boolean')}</Select.Option>
+            </Select>
+          </Col>
+          <Col span={11}>{renderParameterValueInput(param, index)}</Col>
+          <Col span={3}>
+            <Button icon={<DeleteOutlined />} onClick={() => onDeleteCustomParameter(index)} danger />
+          </Col>
+        </Row>
+      ))}
       <Divider style={{ margin: '15px 0' }} />
       <HStack justifyContent="flex-end">
         <Button onClick={onReset} style={{ width: 80 }} danger type="primary">

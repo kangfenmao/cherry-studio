@@ -96,7 +96,8 @@ export default class GeminiProvider extends BaseProvider {
         generationConfig: {
           maxOutputTokens: maxTokens,
           temperature: assistant?.settings?.temperature,
-          topP: assistant?.settings?.topP
+          topP: assistant?.settings?.topP,
+          ...this.getCustomParameters(assistant)
         },
         safetySettings: [
           { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },

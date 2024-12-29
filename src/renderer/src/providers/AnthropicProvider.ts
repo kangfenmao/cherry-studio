@@ -87,7 +87,8 @@ export default class AnthropicProvider extends BaseProvider {
       max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
       temperature: assistant?.settings?.temperature,
       top_p: assistant?.settings?.topP,
-      system: assistant.prompt
+      system: assistant.prompt,
+      ...this.getCustomParameters(assistant)
     }
 
     let time_first_token_millsec = 0

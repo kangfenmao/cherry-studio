@@ -1,4 +1,4 @@
-import { CheckOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
+import { CheckOutlined, DeleteOutlined, PlusOutlined, QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
 import {
@@ -29,7 +29,7 @@ import {
   setShowMessageDivider
 } from '@renderer/store/settings'
 import { Assistant, AssistantSettings, ThemeMode } from '@renderer/types'
-import { Col, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
+import { Button, Col, Input, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -102,7 +102,8 @@ const SettingsTab: FC<Props> = (props) => {
         maxTokens: DEFAULT_MAX_TOKENS,
         streamOutput: true,
         hideMessages: false,
-        autoResetModel: false
+        autoResetModel: false,
+        customParameters: []
       }
     })
   }
@@ -202,6 +203,106 @@ const SettingsTab: FC<Props> = (props) => {
             />
           </Col>
         </Row>
+        {assistant?.settings?.customParameters?.map((param, index) => (
+          <ParameterCard key={index}>
+            <Row align="middle" gutter={8} style={{ marginBottom: 8 }}>
+              <Col span={14}>
+                <Input
+                  placeholder={t('models.parameter_name')}
+                  value={param.name}
+                  onChange={(e) => {
+                    const newParams = [...(assistant?.settings?.customParameters || [])]
+                    newParams[index] = { ...param, name: e.target.value }
+                    onUpdateAssistantSettings({ customParameters: newParams })
+                  }}
+                />
+              </Col>
+              <Col span={10}>
+                <Select
+                  value={param.type}
+                  onChange={(value: 'string' | 'number' | 'boolean') => {
+                    const newParams = [...(assistant?.settings?.customParameters || [])]
+                    let defaultValue: any = ''
+                    switch (value) {
+                      case 'number':
+                        defaultValue = 0
+                        break
+                      case 'boolean':
+                        defaultValue = false
+                        break
+                      default:
+                        defaultValue = ''
+                    }
+                    newParams[index] = { ...param, type: value, value: defaultValue }
+                    onUpdateAssistantSettings({ customParameters: newParams })
+                  }}
+                  style={{ width: '100%' }}>
+                  <Select.Option value="string">{t('models.parameter_type.string')}</Select.Option>
+                  <Select.Option value="number">{t('models.parameter_type.number')}</Select.Option>
+                  <Select.Option value="boolean">{t('models.parameter_type.boolean')}</Select.Option>
+                </Select>
+              </Col>
+            </Row>
+            <Row align="middle" gutter={10}>
+              <Col span={20}>
+                {param.type === 'boolean' ? (
+                  <Switch
+                    checked={param.value as boolean}
+                    onChange={(checked) => {
+                      const newParams = [...(assistant?.settings?.customParameters || [])]
+                      newParams[index] = { ...param, value: checked }
+                      onUpdateAssistantSettings({ customParameters: newParams })
+                    }}
+                  />
+                ) : param.type === 'number' ? (
+                  <InputNumber
+                    style={{ width: '100%' }}
+                    value={param.value as number}
+                    onChange={(value) => {
+                      const newParams = [...(assistant?.settings?.customParameters || [])]
+                      newParams[index] = { ...param, value: value || 0 }
+                      onUpdateAssistantSettings({ customParameters: newParams })
+                    }}
+                    step={0.01}
+                  />
+                ) : (
+                  <Input
+                    value={typeof param.value === 'string' ? param.value : JSON.stringify(param.value)}
+                    onChange={(e) => {
+                      const newParams = [...(assistant?.settings?.customParameters || [])]
+                      newParams[index] = { ...param, value: e.target.value }
+                      onUpdateAssistantSettings({ customParameters: newParams })
+                    }}
+                  />
+                )}
+              </Col>
+              <Col span={4}>
+                <Button
+                  icon={<DeleteOutlined />}
+                  onClick={() => {
+                    const newParams = [...(assistant?.settings?.customParameters || [])]
+                    newParams.splice(index, 1)
+                    onUpdateAssistantSettings({ customParameters: newParams })
+                  }}
+                  danger
+                  style={{ width: '100%' }}
+                />
+              </Col>
+            </Row>
+          </ParameterCard>
+        ))}
+        <Button
+          icon={<PlusOutlined />}
+          onClick={() => {
+            const newParams = [
+              ...(assistant?.settings?.customParameters || []),
+              { name: '', value: '', type: 'string' as const }
+            ]
+            onUpdateAssistantSettings({ customParameters: newParams })
+          }}
+          style={{ marginBottom: 0, width: '100%', borderStyle: 'dashed' }}>
+          {t('models.add_parameter')}
+        </Button>
       </SettingGroup>
       <SettingGroup>
         <SettingSubtitle style={{ marginTop: 0 }}>{t('settings.messages.title')}</SettingSubtitle>
@@ -416,6 +517,17 @@ export const SettingGroup = styled.div<{ theme?: ThemeMode }>`
   margin-bottom: 10px;
   border: 0.5px solid var(--color-border);
   background: var(--color-group-background);
+`
+
+const ParameterCard = styled.div`
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-background);
+  &:last-child {
+    margin-bottom: 12px;
+  }
 `
 
 export default SettingsTab
