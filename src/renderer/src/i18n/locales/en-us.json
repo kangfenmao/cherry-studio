@@ -417,6 +417,7 @@
       "models.translate_model_prompt_title": "Translate Model Prompt",
       "models.topic_naming_model_setting_title": "Topic Naming Model Settings",
       "models.enable_topic_naming": "Topic Auto Naming",
+      "models.topic_naming_prompt": "Topic Naming Prompt",
       "provider": {
         "add.name": "Provider Name",
         "add.name.placeholder": "Example: OpenAI",
@@ -586,6 +587,9 @@
       "embedding_model": "Embedding Model",
       "embedding_model_tooltip": "Add in Settings->Model Provider->Manage",
       "dimensions": "Dimensions {{dimensions}}"
+    },
+    "prompts": {
+      "summarize": "You are an assistant who is good at conversation. You need to summarize the user's conversation into a title of 10 characters or less, ensuring it matches the user's primary language without using punctuation or other special symbols."
     }
   }
 }

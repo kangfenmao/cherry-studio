@@ -1,8 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@renderer/store'
+import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   SendMessageShortcut,
   setSendMessageShortcut as _setSendMessageShortcut,
   setTheme,
+  SettingsState,
   setTopicPosition,
   setTray,
   setWindowStyle
@@ -40,4 +41,8 @@ export function useMessageStyle() {
   return {
     isBubbleStyle
   }
+}
+
+export const getStoreSetting = (key: keyof SettingsState) => {
+  return store.getState().settings[key]
 }

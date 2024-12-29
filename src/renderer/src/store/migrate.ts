@@ -771,6 +771,10 @@ const migrateConfig = {
       enabled: false
     })
     return state
+  },
+  '51': (state: RootState) => {
+    state.settings.topicNamingPrompt = ''
+    return state
   }
 }
 

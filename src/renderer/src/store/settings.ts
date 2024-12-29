@@ -45,6 +45,7 @@ export interface SettingsState {
   showMinappIcon: boolean
   showFilesIcon: boolean
   customCss: string
+  topicNamingPrompt: string
 }
 
 const initialState: SettingsState = {
@@ -85,7 +86,8 @@ const initialState: SettingsState = {
   enableTopicNaming: true,
   showMinappIcon: true,
   showFilesIcon: true,
-  customCss: ''
+  customCss: '',
+  topicNamingPrompt: ''
 }
 
 const settingsSlice = createSlice({
@@ -212,6 +214,9 @@ const settingsSlice = createSlice({
     },
     setCustomCss: (state, action: PayloadAction<string>) => {
       state.customCss = action.payload
+    },
+    setTopicNamingPrompt: (state, action: PayloadAction<string>) => {
+      state.topicNamingPrompt = action.payload
     }
   }
 })
@@ -256,7 +261,8 @@ export const {
   setShowMinappIcon,
   setShowFilesIcon,
   setPasteLongTextThreshold,
-  setCustomCss
+  setCustomCss,
+  setTopicNamingPrompt
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

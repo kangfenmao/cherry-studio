@@ -9,7 +9,8 @@ import {
   TextPart
 } from '@google/generative-ai'
 import { isEmbeddingModel, isWebSearchModel } from '@renderer/config/models'
-import { SUMMARIZE_PROMPT } from '@renderer/config/prompts'
+import { getStoreSetting } from '@renderer/hooks/useSettings'
+import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
@@ -198,7 +199,7 @@ export default class GeminiProvider extends BaseProvider {
 
     const systemMessage = {
       role: 'system',
-      content: SUMMARIZE_PROMPT
+      content: (getStoreSetting('topicNamingPrompt') as string) || i18n.t('prompts.summarize')
     }
 
     const userMessage = {

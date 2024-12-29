@@ -1,8 +1,8 @@
 import { HStack } from '@renderer/components/Layout'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
-import { setEnableTopicNaming } from '@renderer/store/settings'
-import { Divider, Modal, Switch } from 'antd'
+import { setEnableTopicNaming, setTopicNamingPrompt } from '@renderer/store/settings'
+import { Button, Divider, Input, Modal, Switch } from 'antd'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +15,7 @@ interface Props {
 const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const [open, setOpen] = useState(true)
   const { t } = useTranslation()
-  const { enableTopicNaming } = useSettings()
+  const { enableTopicNaming, topicNamingPrompt } = useSettings()
   const dispatch = useAppDispatch()
 
   const onOk = () => {
@@ -28,6 +28,10 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
 
   const onClose = () => {
     resolve({})
+  }
+
+  const handleReset = () => {
+    dispatch(setTopicNamingPrompt(''))
   }
 
   TopicNamingModalPopup.hide = onCancel
@@ -47,6 +51,21 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
         <div>{t('settings.models.enable_topic_naming')}</div>
         <Switch checked={enableTopicNaming} onChange={(v) => dispatch(setEnableTopicNaming(v))} />
       </HStack>
+      <Divider style={{ margin: '10px 0' }} />
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 10 }}>{t('settings.models.topic_naming_prompt')}</div>
+        <Input.TextArea
+          rows={4}
+          value={topicNamingPrompt || t('prompts.summarize')}
+          onChange={(e) => dispatch(setTopicNamingPrompt(e.target.value.trim()))}
+          placeholder={t('prompts.summarize')}
+        />
+        {topicNamingPrompt && (
+          <Button style={{ marginTop: 10 }} onClick={handleReset}>
+            {t('common.reset')}
+          </Button>
+        )}
+      </div>
     </Modal>
   )
 }

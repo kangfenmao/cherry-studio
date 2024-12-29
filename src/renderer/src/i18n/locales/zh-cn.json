@@ -418,6 +418,7 @@
       "models.translate_model_prompt_title": "翻译模型提示词",
       "models.topic_naming_model_setting_title": "话题命名模型设置",
       "models.enable_topic_naming": "话题自动重命名",
+      "models.topic_naming_prompt": "话题命名提示词",
       "provider": {
         "add.name": "提供商名称",
         "add.name.placeholder": "例如 OpenAI",
@@ -575,6 +576,9 @@
       "embedding_model": "嵌入模型",
       "embedding_model_tooltip": "在设置->模型服务中点击管理按钮添加",
       "dimensions": "{{dimensions}} 维"
+    },
+    "prompts": {
+      "summarize": "你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，标题语言与用户的首要语言一致，不要使用标点符号和其他特殊符号"
     }
   }
 }
