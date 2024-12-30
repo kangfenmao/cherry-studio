@@ -1577,7 +1577,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@llm-tools/embedjs-loader-markdown@npm:^0.1.25":
+"@llm-tools/embedjs-loader-markdown@npm:0.1.25":
   version: 0.1.25
   resolution: "@llm-tools/embedjs-loader-markdown@npm:0.1.25"
   dependencies:
@@ -1589,6 +1589,21 @@ __metadata:
     micromark-extension-gfm: "npm:^3.0.0"
     micromark-extension-mdx-jsx: "npm:^3.0.1"
   checksum: 10c0/9cc540a654ece8d108766962017225167d324c40fd1911b1ccd5b749820a3b4e475ca008ef02fc0094bf698de6a87cda672168c4741d2aabb549380b0b64937c
+  languageName: node
+  linkType: hard
+
+"@llm-tools/embedjs-loader-markdown@patch:@llm-tools/embedjs-loader-markdown@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-loader-markdown-npm-0.1.25-d1d536d640.patch":
+  version: 0.1.25
+  resolution: "@llm-tools/embedjs-loader-markdown@patch:@llm-tools/embedjs-loader-markdown@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-loader-markdown-npm-0.1.25-d1d536d640.patch::version=0.1.25&hash=3a7d12"
+  dependencies:
+    "@llm-tools/embedjs-interfaces": "npm:0.1.25"
+    "@llm-tools/embedjs-loader-web": "npm:0.1.25"
+    debug: "npm:^4.4.0"
+    md5: "npm:^2.3.0"
+    micromark: "npm:^4.0.1"
+    micromark-extension-gfm: "npm:^3.0.0"
+    micromark-extension-mdx-jsx: "npm:^3.0.1"
+  checksum: 10c0/8e91a1260f8c94ec516be13a5105055bf140b5c63a85fa3c7641cc8f6799a0410ddb6bce61db858e91712f7dbc2b333269eb7c3ce813c1d95416f49f4f4f31a5
   languageName: node
   linkType: hard
 
@@ -2846,7 +2861,7 @@ __metadata:
     "@llm-tools/embedjs": "patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch"
     "@llm-tools/embedjs-libsql": "patch:@llm-tools/embedjs-libsql@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-libsql-npm-0.1.25-fad000d74c.patch"
     "@llm-tools/embedjs-loader-csv": "npm:^0.1.25"
-    "@llm-tools/embedjs-loader-markdown": "npm:^0.1.25"
+    "@llm-tools/embedjs-loader-markdown": "patch:@llm-tools/embedjs-loader-markdown@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-loader-markdown-npm-0.1.25-d1d536d640.patch"
     "@llm-tools/embedjs-loader-msoffice": "npm:^0.1.25"
     "@llm-tools/embedjs-loader-pdf": "npm:^0.1.25"
     "@llm-tools/embedjs-loader-sitemap": "npm:^0.1.25"

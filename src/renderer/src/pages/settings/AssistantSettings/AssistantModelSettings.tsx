@@ -337,7 +337,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
         </Button>
       </SettingRow>
       {customParameters.map((param, index) => (
-        <Row key={index} align="middle" gutter={10} style={{ marginTop: 10 }}>
+        <Row key={index} align="stretch" gutter={10} style={{ marginTop: 10 }}>
           <Col span={6}>
             <Input
               placeholder={t('models.parameter_name')}
@@ -355,8 +355,8 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
               <Select.Option value="boolean">{t('models.parameter_type.boolean')}</Select.Option>
             </Select>
           </Col>
-          <Col span={11}>{renderParameterValueInput(param, index)}</Col>
-          <Col span={3}>
+          <Col span={12}>{renderParameterValueInput(param, index)}</Col>
+          <Col span={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button icon={<DeleteOutlined />} onClick={() => onDeleteCustomParameter(index)} danger />
           </Col>
         </Row>

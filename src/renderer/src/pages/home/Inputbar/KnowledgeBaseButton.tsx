@@ -62,6 +62,7 @@ const KnowledgeBaseButton: FC<Props> = ({ selectedBase, onSelect, disabled, Tool
       <Popover
         placement="top"
         content={<KnowledgeBaseSelector selectedBase={selectedBase} onSelect={onSelect} />}
+        overlayStyle={{ maxWidth: 400 }}
         trigger="click">
         <ToolbarButton type="text" onClick={() => selectedBase && onSelect(undefined)} disabled={disabled}>
           <FileSearchOutlined style={{ color: selectedBase ? 'var(--color-link)' : 'var(--color-icon)' }} />
