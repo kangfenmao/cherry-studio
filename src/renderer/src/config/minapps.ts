@@ -6,6 +6,7 @@ import DoubaoAppLogo from '@renderer/assets/images/apps/doubao.png'
 import DuckDuckGoAppLogo from '@renderer/assets/images/apps/duckduckgo.webp'
 import FeloAppLogo from '@renderer/assets/images/apps/felo.png'
 import GeminiAppLogo from '@renderer/assets/images/apps/gemini.png'
+import GensparkLogo from '@renderer/assets/images/apps/genspark.jpg'
 import GithubCopilotLogo from '@renderer/assets/images/apps/github-copilot.webp'
 import HuggingChatLogo from '@renderer/assets/images/apps/huggingchat.svg'
 import KimiAppLogo from '@renderer/assets/images/apps/kimi.jpg'
@@ -230,6 +231,12 @@ const _apps: MinAppType[] = [
     name: 'GitHub Copilot',
     logo: GithubCopilotLogo,
     url: 'https://github.com/copilot'
+  },
+  {
+    id: 'genspark',
+    name: 'Genspark',
+    logo: GensparkLogo,
+    url: 'https://www.genspark.ai/'
   }
 ]
 
