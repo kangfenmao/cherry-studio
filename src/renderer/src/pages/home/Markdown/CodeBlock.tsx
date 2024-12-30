@@ -3,6 +3,7 @@ import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useSyntaxHighlighter } from '@renderer/context/SyntaxHighlighterProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import React, { memo, useEffect, useRef, useState } from 'react'
+import DOMPurify from 'dompurify'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -37,6 +38,7 @@ const ExpandButton: React.FC<{
     </ExpandButtonWrapper>
   )
 }
+const ALLOWED_TAGS = ['sub'] // 允许的HTML标签
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
   const match = /language-(\w+)/.exec(className || '')
@@ -133,7 +135,15 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => {
       {language === 'html' && children?.includes('</html>') && <Artifacts html={children} />}
     </CodeBlockWrapper>
   ) : (
-    <code className={className}>{children}</code>
+    <code
+      className={className}
+      dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(children, {
+          ALLOWED_TAGS,
+          ALLOWED_ATTR: [] // 不允许任何属性
+        })
+      }}
+    />
   )
 }
 
