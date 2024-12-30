@@ -29,7 +29,7 @@ interface KnowledgeContentProps {
   selectedBase: KnowledgeBase
 }
 
-const fileTypes = ['.pdf', '.docx', '.pptx', '.xlsx', '.txt', '.md', '.mdx']
+const fileTypes = ['.pdf', '.docx', '.pptx', '.xlsx', '.txt', '.md']
 
 const FlexColumn = styled.div`
   display: flex;

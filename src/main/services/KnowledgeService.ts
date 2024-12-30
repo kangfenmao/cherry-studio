@@ -122,7 +122,7 @@ class KnowledgeService {
         return await ragApplication.addLoader(new ExcelLoader({ filePathOrUrl: file.path }) as any, forceReload)
       }
 
-      if (['.md', '.mdx'].includes(file.ext)) {
+      if (['.md'].includes(file.ext)) {
         return await ragApplication.addLoader(new MarkdownLoader({ filePathOrUrl: file.path }) as any, forceReload)
       }
 

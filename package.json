@@ -53,7 +53,7 @@
     "@llm-tools/embedjs": "patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch",
     "@llm-tools/embedjs-libsql": "patch:@llm-tools/embedjs-libsql@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-libsql-npm-0.1.25-fad000d74c.patch",
     "@llm-tools/embedjs-loader-csv": "^0.1.25",
-    "@llm-tools/embedjs-loader-markdown": "^0.1.25",
+    "@llm-tools/embedjs-loader-markdown": "patch:@llm-tools/embedjs-loader-markdown@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-loader-markdown-npm-0.1.25-d1d536d640.patch",
     "@llm-tools/embedjs-loader-msoffice": "^0.1.25",
     "@llm-tools/embedjs-loader-pdf": "^0.1.25",
     "@llm-tools/embedjs-loader-sitemap": "^0.1.25",
