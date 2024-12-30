@@ -39,6 +39,7 @@ nsis:
   createDesktopShortcut: always
   allowToChangeInstallationDirectory: true
   oneClick: false
+  include: build/nsis-installer.nsh
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   notarize: false
