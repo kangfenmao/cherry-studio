@@ -15,7 +15,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { translateText } from '@renderer/services/TranslateService'
 import { Message, Model } from '@renderer/types'
 import { removeTrailingDoubleSpaces } from '@renderer/utils'
-import { Dropdown, Popconfirm, Tooltip } from 'antd'
+import { Button, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,6 +31,7 @@ interface Props {
   setModel: (model: Model) => void
   onEditMessage?: (message: Message) => void
   onDeleteMessage?: (message: Message) => void
+  onGetMessages?: () => Message[]
 }
 
 const MessageMenubar: FC<Props> = (props) => {
@@ -43,7 +44,8 @@ const MessageMenubar: FC<Props> = (props) => {
     assistantModel,
     setModel,
     onEditMessage,
-    onDeleteMessage
+    onDeleteMessage,
+    onGetMessages
   } = props
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
@@ -75,10 +77,43 @@ const MessageMenubar: FC<Props> = (props) => {
     })
   }, [index, t])
 
+  const onResend = useCallback(() => {
+    const _messages = onGetMessages?.() || []
+    const index = _messages.findIndex((m) => m.id === message.id)
+    const nextIndex = index + 1
+    const nextMessage = _messages[nextIndex]
+
+    if (nextMessage && nextMessage.role === 'assistant') {
+      EventEmitter.emit(EVENT_NAMES.RESEND_MESSAGE + ':' + nextMessage.id, {
+        ...nextMessage,
+        content: '',
+        status: 'sending',
+        modelId: assistantModel?.id || model?.id,
+        translatedContent: undefined
+      })
+    }
+  }, [assistantModel?.id, message.id, model?.id, onGetMessages])
+
   const onEdit = useCallback(async () => {
-    const editedText = await TextEditPopup.show({ text: message.content })
+    let resendMessage = false
+
+    const editedText = await TextEditPopup.show({
+      text: message.content,
+      children: (props) => (
+        <ReSendButton
+          icon={<i className="iconfont icon-ic_send" style={{ color: 'var(--color-primary)' }} />}
+          onClick={() => {
+            props.onOk?.()
+            resendMessage = true
+          }}>
+          {t('chat.resend')}
+        </ReSendButton>
+      )
+    })
+
     editedText && onEditMessage?.({ ...message, content: editedText })
-  }, [message, onEditMessage])
+    resendMessage && onResend()
+  }, [message, onEditMessage, onResend, t])
 
   const handleTranslate = useCallback(
     async (language: string) => {
@@ -285,6 +320,12 @@ const ActionButton = styled.div`
   .icon-at1 {
     font-size: 16px;
   }
+`
+
+const ReSendButton = styled(Button)`
+  position: absolute;
+  top: 10px;
+  left: 0;
 `
 
 export default MessageMenubar

@@ -112,7 +112,8 @@
       "topics.list": "Topic List",
       "topics.move_to": "Move to",
       "topics.title": "Topics",
-      "translate": "Translate"
+      "translate": "Translate",
+      "resend": "Resend"
     },
     "common": {
       "and": "and",

@@ -112,7 +112,8 @@
       "topics.list": "Список топиков",
       "topics.move_to": "Переместить в",
       "topics.title": "Топики",
-      "translate": "Перевести"
+      "translate": "Перевести",
+      "resend": "Переотправить"
     },
     "common": {
       "and": "и",

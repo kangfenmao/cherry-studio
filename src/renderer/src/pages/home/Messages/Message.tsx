@@ -86,9 +86,12 @@ const MessageItem: FC<Props> = ({
   }
 
   useEffect(() => {
-    const unsubscribes = [EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, messageHighlightHandler)]
+    const unsubscribes = [
+      EventEmitter.on(EVENT_NAMES.LOCATE_MESSAGE + ':' + message.id, messageHighlightHandler),
+      EventEmitter.on(EVENT_NAMES.RESEND_MESSAGE + ':' + message.id, onEditMessage)
+    ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [message])
+  }, [message, onEditMessage])
 
   useEffect(() => {
     if (message.role === 'user' && !message.usage) {
@@ -178,6 +181,7 @@ const MessageItem: FC<Props> = ({
               setModel={setModel}
               onEditMessage={onEditMessage}
               onDeleteMessage={onDeleteMessage}
+              onGetMessages={onGetMessages}
             />
           </MessageFooter>
         )}

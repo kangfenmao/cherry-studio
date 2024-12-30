@@ -112,7 +112,8 @@
       "topics.list": "トピックリスト",
       "topics.move_to": "移動先",
       "topics.title": "トピック",
-      "translate": "翻訳"
+      "translate": "翻訳",
+      "resend": "再送信"
     },
     "common": {
       "and": "と",
