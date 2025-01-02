@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
+import { modelGenerating } from '@renderer/hooks/useRuntime'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { translateText } from '@renderer/services/TranslateService'
 import { Message, Model } from '@renderer/types'
@@ -69,7 +70,8 @@ const MessageMenubar: FC<Props> = (props) => {
     [setModel]
   )
 
-  const onNewBranch = useCallback(() => {
+  const onNewBranch = useCallback(async () => {
+    await modelGenerating()
     EventEmitter.emit(EVENT_NAMES.NEW_BRANCH, index)
     window.message.success({
       content: t('chat.message.new.branch.created'),
@@ -77,7 +79,8 @@ const MessageMenubar: FC<Props> = (props) => {
     })
   }, [index, t])
 
-  const onResend = useCallback(() => {
+  const onResend = useCallback(async () => {
+    await modelGenerating()
     const _messages = onGetMessages?.() || []
     const index = _messages.findIndex((m) => m.id === message.id)
     const nextIndex = index + 1
@@ -173,11 +176,13 @@ const MessageMenubar: FC<Props> = (props) => {
   )
 
   const onAtModelRegenerate = async () => {
+    await modelGenerating()
     const selectedModel = await SelectModelPopup.show({ model })
     selectedModel && onRegenerate(selectedModel)
   }
 
-  const onDeleteAndRegenerate = () => {
+  const onDeleteAndRegenerate = async () => {
+    await modelGenerating()
     onEditMessage?.({
       ...message,
       content: '',

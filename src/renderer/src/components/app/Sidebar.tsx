@@ -3,7 +3,7 @@ import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
-import { useRuntime } from '@renderer/hooks/useRuntime'
+import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { Tooltip } from 'antd'
 import { Avatar } from 'antd'
@@ -19,7 +19,6 @@ const Sidebar: FC = () => {
   const { pathname } = useLocation()
   const avatar = useAvatar()
   const { minappShow } = useRuntime()
-  const { generating } = useRuntime()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { windowStyle, showMinappIcon, showFilesIcon } = useSettings()
@@ -33,11 +32,8 @@ const Sidebar: FC = () => {
   const macTransparentWindow = isMac && windowStyle === 'transparent'
   const sidebarBgColor = macTransparentWindow ? 'transparent' : 'var(--navbar-background)'
 
-  const to = (path: string) => {
-    if (generating) {
-      window.message.warning({ content: t('message.switch.disabled'), key: 'switch-assistant' })
-      return
-    }
+  const to = async (path: string) => {
+    await modelGenerating()
     navigate(path)
   }
 

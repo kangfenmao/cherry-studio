@@ -10,11 +10,12 @@ import DragableList from '@renderer/components/DragableList'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { useAssistant, useAssistants } from '@renderer/hooks/useAssistant'
+import { modelGenerating } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { TopicManager } from '@renderer/hooks/useTopic'
 import { fetchMessagesSummary } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import store, { useAppSelector } from '@renderer/store'
+import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
 import { exportTopicAsMarkdown, topicToMarkdown } from '@renderer/utils/export'
@@ -35,46 +36,36 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const { assistants } = useAssistants()
   const { assistant, removeTopic, moveTopic, updateTopic, updateTopics } = useAssistant(_assistant.id)
   const { t } = useTranslation()
-  const generating = useAppSelector((state) => state.runtime.generating)
   const { showTopicTime, topicPosition } = useSettings()
 
   const borderRadius = showTopicTime ? 12 : 17
 
   const onDeleteTopic = useCallback(
-    (topic: Topic) => {
-      if (generating) {
-        window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
-        return
-      }
+    async (topic: Topic) => {
+      await modelGenerating()
       const index = findIndex(assistant.topics, (t) => t.id === topic.id)
       setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
       removeTopic(topic)
     },
-    [assistant.topics, generating, removeTopic, setActiveTopic, t]
+    [assistant.topics, removeTopic, setActiveTopic]
   )
 
   const onMoveTopic = useCallback(
-    (topic: Topic, toAssistant: Assistant) => {
-      if (generating) {
-        window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
-        return
-      }
+    async (topic: Topic, toAssistant: Assistant) => {
+      await modelGenerating()
       const index = findIndex(assistant.topics, (t) => t.id === topic.id)
       setActiveTopic(assistant.topics[index + 1 === assistant.topics.length ? 0 : index + 1])
       moveTopic(topic, toAssistant)
     },
-    [assistant.topics, generating, moveTopic, setActiveTopic, t]
+    [assistant.topics, moveTopic, setActiveTopic]
   )
 
   const onSwitchTopic = useCallback(
-    (topic: Topic) => {
-      if (generating) {
-        window.message.warning({ content: t('message.switch.disabled'), key: 'generating' })
-        return
-      }
+    async (topic: Topic) => {
+      await modelGenerating()
       setActiveTopic(topic)
     },
-    [generating, setActiveTopic, t]
+    [setActiveTopic]
   )
 
   const onClearMessages = useCallback(() => {
