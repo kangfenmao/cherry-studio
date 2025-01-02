@@ -136,6 +136,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     (message: Message) => {
       const _messages = messages.filter((m) => m.id !== message.id)
       setMessages(_messages)
+      setDisplayMessages(_messages)
       db.topics.update(topic.id, { messages: _messages })
       deleteMessageFiles(message)
     },

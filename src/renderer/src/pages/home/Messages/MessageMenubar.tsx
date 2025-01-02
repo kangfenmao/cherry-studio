@@ -14,7 +14,7 @@ import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { translateText } from '@renderer/services/TranslateService'
 import { Message, Model } from '@renderer/types'
-import { removeTrailingDoubleSpaces } from '@renderer/utils'
+import { removeTrailingDoubleSpaces, uuid } from '@renderer/utils'
 import { Button, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { FC, useCallback, useMemo, useState } from 'react'
@@ -92,7 +92,12 @@ const MessageMenubar: FC<Props> = (props) => {
         translatedContent: undefined
       })
     }
-  }, [assistantModel?.id, message.id, model?.id, onGetMessages])
+
+    if (!nextMessage) {
+      onDeleteMessage?.(message)
+      EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, { ...message, id: uuid() })
+    }
+  }, [assistantModel?.id, message, model?.id, onDeleteMessage, onGetMessages])
 
   const onEdit = useCallback(async () => {
     let resendMessage = false
