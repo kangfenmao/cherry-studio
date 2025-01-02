@@ -410,13 +410,11 @@ const SettingRowTitleSmall = styled(SettingRowTitle)`
 `
 
 export const SettingGroup = styled.div<{ theme?: ThemeMode }>`
-  padding: 10px;
+  padding: 10px 5px;
   width: 100%;
   margin-top: 0;
   border-radius: 8px;
   margin-bottom: 10px;
-  border: 0.5px solid var(--color-border);
-  background: var(--color-group-background);
 `
 
 export default SettingsTab
