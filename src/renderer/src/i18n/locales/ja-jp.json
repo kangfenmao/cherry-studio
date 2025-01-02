@@ -277,7 +277,9 @@
       "regenerate.confirm": "これにより、既存の生成画像が置き換えられます。続行しますか？",
       "seed": "シード",
       "seed_tip": "同じシードとプロンプトで似た画像を生成できます",
-      "title": "画像"
+      "title": "画像",
+      "prompt_enhancement": "プロンプト強化",
+      "prompt_enhancement_tip": "オンにすると、プロンプトを詳細でモデルに適したバージョンに書き直します"
     },
     "provider": {
       "aihubmix": "AiHubMix",

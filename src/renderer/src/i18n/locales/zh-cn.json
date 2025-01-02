@@ -280,7 +280,9 @@
       "regenerate.confirm": "这将覆盖已生成的图片，是否继续？",
       "seed": "随机种子",
       "seed_tip": "相同的种子和提示词可以生成相似的图片",
-      "title": "图片"
+      "title": "图片",
+      "prompt_enhancement": "提示词增强",
+      "prompt_enhancement_tip": "开启后将提示重写为详细的、适合模型的版本"
     },
     "provider": {
       "aihubmix": "AiHubMix",

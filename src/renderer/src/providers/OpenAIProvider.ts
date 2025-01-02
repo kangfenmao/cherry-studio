@@ -4,7 +4,7 @@ import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
-import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
+import { Assistant, FileTypes, GenerateImageParams, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeQuotes } from '@renderer/utils'
 import { last, takeRight } from 'lodash'
 import OpenAI, { AzureOpenAI } from 'openai'
@@ -345,6 +345,7 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   public async generateImage({
+    model,
     prompt,
     negativePrompt,
     imageSize,
@@ -352,30 +353,23 @@ export default class OpenAIProvider extends BaseProvider {
     seed,
     numInferenceSteps,
     guidanceScale,
-    signal
-  }: {
-    prompt: string
-    negativePrompt?: string
-    imageSize: string
-    batchSize: number
-    seed?: string
-    numInferenceSteps: number
-    guidanceScale: number
-    signal?: AbortSignal
-  }): Promise<string[]> {
+    signal,
+    promptEnhancement
+  }: GenerateImageParams): Promise<string[]> {
     const response = (await this.sdk.request({
       method: 'post',
       path: '/images/generations',
       signal,
       body: {
-        model: 'stabilityai/stable-diffusion-3-5-large',
+        model,
         prompt,
         negative_prompt: negativePrompt,
         image_size: imageSize,
         batch_size: batchSize,
         seed: seed ? parseInt(seed) : undefined,
         num_inference_steps: numInferenceSteps,
-        guidance_scale: guidanceScale
+        guidance_scale: guidanceScale,
+        prompt_enhancement: promptEnhancement
       }
     })) as { data: Array<{ url: string }> }
 

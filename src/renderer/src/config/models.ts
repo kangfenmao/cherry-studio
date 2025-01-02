@@ -961,6 +961,11 @@ export const TEXT_TO_IMAGES_MODELS = [
   }
 ]
 
+export const TEXT_TO_IMAGES_MODELS_SUPPORT_IMAGE_ENHANCEMENT = [
+  'stabilityai/stable-diffusion-2-1',
+  'stabilityai/stable-diffusion-xl-base-1.0'
+]
+
 export function isTextToImageModel(model: Model): boolean {
   return TEXT_TO_IMAGE_REGEX.test(model.id)
 }

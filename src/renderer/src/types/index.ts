@@ -112,6 +112,7 @@ export type Suggestion = {
 
 export interface Painting {
   id: string
+  model?: string
   urls: string[]
   files: FileType[]
   prompt?: string
@@ -121,7 +122,7 @@ export interface Painting {
   seed?: string
   steps?: number
   guidanceScale?: number
-  model?: string
+  promptEnhancement?: boolean
 }
 
 export type MinAppType = {
@@ -223,4 +224,17 @@ export type KnowledgeBaseParams = {
   apiKey: string
   apiVersion?: string
   baseURL: string
+}
+
+export type GenerateImageParams = {
+  model: string
+  prompt: string
+  negativePrompt?: string
+  imageSize: string
+  batchSize: number
+  seed?: string
+  numInferenceSteps: number
+  guidanceScale: number
+  signal?: AbortSignal
+  promptEnhancement?: boolean
 }

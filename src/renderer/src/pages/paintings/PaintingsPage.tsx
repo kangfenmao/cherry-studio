@@ -6,7 +6,7 @@ import ImageSize3_4 from '@renderer/assets/images/paintings/image-size-3-4.svg'
 import ImageSize9_16 from '@renderer/assets/images/paintings/image-size-9-16.svg'
 import ImageSize16_9 from '@renderer/assets/images/paintings/image-size-16-9.svg'
 import { Navbar, NavbarCenter, NavbarRight } from '@renderer/components/app/Navbar'
-import { VStack } from '@renderer/components/Layout'
+import { HStack, VStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
 import TranslateButton from '@renderer/components/TranslateButton'
 import { isMac } from '@renderer/config/constant'
@@ -25,7 +25,7 @@ import { DEFAULT_PAINTING } from '@renderer/store/paintings'
 import { setGenerating } from '@renderer/store/runtime'
 import { FileType, Painting } from '@renderer/types'
 import { getErrorMessage } from '@renderer/utils'
-import { Button, Input, InputNumber, Radio, Select, Slider, Tooltip } from 'antd'
+import { Button, Input, InputNumber, Radio, Select, Slider, Switch, Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -149,8 +149,13 @@ const PaintingsPage: FC = () => {
     dispatch(setGenerating(true))
     const AI = new AiProvider(provider)
 
+    if (!painting.model) {
+      return
+    }
+
     try {
       const urls = await AI.generateImage({
+        model: painting.model,
         prompt,
         negativePrompt: painting.negativePrompt || '',
         imageSize: painting.imageSize || '1024x1024',
@@ -158,7 +163,8 @@ const PaintingsPage: FC = () => {
         seed: painting.seed || undefined,
         numInferenceSteps: painting.steps || 25,
         guidanceScale: painting.guidanceScale || 4.5,
-        signal: controller.signal
+        signal: controller.signal,
+        promptEnhancement: painting.promptEnhancement || false
       })
 
       if (urls.length > 0) {
@@ -360,13 +366,15 @@ const PaintingsPage: FC = () => {
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
-          <Slider min={1} max={50} value={painting.steps} onChange={(v) => updatePaintingState({ steps: v })} />
-          <InputNumber
-            min={1}
-            max={50}
-            value={painting.steps}
-            onChange={(v) => updatePaintingState({ steps: v || 25 })}
-          />
+          <SliderContainer>
+            <Slider min={1} max={50} value={painting.steps} onChange={(v) => updatePaintingState({ steps: v })} />
+            <StyledInputNumber
+              min={1}
+              max={50}
+              value={painting.steps}
+              onChange={(v) => updatePaintingState({ steps: (v as number) || 25 })}
+            />
+          </SliderContainer>
 
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
             {t('paintings.guidance_scale')}
@@ -374,21 +382,22 @@ const PaintingsPage: FC = () => {
               <InfoIcon />
             </Tooltip>
           </SettingTitle>
-          <Slider
-            min={1}
-            max={20}
-            step={0.1}
-            value={painting.guidanceScale}
-            onChange={(v) => updatePaintingState({ guidanceScale: v })}
-          />
-          <InputNumber
-            min={1}
-            max={20}
-            step={0.1}
-            value={painting.guidanceScale}
-            onChange={(v) => updatePaintingState({ guidanceScale: v || 4.5 })}
-          />
-
+          <SliderContainer>
+            <Slider
+              min={1}
+              max={20}
+              step={0.1}
+              value={painting.guidanceScale}
+              onChange={(v) => updatePaintingState({ guidanceScale: v })}
+            />
+            <StyledInputNumber
+              min={1}
+              max={20}
+              step={0.1}
+              value={painting.guidanceScale}
+              onChange={(v) => updatePaintingState({ guidanceScale: (v as number) || 4.5 })}
+            />
+          </SliderContainer>
           <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
             {t('paintings.negative_prompt')}
             <Tooltip title={t('paintings.negative_prompt_tip')}>
@@ -400,6 +409,18 @@ const PaintingsPage: FC = () => {
             onChange={(e) => updatePaintingState({ negativePrompt: e.target.value })}
             rows={4}
           />
+          <SettingTitle style={{ marginBottom: 5, marginTop: 15 }}>
+            {t('paintings.prompt_enhancement')}
+            <Tooltip title={t('paintings.prompt_enhancement_tip')}>
+              <InfoIcon />
+            </Tooltip>
+          </SettingTitle>
+          <HStack>
+            <Switch
+              checked={painting.promptEnhancement}
+              onChange={(checked) => updatePaintingState({ promptEnhancement: checked })}
+            />
+          </HStack>
         </LeftContainer>
         <MainContainer>
           <Artboard
@@ -545,6 +566,20 @@ const InfoIcon = styled(QuestionCircleOutlined)`
   &:hover {
     opacity: 1;
   }
+`
+
+const SliderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .ant-slider {
+    flex: 1;
+  }
+`
+
+const StyledInputNumber = styled(InputNumber)`
+  width: 70px;
 `
 
 export default PaintingsPage

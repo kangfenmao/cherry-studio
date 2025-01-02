@@ -279,7 +279,9 @@
       "regenerate.confirm": "This will replace your existing generated images. Do you want to continue?",
       "seed": "Seed",
       "seed_tip": "The same seed and prompt can produce similar images",
-      "title": "Images"
+      "title": "Images",
+      "prompt_enhancement": "Prompt Enhancement",
+      "prompt_enhancement_tip": "Rewrite prompts into detailed, model-friendly versions when switched on"
     },
     "provider": {
       "aihubmix": "AiHubMix",

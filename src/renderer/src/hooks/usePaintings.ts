@@ -14,6 +14,7 @@ export function usePaintings() {
     paintings,
     addPainting: () => {
       const newPainting: Painting = {
+        model: TEXT_TO_IMAGES_MODELS[0].id,
         id: uuid(),
         urls: [],
         files: [],
@@ -24,7 +25,7 @@ export function usePaintings() {
         seed: generateRandomSeed(),
         steps: 25,
         guidanceScale: 4.5,
-        model: TEXT_TO_IMAGES_MODELS[0].id
+        promptEnhancement: true
       }
       dispatch(addPainting(newPainting))
       return newPainting

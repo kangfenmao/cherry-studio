@@ -279,7 +279,9 @@
       "regenerate.confirm": "這將覆蓋已生成的圖片，是否繼續？",
       "seed": "隨機種子",
       "seed_tip": "相同的種子和提示詞可以生成相似的圖片",
-      "title": "繪圖"
+      "title": "繪圖",
+      "prompt_enhancement": "提示詞增強",
+      "prompt_enhancement_tip": "開啟後將提示重寫為詳細的、適合模型的版本"
     },
     "provider": {
       "aihubmix": "AiHubMix",

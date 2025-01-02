@@ -1,6 +1,6 @@
 import BaseProvider from '@renderer/providers/BaseProvider'
 import ProviderFactory from '@renderer/providers/ProviderFactory'
-import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
+import { Assistant, GenerateImageParams, Message, Model, Provider, Suggestion } from '@renderer/types'
 import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
@@ -48,16 +48,7 @@ export default class AiProvider {
     return this.sdk.getApiKey()
   }
 
-  public async generateImage(params: {
-    prompt: string
-    negativePrompt: string
-    imageSize: string
-    batchSize: number
-    seed?: string
-    numInferenceSteps: number
-    guidanceScale: number
-    signal?: AbortSignal
-  }): Promise<string[]> {
+  public async generateImage(params: GenerateImageParams): Promise<string[]> {
     return this.sdk.generateImage(params)
   }
 
