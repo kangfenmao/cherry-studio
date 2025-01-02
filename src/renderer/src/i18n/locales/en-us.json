@@ -362,7 +362,12 @@
         "webdav.minutes": "Minutes",
         "webdav.restore.button": "Restore from WebDAV",
         "webdav.title": "WebDAV",
-        "webdav.user": "WebDAV User"
+        "webdav.user": "WebDAV User",
+        "webdav.syncStatus": "Sync Status",
+        "webdav.autoSync.off": "Off",
+        "webdav.noSync": "Waiting for next sync",
+        "webdav.syncError": "Sync Error",
+        "webdav.lastSync": "Last Sync"
       },
       "display.title": "Display Settings",
       "font_size.title": "Message font size",

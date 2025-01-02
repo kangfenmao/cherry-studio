@@ -362,7 +362,12 @@
         "webdav.minutes": "分鐘",
         "webdav.restore.button": "從 WebDAV 恢復",
         "webdav.title": "WebDAV",
-        "webdav.user": "WebDAV 使用者名稱"
+        "webdav.user": "WebDAV 使用者名稱",
+        "webdav.syncStatus": "同步狀態",
+        "webdav.autoSync.off": "關閉",
+        "webdav.noSync": "等待下次同步",
+        "webdav.syncError": "同步錯誤",
+        "webdav.lastSync": "上次同步時間"
       },
       "display.title": "顯示設定",
       "font_size.title": "訊息字體大小",

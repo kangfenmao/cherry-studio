@@ -362,7 +362,12 @@
         "webdav.minutes": "минут",
         "webdav.restore.button": "Восстановление с WebDAV",
         "webdav.title": "WebDAV",
-        "webdav.user": "Пользователь WebDAV"
+        "webdav.user": "Пользователь WebDAV",
+        "webdav.syncStatus": "Статус синхронизации",
+        "webdav.autoSync.off": "Выключено",
+        "webdav.noSync": "Ожидание следующей синхронизации",
+        "webdav.syncError": "Ошибка синхронизации",
+        "webdav.lastSync": "Последняя синхронизация"
       },
       "display.title": "Настройки отображения",
       "font_size.title": "Размер шрифта сообщений",

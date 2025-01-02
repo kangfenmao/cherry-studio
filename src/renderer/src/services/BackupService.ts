@@ -1,6 +1,7 @@
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
+import { setWebDAVSyncState } from '@renderer/store/runtime'
 import dayjs from 'dayjs'
 
 export async function backup() {
@@ -63,6 +64,9 @@ export async function backupToWebdav({ showMessage = true }: { showMessage?: boo
     console.log('[Backup] Manual backup already in progress')
     return
   }
+
+  store.dispatch(setWebDAVSyncState({ syncing: true, lastSyncError: null }))
+
   const { webdavHost, webdavUser, webdavPass, webdavPath } = store.getState().settings
 
   const backupData = await getBackupData()
@@ -76,11 +80,19 @@ export async function backupToWebdav({ showMessage = true }: { showMessage?: boo
       webdavPath
     })
     if (success) {
+      store.dispatch(
+        setWebDAVSyncState({
+          lastSyncTime: Date.now(),
+          lastSyncError: null
+        })
+      )
       showMessage && window.message.success({ content: i18n.t('message.backup.success'), key: 'backup' })
     } else {
+      store.dispatch(setWebDAVSyncState({ lastSyncError: 'Backup failed' }))
       showMessage && window.message.error({ content: i18n.t('message.backup.failed'), key: 'backup' })
     }
   } catch (error: any) {
+    store.dispatch(setWebDAVSyncState({ lastSyncError: error.message }))
     console.error('[backup] backupToWebdav: Error uploading file to WebDAV:', error)
     showMessage &&
       window.modal.error({
@@ -88,6 +100,7 @@ export async function backupToWebdav({ showMessage = true }: { showMessage?: boo
         content: error.message
       })
   } finally {
+    store.dispatch(setWebDAVSyncState({ syncing: false }))
     isManualBackupRunning = false
   }
 }
@@ -125,9 +138,9 @@ export function startAutoSync() {
     return
   }
 
-  const { webdavAutoSync, webdavHost, webdavSyncInterval } = store.getState().settings
+  const { webdavAutoSync, webdavHost } = store.getState().settings
 
-  if (!webdavAutoSync || !webdavHost || webdavSyncInterval <= 0) {
+  if (!webdavAutoSync || !webdavHost) {
     console.log('[AutoSync] Invalid sync settings, auto sync disabled')
     return
   }
@@ -144,7 +157,16 @@ export function startAutoSync() {
       syncTimeout = null
     }
 
+    const { webdavSyncInterval } = store.getState().settings
+
+    if (webdavSyncInterval <= 0) {
+      console.log('[AutoSync] Invalid sync interval, auto sync disabled')
+      stopAutoSync()
+      return
+    }
+
     syncTimeout = setTimeout(performAutoBackup, webdavSyncInterval * 60 * 1000)
+
     console.log(`[AutoSync] Next sync scheduled in ${webdavSyncInterval} minutes`)
   }
 
