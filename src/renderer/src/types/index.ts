@@ -32,8 +32,8 @@ export type AssistantSettings = {
   autoResetModel: boolean
   customParameters?: {
     name: string
-    value: string | number | boolean
-    type: 'string' | 'number' | 'boolean'
+    value: string | number | boolean | object
+    type: 'string' | 'number' | 'boolean' | 'json'
   }[]
 }
 

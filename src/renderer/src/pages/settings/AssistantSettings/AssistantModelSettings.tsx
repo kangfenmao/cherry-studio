@@ -28,8 +28,8 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [customParameters, setCustomParameters] = useState<
     Array<{
       name: string
-      value: string | number | boolean
-      type: 'string' | 'number' | 'boolean'
+      value: string | number | boolean | object
+      type: 'string' | 'number' | 'boolean' | 'json'
     }>
   >(assistant?.settings?.customParameters ?? [])
   const { t } = useTranslation()
@@ -68,7 +68,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const onUpdateCustomParameter = (
     index: number,
     field: 'name' | 'value' | 'type',
-    value: string | number | boolean
+    value: string | number | boolean | object
   ) => {
     const newParams = [...customParameters]
     if (field === 'type') {
@@ -79,6 +79,9 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
           break
         case 'boolean':
           defaultValue = false
+          break
+        case 'json':
+          defaultValue = ''
           break
         default:
           defaultValue = ''
@@ -111,6 +114,20 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
           <Switch
             checked={param.value as boolean}
             onChange={(checked) => onUpdateCustomParameter(index, 'value', checked)}
+          />
+        )
+      case 'json':
+        return (
+          <Input
+            value={typeof param.value === 'string' ? param.value : JSON.stringify(param.value, null, 2)}
+            onChange={(e) => {
+              try {
+                const jsonValue = JSON.parse(e.target.value)
+                onUpdateCustomParameter(index, 'value', jsonValue)
+              } catch {
+                onUpdateCustomParameter(index, 'value', e.target.value)
+              }
+            }}
           />
         )
       default:
@@ -353,6 +370,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
               <Select.Option value="string">{t('models.parameter_type.string')}</Select.Option>
               <Select.Option value="number">{t('models.parameter_type.number')}</Select.Option>
               <Select.Option value="boolean">{t('models.parameter_type.boolean')}</Select.Option>
+              <Select.Option value="json">{t('models.parameter_type.json')}</Select.Option>
             </Select>
           </Col>
           <Col span={12}>{renderParameterValueInput(param, index)}</Col>

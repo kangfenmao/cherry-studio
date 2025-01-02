@@ -582,7 +582,8 @@
       "parameter_type": {
         "string": "テキスト",
         "number": "数値",
-        "boolean": "真偽値"
+        "boolean": "真偽値",
+        "json": "JSON"
       }
     },
     "prompts": {

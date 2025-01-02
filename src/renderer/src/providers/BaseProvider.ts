@@ -3,7 +3,7 @@ import { getOllamaKeepAliveTime } from '@renderer/hooks/useOllama'
 import { getKnowledgeReferences } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
-import { delay } from '@renderer/utils'
+import { delay, isJSON } from '@renderer/utils'
 import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
@@ -101,13 +101,16 @@ export default abstract class BaseProvider {
 
   protected getCustomParameters(assistant: Assistant) {
     return (
-      assistant?.settings?.customParameters?.reduce(
-        (acc, param) => ({
-          ...acc,
-          [param.name]: param.value
-        }),
-        {}
-      ) || {}
+      assistant?.settings?.customParameters?.reduce((acc, param) => {
+        if (!param.name?.trim()) {
+          return acc
+        }
+        if (param.type === 'json') {
+          const value = param.value as string
+          return { ...acc, [param.name]: isJSON(value) ? JSON.parse(value) : value }
+        }
+        return { ...acc, [param.name]: param.value }
+      }, {}) || {}
     )
   }
 }

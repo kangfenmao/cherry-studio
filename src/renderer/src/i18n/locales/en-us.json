@@ -599,7 +599,8 @@
       "parameter_type": {
         "string": "Text",
         "number": "Number",
-        "boolean": "Boolean"
+        "boolean": "Boolean",
+        "json": "JSON"
       }
     },
     "prompts": {

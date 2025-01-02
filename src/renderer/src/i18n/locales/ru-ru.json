@@ -599,7 +599,8 @@
       "parameter_type": {
         "string": "Текст",
         "number": "Число",
-        "boolean": "Логическое"
+        "boolean": "Логическое",
+        "json": "JSON"
       }
     },
     "prompts": {

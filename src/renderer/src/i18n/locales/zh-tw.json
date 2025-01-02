@@ -587,7 +587,8 @@
       "parameter_type": {
         "string": "文字",
         "number": "數字",
-        "boolean": "布林值"
+        "boolean": "布林值",
+        "json": "JSON"
       }
     },
     "prompts": {

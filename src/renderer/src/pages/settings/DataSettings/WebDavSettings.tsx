@@ -25,7 +25,6 @@ const WebDavSettings: FC = () => {
     webdavUser: webDAVUser,
     webdavPass: webDAVPass,
     webdavPath: webDAVPath,
-    webdavAutoSync: webDAVAutoSync,
     webdavSyncInterval: webDAVSyncInterval
   } = useSettings()
 
