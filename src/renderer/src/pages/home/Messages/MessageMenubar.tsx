@@ -156,9 +156,15 @@ const MessageMenubar: FC<Props> = (props) => {
         key: 'edit',
         icon: <EditOutlined />,
         onClick: onEdit
+      },
+      {
+        label: t('chat.message.new.branch'),
+        key: 'new-branch',
+        icon: <ForkOutlined />,
+        onClick: onNewBranch
       }
     ],
-    [message, onEdit, t]
+    [message, onEdit, onNewBranch, t]
   )
 
   const onAtModelRegenerate = async () => {
@@ -209,13 +215,6 @@ const MessageMenubar: FC<Props> = (props) => {
         <Tooltip title={t('chat.message.regenerate.model')} mouseEnterDelay={0.8}>
           <ActionButton className="message-action-button" onClick={onAtModelRegenerate}>
             <i className="iconfont icon-at1"></i>
-          </ActionButton>
-        </Tooltip>
-      )}
-      {isAssistantMessage && (
-        <Tooltip title={t('chat.message.new.branch')} mouseEnterDelay={0.8}>
-          <ActionButton className="message-action-button" onClick={onNewBranch}>
-            <ForkOutlined />
           </ActionButton>
         </Tooltip>
       )}
