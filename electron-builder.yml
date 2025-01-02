@@ -78,9 +78,8 @@ afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    增加 Genspark 小程序
-    用户消息支持编辑并重新发送
-    助手支持自定义请求参数 by @n2yt584v2t4nh7y
-    支持编辑话题总结提示词
-    修复 Windows 用户安装后无法打开的问题
-    修复知识库无法向量化MD文件的问题
+    文件支持删除
+    增加 Hika 小程序
+    增加 WebDAV 同步状态显示
+    自定义参数增加 JSON 类型
+    腾讯混元的联网开关

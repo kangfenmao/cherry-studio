@@ -47,21 +47,8 @@ export const AGENT_PROMPT = `
 export const SUMMARIZE_PROMPT =
   '你是一名擅长会话的助理，你需要将用户的会话总结为 10 个字以内的标题，标题语言与用户的首要语言一致，不要使用标点符号和其他特殊符号'
 
-export const TRANSLATE_PROMPT = `You are a translation expert.
-
-Translate from input language to {{target_language}}
-
-Requirements:
-
-1. provide the translation result directly without any explanation and keep original format.
-2. Do not translate if the target language is the same as the source language.
-
-Example:
-
-input: 你好，今天天气怎么样？
-target_language: english
-output: Hello, how is the weather today?
-`
+export const TRANSLATE_PROMPT =
+  'You are a translation expert. Translate from input language to {{target_language}}, provide the translation result directly without any explanation and keep original format. Do not translate if the target language is the same as the source language.'
 
 export const REFERENCE_PROMPT = `请根据参考资料回答问题，并使用脚注格式引用数据来源。请忽略无关的参考资料。
 

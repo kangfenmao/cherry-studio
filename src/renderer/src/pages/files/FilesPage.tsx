@@ -203,7 +203,7 @@ const FilesPage: FC = () => {
           ) : (
             <Table
               dataSource={dataSource}
-              columns={columns}
+              columns={columns as any}
               style={{ width: '100%' }}
               size="small"
               pagination={{ pageSize: 100 }}

@@ -9,7 +9,6 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import AssistantSettingsPopup from '@renderer/pages/settings/AssistantSettings'
 import { getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { useAppSelector } from '@renderer/store'
 import { Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { Dropdown } from 'antd'
@@ -33,7 +32,6 @@ const Assistants: FC<Props> = ({
   onCreateDefaultAssistant
 }) => {
   const { assistants, removeAssistant, addAssistant, updateAssistants } = useAssistants()
-  const generating = useAppSelector((state) => state.runtime.generating)
   const [dragging, setDragging] = useState(false)
   const { removeAllTopics } = useAssistant(activeAssistant.id)
   const { clickAssistantToShowTopic, topicPosition } = useSettings()
