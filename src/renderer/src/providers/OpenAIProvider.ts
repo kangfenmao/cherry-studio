@@ -198,7 +198,8 @@ export default class OpenAIProvider extends BaseProvider {
       model: model.id,
       messages: messages as ChatCompletionMessageParam[],
       stream: false,
-      keep_alive: this.keepAliveTime
+      keep_alive: this.keepAliveTime,
+      temperature: assistant?.settings?.temperature
     })
 
     return response.choices[0].message?.content || ''

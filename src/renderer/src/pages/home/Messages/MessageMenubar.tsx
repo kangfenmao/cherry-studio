@@ -156,51 +156,9 @@ const MessageMenubar: FC<Props> = (props) => {
         key: 'edit',
         icon: <EditOutlined />,
         onClick: onEdit
-      },
-      {
-        label: t('chat.translate'),
-        key: 'translate',
-        icon: isTranslating ? <SyncOutlined spin /> : <TranslationOutlined />,
-        children: [
-          {
-            label: '🇨🇳 ' + t('languages.chinese'),
-            key: 'translate-chinese',
-            onClick: () => handleTranslate('chinese')
-          },
-          {
-            label: '🇭🇰 ' + t('languages.chinese-traditional'),
-            key: 'translate-chinese-traditional',
-            onClick: () => handleTranslate('chinese-traditional')
-          },
-          {
-            label: '🇬🇧 ' + t('languages.english'),
-            key: 'translate-english',
-            onClick: () => handleTranslate('english')
-          },
-          {
-            label: '🇯🇵 ' + t('languages.japanese'),
-            key: 'translate-japanese',
-            onClick: () => handleTranslate('japanese')
-          },
-          {
-            label: '🇰🇷 ' + t('languages.korean'),
-            key: 'translate-korean',
-            onClick: () => handleTranslate('korean')
-          },
-          {
-            label: '🇷🇺 ' + t('languages.russian'),
-            key: 'translate-russian',
-            onClick: () => handleTranslate('russian')
-          },
-          {
-            label: '✖ ' + t('translate.close'),
-            key: 'translate-close',
-            onClick: () => onEditMessage?.({ ...message, translatedContent: undefined })
-          }
-        ]
       }
     ],
-    [handleTranslate, isTranslating, message, onEdit, onEditMessage, t]
+    [message, onEdit, t]
   )
 
   const onAtModelRegenerate = async () => {
@@ -260,6 +218,57 @@ const MessageMenubar: FC<Props> = (props) => {
             <ForkOutlined />
           </ActionButton>
         </Tooltip>
+      )}
+      {!isUserMessage && (
+        <Dropdown
+          menu={{
+            items: [
+              {
+                label: '🇨🇳 ' + t('languages.chinese'),
+                key: 'translate-chinese',
+                onClick: () => handleTranslate('chinese')
+              },
+              {
+                label: '🇭🇰 ' + t('languages.chinese-traditional'),
+                key: 'translate-chinese-traditional',
+                onClick: () => handleTranslate('chinese-traditional')
+              },
+              {
+                label: '🇬🇧 ' + t('languages.english'),
+                key: 'translate-english',
+                onClick: () => handleTranslate('english')
+              },
+              {
+                label: '🇯🇵 ' + t('languages.japanese'),
+                key: 'translate-japanese',
+                onClick: () => handleTranslate('japanese')
+              },
+              {
+                label: '🇰🇷 ' + t('languages.korean'),
+                key: 'translate-korean',
+                onClick: () => handleTranslate('korean')
+              },
+              {
+                label: '🇷🇺 ' + t('languages.russian'),
+                key: 'translate-russian',
+                onClick: () => handleTranslate('russian')
+              },
+              {
+                label: '✖ ' + t('translate.close'),
+                key: 'translate-close',
+                onClick: () => onEditMessage?.({ ...message, translatedContent: undefined })
+              }
+            ]
+          }}
+          trigger={['click']}
+          placement="topRight"
+          arrow>
+          <Tooltip title={t('chat.translate')} mouseEnterDelay={1.2}>
+            <ActionButton className="message-action-button">
+              <TranslationOutlined />
+            </ActionButton>
+          </Tooltip>
+        </Dropdown>
       )}
       <Popconfirm
         title={t('message.message.delete.content')}

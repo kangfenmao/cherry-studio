@@ -23,6 +23,11 @@ export function getDefaultTranslateAssistant(targetLanguage: string, text: strin
   const translateModel = getTranslateModel()
   const assistant: Assistant = getDefaultAssistant()
   assistant.model = translateModel
+
+  assistant.settings = {
+    temperature: 0.7
+  }
+
   assistant.prompt = store
     .getState()
     .settings.translateModelPrompt.replace('{{target_language}}', targetLanguage)
