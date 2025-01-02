@@ -4,9 +4,9 @@ import { HStack } from '@renderer/components/Layout'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { SettingRow } from '@renderer/pages/settings'
-import { Assistant, AssistantSettings } from '@renderer/types'
+import { Assistant, AssistantSettingCustomParameters, AssistantSettings } from '@renderer/types'
 import { Button, Col, Divider, Input, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
-import { FC, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -25,13 +25,14 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const [defaultModel, setDefaultModel] = useState(assistant?.defaultModel)
   const [topP, setTopP] = useState(assistant?.settings?.topP ?? 1)
-  const [customParameters, setCustomParameters] = useState<
-    Array<{
-      name: string
-      value: string | number | boolean | object
-      type: 'string' | 'number' | 'boolean' | 'json'
-    }>
-  >(assistant?.settings?.customParameters ?? [])
+  const [customParameters, setCustomParameters] = useState<AssistantSettingCustomParameters[]>(
+    assistant?.settings?.customParameters ?? []
+  )
+
+  const customParametersRef = useRef(customParameters)
+
+  customParametersRef.current = customParameters
+
   const { t } = useTranslation()
 
   const onTemperatureChange = (value) => {
@@ -95,7 +96,6 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
       newParams[index] = { ...newParams[index], [field]: value }
     }
     setCustomParameters(newParams)
-    updateAssistantSettings({ customParameters: newParams })
   }
 
   const renderParameterValueInput = (param: (typeof customParameters)[0], index: number) => {
@@ -175,6 +175,10 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
       })
     }
   }
+
+  useEffect(() => {
+    return () => updateAssistantSettings({ customParameters: customParametersRef.current })
+  }, [])
 
   return (
     <Container>

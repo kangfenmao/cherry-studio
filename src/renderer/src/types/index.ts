@@ -21,6 +21,12 @@ export type AssistantMessage = {
   content: string
 }
 
+export type AssistantSettingCustomParameters = {
+  name: string
+  value: string | number | boolean | object
+  type: 'string' | 'number' | 'boolean' | 'json'
+}
+
 export type AssistantSettings = {
   contextCount: number
   temperature: number
@@ -30,11 +36,7 @@ export type AssistantSettings = {
   streamOutput: boolean
   hideMessages: boolean
   autoResetModel: boolean
-  customParameters?: {
-    name: string
-    value: string | number | boolean | object
-    type: 'string' | 'number' | 'boolean' | 'json'
-  }[]
+  customParameters?: AssistantSettingCustomParameters[]
 }
 
 export type Agent = Omit<Assistant, 'model'>
