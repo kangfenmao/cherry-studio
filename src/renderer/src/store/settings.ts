@@ -61,6 +61,7 @@ export interface SettingsState {
     disabled: SidebarIcon[]
   }
   narrowMode: boolean
+  clickTrayToShowQuickAssistant: boolean
 }
 
 const initialState: SettingsState = {
@@ -105,7 +106,8 @@ const initialState: SettingsState = {
     visible: DEFAULT_SIDEBAR_ICONS,
     disabled: []
   },
-  narrowMode: false
+  narrowMode: false,
+  clickTrayToShowQuickAssistant: false
 }
 
 const settingsSlice = createSlice({
@@ -240,6 +242,9 @@ const settingsSlice = createSlice({
     },
     setNarrowMode: (state, action: PayloadAction<boolean>) => {
       state.narrowMode = action.payload
+    },
+    setClickTrayToShowQuickAssistant: (state, action: PayloadAction<boolean>) => {
+      state.clickTrayToShowQuickAssistant = action.payload
     }
   }
 })
@@ -285,7 +290,8 @@ export const {
   setCustomCss,
   setTopicNamingPrompt,
   setSidebarIcons,
-  setNarrowMode
+  setNarrowMode,
+  setClickTrayToShowQuickAssistant
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

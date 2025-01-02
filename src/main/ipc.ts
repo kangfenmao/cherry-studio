@@ -52,6 +52,14 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     configManager.setTray(isActive)
   })
 
+  ipcMain.handle('config:set', (_, key: string, value: any) => {
+    configManager.set(key, value)
+  })
+
+  ipcMain.handle('config:get', (_, key: string) => {
+    return configManager.get(key)
+  })
+
   // theme
   ipcMain.handle('app:set-theme', (_, theme: ThemeMode) => {
     configManager.setTheme(theme)

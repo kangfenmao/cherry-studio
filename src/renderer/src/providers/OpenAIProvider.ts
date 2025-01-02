@@ -322,7 +322,7 @@ export default class OpenAIProvider extends BaseProvider {
 
     const systemMessage = {
       role: 'system',
-      content: getStoreSetting('topicNamingPrompt') || i18n.t('prompts.summarize')
+      content: getStoreSetting('topicNamingPrompt') || i18n.t('prompts.title')
     }
 
     const userMessage = {

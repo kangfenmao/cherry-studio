@@ -812,6 +812,16 @@ const migrateConfig = {
       enabled: false
     })
     return state
+  },
+  '57': (state: RootState) => {
+    state.shortcuts.shortcuts.push({
+      key: 'mini_window',
+      shortcut: [isMac ? 'Command' : 'Ctrl', 'E'],
+      editable: true,
+      enabled: false,
+      system: true
+    })
+    return state
   }
 }
 

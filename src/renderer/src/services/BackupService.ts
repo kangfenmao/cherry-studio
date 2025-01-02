@@ -181,10 +181,8 @@ export function startAutoSync() {
     try {
       console.log('[AutoSync] Performing auto backup...')
       await backupToWebdav({ showMessage: false })
-      window.message.success({ content: i18n.t('message.backup.success'), key: 'webdav-auto-sync' })
     } catch (error) {
       console.error('[AutoSync] Auto backup failed:', error)
-      window.message.error({ content: i18n.t('message.backup.failed'), key: 'webdav-auto-sync' })
     } finally {
       isAutoBackupRunning = false
       scheduleNextBackup()

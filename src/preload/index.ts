@@ -82,6 +82,13 @@ const api = {
     retrieveFile: (file: FileType, apiKey: string) => ipcRenderer.invoke('gemini:retrieve-file', file, apiKey),
     listFiles: (apiKey: string) => ipcRenderer.invoke('gemini:list-files', apiKey),
     deleteFile: (apiKey: string, fileId: string) => ipcRenderer.invoke('gemini:delete-file', apiKey, fileId)
+  },
+  selectionMenu: {
+    action: (action: string) => ipcRenderer.invoke('selection-menu:action', action)
+  },
+  config: {
+    set: (key: string, value: any) => ipcRenderer.invoke('config:set', key, value),
+    get: (key: string) => ipcRenderer.invoke('config:get', key)
   }
 }
 

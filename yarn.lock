@@ -2495,6 +2495,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ffi-napi@npm:^4":
+  version: 4.0.10
+  resolution: "@types/ffi-napi@npm:4.0.10"
+  dependencies:
+    "@types/node": "npm:*"
+    "@types/ref-napi": "npm:*"
+    "@types/ref-struct-di": "npm:*"
+  checksum: 10c0/309e4659676ea978c76ebd336935f7d7481343e982c0a6e93e5cae09ffd45530171ea1bc5832cf21a3358828e7d96d32ccb436785abb34dcbba6ecfbcc0d3f30
+  languageName: node
+  linkType: hard
+
 "@types/fs-extra@npm:9.0.13, @types/fs-extra@npm:^9.0.11":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
@@ -2721,6 +2732,24 @@ __metadata:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10c0/8fb2b00672072135d0858dc9db07873ea107cc238b6228aaa2a9afd1ef7a64a7074078250db38afbeb19064be8ea6af5eac32d404efdd5f45e093cc4829d87f8
+  languageName: node
+  linkType: hard
+
+"@types/ref-napi@npm:*, @types/ref-napi@npm:^3":
+  version: 3.0.12
+  resolution: "@types/ref-napi@npm:3.0.12"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/d60c3e07aa908c97fdf3ea958264ca0f88d080467c045f423d7dda43d475b35e7a5798b108ddfbce7ced04a70d9787acf99991e251c6f8c0556be6e71c0e02b8
+  languageName: node
+  linkType: hard
+
+"@types/ref-struct-di@npm:*":
+  version: 1.1.12
+  resolution: "@types/ref-struct-di@npm:1.1.12"
+  dependencies:
+    "@types/ref-napi": "npm:*"
+  checksum: 10c0/c52043a067fd419b30ebbfe794cad9e44606a100a31aa4d094effc121a7c30ce654dd287809f57b289f0622fb642b916a9d90b559f7f721e21c322075ce149c1
   languageName: node
   linkType: hard
 
@@ -2999,6 +3028,7 @@ __metadata:
     "@llm-tools/embedjs-openai": "npm:^0.1.25"
     "@reduxjs/toolkit": "npm:^2.2.5"
     "@types/adm-zip": "npm:^0"
+    "@types/ffi-napi": "npm:^4"
     "@types/fs-extra": "npm:^11"
     "@types/lodash": "npm:^4.17.5"
     "@types/markdown-it": "npm:^14"
@@ -3006,11 +3036,13 @@ __metadata:
     "@types/react": "npm:^18.2.48"
     "@types/react-dom": "npm:^18.2.18"
     "@types/react-infinite-scroll-component": "npm:^5.0.0"
+    "@types/ref-napi": "npm:^3"
     "@types/tinycolor2": "npm:^1"
     "@vitejs/plugin-react": "npm:^4.2.1"
     adm-zip: "npm:^0.5.16"
     antd: "npm:^5.22.5"
     apache-arrow: "npm:^18.1.0"
+    applescript: "npm:^1.0.0"
     axios: "npm:^1.7.3"
     browser-image-compression: "npm:^2.0.2"
     dayjs: "npm:^1.11.11"
@@ -3034,6 +3066,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.2"
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     eslint-plugin-unused-imports: "npm:^4.0.0"
+    ffi-napi: "npm:^4.0.3"
     fs-extra: "npm:^11.2.0"
     html2canvas: "npm:^1.4.1"
     i18next: "npm:^23.11.5"
@@ -3055,6 +3088,7 @@ __metadata:
     react-spinners: "npm:^0.14.1"
     redux: "npm:^5.0.1"
     redux-persist: "npm:^6.0.0"
+    ref-napi: "npm:^3.0.3"
     rehype-katex: "npm:^7.0.1"
     rehype-mathjax: "npm:^6.0.0"
     rehype-raw: "npm:^7.0.0"
@@ -3073,6 +3107,11 @@ __metadata:
   peerDependencies:
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
+  dependenciesMeta:
+    ffi-napi:
+      optional: true
+    ref-napi:
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -3387,6 +3426,13 @@ __metadata:
     dmg-builder: 24.13.3
     electron-builder-squirrel-windows: 24.13.3
   checksum: 10c0/a3ff90e63f738e8a0d8a2f52fc336cd130adf1c00c7fe8e575a3b2bbb23b733135d530589882b45735fb8e43ff9ad8ed19d5992b4ac81029371efbb4bc6ffdb2
+  languageName: node
+  linkType: hard
+
+"applescript@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "applescript@npm:1.0.0"
+  checksum: 10c0/b535e7df97a3e1272d1b8e8c832494ba3933fbad879847cb83c8990c08aed5bcb097d2af200ba2e0754c3467c2367441706b7864173e1aa9ee4132f5189287f0
   languageName: node
   linkType: hard
 
@@ -6098,6 +6144,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ffi-napi@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "ffi-napi@npm:4.0.3"
+  dependencies:
+    debug: "npm:^4.1.1"
+    get-uv-event-loop-napi-h: "npm:^1.0.5"
+    node-addon-api: "npm:^3.0.0"
+    node-gyp: "npm:latest"
+    node-gyp-build: "npm:^4.2.1"
+    ref-napi: "npm:^2.0.1 || ^3.0.2"
+    ref-struct-di: "npm:^1.1.0"
+  checksum: 10c0/03a81bc228da1fa4f65431a3a54cf8e0367f9be45173ffd3085f13ec44b7bb9124b703535aa0b49955207f083daca86795759d6513db1605d1ed868c76d199de
+  languageName: node
+  linkType: hard
+
 "fflate@npm:0.8.1":
   version: 0.8.1
   resolution: "fflate@npm:0.8.1"
@@ -6588,6 +6649,22 @@ __metadata:
     es-errors: "npm:^1.3.0"
     get-intrinsic: "npm:^1.2.6"
   checksum: 10c0/d6a7d6afca375779a4b307738c9e80dbf7afc0bdbe5948768d54ab9653c865523d8920e670991a925936eb524b7cb6a6361d199a760b21d0ca7620194455aa4b
+  languageName: node
+  linkType: hard
+
+"get-symbol-from-current-process-h@npm:^1.0.1, get-symbol-from-current-process-h@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "get-symbol-from-current-process-h@npm:1.0.2"
+  checksum: 10c0/f33109e08aef7029b16f18032dce669e92efb21992946d7b575e494f32907c3d2c353685e00398b9202c332aab140e444e9333c93f2b81aa662bde3f59e3a25a
+  languageName: node
+  linkType: hard
+
+"get-uv-event-loop-napi-h@npm:^1.0.5":
+  version: 1.0.6
+  resolution: "get-uv-event-loop-napi-h@npm:1.0.6"
+  dependencies:
+    get-symbol-from-current-process-h: "npm:^1.0.1"
+  checksum: 10c0/beb601c7e4b74fec51fb33df452a214943a1453bac9e3ca66b98fabb9ac9371f07b53d43b163a20b69228003eaf61a84b9b3faf692ed896ef66d84970411d5e0
   languageName: node
   linkType: hard
 
@@ -9800,6 +9877,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^3.0.0":
+  version: 3.2.1
+  resolution: "node-addon-api@npm:3.2.1"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10c0/41f21c9d12318875a2c429befd06070ce367065a3ef02952cfd4ea17ef69fa14012732f510b82b226e99c254da8d671847ea018cad785f839a5366e02dd56302
+  languageName: node
+  linkType: hard
+
 "node-addon-api@npm:^7.0.0":
   version: 7.1.1
   resolution: "node-addon-api@npm:7.1.1"
@@ -9845,6 +9931,17 @@ __metadata:
     fetch-blob: "npm:^3.1.4"
     formdata-polyfill: "npm:^4.0.10"
   checksum: 10c0/f3d5e56190562221398c9f5750198b34cf6113aa304e34ee97c94fd300ec578b25b2c2906edba922050fce983338fde0d5d34fcb0fc3336ade5bd0e429ad7538
+  languageName: node
+  linkType: hard
+
+"node-gyp-build@npm:^4.2.1":
+  version: 4.8.4
+  resolution: "node-gyp-build@npm:4.8.4"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 10c0/444e189907ece2081fe60e75368784f7782cfddb554b60123743dfb89509df89f1f29c03bbfa16b3a3e0be3f48799a4783f487da6203245fa5bed239ba7407e1
   languageName: node
   linkType: hard
 
@@ -11787,6 +11884,29 @@ __metadata:
   version: 5.0.1
   resolution: "redux@npm:5.0.1"
   checksum: 10c0/b10c28357194f38e7d53b760ed5e64faa317cc63de1fb95bc5d9e127fab956392344368c357b8e7a9bedb0c35b111e7efa522210cfdc3b3c75e5074718e9069c
+  languageName: node
+  linkType: hard
+
+"ref-napi@npm:^2.0.1 || ^3.0.2, ref-napi@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "ref-napi@npm:3.0.3"
+  dependencies:
+    debug: "npm:^4.1.1"
+    get-symbol-from-current-process-h: "npm:^1.0.2"
+    node-addon-api: "npm:^3.0.0"
+    node-gyp: "npm:latest"
+    node-gyp-build: "npm:^4.2.1"
+  checksum: 10c0/03768cfe6134061c4afe8c5da6cc03ced9763ad1b8401895df2c5f6b10211dfd2bbcf31cca256e2abe9f2d4ddf08333590a6589b2ec5e68efacf70de2c0e2d7b
+  languageName: node
+  linkType: hard
+
+"ref-struct-di@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "ref-struct-di@npm:1.1.1"
+  dependencies:
+    debug: "npm:^3.1.0"
+    node-gyp: "npm:latest"
+  checksum: 10c0/e456f4b228647d06af1c911bd3f90fd85f7b9d88aa9707e10fa2879fee92d2e7a3035ca819cb30b0bdc1b32751a628308229204b00a0fb3b0e93b002dcef9835
   languageName: node
   linkType: hard
 

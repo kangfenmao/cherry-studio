@@ -1,7 +1,7 @@
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
-import { Assistant, Message, Model, Provider, Suggestion, Topic } from '@renderer/types'
+import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { isEmpty } from 'lodash'
 
 import AiProvider from '../providers/AiProvider'
@@ -24,7 +24,6 @@ export async function fetchChatCompletion({
 }: {
   message: Message
   messages: Message[]
-  topic: Topic
   assistant: Assistant
   onResponse: (message: Message) => void
 }) {

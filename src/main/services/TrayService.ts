@@ -17,6 +17,8 @@ export class TrayService {
   }
 
   private createTray() {
+    this.destroyTray()
+
     const iconPath = isMac ? (nativeTheme.shouldUseDarkColors ? iconLight : iconDark) : icon
     const tray = new Tray(iconPath)
 
@@ -43,6 +45,10 @@ export class TrayService {
         label: trayLocale.show_window,
         click: () => windowService.showMainWindow()
       },
+      {
+        label: trayLocale.show_mini_window,
+        click: () => windowService.showMiniWindow()
+      },
       { type: 'separator' },
       {
         label: trayLocale.quit,
@@ -61,12 +67,17 @@ export class TrayService {
     })
 
     this.tray.on('click', () => {
-      windowService.showMainWindow()
+      if (configManager.getClickTrayToShowQuickAssistant()) {
+        windowService.showMiniWindow()
+      } else {
+        windowService.showMainWindow()
+      }
     })
   }
 
   private updateTray() {
-    if (configManager.isTray()) {
+    const showTray = configManager.getTray()
+    if (showTray) {
       this.createTray()
     } else {
       this.destroyTray()

@@ -89,6 +89,13 @@ declare global {
         listFiles: (apiKey: string) => Promise<ListFilesResponse>
         deleteFile: (apiKey: string, fileId: string) => Promise<void>
       }
+      selectionMenu: {
+        action: (action: string) => Promise<void>
+      }
+      config: {
+        set: (key: string, value: any) => Promise<void>
+        get: (key: string) => Promise<any>
+      }
     }
   }
 }

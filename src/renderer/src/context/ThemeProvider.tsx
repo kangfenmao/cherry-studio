@@ -13,7 +13,11 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {}
 })
 
-export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
+interface ThemeProviderProps extends PropsWithChildren {
+  defaultTheme?: ThemeMode
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, defaultTheme }) => {
   const { theme, setTheme } = useSettings()
   const [_theme, _setTheme] = useState(theme)
 
@@ -22,7 +26,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect((): any => {
-    if (theme === ThemeMode.auto) {
+    if (theme === ThemeMode.auto || defaultTheme === ThemeMode.auto) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
       _setTheme(mediaQuery.matches ? ThemeMode.dark : ThemeMode.light)
       const handleChange = (e: MediaQueryListEvent) => _setTheme(e.matches ? ThemeMode.dark : ThemeMode.light)
@@ -31,7 +35,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
     } else {
       _setTheme(theme)
     }
-  }, [theme])
+  }, [defaultTheme, theme])
 
   useEffect(() => {
     document.body.setAttribute('theme-mode', _theme)

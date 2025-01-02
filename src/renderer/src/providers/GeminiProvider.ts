@@ -269,7 +269,7 @@ export default class GeminiProvider extends BaseProvider {
 
     const systemMessage = {
       role: 'system',
-      content: (getStoreSetting('topicNamingPrompt') as string) || i18n.t('prompts.summarize')
+      content: (getStoreSetting('topicNamingPrompt') as string) || i18n.t('prompts.title')
     }
 
     const userMessage = {
