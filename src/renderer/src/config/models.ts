@@ -1009,5 +1009,13 @@ export function isWebSearchModel(model: Model): boolean {
     return false
   }
 
-  return (provider.id === 'gemini' || provider?.type === 'gemini') && model?.id === 'gemini-2.0-flash-exp'
+  if (provider.id === 'gemini' || provider?.type === 'gemini') {
+    return model?.id === 'gemini-2.0-flash-exp'
+  }
+
+  if (provider.id === 'hunyuan') {
+    return model?.id !== 'hunyuan-lite'
+  }
+
+  return false
 }
