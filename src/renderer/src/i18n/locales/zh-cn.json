@@ -185,7 +185,12 @@
       "open": "打开",
       "size": "大小",
       "text": "文本",
-      "title": "文件"
+      "title": "文件",
+      "edit": "编辑",
+      "delete": "删除",
+      "delete.title": "删除文件",
+      "delete.content": "删除文件会删除文件在所有消息中的引用，确定要删除此文件吗?",
+      "delete.paintings.warning": "绘图中包含该图片，暂时无法删除"
     },
     "history": {
       "continue_chat": "继续聊天",

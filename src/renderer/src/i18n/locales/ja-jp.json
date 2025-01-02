@@ -184,7 +184,12 @@
       "open": "開く",
       "size": "サイズ",
       "text": "テキスト",
-      "title": "ファイル"
+      "title": "ファイル",
+      "edit": "編集",
+      "delete": "削除",
+      "delete.title": "ファイルを削除",
+      "delete.content": "ファイルを削除すると、ファイルがすべてのメッセージで参照されることを削除します。このファイルを削除してもよろしいですか？",
+      "delete.paintings.warning": "画像に含まれているため、削除できません"
     },
     "history": {
       "continue_chat": "チャットを続ける",

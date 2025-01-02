@@ -184,7 +184,12 @@
       "open": "打開",
       "size": "大小",
       "text": "文本",
-      "title": "檔案"
+      "title": "檔案",
+      "edit": "編輯",
+      "delete": "刪除",
+      "delete.title": "刪除檔案",
+      "delete.content": "刪除檔案會刪除檔案在所有消息中的引用，確定要刪除此檔案嗎?",
+      "delete.paintings.warning": "繪圖中包含該圖片，暫時無法刪除"
     },
     "history": {
       "continue_chat": "繼續聊天",

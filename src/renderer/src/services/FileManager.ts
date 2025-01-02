@@ -57,20 +57,29 @@ class FileManager {
     return file
   }
 
-  static async deleteFile(id: string): Promise<void> {
+  static async deleteFile(id: string, force: boolean = false): Promise<void> {
     const file = await this.getFile(id)
+
+    console.debug('[FileManager] Deleting file:', file)
 
     if (!file) {
       return
     }
 
-    if (file.count > 1) {
-      await db.files.update(id, { ...file, count: file.count - 1 })
-      return
+    if (!force) {
+      if (file.count > 1) {
+        await db.files.update(id, { ...file, count: file.count - 1 })
+        return
+      }
     }
 
     await db.files.delete(id)
-    await window.api.file.delete(id + file.ext)
+
+    try {
+      await window.api.file.delete(id + file.ext)
+    } catch (error) {
+      console.error('[FileManager] Failed to delete file:', error)
+    }
   }
 
   static async deleteFiles(files: FileType[]): Promise<void> {
@@ -92,6 +101,14 @@ class FileManager {
   static getFileUrl(file: FileType) {
     const filesPath = store.getState().runtime.filesPath
     return 'file://' + filesPath + '/' + file.name
+  }
+
+  static async updateFile(file: FileType) {
+    if (!file.origin_name.includes(file.ext)) {
+      file.origin_name = file.origin_name + file.ext
+    }
+
+    await db.files.update(file.id, file)
   }
 }
 
