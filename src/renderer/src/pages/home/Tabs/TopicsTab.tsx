@@ -186,7 +186,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   )
 
   return (
-    <Container right={topicPosition === 'right'}>
+    <Container right={topicPosition === 'right'} className="topics-tab">
       <DragableList list={assistant.topics} onUpdate={updateTopics}>
         {(topic) => {
           const isActive = topic.id === activeTopic?.id

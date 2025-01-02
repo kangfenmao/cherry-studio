@@ -94,7 +94,7 @@ const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant,
   }, [position, tab, topicPosition])
 
   return (
-    <Container style={border}>
+    <Container style={border} className="home-tabs">
       {showTab && (
         <Segmented
           value={tab}
@@ -125,7 +125,7 @@ const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant,
           block
         />
       )}
-      <TabContent>
+      <TabContent className="home-tabs-content">
         {tab === 'assistants' && (
           <Assistants
             activeAssistant={activeAssistant}

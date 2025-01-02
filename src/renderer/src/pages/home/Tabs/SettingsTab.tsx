@@ -117,7 +117,7 @@ const SettingsTab: FC<Props> = (props) => {
   }, [assistant])
 
   return (
-    <Container>
+    <Container className="settings-tab">
       <SettingGroup style={{ marginTop: 10 }}>
         <SettingSubtitle style={{ marginTop: 0 }}>
           {t('settings.messages.model.title')}{' '}

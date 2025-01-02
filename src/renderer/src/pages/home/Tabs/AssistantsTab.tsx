@@ -41,7 +41,7 @@ const Assistants: FC<Props> = ({
 
   const onDelete = useCallback(
     (assistant: Assistant) => {
-      const _assistant = last(assistants.filter((a) => a.id !== assistant.id))
+      const _assistant: Assistant | undefined = last(assistants.filter((a) => a.id !== assistant.id))
       _assistant ? setActiveAssistant(_assistant) : onCreateDefaultAssistant()
       removeAssistant(assistant.id)
     },
@@ -135,7 +135,7 @@ const Assistants: FC<Props> = ({
   )
 
   return (
-    <Container>
+    <Container className="assistants-tab">
       <DragableList
         list={assistants}
         onUpdate={updateAssistants}

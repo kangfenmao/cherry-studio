@@ -41,7 +41,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   })
 
   return (
-    <Navbar>
+    <Navbar className="home-navbar">
       {showAssistants && (
         <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
           <NavbarIcon onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
@@ -52,7 +52,9 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           </NavbarIcon>
         </NavbarLeft>
       )}
-      <NavbarRight style={{ justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12, flex: 1 }}>
+      <NavbarRight
+        style={{ justifyContent: 'space-between', paddingRight: isWindows ? 140 : 12, flex: 1 }}
+        className="home-navbar-right">
         <HStack alignItems="center">
           {!showAssistants && (
             <NavbarIcon

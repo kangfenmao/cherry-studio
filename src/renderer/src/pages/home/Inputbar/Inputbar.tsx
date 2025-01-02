@@ -25,7 +25,7 @@ import { translateText } from '@renderer/services/TranslateService'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, KnowledgeBase, Message, Topic } from '@renderer/types'
-import { delay, getFileExtension, uuid } from '@renderer/utils'
+import { classNames, delay, getFileExtension, uuid } from '@renderer/utils'
 import { documentExts, imageExts, textExts } from '@shared/config/constant'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
@@ -388,9 +388,12 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   }
 
   return (
-    <Container onDragOver={handleDragOver} onDrop={handleDrop}>
+    <Container onDragOver={handleDragOver} onDrop={handleDrop} className="inputbar">
       <AttachmentPreview files={files} setFiles={setFiles} />
-      <InputBarContainer id="inputbar" className={inputFocus ? 'focus' : ''} ref={containerRef}>
+      <InputBarContainer
+        id="inputbar"
+        className={classNames('inputbar-container', inputFocus && 'focus')}
+        ref={containerRef}>
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}

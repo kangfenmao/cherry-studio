@@ -54,7 +54,7 @@ const MessageHeader: FC<Props> = memo(({ assistant, model, message }) => {
     : undefined
 
   return (
-    <Container>
+    <Container className="message-header">
       <AvatarWrapper style={avatarStyle}>
         {isAssistantMessage ? (
           <Avatar
