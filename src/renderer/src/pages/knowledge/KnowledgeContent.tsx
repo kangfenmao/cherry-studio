@@ -13,6 +13,7 @@ import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { useKnowledge } from '@renderer/hooks/useKnowledge'
 import FileManager from '@renderer/services/FileManager'
+import { getProviderName } from '@renderer/services/ProviderService'
 import { FileType, FileTypes, KnowledgeBase } from '@renderer/types'
 import { Alert, Button, Card, Divider, message, Tag, Typography, Upload } from 'antd'
 import { FC } from 'react'
@@ -74,11 +75,17 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
     addDirectory
   } = useKnowledge(selectedBase.id || '')
 
+  const providerName = getProviderName(base?.model.provider || '')
+  const disabled = !base?.version || !providerName
+
   if (!base) {
     return null
   }
 
   const handleAddFile = () => {
+    if (disabled) {
+      return
+    }
     const input = document.createElement('input')
     input.type = 'file'
     input.multiple = true
@@ -91,6 +98,10 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   }
 
   const handleDrop = async (files: File[]) => {
+    if (disabled) {
+      return
+    }
+
     if (files) {
       const _files: FileType[] = files.map((file) => ({
         id: file.name,
@@ -110,6 +121,10 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   }
 
   const handleAddUrl = async () => {
+    if (disabled) {
+      return
+    }
+
     const url = await PromptPopup.show({
       title: t('knowledge_base.add_url'),
       message: '',
@@ -135,6 +150,10 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   }
 
   const handleAddSitemap = async () => {
+    if (disabled) {
+      return
+    }
+
     const url = await PromptPopup.show({
       title: t('knowledge_base.add_sitemap'),
       message: '',
@@ -160,16 +179,28 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   }
 
   const handleAddNote = async () => {
+    if (disabled) {
+      return
+    }
+
     const note = await TextEditPopup.show({ text: '', textareaProps: { rows: 20 } })
     note && addNote(note)
   }
 
   const handleEditNote = async (note: any) => {
+    if (disabled) {
+      return
+    }
+
     const editedText = await TextEditPopup.show({ text: note.content as string, textareaProps: { rows: 20 } })
     editedText && updateNoteContent(note.id, editedText)
   }
 
   const handleAddDirectory = async () => {
+    if (disabled) {
+      return
+    }
+
     const path = await window.api.file.selectFolder()
     console.log('[KnowledgeContent] Selected directory:', path)
     path && addDirectory(path)
@@ -180,10 +211,13 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       {!base?.version && (
         <Alert message={t('knowledge_base.not_support')} type="error" style={{ marginBottom: 20 }} showIcon />
       )}
+      {!providerName && (
+        <Alert message={t('knowledge_base.no_provider')} type="error" style={{ marginBottom: 20 }} showIcon />
+      )}
       <FileSection>
         <TitleWrapper>
           <Title level={5}>{t('files.title')}</Title>
-          <Button icon={<PlusOutlined />} onClick={handleAddFile}>
+          <Button icon={<PlusOutlined />} onClick={handleAddFile} disabled={disabled}>
             {t('knowledge_base.add_file')}
           </Button>
         </TitleWrapper>
@@ -223,7 +257,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       <ContentSection>
         <TitleWrapper>
           <Title level={5}>{t('knowledge_base.directories')}</Title>
-          <Button icon={<PlusOutlined />} onClick={handleAddDirectory}>
+          <Button icon={<PlusOutlined />} onClick={handleAddDirectory} disabled={disabled}>
             {t('knowledge_base.add_directory')}
           </Button>
         </TitleWrapper>
@@ -250,7 +284,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       <ContentSection>
         <TitleWrapper>
           <Title level={5}>{t('knowledge_base.urls')}</Title>
-          <Button icon={<PlusOutlined />} onClick={handleAddUrl}>
+          <Button icon={<PlusOutlined />} onClick={handleAddUrl} disabled={disabled}>
             {t('knowledge_base.add_url')}
           </Button>
         </TitleWrapper>
@@ -277,7 +311,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       <ContentSection>
         <TitleWrapper>
           <Title level={5}>{t('knowledge_base.sitemaps')}</Title>
-          <Button icon={<PlusOutlined />} onClick={handleAddSitemap}>
+          <Button icon={<PlusOutlined />} onClick={handleAddSitemap} disabled={disabled}>
             {t('knowledge_base.add_sitemap')}
           </Button>
         </TitleWrapper>
@@ -304,7 +338,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       <ContentSection>
         <TitleWrapper>
           <Title level={5}>{t('knowledge_base.notes')}</Title>
-          <Button icon={<PlusOutlined />} onClick={handleAddNote}>
+          <Button icon={<PlusOutlined />} onClick={handleAddNote} disabled={disabled}>
             {t('knowledge_base.add_note')}
           </Button>
         </TitleWrapper>
@@ -332,11 +366,15 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
         <label htmlFor="model-info">{t('knowledge_base.model_info')}</label>
         <Tag color="blue">{base.model.name}</Tag>
         <Tag color="cyan">{t('models.dimensions', { dimensions: base.dimensions || 0 })}</Tag>
-        <Tag color="purple">{base.model.provider}</Tag>
+        {providerName && <Tag color="purple">{providerName}</Tag>}
       </ModelInfo>
 
       <IndexSection>
-        <Button type="primary" onClick={() => KnowledgeSearchPopup.show({ base })} icon={<SearchOutlined />}>
+        <Button
+          type="primary"
+          onClick={() => KnowledgeSearchPopup.show({ base })}
+          icon={<SearchOutlined />}
+          disabled={disabled}>
           {t('knowledge_base.search')}
         </Button>
       </IndexSection>

@@ -556,7 +556,11 @@
       "sitemap_placeholder": "サイトマップURLを入力",
       "directories": "ディレクトリ",
       "add_directory": "ディレクトリを追加",
-      "directory_placeholder": "ディレクトリパスを入力"
+      "directory_placeholder": "ディレクトリパスを入力",
+      "model_info": "モデル情報",
+      "not_support": "ナレッジベースデータベースエンジンが更新されました。このナレッジベースはもうサポートされていません。新しいナレッジベースを作成してください",
+      "no_provider": "ナレッジベースモデルプロバイダーが設定されていません。ナレッジベースはもうサポートされていません。新しいナレッジベースを作成してください",
+      "source": "ソース"
     },
     "models": {
       "pinned": "固定済み",

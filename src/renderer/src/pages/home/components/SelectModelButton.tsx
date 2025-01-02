@@ -4,7 +4,7 @@ import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import { isLocalAi } from '@renderer/config/env'
 import { isVisionModel } from '@renderer/config/models'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { getProviderByModel } from '@renderer/services/AssistantService'
+import { getProviderName } from '@renderer/services/ProviderService'
 import { Assistant } from '@renderer/types'
 import { Button } from 'antd'
 import { FC } from 'react'
@@ -31,13 +31,14 @@ const SelectModelButton: FC<Props> = ({ assistant }) => {
     }
   }
 
+  const providerName = getProviderName(model?.provider)
+
   return (
     <DropdownButton size="small" type="default" onClick={onSelectModel}>
       <ButtonContent>
         <ModelAvatar model={model} size={20} />
         <ModelName>
-          {model ? model.name : t('button.select_model')} |{' '}
-          {t(`provider.${model?.provider}`, { defaultValue: getProviderByModel(model)?.name })}
+          {model ? model.name : t('button.select_model')} {providerName ? '| ' + providerName : ''}
         </ModelName>
         {isVisionModel(model) && <VisionIcon style={{ marginLeft: 0 }} />}
       </ButtonContent>

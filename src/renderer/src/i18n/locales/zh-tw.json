@@ -561,6 +561,7 @@
       "directory_placeholder": "請輸入目錄路徑",
       "model_info": "模型信息",
       "not_support": "知識庫數據庫引擎已更新，該知識庫將不再支持，請重新創建知識庫",
+      "no_provider": "知識庫模型提供商遺失，該知識庫將不再支持，請重新創建知識庫",
       "source": "來源"
     },
     "models": {

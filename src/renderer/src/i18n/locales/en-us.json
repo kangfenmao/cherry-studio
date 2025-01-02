@@ -573,6 +573,7 @@
       "directory_placeholder": "Enter Directory Path",
       "model_info": "Model Info",
       "not_support": "Knowledge base database engine updated, the knowledge base will no longer be supported, please create a new knowledge base",
+      "no_provider": "Knowledge base model provider is not set, the knowledge base will no longer be supported, please create a new knowledge base",
       "source": "Source"
     },
     "models": {

@@ -391,6 +391,7 @@ const Container = styled(Scrollbar)`
   padding: 0 10px;
   padding-right: 5px;
   padding-top: 2px;
+  padding-bottom: 10px;
 `
 
 const Label = styled.p`
@@ -410,7 +411,7 @@ const SettingRowTitleSmall = styled(SettingRowTitle)`
 `
 
 export const SettingGroup = styled.div<{ theme?: ThemeMode }>`
-  padding: 10px 5px;
+  padding: 0 5px;
   width: 100%;
   margin-top: 0;
   border-radius: 8px;
