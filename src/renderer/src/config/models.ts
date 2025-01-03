@@ -274,7 +274,7 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'Qwen/Qwen2.5-7B-Instruct',
       provider: 'silicon',
       name: 'Qwen2.5-7B-Instruct',
-      group: 'Qwen2.5'
+      group: 'Qwen'
     },
     {
       id: 'meta-llama/Llama-3.3-70B-Instruct',
