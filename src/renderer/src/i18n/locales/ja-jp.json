@@ -252,7 +252,7 @@
       "reset.double.confirm.title": "データが失われます！！！",
       "restore.success": "復元に成功しました",
       "save.success.title": "保存に成功しました",
-      "switch.disabled": "アシスタントが生成中は切り替えが無効です",
+      "switch.disabled": "現在の応答が完了するまで切り替えを無効にします",
       "topic.added": "新しいトピックが追加されました",
       "upgrade.success.button": "再起動",
       "upgrade.success.content": "アップグレードを完了するためにアプリケーションを再起動してください",

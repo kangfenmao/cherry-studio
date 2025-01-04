@@ -38,7 +38,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const { t } = useTranslation()
   const { showTopicTime, topicPosition } = useSettings()
 
-  const borderRadius = showTopicTime ? 12 : 17
+  const borderRadius = showTopicTime ? 12 : 'var(--list-item-border-radius)'
 
   const onDeleteTopic = useCallback(
     async (topic: Topic) => {
@@ -185,8 +185,8 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
             <Dropdown menu={{ items: getTopicMenuItems(topic) }} trigger={['contextMenu']} key={topic.id}>
               <TopicListItem
                 className={isActive ? 'active' : ''}
-                style={{ borderRadius }}
-                onClick={() => onSwitchTopic(topic)}>
+                onClick={() => onSwitchTopic(topic)}
+                style={{ borderRadius }}>
                 <TopicName className="name">{topic.name.replace('`', '')}</TopicName>
                 {showTopicTime && (
                   <TopicTime className="time">{dayjs(topic.createdAt).format('MM/DD HH:mm')}</TopicTime>
@@ -223,8 +223,9 @@ const Container = styled(Scrollbar)`
 
 const TopicListItem = styled.div`
   padding: 7px 12px;
-  margin: 0 10px;
-  border-radius: 16px;
+  margin-left: 10px;
+  margin-right: 4px;
+  border-radius: var(--list-item-border-radius);
   font-family: Ubuntu;
   font-size: 13px;
   display: flex;

@@ -105,6 +105,7 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
     maxTokens: getAssistantMaxTokens(),
     streamOutput: assistant?.settings?.streamOutput ?? true,
     hideMessages: assistant?.settings?.hideMessages ?? false,
+    defaultModel: assistant?.defaultModel ?? undefined,
     autoResetModel: assistant?.settings?.autoResetModel ?? false,
     customParameters: assistant?.settings?.customParameters ?? []
   }

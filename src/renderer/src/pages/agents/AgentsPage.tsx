@@ -283,7 +283,7 @@ const Tabs = styled(TabsAntd)<{ $language: string }>`
   }
   .ant-tabs-tab {
     margin: 0 !important;
-    border-radius: 16px;
+    border-radius: var(--list-item-border-radius);
     margin-bottom: 5px !important;
     font-size: 13px;
     justify-content: left;

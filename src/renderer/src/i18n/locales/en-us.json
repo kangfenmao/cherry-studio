@@ -253,7 +253,7 @@
       "reset.double.confirm.title": "DATA LOST !!!",
       "restore.success": "Restored successfully",
       "save.success.title": "Saved successfully",
-      "switch.disabled": "Switching is disabled while the assistant is generating",
+      "switch.disabled": "Please wait for the current reply to complete",
       "topic.added": "New topic added",
       "upgrade.success.button": "Restart",
       "upgrade.success.content": "Please restart the application to complete the upgrade",

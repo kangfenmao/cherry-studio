@@ -10,9 +10,8 @@ interface ListItemProps {
 }
 
 const ListItem = ({ active, icon, title, subtitle, onClick }: ListItemProps) => {
-  const borderRadius = subtitle ? '10px' : '16px'
   return (
-    <ListItemContainer className={active ? 'active' : ''} onClick={onClick} style={{ borderRadius }}>
+    <ListItemContainer className={active ? 'active' : ''} onClick={onClick}>
       <ListItemContent>
         {icon && <IconWrapper>{icon}</IconWrapper>}
         <TextContainer>
@@ -26,7 +25,7 @@ const ListItem = ({ active, icon, title, subtitle, onClick }: ListItemProps) => 
 
 const ListItemContainer = styled.div`
   padding: 7px 12px;
-  border-radius: 16px;
+  border-radius: var(--list-item-border-radius);
   font-size: 13px;
   display: flex;
   flex-direction: column;

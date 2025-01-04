@@ -181,7 +181,7 @@ const AssistantItem = styled.div`
   margin: 0 10px;
   padding-right: 35px;
   font-family: Ubuntu;
-  border-radius: 16px;
+  border-radius: var(--list-item-border-radius);
   border: 0.5px solid transparent;
   cursor: pointer;
   .iconfont {

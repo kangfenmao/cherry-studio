@@ -182,7 +182,7 @@ const ProviderListItem = styled.div`
   padding: 5px 8px;
   width: 100%;
   cursor: grab;
-  border-radius: 16px;
+  border-radius: var(--list-item-border-radius);
   font-size: 14px;
   transition: all 0.2s ease-in-out;
   border: 0.5px solid transparent;

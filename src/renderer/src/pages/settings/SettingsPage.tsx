@@ -132,7 +132,7 @@ const MenuItem = styled.li`
   padding: 6px 10px;
   width: 100%;
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: var(--list-item-border-radius);
   font-weight: 500;
   transition: all 0.2s ease-in-out;
   border: 0.5px solid transparent;
