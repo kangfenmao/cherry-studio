@@ -397,6 +397,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
           autoFocus
           contextMenu="true"
           variant="borderless"
+          spellCheck={false}
           rows={textareaRows}
           ref={textareaRef}
           style={{ fontSize }}
