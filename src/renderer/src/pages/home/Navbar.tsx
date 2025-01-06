@@ -40,6 +40,10 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
     }
   })
 
+  useShortcut('search_message', () => {
+    SearchPopup.show()
+  })
+
   return (
     <Navbar className="home-navbar">
       {showAssistants && (

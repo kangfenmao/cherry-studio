@@ -487,7 +487,8 @@
         "clear_shortcut": "ショートカットをクリア",
         "toggle_show_assistants": "アシスタントの表示を切り替え",
         "toggle_show_topics": "トピックの表示を切り替え",
-        "copy_last_message": "最後のメッセージをコピー"
+        "copy_last_message": "最後のメッセージをコピー",
+        "search_message": "メッセージを検索"
       },
       "theme.auto": "自動",
       "theme.dark": "ダークテーマ",

@@ -501,7 +501,8 @@
         "clear_shortcut": "Clear Shortcut",
         "toggle_show_assistants": "Toggle Assistants",
         "toggle_show_topics": "Toggle Topics",
-        "copy_last_message": "Copy Last Message"
+        "copy_last_message": "Copy Last Message",
+        "search_message": "Search Message"
       },
       "theme.auto": "Auto",
       "theme.dark": "Dark",

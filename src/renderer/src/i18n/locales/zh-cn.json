@@ -490,7 +490,8 @@
         "clear_shortcut": "清除快捷键",
         "toggle_show_assistants": "切换助手显示",
         "toggle_show_topics": "切换话题显示",
-        "copy_last_message": "复制上一条消息"
+        "copy_last_message": "复制上一条消息",
+        "search_message": "搜索消息"
       },
       "theme.auto": "跟随系统",
       "theme.dark": "深色主题",

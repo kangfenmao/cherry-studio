@@ -501,7 +501,8 @@
         "clear_shortcut": "Очистить сочетание клавиш",
         "toggle_show_assistants": "Переключить отображение ассистентов",
         "toggle_show_topics": "Переключить отображение топиков",
-        "copy_last_message": "Копировать последнее сообщение"
+        "copy_last_message": "Копировать последнее сообщение",
+        "search_message": "Поиск сообщения"
       },
       "theme.auto": "Автоматически",
       "theme.dark": "Темная",
