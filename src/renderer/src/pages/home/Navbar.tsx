@@ -25,7 +25,7 @@ interface Props {
 const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   const { assistant } = useAssistant(activeAssistant.id)
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
-  const { topicPosition } = useSettings()
+  const { topicPosition, showMinappIcon } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
 
   useShortcut('toggle_show_assistants', () => {
@@ -79,11 +79,13 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <NavbarIcon onClick={() => SearchPopup.show()}>
             <SearchOutlined />
           </NavbarIcon>
-          <AppStorePopover>
-            <NavbarIcon style={{ marginLeft: isMac ? 5 : 10 }}>
-              <i className="iconfont icon-appstore" />
-            </NavbarIcon>
-          </AppStorePopover>
+          {showMinappIcon && (
+            <AppStorePopover>
+              <NavbarIcon style={{ marginLeft: isMac ? 5 : 10 }}>
+                <i className="iconfont icon-appstore" />
+              </NavbarIcon>
+            </AppStorePopover>
+          )}
           {topicPosition === 'right' && (
             <NavbarIcon onClick={toggleShowTopics} style={{ marginLeft: isMac ? 5 : 10 }}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />

@@ -786,6 +786,9 @@ const migrateConfig = {
         system: false
       })
     }
+    state.settings.showTranslateIcon = true
+    state.settings.showPaintingIcon = true
+    state.settings.showKnowledgeIcon = true
     return state
   }
 }
