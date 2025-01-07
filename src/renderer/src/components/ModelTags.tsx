@@ -10,15 +10,16 @@ import WebSearchIcon from './Icons/WebSearchIcon'
 
 interface ModelTagsProps {
   model: Model
+  showFree?: boolean
 }
 
-const ModelTags: FC<ModelTagsProps> = ({ model }) => {
+const ModelTags: FC<ModelTagsProps> = ({ model, showFree = true }) => {
   const { t } = useTranslation()
   return (
     <>
       {isVisionModel(model) && <VisionIcon />}
       {isWebSearchModel(model) && <WebSearchIcon />}
-      {isFreeModel(model) && (
+      {showFree && isFreeModel(model) && (
         <Tag style={{ marginLeft: 10 }} color="green">
           {t('models.free')}
         </Tag>
