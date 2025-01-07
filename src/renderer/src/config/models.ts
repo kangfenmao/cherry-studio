@@ -262,6 +262,44 @@ export function getModelLogo(modelId: string) {
 }
 
 export const SYSTEM_MODELS: Record<string, Model[]> = {
+  aihubmix: [
+    {
+      id: 'gpt-4o',
+      provider: 'aihubmix',
+      name: 'GPT-4o',
+      group: 'GPT-4o'
+    },
+    {
+      id: 'claude-3-5-sonnet-latest',
+      provider: 'aihubmix',
+      name: 'Claude 3.5 Sonnet',
+      group: 'Claude 3.5'
+    },
+    {
+      id: 'gemini-2.0-flash-exp-search',
+      provider: 'aihubmix',
+      name: 'Gemini 2.0 Flash Exp Search',
+      group: 'Gemini 2.0'
+    },
+    {
+      id: 'deepseek-chat',
+      provider: 'aihubmix',
+      name: 'DeepSeek Chat',
+      group: 'DeepSeek Chat'
+    },
+    {
+      id: 'aihubmix-Llama-3-3-70B-Instruct',
+      provider: 'aihubmix',
+      name: 'Llama-3.3-70b',
+      group: 'Llama 3.3'
+    },
+    {
+      id: 'Qwen/QVQ-72B-Preview',
+      provider: 'aihubmix',
+      name: 'Qwen/QVQ-72B',
+      group: 'Qwen'
+    }
+  ],
   ollama: [],
   silicon: [
     {
@@ -750,20 +788,6 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'Jina Embeddings V3'
     }
   ],
-  aihubmix: [
-    {
-      id: 'gpt-4o-mini',
-      provider: 'aihubmix',
-      name: 'GPT-4o Mini',
-      group: 'GPT-4o'
-    },
-    {
-      id: 'aihubmix-Llama-3-70B-Instruct',
-      provider: 'aihubmix',
-      name: 'Llama 3 70B Instruct',
-      group: 'Llama3'
-    }
-  ],
   fireworks: [
     {
       id: 'accounts/fireworks/models/mythomax-l2-13b',
@@ -1015,6 +1039,10 @@ export function isWebSearchModel(model: Model): boolean {
 
   if (provider.id === 'hunyuan') {
     return model?.id !== 'hunyuan-lite'
+  }
+
+  if (provider.id === 'aihubmix') {
+    return model?.id === 'gemini-2.0-flash-exp-search'
   }
 
   return false
