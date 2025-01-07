@@ -123,7 +123,10 @@ import YiModelLogo from '@renderer/assets/images/models/yi.png'
 import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import { Model } from '@renderer/types'
+import { isEmpty } from 'lodash'
 import OpenAI from 'openai'
+
+import { getWebSearchTools } from './tools'
 
 const visionAllowedModels = [
   'llava',
@@ -559,9 +562,21 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   ],
   zhipu: [
     {
-      id: 'glm-4',
+      id: 'glm-zero-preview',
       provider: 'zhipu',
-      name: 'GLM-4',
+      name: 'GLM-Zero-Preview',
+      group: 'GLM-Zero'
+    },
+    {
+      id: 'glm-4-0520',
+      provider: 'zhipu',
+      name: 'GLM-4-0520',
+      group: 'GLM-4'
+    },
+    {
+      id: 'glm-4-long',
+      provider: 'zhipu',
+      name: 'GLM-4-Long',
       group: 'GLM-4'
     },
     {
@@ -605,6 +620,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       provider: 'zhipu',
       name: 'GLM-4-AllTools',
       group: 'GLM-4-AllTools'
+    },
+    {
+      id: 'embedding-3',
+      provider: 'zhipu',
+      name: 'Embedding-3',
+      group: 'Embedding'
     }
   ],
   moonshot: [
@@ -1045,5 +1066,27 @@ export function isWebSearchModel(model: Model): boolean {
     return model?.id === 'gemini-2.0-flash-exp-search'
   }
 
+  if (provider.id === 'zhipu') {
+    return model?.id?.startsWith('glm-4-')
+  }
+
   return false
+}
+
+export function getWebSearchParams(model: Model): Record<string, any> {
+  if (isWebSearchModel(model)) {
+    if (model.provider === 'hunyuan') {
+      return { enable_enhancement: true }
+    }
+
+    if (model.provider === 'zhipu') {
+      const webSearchTools = getWebSearchTools(model)
+      return isEmpty(webSearchTools)
+        ? {}
+        : {
+            tools: webSearchTools
+          }
+    }
+  }
+  return {}
 }
