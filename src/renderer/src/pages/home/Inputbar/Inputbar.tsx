@@ -63,7 +63,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     clickAssistantToShowTopic,
     language,
     autoTranslateWithSpace,
-    showKnowledgeIcon
+    sidebarIcons
   } = useSettings()
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
@@ -84,6 +84,8 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
+
+  const showKnowledgeIcon = sidebarIcons.visible.includes('knowledge')
 
   const estimateTextTokens = useCallback(debounce(estimateTxtTokens, 1000), [])
   const inputTokenCount = useMemo(
