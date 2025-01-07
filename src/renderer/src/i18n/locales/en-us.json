@@ -183,6 +183,7 @@
       "name": "Name",
       "open": "Open",
       "size": "Size",
+      "type": "Type",
       "text": "Text",
       "title": "Files",
       "edit": "Edit",

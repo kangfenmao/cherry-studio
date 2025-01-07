@@ -1,4 +1,6 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import type { FileMetadataResponse } from '@google/generative-ai/server'
+import { UploadFileResponse } from '@google/generative-ai/server'
 import { AddLoaderReturn, ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { FileType } from '@renderer/types'
 import { WebDavConfig } from '@renderer/types'
@@ -79,6 +81,11 @@ declare global {
       window: {
         setMinimumSize: (width: number, height: number) => Promise<void>
         resetMinimumSize: () => Promise<void>
+      }
+      gemini: {
+        uploadFile: (file: FileType, apiKey: string) => Promise<UploadFileResponse>
+        retrieveFile: (file: FileType, apiKey: string) => Promise<FileMetadataResponse | undefined>
+        base64File: (file: FileType) => Promise<{ data: string; mimeType: string }>
       }
     }
   }
