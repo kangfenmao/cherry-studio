@@ -9,7 +9,6 @@ import {
   RequestOptions,
   TextPart
 } from '@google/generative-ai'
-import { GoogleAIFileManager, ListFilesResponse } from '@google/generative-ai/server'
 import { isEmbeddingModel, isWebSearchModel } from '@renderer/config/models'
 import { getStoreSetting } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
@@ -344,15 +343,5 @@ export default class GeminiProvider extends BaseProvider {
   public async getEmbeddingDimensions(model: Model): Promise<number> {
     const data = await this.sdk.getGenerativeModel({ model: model.id }, this.requestOptions).embedContent('hi')
     return data.embedding.values.length
-  }
-
-  public async listFiles(): Promise<ListFilesResponse> {
-    const fileManager = new GoogleAIFileManager(this.apiKey)
-    return await fileManager.listFiles()
-  }
-
-  public async deleteFile(fileId: string): Promise<void> {
-    const fileManager = new GoogleAIFileManager(this.apiKey)
-    await fileManager.deleteFile(fileId)
   }
 }

@@ -50,4 +50,14 @@ export class GeminiService {
     }
     return undefined
   }
+
+  static async listFiles(_: Electron.IpcMainInvokeEvent, apiKey: string) {
+    const fileManager = new GoogleAIFileManager(apiKey)
+    return await fileManager.listFiles()
+  }
+
+  static async deleteFile(_: Electron.IpcMainInvokeEvent, apiKey: string, fileId: string) {
+    const fileManager = new GoogleAIFileManager(apiKey)
+    await fileManager.deleteFile(fileId)
+  }
 }

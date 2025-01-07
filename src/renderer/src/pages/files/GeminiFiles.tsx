@@ -1,7 +1,6 @@
 import { DeleteOutlined } from '@ant-design/icons'
-import { FileMetadataResponse, FileState } from '@google/generative-ai/server'
+import type { FileMetadataResponse } from '@google/generative-ai/server'
 import { useProvider } from '@renderer/hooks/useProvider'
-import GeminiProvider from '@renderer/providers/GeminiProvider'
 import { runAsyncFunction } from '@renderer/utils'
 import { Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
@@ -20,9 +19,8 @@ const GeminiFiles: FC<GeminiFilesProps> = ({ id }) => {
   const [loading, setLoading] = useState(false)
 
   const fetchFiles = useCallback(async () => {
-    const geminiProvider = new GeminiProvider(provider)
-    const { files } = await geminiProvider.listFiles()
-    files && setFiles(files.filter((file) => file.state === FileState.ACTIVE))
+    const { files } = await window.api.gemini.listFiles(provider.apiKey)
+    files && setFiles(files.filter((file) => file.state === 'ACTIVE'))
   }, [provider])
 
   const columns: ColumnsType<FileMetadataResponse> = [
@@ -54,13 +52,12 @@ const GeminiFiles: FC<GeminiFilesProps> = ({ id }) => {
       key: 'actions',
       align: 'center',
       render: (_, record) => {
-        const geminiProvider = new GeminiProvider(provider)
         return (
           <DeleteOutlined
             style={{ cursor: 'pointer', color: 'var(--color-error)' }}
             onClick={() => {
               setFiles(files.filter((file) => file.name !== record.name))
-              geminiProvider.deleteFile(record.name).catch((error) => {
+              window.api.gemini.deleteFile(provider.apiKey, record.name).catch((error) => {
                 console.error('Failed to delete file:', error)
                 setFiles((prev) => [...prev, record])
               })

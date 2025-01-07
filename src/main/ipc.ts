@@ -173,4 +173,6 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('gemini:upload-file', GeminiService.uploadFile)
   ipcMain.handle('gemini:base64-file', GeminiService.base64File)
   ipcMain.handle('gemini:retrieve-file', GeminiService.retrieveFile)
+  ipcMain.handle('gemini:list-files', GeminiService.listFiles)
+  ipcMain.handle('gemini:delete-file', GeminiService.deleteFile)
 }

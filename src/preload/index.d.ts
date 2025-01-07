@@ -1,6 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { FileMetadataResponse } from '@google/generative-ai/server'
-import { UploadFileResponse } from '@google/generative-ai/server'
+import type { FileMetadataResponse, ListFilesResponse, UploadFileResponse } from '@google/generative-ai/server'
 import { AddLoaderReturn, ExtractChunkData } from '@llm-tools/embedjs-interfaces'
 import { FileType } from '@renderer/types'
 import { WebDavConfig } from '@renderer/types'
@@ -86,6 +85,8 @@ declare global {
         uploadFile: (file: FileType, apiKey: string) => Promise<UploadFileResponse>
         retrieveFile: (file: FileType, apiKey: string) => Promise<FileMetadataResponse | undefined>
         base64File: (file: FileType) => Promise<{ data: string; mimeType: string }>
+        listFiles: (apiKey: string) => Promise<ListFilesResponse>
+        deleteFile: (apiKey: string, fileId: string) => Promise<void>
       }
     }
   }

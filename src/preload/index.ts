@@ -78,7 +78,9 @@ const api = {
   gemini: {
     uploadFile: (file: FileType, apiKey: string) => ipcRenderer.invoke('gemini:upload-file', file, apiKey),
     base64File: (file: FileType) => ipcRenderer.invoke('gemini:base64-file', file),
-    retrieveFile: (file: FileType, apiKey: string) => ipcRenderer.invoke('gemini:retrieve-file', file, apiKey)
+    retrieveFile: (file: FileType, apiKey: string) => ipcRenderer.invoke('gemini:retrieve-file', file, apiKey),
+    listFiles: (apiKey: string) => ipcRenderer.invoke('gemini:list-files', apiKey),
+    deleteFile: (apiKey: string, fileId: string) => ipcRenderer.invoke('gemini:delete-file', apiKey, fileId)
   }
 }
 
