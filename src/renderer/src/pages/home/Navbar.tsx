@@ -10,6 +10,8 @@ import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { useShowAssistants, useShowTopics } from '@renderer/hooks/useStore'
 import AssistantSettingsPopup from '@renderer/pages/settings/AssistantSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
+import { useAppDispatch } from '@renderer/store'
+import { setNarrowMode } from '@renderer/store/settings'
 import { Assistant, Topic } from '@renderer/types'
 import { FC } from 'react'
 import styled from 'styled-components'
@@ -25,8 +27,9 @@ interface Props {
 const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   const { assistant } = useAssistant(activeAssistant.id)
   const { showAssistants, toggleShowAssistants } = useShowAssistants()
-  const { topicPosition, sidebarIcons } = useSettings()
+  const { topicPosition, sidebarIcons, narrowMode } = useSettings()
   const { showTopics, toggleShowTopics } = useShowTopics()
+  const dispatch = useAppDispatch()
 
   useShortcut('toggle_show_assistants', () => {
     toggleShowAssistants()
@@ -75,19 +78,22 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           </TitleText>
           <SelectModelButton assistant={assistant} />
         </HStack>
-        <HStack alignItems="center">
+        <HStack alignItems="center" gap={8}>
           <NavbarIcon onClick={() => SearchPopup.show()}>
             <SearchOutlined />
           </NavbarIcon>
+          <NavbarIcon onClick={() => dispatch(setNarrowMode(!narrowMode))}>
+            <i className="iconfont icon-icon-adaptive-width"></i>
+          </NavbarIcon>
           {sidebarIcons.visible.includes('minapp') && (
             <AppStorePopover>
-              <NavbarIcon style={{ marginLeft: isMac ? 5 : 10 }}>
+              <NavbarIcon>
                 <i className="iconfont icon-appstore" />
               </NavbarIcon>
             </AppStorePopover>
           )}
           {topicPosition === 'right' && (
-            <NavbarIcon onClick={toggleShowTopics} style={{ marginLeft: isMac ? 5 : 10 }}>
+            <NavbarIcon onClick={toggleShowTopics}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
             </NavbarIcon>
           )}
