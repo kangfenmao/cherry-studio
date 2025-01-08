@@ -18,6 +18,7 @@ const NarrowLayout: FC<Props> = ({ children, ...props }) => {
 
 const Container = styled.div`
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
 `
 

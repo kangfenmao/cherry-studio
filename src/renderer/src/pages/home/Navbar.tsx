@@ -82,9 +82,9 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <NavbarIcon onClick={() => SearchPopup.show()}>
             <SearchOutlined />
           </NavbarIcon>
-          <NavbarIcon onClick={() => dispatch(setNarrowMode(!narrowMode))}>
+          <NarrowIcon onClick={() => dispatch(setNarrowMode(!narrowMode))}>
             <i className="iconfont icon-icon-adaptive-width"></i>
-          </NavbarIcon>
+          </NarrowIcon>
           {sidebarIcons.visible.includes('minapp') && (
             <AppStorePopover>
               <NavbarIcon>
@@ -143,6 +143,12 @@ const TitleText = styled.span`
   font-size: 13px;
   user-select: none;
   @media (max-width: 600px) {
+    display: none;
+  }
+`
+
+const NarrowIcon = styled(NavbarIcon)`
+  @media (max-width: 800px) {
     display: none;
   }
 `
