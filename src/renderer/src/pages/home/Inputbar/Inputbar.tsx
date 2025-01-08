@@ -461,13 +461,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                 disabled={files.length > 0}
               />
             )}
-            <AttachmentButton
-              model={model}
-              files={files}
-              setFiles={setFiles}
-              ToolbarButton={ToolbarButton}
-              disabled={!!selectedKnowledgeBase}
-            />
+            <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
             <ToolbarButton type="text" onClick={onNewContext}>
               <Tooltip placement="top" title={t('chat.input.new.context')}>
                 <PicCenterOutlined />
