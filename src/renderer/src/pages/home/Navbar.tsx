@@ -50,8 +50,8 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
   return (
     <Navbar className="home-navbar">
       {showAssistants && (
-        <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: '0 8px' }}>
-          <NavbarIcon onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 8 : 0 }}>
+        <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: 0 }}>
+          <NavbarIcon onClick={toggleShowAssistants} style={{ marginLeft: isMac ? 16 : 0 }}>
             <i className="iconfont icon-hide-sidebar" />
           </NavbarIcon>
           <NavbarIcon onClick={() => EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)}>
@@ -64,9 +64,7 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
         className="home-navbar-right">
         <HStack alignItems="center">
           {!showAssistants && (
-            <NavbarIcon
-              onClick={() => toggleShowAssistants()}
-              style={{ marginRight: isMac ? 8 : 25, marginLeft: isMac ? 4 : 0 }}>
+            <NavbarIcon onClick={() => toggleShowAssistants()} style={{ marginRight: 8, marginLeft: isMac ? 4 : -12 }}>
               <i className="iconfont icon-show-sidebar" />
             </NavbarIcon>
           )}
@@ -79,23 +77,23 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant }) => {
           <SelectModelButton assistant={assistant} />
         </HStack>
         <HStack alignItems="center" gap={8}>
-          <NavbarIcon onClick={() => SearchPopup.show()}>
+          <NarrowIcon onClick={() => SearchPopup.show()}>
             <SearchOutlined />
-          </NavbarIcon>
+          </NarrowIcon>
           <NarrowIcon onClick={() => dispatch(setNarrowMode(!narrowMode))}>
             <i className="iconfont icon-icon-adaptive-width"></i>
           </NarrowIcon>
           {sidebarIcons.visible.includes('minapp') && (
             <AppStorePopover>
-              <NavbarIcon>
+              <NarrowIcon>
                 <i className="iconfont icon-appstore" />
-              </NavbarIcon>
+              </NarrowIcon>
             </AppStorePopover>
           )}
           {topicPosition === 'right' && (
-            <NavbarIcon onClick={toggleShowTopics}>
+            <NarrowIcon onClick={toggleShowTopics}>
               <i className={`iconfont icon-${showTopics ? 'show' : 'hide'}-sidebar`} />
-            </NavbarIcon>
+            </NarrowIcon>
           )}
         </HStack>
       </NavbarRight>
@@ -140,15 +138,15 @@ export const NavbarIcon = styled.div`
 const TitleText = styled.span`
   margin-left: 5px;
   font-family: Ubuntu;
-  font-size: 13px;
+  font-size: 12px;
   user-select: none;
-  @media (max-width: 600px) {
+  @media (max-width: 1080px) {
     display: none;
   }
 `
 
 const NarrowIcon = styled(NavbarIcon)`
-  @media (max-width: 800px) {
+  @media (max-width: 1000px) {
     display: none;
   }
 `
