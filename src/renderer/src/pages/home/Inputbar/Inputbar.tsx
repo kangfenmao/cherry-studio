@@ -133,7 +133,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     setTimeout(() => resizeTextArea(), 0)
 
     setExpend(false)
-  }, [generating, inputEmpty, text, assistant.id, assistant.topics, selectedKnowledgeBase, files])
+  }, [inputEmpty, text, assistant.id, assistant.topics, selectedKnowledgeBase, files])
 
   const translate = async () => {
     if (isTranslating) {
