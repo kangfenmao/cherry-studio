@@ -124,7 +124,6 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
             label={t('agents.add.prompt')}
             rules={[{ required: true }]}
             style={{ position: 'relative' }}>
-            spellCheck={false}
             <TextArea placeholder={t('agents.add.prompt.placeholder')} spellCheck={false} rows={10} />
           </Form.Item>
           <Button
