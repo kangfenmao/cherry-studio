@@ -17,11 +17,15 @@ const AppsPage: FC = () => {
   const { miniAppIcons } = useSettings()
   const allApps = useMemo(() => getAllMinApps(), [])
 
-  // 只显示可见的小程序
+  // 只显示可见的小程序，但包括所有固定的小程序
   const visibleApps = useMemo(() => {
     if (!miniAppIcons?.visible) return allApps
-    return allApps.filter((app) => miniAppIcons.visible.includes(app.id))
-  }, [allApps, miniAppIcons?.visible])
+    const visibleIds = new Set([
+      ...miniAppIcons.visible,
+      ...(miniAppIcons.pinned || []) // 确保固定的小程序总是可见
+    ])
+    return allApps.filter((app) => visibleIds.has(app.id))
+  }, [allApps, miniAppIcons?.visible, miniAppIcons?.pinned])
 
   const filteredApps = search
     ? visibleApps.filter(

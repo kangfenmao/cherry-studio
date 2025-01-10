@@ -411,6 +411,7 @@
       "display.minApp.visible": "Visible MinApp",
       "display.minApp.disabled": "Hidden MinApp",
       "display.minApp.empty": "Drag minApp from the left to hide them here",
+      "display.minApp.pinnedError": "MinApp that have been added to the sidebar do not support hiding. If you want to hide them, please remove them from the sidebar first.",
       "display.topic.title": "Topic Settings",
       "display.custom.css": "Custom CSS",
       "display.custom.css.placeholder": "/* Put custom CSS here */",

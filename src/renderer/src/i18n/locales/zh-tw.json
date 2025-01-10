@@ -408,17 +408,14 @@
       "display.sidebar.empty": "把要隱藏的功能從左側拖拽到這裡",
       "display.sidebar.visible": "顯示我的側邊欄圖標",
       "display.sidebar.disabled": "隱藏我的側邊欄圖標",
+      "display.minApp.title": "小程序顯示設定",
+      "display.minApp.visible": "顯示的小程序",
+      "display.minApp.disabled": "隱藏的小程序",
+      "display.minApp.empty": "把要隱藏的小程序從左側拖拽到這裡",
+      "display.minApp.pinnedError": "已新增至側邊欄的小程序，不支援隱藏，如需隱藏請先從側邊欄移除",
       "display.custom.css": "自定義 CSS",
       "display.custom.css.placeholder": "/* 這裡寫自定義 CSS */",
       "input.auto_translate_with_space": "快速敲擊3次空格翻譯",
-     "display": {
-        "minApp": {
-          "title": "小程序顯示設定",
-          "visible": "顯示的小程序",
-          "disabled": "隱藏的小程序",
-          "empty": "把要隱藏的小程序從左側拖拽到這裡"
-        }
-      },
       "messages.divider": "訊息間顯示分隔線",
       "messages.input.paste_long_text_as_file": "將長文本貼上為檔案",
       "messages.input.send_shortcuts": "發送快捷鍵",

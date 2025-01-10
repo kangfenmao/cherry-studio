@@ -8,12 +8,12 @@ import {
   DropResult
 } from '@hello-pangea/dnd'
 import { getAllMinApps } from '@renderer/config/minapps'
+import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
+import { MinAppIcon, setMiniAppIcons } from '@renderer/store/settings'
 import { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { MinAppIcon, setMiniAppIcons } from '../../../store/settings'
 
 interface MiniAppManagerProps {
   visibleMiniApps: MinAppIcon[]
@@ -29,6 +29,50 @@ interface AppInfo {
   logo?: string
 }
 
+// 添加 reorderLists 函数的接口定义
+interface ReorderListsParams {
+  sourceList: MinAppIcon[]
+  destList: MinAppIcon[]
+  sourceIndex: number
+  destIndex: number
+  isSameList: boolean
+}
+
+interface ReorderListsResult {
+  sourceList: MinAppIcon[]
+  destList: MinAppIcon[]
+}
+
+// 添加 reorderLists 函数
+const reorderLists = ({
+  sourceList,
+  destList,
+  sourceIndex,
+  destIndex,
+  isSameList
+}: ReorderListsParams): ReorderListsResult => {
+  if (isSameList) {
+    // 在同一列表内重新排序
+    const newList = [...sourceList]
+    const [removed] = newList.splice(sourceIndex, 1)
+    newList.splice(destIndex, 0, removed)
+    return {
+      sourceList: newList,
+      destList: destList
+    }
+  } else {
+    // 在不同列表间移动
+    const newSourceList = [...sourceList]
+    const [removed] = newSourceList.splice(sourceIndex, 1)
+    const newDestList = [...destList]
+    newDestList.splice(destIndex, 0, removed)
+    return {
+      sourceList: newSourceList,
+      destList: newDestList
+    }
+  }
+}
+
 const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
   visibleMiniApps,
   disabledMiniApps,
@@ -37,6 +81,7 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
 }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { miniAppIcons } = useSettings()
   const allApps = useMemo(() => getAllMinApps(), [])
 
   // 创建 app 信息的 Map 缓存
@@ -58,48 +103,64 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
   )
 
   const handleListUpdate = useCallback(
-    (visible: MinAppIcon[], disabled: MinAppIcon[]) => {
-      setVisibleMiniApps(visible)
-      setDisabledMiniApps(disabled)
-      dispatch(setMiniAppIcons({ visible, disabled, pinned: [] }))
+    (newVisible: MinAppIcon[], newDisabled: MinAppIcon[]) => {
+      setVisibleMiniApps(newVisible)
+      setDisabledMiniApps(newDisabled)
+
+      // 保持 pinned 状态不变
+      dispatch(
+        setMiniAppIcons({
+          visible: newVisible,
+          disabled: newDisabled,
+          pinned: miniAppIcons.pinned // 保持原有的 pinned 状态
+        })
+      )
     },
-    [dispatch, setVisibleMiniApps, setDisabledMiniApps]
+    [dispatch, setVisibleMiniApps, setDisabledMiniApps, miniAppIcons.pinned]
   )
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
+      if (!result.destination) return
+
       const { source, destination } = result
-      if (!destination) return
+      const sourceList = source.droppableId as ListType
+      const destList = destination.droppableId as ListType
 
-      const sourceList = source.droppableId === 'visible' ? visibleMiniApps : disabledMiniApps
-      const destList = destination.droppableId === 'visible' ? visibleMiniApps : disabledMiniApps
+      // 如果是 pinned 的小程序，不允许拖到 disabled
+      if (destList === 'disabled') {
+        const draggedApp = sourceList === 'visible' ? visibleMiniApps[source.index] : disabledMiniApps[source.index]
 
-      if (source.droppableId === destination.droppableId) {
-        const newList = [...sourceList]
-        const [removed] = newList.splice(source.index, 1)
-        newList.splice(destination.index, 0, removed)
-
-        handleListUpdate(
-          source.droppableId === 'visible' ? newList : visibleMiniApps,
-          source.droppableId === 'disabled' ? newList : disabledMiniApps
-        )
-      } else {
-        const sourceNewList = [...sourceList]
-        const [removed] = sourceNewList.splice(source.index, 1)
-        const destNewList = [...destList]
-        destNewList.splice(destination.index, 0, removed)
-
-        handleListUpdate(
-          destination.droppableId === 'visible' ? destNewList : sourceNewList,
-          destination.droppableId === 'disabled' ? destNewList : sourceNewList
-        )
+        if (miniAppIcons.pinned.includes(draggedApp)) {
+          window.message.error(t('settings.display.minApp.pinnedError'))
+          return
+        }
       }
+
+      const newLists = reorderLists({
+        sourceList: sourceList === 'visible' ? visibleMiniApps : disabledMiniApps,
+        destList: destList === 'visible' ? visibleMiniApps : disabledMiniApps,
+        sourceIndex: source.index,
+        destIndex: destination.index,
+        isSameList: sourceList === destList
+      })
+
+      handleListUpdate(
+        sourceList === 'visible' ? newLists.sourceList : newLists.destList,
+        sourceList === 'visible' ? newLists.destList : newLists.sourceList
+      )
     },
-    [visibleMiniApps, disabledMiniApps, handleListUpdate]
+    [visibleMiniApps, disabledMiniApps, handleListUpdate, miniAppIcons.pinned, t]
   )
 
   const onMoveMiniApp = useCallback(
     (program: MinAppIcon, fromList: ListType) => {
+      // 如果是从可见列表移动到隐藏列表，且程序是 pinned 状态，则阻止移动
+      if (fromList === 'visible' && miniAppIcons.pinned.includes(program)) {
+        window.message.error(t('settings.display.minApp.pinnedError'))
+        return
+      }
+
       const isMovingToVisible = fromList === 'disabled'
       const newVisible = isMovingToVisible
         ? [...visibleMiniApps, program]
@@ -110,7 +171,7 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
 
       handleListUpdate(newVisible, newDisabled)
     },
-    [visibleMiniApps, disabledMiniApps, handleListUpdate]
+    [visibleMiniApps, disabledMiniApps, handleListUpdate, miniAppIcons.pinned, t]
   )
 
   const renderProgramItem = (program: MinAppIcon, provided: DraggableProvided, listType: ListType) => {

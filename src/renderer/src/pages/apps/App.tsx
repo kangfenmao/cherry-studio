@@ -8,7 +8,6 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-
 interface Props {
   app: MinAppType
   onClick?: () => void
@@ -20,6 +19,7 @@ const App: FC<Props> = ({ app, onClick, size = 60 }) => {
   const dispatch = useAppDispatch()
   const { miniAppIcons } = useAppSelector((state) => state.settings)
   const isPinned = miniAppIcons?.pinned.includes(app.id)
+  const isVisible = miniAppIcons?.visible.includes(app.id)
 
   const handleClick = () => {
     MinApp.start(app)
@@ -38,12 +38,15 @@ const App: FC<Props> = ({ app, onClick, size = 60 }) => {
         dispatch(
           setMiniAppIcons({
             ...miniAppIcons,
-            pinned: newPinned
+            pinned: newPinned,
+            visible: isPinned ? miniAppIcons.visible : [...new Set([...miniAppIcons.visible, app.id])]
           })
         )
       }
     }
   ]
+
+  if (!isVisible) return null
 
   return (
     <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>

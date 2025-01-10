@@ -411,6 +411,7 @@
       "display.minApp.visible": "Отображаемый апплет",
       "display.minApp.disabled": "скрытый апплет",
       "display.minApp.empty": "Перетащите апплет, который хотите скрыть, слева сюда",
+      "display.minApp.pinnedError": "Мини-программы, добавленные на боковую панель, не поддерживают скрытие. Если вы хотите скрыть их, сначала удалите их с боковой панели",
       "display.topic.title": "Настройки топиков",
       "display.custom.css": "Пользовательский CSS",
       "display.custom.css.placeholder": "/* Здесь введите пользовательский CSS */",

@@ -412,6 +412,7 @@
       "display.minApp.visible": "表示中ミニプログラム",
       "display.minApp.disabled": "非表示ミニプログラム",
       "display.minApp.empty": "非表示にしたいアプレットを左からここまでドラッグします",
+      "display.minApp.pinnedError": "サイドバーに追加されたミニ プログラムは非表示をサポートしていません。非表示にしたい場合は、まずサイドバーから削除してください",
       "input.auto_translate_with_space": "スペースを3回押して翻訳",
       "messages.divider": "メッセージ間に区切り線を表示",
       "messages.input.paste_long_text_as_file": "長いテキストをファイルとして貼り付け",
