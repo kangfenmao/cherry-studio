@@ -1,7 +1,13 @@
 import MinApp from '@renderer/components/MinApp'
+import { useAppDispatch, useAppSelector } from '@renderer/store'
+import { setMiniAppIcons } from '@renderer/store/settings'
 import { MinAppType } from '@renderer/types'
+import type { MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
 
 interface Props {
   app: MinAppType
@@ -10,23 +16,49 @@ interface Props {
 }
 
 const App: FC<Props> = ({ app, onClick, size = 60 }) => {
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const { miniAppIcons } = useAppSelector((state) => state.settings)
+  const isPinned = miniAppIcons?.pinned.includes(app.id)
+
   const handleClick = () => {
     MinApp.start(app)
     onClick?.()
   }
 
+  const menuItems: MenuProps['items'] = [
+    {
+      key: 'togglePin',
+      label: isPinned ? t('minapp.sidebar.remove.title') : t('minapp.sidebar.add.title'),
+      onClick: () => {
+        const newPinned = isPinned
+          ? miniAppIcons.pinned.filter((id) => id !== app.id)
+          : [...(miniAppIcons.pinned || []), app.id]
+
+        dispatch(
+          setMiniAppIcons({
+            ...miniAppIcons,
+            pinned: newPinned
+          })
+        )
+      }
+    }
+  ]
+
   return (
-    <Container onClick={handleClick}>
-      <AppIcon
-        src={app.logo}
-        style={{
-          border: app.bodered ? '0.5px solid var(--color-border)' : 'none',
-          width: `${size}px`,
-          height: `${size}px`
-        }}
-      />
-      <AppTitle>{app.name}</AppTitle>
-    </Container>
+    <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
+      <Container onClick={handleClick}>
+        <AppIcon
+          src={app.logo}
+          style={{
+            border: app.bodered ? '0.5px solid var(--color-border)' : 'none',
+            width: `${size}px`,
+            height: `${size}px`
+          }}
+        />
+        <AppTitle>{app.name}</AppTitle>
+      </Container>
+    </Dropdown>
   )
 }
 

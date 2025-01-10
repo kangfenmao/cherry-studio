@@ -202,23 +202,40 @@ const EmptyView = styled.div`
 export default class MinApp {
   static topviewId = 0
   static onClose = () => {}
+  static isOpening = false
+
+  static async start(app: MinAppType) {
+    if (this.isOpening) return
+    this.isOpening = true
+    
+    try {
+      // 先关闭现有的小程序
+      await this.close()
+      
+      // 确保 webview 完全卸载
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      store.dispatch(setMinappShow(true))
+      return new Promise<any>((resolve) => {
+        TopView.show(
+          <PopupContainer
+            app={app}
+            resolve={(v) => {
+              resolve(v)
+              this.close()
+            }}
+          />,
+          'MinApp'
+        )
+      })
+    } finally {
+      this.isOpening = false
+    }
+  }
+
   static close() {
+    if (!this.isOpening) return
     TopView.hide('MinApp')
     store.dispatch(setMinappShow(false))
-  }
-  static start(app: MinAppType) {
-    store.dispatch(setMinappShow(true))
-    return new Promise<any>((resolve) => {
-      TopView.show(
-        <PopupContainer
-          app={app}
-          resolve={(v) => {
-            resolve(v)
-            this.close()
-          }}
-        />,
-        'MinApp'
-      )
-    })
   }
 }

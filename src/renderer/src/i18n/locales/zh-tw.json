@@ -264,7 +264,9 @@
       "error.get_embedding_dimensions": "獲取嵌入維度失敗"
     },
     "minapp": {
-      "title": "小程序"
+      "title": "小程序",
+      "sidebar.add.title": "新增小程式到側邊欄",
+      "sidebar.remove.title": "從側邊欄移除小程式"
     },
     "ollama": {
       "keep_alive_time.description": "對話後模型在記憶體中保持的時間（預設為 5 分鐘）。",
@@ -409,6 +411,14 @@
       "display.custom.css": "自定義 CSS",
       "display.custom.css.placeholder": "/* 這裡寫自定義 CSS */",
       "input.auto_translate_with_space": "快速敲擊3次空格翻譯",
+     "display": {
+        "minApp": {
+          "title": "小程序顯示設定",
+          "visible": "顯示的小程序",
+          "disabled": "隱藏的小程序",
+          "empty": "把要隱藏的小程序從左側拖拽到這裡"
+        }
+      },
       "messages.divider": "訊息間顯示分隔線",
       "messages.input.paste_long_text_as_file": "將長文本貼上為檔案",
       "messages.input.send_shortcuts": "發送快捷鍵",

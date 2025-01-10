@@ -265,7 +265,9 @@
       "error.get_embedding_dimensions": "获取嵌入维度失败"
     },
     "minapp": {
-      "title": "小程序"
+      "title": "小程序",
+      "sidebar.add.title": "添加小程序到侧边栏",
+      "sidebar.remove.title": "从侧边栏移除小程序"
     },
     "ollama": {
       "keep_alive_time.description": "对话后模型在内存中保持的时间（默认：5分钟）",
@@ -406,6 +408,10 @@
       "display.sidebar.disabled": "隐藏我的侧边栏图标",
       "display.sidebar.chat.hiddenMessage": "助手是基础功能，不支持隐藏",
       "display.sidebar.empty": "把要隐藏的功能从左侧拖拽到这里",
+      "display.minApp.title": "小程序显示设置",
+      "display.minApp.visible": "显示的小程序",
+      "display.minApp.disabled": "隐藏的小程序",
+      "display.minApp.empty": "把要隐藏的小程序从左侧拖拽到这里",
       "display.topic.title": "话题设置",
       "display.custom.css": "自定义 CSS",
       "display.custom.css.placeholder": "/* 这里写自定义CSS */",

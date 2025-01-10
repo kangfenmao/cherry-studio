@@ -1,6 +1,7 @@
 import { FileSearchOutlined, FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
+import { getAllMinApps } from '@renderer/config/minapps'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
@@ -21,8 +22,9 @@ const Sidebar: FC = () => {
   const { minappShow } = useRuntime()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { windowStyle, sidebarIcons } = useSettings()
+  const { windowStyle, sidebarIcons, miniAppIcons } = useSettings()
   const { theme, toggleTheme } = useTheme()
+  const allApps = getAllMinApps()
 
   const isRoute = (path: string): string => (pathname === path ? 'active' : '')
   const isRoutes = (path: string): string => (pathname.startsWith(path) ? 'active' : '')
@@ -72,6 +74,27 @@ const Sidebar: FC = () => {
     })
   }
 
+  const renderPinnedApps = () => {
+    if (!miniAppIcons?.pinned) return null
+    const pinnedApps = allApps.filter((app) => miniAppIcons.pinned.includes(app.id))
+    return pinnedApps.map((app) => (
+      <Tooltip key={app.id} title={app.name} mouseEnterDelay={0.8} placement="right">
+        <StyledLink>
+          <Icon onClick={() => MinApp.start(app)}>
+            <AppIcon
+              src={app.logo}
+              style={{
+                width: '20px',
+                height: '20px',
+                border: app.bodered ? '0.5px solid var(--color-border)' : 'none'
+              }}
+            />
+          </Icon>
+        </StyledLink>
+      </Tooltip>
+    ))
+  }
+
   return (
     <Container
       id="app-sidebar"
@@ -81,7 +104,12 @@ const Sidebar: FC = () => {
       }}>
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       <MainMenus>
-        <Menus onClick={MinApp.onClose}>{renderMainMenus()}</Menus>
+        <ScrollContainer>
+          <Menus onClick={MinApp.onClose}>
+            {renderMainMenus()}
+            {renderPinnedApps()}
+          </Menus>
+        </ScrollContainer>
       </MainMenus>
       <Menus onClick={MinApp.onClose}>
         <Tooltip title={t('settings.theme.title')} mouseEnterDelay={0.8} placement="right">
@@ -129,6 +157,7 @@ const AvatarImg = styled(Avatar)`
 const MainMenus = styled.div`
   display: flex;
   flex: 1;
+  overflow: hidden;
 `
 
 const Menus = styled.div`
@@ -179,6 +208,33 @@ const StyledLink = styled.div`
   -webkit-app-region: none;
   &* {
     user-select: none;
+  }
+`
+
+const AppIcon = styled.img`
+  border-radius: 6px;
+`
+
+const ScrollContainer = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  &:hover::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
   }
 `
 

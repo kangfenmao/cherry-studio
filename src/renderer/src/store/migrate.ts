@@ -9,7 +9,7 @@ import { isEmpty } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
 import { RootState } from '.'
-import { DEFAULT_SIDEBAR_ICONS } from './settings'
+import { DEFAULT_MINIAPP_ICONS, DEFAULT_SIDEBAR_ICONS } from './settings'
 
 const migrateConfig = {
   '2': (state: RootState) => {
@@ -788,6 +788,11 @@ const migrateConfig = {
     state.settings.sidebarIcons = {
       visible: DEFAULT_SIDEBAR_ICONS,
       disabled: []
+    }
+    state.settings.miniAppIcons = {
+      visible: DEFAULT_MINIAPP_ICONS,
+      disabled: [],
+      pinned: []
     }
     return state
   }

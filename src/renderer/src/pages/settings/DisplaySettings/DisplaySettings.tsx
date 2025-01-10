@@ -3,9 +3,11 @@ import { useTheme } from '@renderer/context/ThemeProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
 import {
+  DEFAULT_MINIAPP_ICONS,
   DEFAULT_SIDEBAR_ICONS,
   setClickAssistantToShowTopic,
   setCustomCss,
+  setMiniAppIcons,
   setShowTopicTime,
   setSidebarIcons
 } from '@renderer/store/settings'
@@ -16,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '..'
+import MiniAppIconsManager from './MiniAppIconsManager'
 import SidebarIconsManager from './SidebarIconsManager'
 
 const DisplaySettings: FC = () => {
@@ -29,7 +32,8 @@ const DisplaySettings: FC = () => {
     clickAssistantToShowTopic,
     showTopicTime,
     customCss,
-    sidebarIcons
+    sidebarIcons,
+    miniAppIcons
   } = useSettings()
   const { theme: themeMode } = useTheme()
   const { t } = useTranslation()
@@ -37,6 +41,8 @@ const DisplaySettings: FC = () => {
 
   const [visibleIcons, setVisibleIcons] = useState(sidebarIcons?.visible || DEFAULT_SIDEBAR_ICONS)
   const [disabledIcons, setDisabledIcons] = useState(sidebarIcons?.disabled || [])
+  const [visibleMiniApps, setVisibleMiniApps] = useState(miniAppIcons?.visible || DEFAULT_MINIAPP_ICONS)
+  const [disabledMiniApps, setDisabledMiniApps] = useState(miniAppIcons?.disabled || [])
 
   // 使用useCallback优化回调函数
   const handleWindowStyleChange = useCallback(
@@ -51,6 +57,18 @@ const DisplaySettings: FC = () => {
     setDisabledIcons([])
     dispatch(setSidebarIcons({ visible: DEFAULT_SIDEBAR_ICONS, disabled: [] }))
   }, [dispatch])
+
+  const handleResetMinApps = useCallback(() => {
+    setVisibleMiniApps(DEFAULT_MINIAPP_ICONS)
+    setDisabledMiniApps([])
+    dispatch(
+      setMiniAppIcons({
+        visible: DEFAULT_MINIAPP_ICONS,
+        disabled: [],
+        pinned: miniAppIcons?.pinned || []
+      })
+    )
+  }, [dispatch, miniAppIcons?.pinned])
 
   return (
     <SettingContainer theme={themeMode}>
@@ -140,6 +158,22 @@ const DisplaySettings: FC = () => {
             minHeight: 200,
             fontFamily: 'monospace'
           }}
+        />
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle
+          style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>{t('settings.display.minApp.title')}</span>
+          <ResetButtonWrapper>
+            <Button onClick={handleResetMinApps}>{t('common.reset')}</Button>
+          </ResetButtonWrapper>
+        </SettingTitle>
+        <SettingDivider />
+        <MiniAppIconsManager
+          visibleMiniApps={visibleMiniApps}
+          disabledMiniApps={disabledMiniApps}
+          setVisibleMiniApps={setVisibleMiniApps}
+          setDisabledMiniApps={setDisabledMiniApps}
         />
       </SettingGroup>
     </SettingContainer>

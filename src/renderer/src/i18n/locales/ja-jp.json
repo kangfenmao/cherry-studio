@@ -262,7 +262,9 @@
       "copy.success": "コピーしました！"
     },
     "minapp": {
-      "title": "ミニアプリ"
+      "title": "ミニアプリ",
+      "sidebar.add.title": "ミニプログラムをサイドバーに追加",
+      "sidebar.remove.title": "サイドバーからアプレットを削除する"
     },
     "ollama": {
       "keep_alive_time.description": "モデルがメモリに保持される時間（デフォルト：5分）",
@@ -406,6 +408,10 @@
       "display.topic.title": "トピック設定",
       "display.custom.css": "カスタムCSS",
       "display.custom.css.placeholder": "/* ここにカスタムCSSを入力 */",
+      "display.minApp.title": "ミニプログラム表示設定",
+      "display.minApp.visible": "表示中ミニプログラム",
+      "display.minApp.disabled": "非表示ミニプログラム",
+      "display.minApp.empty": "非表示にしたいアプレットを左からここまでドラッグします",
       "input.auto_translate_with_space": "スペースを3回押して翻訳",
       "messages.divider": "メッセージ間に区切り線を表示",
       "messages.input.paste_long_text_as_file": "長いテキストをファイルとして貼り付け",
