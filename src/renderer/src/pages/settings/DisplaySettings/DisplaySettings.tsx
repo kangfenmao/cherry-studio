@@ -148,19 +148,6 @@ const DisplaySettings: FC = () => {
         />
       </SettingGroup>
       <SettingGroup theme={theme}>
-        <SettingTitle>{t('settings.display.custom.css')}</SettingTitle>
-        <SettingDivider />
-        <Input.TextArea
-          value={customCss}
-          onChange={(e) => dispatch(setCustomCss(e.target.value))}
-          placeholder={t('settings.display.custom.css.placeholder')}
-          style={{
-            minHeight: 200,
-            fontFamily: 'monospace'
-          }}
-        />
-      </SettingGroup>
-      <SettingGroup theme={theme}>
         <SettingTitle
           style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>{t('settings.display.minApp.title')}</span>
@@ -174,6 +161,19 @@ const DisplaySettings: FC = () => {
           disabledMiniApps={disabledMiniApps}
           setVisibleMiniApps={setVisibleMiniApps}
           setDisabledMiniApps={setDisabledMiniApps}
+        />
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle>{t('settings.display.custom.css')}</SettingTitle>
+        <SettingDivider />
+        <Input.TextArea
+          value={customCss}
+          onChange={(e) => dispatch(setCustomCss(e.target.value))}
+          placeholder={t('settings.display.custom.css.placeholder')}
+          style={{
+            minHeight: 200,
+            fontFamily: 'monospace'
+          }}
         />
       </SettingGroup>
     </SettingContainer>
