@@ -5,6 +5,7 @@ import { useBridge } from '@renderer/hooks/useBridge'
 import store from '@renderer/store'
 import { setMinappShow } from '@renderer/store/runtime'
 import { MinAppType } from '@renderer/types'
+import { delay } from '@renderer/utils'
 import { Avatar, Drawer } from 'antd'
 import { WebviewTag } from 'electron'
 import { useEffect, useRef, useState } from 'react'
@@ -28,9 +29,10 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
 
   const canOpenExternalLink = app.url.startsWith('http://') || app.url.startsWith('https://')
 
-  const onClose = () => {
+  const onClose = async (_delay = 0.3) => {
     setOpen(false)
-    setTimeout(() => resolve({}), 300)
+    await delay(_delay)
+    resolve({})
   }
 
   MinApp.onClose = onClose
@@ -58,7 +60,7 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
               <ExportOutlined />
             </Button>
           )}
-          <Button onClick={onClose}>
+          <Button onClick={() => onClose()}>
             <CloseOutlined />
           </Button>
         </ButtonsGroup>
@@ -99,7 +101,7 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
     <Drawer
       title={<Title />}
       placement="bottom"
-      onClose={onClose}
+      onClose={() => onClose()}
       open={open}
       mask={true}
       rootClassName="minapp-drawer"
@@ -202,40 +204,39 @@ const EmptyView = styled.div`
 export default class MinApp {
   static topviewId = 0
   static onClose = () => {}
-  static isOpening = false
+  static app: MinAppType | null = null
 
   static async start(app: MinAppType) {
-    if (this.isOpening) return
-    this.isOpening = true
-    
-    try {
-      // 先关闭现有的小程序
-      await this.close()
-      
-      // 确保 webview 完全卸载
-      await new Promise(resolve => setTimeout(resolve, 100))
-
-      store.dispatch(setMinappShow(true))
-      return new Promise<any>((resolve) => {
-        TopView.show(
-          <PopupContainer
-            app={app}
-            resolve={(v) => {
-              resolve(v)
-              this.close()
-            }}
-          />,
-          'MinApp'
-        )
-      })
-    } finally {
-      this.isOpening = false
+    if (MinApp.app?.id === app.id) {
+      return
     }
+
+    if (MinApp.app) {
+      // @ts-ignore delay params
+      await MinApp.onClose(0)
+      await delay(0)
+    }
+
+    MinApp.app = app
+    store.dispatch(setMinappShow(true))
+
+    return new Promise<any>((resolve) => {
+      TopView.show(
+        <PopupContainer
+          app={app}
+          resolve={(v) => {
+            resolve(v)
+            this.close()
+          }}
+        />,
+        'MinApp'
+      )
+    })
   }
 
   static close() {
-    if (!this.isOpening) return
     TopView.hide('MinApp')
     store.dispatch(setMinappShow(false))
+    MinApp.app = null
   }
 }

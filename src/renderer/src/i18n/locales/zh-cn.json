@@ -266,8 +266,8 @@
     },
     "minapp": {
       "title": "小程序",
-      "sidebar.add.title": "添加小程序到侧边栏",
-      "sidebar.remove.title": "从侧边栏移除小程序"
+      "sidebar.add.title": "添加到侧边栏",
+      "sidebar.remove.title": "从侧边栏移除"
     },
     "ollama": {
       "keep_alive_time.description": "对话后模型在内存中保持的时间（默认：5分钟）",
@@ -404,15 +404,14 @@
       "display.sidebar.knowledge.icon": "显示知识图标",
       "display.sidebar.files.icon": "显示文件图标",
       "display.sidebar.title": "侧边栏设置",
-      "display.sidebar.visible": "显示我的侧边栏图标",
-      "display.sidebar.disabled": "隐藏我的侧边栏图标",
+      "display.sidebar.visible": "显示的图标",
+      "display.sidebar.disabled": "隐藏的图标",
       "display.sidebar.chat.hiddenMessage": "助手是基础功能，不支持隐藏",
       "display.sidebar.empty": "把要隐藏的功能从左侧拖拽到这里",
       "display.minApp.title": "小程序显示设置",
       "display.minApp.visible": "显示的小程序",
       "display.minApp.disabled": "隐藏的小程序",
       "display.minApp.empty": "把要隐藏的小程序从左侧拖拽到这里",
-      "display.minApp.pinnedError": "已经添加到侧边栏的小程序，不支持隐藏，如需隐藏请先从侧边栏移除",
       "display.topic.title": "话题设置",
       "display.custom.css": "自定义 CSS",
       "display.custom.css.placeholder": "/* 这里写自定义CSS */",

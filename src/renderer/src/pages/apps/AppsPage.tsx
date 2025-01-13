@@ -1,11 +1,10 @@
 import { SearchOutlined } from '@ant-design/icons'
 import { Navbar, NavbarCenter } from '@renderer/components/app/Navbar'
 import { Center } from '@renderer/components/Layout'
-import { getAllMinApps } from '@renderer/config/minapps'
-import { useSettings } from '@renderer/hooks/useSettings'
+import { useMinapps } from '@renderer/hooks/useMinapps'
 import { Empty, Input } from 'antd'
 import { isEmpty } from 'lodash'
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -14,24 +13,15 @@ import App from './App'
 const AppsPage: FC = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
-  const { miniAppIcons } = useSettings()
-  const allApps = useMemo(() => getAllMinApps(), [])
+  const { minapps } = useMinapps()
 
-  // 只显示可见的小程序，但包括所有固定的小程序
-  const visibleApps = useMemo(() => {
-    if (!miniAppIcons?.visible) return allApps
-    const visibleIds = new Set([
-      ...miniAppIcons.visible,
-      ...(miniAppIcons.pinned || []) // 确保固定的小程序总是可见
-    ])
-    return allApps.filter((app) => visibleIds.has(app.id))
-  }, [allApps, miniAppIcons?.visible, miniAppIcons?.pinned])
+  console.debug('minapps', minapps)
 
   const filteredApps = search
-    ? visibleApps.filter(
+    ? minapps.filter(
         (app) => app.name.toLowerCase().includes(search.toLowerCase()) || app.url.includes(search.toLowerCase())
       )
-    : visibleApps
+    : minapps
 
   // Calculate the required number of lines
   const itemsPerRow = Math.floor(930 / 115) // Maximum width divided by the width of each item (including spacing)

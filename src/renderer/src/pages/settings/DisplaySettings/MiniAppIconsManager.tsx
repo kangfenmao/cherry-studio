@@ -8,39 +8,33 @@ import {
   DropResult
 } from '@hello-pangea/dnd'
 import { getAllMinApps } from '@renderer/config/minapps'
-import { useSettings } from '@renderer/hooks/useSettings'
-import { useAppDispatch } from '@renderer/store'
-import { MinAppIcon, setMiniAppIcons } from '@renderer/store/settings'
+import { useMinapps } from '@renderer/hooks/useMinapps'
+import { MinAppType } from '@renderer/types'
 import { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 interface MiniAppManagerProps {
-  visibleMiniApps: MinAppIcon[]
-  disabledMiniApps: MinAppIcon[]
-  setVisibleMiniApps: (programs: MinAppIcon[]) => void
-  setDisabledMiniApps: (programs: MinAppIcon[]) => void
+  visibleMiniApps: MinAppType[]
+  disabledMiniApps: MinAppType[]
+  setVisibleMiniApps: (programs: MinAppType[]) => void
+  setDisabledMiniApps: (programs: MinAppType[]) => void
 }
 
-// 将可复用的类型和常量提取出来
 type ListType = 'visible' | 'disabled'
-interface AppInfo {
-  name: string
-  logo?: string
-}
 
 // 添加 reorderLists 函数的接口定义
 interface ReorderListsParams {
-  sourceList: MinAppIcon[]
-  destList: MinAppIcon[]
+  sourceList: MinAppType[]
+  destList: MinAppType[]
   sourceIndex: number
   destIndex: number
   isSameList: boolean
 }
 
 interface ReorderListsResult {
-  sourceList: MinAppIcon[]
-  destList: MinAppIcon[]
+  sourceList: MinAppType[]
+  destList: MinAppType[]
 }
 
 // 添加 reorderLists 函数
@@ -80,43 +74,18 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
   setDisabledMiniApps
 }) => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-  const { miniAppIcons } = useSettings()
   const allApps = useMemo(() => getAllMinApps(), [])
-
-  // 创建 app 信息的 Map 缓存
-  const appInfoMap = useMemo(() => {
-    return allApps.reduce(
-      (acc, app) => {
-        acc[String(app.id)] = { name: app.name, logo: app.logo }
-        return acc
-      },
-      {} as Record<string, AppInfo>
-    )
-  }, [allApps])
-
-  const getAppInfo = useCallback(
-    (id: MinAppIcon) => {
-      return appInfoMap[String(id)] || { name: id, logo: '' }
-    },
-    [appInfoMap]
-  )
+  const { pinned, updateMinapps, updateDisabledMinapps, updatePinnedMinapps } = useMinapps()
 
   const handleListUpdate = useCallback(
-    (newVisible: MinAppIcon[], newDisabled: MinAppIcon[]) => {
+    (newVisible: MinAppType[], newDisabled: MinAppType[]) => {
       setVisibleMiniApps(newVisible)
       setDisabledMiniApps(newDisabled)
-
-      // 保持 pinned 状态不变
-      dispatch(
-        setMiniAppIcons({
-          visible: newVisible,
-          disabled: newDisabled,
-          pinned: miniAppIcons.pinned // 保持原有的 pinned 状态
-        })
-      )
+      updateMinapps(newVisible)
+      updateDisabledMinapps(newDisabled)
+      updatePinnedMinapps(pinned.filter((p) => !newDisabled.some((d) => d.id === p.id)))
     },
-    [dispatch, setVisibleMiniApps, setDisabledMiniApps, miniAppIcons.pinned]
+    [pinned, setDisabledMiniApps, setVisibleMiniApps, updateDisabledMinapps, updateMinapps, updatePinnedMinapps]
   )
 
   const onDragEnd = useCallback(
@@ -127,15 +96,7 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
       const sourceList = source.droppableId as ListType
       const destList = destination.droppableId as ListType
 
-      // 如果是 pinned 的小程序，不允许拖到 disabled
-      if (destList === 'disabled') {
-        const draggedApp = sourceList === 'visible' ? visibleMiniApps[source.index] : disabledMiniApps[source.index]
-
-        if (miniAppIcons.pinned.includes(draggedApp)) {
-          window.message.error(t('settings.display.minApp.pinnedError'))
-          return
-        }
-      }
+      if (source.droppableId === destination.droppableId) return
 
       const newLists = reorderLists({
         sourceList: sourceList === 'visible' ? visibleMiniApps : disabledMiniApps,
@@ -150,32 +111,26 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
         sourceList === 'visible' ? newLists.destList : newLists.sourceList
       )
     },
-    [visibleMiniApps, disabledMiniApps, handleListUpdate, miniAppIcons.pinned, t]
+    [disabledMiniApps, handleListUpdate, visibleMiniApps]
   )
 
   const onMoveMiniApp = useCallback(
-    (program: MinAppIcon, fromList: ListType) => {
-      // 如果是从可见列表移动到隐藏列表，且程序是 pinned 状态，则阻止移动
-      if (fromList === 'visible' && miniAppIcons.pinned.includes(program)) {
-        window.message.error(t('settings.display.minApp.pinnedError'))
-        return
-      }
-
+    (program: MinAppType, fromList: ListType) => {
       const isMovingToVisible = fromList === 'disabled'
       const newVisible = isMovingToVisible
         ? [...visibleMiniApps, program]
-        : visibleMiniApps.filter((p) => p !== program)
+        : visibleMiniApps.filter((p) => p.id !== program.id)
       const newDisabled = isMovingToVisible
-        ? disabledMiniApps.filter((p) => p !== program)
+        ? disabledMiniApps.filter((p) => p.id !== program.id)
         : [...disabledMiniApps, program]
 
       handleListUpdate(newVisible, newDisabled)
     },
-    [visibleMiniApps, disabledMiniApps, handleListUpdate, miniAppIcons.pinned, t]
+    [visibleMiniApps, disabledMiniApps, handleListUpdate]
   )
 
-  const renderProgramItem = (program: MinAppIcon, provided: DraggableProvided, listType: ListType) => {
-    const { name, logo } = getAppInfo(program)
+  const renderProgramItem = (program: MinAppType, provided: DraggableProvided, listType: ListType) => {
+    const { name, logo } = allApps.find((app) => app.id === program.id) || { name: program.name, logo: '' }
 
     return (
       <ProgramItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
@@ -201,7 +156,7 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
                 <ProgramList ref={provided.innerRef} {...provided.droppableProps}>
                   <ScrollContainer>
                     {(listType === 'visible' ? visibleMiniApps : disabledMiniApps).map((program, index) => (
-                      <Draggable key={program} draggableId={String(program)} index={index}>
+                      <Draggable key={program.id} draggableId={String(program.id)} index={index}>
                         {(provided: DraggableProvided) => renderProgramItem(program, provided, listType)}
                       </Draggable>
                     ))}
@@ -230,6 +185,7 @@ const AppLogo = styled.img`
 const ScrollContainer = styled.div`
   overflow-y: auto;
   height: 100%;
+  padding-right: 5px;
 `
 
 const ProgramSection = styled.div`
@@ -253,6 +209,7 @@ const ProgramList = styled.div`
   height: 365px;
   min-height: 365px;
   padding: 10px;
+  padding-right: 5px;
   background: var(--color-background-soft);
   border-radius: 8px;
   border: 1px solid var(--color-border);

@@ -1,18 +1,21 @@
 import { FileSearchOutlined, FolderOutlined, PictureOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isMac } from '@renderer/config/constant'
 import { isLocalAi, UserAvatar } from '@renderer/config/env'
-import { getAllMinApps } from '@renderer/config/minapps'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
+import { useMinapps } from '@renderer/hooks/useMinapps'
 import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
+import type { MenuProps } from 'antd'
 import { Tooltip } from 'antd'
 import { Avatar } from 'antd'
+import { Dropdown } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
+import DragableList from '../DragableList'
 import MinApp from '../MinApp'
 import UserPopup from '../Popups/UserPopup'
 
@@ -22,77 +25,20 @@ const Sidebar: FC = () => {
   const { minappShow } = useRuntime()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { windowStyle, sidebarIcons, miniAppIcons } = useSettings()
+  const { windowStyle, sidebarIcons } = useSettings()
   const { theme, toggleTheme } = useTheme()
-  const allApps = getAllMinApps()
-
-  const isRoute = (path: string): string => (pathname === path ? 'active' : '')
-  const isRoutes = (path: string): string => (pathname.startsWith(path) ? 'active' : '')
+  const { pinned } = useMinapps()
 
   const onEditUser = () => UserPopup.show()
 
   const macTransparentWindow = isMac && windowStyle === 'transparent'
   const sidebarBgColor = macTransparentWindow ? 'transparent' : 'var(--navbar-background)'
 
+  const showPinnedApps = pinned.length > 0 && sidebarIcons.visible.includes('minapp')
+
   const to = async (path: string) => {
     await modelGenerating()
     navigate(path)
-  }
-
-  const renderMainMenus = () => {
-    return sidebarIcons.visible.map((icon) => {
-      const iconMap = {
-        assistants: <i className="iconfont icon-chat" />,
-        agents: <i className="iconfont icon-business-smart-assistant" />,
-        paintings: <PictureOutlined style={{ fontSize: 16 }} />,
-        translate: <TranslationOutlined />,
-        minapp: <i className="iconfont icon-appstore" />,
-        knowledge: <FileSearchOutlined />,
-        files: <FolderOutlined />
-      }
-
-      const pathMap = {
-        assistants: '/',
-        agents: '/agents',
-        paintings: '/paintings',
-        translate: '/translate',
-        minapp: '/apps',
-        knowledge: '/knowledge',
-        files: '/files'
-      }
-
-      const path = pathMap[icon]
-      const isActive = path === '/' ? isRoute(path) : isRoutes(path)
-
-      return (
-        <Tooltip key={icon} title={t(`${icon}.title`)} mouseEnterDelay={0.8} placement="right">
-          <StyledLink onClick={() => to(path)}>
-            <Icon className={isActive}>{iconMap[icon]}</Icon>
-          </StyledLink>
-        </Tooltip>
-      )
-    })
-  }
-
-  const renderPinnedApps = () => {
-    if (!miniAppIcons?.pinned) return null
-    const pinnedApps = allApps.filter((app) => miniAppIcons.pinned.includes(app.id))
-    return pinnedApps.map((app) => (
-      <Tooltip key={app.id} title={app.name} mouseEnterDelay={0.8} placement="right">
-        <StyledLink>
-          <Icon onClick={() => MinApp.start(app)}>
-            <AppIcon
-              src={app.logo}
-              style={{
-                width: '20px',
-                height: '20px',
-                border: app.bodered ? '0.5px solid var(--color-border)' : 'none'
-              }}
-            />
-          </Icon>
-        </StyledLink>
-      </Tooltip>
-    ))
   }
 
   return (
@@ -103,14 +49,19 @@ const Sidebar: FC = () => {
         zIndex: minappShow ? 10000 : 'initial'
       }}>
       <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
-      <MainMenus>
-        <ScrollContainer>
-          <Menus onClick={MinApp.onClose}>
-            {renderMainMenus()}
-            {renderPinnedApps()}
-          </Menus>
-        </ScrollContainer>
-      </MainMenus>
+      <MainMenusContainer>
+        <Menus onClick={MinApp.onClose}>
+          <MainMenus />
+        </Menus>
+        {showPinnedApps && (
+          <AppsContainer>
+            <Divider />
+            <Menus>
+              <PinnedApps />
+            </Menus>
+          </AppsContainer>
+        )}
+      </MainMenusContainer>
       <Menus onClick={MinApp.onClose}>
         <Tooltip title={t('settings.theme.title')} mouseEnterDelay={0.8} placement="right">
           <Icon onClick={() => toggleTheme()}>
@@ -130,6 +81,89 @@ const Sidebar: FC = () => {
         </Tooltip>
       </Menus>
     </Container>
+  )
+}
+
+const MainMenus: FC = () => {
+  const { t } = useTranslation()
+  const { pathname } = useLocation()
+  const { sidebarIcons } = useSettings()
+  const navigate = useNavigate()
+
+  const isRoute = (path: string): string => (pathname === path ? 'active' : '')
+  const isRoutes = (path: string): string => (pathname.startsWith(path) ? 'active' : '')
+
+  const iconMap = {
+    assistants: <i className="iconfont icon-chat" />,
+    agents: <i className="iconfont icon-business-smart-assistant" />,
+    paintings: <PictureOutlined style={{ fontSize: 16 }} />,
+    translate: <TranslationOutlined />,
+    minapp: <i className="iconfont icon-appstore" />,
+    knowledge: <FileSearchOutlined />,
+    files: <FolderOutlined />
+  }
+
+  const pathMap = {
+    assistants: '/',
+    agents: '/agents',
+    paintings: '/paintings',
+    translate: '/translate',
+    minapp: '/apps',
+    knowledge: '/knowledge',
+    files: '/files'
+  }
+
+  return sidebarIcons.visible.map((icon) => {
+    const path = pathMap[icon]
+    const isActive = path === '/' ? isRoute(path) : isRoutes(path)
+
+    return (
+      <Tooltip key={icon} title={t(`${icon}.title`)} mouseEnterDelay={0.8} placement="right">
+        <StyledLink onClick={() => navigate(path)}>
+          <Icon className={isActive}>{iconMap[icon]}</Icon>
+        </StyledLink>
+      </Tooltip>
+    )
+  })
+}
+
+const PinnedApps: FC = () => {
+  const { pinned, updatePinnedMinapps } = useMinapps()
+  const { t } = useTranslation()
+
+  return (
+    <DragableList list={pinned} onUpdate={updatePinnedMinapps}>
+      {(app) => {
+        const menuItems: MenuProps['items'] = [
+          {
+            key: 'togglePin',
+            label: t('minapp.sidebar.remove.title'),
+            onClick: () => {
+              const newPinned = pinned.filter((item) => item.id !== app.id)
+              updatePinnedMinapps(newPinned)
+            }
+          }
+        ]
+        return (
+          <Tooltip key={app.id} title={app.name} mouseEnterDelay={0.8} placement="right">
+            <StyledLink>
+              <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
+                <Icon onClick={() => MinApp.start(app)}>
+                  <AppIcon
+                    src={app.logo}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      border: app.bodered ? '0.5px solid var(--color-border)' : 'none'
+                    }}
+                  />
+                </Icon>
+              </Dropdown>
+            </StyledLink>
+          </Tooltip>
+        )
+      }}
+    </DragableList>
   )
 }
 
@@ -154,9 +188,10 @@ const AvatarImg = styled(Avatar)`
   border: none;
   cursor: pointer;
 `
-const MainMenus = styled.div`
+const MainMenusContainer = styled.div`
   display: flex;
   flex: 1;
+  flex-direction: column;
   overflow: hidden;
 `
 
@@ -164,6 +199,7 @@ const Menus = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
 `
 
 const Icon = styled.div`
@@ -173,7 +209,6 @@ const Icon = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  margin-bottom: 5px;
   -webkit-app-region: none;
   border: 0.5px solid transparent;
   .iconfont,
@@ -215,27 +250,23 @@ const AppIcon = styled.img`
   border-radius: 6px;
 `
 
-const ScrollContainer = styled.div`
+const AppsContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100%;
-
+  margin-bottom: 10px;
   &::-webkit-scrollbar {
-    width: 0px;
+    display: none;
   }
+`
 
-  &:hover::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--color-border);
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
+const Divider = styled.div`
+  width: 50%;
+  margin: 8px 0;
+  border-bottom: 0.5px solid var(--color-border);
 `
 
 export default Sidebar

@@ -1,13 +1,13 @@
 import { isMac } from '@renderer/config/constant'
+import { getAllMinApps } from '@renderer/config/minapps'
 import { useTheme } from '@renderer/context/ThemeProvider'
+import { useMinapps } from '@renderer/hooks/useMinapps'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
 import {
-  DEFAULT_MINIAPP_ICONS,
   DEFAULT_SIDEBAR_ICONS,
   setClickAssistantToShowTopic,
   setCustomCss,
-  setMiniAppIcons,
   setShowTopicTime,
   setSidebarIcons
 } from '@renderer/store/settings'
@@ -32,17 +32,17 @@ const DisplaySettings: FC = () => {
     clickAssistantToShowTopic,
     showTopicTime,
     customCss,
-    sidebarIcons,
-    miniAppIcons
+    sidebarIcons
   } = useSettings()
+  const { minapps, disabled, updateMinapps, updateDisabledMinapps } = useMinapps()
   const { theme: themeMode } = useTheme()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
 
   const [visibleIcons, setVisibleIcons] = useState(sidebarIcons?.visible || DEFAULT_SIDEBAR_ICONS)
   const [disabledIcons, setDisabledIcons] = useState(sidebarIcons?.disabled || [])
-  const [visibleMiniApps, setVisibleMiniApps] = useState(miniAppIcons?.visible || DEFAULT_MINIAPP_ICONS)
-  const [disabledMiniApps, setDisabledMiniApps] = useState(miniAppIcons?.disabled || [])
+  const [visibleMiniApps, setVisibleMiniApps] = useState(minapps)
+  const [disabledMiniApps, setDisabledMiniApps] = useState(disabled || [])
 
   // 使用useCallback优化回调函数
   const handleWindowStyleChange = useCallback(
@@ -59,16 +59,11 @@ const DisplaySettings: FC = () => {
   }, [dispatch])
 
   const handleResetMinApps = useCallback(() => {
-    setVisibleMiniApps(DEFAULT_MINIAPP_ICONS)
+    setVisibleMiniApps(getAllMinApps())
     setDisabledMiniApps([])
-    dispatch(
-      setMiniAppIcons({
-        visible: DEFAULT_MINIAPP_ICONS,
-        disabled: [],
-        pinned: miniAppIcons?.pinned || []
-      })
-    )
-  }, [dispatch, miniAppIcons?.pinned])
+    updateMinapps(getAllMinApps())
+    updateDisabledMinapps([])
+  }, [updateDisabledMinapps, updateMinapps])
 
   return (
     <SettingContainer theme={themeMode}>

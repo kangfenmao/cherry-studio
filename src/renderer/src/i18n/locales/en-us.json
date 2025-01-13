@@ -265,8 +265,8 @@
     },
     "minapp": {
       "title": "MinApp",
-      "sidebar.add.title": "Add minAPP to sidebar",
-      "sidebar.remove.title": "Remove minAPP from sidebar"
+      "sidebar.add.title": "Add to sidebar",
+      "sidebar.remove.title": "Remove from sidebar"
     },
     "ollama": {
       "keep_alive_time.description": "The time in minutes to keep the connection alive, default is 5 minutes.",
@@ -403,15 +403,15 @@
       "display.sidebar.knowledge.icon": "Show Knowledge icon",
       "display.sidebar.files.icon": "Show Files icon",
       "display.sidebar.title": "Sidebar Settings",
-      "display.sidebar.visible": "Show my sidebar icons",
-      "display.sidebar.disabled": "Hide my sidebar icons",
+      "display.sidebar.visible": "Show icons",
+      "display.sidebar.disabled": "Hide icons",
       "display.sidebar.chat.hiddenMessage": "Assistants are basic functions, not supported for hiding",
       "display.sidebar.empty": "Drag the hidden feature from the left side here",
       "display.minApp.title": "MinApp  Settings",
       "display.minApp.visible": "Visible MinApp",
       "display.minApp.disabled": "Hidden MinApp",
       "display.minApp.empty": "Drag minApp from the left to hide them here",
-      "display.minApp.pinnedError": "MinApp that have been added to the sidebar do not support hiding. If you want to hide them, please remove them from the sidebar first.",
+      "": "MinApp that have been added to the sidebar do not support hiding. If you want to hide them, please remove them from the sidebar first.",
       "display.topic.title": "Topic Settings",
       "display.custom.css": "Custom CSS",
       "display.custom.css.placeholder": "/* Put custom CSS here */",

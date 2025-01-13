@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getAllMinApps } from '@renderer/config/minapps'
 import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import { CodeStyleVarious, LanguageVarious, ThemeMode } from '@renderer/types'
 
@@ -16,11 +15,6 @@ export const DEFAULT_SIDEBAR_ICONS: SidebarIcon[] = [
   'knowledge',
   'files'
 ]
-const [minApps] = await Promise.all([getAllMinApps()])
-
-export type MinAppIcon = (typeof minApps)[number]['id'] // 假设每个小程序对象有 type 字段
-
-export const DEFAULT_MINIAPP_ICONS: MinAppIcon[] = minApps.map((app) => app.id)
 
 export interface SettingsState {
   showAssistants: boolean
@@ -67,11 +61,6 @@ export interface SettingsState {
     disabled: SidebarIcon[]
   }
   narrowMode: boolean
-  miniAppIcons: {
-    visible: MinAppIcon[]
-    disabled: MinAppIcon[]
-    pinned: MinAppIcon[]
-  }
 }
 
 const initialState: SettingsState = {
@@ -116,12 +105,7 @@ const initialState: SettingsState = {
     visible: DEFAULT_SIDEBAR_ICONS,
     disabled: []
   },
-  narrowMode: false,
-  miniAppIcons: {
-    visible: DEFAULT_MINIAPP_ICONS,
-    disabled: [],
-    pinned: []
-  }
+  narrowMode: false
 }
 
 const settingsSlice = createSlice({
@@ -246,17 +230,16 @@ const settingsSlice = createSlice({
     setTopicNamingPrompt: (state, action: PayloadAction<string>) => {
       state.topicNamingPrompt = action.payload
     },
-    setSidebarIcons: (state, action: PayloadAction<{ visible: SidebarIcon[]; disabled: SidebarIcon[] }>) => {
-      state.sidebarIcons = action.payload
+    setSidebarIcons: (state, action: PayloadAction<{ visible?: SidebarIcon[]; disabled?: SidebarIcon[] }>) => {
+      if (action.payload.visible) {
+        state.sidebarIcons.visible = action.payload.visible
+      }
+      if (action.payload.disabled) {
+        state.sidebarIcons.disabled = action.payload.disabled
+      }
     },
     setNarrowMode: (state, action: PayloadAction<boolean>) => {
       state.narrowMode = action.payload
-    },
-    setMiniAppIcons: (
-      state,
-      action: PayloadAction<{ visible: MinAppIcon[]; disabled: MinAppIcon[]; pinned: MinAppIcon[] }>
-    ) => {
-      state.miniAppIcons = action.payload
     }
   }
 })
@@ -302,8 +285,7 @@ export const {
   setCustomCss,
   setTopicNamingPrompt,
   setSidebarIcons,
-  setNarrowMode,
-  setMiniAppIcons
+  setNarrowMode
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

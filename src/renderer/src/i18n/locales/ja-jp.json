@@ -263,8 +263,8 @@
     },
     "minapp": {
       "title": "ミニアプリ",
-      "sidebar.add.title": "ミニプログラムをサイドバーに追加",
-      "sidebar.remove.title": "サイドバーからアプレットを削除する"
+      "sidebar.add.title": "サイドバーに追加",
+      "sidebar.remove.title": "サイドバーから削除"
     },
     "ollama": {
       "keep_alive_time.description": "モデルがメモリに保持される時間（デフォルト：5分）",
@@ -401,8 +401,8 @@
       "display.sidebar.knowledge.icon": "ナレッジのアイコンを表示",
       "display.sidebar.files.icon": "ファイルのアイコンを表示",
       "display.sidebar.title": "サイドバー設定",
-      "display.sidebar.visible": "サイドバーのアイコンを表示する",
-      "display.sidebar.disabled": "サイドバーのアイコンを非表示にする",
+      "display.sidebar.visible": "アイコンを表示",
+      "display.sidebar.disabled": "アイコンを非表示",
       "display.sidebar.chat.hiddenMessage": "アシスタントは基本的な機能であり、非表示はサポートされていません",
       "display.sidebar.empty": "非表示にする機能を左側からここにドラッグ",
       "display.topic.title": "トピック設定",
@@ -412,7 +412,6 @@
       "display.minApp.visible": "表示中ミニプログラム",
       "display.minApp.disabled": "非表示ミニプログラム",
       "display.minApp.empty": "非表示にしたいアプレットを左からここまでドラッグします",
-      "display.minApp.pinnedError": "サイドバーに追加されたミニ プログラムは非表示をサポートしていません。非表示にしたい場合は、まずサイドバーから削除してください",
       "input.auto_translate_with_space": "スペースを3回押して翻訳",
       "messages.divider": "メッセージ間に区切り線を表示",
       "messages.input.paste_long_text_as_file": "長いテキストをファイルとして貼り付け",

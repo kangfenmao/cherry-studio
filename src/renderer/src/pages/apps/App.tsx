@@ -1,6 +1,5 @@
 import MinApp from '@renderer/components/MinApp'
-import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { setMiniAppIcons } from '@renderer/store/settings'
+import { useMinapps } from '@renderer/hooks/useMinapps'
 import { MinAppType } from '@renderer/types'
 import type { MenuProps } from 'antd'
 import { Dropdown } from 'antd'
@@ -16,10 +15,9 @@ interface Props {
 
 const App: FC<Props> = ({ app, onClick, size = 60 }) => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-  const { miniAppIcons } = useAppSelector((state) => state.settings)
-  const isPinned = miniAppIcons?.pinned.includes(app.id)
-  const isVisible = miniAppIcons?.visible.includes(app.id)
+  const { minapps, pinned, updatePinnedMinapps } = useMinapps()
+  const isPinned = pinned.some((p) => p.id === app.id)
+  const isVisible = minapps.some((m) => m.id === app.id)
 
   const handleClick = () => {
     MinApp.start(app)
@@ -31,17 +29,8 @@ const App: FC<Props> = ({ app, onClick, size = 60 }) => {
       key: 'togglePin',
       label: isPinned ? t('minapp.sidebar.remove.title') : t('minapp.sidebar.add.title'),
       onClick: () => {
-        const newPinned = isPinned
-          ? miniAppIcons.pinned.filter((id) => id !== app.id)
-          : [...(miniAppIcons.pinned || []), app.id]
-
-        dispatch(
-          setMiniAppIcons({
-            ...miniAppIcons,
-            pinned: newPinned,
-            visible: isPinned ? miniAppIcons.visible : [...new Set([...miniAppIcons.visible, app.id])]
-          })
-        )
+        const newPinned = isPinned ? pinned.filter((item) => item.id !== app.id) : [...(pinned || []), app]
+        updatePinnedMinapps(newPinned)
       }
     }
   ]
