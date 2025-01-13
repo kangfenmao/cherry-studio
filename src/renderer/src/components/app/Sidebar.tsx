@@ -133,7 +133,7 @@ const PinnedApps: FC = () => {
   const { t } = useTranslation()
 
   return (
-    <DragableList list={pinned} onUpdate={updatePinnedMinapps}>
+    <DragableList list={pinned} onUpdate={updatePinnedMinapps} listStyle={{ marginBottom: 5 }}>
       {(app) => {
         const menuItems: MenuProps['items'] = [
           {

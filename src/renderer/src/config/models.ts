@@ -1101,10 +1101,14 @@ export function getOpenAIWebSearchParams(model: Model): Record<string, any> {
     }
 
     return {
-      type: 'function',
-      function: {
-        name: 'googleSearch'
-      }
+      tools: [
+        {
+          type: 'function',
+          function: {
+            name: 'googleSearch'
+          }
+        }
+      ]
     }
   }
 
