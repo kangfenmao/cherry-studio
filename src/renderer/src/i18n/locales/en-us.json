@@ -231,6 +231,7 @@
     "message": {
       "api.connection.failed": "Connection failed",
       "api.connection.success": "Connection successful",
+      "api.check.model.title": "Select the model to use for detection",
       "assistant.added.content": "Assistant added successfully",
       "backup.failed": "Backup failed",
       "backup.success": "Backup successful",

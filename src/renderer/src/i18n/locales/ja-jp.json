@@ -231,6 +231,7 @@
     "message": {
       "api.connection.failed": "接続に失敗しました",
       "api.connection.success": "接続に成功しました",
+      "api.check.model.title": "検出に使用するモデルを選択してください",
       "assistant.added.content": "アシスタントが追加されました",
       "backup.failed": "バックアップに失敗しました",
       "backup.success": "バックアップに成功しました",

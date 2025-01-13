@@ -9,7 +9,7 @@ import {
   RequestOptions,
   TextPart
 } from '@google/generative-ai'
-import { isEmbeddingModel, isWebSearchModel } from '@renderer/config/models'
+import { isWebSearchModel } from '@renderer/config/models'
 import { getStoreSetting } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
@@ -18,7 +18,7 @@ import { filterContextMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileType, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
 import axios from 'axios'
-import { first, isEmpty, last, takeRight } from 'lodash'
+import { first, isEmpty, takeRight } from 'lodash'
 import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
@@ -291,9 +291,7 @@ export default class GeminiProvider extends BaseProvider {
     return []
   }
 
-  public async check(): Promise<{ valid: boolean; error: Error | null }> {
-    const model = last(this.provider.models.filter((m) => !isEmbeddingModel(m)))
-
+  public async check(model: Model): Promise<{ valid: boolean; error: Error | null }> {
     if (!model) {
       return { valid: false, error: new Error('No model found') }
     }

@@ -1,7 +1,7 @@
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
-import { Assistant, Message, Provider, Suggestion, Topic } from '@renderer/types'
+import { Assistant, Message, Model, Provider, Suggestion, Topic } from '@renderer/types'
 import { isEmpty } from 'lodash'
 
 import AiProvider from '../providers/AiProvider'
@@ -184,7 +184,7 @@ export async function fetchSuggestions({
   }
 }
 
-export async function checkApi(provider: Provider) {
+export async function checkApi(provider: Provider, model: Model) {
   const key = 'api-check'
   const style = { marginTop: '3vh' }
 
@@ -207,7 +207,7 @@ export async function checkApi(provider: Provider) {
 
   const AI = new AiProvider(provider)
 
-  const { valid } = await AI.check()
+  const { valid } = await AI.check(model)
 
   return valid
 }

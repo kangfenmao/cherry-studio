@@ -1,4 +1,4 @@
-import { getWebSearchParams, isEmbeddingModel, isSupportedModel, isVisionModel } from '@renderer/config/models'
+import { getWebSearchParams, isSupportedModel, isVisionModel } from '@renderer/config/models'
 import { getStoreSetting } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
@@ -6,7 +6,7 @@ import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileTypes, GenerateImageParams, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
-import { last, takeRight } from 'lodash'
+import { takeRight } from 'lodash'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
   ChatCompletionContentPart,
@@ -286,9 +286,7 @@ export default class OpenAIProvider extends BaseProvider {
     return response?.questions?.filter(Boolean)?.map((q: any) => ({ content: q })) || []
   }
 
-  public async check(): Promise<{ valid: boolean; error: Error | null }> {
-    const model = last(this.provider.models.filter((m) => !isEmbeddingModel(m)))
-
+  public async check(model: Model): Promise<{ valid: boolean; error: Error | null }> {
     if (!model) {
       return { valid: false, error: new Error('No model found') }
     }

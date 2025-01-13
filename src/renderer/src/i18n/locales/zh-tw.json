@@ -231,6 +231,7 @@
     "message": {
       "api.connection.failed": "連接失敗",
       "api.connection.success": "連接成功",
+      "api.check.model.title": "請選擇要檢測的模型",
       "assistant.added.content": "智能體添加成功",
       "backup.failed": "備份失敗",
       "backup.success": "備份成功",

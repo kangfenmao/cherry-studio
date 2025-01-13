@@ -231,6 +231,7 @@
     "message": {
       "api.connection.failed": "Соединение не удалось",
       "api.connection.success": "Соединение успешно",
+      "api.check.model.title": "Выберите модель для проверки",
       "assistant.added.content": "Ассистент успешно добавлен",
       "backup.failed": "Создание резервной копии не удалось",
       "backup.success": "Резервная копия успешно создана",
