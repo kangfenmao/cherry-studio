@@ -248,6 +248,7 @@ const AppsContainer = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   margin-bottom: 10px;
+  -webkit-app-region: none;
   &::-webkit-scrollbar {
     display: none;
   }
