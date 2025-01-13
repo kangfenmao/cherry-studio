@@ -1,3 +1,4 @@
+import MinAppIcon from '@renderer/components/Icons/MinAppIcon'
 import MinApp from '@renderer/components/MinApp'
 import { useMinapps } from '@renderer/hooks/useMinapps'
 import { MinAppType } from '@renderer/types'
@@ -40,14 +41,7 @@ const App: FC<Props> = ({ app, onClick, size = 60 }) => {
   return (
     <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
       <Container onClick={handleClick}>
-        <AppIcon
-          src={app.logo}
-          style={{
-            border: app.bodered ? '0.5px solid var(--color-border)' : 'none',
-            width: `${size}px`,
-            height: `${size}px`
-          }}
-        />
+        <MinAppIcon size={size} app={app} />
         <AppTitle>{app.name}</AppTitle>
       </Container>
     </Dropdown>
@@ -61,12 +55,6 @@ const Container = styled.div`
   align-items: center;
   cursor: pointer;
   overflow: hidden;
-`
-
-const AppIcon = styled.img`
-  border-radius: 16px;
-  user-select: none;
-  -webkit-user-drag: none;
 `
 
 const AppTitle = styled.div`

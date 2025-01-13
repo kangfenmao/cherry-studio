@@ -7,10 +7,10 @@ import {
   DroppableProvided,
   DropResult
 } from '@hello-pangea/dnd'
-import { getAllMinApps } from '@renderer/config/minapps'
+import { DEFAULT_MIN_APPS } from '@renderer/config/minapps'
 import { useMinapps } from '@renderer/hooks/useMinapps'
 import { MinAppType } from '@renderer/types'
-import { FC, useCallback, useMemo } from 'react'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -74,7 +74,6 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
   setDisabledMiniApps
 }) => {
   const { t } = useTranslation()
-  const allApps = useMemo(() => getAllMinApps(), [])
   const { pinned, updateMinapps, updateDisabledMinapps, updatePinnedMinapps } = useMinapps()
 
   const handleListUpdate = useCallback(
@@ -130,7 +129,7 @@ const MiniAppIconsManager: FC<MiniAppManagerProps> = ({
   )
 
   const renderProgramItem = (program: MinAppType, provided: DraggableProvided, listType: ListType) => {
-    const { name, logo } = allApps.find((app) => app.id === program.id) || { name: program.name, logo: '' }
+    const { name, logo } = DEFAULT_MIN_APPS.find((app) => app.id === program.id) || { name: program.name, logo: '' }
 
     return (
       <ProgramItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>

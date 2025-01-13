@@ -1,5 +1,5 @@
 import { isMac } from '@renderer/config/constant'
-import { getAllMinApps } from '@renderer/config/minapps'
+import { DEFAULT_MIN_APPS } from '@renderer/config/minapps'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useMinapps } from '@renderer/hooks/useMinapps'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -59,9 +59,9 @@ const DisplaySettings: FC = () => {
   }, [dispatch])
 
   const handleResetMinApps = useCallback(() => {
-    setVisibleMiniApps(getAllMinApps())
+    setVisibleMiniApps(DEFAULT_MIN_APPS)
     setDisabledMiniApps([])
-    updateMinapps(getAllMinApps())
+    updateMinapps(DEFAULT_MIN_APPS)
     updateDisabledMinapps([])
   }, [updateDisabledMinapps, updateMinapps])
 

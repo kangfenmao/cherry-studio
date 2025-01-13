@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import DragableList from '../DragableList'
+import MinAppIcon from '../Icons/MinAppIcon'
 import MinApp from '../MinApp'
 import UserPopup from '../Popups/UserPopup'
 
@@ -149,14 +150,7 @@ const PinnedApps: FC = () => {
             <StyledLink>
               <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']}>
                 <Icon onClick={() => MinApp.start(app)}>
-                  <AppIcon
-                    src={app.logo}
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      border: app.bodered ? '0.5px solid var(--color-border)' : 'none'
-                    }}
-                  />
+                  <MinAppIcon size={20} app={app} style={{ borderRadius: 6 }} />
                 </Icon>
               </Dropdown>
             </StyledLink>
@@ -244,10 +238,6 @@ const StyledLink = styled.div`
   &* {
     user-select: none;
   }
-`
-
-const AppIcon = styled.img`
-  border-radius: 6px;
 `
 
 const AppsContainer = styled.div`

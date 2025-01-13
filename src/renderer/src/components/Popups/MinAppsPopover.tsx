@@ -1,11 +1,10 @@
 import { Center } from '@renderer/components/Layout'
-import { getAllMinApps } from '@renderer/config/minapps'
-import { useSettings } from '@renderer/hooks/useSettings'
+import { useMinapps } from '@renderer/hooks/useMinapps'
 import App from '@renderer/pages/apps/App'
 import { Popover } from 'antd'
 import { Empty } from 'antd'
 import { isEmpty } from 'lodash'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import styled from 'styled-components'
 
@@ -15,16 +14,9 @@ interface Props {
   children: React.ReactNode
 }
 
-const AppStorePopover: FC<Props> = ({ children }) => {
+const MinAppsPopover: FC<Props> = ({ children }) => {
   const [open, setOpen] = useState(false)
-  const { miniAppIcons } = useSettings()
-  const allApps = useMemo(() => getAllMinApps(), [])
-
-  // 只显示可见的小程序
-  const visibleApps = useMemo(() => {
-    if (!miniAppIcons?.visible) return allApps
-    return allApps.filter((app) => miniAppIcons.visible.includes(app.id))
-  }, [allApps, miniAppIcons?.visible])
+  const { minapps } = useMinapps()
 
   useHotkeys('esc', () => {
     setOpen(false)
@@ -37,10 +29,10 @@ const AppStorePopover: FC<Props> = ({ children }) => {
   const content = (
     <PopoverContent>
       <AppsContainer>
-        {visibleApps.map((app) => (
+        {minapps.map((app) => (
           <App key={app.id} app={app} onClick={handleClose} size={50} />
         ))}
-        {isEmpty(visibleApps) && (
+        {isEmpty(minapps) && (
           <Center>
             <Empty />
           </Center>
@@ -70,4 +62,4 @@ const AppsContainer = styled.div`
   gap: 18px;
 `
 
-export default AppStorePopover
+export default MinAppsPopover

@@ -134,6 +134,7 @@ export type MinAppType = {
   logo: string
   url: string
   bodered?: boolean
+  background?: string
 }
 
 export interface FileType {
