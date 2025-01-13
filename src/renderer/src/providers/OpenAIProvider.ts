@@ -1,4 +1,4 @@
-import { getWebSearchParams, isSupportedModel, isVisionModel } from '@renderer/config/models'
+import { getOpenAIWebSearchParams, isSupportedModel, isVisionModel } from '@renderer/config/models'
 import { getStoreSetting } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
@@ -155,7 +155,7 @@ export default class OpenAIProvider extends BaseProvider {
       max_tokens: maxTokens,
       keep_alive: this.keepAliveTime,
       stream: isSupportStreamOutput(),
-      ...(assistant.enableWebSearch ? getWebSearchParams(model) : {}),
+      ...(assistant.enableWebSearch ? getOpenAIWebSearchParams(model) : {}),
       ...this.getCustomParameters(assistant)
     })
 

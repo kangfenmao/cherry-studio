@@ -604,6 +604,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'GLM-4'
     },
     {
+      id: 'glm-4-flashx',
+      provider: 'zhipu',
+      name: 'GLM-4-FlashX',
+      group: 'GLM-4'
+    },
+    {
       id: 'glm-4v',
       provider: 'zhipu',
       name: 'GLM 4V',
@@ -1050,6 +1056,12 @@ export function isWebSearchModel(model: Model): boolean {
 
   const provider = getProviderByModel(model)
 
+  if (provider.type === 'openai') {
+    if (model?.id?.includes('gemini-2.0-flash-exp')) {
+      return true
+    }
+  }
+
   if (!provider) {
     return false
   }
@@ -1073,7 +1085,7 @@ export function isWebSearchModel(model: Model): boolean {
   return false
 }
 
-export function getWebSearchParams(model: Model): Record<string, any> {
+export function getOpenAIWebSearchParams(model: Model): Record<string, any> {
   if (isWebSearchModel(model)) {
     if (model.provider === 'hunyuan') {
       return { enable_enhancement: true }
@@ -1087,6 +1099,14 @@ export function getWebSearchParams(model: Model): Record<string, any> {
             tools: webSearchTools
           }
     }
+
+    return {
+      type: 'function',
+      function: {
+        name: 'googleSearch'
+      }
+    }
   }
+
   return {}
 }
