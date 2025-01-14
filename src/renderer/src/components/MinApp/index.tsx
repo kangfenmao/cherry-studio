@@ -207,7 +207,7 @@ export default class MinApp {
   static app: MinAppType | null = null
 
   static async start(app: MinAppType) {
-    if (MinApp.app?.id === app.id) {
+    if (app?.id && MinApp.app?.id === app?.id) {
       return
     }
 
