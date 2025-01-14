@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash'
 import { createMigrate } from 'redux-persist'
 
 import { RootState } from '.'
+import { DEFAULT_SIDEBAR_ICONS } from './settings'
 
 const migrateConfig = {
   '2': (state: RootState) => {
@@ -783,6 +784,19 @@ const migrateConfig = {
         enabled: true,
         system: false
       })
+    }
+    state.settings.sidebarIcons = {
+      visible: DEFAULT_SIDEBAR_ICONS,
+      disabled: []
+    }
+    return state
+  },
+  '55': (state: RootState) => {
+    if (!state.settings.sidebarIcons) {
+      state.settings.sidebarIcons = {
+        visible: DEFAULT_SIDEBAR_ICONS,
+        disabled: []
+      }
     }
     return state
   }
