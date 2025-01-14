@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import Markdown from '../Markdown/Markdown'
 import MessageAttachments from './MessageAttachments'
 import MessageError from './MessageError'
+import MessageSearchResults from './MessageSearchResults'
 
 const MessageContent: React.FC<{
   message: Message
@@ -50,6 +51,7 @@ const MessageContent: React.FC<{
         </>
       )}
       <MessageAttachments message={message} />
+      <MessageSearchResults message={message} />
     </>
   )
 }

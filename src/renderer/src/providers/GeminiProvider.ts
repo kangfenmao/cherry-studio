@@ -176,7 +176,8 @@ export default class GeminiProvider extends BaseProvider {
           completion_tokens: response.usageMetadata?.candidatesTokenCount,
           time_completion_millsec,
           time_first_token_millsec: 0
-        }
+        },
+        search: response.candidates?.[0]?.groundingMetadata
       })
       return
     }
@@ -201,7 +202,8 @@ export default class GeminiProvider extends BaseProvider {
           completion_tokens: chunk.usageMetadata?.candidatesTokenCount,
           time_completion_millsec,
           time_first_token_millsec
-        }
+        },
+        search: chunk.candidates?.[0]?.groundingMetadata
       })
     }
   }
