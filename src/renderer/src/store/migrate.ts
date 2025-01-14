@@ -799,6 +799,19 @@ const migrateConfig = {
       }
     }
     return state
+  },
+  '56': (state: RootState) => {
+    state.llm.providers.push({
+      id: 'qwenlm',
+      name: 'QwenLM',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://chat.qwenlm.ai/api/',
+      models: SYSTEM_MODELS.qwenlm,
+      isSystem: true,
+      enabled: false
+    })
+    return state
   }
 }
 
