@@ -82,5 +82,6 @@ jobs:
         with:
           draft: true
           allowUpdates: true
+          makeLatest: false
           artifacts: 'dist/*.exe,dist/*.zip,dist/*.dmg,dist/*.AppImage,dist/*.snap,dist/*.deb,dist/*.rpm,dist/*.tar.gz,dist/latest*.yml,dist/*.blockmap'
           token: ${{ secrets.GH_TOKEN }}
