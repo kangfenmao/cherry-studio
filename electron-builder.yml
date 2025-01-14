@@ -80,4 +80,9 @@ afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复智能体无法创建的问题
+    支持将小程序固定到侧边栏 @hxp0618
+    增加 Grok 和 QwenLM 小程序 @ruiwarn
+    支持下载模型生成的 CSV 文件
+    知识库增加刷新按钮
+    Gemini 搜索增加引用来源
+    修复模型设置参数无法保存的问题
