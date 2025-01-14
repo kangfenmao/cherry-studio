@@ -95,7 +95,7 @@ const initialState: SettingsState = {
   webdavPass: '',
   webdavPath: '/cherry-studio',
   webdavAutoSync: false,
-  webdavSyncInterval: 5,
+  webdavSyncInterval: 0,
   translateModelPrompt: TRANSLATE_PROMPT,
   autoTranslateWithSpace: false,
   enableTopicNaming: true,

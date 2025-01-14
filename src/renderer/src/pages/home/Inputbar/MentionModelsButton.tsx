@@ -105,7 +105,7 @@ const MentionModelsButton: FC<Props> = ({ onMentionModel: onSelect, ToolbarButto
       <Dropdown menu={{ items: modelMenuItems }} trigger={['click']} overlayClassName="mention-models-dropdown">
         <Tooltip placement="top" title={t('agents.edit.model.select.title')} arrow>
           <ToolbarButton type="text">
-            <i className="iconfont icon-at"></i>
+            <i className="iconfont icon-at" style={{ fontSize: 18 }}></i>
           </ToolbarButton>
         </Tooltip>
       </Dropdown>

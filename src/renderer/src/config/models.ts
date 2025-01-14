@@ -269,49 +269,49 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       id: 'qwen-plus-latest',
       provider: 'qwenlm',
       name: 'Qwen2.5-Plus',
-      group: 'Qwen'
+      group: 'Qwen 2.5'
     },
     {
       id: 'qvq-72b-preview',
       provider: 'qwenlm',
       name: 'QVQ-72B-Preview',
-      group: 'Qwen'
+      group: 'QVQ'
     },
     {
       id: 'qwq-32b-preview',
       provider: 'qwenlm',
       name: 'QwQ-32B-Preview',
-      group: 'Qwen'
+      group: 'QVQ'
     },
     {
       id: 'qwen2.5-coder-32b-instruct',
       provider: 'qwenlm',
       name: 'Qwen2.5-Coder-32B-Instruct',
-      group: 'Qwen'
+      group: 'Qwen 2.5'
     },
     {
       id: 'qwen-vl-max-latest',
       provider: 'qwenlm',
       name: 'Qwen2-VL-Max',
-      group: 'Qwen'
+      group: 'Qwen 2'
     },
     {
       id: 'qwen-turbo-latest',
       provider: 'qwenlm',
       name: 'Qwen2.5-Turbo',
-      group: 'Qwen'
+      group: 'Qwen 2.5'
     },
     {
       id: 'qwen2.5-72b-instruct',
       provider: 'qwenlm',
       name: 'Qwen2.5-72B-Instruct',
-      group: 'Qwen'
+      group: 'Qwen 2.5'
     },
     {
       id: 'qwen2.5-32b-instruct',
       provider: 'qwenlm',
       name: 'Qwen2.5-32B-Instruct',
-      group: 'Qwen'
+      group: 'Qwen 2.5'
     }
   ],
   aihubmix: [
