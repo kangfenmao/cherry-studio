@@ -1105,14 +1105,14 @@ export function isWebSearchModel(model: Model): boolean {
 
   const provider = getProviderByModel(model)
 
-  if (provider.type === 'openai') {
+  if (!provider) {
+    return false
+  }
+
+  if (provider?.type === 'openai') {
     if (model?.id?.includes('gemini-2.0-flash-exp')) {
       return true
     }
-  }
-
-  if (!provider) {
-    return false
   }
 
   if (provider.id === 'gemini' || provider?.type === 'gemini') {
