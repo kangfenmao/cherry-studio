@@ -183,6 +183,10 @@ export default class OpenAIProvider extends BaseProvider {
     const _messages = filterContextMessages(takeRight(messages, contextCount + 1))
     onFilterMessages(_messages)
 
+    if (this.provider.id === 'qwenlm' && _messages[0]?.role !== 'user') {
+      userMessages.push({ role: 'user', content: '' })
+    }
+
     for (const message of _messages) {
       userMessages.push(await this.getMessageParam(message, model))
     }
