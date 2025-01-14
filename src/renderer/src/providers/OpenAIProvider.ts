@@ -123,7 +123,7 @@ export default class OpenAIProvider extends BaseProvider {
 
     //QwenLM上传图片
     if (this.provider.id === 'qwenlm') {
-      let qwenlm_image_url: { type: string; image: string }[] = []
+      const qwenlm_image_url: { type: string; image: string }[] = []
 
       for (const file of message.files || []) {
         if (file.type === FileTypes.IMAGE && isVision) {
@@ -147,22 +147,22 @@ export default class OpenAIProvider extends BaseProvider {
         role: message.role,
         content: [...parts, ...qwenlm_image_url]
       } as ChatCompletionMessageParam
-    } else {
-      for (const file of message.files || []) {
-        if (file.type === FileTypes.IMAGE && isVision) {
-          const image = await window.api.file.base64Image(file.id + file.ext)
-          parts.push({
-            type: 'image_url',
-            image_url: { url: image.data }
-          })
-        }
-        if ([FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type)) {
-          const fileContent = await (await window.api.file.read(file.id + file.ext)).trim()
-          parts.push({
-            type: 'text',
-            text: file.origin_name + '\n' + fileContent
-          })
-        }
+    }
+
+    for (const file of message.files || []) {
+      if (file.type === FileTypes.IMAGE && isVision) {
+        const image = await window.api.file.base64Image(file.id + file.ext)
+        parts.push({
+          type: 'image_url',
+          image_url: { url: image.data }
+        })
+      }
+      if ([FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type)) {
+        const fileContent = await (await window.api.file.read(file.id + file.ext)).trim()
+        parts.push({
+          type: 'text',
+          text: file.origin_name + '\n' + fileContent
+        })
       }
     }
 
