@@ -1,8 +1,11 @@
 import Scrollbar from '@renderer/components/Scrollbar'
+import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getAssistantMessage } from '@renderer/services/MessagesService'
 import { Assistant, Message } from '@renderer/types'
+import { last } from 'lodash'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import MessageItem from './Message'
@@ -21,6 +24,8 @@ const Messages: FC<Props> = ({ assistant, route }) => {
 
   const containerRef = useRef<HTMLDivElement>(null)
   const messagesRef = useRef(messages)
+
+  const { t } = useTranslation()
 
   messagesRef.current = messages
 
@@ -43,6 +48,14 @@ const Messages: FC<Props> = ({ assistant, route }) => {
     const unsubscribes = [EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, onSendMessage)]
     return () => unsubscribes.forEach((unsub) => unsub())
   }, [assistant.id, onSendMessage])
+
+  useShortcut('copy_last_message', () => {
+    const lastMessage = last(messages)
+    if (lastMessage) {
+      navigator.clipboard.writeText(lastMessage.content)
+      window.message.success(t('message.copy.success'))
+    }
+  })
 
   return (
     <Container id="messages" key={assistant.id} ref={containerRef}>

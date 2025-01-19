@@ -14,7 +14,7 @@ import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowT
 const QuickAssistantSettings: FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { enableQuickAssistant, clickTrayToShowQuickAssistant, setTray } = useSettings()
+  const { enableQuickAssistant, clickTrayToShowQuickAssistant, tray, setTray } = useSettings()
   const dispatch = useAppDispatch()
 
   const handleEnableQuickAssistant = async (enable: boolean) => {
@@ -32,15 +32,16 @@ const QuickAssistantSettings: FC = () => {
         key: 'quick-assistant-info'
       })
     }
+
+    if (enable && clickTrayToShowQuickAssistant) {
+      setTray(true)
+    }
   }
 
   const handleClickTrayToShowQuickAssistant = async (checked: boolean) => {
     dispatch(setClickTrayToShowQuickAssistant(checked))
     await window.api.config.set('clickTrayToShowQuickAssistant', checked)
-    if (checked) {
-      setTray(true)
-      window.api.setTray(true)
-    }
+    checked && setTray(true)
   }
 
   return (

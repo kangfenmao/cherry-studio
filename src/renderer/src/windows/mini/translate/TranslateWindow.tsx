@@ -9,7 +9,7 @@ import { Assistant, Message } from '@renderer/types'
 import { runAsyncFunction, uuid } from '@renderer/utils'
 import { Select, Space } from 'antd'
 import { isEmpty } from 'lodash'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -24,26 +24,40 @@ const Translate: FC<Props> = ({ text }) => {
   const [targetLanguage, setTargetLanguage] = useState(_targetLanguage)
   const { translateModel } = useDefaultModel()
   const { t } = useTranslation()
+  const translatingRef = useRef(false)
 
   _targetLanguage = targetLanguage
 
   const translate = useCallback(async () => {
     if (!text.trim() || !translateModel) return
 
-    const assistant: Assistant = getDefaultTranslateAssistant(targetLanguage, text)
-    const message: Message = {
-      id: uuid(),
-      role: 'user',
-      content: text,
-      assistantId: assistant.id,
-      topicId: uuid(),
-      modelId: translateModel.id,
-      createdAt: new Date().toISOString(),
-      type: 'text',
-      status: 'sending'
-    }
+    if (translatingRef.current) return
 
-    await fetchTranslate({ message, assistant, onResponse: setResult })
+    try {
+      translatingRef.current = true
+
+      const targetLang = await db.settings.get({ id: 'translate:target:language' })
+      const assistant: Assistant = getDefaultTranslateAssistant(targetLang?.value || targetLanguage, text)
+      const message: Message = {
+        id: uuid(),
+        role: 'user',
+        content: text,
+        assistantId: assistant.id,
+        topicId: uuid(),
+        modelId: translateModel.id,
+        createdAt: new Date().toISOString(),
+        type: 'text',
+        status: 'sending'
+      }
+
+      await fetchTranslate({ message, assistant, onResponse: setResult })
+
+      translatingRef.current = false
+    } catch (error) {
+      console.error(error)
+    } finally {
+      translatingRef.current = false
+    }
   }, [text, targetLanguage, translateModel])
 
   useEffect(() => {
@@ -75,9 +89,9 @@ const Translate: FC<Props> = ({ text }) => {
           style={{ width: 200 }}
           optionFilterProp="label"
           options={TranslateLanguageOptions}
-          onChange={(value) => {
+          onChange={async (value) => {
+            await db.settings.put({ id: 'translate:target:language', value })
             setTargetLanguage(value)
-            db.settings.put({ id: 'translate:target:language', value })
           }}
           optionRender={(option) => (
             <Space>

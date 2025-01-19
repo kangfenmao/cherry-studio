@@ -30,9 +30,9 @@ const HomeWindow: FC = () => {
   const { t } = useTranslation()
   const textRef = useRef(text)
 
-  const referenceText = selectedText || clipboardText
+  const referenceText = selectedText || clipboardText || text
 
-  textRef.current = `${referenceText}\n\n${text}`
+  textRef.current = referenceText === text ? text : `${referenceText}\n\n${text}`
 
   const onReadClipboard = useCallback(async () => {
     const text = await navigator.clipboard.readText()
@@ -58,6 +58,7 @@ const HomeWindow: FC = () => {
     }
 
     if (e.key === 'Enter') {
+      e.preventDefault()
       if (text.trim() === '') {
         return
       }
@@ -69,11 +70,12 @@ const HomeWindow: FC = () => {
 
   const onSendMessage = useCallback(
     async (prompt?: string) => {
+      const text = textRef.current.trim()
       setTimeout(() => {
         const message = {
           id: uuid(),
           role: 'user',
-          content: prompt ? `${prompt}\n\n${textRef.current}` : textRef.current,
+          content: prompt ? `${prompt}\n\n${text}` : text,
           assistantId: defaultAssistant.id,
           topicId: defaultAssistant.topics[0].id || uuid(),
           createdAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),

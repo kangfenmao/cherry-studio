@@ -12,7 +12,7 @@ import styled from 'styled-components'
 interface Props {
   message: Message
   index?: number
-  total?: number
+  total: number
   route: string
   onGetMessages?: () => Message[]
   onSetMessages?: Dispatch<SetStateAction<Message[]>>
@@ -35,6 +35,8 @@ const MessageItem: FC<Props> = ({ message: _message, index, total, route, onSetM
   }, [messageFont])
 
   const messageBackground = getMessageBackground(true, isAssistantMessage)
+
+  const maxWidth = window.location.hash === '#/mini' ? '480px' : '100%'
 
   useEffect(() => {
     if (onGetMessages && onSetMessages) {
@@ -70,7 +72,7 @@ const MessageItem: FC<Props> = ({ message: _message, index, total, route, onSetM
     <MessageContainer
       key={message.id}
       ref={messageContainerRef}
-      style={{ ...(isBubbleStyle ? { alignItems: isAssistantMessage ? 'start' : 'end' } : {}) }}>
+      style={{ ...(isBubbleStyle ? { alignItems: isAssistantMessage ? 'start' : 'end' } : {}), maxWidth }}>
       <MessageContentContainer
         className="message-content-container"
         style={{

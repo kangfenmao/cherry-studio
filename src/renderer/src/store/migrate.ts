@@ -847,6 +847,7 @@ const migrateConfig = {
     })
 
     state.settings.enableQuickAssistant = false
+    state.settings.clickTrayToShowQuickAssistant = true
 
     return state
   }

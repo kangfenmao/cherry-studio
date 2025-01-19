@@ -305,7 +305,9 @@ export class WindowService {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       this.miniWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/mini')
     } else {
-      this.miniWindow.loadFile(join(__dirname, '../renderer/index.html') + '#/mini')
+      this.miniWindow.loadFile(join(__dirname, '../renderer/index.html'), {
+        hash: '#/mini'
+      })
     }
   }
 
