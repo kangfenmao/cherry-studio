@@ -54,6 +54,7 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
     const newPinned = isPinned ? pinned.filter((item) => item.id !== app.id) : [...pinned, app]
     updatePinnedMinapps(newPinned)
   }
+
   const Title = () => {
     return (
       <TitleContainer style={{ justifyContent: 'space-between' }}>
@@ -63,7 +64,7 @@ const PopupContainer: React.FC<Props> = ({ app, resolve }) => {
             <ReloadOutlined />
           </Button>
           <Button onClick={onTogglePin} className={isPinned ? 'pinned' : ''}>
-            <PushpinOutlined />
+            <PushpinOutlined style={{ fontSize: 16 }} />
           </Button>
           {canOpenExternalLink && (
             <Button onClick={onOpenLink}>
