@@ -192,7 +192,7 @@ export default class OpenAIProvider extends BaseProvider {
     }
   }
 
-  async translate(message: Message, assistant: Assistant) {
+  async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
     const messages = [
@@ -200,16 +200,41 @@ export default class OpenAIProvider extends BaseProvider {
       { role: 'user', content: message.content }
     ]
 
+    const isOpenAIo1 = model.id.startsWith('o1')
+
+    const isSupportedStreamOutput = () => {
+      if (!onResponse) {
+        return false
+      }
+      if (this.provider.id === 'github' && isOpenAIo1) {
+        return false
+      }
+      return true
+    }
+
+    const stream = isSupportedStreamOutput()
+
     // @ts-ignore key is not typed
     const response = await this.sdk.chat.completions.create({
       model: model.id,
       messages: messages as ChatCompletionMessageParam[],
-      stream: false,
+      stream,
       keep_alive: this.keepAliveTime,
       temperature: assistant?.settings?.temperature
     })
 
-    return response.choices[0].message?.content || ''
+    if (!stream) {
+      return response.choices[0].message?.content || ''
+    }
+
+    let text = ''
+
+    for await (const chunk of response) {
+      text += chunk.choices[0]?.delta?.content || ''
+      onResponse?.(text)
+    }
+
+    return text
   }
 
   public async summaries(messages: Message[], assistant: Assistant): Promise<string> {

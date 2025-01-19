@@ -1,11 +1,14 @@
+import { SwapOutlined } from '@ant-design/icons'
 import Scrollbar from '@renderer/components/Scrollbar'
+import { TranslateLanguageOptions } from '@renderer/config/translate'
 import db from '@renderer/databases'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { fetchTranslate } from '@renderer/services/ApiService'
 import { getDefaultTranslateAssistant } from '@renderer/services/AssistantService'
 import { Assistant, Message } from '@renderer/types'
-import { uuid } from '@renderer/utils'
+import { runAsyncFunction, uuid } from '@renderer/utils'
 import { Select, Space } from 'antd'
+import { isEmpty } from 'lodash'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -14,70 +17,15 @@ interface Props {
   text: string
 }
 
-const Translate: FC<Props> = ({ text }) => {
-  const { t } = useTranslation()
-  const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState('')
-  const [targetLanguage, setTargetLanguage] = useState('chinese')
-  const { translateModel } = useDefaultModel()
+let _targetLanguage = 'chinese'
 
-  const languageOptions = [
-    {
-      value: 'english',
-      label: t('languages.english'),
-      emoji: '🇬🇧'
-    },
-    {
-      value: 'chinese',
-      label: t('languages.chinese'),
-      emoji: '🇨🇳'
-    },
-    {
-      value: 'chinese-traditional',
-      label: t('languages.chinese-traditional'),
-      emoji: '🇭🇰'
-    },
-    {
-      value: 'japanese',
-      label: t('languages.japanese'),
-      emoji: '🇯🇵'
-    },
-    {
-      value: 'korean',
-      label: t('languages.korean'),
-      emoji: '🇰🇷'
-    },
-    {
-      value: 'russian',
-      label: t('languages.russian'),
-      emoji: '🇷🇺'
-    },
-    {
-      value: 'spanish',
-      label: t('languages.spanish'),
-      emoji: '🇪🇸'
-    },
-    {
-      value: 'french',
-      label: t('languages.french'),
-      emoji: '🇫🇷'
-    },
-    {
-      value: 'italian',
-      label: t('languages.italian'),
-      emoji: '🇮🇹'
-    },
-    {
-      value: 'portuguese',
-      label: t('languages.portuguese'),
-      emoji: '🇵🇹'
-    },
-    {
-      value: 'arabic',
-      label: t('languages.arabic'),
-      emoji: '🇸🇦'
-    }
-  ]
+const Translate: FC<Props> = ({ text }) => {
+  const [result, setResult] = useState('')
+  const [targetLanguage, setTargetLanguage] = useState(_targetLanguage)
+  const { translateModel } = useDefaultModel()
+  const { t } = useTranslation()
+
+  _targetLanguage = targetLanguage
 
   const translate = useCallback(async () => {
     if (!text.trim() || !translateModel) return
@@ -95,36 +43,41 @@ const Translate: FC<Props> = ({ text }) => {
       status: 'sending'
     }
 
-    setLoading(true)
-    const translateText = await fetchTranslate({ message, assistant })
-    setResult(translateText)
-    setLoading(false)
+    await fetchTranslate({ message, assistant, onResponse: setResult })
   }, [text, targetLanguage, translateModel])
 
   useEffect(() => {
-    // 获取默认目标语言
-    db.settings.get({ id: 'translate:target:language' }).then((targetLang) => {
-      if (targetLang) {
-        setTargetLanguage(targetLang.value)
-      }
+    runAsyncFunction(async () => {
+      const targetLang = await db.settings.get({ id: 'translate:target:language' })
+      targetLang && setTargetLanguage(targetLang.value)
     })
   }, [])
 
   useEffect(() => {
     translate()
-  }, [])
+  }, [translate])
 
   return (
     <Container>
-      <LanguageSelect>
+      <MenuContainer>
         <Select
-          value={targetLanguage}
-          style={{ width: 140 }}
+          showSearch
+          value="any"
+          style={{ width: 200 }}
           optionFilterProp="label"
-          options={languageOptions}
+          disabled
+          options={[{ label: t('translate.any.language'), value: 'any' }]}
+        />
+        <SwapOutlined />
+        <Select
+          showSearch
+          value={targetLanguage}
+          style={{ width: 200 }}
+          optionFilterProp="label"
+          options={TranslateLanguageOptions}
           onChange={(value) => {
             setTargetLanguage(value)
-            translate()
+            db.settings.put({ id: 'translate:target:language', value })
           }}
           optionRender={(option) => (
             <Space>
@@ -135,8 +88,16 @@ const Translate: FC<Props> = ({ text }) => {
             </Space>
           )}
         />
-      </LanguageSelect>
-      <Main>{loading ? <LoadingText>翻译中...</LoadingText> : <ResultText>{result || text}</ResultText>}</Main>
+      </MenuContainer>
+      <Main>
+        {isEmpty(result) ? (
+          <LoadingText>{t('translate.output.placeholder')}...</LoadingText>
+        ) : (
+          <OutputContainer>
+            <ResultText>{result}</ResultText>
+          </OutputContainer>
+        )}
+      </Main>
     </Container>
   )
 }
@@ -158,7 +119,7 @@ const Main = styled.div`
   overflow: hidden;
 `
 
-const ResultText = styled(Scrollbar)`
+const ResultText = styled.div`
   white-space: pre-wrap;
   word-break: break-word;
   width: 100%;
@@ -169,8 +130,19 @@ const LoadingText = styled.div`
   font-style: italic;
 `
 
-const LanguageSelect = styled.div`
-  margin-bottom: 8px;
+const MenuContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 20px;
+`
+
+const OutputContainer = styled(Scrollbar)`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
 `
 
 export default Translate

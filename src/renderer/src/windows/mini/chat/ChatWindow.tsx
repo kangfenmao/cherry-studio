@@ -4,7 +4,7 @@ import { getDefaultModel } from '@renderer/services/AssistantService'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-import Messages from './Messages'
+import Messages from './components/Messages'
 
 interface Props {
   route: string

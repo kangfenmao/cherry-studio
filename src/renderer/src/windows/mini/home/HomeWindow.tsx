@@ -1,5 +1,7 @@
 import { isMac } from '@renderer/config/constant'
 import { useDefaultAssistant, useDefaultModel } from '@renderer/hooks/useAssistant'
+import { useSettings } from '@renderer/hooks/useSettings'
+import i18n from '@renderer/i18n'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { EventEmitter } from '@renderer/services/EventService'
 import { uuid } from '@renderer/utils'
@@ -11,11 +13,11 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import ChatWindow from '../chat/ChatWindow'
+import TranslateWindow from '../translate/TranslateWindow'
 import ClipboardPreview from './components/ClipboardPreview'
 import FeatureMenus from './components/FeatureMenus'
 import Footer from './components/Footer'
 import InputBar from './components/InputBar'
-import Translate from './Translate'
 
 const HomeWindow: FC = () => {
   const [route, setRoute] = useState<'home' | 'chat' | 'translate' | 'summary' | 'explanation'>('home')
@@ -24,6 +26,7 @@ const HomeWindow: FC = () => {
   const [text, setText] = useState('')
   const { defaultAssistant } = useDefaultAssistant()
   const { defaultModel: model } = useDefaultModel()
+  const { language } = useSettings()
   const { t } = useTranslation()
   const textRef = useRef(text)
 
@@ -41,6 +44,10 @@ const HomeWindow: FC = () => {
   useEffect(() => {
     onReadClipboard()
   }, [onReadClipboard])
+
+  useEffect(() => {
+    i18n.changeLanguage(language || navigator.language || 'en-US')
+  }, [language])
 
   const onCloseWindow = () => isMiniWindow && window.close()
 
@@ -145,7 +152,7 @@ const HomeWindow: FC = () => {
   if (route === 'translate') {
     return (
       <Container>
-        <Translate text={referenceText} />
+        <TranslateWindow text={referenceText} />
         <Divider style={{ margin: '10px 0' }} />
         <Footer route={route} onExit={() => setRoute('home')} />
       </Container>
