@@ -1,6 +1,7 @@
 import { isMac } from '@renderer/config/constant'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { ThemeMode } from '@renderer/types'
+import { isMiniWindow } from '@renderer/utils'
 import React, { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
 
 interface ThemeContextType {
@@ -39,7 +40,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, defaultT
 
   useEffect(() => {
     document.body.setAttribute('theme-mode', _theme)
-    window.api?.setTheme(_theme === ThemeMode.dark ? 'dark' : 'light')
+    if (!isMiniWindow()) {
+      window.api?.setTheme(_theme === ThemeMode.dark ? 'dark' : 'light')
+    }
   }, [_theme])
 
   useEffect(() => {

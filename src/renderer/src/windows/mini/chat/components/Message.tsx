@@ -6,6 +6,7 @@ import MessageErrorBoundary from '@renderer/pages/home/Messages/MessageErrorBoun
 import { fetchChatCompletion } from '@renderer/services/ApiService'
 import { getDefaultAssistant, getDefaultModel } from '@renderer/services/AssistantService'
 import { Message } from '@renderer/types'
+import { isMiniWindow } from '@renderer/utils'
 import { Dispatch, FC, memo, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -36,7 +37,7 @@ const MessageItem: FC<Props> = ({ message: _message, index, total, route, onSetM
 
   const messageBackground = getMessageBackground(true, isAssistantMessage)
 
-  const maxWidth = window.location.hash === '#/mini' ? '480px' : '100%'
+  const maxWidth = isMiniWindow() ? '480px' : '100%'
 
   useEffect(() => {
     if (onGetMessages && onSetMessages) {

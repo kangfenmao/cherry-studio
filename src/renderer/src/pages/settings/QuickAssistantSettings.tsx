@@ -14,7 +14,7 @@ import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowT
 const QuickAssistantSettings: FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { enableQuickAssistant, clickTrayToShowQuickAssistant, tray, setTray } = useSettings()
+  const { enableQuickAssistant, clickTrayToShowQuickAssistant, setTray } = useSettings()
   const dispatch = useAppDispatch()
 
   const handleEnableQuickAssistant = async (enable: boolean) => {
@@ -84,6 +84,7 @@ const AssistantContainer = styled.div`
   border-radius: 10px;
   border: 0.5px solid var(--color-border);
   margin: 0 auto;
+  overflow: hidden;
 `
 
 export default QuickAssistantSettings
