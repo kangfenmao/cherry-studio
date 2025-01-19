@@ -1,9 +1,10 @@
+import { InfoCircleOutlined } from '@ant-design/icons'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useAppDispatch } from '@renderer/store'
-import { setClickTrayToShowQuickAssistant } from '@renderer/store/settings'
+import { setClickTrayToShowQuickAssistant, setEnableQuickAssistant } from '@renderer/store/settings'
 import HomeWindow from '@renderer/windows/mini/home/HomeWindow'
-import { Switch } from 'antd'
+import { Switch, Tooltip } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -13,8 +14,25 @@ import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowT
 const QuickAssistantSettings: FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { clickTrayToShowQuickAssistant, setTray } = useSettings()
+  const { enableQuickAssistant, clickTrayToShowQuickAssistant, setTray } = useSettings()
   const dispatch = useAppDispatch()
+
+  const handleEnableQuickAssistant = async (enable: boolean) => {
+    dispatch(setEnableQuickAssistant(enable))
+    await window.api.config.set('enableQuickAssistant', enable)
+    window.api.restartTray()
+    const disable = !enable
+    disable && window.api.miniWindow.close()
+
+    if (enable && !clickTrayToShowQuickAssistant) {
+      window.message.info({
+        content: t('settings.quickAssistant.use_shortcut_to_show'),
+        duration: 4,
+        icon: <InfoCircleOutlined />,
+        key: 'quick-assistant-info'
+      })
+    }
+  }
 
   const handleClickTrayToShowQuickAssistant = async (checked: boolean) => {
     dispatch(setClickTrayToShowQuickAssistant(checked))
@@ -31,13 +49,29 @@ const QuickAssistantSettings: FC = () => {
         <SettingTitle>{t('settings.quickAssistant.title')}</SettingTitle>
         <SettingDivider />
         <SettingRow>
-          <SettingRowTitle>{t('settings.quickAssistant.click_tray_to_show')}</SettingRowTitle>
-          <Switch checked={clickTrayToShowQuickAssistant} onChange={handleClickTrayToShowQuickAssistant} />
+          <SettingRowTitle style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span>{t('settings.quickAssistant.enable_quick_assistant')}</span>
+            <Tooltip title={t('settings.quickAssistant.use_shortcut_to_show')} placement="right">
+              <InfoCircleOutlined style={{ cursor: 'pointer' }} />
+            </Tooltip>
+          </SettingRowTitle>
+          <Switch checked={enableQuickAssistant} onChange={handleEnableQuickAssistant} />
         </SettingRow>
+        {enableQuickAssistant && (
+          <>
+            <SettingDivider />
+            <SettingRow>
+              <SettingRowTitle>{t('settings.quickAssistant.click_tray_to_show')}</SettingRowTitle>
+              <Switch checked={clickTrayToShowQuickAssistant} onChange={handleClickTrayToShowQuickAssistant} />
+            </SettingRow>
+          </>
+        )}
       </SettingGroup>
-      <AssistantContainer onClick={() => {}}>
-        <HomeWindow />
-      </AssistantContainer>
+      {enableQuickAssistant && (
+        <AssistantContainer>
+          <HomeWindow />
+        </AssistantContainer>
+      )}
     </SettingContainer>
   )
 }

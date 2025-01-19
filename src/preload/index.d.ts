@@ -18,6 +18,7 @@ declare global {
       setProxy: (proxy: string | undefined) => void
       setLanguage: (theme: LanguageVarious) => void
       setTray: (isActive: boolean) => void
+      restartTray: () => void
       setTheme: (theme: 'light' | 'dark') => void
       minApp: (options: { url: string; windowOptions?: Electron.BrowserWindowConstructorOptions }) => void
       reload: () => void
@@ -95,6 +96,12 @@ declare global {
       config: {
         set: (key: string, value: any) => Promise<void>
         get: (key: string) => Promise<any>
+      }
+      miniWindow: {
+        show: () => Promise<void>
+        hide: () => Promise<void>
+        close: () => Promise<void>
+        toggle: () => Promise<void>
       }
     }
   }

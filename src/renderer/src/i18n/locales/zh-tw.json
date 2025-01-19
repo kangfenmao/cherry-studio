@@ -387,7 +387,9 @@
       },
       "quickAssistant": {
         "title": "快捷助手",
-        "click_tray_to_show": "點擊系統托盤圖標打開"
+        "click_tray_to_show": "點擊托盤圖標啟動",
+        "enable_quick_assistant": "啟用快捷助手",
+        "use_shortcut_to_show": "右鍵點擊托盤圖標或使用快捷鍵啟動"
       },
       "display.title": "顯示設定",
       "font_size.title": "訊息字體大小",

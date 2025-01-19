@@ -67,8 +67,6 @@ export class WindowService {
 
     this.setupMainWindow(this.mainWindow, mainWindowState)
 
-    setTimeout(() => this.showMiniWindow(), 5000)
-
     return this.mainWindow
   }
 
@@ -241,6 +239,12 @@ export class WindowService {
   }
 
   public showMiniWindow() {
+    const enableQuickAssistant = configManager.getEnableQuickAssistant()
+
+    if (!enableQuickAssistant) {
+      return
+    }
+
     if (this.selectionMenuWindow) {
       this.selectionMenuWindow.hide()
     }
@@ -260,7 +264,7 @@ export class WindowService {
     this.miniWindow = new BrowserWindow({
       width: 500,
       height: 520,
-      show: false,
+      show: true,
       autoHideMenuBar: true,
       transparent: isMac,
       vibrancy: 'under-window',
@@ -279,14 +283,6 @@ export class WindowService {
     })
 
     this.miniWindow.on('blur', () => {
-      this.miniWindow?.hide()
-    })
-
-    this.miniWindow.on('close', (event) => {
-      if (this.isQuitting) {
-        return
-      }
-      event.preventDefault()
       this.miniWindow?.hide()
     })
 
@@ -313,9 +309,19 @@ export class WindowService {
     }
   }
 
+  public hideMiniWindow() {
+    this.miniWindow?.hide()
+  }
+
+  public closeMiniWindow() {
+    this.miniWindow?.close()
+  }
+
   public toggleMiniWindow() {
     if (this.miniWindow) {
       this.miniWindow.isVisible() ? this.miniWindow.hide() : this.miniWindow.show()
+    } else {
+      this.showMiniWindow()
     }
   }
 

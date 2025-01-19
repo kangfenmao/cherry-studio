@@ -10,6 +10,7 @@ const api = {
   checkForUpdate: () => ipcRenderer.invoke('app:check-for-update'),
   setLanguage: (lang: string) => ipcRenderer.invoke('app:set-language', lang),
   setTray: (isActive: boolean) => ipcRenderer.invoke('app:set-tray', isActive),
+  restartTray: () => ipcRenderer.invoke('app:restart-tray'),
   setTheme: (theme: 'light' | 'dark') => ipcRenderer.invoke('app:set-theme', theme),
   openWebsite: (url: string) => ipcRenderer.invoke('open:website', url),
   minApp: (url: string) => ipcRenderer.invoke('minapp', url),
@@ -89,6 +90,12 @@ const api = {
   config: {
     set: (key: string, value: any) => ipcRenderer.invoke('config:set', key, value),
     get: (key: string) => ipcRenderer.invoke('config:get', key)
+  },
+  miniWindow: {
+    show: () => ipcRenderer.invoke('miniwindow:show'),
+    hide: () => ipcRenderer.invoke('miniwindow:hide'),
+    close: () => ipcRenderer.invoke('miniwindow:close'),
+    toggle: () => ipcRenderer.invoke('miniwindow:toggle')
   }
 }
 

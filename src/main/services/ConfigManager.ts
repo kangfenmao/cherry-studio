@@ -92,6 +92,14 @@ export class ConfigManager {
     this.store.set('clickTrayToShowQuickAssistant', value)
   }
 
+  getEnableQuickAssistant(): boolean {
+    return this.store.get('enableQuickAssistant', false) as boolean
+  }
+
+  setEnableQuickAssistant(value: boolean) {
+    this.store.set('enableQuickAssistant', value)
+  }
+
   set(key: string, value: any) {
     this.store.set(key, value)
   }

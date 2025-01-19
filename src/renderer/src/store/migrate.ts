@@ -846,6 +846,8 @@ const migrateConfig = {
       }
     })
 
+    state.settings.enableQuickAssistant = false
+
     return state
   }
 }

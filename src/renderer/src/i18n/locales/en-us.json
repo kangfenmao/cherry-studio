@@ -387,7 +387,9 @@
       },
       "quickAssistant": {
         "title": "Quick Assistant",
-        "click_tray_to_show": "Click the system tray icon to open"
+        "click_tray_to_show": "Click the tray icon to start",
+        "enable_quick_assistant": "Enable Quick Assistant",
+        "use_shortcut_to_show": "Right-click the tray icon or use shortcuts to start"
       },
       "display.title": "Display Settings",
       "font_size.title": "Message font size",

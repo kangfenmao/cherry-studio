@@ -385,7 +385,9 @@
       },
       "quickAssistant": {
         "title": "クイックアシスタント",
-        "click_tray_to_show": "システムトレイアイコンをクリックして開く"
+        "click_tray_to_show": "トレイアイコンをクリックして起動",
+        "enable_quick_assistant": "クイックアシスタントを有効にする",
+        "use_shortcut_to_show": "トレイアイコンを右クリックするか、ショートカットキーで起動できます"
       },
       "display.title": "表示設定",
       "font_size.title": "メッセージのフォントサイズ",

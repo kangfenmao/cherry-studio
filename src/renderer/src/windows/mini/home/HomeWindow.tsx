@@ -34,8 +34,6 @@ const HomeWindow: FC = () => {
 
   textRef.current = `${referenceText}\n\n${text}`
 
-  const isMiniWindow = window.location.hash === '#/mini'
-
   const onReadClipboard = useCallback(async () => {
     const text = await navigator.clipboard.readText()
     setClipboardText(text.trim())
@@ -49,7 +47,7 @@ const HomeWindow: FC = () => {
     i18n.changeLanguage(language || navigator.language || 'en-US')
   }, [language])
 
-  const onCloseWindow = () => isMiniWindow && window.close()
+  const onCloseWindow = () => window.api.miniWindow.hide()
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {

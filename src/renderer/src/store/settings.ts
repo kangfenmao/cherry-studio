@@ -61,6 +61,7 @@ export interface SettingsState {
     disabled: SidebarIcon[]
   }
   narrowMode: boolean
+  enableQuickAssistant: boolean
   clickTrayToShowQuickAssistant: boolean
 }
 
@@ -107,6 +108,7 @@ const initialState: SettingsState = {
     disabled: []
   },
   narrowMode: false,
+  enableQuickAssistant: false,
   clickTrayToShowQuickAssistant: false
 }
 
@@ -245,6 +247,9 @@ const settingsSlice = createSlice({
     },
     setClickTrayToShowQuickAssistant: (state, action: PayloadAction<boolean>) => {
       state.clickTrayToShowQuickAssistant = action.payload
+    },
+    setEnableQuickAssistant: (state, action: PayloadAction<boolean>) => {
+      state.enableQuickAssistant = action.payload
     }
   }
 })
@@ -291,7 +296,8 @@ export const {
   setTopicNamingPrompt,
   setSidebarIcons,
   setNarrowMode,
-  setClickTrayToShowQuickAssistant
+  setClickTrayToShowQuickAssistant,
+  setEnableQuickAssistant
 } = settingsSlice.actions
 
 export default settingsSlice.reducer
