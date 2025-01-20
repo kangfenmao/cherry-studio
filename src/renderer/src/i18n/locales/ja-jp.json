@@ -652,7 +652,8 @@
       "footer": {
         "esc": "ESC キーを押して{{action}}",
         "esc_close": "ウィンドウを閉じる",
-        "esc_back": "戻る"
+        "esc_back": "戻る",
+        "copy_last_message": "C キーを押してコピー"
       }
     }
   }

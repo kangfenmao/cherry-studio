@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 interface FeatureMenusProps {
+  text: string
   setRoute: Dispatch<SetStateAction<'translate' | 'summary' | 'chat' | 'explanation' | 'home'>>
   onSendMessage: (prompt?: string) => void
 }
 
-const FeatureMenus: FC<FeatureMenusProps> = ({ setRoute, onSendMessage }) => {
+const FeatureMenus: FC<FeatureMenusProps> = ({ text, setRoute, onSendMessage }) => {
   const { t } = useTranslation()
 
   const features = [
@@ -19,29 +20,35 @@ const FeatureMenus: FC<FeatureMenusProps> = ({ setRoute, onSendMessage }) => {
       title: t('miniwindow.feature.chat'),
       active: true,
       onClick: () => {
-        setRoute('chat')
-        onSendMessage()
+        if (text) {
+          setRoute('chat')
+          onSendMessage()
+        }
       }
     },
     {
       icon: <TranslationOutlined style={{ fontSize: '16px', color: 'var(--color-text)' }} />,
       title: t('miniwindow.feature.translate'),
-      onClick: () => setRoute('translate')
+      onClick: () => text && setRoute('translate')
     },
     {
       icon: <FileTextOutlined style={{ fontSize: '16px', color: 'var(--color-text)' }} />,
       title: t('miniwindow.feature.summary'),
       onClick: () => {
-        setRoute('summary')
-        onSendMessage(t('prompts.summarize'))
+        if (text) {
+          setRoute('summary')
+          onSendMessage(t('prompts.summarize'))
+        }
       }
     },
     {
       icon: <BulbOutlined style={{ fontSize: '16px', color: 'var(--color-text)' }} />,
       title: t('miniwindow.feature.explanation'),
       onClick: () => {
-        setRoute('explanation')
-        onSendMessage(t('prompts.explanation'))
+        if (text) {
+          setRoute('explanation')
+          onSendMessage(t('prompts.explanation'))
+        }
       }
     }
   ]

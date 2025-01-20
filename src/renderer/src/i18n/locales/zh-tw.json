@@ -654,7 +654,8 @@
       "footer": {
         "esc": "按 ESC {{action}}",
         "esc_close": "關閉窗口",
-        "esc_back": "返回"
+        "esc_back": "返回",
+        "copy_last_message": "按 C 鍵複製"
       }
     }
   }

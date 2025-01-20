@@ -667,7 +667,8 @@
       "footer": {
         "esc": "Press ESC {{action}}",
         "esc_close": "close the window",
-        "esc_back": "back"
+        "esc_back": "back",
+        "copy_last_message": "Press C to copy"
       }
     }
   }

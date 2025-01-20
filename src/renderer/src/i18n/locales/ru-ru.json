@@ -666,7 +666,8 @@
       "footer": {
         "esc": "Нажмите ESC {{action}}",
         "esc_close": "закрытия окна",
-        "esc_back": "возвращения"
+        "esc_back": "возвращения",
+        "copy_last_message": "Нажмите C для копирования"
       }
     }
   }

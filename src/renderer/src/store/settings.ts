@@ -133,6 +133,7 @@ const settingsSlice = createSlice({
     },
     setLanguage: (state, action: PayloadAction<LanguageVarious>) => {
       state.language = action.payload
+      window.electron.ipcRenderer.send('miniwindow-reload')
     },
     setProxyMode: (state, action: PayloadAction<'system' | 'custom' | 'none'>) => {
       state.proxyMode = action.payload
