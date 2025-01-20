@@ -59,7 +59,7 @@ const HomeWindow: FC = () => {
 
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (text.trim() === '') {
+      if (textRef.current.trim() === '') {
         return
       }
       setRoute('chat')
