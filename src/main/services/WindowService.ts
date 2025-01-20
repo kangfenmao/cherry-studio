@@ -14,7 +14,6 @@ export class WindowService {
   private static instance: WindowService | null = null
   private mainWindow: BrowserWindow | null = null
   private miniWindow: BrowserWindow | null = null
-  private isQuitting: boolean = false
   private wasFullScreen: boolean = false
   private selectionMenuWindow: BrowserWindow | null = null
   private lastSelectedText: string = ''
@@ -199,30 +198,25 @@ export class WindowService {
   }
 
   private setupWindowLifecycleEvents(mainWindow: BrowserWindow) {
-    // 监听应用退出事件
-    app.on('before-quit', () => {
-      this.isQuitting = true
-    })
-
     mainWindow.on('close', (event) => {
-      const notInTray = !configManager.getTray()
+      // 如果已经触发退出，直接退出
+      if (app.isQuitting) {
+        return app.quit()
+      }
 
-      // Windows and Linux
+      // 没有开启托盘，且是Windows或Linux系统，直接退出
+      const notInTray = !configManager.getTray()
       if ((isWin || isLinux) && notInTray) {
         return app.quit()
       }
 
-      // Mac
-      if (!this.isQuitting) {
-        if (this.wasFullScreen) {
-          // 如果是全屏状态，直接退出
-          this.isQuitting = true
-          app.quit()
-        } else {
-          event.preventDefault()
-          mainWindow.hide()
-        }
+      // 如果是全屏状态，直接退出
+      if (this.wasFullScreen) {
+        return app.quit()
       }
+
+      event.preventDefault()
+      mainWindow.hide()
     })
   }
 
