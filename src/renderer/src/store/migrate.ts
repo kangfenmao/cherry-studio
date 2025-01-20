@@ -12,20 +12,12 @@ import { createMigrate } from 'redux-persist'
 import { RootState } from '.'
 import { DEFAULT_SIDEBAR_ICONS } from './settings'
 
+// remove logo base64 data to reduce the size of the state
 function removeMiniAppIconsFromState(state: RootState) {
   if (state.minapps) {
-    state.minapps.enabled = state.minapps.enabled.map((app) => {
-      const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
-      return _app || app
-    })
-    state.minapps.disabled = state.minapps.disabled.map((app) => {
-      const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
-      return _app || app
-    })
-    state.minapps.pinned = state.minapps.pinned.map((app) => {
-      const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
-      return _app || app
-    })
+    state.minapps.enabled = state.minapps.enabled.map((app) => ({ ...app, logo: undefined }))
+    state.minapps.disabled = state.minapps.disabled.map((app) => ({ ...app, logo: undefined }))
+    state.minapps.pinned = state.minapps.pinned.map((app) => ({ ...app, logo: undefined }))
   }
 }
 

@@ -68,7 +68,7 @@ const initialState: ShortcutsState = {
     },
     {
       key: 'toggle_new_context',
-      shortcut: [isMac ? 'Command' : 'Ctrl', 'R'],
+      shortcut: [isMac ? 'Command' : 'Ctrl', 'K'],
       editable: true,
       enabled: true,
       system: false
