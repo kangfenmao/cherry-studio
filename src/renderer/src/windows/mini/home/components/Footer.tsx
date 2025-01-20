@@ -13,9 +13,9 @@ const Footer: FC<FooterProps> = ({ route, onExit }) => {
   const { t } = useTranslation()
 
   return (
-    <WindowFooter onClick={() => onExit()}>
+    <WindowFooter>
       <FooterText className="nodrag">
-        <Tag bordered={false} icon={<LoginOutlined />}>
+        <Tag bordered={false} icon={<LoginOutlined />} onClick={() => onExit()}>
           {t('miniwindow.footer.esc', {
             action: route === 'home' ? t('miniwindow.footer.esc_close') : t('miniwindow.footer.esc_back')
           })}
