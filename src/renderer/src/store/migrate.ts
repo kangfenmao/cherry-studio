@@ -12,6 +12,23 @@ import { createMigrate } from 'redux-persist'
 import { RootState } from '.'
 import { DEFAULT_SIDEBAR_ICONS } from './settings'
 
+function removeMiniAppIconsFromState(state: RootState) {
+  if (state.minapps) {
+    state.minapps.enabled = state.minapps.enabled.map((app) => {
+      const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
+      return _app || app
+    })
+    state.minapps.disabled = state.minapps.disabled.map((app) => {
+      const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
+      return _app || app
+    })
+    state.minapps.pinned = state.minapps.pinned.map((app) => {
+      const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
+      return _app || app
+    })
+  }
+}
+
 const migrateConfig = {
   '2': (state: RootState) => {
     return {
@@ -825,20 +842,7 @@ const migrateConfig = {
       })
     }
 
-    if (state.minapps) {
-      state.minapps.enabled = state.minapps.enabled.map((app) => {
-        const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
-        return _app || app
-      })
-      state.minapps.disabled = state.minapps.disabled.map((app) => {
-        const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
-        return _app || app
-      })
-      state.minapps.pinned = state.minapps.pinned.map((app) => {
-        const _app = DEFAULT_MIN_APPS.find((m) => m.id === app.id)
-        return _app || app
-      })
-    }
+    removeMiniAppIconsFromState(state)
 
     state.llm.providers.forEach((provider) => {
       if (provider.id === 'qwenlm') {
@@ -879,6 +883,7 @@ const migrateConfig = {
         state.minapps.enabled.push(flowith)
       }
     }
+    removeMiniAppIconsFromState(state)
     return state
   }
 }
