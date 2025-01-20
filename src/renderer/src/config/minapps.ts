@@ -266,7 +266,8 @@ export const DEFAULT_MIN_APPS: MinAppType[] = [
     id: 'flowith',
     name: 'Flowith',
     logo: FlowithAppLogo,
-    url: 'https://www.flowith.io/'
+    url: 'https://www.flowith.io/',
+    bodered: true
   }
 ]
 

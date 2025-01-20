@@ -871,6 +871,15 @@ const migrateConfig = {
       )
     }
     return state
+  },
+  '59': (state: RootState) => {
+    if (state.minapps) {
+      const flowith = DEFAULT_MIN_APPS.find((app) => app.id === 'flowith')
+      if (flowith) {
+        state.minapps.enabled.push(flowith)
+      }
+    }
+    return state
   }
 }
 
