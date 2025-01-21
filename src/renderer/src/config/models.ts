@@ -441,10 +441,10 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'DeepSeek Chat'
     },
     {
-      id: 'deepseek-coder',
+      id: 'deepseek-reasoner',
       provider: 'deepseek',
-      name: 'DeepSeek Coder',
-      group: 'DeepSeek Coder'
+      name: 'DeepSeek Reasoner',
+      group: 'DeepSeek Reasoner'
     }
   ],
   together: [
