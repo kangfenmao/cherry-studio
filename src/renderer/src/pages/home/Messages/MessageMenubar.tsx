@@ -186,6 +186,8 @@ const MessageMenubar: FC<Props> = (props) => {
     onEditMessage?.({
       ...message,
       content: '',
+      reasoning_content: undefined,
+      metrics: undefined,
       status: 'sending',
       modelId: assistantModel?.id || model?.id,
       translatedContent: undefined
