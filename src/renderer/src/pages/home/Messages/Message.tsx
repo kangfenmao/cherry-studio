@@ -25,9 +25,10 @@ interface Props {
   index?: number
   total?: number
   hidePresetMessages?: boolean
+  style?: React.CSSProperties
   onGetMessages?: () => Message[]
   onSetMessages?: Dispatch<SetStateAction<Message[]>>
-  onDeleteMessage?: (message: Message) => void
+  onDeleteMessage?: (message: Message) => Promise<void>
 }
 
 const getMessageBackground = (isBubbleStyle: boolean, isAssistantMessage: boolean) =>
@@ -38,6 +39,7 @@ const MessageItem: FC<Props> = ({
   topic,
   index,
   hidePresetMessages,
+  style,
   onDeleteMessage,
   onSetMessages,
   onGetMessages
@@ -123,7 +125,7 @@ const MessageItem: FC<Props> = ({
           onResponse: (msg) => {
             setMessage(msg)
             if (msg.status !== 'pending') {
-              const _messages = messages.map((m) => (m.id === msg.id ? msg : m))
+              const _messages = onGetMessages().map((m) => (m.id === msg.id ? msg : m))
               onSetMessages(_messages)
               db.topics.update(topic.id, { messages: _messages })
             }
@@ -157,7 +159,7 @@ const MessageItem: FC<Props> = ({
         'message-user': !isAssistantMessage
       })}
       ref={messageContainerRef}
-      style={isBubbleStyle ? { alignItems: isAssistantMessage ? 'start' : 'end' } : undefined}>
+      style={{ ...style, alignItems: isBubbleStyle ? (isAssistantMessage ? 'start' : 'end') : undefined }}>
       <MessageHeader message={message} assistant={assistant} model={model} key={message.modelId} />
       <MessageContentContainer
         className="message-content-container"

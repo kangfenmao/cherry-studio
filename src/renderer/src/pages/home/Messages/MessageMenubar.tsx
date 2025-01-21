@@ -33,7 +33,7 @@ interface Props {
   isAssistantMessage: boolean
   setModel: (model: Model) => void
   onEditMessage?: (message: Message) => void
-  onDeleteMessage?: (message: Message) => void
+  onDeleteMessage?: (message: Message) => Promise<void>
   onGetMessages?: () => Message[]
 }
 

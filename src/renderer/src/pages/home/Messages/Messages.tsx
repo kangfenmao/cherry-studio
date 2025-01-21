@@ -36,41 +36,6 @@ interface Props {
   setActiveTopic: (topic: Topic) => void
 }
 
-interface LoaderProps {
-  $loading: boolean
-}
-
-const LoaderContainer = styled.div<LoaderProps>`
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  width: 100%;
-  background: var(--color-background);
-  opacity: ${(props) => (props.$loading ? 1 : 0)};
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-`
-
-const ScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 16px 16px;
-  gap: 32px;
-`
-
-interface ContainerProps {
-  $right?: boolean
-}
-
-const Container = styled(Scrollbar)<ContainerProps>`
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 10px 0;
-  padding-bottom: 20px;
-  overflow-x: hidden;
-  background-color: var(--color-background);
-`
-
 const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [displayMessages, setDisplayMessages] = useState<Message[]>([])
@@ -151,12 +116,25 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   }, [assistant, enableTopicNaming, messages, setActiveTopic, topic.id, updateTopic])
 
   const onDeleteMessage = useCallback(
-    (message: Message) => {
+    async (message: Message) => {
       const _messages = messages.filter((m) => m.id !== message.id)
       setMessages(_messages)
       setDisplayMessages(_messages)
-      db.topics.update(topic.id, { messages: _messages })
-      deleteMessageFiles(message)
+      await db.topics.update(topic.id, { messages: _messages })
+      await deleteMessageFiles(message)
+    },
+    [messages, topic.id]
+  )
+
+  const onDeleteGroupMessages = useCallback(
+    async (askId: string) => {
+      const _messages = messages.filter((m) => m.askId !== askId && m.id !== askId)
+      setMessages(_messages)
+      setDisplayMessages(_messages)
+      await db.topics.update(topic.id, { messages: _messages })
+      for (const message of _messages) {
+        await deleteMessageFiles(message)
+      }
     },
     [messages, topic.id]
   )
@@ -323,6 +301,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
                 hidePresetMessages={assistant.settings?.hideMessages}
                 onSetMessages={setMessages}
                 onDeleteMessage={onDeleteMessage}
+                onDeleteGroupMessages={onDeleteGroupMessages}
                 onGetMessages={onGetMessages}
               />
             ))}
@@ -333,5 +312,39 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     </Container>
   )
 }
+
+interface LoaderProps {
+  $loading: boolean
+}
+
+const LoaderContainer = styled.div<LoaderProps>`
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 100%;
+  background: var(--color-background);
+  opacity: ${(props) => (props.$loading ? 1 : 0)};
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+`
+
+const ScrollContainer = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 0 20px;
+`
+
+interface ContainerProps {
+  $right?: boolean
+}
+
+const Container = styled(Scrollbar)<ContainerProps>`
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 10px 0;
+  padding-bottom: 20px;
+  overflow-x: hidden;
+  background-color: var(--color-background);
+`
 
 export default Messages

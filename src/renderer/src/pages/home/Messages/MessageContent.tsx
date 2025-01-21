@@ -38,7 +38,7 @@ const MessageContent: React.FC<{
 
   return (
     <>
-      <Flex gap="8px" wrap>
+      <Flex gap="8px" wrap style={{ marginBottom: 10 }}>
         {message.mentions?.map((model) => <MentionTag key={model.id}>{'@' + model.name}</MentionTag>)}
       </Flex>
       <MessageThought message={message} />
