@@ -113,7 +113,9 @@
       "topics.move_to": "Переместить в",
       "topics.title": "Топики",
       "translate": "Перевести",
-      "resend": "Переотправить"
+      "resend": "Переотправить",
+      "thinking": "Мыслим",
+      "deeply_thought": "Мыслим ({{secounds}} секунд)"
     },
     "common": {
       "and": "и",

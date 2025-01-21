@@ -113,7 +113,9 @@
       "topics.move_to": "移動到",
       "topics.title": "話題",
       "translate": "翻譯",
-      "resend": "重新發送"
+      "resend": "重新發送",
+      "thinking": "思考中",
+      "deeply_thought": "已深度思考（用時 {{secounds}} 秒）"
     },
     "common": {
       "and": "與",

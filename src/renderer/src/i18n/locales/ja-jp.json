@@ -113,7 +113,9 @@
       "topics.move_to": "移動先",
       "topics.title": "トピック",
       "translate": "翻訳",
-      "resend": "再送信"
+      "resend": "再送信",
+      "thinking": "思考中...",
+      "deeply_thought": "深く考えています（{{secounds}} 秒）"
     },
     "common": {
       "and": "と",
@@ -260,7 +262,8 @@
       "upgrade.success.content": "アップグレードを完了するためにアプリケーションを再起動してください",
       "upgrade.success.title": "アップグレードに成功しました",
       "regenerate.confirm": "再生成すると現在のメッセージが置き換えられます",
-      "copy.success": "コピーしました！"
+      "copy.success": "コピーしました！",
+      "error.get_embedding_dimensions": "埋込み次元を取得できませんでした"
     },
     "minapp": {
       "title": "ミニアプリ",

@@ -56,10 +56,14 @@ export async function fetchChatCompletion({
       messages,
       assistant,
       onFilterMessages: (messages) => (_messages = messages),
-      onChunk: ({ text, usage, metrics, search }) => {
+      onChunk: ({ text, reasoning_content, usage, metrics, search }) => {
         message.content = message.content + text || ''
         message.usage = usage
         message.metrics = metrics
+
+        if (reasoning_content) {
+          message.reasoning_content = (message.reasoning_content || '') + reasoning_content
+        }
 
         if (search) {
           message.metadata = { groundingMetadata: search }

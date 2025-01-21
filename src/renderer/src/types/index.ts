@@ -47,6 +47,7 @@ export type Message = {
   assistantId: string
   role: 'user' | 'assistant'
   content: string
+  reasoning_content?: string
   translatedContent?: string
   topicId: string
   createdAt: string
@@ -71,6 +72,7 @@ export type Metrics = {
   completion_tokens?: number
   time_completion_millsec?: number
   time_first_token_millsec?: number
+  time_thinking_millsec?: number
 }
 
 export type Topic = {

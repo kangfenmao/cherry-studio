@@ -113,7 +113,9 @@
       "topics.move_to": "Move to",
       "topics.title": "Topics",
       "translate": "Translate",
-      "resend": "Resend"
+      "resend": "Resend",
+      "thinking": "Thinking",
+      "deeply_thought": "Deeply thought ({{secounds}} seconds)"
     },
     "common": {
       "and": "and",
