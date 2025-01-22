@@ -100,16 +100,17 @@ const MessageMenubar: FC<Props> = (props) => {
 
     const editedText = await TextEditPopup.show({
       text: message.content,
-      children: (props) => (
-        <ReSendButton
-          icon={<i className="iconfont icon-ic_send" style={{ color: 'var(--color-primary)' }} />}
-          onClick={() => {
-            props.onOk?.()
-            resendMessage = true
-          }}>
-          {t('chat.resend')}
-        </ReSendButton>
-      )
+      children: (props) =>
+        message.role === 'user' ? (
+          <ReSendButton
+            icon={<i className="iconfont icon-ic_send" style={{ color: 'var(--color-primary)' }} />}
+            onClick={() => {
+              props.onOk?.()
+              resendMessage = true
+            }}>
+            {t('chat.resend')}
+          </ReSendButton>
+        ) : null
     })
 
     editedText && onEditMessage?.({ ...message, content: editedText })
