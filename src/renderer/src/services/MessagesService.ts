@@ -86,7 +86,7 @@ export function getUserMessage({
     content: content || '',
     assistantId: assistant.id,
     topicId: topic.id,
-    modelId: model.id,
+    model,
     createdAt: new Date().toISOString(),
     type,
     status: 'success'
@@ -104,7 +104,6 @@ export function getAssistantMessage({ assistant, topic }: { assistant: Assistant
     assistantId: assistant.id,
     topicId: topic.id,
     model,
-    modelId: model.id,
     createdAt: new Date().toISOString(),
     type: 'text',
     status: 'sending'
@@ -149,4 +148,8 @@ export function getGroupedMessages(messages: Message[]): { [key: string]: (Messa
     groups[key].unshift({ ...message, index })
   })
   return groups
+}
+
+export function getMessageModelId(message: Message) {
+  return message?.model?.id || message.modelId
 }

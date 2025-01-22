@@ -45,7 +45,7 @@ const Translate: FC<Props> = ({ text }) => {
         content: text,
         assistantId: assistant.id,
         topicId: uuid(),
-        modelId: translateModel.id,
+        model: translateModel,
         createdAt: new Date().toISOString(),
         type: 'text',
         status: 'sending'

@@ -133,7 +133,7 @@ export async function addAssistantMessagesToTopic({ assistant, topic }: { assist
       topicId: topic.id,
       createdAt: new Date().toISOString(),
       status: 'success',
-      modelId: assistant.defaultModel?.id || defaultModel.id,
+      model: assistant.defaultModel || defaultModel,
       type: 'text',
       isPreset: true
     }

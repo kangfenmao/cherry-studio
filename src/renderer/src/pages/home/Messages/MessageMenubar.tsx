@@ -84,7 +84,7 @@ const MessageMenubar: FC<Props> = (props) => {
         ...nextMessage,
         content: '',
         status: 'sending',
-        modelId: assistantModel?.id || model?.id,
+        model: assistantModel || model,
         translatedContent: undefined
       })
     }
@@ -93,7 +93,7 @@ const MessageMenubar: FC<Props> = (props) => {
       EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, { ...message, id: uuid() })
       onDeleteMessage?.(message)
     }
-  }, [assistantModel?.id, message, model?.id, onDeleteMessage, onGetMessages])
+  }, [assistantModel, message, model, onDeleteMessage, onGetMessages])
 
   const onEdit = useCallback(async () => {
     let resendMessage = false
@@ -169,7 +169,7 @@ const MessageMenubar: FC<Props> = (props) => {
     [message, onEdit, onNewBranch, t]
   )
 
-  const onDeleteAndRegenerate = async () => {
+  const onRegenerate = async () => {
     await modelGenerating()
     const selectedModel = await SelectModelPopup.show({ model })
     if (!selectedModel) return
@@ -180,7 +180,6 @@ const MessageMenubar: FC<Props> = (props) => {
       reasoning_content: undefined,
       metrics: undefined,
       status: 'sending',
-      modelId: selectedModel.id,
       model: selectedModel,
       translatedContent: undefined,
       metadata: undefined
@@ -214,7 +213,7 @@ const MessageMenubar: FC<Props> = (props) => {
       </Tooltip>
       {isAssistantMessage && (
         <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-          <ActionButton className="message-action-button" onClick={onDeleteAndRegenerate}>
+          <ActionButton className="message-action-button" onClick={onRegenerate}>
             <SyncOutlined />
           </ActionButton>
         </Tooltip>

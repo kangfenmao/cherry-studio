@@ -164,8 +164,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       }),
       EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async (model: Model) => {
         const lastUserMessage = last(filterMessages(messages).filter((m) => m.role === 'user'))
-        lastUserMessage &&
-          onSendMessage({ ...lastUserMessage, id: uuid(), modelId: model.id, model: model, mentions: [model] })
+        lastUserMessage && onSendMessage({ ...lastUserMessage, id: uuid(), model: model, mentions: [model] })
       }),
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {

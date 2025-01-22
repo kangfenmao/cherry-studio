@@ -5,6 +5,7 @@ import { getModelLogo } from '@renderer/config/models'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import useAvatar from '@renderer/hooks/useAvatar'
 import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
+import { getMessageModelId } from '@renderer/services/MessagesService'
 import { Assistant, Message, Model } from '@renderer/types'
 import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar } from 'antd'
@@ -31,7 +32,7 @@ const MessageHeader: FC<Props> = memo(({ assistant, model, message }) => {
   const { t } = useTranslation()
   const { isBubbleStyle } = useMessageStyle()
 
-  const avatarSource = useMemo(() => getAvatarSource(isLocalAi, message.modelId), [message.modelId])
+  const avatarSource = useMemo(() => getAvatarSource(isLocalAi, getMessageModelId(message)), [message])
 
   const getUserName = useCallback(() => {
     if (isLocalAi && message.role !== 'user') return APP_NAME

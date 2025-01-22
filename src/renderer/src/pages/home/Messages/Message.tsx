@@ -5,6 +5,7 @@ import { useModel } from '@renderer/hooks/useModel'
 import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
 import { fetchChatCompletion } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
+import { getMessageModelId } from '@renderer/services/MessagesService'
 import { estimateMessageUsage } from '@renderer/services/TokenService'
 import { Message, Topic } from '@renderer/types'
 import { classNames, runAsyncFunction } from '@renderer/utils'
@@ -52,7 +53,7 @@ const MessageItem: FC<Props> = ({
   const [message, setMessage] = useState(_message)
   const { t } = useTranslation()
   const { assistant, setModel } = useAssistant(message.assistantId)
-  const model = useModel(message.modelId)
+  const model = useModel(getMessageModelId(message))
   const { isBubbleStyle } = useMessageStyle()
   const { showMessageDivider, messageFont, fontSize } = useSettings()
   const messageContainerRef = useRef<HTMLDivElement>(null)
@@ -165,7 +166,7 @@ const MessageItem: FC<Props> = ({
       })}
       ref={messageContainerRef}
       style={{ ...style, alignItems: isBubbleStyle ? (isAssistantMessage ? 'start' : 'end') : undefined }}>
-      <MessageHeader message={message} assistant={assistant} model={model} key={message.modelId} />
+      <MessageHeader message={message} assistant={assistant} model={model} key={getMessageModelId(message)} />
       <MessageContentContainer
         className="message-content-container"
         style={{ fontFamily, fontSize, background: messageBackground }}>
