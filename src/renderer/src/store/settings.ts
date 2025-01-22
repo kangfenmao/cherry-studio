@@ -113,7 +113,7 @@ const initialState: SettingsState = {
   narrowMode: false,
   enableQuickAssistant: false,
   clickTrayToShowQuickAssistant: false,
-  multiModelMessageStyle: 'horizontal'
+  multiModelMessageStyle: 'fold'
 }
 
 const settingsSlice = createSlice({

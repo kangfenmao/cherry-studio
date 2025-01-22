@@ -173,16 +173,23 @@ const MessageMenubar: FC<Props> = (props) => {
     const selectedModel = await SelectModelPopup.show({ model })
     if (!selectedModel) return
 
-    onEditMessage?.({
+    const _message: Message = {
       ...message,
       content: '',
       reasoning_content: undefined,
       metrics: undefined,
       status: 'sending',
-      modelId: selectedModel.id || assistantModel?.id || model?.id,
+      modelId: selectedModel.id,
       model: selectedModel,
-      translatedContent: undefined
-    })
+      translatedContent: undefined,
+      metadata: undefined
+    }
+
+    if (message.askId && message.model) {
+      return EventEmitter.emit(EVENT_NAMES.APPEND_MESSAGE, { ..._message, id: uuid() })
+    }
+
+    onEditMessage?.(_message)
   }
 
   const onUseful = useCallback(() => {

@@ -264,9 +264,9 @@ const SettingsTab: FC<Props> = (props) => {
             value={multiModelMessageStyle}
             onChange={(value) => dispatch(setMultiModelMessageStyle(value))}
             style={{ width: 135 }}>
+            <Select.Option value="fold">{t('message.message.multi_model_style.fold')}</Select.Option>
             <Select.Option value="horizontal">{t('message.message.multi_model_style.horizontal')}</Select.Option>
             <Select.Option value="vertical">{t('message.message.multi_model_style.vertical')}</Select.Option>
-            <Select.Option value="fold">{t('message.message.multi_model_style.fold')}</Select.Option>
           </Select>
         </SettingRow>
         <SettingDivider />

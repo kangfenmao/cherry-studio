@@ -103,6 +103,7 @@ export function getAssistantMessage({ assistant, topic }: { assistant: Assistant
     content: '',
     assistantId: assistant.id,
     topicId: topic.id,
+    model,
     modelId: model.id,
     createdAt: new Date().toISOString(),
     type: 'text',

@@ -7,7 +7,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { MultiModelMessageStyle } from '@renderer/store/settings'
 import { Message, Model, Topic } from '@renderer/types'
 import { Button, Segmented } from 'antd'
-import { Dispatch, FC, SetStateAction, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import MessageItem from './Message'
@@ -37,7 +37,7 @@ const MessageGroup: FC<Props> = ({
     useState<MultiModelMessageStyle>(multiModelMessageStyleSetting)
 
   const messageLength = messages.length
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(messageLength - 1)
 
   const isGrouped = messageLength > 1
 
@@ -45,6 +45,12 @@ const MessageGroup: FC<Props> = ({
     const askId = messages[0].askId
     askId && onDeleteGroupMessages?.(askId)
   }
+
+  useEffect(() => {
+    setSelectedIndex(messageLength - 1)
+  }, [messageLength])
+
+  const isHorizontal = multiModelMessageStyle === 'horizontal'
 
   return (
     <GroupContainer $isGrouped={isGrouped} $layout={multiModelMessageStyle}>
@@ -54,7 +60,8 @@ const MessageGroup: FC<Props> = ({
             $layout={multiModelMessageStyle}
             $selected={index === selectedIndex}
             $isGrouped={isGrouped}
-            key={message.id}>
+            key={message.id}
+            className={message.role === 'assistant' && isHorizontal && isGrouped ? 'group-message-wrapper' : ''}>
             <MessageItem
               message={message}
               topic={topic}
@@ -69,8 +76,8 @@ const MessageGroup: FC<Props> = ({
         ))}
       </GridContainer>
       {isGrouped && (
-        <GroupHeader>
-          <HStack style={{ alignItems: 'center' }}>
+        <GroupMenuBar className="group-menu-bar">
+          <HStack style={{ alignItems: 'center', flex: 1, overflow: 'hidden' }}>
             <LayoutContainer>
               {['fold', 'horizontal', 'vertical'].map((layout) => (
                 <LayoutOption
@@ -115,7 +122,7 @@ const MessageGroup: FC<Props> = ({
             icon={<DeleteOutlined style={{ color: 'var(--color-error)' }} />}
             onClick={onDelete}
           />
-        </GroupHeader>
+        </GroupMenuBar>
       )}
     </GroupContainer>
   )
@@ -133,6 +140,12 @@ const GridContainer = styled(Scrollbar)<{ $count: number; $layout: MultiModelMes
     minmax(550px, 1fr)
   );
   gap: ${({ $layout }) => ($layout === 'horizontal' ? '16px' : '0')};
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(
+      ${(props) => (['fold', 'vertical'].includes(props.$layout) ? 1 : props.$count)},
+      minmax(400px, 1fr)
+    );
+  }
 `
 
 interface MessageWrapperProps {
@@ -160,31 +173,24 @@ const MessageWrapper = styled(Scrollbar)<MessageWrapperProps>`
         border-radius: 6px;
         max-height: 600px;
         overflow-y: auto;
+        margin-bottom: 10px;
       `
     }
     return ''
   }}
 `
 
-const GroupHeader = styled.div`
+const GroupMenuBar = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
   background-color: var(--color-background-soft);
-  padding: 8px 10px;
+  padding: 6px 10px;
   border-radius: 6px;
   margin-top: 10px;
   justify-content: space-between;
-`
-
-const ModelsContainer = styled(Scrollbar)`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  overflow: hidden;
 `
 
 const LayoutContainer = styled.div`
@@ -205,11 +211,20 @@ const LayoutOption = styled.div<{ active: boolean }>`
   }
 `
 
+const ModelsContainer = styled(Scrollbar)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
 const SegmentedLabel = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 0;
+  padding: 3px 0;
 `
 
 const ModelName = styled.span`

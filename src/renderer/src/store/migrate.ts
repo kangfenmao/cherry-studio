@@ -879,7 +879,7 @@ const migrateConfig = {
     return state
   },
   '60': (state: RootState) => {
-    state.settings.multiModelMessageStyle = 'vertical'
+    state.settings.multiModelMessageStyle = 'fold'
     return state
   }
 }

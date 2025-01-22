@@ -68,6 +68,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   const onSendMessage = useCallback(
     async (message: Message) => {
       const assistantMessages: Message[] = []
+
       if (message.mentions?.length) {
         message.mentions.forEach((m) => {
           const assistantMessage = getAssistantMessage({ assistant: { ...assistant, model: m }, topic })
@@ -90,6 +91,17 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       scrollToBottom()
     },
     [assistant, scrollToBottom, topic]
+  )
+
+  const onAppendMessage = useCallback(
+    (message: Message) => {
+      setMessages((prev) => {
+        const messages = prev.concat([message])
+        db.topics.put({ id: topic.id, messages })
+        return messages
+      })
+    },
+    [topic.id]
   )
 
   const autoRenameTopic = useCallback(async () => {
@@ -146,6 +158,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
   useEffect(() => {
     const unsubscribes = [
       EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, onSendMessage),
+      EventEmitter.on(EVENT_NAMES.APPEND_MESSAGE, onAppendMessage),
       EventEmitter.on(EVENT_NAMES.RECEIVE_MESSAGE, async () => {
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
       }),
@@ -215,6 +228,7 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
     assistant,
     autoRenameTopic,
     messages,
+    onAppendMessage,
     onDeleteMessage,
     onSendMessage,
     scrollToBottom,

@@ -23,6 +23,7 @@ const MessageThought: FC<Props> = ({ message }) => {
 
   return (
     <CollapseContainer
+      className="message-thought-container"
       items={[
         {
           key: 'thought',
