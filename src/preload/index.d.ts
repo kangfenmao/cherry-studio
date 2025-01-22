@@ -56,6 +56,9 @@ declare global {
         copy: (fileId: string, destPath: string) => Promise<void>
         binaryFile: (fileId: string) => Promise<{ data: Buffer; mime: string }>
       }
+      fs: {
+        read: (path: string) => Promise<string>
+      }
       export: {
         toWord: (markdown: string, fileName: string) => Promise<void>
       }

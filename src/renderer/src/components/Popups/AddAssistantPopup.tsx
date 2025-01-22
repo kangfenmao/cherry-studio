@@ -1,8 +1,8 @@
 import { SearchOutlined } from '@ant-design/icons'
 import { TopView } from '@renderer/components/TopView'
-import systemAgents from '@renderer/config/agents.json'
 import { useAgents } from '@renderer/hooks/useAgents'
 import { useAssistants, useDefaultAssistant } from '@renderer/hooks/useAssistant'
+import { useSystemAgents } from '@renderer/pages/agents'
 import { createAssistantFromAgent } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Agent, Assistant } from '@renderer/types'
@@ -28,6 +28,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const { defaultAssistant } = useDefaultAssistant()
   const { assistants, addAssistant } = useAssistants()
   const inputRef = useRef<InputRef>(null)
+  const systemAgents = useSystemAgents()
 
   const agents = useMemo(() => {
     const allAgents = [...userAgents, ...systemAgents] as Agent[]
@@ -48,7 +49,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       return [newAgent, ...filtered]
     }
     return filtered
-  }, [assistants, defaultAssistant, searchText, userAgents])
+  }, [assistants, defaultAssistant, searchText, systemAgents, userAgents])
 
   const onCreateAssistant = async (agent: Agent) => {
     let assistant: Assistant

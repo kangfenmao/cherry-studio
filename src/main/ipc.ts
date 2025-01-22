@@ -10,12 +10,14 @@ import AppUpdater from './services/AppUpdater'
 import BackupManager from './services/BackupManager'
 import { configManager } from './services/ConfigManager'
 import { ExportService } from './services/ExportService'
+import FileService from './services/FileService'
 import FileStorage from './services/FileStorage'
 import { GeminiService } from './services/GeminiService'
 import KnowledgeService from './services/KnowledgeService'
 import { registerShortcuts, unregisterAllShortcuts } from './services/ShortcutService'
 import { TrayService } from './services/TrayService'
 import { windowService } from './services/WindowService'
+import { getResourcePath } from './utils'
 import { compress, decompress } from './utils/zip'
 
 const fileManager = new FileStorage()
@@ -31,6 +33,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     appPath: app.getAppPath(),
     filesPath: path.join(app.getPath('userData'), 'Data', 'Files'),
     appDataPath: app.getPath('userData'),
+    resourcesPath: getResourcePath(),
     logsPath: log.transports.file.getFile().path
   }))
 
@@ -129,6 +132,9 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('file:download', fileManager.downloadFile)
   ipcMain.handle('file:copy', fileManager.copyFile)
   ipcMain.handle('file:binaryFile', fileManager.binaryFile)
+
+  // fs
+  ipcMain.handle('fs:read', FileService.readFile)
 
   // minapp
   ipcMain.handle('minapp', (_, args) => {

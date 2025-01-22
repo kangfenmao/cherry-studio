@@ -191,6 +191,7 @@ export type AppInfo = {
   isPackaged: boolean
   appPath: string
   appDataPath: string
+  resourcesPath: string
   filesPath: string
   logsPath: string
 }
