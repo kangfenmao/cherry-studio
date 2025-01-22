@@ -133,7 +133,7 @@ const GroupContainer = styled.div<{ $isGrouped: boolean; $layout: MultiModelMess
   padding-top: ${({ $isGrouped, $layout }) => ($isGrouped && $layout === 'horizontal' ? '15px' : '0')};
 `
 
-const GridContainer = styled(Scrollbar)<{ $count: number; $layout: MultiModelMessageStyle }>`
+const GridContainer = styled.div<{ $count: number; $layout: MultiModelMessageStyle }>`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(
@@ -147,6 +147,7 @@ const GridContainer = styled(Scrollbar)<{ $count: number; $layout: MultiModelMes
       minmax(400px, 1fr)
     );
   }
+  overflow-y: auto;
 `
 
 interface MessageWrapperProps {
