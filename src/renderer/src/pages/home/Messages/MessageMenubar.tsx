@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
+import { TranslateLanguageOptions } from '@renderer/config/translate'
 import { modelGenerating } from '@renderer/hooks/useRuntime'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { translateText } from '@renderer/services/TranslateService'
@@ -214,36 +215,11 @@ const MessageMenubar: FC<Props> = (props) => {
         <Dropdown
           menu={{
             items: [
-              {
-                label: '🇨🇳 ' + t('languages.chinese'),
-                key: 'translate-chinese',
-                onClick: () => handleTranslate('chinese')
-              },
-              {
-                label: '🇭🇰 ' + t('languages.chinese-traditional'),
-                key: 'translate-chinese-traditional',
-                onClick: () => handleTranslate('chinese-traditional')
-              },
-              {
-                label: '🇬🇧 ' + t('languages.english'),
-                key: 'translate-english',
-                onClick: () => handleTranslate('english')
-              },
-              {
-                label: '🇯🇵 ' + t('languages.japanese'),
-                key: 'translate-japanese',
-                onClick: () => handleTranslate('japanese')
-              },
-              {
-                label: '🇰🇷 ' + t('languages.korean'),
-                key: 'translate-korean',
-                onClick: () => handleTranslate('korean')
-              },
-              {
-                label: '🇷🇺 ' + t('languages.russian'),
-                key: 'translate-russian',
-                onClick: () => handleTranslate('russian')
-              },
+              ...TranslateLanguageOptions.map((item) => ({
+                label: item.emoji + ' ' + item.label,
+                key: item.value,
+                onClick: () => handleTranslate(item.value)
+              })),
               {
                 label: '✖ ' + t('translate.close'),
                 key: 'translate-close',
