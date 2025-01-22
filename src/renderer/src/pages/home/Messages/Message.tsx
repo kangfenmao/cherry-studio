@@ -31,8 +31,13 @@ interface Props {
   onDeleteMessage?: (message: Message) => Promise<void>
 }
 
-const getMessageBackground = (isBubbleStyle: boolean, isAssistantMessage: boolean) =>
-  isBubbleStyle ? (isAssistantMessage ? 'var(--chat-background-assistant)' : 'var(--chat-background-user)') : undefined
+const getMessageBackground = (isBubbleStyle: boolean, isAssistantMessage: boolean) => {
+  return isBubbleStyle
+    ? isAssistantMessage
+      ? 'var(--chat-background-assistant)'
+      : 'var(--chat-background-user)'
+    : undefined
+}
 
 const MessageItem: FC<Props> = ({
   message: _message,

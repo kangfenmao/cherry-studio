@@ -80,3 +80,22 @@ export function withGeminiGrounding(message: Message) {
 
   return content
 }
+
+export function withMessageThought(message: Message) {
+  const content = message.content
+
+  const thinkPattern = /<think>(.*?)<\/think>/s
+  const matches = content.match(thinkPattern)
+
+  if (matches) {
+    const reasoning_content = matches[1].trim()
+    const remainingContent = content.replace(thinkPattern, '').trim()
+    if (reasoning_content) {
+      message.reasoning_content = reasoning_content
+      message.content = remainingContent
+      return message
+    }
+  }
+
+  return message
+}
