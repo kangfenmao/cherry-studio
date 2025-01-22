@@ -27,6 +27,7 @@ interface Props {
   total?: number
   hidePresetMessages?: boolean
   style?: React.CSSProperties
+  isGrouped?: boolean
   onGetMessages?: () => Message[]
   onSetMessages?: Dispatch<SetStateAction<Message[]>>
   onDeleteMessage?: (message: Message) => Promise<void>
@@ -45,6 +46,7 @@ const MessageItem: FC<Props> = ({
   topic,
   index,
   hidePresetMessages,
+  isGrouped,
   style,
   onDeleteMessage,
   onSetMessages,
@@ -187,6 +189,7 @@ const MessageItem: FC<Props> = ({
               index={index}
               isLastMessage={isLastMessage}
               isAssistantMessage={isAssistantMessage}
+              isGrouped={isGrouped}
               setModel={setModel}
               onEditMessage={onEditMessage}
               onDeleteMessage={onDeleteMessage}

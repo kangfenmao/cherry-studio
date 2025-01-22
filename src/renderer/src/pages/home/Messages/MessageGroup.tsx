@@ -6,7 +6,7 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { MultiModelMessageStyle } from '@renderer/store/settings'
 import { Message, Model, Topic } from '@renderer/types'
-import { Button, Segmented } from 'antd'
+import { Button, Segmented as AntdSegmented } from 'antd'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -63,6 +63,7 @@ const MessageGroup: FC<Props> = ({
             key={message.id}
             className={message.role === 'assistant' && isHorizontal && isGrouped ? 'group-message-wrapper' : ''}>
             <MessageItem
+              isGrouped={isGrouped}
               message={message}
               topic={topic}
               index={message.index}
@@ -76,10 +77,10 @@ const MessageGroup: FC<Props> = ({
         ))}
       </GridContainer>
       {isGrouped && (
-        <GroupMenuBar className="group-menu-bar">
+        <GroupMenuBar className="group-menu-bar" $layout={multiModelMessageStyle}>
           <HStack style={{ alignItems: 'center', flex: 1, overflow: 'hidden' }}>
             <LayoutContainer>
-              {['fold', 'horizontal', 'vertical'].map((layout) => (
+              {['fold', 'vertical', 'horizontal'].map((layout) => (
                 <LayoutOption
                   key={layout}
                   active={multiModelMessageStyle === layout}
@@ -180,17 +181,20 @@ const MessageWrapper = styled(Scrollbar)<MessageWrapperProps>`
   }}
 `
 
-const GroupMenuBar = styled.div`
+const GroupMenuBar = styled.div<{ $layout: MultiModelMessageStyle }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  background-color: var(--color-background-soft);
   padding: 6px 10px;
   border-radius: 6px;
   margin-top: 10px;
   justify-content: space-between;
   overflow: hidden;
+  border: 0.5px solid var(--color-border);
+  height: 40px;
+  margin-left: ${({ $layout }) => ($layout === 'horizontal' ? '0' : '40px')};
+  transition: all 0.3s ease;
 `
 
 const LayoutContainer = styled.div`
@@ -203,11 +207,10 @@ const LayoutOption = styled.div<{ active: boolean }>`
   cursor: pointer;
   padding: 2px 10px;
   border-radius: 4px;
-  background-color: ${({ active }) => (active ? 'var(--color-primary)' : 'transparent')};
-  color: ${({ active }) => (active ? 'var(--color-white)' : 'inherit')};
+  background-color: ${({ active }) => (active ? 'var(--color-background-soft)' : 'transparent')};
 
   &:hover {
-    background-color: ${({ active }) => (active ? 'var(--color-primary)' : 'var(--color-hover)')};
+    background-color: ${({ active }) => (active ? 'var(--color-background-soft)' : 'var(--color-hover)')};
   }
 `
 
@@ -217,6 +220,22 @@ const ModelsContainer = styled(Scrollbar)`
   justify-content: space-between;
   &::-webkit-scrollbar {
     display: none;
+  }
+`
+
+const Segmented = styled(AntdSegmented)`
+  .ant-segmented-item {
+    background-color: transparent !important;
+    transition: none !important;
+    &:hover {
+      background: transparent !important;
+    }
+  }
+  .ant-segmented-thumb,
+  .ant-segmented-item-selected {
+    background-color: transparent !important;
+    border: 0.5px solid var(--color-border);
+    transition: none !important;
   }
 `
 

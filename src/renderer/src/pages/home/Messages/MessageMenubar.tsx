@@ -30,6 +30,7 @@ interface Props {
   assistantModel?: Model
   model?: Model
   index?: number
+  isGrouped?: boolean
   isLastMessage: boolean
   isAssistantMessage: boolean
   setModel: (model: Model) => void
@@ -42,6 +43,7 @@ const MessageMenubar: FC<Props> = (props) => {
   const {
     message,
     index,
+    isGrouped,
     model,
     isLastMessage,
     isAssistantMessage,
@@ -252,14 +254,16 @@ const MessageMenubar: FC<Props> = (props) => {
           </ActionButton>
         </Tooltip>
       )}
-
       <Popconfirm
+        disabled={isGrouped}
         title={t('message.message.delete.content')}
         okButtonProps={{ danger: true }}
         icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
         onConfirm={() => onDeleteMessage?.(message)}>
         <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
-          <ActionButton className="message-action-button">
+          <ActionButton
+            className="message-action-button"
+            onClick={isGrouped ? () => onDeleteMessage?.(message) : undefined}>
             <DeleteOutlined />
           </ActionButton>
         </Tooltip>
