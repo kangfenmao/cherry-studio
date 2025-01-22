@@ -126,8 +126,9 @@ const MessageMenubar: FC<Props> = (props) => {
       setIsTranslating(true)
 
       try {
-        const translatedText = await translateText(message.content, language)
-        onEditMessage?.({ ...message, translatedContent: translatedText })
+        await translateText(message.content, language, (text) =>
+          onEditMessage?.({ ...message, translatedContent: text })
+        )
       } catch (error) {
         console.error('Translation failed:', error)
         window.message.error({

@@ -6,7 +6,7 @@ import { getDefaultTopic } from './AssistantService'
 import { getDefaultTranslateAssistant } from './AssistantService'
 import { getUserMessage } from './MessagesService'
 
-export const translateText = async (text: string, targetLanguage: string) => {
+export const translateText = async (text: string, targetLanguage: string, onResponse?: (text: string) => void) => {
   const translateModel = store.getState().llm.translateModel
 
   if (!translateModel) {
@@ -25,7 +25,7 @@ export const translateText = async (text: string, targetLanguage: string) => {
     content: text
   })
 
-  const translatedText = await fetchTranslate({ message, assistant })
+  const translatedText = await fetchTranslate({ message, assistant, onResponse })
 
   const trimmedText = translatedText.trim()
 
