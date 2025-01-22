@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
-import { useSystemAgents } from '.'
+import { getAgentsFromSystemAgents, useSystemAgents } from '.'
 import { groupTranslations } from './agentGroupTranslations'
 import AgentCard from './components/AgentCard'
 import MyAgents from './components/MyAgents'
@@ -27,7 +27,7 @@ const AgentsPage: FC = () => {
 
   const agentGroups = useMemo(() => {
     if (Object.keys(_agentGroups).length === 0) {
-      _agentGroups = groupBy(systemAgents, 'group')
+      _agentGroups = groupBy(getAgentsFromSystemAgents(systemAgents), 'group')
     }
     return _agentGroups
   }, [systemAgents])

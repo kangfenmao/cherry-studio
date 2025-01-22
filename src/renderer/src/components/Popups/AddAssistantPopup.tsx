@@ -121,7 +121,11 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
             key={agent.id}
             onClick={() => onCreateAssistant(agent)}
             className={agent.id === 'default' ? 'default' : ''}>
-            <HStack alignItems="center" gap={5}>
+            <HStack
+              alignItems="center"
+              gap={5}
+              style={{ overflow: 'hidden', maxWidth: '100%' }}
+              className="text-nowrap">
               {agent.emoji} {agent.name}
             </HStack>
             {agent.id === 'default' && <Tag color="green">{t('agents.tag.system')}</Tag>}
@@ -150,6 +154,7 @@ const AgentItem = styled.div`
   user-select: none;
   margin-bottom: 8px;
   cursor: pointer;
+  overflow: hidden;
   &.default {
     background-color: var(--color-background-mute);
   }

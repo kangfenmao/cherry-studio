@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 let _agents: Agent[] = []
 
-const getAgentsFromSystemAgents = (systemAgents: any) => {
+export const getAgentsFromSystemAgents = (systemAgents: any) => {
   const agents: Agent[] = []
   for (let i = 0; i < systemAgents.length; i++) {
     for (let j = 0; j < systemAgents[i].group.length; j++) {
@@ -24,7 +24,7 @@ export function useSystemAgents() {
     runAsyncFunction(async () => {
       if (_agents.length > 0) return
       const agents = await window.api.fs.read(resourcesPath + '/data/agents.json')
-      _agents = getAgentsFromSystemAgents(JSON.parse(agents) as Agent[])
+      _agents = JSON.parse(agents) as Agent[]
       setAgents(_agents)
     })
   }, [resourcesPath])
