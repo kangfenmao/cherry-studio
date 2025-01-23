@@ -13,6 +13,8 @@ Cherry Studioは、複数のLLMプロバイダーをサポートするデスク�
 
 👏 [Telegramグループ](https://t.me/CherryStudioAI)に参加しましょう
 
+❤️ Cherry Studioをお気に入りにしましたか？小さな星をつけてください 🌟 または [スポンサー](sponsor.md) をして開発をサポートしてください！❤️
+
 # 🌠 スクリーンショット
 
 ![](https://github.com/user-attachments/assets/28585d83-4bf0-4714-b561-8c7bf57cc600)
