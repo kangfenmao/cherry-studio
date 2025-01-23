@@ -814,7 +814,7 @@ const migrateConfig = {
     state.llm.providers.push({
       id: 'qwenlm',
       name: 'QwenLM',
-      type: 'openai',
+      type: 'qwenlm',
       apiKey: '',
       apiHost: 'https://chat.qwenlm.ai/api/',
       models: SYSTEM_MODELS.qwenlm,
@@ -880,6 +880,14 @@ const migrateConfig = {
   },
   '60': (state: RootState) => {
     state.settings.multiModelMessageStyle = 'fold'
+    return state
+  },
+  '61': (state: RootState) => {
+    state.llm.providers.forEach((provider) => {
+      if (provider.id === 'qwenlm') {
+        provider.type = 'qwenlm'
+      }
+    })
     return state
   }
 }
