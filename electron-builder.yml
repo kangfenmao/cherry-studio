@@ -80,7 +80,4 @@ afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    消息分组显示 @teojs
-    支持 DeepSeek R1 模型
-    助手的预设消息保存逻辑的修改 @duanyongcheng
-    错误修复和性能优化
+    错误修复
