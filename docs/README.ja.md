@@ -11,7 +11,7 @@
 
 Cherry Studioは、複数のLLMプロバイダーをサポートするデスクトップクライアントで、Windows、Mac、Linuxで利用可能です。
 
-👏 [Telegramグループ](https://t.me/CherryStudioAI)に参加しましょう
+👏 [Telegramグループ](https://t.me/CherryStudioAI)に参加しましょう ｜ [Discord](https://discord.gg/C3xrXWjY) で討論と助けを得る！
 
 ❤️ Cherry Studioをお気に入りにしましたか？小さな星をつけてください 🌟 または [スポンサー](sponsor.md) をして開発をサポートしてください！❤️
 
