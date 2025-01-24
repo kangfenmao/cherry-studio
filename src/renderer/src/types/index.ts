@@ -53,6 +53,7 @@ export type Message = {
   createdAt: string
   status: 'sending' | 'pending' | 'success' | 'paused' | 'error'
   modelId?: string
+  model?: Model
   files?: FileType[]
   images?: string[]
   usage?: OpenAI.Completions.CompletionUsage
@@ -61,7 +62,6 @@ export type Message = {
   type: 'text' | '@' | 'clear'
   isPreset?: boolean
   mentions?: Model[]
-  model?: Model
   metadata?: {
     // Gemini
     groundingMetadata?: any

@@ -16,11 +16,13 @@ import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import { TranslateLanguageOptions } from '@renderer/config/translate'
 import { modelGenerating } from '@renderer/hooks/useRuntime'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
+import { resetAssistantMessage } from '@renderer/services/MessagesService'
 import { translateText } from '@renderer/services/TranslateService'
 import { Message, Model } from '@renderer/types'
 import { removeTrailingDoubleSpaces, uuid } from '@renderer/utils'
 import { Button, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -77,6 +79,21 @@ const MessageMenubar: FC<Props> = (props) => {
   const onResend = useCallback(async () => {
     await modelGenerating()
     const _messages = onGetMessages?.() || []
+    const groupdMessages = _messages.filter((m) => m.askId === message.id)
+
+    // Resend all groupd messages
+    if (!isEmpty(groupdMessages)) {
+      for (const assistantMessage of groupdMessages) {
+        const _model = assistantMessage.model || assistantModel
+        EventEmitter.emit(
+          EVENT_NAMES.RESEND_MESSAGE + ':' + assistantMessage.id,
+          resetAssistantMessage(assistantMessage, _model)
+        )
+      }
+      return
+    }
+
+    // If there is no groupd message, resend next message
     const index = _messages.findIndex((m) => m.id === message.id)
     const nextIndex = index + 1
     const nextMessage = _messages[nextIndex]
@@ -91,6 +108,7 @@ const MessageMenubar: FC<Props> = (props) => {
       })
     }
 
+    // If next message is not exist or next message role is user, delete current message and resend
     if (!nextMessage || nextMessage.role === 'user') {
       EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE, { ...message, id: uuid() })
       onDeleteMessage?.(message)
@@ -102,20 +120,25 @@ const MessageMenubar: FC<Props> = (props) => {
 
     const editedText = await TextEditPopup.show({
       text: message.content,
-      children: (props) =>
-        message.role === 'user' ? (
+      children: (props) => {
+        const onPress = () => {
+          props.onOk?.()
+          resendMessage = true
+        }
+        return message.role === 'user' ? (
           <ReSendButton
             icon={<i className="iconfont icon-ic_send" style={{ color: 'var(--color-primary)' }} />}
-            onClick={() => {
-              props.onOk?.()
-              resendMessage = true
-            }}>
+            onClick={onPress}>
             {t('chat.resend')}
           </ReSendButton>
         ) : null
+      }
     })
 
-    editedText && onEditMessage?.({ ...message, content: editedText })
+    if (editedText) {
+      await onEditMessage?.({ ...message, content: editedText })
+    }
+
     resendMessage && onResend()
   }, [message, onEditMessage, onResend, t])
 
@@ -177,16 +200,7 @@ const MessageMenubar: FC<Props> = (props) => {
     const selectedModel = await SelectModelPopup.show({ model })
     if (!selectedModel) return
 
-    const _message: Message = {
-      ...message,
-      content: '',
-      reasoning_content: undefined,
-      metrics: undefined,
-      status: 'sending',
-      model: selectedModel,
-      translatedContent: undefined,
-      metadata: undefined
-    }
+    const _message: Message = resetAssistantMessage(message, selectedModel)
 
     if (message.askId && message.model) {
       return EventEmitter.emit(EVENT_NAMES.APPEND_MESSAGE, { ..._message, id: uuid() })
