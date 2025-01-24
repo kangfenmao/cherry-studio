@@ -8,6 +8,7 @@ import { MultiModelMessageStyle } from '@renderer/store/settings'
 import { Message, Model, Topic } from '@renderer/types'
 import { Button, Segmented as AntdSegmented } from 'antd'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import MessageItem from './Message'
@@ -32,6 +33,7 @@ const MessageGroup: FC<Props> = ({
   onDeleteGroupMessages
 }) => {
   const { multiModelMessageStyle: multiModelMessageStyleSetting } = useSettings()
+  const { t } = useTranslation()
 
   const [multiModelMessageStyle, setMultiModelMessageStyle] =
     useState<MultiModelMessageStyle>(multiModelMessageStyleSetting)
@@ -42,8 +44,19 @@ const MessageGroup: FC<Props> = ({
   const isGrouped = messageLength > 1
 
   const onDelete = async () => {
-    const askId = messages[0].askId
-    askId && onDeleteGroupMessages?.(askId)
+    window.modal.confirm({
+      title: t('message.group.delete.title'),
+      content: t('message.group.delete.content'),
+      centered: true,
+      okButtonProps: {
+        danger: true
+      },
+      okText: t('common.delete'),
+      onOk: () => {
+        const askId = messages[0].askId
+        askId && onDeleteGroupMessages?.(askId)
+      }
+    })
   }
 
   useEffect(() => {

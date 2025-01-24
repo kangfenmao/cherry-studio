@@ -269,7 +269,9 @@
       "upgrade.success.title": "Upgrade successfully",
       "regenerate.confirm": "Regenerating will replace current message",
       "copy.success": "Copied!",
-      "error.get_embedding_dimensions": "Failed to get embedding dimensions"
+      "error.get_embedding_dimensions": "Failed to get embedding dimensions",
+      "group.delete.title": "Delete Group Message",
+      "group.delete.content": "Deleting a group message will delete the user's question and all assistant's answers"
     },
     "minapp": {
       "title": "MinApp",

@@ -268,7 +268,9 @@
       "upgrade.success.title": "アップグレードに成功しました",
       "regenerate.confirm": "再生成すると現在のメッセージが置き換えられます",
       "copy.success": "コピーしました！",
-      "error.get_embedding_dimensions": "埋込み次元を取得できませんでした"
+      "error.get_embedding_dimensions": "埋込み次元を取得できませんでした",
+      "group.delete.title": "分組メッセージを削除",
+      "group.delete.content": "分組メッセージを削除するとユーザーの質問と助け手の回答がすべて削除されます"
     },
     "minapp": {
       "title": "ミニアプリ",
