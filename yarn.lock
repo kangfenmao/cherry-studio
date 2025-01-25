@@ -1693,7 +1693,7 @@ __metadata:
 
 "@llm-tools/embedjs@patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch":
   version: 0.1.25
-  resolution: "@llm-tools/embedjs@patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch::version=0.1.25&hash=7b05b5"
+  resolution: "@llm-tools/embedjs@patch:@llm-tools/embedjs@npm%3A0.1.25#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.25-ec5645cf36.patch::version=0.1.25&hash=3b8a9c"
   dependencies:
     "@langchain/textsplitters": "npm:^0.1.0"
     "@llm-tools/embedjs-interfaces": "npm:0.1.25"
@@ -1703,7 +1703,7 @@ __metadata:
     md5: "npm:^2.3.0"
     mime: "npm:^4.0.6"
     stream-mime-type: "npm:^2.0.0"
-  checksum: 10c0/d0a37a5c7232571a71eff7e90ff4ba612bf33022a6eccd933c3a778844320f427a936d0851aae00092e34407c8c2f3555fe4444c6f2139f978ecfdd42fd89375
+  checksum: 10c0/3ef5fb0068e662d9fc3ff794c0c200fca91fba548d1989a628ad2c3576e3f97838f3abca683adc77b1774d57e09c6d155c1c4b9d69eb20aac26bd274148f72a1
   languageName: node
   linkType: hard
 

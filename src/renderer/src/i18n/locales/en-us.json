@@ -245,6 +245,7 @@
       "error.enter.api.key": "Please enter your API key first",
       "error.enter.model": "Please select a model first",
       "error.enter.name": "Please enter the name of the knowledge base",
+      "error.chunk_overlap_too_large": "Chunk overlap cannot be greater than chunk size",
       "error.invalid.proxy.url": "Invalid proxy URL",
       "error.invalid.webdav": "Invalid WebDAV settings",
       "message.code_style": "Code style",
@@ -625,7 +626,10 @@
       "model_info": "Model Info",
       "not_support": "Knowledge base database engine updated, the knowledge base will no longer be supported, please create a new knowledge base",
       "no_provider": "Knowledge base model provider is not set, the knowledge base will no longer be supported, please create a new knowledge base",
-      "source": "Source"
+      "source": "Source",
+      "chunk_size": "Chunk Size",
+      "chunk_overlap": "Chunk Overlap",
+      "not_set": "Not Set"
     },
     "models": {
       "pinned": "Pinned",

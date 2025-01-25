@@ -6,7 +6,7 @@ import AiProvider from '@renderer/providers/AiProvider'
 import { getKnowledgeBaseParams } from '@renderer/services/KnowledgeService'
 import { getModelUniqId } from '@renderer/services/ModelService'
 import { Model } from '@renderer/types'
-import { Form, Input, Modal, Select } from 'antd'
+import { Form, Input, InputNumber, Modal, Select } from 'antd'
 import { find, sortBy } from 'lodash'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
@@ -19,6 +19,8 @@ interface ShowParams {
 interface FormData {
   name: string
   model: string
+  chunkSize?: number
+  chunkOverlap?: number
 }
 
 interface Props extends ShowParams {
@@ -81,6 +83,8 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
           name: values.name,
           model: selectedModel,
           dimensions,
+          chunkSize: values.chunkSize,
+          chunkOverlap: values.chunkOverlap,
           items: [],
           created_at: Date.now(),
           updated_at: Date.now(),
@@ -130,6 +134,28 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
           tooltip={{ title: t('models.embedding_model_tooltip'), placement: 'right' }}
           rules={[{ required: true, message: t('message.error.enter.model') }]}>
           <Select style={{ width: '100%' }} options={selectOptions} placeholder={t('settings.models.empty')} />
+        </Form.Item>
+
+        <Form.Item name="chunkSize" label={t('knowledge.chunk_size')} initialValue={1000}>
+          <InputNumber style={{ width: '100%' }} min={1} />
+        </Form.Item>
+
+        <Form.Item
+          name="chunkOverlap"
+          label={t('knowledge.chunk_overlap')}
+          initialValue={0}
+          rules={[
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('chunkSize') > value) {
+                  return Promise.resolve()
+                }
+                return Promise.reject(new Error(t('message.error.chunk_overlap_too_large')))
+              }
+            })
+          ]}
+          dependencies={['chunkSize']}>
+          <InputNumber style={{ width: '100%' }} min={0} />
         </Form.Item>
       </Form>
     </Modal>

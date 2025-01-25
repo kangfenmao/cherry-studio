@@ -244,6 +244,7 @@
       "error.enter.api.host": "APIホストを入力してください",
       "error.enter.api.key": "APIキーを入力してください",
       "error.enter.model": "モデルを選択してください",
+      "error.chunk_overlap_too_large": "チャンクの重なりは、チャンクサイズを超えることはできません",
       "error.invalid.proxy.url": "無効なプロキシURL",
       "error.invalid.webdav": "無効なWebDAV設定",
       "message.code_style": "コードスタイル",
@@ -609,7 +610,10 @@
       "model_info": "モデル情報",
       "not_support": "ナレッジベースデータベースエンジンが更新されました。このナレッジベースはもうサポートされていません。新しいナレッジベースを作成してください",
       "no_provider": "ナレッジベースモデルプロバイダーが設定されていません。ナレッジベースはもうサポートされていません。新しいナレッジベースを作成してください",
-      "source": "ソース"
+      "source": "ソース",
+      "chunk_size": "チャンクサイズ",
+      "chunk_overlap": "チャンクの重なり",
+      "not_set": "未設定"
     },
     "models": {
       "pinned": "固定済み",

@@ -246,6 +246,7 @@
       "error.enter.api.key": "请输入您的 API 密钥",
       "error.enter.model": "请选择一个模型",
       "error.enter.name": "请输入知识库名称",
+      "error.chunk_overlap_too_large": "分段重叠不能大于分段大小",
       "error.invalid.proxy.url": "无效的代理地址",
       "error.invalid.webdav": "无效的 WebDAV 设置",
       "message.code_style": "代码风格",
@@ -611,7 +612,10 @@
       "model_info": "模型信息",
       "not_support": "知识库数据库引擎已更新，该知识库将不再支持，请重新创建知识库",
       "no_provider": "知识库模型服务商丢失，该知识库将不再支持，请重新创建知识库",
-      "source": "来源"
+      "source": "来源",
+      "chunk_size": "分段大小",
+      "chunk_overlap": "重叠大小",
+      "not_set": "未设置"
     },
     "models": {
       "pinned": "已固定",

@@ -245,6 +245,7 @@
       "error.enter.api.key": "請先輸入您的 API 密鑰",
       "error.enter.model": "請先選擇一個模型",
       "error.enter.name": "請先輸入知識庫名稱",
+      "error.chunk_overlap_too_large": "分段重疊不能大於分段大小",
       "error.invalid.proxy.url": "無效的代理 URL",
       "error.invalid.webdav": "無效的 WebDAV 設定",
       "message.code_style": "程式碼風格",
@@ -610,7 +611,10 @@
       "model_info": "模型信息",
       "not_support": "知識庫數據庫引擎已更新，該知識庫將不再支持，請重新創建知識庫",
       "no_provider": "知識庫模型提供商遺失，該知識庫將不再支持，請重新創建知識庫",
-      "source": "來源"
+      "source": "來源",
+      "chunk_size": "分段大小",
+      "chunk_overlap": "重疊大小",
+      "not_set": "未設置"
     },
     "models": {
       "pinned": "已固定",

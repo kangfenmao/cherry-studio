@@ -361,6 +361,13 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
         {providerName && <Tag color="purple">{providerName}</Tag>}
       </ModelInfo>
 
+      <ModelInfo>
+        <label htmlFor="model-info">{t('knowledge.chunk_size')}</label>
+        <Tag color="green">{base.chunkSize || t('knowledge.not_set')}</Tag>
+        <label htmlFor="model-info">{t('knowledge.chunk_overlap')}</label>
+        <Tag color="orange">{base.chunkOverlap || t('knowledge.not_set')}</Tag>
+      </ModelInfo>
+
       <IndexSection>
         <Button
           type="primary"
