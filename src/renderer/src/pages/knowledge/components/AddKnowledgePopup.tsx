@@ -136,14 +136,13 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
           <Select style={{ width: '100%' }} options={selectOptions} placeholder={t('settings.models.empty')} />
         </Form.Item>
 
-        <Form.Item name="chunkSize" label={t('knowledge.chunk_size')} initialValue={1000}>
+        <Form.Item name="chunkSize" label={t('knowledge.chunk_size')}>
           <InputNumber style={{ width: '100%' }} min={1} />
         </Form.Item>
 
         <Form.Item
           name="chunkOverlap"
           label={t('knowledge.chunk_overlap')}
-          initialValue={0}
           rules={[
             ({ getFieldValue }) => ({
               validator(_, value) {
