@@ -9,15 +9,14 @@ import { getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import {
   deleteMessageFiles,
-  filterMessages,
   getAssistantMessage,
   getContextCount,
   getGroupedMessages,
   getUserMessage
 } from '@renderer/services/MessagesService'
 import { estimateHistoryTokens } from '@renderer/services/TokenService'
-import { Assistant, Message, Model, Topic } from '@renderer/types'
-import { captureScrollableDiv, runAsyncFunction, uuid } from '@renderer/utils'
+import { Assistant, Message, Topic } from '@renderer/types'
+import { captureScrollableDiv, runAsyncFunction } from '@renderer/utils'
 import { t } from 'i18next'
 import { flatten, last, take } from 'lodash'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -161,10 +160,6 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
       EventEmitter.on(EVENT_NAMES.APPEND_MESSAGE, onAppendMessage),
       EventEmitter.on(EVENT_NAMES.RECEIVE_MESSAGE, async () => {
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
-      }),
-      EventEmitter.on(EVENT_NAMES.REGENERATE_MESSAGE, async (model: Model) => {
-        const lastUserMessage = last(filterMessages(messages).filter((m) => m.role === 'user'))
-        lastUserMessage && onSendMessage({ ...lastUserMessage, id: uuid(), model: model, mentions: [model] })
       }),
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {

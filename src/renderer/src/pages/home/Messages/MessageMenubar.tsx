@@ -197,6 +197,12 @@ const MessageMenubar: FC<Props> = (props) => {
 
   const onRegenerate = async () => {
     await modelGenerating()
+    const _message: Message = resetAssistantMessage(message, assistantModel)
+    onEditMessage?.(_message)
+  }
+
+  const onMentionModel = async () => {
+    await modelGenerating()
     const selectedModel = await SelectModelPopup.show({ model })
     if (!selectedModel) return
 
@@ -229,9 +235,23 @@ const MessageMenubar: FC<Props> = (props) => {
         </ActionButton>
       </Tooltip>
       {isAssistantMessage && (
+        <Popconfirm
+          title={t('message.regenerate.confirm')}
+          okButtonProps={{ danger: true }}
+          destroyTooltipOnHide
+          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+          onConfirm={onRegenerate}>
+          <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
+            <ActionButton className="message-action-button">
+              <SyncOutlined />
+            </ActionButton>
+          </Tooltip>
+        </Popconfirm>
+      )}
+      {isAssistantMessage && (
         <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-          <ActionButton className="message-action-button" onClick={onRegenerate}>
-            <SyncOutlined />
+          <ActionButton className="message-action-button" onClick={onMentionModel}>
+            <i className="iconfont icon-at" style={{ fontSize: 16 }}></i>
           </ActionButton>
         </Tooltip>
       )}
