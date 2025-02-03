@@ -629,7 +629,8 @@
       "source": "Source",
       "chunk_size": "Chunk Size",
       "chunk_overlap": "Chunk Overlap",
-      "not_set": "Not Set"
+      "not_set": "Not Set",
+      "settings": "Knowledge Base Settings"
     },
     "models": {
       "pinned": "Pinned",

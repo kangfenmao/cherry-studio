@@ -615,7 +615,8 @@
       "source": "来源",
       "chunk_size": "分段大小",
       "chunk_overlap": "重叠大小",
-      "not_set": "未设置"
+      "not_set": "未设置",
+      "settings": "知识库设置"
     },
     "models": {
       "pinned": "已固定",

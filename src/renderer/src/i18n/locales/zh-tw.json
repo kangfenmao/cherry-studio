@@ -614,7 +614,8 @@
       "source": "來源",
       "chunk_size": "分段大小",
       "chunk_overlap": "重疊大小",
-      "not_set": "未設置"
+      "not_set": "未設置",
+      "settings": "知識庫設定"
     },
     "models": {
       "pinned": "已固定",
