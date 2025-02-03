@@ -630,7 +630,7 @@
       },
       "all": "全部",
       "vision": "视觉模型",
-      "websearch": "网络搜索模型",
+      "websearch": "联网模型",
       "free": "免费模型",
       "embedding": "嵌入模型",
       "embedding_model": "嵌入模型",

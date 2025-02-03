@@ -889,6 +889,14 @@ const migrateConfig = {
       }
     })
     return state
+  },
+  '62': (state: RootState) => {
+    state.llm.providers.forEach((provider) => {
+      if (provider.id === 'azure-openai') {
+        provider.type = 'azure-openai'
+      }
+    })
+    return state
   }
 }
 

@@ -201,6 +201,8 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     return value.replaceAll('，', ',').replaceAll(' ', ',').replaceAll(' ', '').replaceAll('\n', ',')
   }
 
+  const isAzureOpenAI = provider.id === 'azure-openai' || provider.type === 'azure-openai'
+
   return (
     <SettingContainer theme={theme}>
       <SettingTitle>
@@ -264,7 +266,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           <SettingHelpText>{t('settings.provider.api.url.tip')}</SettingHelpText>
         </SettingHelpTextRow>
       )}
-      {provider.id === 'azure-openai' && (
+      {isAzureOpenAI && (
         <>
           <SettingSubtitle>{t('settings.provider.api_version')}</SettingSubtitle>
           <Space.Compact style={{ width: '100%', marginTop: 5 }}>
