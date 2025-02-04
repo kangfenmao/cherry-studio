@@ -240,7 +240,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
-        {isProviderSupportAuth(provider) && <OAuthButton provider={provider} />}
+        {isProviderSupportAuth(provider) && <OAuthButton provider={provider} onSuccess={setApiKey} />}
         <Button
           type={apiValid ? 'primary' : 'default'}
           ghost={apiValid}
@@ -266,7 +266,9 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           onBlur={onUpdateApiHost}
         />
         {!isEmpty(configedApiHost) && apiHost !== configedApiHost && (
-          <Button onClick={onReset}>{t('settings.provider.api.url.reset')}</Button>
+          <Button danger onClick={onReset}>
+            {t('settings.provider.api.url.reset')}
+          </Button>
         )}
       </Space.Compact>
       {isOpenAIProvider(provider) && (

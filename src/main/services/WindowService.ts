@@ -163,9 +163,9 @@ export class WindowService {
     mainWindow.webContents.setWindowOpenHandler((details) => {
       const { url } = details
 
-      const oauthProviderUrls = ['https://account.siliconflow.cn']
+      const oauthProviderUrls = ['https://account.siliconflow.cn/oauth']
 
-      if (oauthProviderUrls.some((url) => url.startsWith(url))) {
+      if (oauthProviderUrls.some((link) => url.startsWith(link))) {
         return {
           action: 'allow',
           overrideBrowserWindowOptions: {

@@ -1,4 +1,3 @@
-import { useProvider } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
 import { oauthWithAihubmix, oauthWithSiliconFlow } from '@renderer/utils/oauth'
 import { Button, ButtonProps } from 'antd'
@@ -7,16 +6,16 @@ import { useTranslation } from 'react-i18next'
 
 interface Props extends ButtonProps {
   provider: Provider
+  onSuccess?: (key: string) => void
 }
 
-const OAuthButton: FC<Props> = (props) => {
+const OAuthButton: FC<Props> = ({ provider, ...props }) => {
   const { t } = useTranslation()
-  const { provider, updateProvider } = useProvider(props.provider.id)
 
   const onAuth = () => {
     const onSuccess = (key: string) => {
       if (key.trim()) {
-        updateProvider({ ...provider, apiKey: key })
+        props.onSuccess?.(key)
         window.message.success(t('auth.get_key_success'))
       }
     }
