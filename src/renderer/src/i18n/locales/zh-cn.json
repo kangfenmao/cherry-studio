@@ -273,7 +273,8 @@
       "copy.success": "复制成功",
       "error.get_embedding_dimensions": "获取嵌入维度失败",
       "group.delete.title": "删除分组消息",
-      "group.delete.content": "删除分组消息会删除用户提问和所有助手的回答"
+      "group.delete.content": "删除分组消息会删除用户提问和所有助手的回答",
+      "mention.title": "切换模型回答"
     },
     "minapp": {
       "title": "小程序",

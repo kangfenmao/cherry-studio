@@ -272,7 +272,8 @@
       "copy.success": "Copied!",
       "error.get_embedding_dimensions": "Failed to get embedding dimensions",
       "group.delete.title": "Delete Group Message",
-      "group.delete.content": "Deleting a group message will delete the user's question and all assistant's answers"
+      "group.delete.content": "Deleting a group message will delete the user's question and all assistant's answers",
+      "mention.title": "Switch model answer"
     },
     "minapp": {
       "title": "MinApp",

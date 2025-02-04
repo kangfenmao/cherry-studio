@@ -271,7 +271,8 @@
       "copy.success": "コピーしました！",
       "error.get_embedding_dimensions": "埋込み次元を取得できませんでした",
       "group.delete.title": "分組メッセージを削除",
-      "group.delete.content": "分組メッセージを削除するとユーザーの質問と助け手の回答がすべて削除されます"
+      "group.delete.content": "分組メッセージを削除するとユーザーの質問と助け手の回答がすべて削除されます",
+      "mention.title": "モデルを切り替える"
     },
     "minapp": {
       "title": "ミニアプリ",

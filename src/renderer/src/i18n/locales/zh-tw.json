@@ -272,7 +272,8 @@
       "copy.success": "複製成功",
       "error.get_embedding_dimensions": "獲取嵌入維度失敗",
       "group.delete.title": "刪除分組消息",
-      "group.delete.content": "刪除分組消息會刪除用戶提問和所有助手的回答"
+      "group.delete.content": "刪除分組消息會刪除用戶提問和所有助手的回答",
+      "mention.title": "切換模型回答"
     },
     "minapp": {
       "title": "小程序",
