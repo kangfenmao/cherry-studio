@@ -39,3 +39,7 @@ export function formatErrorMessage(error: any): string {
     }
   }
 }
+
+export function getErrorMessage(error: any): string {
+  return error?.message || error?.toString() || ''
+}
