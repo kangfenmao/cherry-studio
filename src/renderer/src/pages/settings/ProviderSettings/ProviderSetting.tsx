@@ -8,6 +8,7 @@ import {
   SettingOutlined
 } from '@ant-design/icons'
 import ModelTags from '@renderer/components/ModelTags'
+import OAuthButton from '@renderer/components/OAuth/OAuthButton'
 import { EMBEDDING_REGEX, getModelLogo, VISION_REGEX } from '@renderer/config/models'
 import { PROVIDER_CONFIG } from '@renderer/config/providers'
 import { useTheme } from '@renderer/context/ThemeProvider'
@@ -16,6 +17,7 @@ import { useProvider } from '@renderer/hooks/useProvider'
 import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/ApiService'
+import { isProviderSupportAuth } from '@renderer/services/ProviderService'
 import { useAppDispatch } from '@renderer/store'
 import { setModel } from '@renderer/store/assistants'
 import { Model, ModelType, Provider } from '@renderer/types'
@@ -61,17 +63,18 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const { defaultModel, setDefaultModel } = useDefaultModel()
 
   const modelGroups = groupBy(models, 'group')
+  const isAzureOpenAI = provider.id === 'azure-openai' || provider.type === 'azure-openai'
 
-  useEffect(() => {
-    setApiKey(provider.apiKey)
-    setApiHost(provider.apiHost)
-  }, [provider])
+  const providerConfig = PROVIDER_CONFIG[provider.id]
+  const officialWebsite = providerConfig?.websites?.official
+  const apiKeyWebsite = providerConfig?.websites?.apiKey
+  const docsWebsite = providerConfig?.websites?.docs
+  const modelsWebsite = providerConfig?.websites?.models
+  const configedApiHost = providerConfig?.api?.url
 
   const onUpdateApiKey = () => {
-    if (apiKey.trim()) {
+    if (apiKey !== provider.apiKey) {
       updateProvider({ ...provider, apiKey })
-    } else {
-      setApiKey(provider.apiKey)
     }
   }
 
@@ -138,13 +141,6 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     }
   }
 
-  const providerConfig = PROVIDER_CONFIG[provider.id]
-  const officialWebsite = providerConfig?.websites?.official
-  const apiKeyWebsite = providerConfig?.websites?.apiKey
-  const docsWebsite = providerConfig?.websites?.docs
-  const modelsWebsite = providerConfig?.websites?.models
-  const configedApiHost = providerConfig?.api?.url
-
   const onReset = () => {
     setApiHost(configedApiHost)
     updateProvider({ ...provider, apiHost: configedApiHost })
@@ -201,16 +197,28 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     return value.replaceAll('，', ',').replaceAll(' ', ',').replaceAll(' ', '').replaceAll('\n', ',')
   }
 
-  const isAzureOpenAI = provider.id === 'azure-openai' || provider.type === 'azure-openai'
+  useEffect(() => {
+    setApiKey(provider.apiKey)
+    setApiHost(provider.apiHost)
+  }, [provider.apiKey, provider.apiHost])
+
+  // Save apiKey to provider when unmount
+  useEffect(() => {
+    return () => {
+      if (apiKey.trim() && apiKey !== provider.apiKey) {
+        updateProvider({ ...provider, apiKey })
+      }
+    }
+  }, [apiKey, provider, updateProvider])
 
   return (
     <SettingContainer theme={theme}>
       <SettingTitle>
-        <Flex align="center">
+        <Flex align="center" gap={8}>
           <ProviderName>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</ProviderName>
           {officialWebsite! && (
             <Link target="_blank" href={providerConfig.websites.official}>
-              <ExportOutlined style={{ marginLeft: '8px', color: 'var(--color-text)', fontSize: '12px' }} />
+              <ExportOutlined style={{ color: 'var(--color-text)', fontSize: '12px' }} />
             </Link>
           )}
         </Flex>
@@ -232,6 +240,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           type="password"
           autoFocus={provider.enabled && apiKey === ''}
         />
+        {isProviderSupportAuth(provider) && <OAuthButton provider={provider} />}
         <Button
           type={apiValid ? 'primary' : 'default'}
           ghost={apiValid}

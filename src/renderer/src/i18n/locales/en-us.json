@@ -509,7 +509,6 @@
       "provider.check": "Check",
       "provider.docs_check": "Check",
       "provider.docs_more_details": "for more details",
-      "provider.get_api_key": "Get API Key",
       "provider.search_placeholder": "Search model id or name",
       "proxy": {
         "mode": {
@@ -688,6 +687,12 @@
         "esc_back": "back",
         "copy_last_message": "Press C to copy"
       }
+    },
+    "auth": {
+      "oauth_button": "Auth with {{provider}}",
+      "get_key": "Get",
+      "get_key_success": "API key automatically obtained successfully",
+      "login": "Login"
     }
   }
 }

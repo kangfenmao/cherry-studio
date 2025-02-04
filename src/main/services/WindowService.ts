@@ -163,6 +163,19 @@ export class WindowService {
     mainWindow.webContents.setWindowOpenHandler((details) => {
       const { url } = details
 
+      const oauthProviderUrls = ['https://account.siliconflow.cn']
+
+      if (oauthProviderUrls.some((url) => url.startsWith(url))) {
+        return {
+          action: 'allow',
+          overrideBrowserWindowOptions: {
+            webPreferences: {
+              partition: 'persist:webview'
+            }
+          }
+        }
+      }
+
       if (url.includes('http://file/')) {
         const fileName = url.replace('http://file/', '')
         const storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
