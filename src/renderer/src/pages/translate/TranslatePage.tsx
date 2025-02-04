@@ -52,7 +52,7 @@ const TranslatePage: FC = () => {
     const message: Message = {
       id: uuid(),
       role: 'user',
-      content: text,
+      content: '',
       assistantId: assistant.id,
       topicId: uuid(),
       model: translateModel,
