@@ -225,7 +225,7 @@ export default class OpenAIProvider extends BaseProvider {
       onChunk({
         text: delta?.content || '',
         // @ts-ignore key is not typed
-        reasoning_content: delta?.reasoning_content || delta.reasoning || '',
+        reasoning_content: delta?.reasoning_content || delta?.reasoning || '',
         usage: chunk.usage,
         metrics: {
           completion_tokens: chunk.usage?.completion_tokens,

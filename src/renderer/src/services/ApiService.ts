@@ -2,6 +2,7 @@ import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
+import { formatErrorMessage } from '@renderer/utils/error'
 import { isEmpty } from 'lodash'
 
 import AiProvider from '../providers/AiProvider'
@@ -239,13 +240,5 @@ export async function fetchModels(provider: Provider) {
     return await AI.models()
   } catch (error) {
     return []
-  }
-}
-
-function formatErrorMessage(error: any): string {
-  try {
-    return '```json\n' + JSON.stringify(error, null, 2) + '\n```'
-  } catch (e) {
-    return 'Error: ' + error?.message
   }
 }
