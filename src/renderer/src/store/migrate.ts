@@ -896,6 +896,7 @@ const migrateConfig = {
         provider.type = 'azure-openai'
       }
     })
+    state.settings.translateModelPrompt = TRANSLATE_PROMPT
     return state
   }
 }
