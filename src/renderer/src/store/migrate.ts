@@ -906,7 +906,6 @@ const migrateConfig = {
         state.minapps.enabled.push(mintop)
       }
     }
-    removeMiniAppIconsFromState(state)
     return state
   }
 }

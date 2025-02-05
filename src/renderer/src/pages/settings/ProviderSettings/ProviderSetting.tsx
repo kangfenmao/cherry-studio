@@ -309,8 +309,10 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
                 <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
                   {model?.name?.[0]?.toUpperCase()}
                 </Avatar>
-                {model?.name}
-                <ModelTags model={model} />
+                <ModelNameRow>
+                  <span>{model?.name}</span>
+                  <ModelTags model={model} />
+                </ModelNameRow>
                 <Popover content={modelTypeContent(model)} title={t('models.type.select')} trigger="click">
                   <SettingIcon />
                 </Popover>
@@ -360,6 +362,13 @@ const ModelListHeader = styled.div`
   align-items: center;
 `
 
+const ModelNameRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`
+
 const RemoveIcon = styled(MinusCircleOutlined)`
   font-size: 18px;
   margin-left: 10px;
@@ -369,7 +378,7 @@ const RemoveIcon = styled(MinusCircleOutlined)`
 `
 
 const SettingIcon = styled(SettingOutlined)`
-  margin-left: 10px;
+  margin-left: 2px;
   color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
