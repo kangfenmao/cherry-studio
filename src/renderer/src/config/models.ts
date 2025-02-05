@@ -145,7 +145,8 @@ const visionAllowedModels = [
   'gpt-4(?:-[\\w-]+)',
   'gpt-4o(?:-[\\w-]+)?',
   'chatgpt-4o(?:-[\\w-]+)?',
-  'o1(?:-[\\w-]+)?'
+  'o1(?:-[\\w-]+)?',
+  'deepseek-vl(?:[\\w-]+)?'
 ]
 
 const visionExcludedModels = ['gpt-4-\\d+-preview', 'gpt-4-turbo-preview', 'gpt-4-32k', 'gpt-4-\\d+']
