@@ -371,6 +371,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'deepseek-ai'
     },
     {
+      id: 'deepseek-ai/DeepSeek-V3',
+      name: 'deepseek-ai/DeepSeek-V3',
+      provider: 'silicon',
+      group: 'deepseek-ai'
+    },
+    {
       id: 'Qwen/Qwen2.5-7B-Instruct',
       provider: 'silicon',
       name: 'Qwen2.5-7B-Instruct',
@@ -381,6 +387,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       name: 'meta-llama/Llama-3.3-70B-Instruct',
       provider: 'silicon',
       group: 'meta-llama'
+    },
+    {
+      id: 'BAAI/bge-m3',
+      name: 'BAAI/bge-m3',
+      provider: 'silicon',
+      group: 'BAAI'
     }
   ],
   openai: [
