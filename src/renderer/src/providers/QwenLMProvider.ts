@@ -120,7 +120,7 @@ class QwenLMProvider extends OpenAIProvider {
       top_p: assistant?.settings?.topP,
       max_tokens: maxTokens,
       stream: true,
-      ...(assistant.enableWebSearch ? getOpenAIWebSearchParams(model) : {}),
+      ...getOpenAIWebSearchParams(assistant, model),
       ...this.getCustomParameters(assistant)
     })
 

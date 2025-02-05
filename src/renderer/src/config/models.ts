@@ -123,7 +123,7 @@ import WenxinModelLogoDark from '@renderer/assets/images/models/wenxin_dark.png'
 import YiModelLogo from '@renderer/assets/images/models/yi.png'
 import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import { getProviderByModel } from '@renderer/services/AssistantService'
-import { Model } from '@renderer/types'
+import { Assistant, Model } from '@renderer/types'
 import OpenAI from 'openai'
 
 import { getWebSearchTools } from './tools'
@@ -1182,16 +1182,22 @@ export function isWebSearchModel(model: Model): boolean {
   return false
 }
 
-export function getOpenAIWebSearchParams(model: Model): Record<string, any> {
+export function getOpenAIWebSearchParams(assistant: Assistant, model: Model): Record<string, any> {
   if (isWebSearchModel(model)) {
-    const webSearchTools = getWebSearchTools(model)
+    if (assistant.enableWebSearch) {
+      const webSearchTools = getWebSearchTools(model)
 
-    if (model.provider === 'hunyuan') {
-      return { enable_enhancement: true }
-    }
+      if (model.provider === 'hunyuan') {
+        return { enable_enhancement: true }
+      }
 
-    return {
-      tools: webSearchTools
+      return {
+        tools: webSearchTools
+      }
+    } else {
+      if (model.provider === 'hunyuan') {
+        return { enable_enhancement: false }
+      }
     }
   }
 

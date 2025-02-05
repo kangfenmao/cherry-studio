@@ -193,7 +193,7 @@ export default class OpenAIProvider extends BaseProvider {
       keep_alive: this.keepAliveTime,
       stream: isSupportStreamOutput(),
       reasoning_effort: this.getReasoningEffort(assistant, model),
-      ...(assistant.enableWebSearch ? getOpenAIWebSearchParams(model) : {}),
+      ...getOpenAIWebSearchParams(assistant, model),
       ...this.getProviderSpecificParameters(model),
       ...this.getCustomParameters(assistant)
     })
