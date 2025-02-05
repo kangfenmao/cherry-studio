@@ -1,4 +1,4 @@
-import { PictureOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
@@ -16,7 +16,7 @@ const Container = styled.div`
   align-items: center;
 `
 
-const Icon = styled(PictureOutlined)`
+const Icon = styled(EyeOutlined)`
   color: var(--color-primary);
   font-size: 15px;
   margin-right: 6px;
