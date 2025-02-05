@@ -165,7 +165,7 @@ export default class OpenAIProvider extends BaseProvider {
     const isOpenAIo1 = model.id.startsWith('o1')
 
     const isSupportStreamOutput = () => {
-      if (this.provider.id === 'github' && isOpenAIo1) {
+      if (isOpenAIo1) {
         return false
       }
       return streamOutput
@@ -251,7 +251,7 @@ export default class OpenAIProvider extends BaseProvider {
       if (!onResponse) {
         return false
       }
-      if (this.provider.id === 'github' && isOpenAIo1) {
+      if (isOpenAIo1) {
         return false
       }
       return true
