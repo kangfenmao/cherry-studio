@@ -117,6 +117,9 @@ Cherry Studioへの貢献を歓迎します！以下の方法で貢献できま�
 
 ご支援と貢献に感謝します！
 
+## 関連頁版
+* [one-api](https://github.com/songquanpeng/one-api):LLM APIの管理・配信システム。OpenAI、Azure、Anthropicなどの主要モデルに対応し、統一APIインターフェースを提供。APIキー管理と再配布に利用可能。
+
 # 🚀 コントリビューター
 
 <a href="https://github.com/kangfenmao/cherry-studio/graphs/contributors">
