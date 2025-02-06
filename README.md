@@ -116,6 +116,9 @@ For more detailed guidelines, please refer to our [Contributing Guide](./CONTRIB
 
 Thank you for your support and contributions!
 
+## Related Projects
+* [one-api](https://github.com/songquanpeng/one-api):LLM API management and distribution system, supporting mainstream models like OpenAI, Azure, and Anthropic. Features unified API interface, suitable for key management and secondary distribution.
+
 # 🚀 Contributors
 
 <a href="https://github.com/kangfenmao/cherry-studio/graphs/contributors">
