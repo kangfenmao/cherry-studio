@@ -117,6 +117,9 @@ $ yarn build:linux
 
 感谢您的支持和贡献！
 
+## 相关项目
+* [one-api](https://github.com/songquanpeng/one-api):LLM API管理及分发系统，支持OpenAI、Azure、Anthropic等主流模型，统一API接口，可用于密钥管理与二次分发。
+
 # 🚀 贡献者
 
 <a href="https://github.com/kangfenmao/cherry-studio/graphs/contributors">
