@@ -411,7 +411,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
 
   useEffect(() => {
     setSelectedKnowledgeBase(assistant.knowledge_base)
-  }, [assistant.id])
+  }, [assistant.id, assistant.knowledge_base])
 
   const textareaRows = window.innerHeight >= 1000 || isBubbleStyle ? 2 : 1
 
