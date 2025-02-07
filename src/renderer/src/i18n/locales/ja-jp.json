@@ -6,6 +6,8 @@
       "add.name.placeholder": "名前を入力",
       "add.prompt": "プロンプト",
       "add.prompt.placeholder": "プロンプトを入力",
+      "add.knowledge_base": "ナレッジベース",
+      "add.knowledge_base.placeholder": "ナレッジベースを選択",
       "add.title": "エージェントを作成",
       "delete.popup.content": "このエージェントを削除してもよろしいですか？",
       "edit.message.add.title": "追加",
@@ -46,6 +48,7 @@
       "settings.model": "モデル設定",
       "settings.preset_messages": "プリセットメッセージ",
       "settings.prompt": "プロンプト設定",
+      "settings.knowledge_base": "ナレッジベース設定",
       "title": "アシスタント"
     },
     "button": {
@@ -129,6 +132,7 @@
       "copy": "コピー",
       "cut": "切り取り",
       "default": "デフォルト",
+      "knowledge_base": "ナレッジベース",
       "delete": "削除",
       "description": "説明",
       "docs": "ドキュメント",

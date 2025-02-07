@@ -5,6 +5,7 @@ export type Assistant = {
   id: string
   name: string
   prompt: string
+  knowledge_base?: KnowledgeBase
   topics: Topic[]
   type: string
   emoji?: string

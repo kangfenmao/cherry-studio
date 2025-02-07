@@ -6,6 +6,8 @@
       "add.name.placeholder": "Введите имя",
       "add.prompt": "Промпт",
       "add.prompt.placeholder": "Введите промпт",
+      "add.knowledge_base": "База знаний",
+      "add.knowledge_base.placeholder": "Выберите базу знаний",
       "add.title": "Создать агента",
       "delete.popup.content": "Вы уверены, что хотите удалить этого агента?",
       "edit.message.add.title": "Добавить",
@@ -46,6 +48,7 @@
       "settings.model": "Настройки модели",
       "settings.preset_messages": "Предустановленные сообщения",
       "settings.prompt": "Настройки промптов",
+      "settings.knowledge_base": "Настройки базы знаний",
       "title": "Ассистенты"
     },
     "button": {
@@ -129,6 +132,7 @@
       "copy": "Копировать",
       "cut": "Вырезать",
       "default": "По умолчанию",
+      "knowledge_base": "База знаний",
       "delete": "Удалить",
       "description": "Описание",
       "docs": "Документы",

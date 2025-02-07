@@ -6,6 +6,8 @@
       "add.name.placeholder": "輸入名稱",
       "add.prompt": "提示詞",
       "add.prompt.placeholder": "輸入提示詞",
+      "add.knowledge_base": "知識庫",
+      "add.knowledge_base.placeholder": "選擇知識庫",
       "add.title": "创建智能體",
       "delete.popup.content": "確定要刪除此智能體嗎？",
       "edit.message.add.title": "添加",
@@ -51,6 +53,7 @@
       "settings.model": "模型設定",
       "settings.preset_messages": "預設訊息",
       "settings.prompt": "提示詞設定",
+      "settings.knowledge_base": "知識庫設定",
       "title": "助手"
     },
     "button": {
@@ -134,6 +137,7 @@
       "copy": "複製",
       "cut": "剪下",
       "default": "預設",
+      "knowledge_base": "知識庫",
       "delete": "刪除",
       "description": "描述",
       "docs": "文件",

@@ -6,6 +6,8 @@
       "add.name.placeholder": "输入名称",
       "add.prompt": "提示词",
       "add.prompt.placeholder": "输入提示词",
+      "add.knowledge_base": "知识库",
+      "add.knowledge_base.placeholder": "选择知识库",
       "add.title": "创建智能体",
       "delete.popup.content": "确定要删除此智能体吗？",
       "edit.message.add.title": "添加",
@@ -51,6 +53,7 @@
       "settings.model": "模型设置",
       "settings.preset_messages": "预设消息",
       "settings.prompt": "提示词设置",
+      "settings.knowledge_base": "知识库设置",
       "title": "助手"
     },
     "button": {
@@ -134,6 +137,7 @@
       "copy": "复制",
       "cut": "剪切",
       "default": "默认",
+      "knowledge_base": "知识库",
       "delete": "删除",
       "description": "描述",
       "docs": "文档",
