@@ -1176,7 +1176,14 @@ export function isWebSearchModel(model: Model): boolean {
   }
 
   if (provider.id === 'gemini' || provider?.type === 'gemini') {
-    return model?.id === 'gemini-2.0-flash-exp'
+    const models = [
+      'gemini-2.0-flash',
+      'gemini-2.0-flash-exp',
+      'gemini-2.0-flash-001',
+      'gemini-2.0-pro-exp-02-05',
+      'gemini-2.0-pro-exp'
+    ]
+    return models.includes(model?.id)
   }
 
   if (provider.id === 'hunyuan') {
