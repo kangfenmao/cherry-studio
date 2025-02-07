@@ -44,6 +44,16 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'ocoolai',
+      name: 'ocoolAI',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://one.ooo.cool',
+      models: SYSTEM_MODELS.ocoolai,
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'deepseek',
       name: 'deepseek',
       type: 'openai',
@@ -101,16 +111,6 @@ const initialState: LlmState = {
       apiKey: '',
       apiHost: 'https://generativelanguage.googleapis.com',
       models: SYSTEM_MODELS.gemini,
-      isSystem: true,
-      enabled: false
-    },
-    {
-      id: 'ocoolai',
-      name: 'ocoolAI',
-      type: 'openai',
-      apiKey: '',
-      apiHost: 'https://one.ooo.cool',
-      models: SYSTEM_MODELS.ocoolai,
       isSystem: true,
       enabled: false
     },
