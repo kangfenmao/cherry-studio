@@ -30,6 +30,9 @@ export function formatErrorMessage(error: any): string {
 
   try {
     const detailedError = getErrorDetails(error)
+    delete detailedError?.headers
+    delete detailedError?.stack
+    delete detailedError?.request_id
     return '```json\n' + JSON.stringify(detailedError, null, 2) + '\n```'
   } catch (e) {
     try {
