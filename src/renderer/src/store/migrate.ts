@@ -910,6 +910,16 @@ const migrateConfig = {
   },
   '64': (state: RootState) => {
     state.llm.providers = state.llm.providers.filter((provider) => provider.id !== 'qwenlm')
+    state.llm.providers.push({
+      id: 'baidu-cloud',
+      name: 'Baidu Cloud',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://qianfan.baidubce.com/v2/',
+      models: SYSTEM_MODELS['baidu-cloud'],
+      isSystem: true,
+      enabled: false
+    })
     return state
   }
 }

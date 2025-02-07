@@ -206,25 +206,37 @@ export async function checkApi(provider: Provider, model: Model) {
   if (provider.id !== 'ollama') {
     if (!provider.apiKey) {
       window.message.error({ content: i18n.t('message.error.enter.api.key'), key, style })
-      return false
+      return {
+        valid: false,
+        error: new Error('message.error.enter.api.key')
+      }
     }
   }
 
   if (!provider.apiHost) {
     window.message.error({ content: i18n.t('message.error.enter.api.host'), key, style })
-    return false
+    return {
+      valid: false,
+      error: new Error('message.error.enter.api.host')
+    }
   }
 
   if (isEmpty(provider.models)) {
     window.message.error({ content: i18n.t('message.error.enter.model'), key, style })
-    return false
+    return {
+      valid: false,
+      error: new Error('message.error.enter.model')
+    }
   }
 
   const AI = new AiProvider(provider)
 
-  const { valid } = await AI.check(model)
+  const { valid, error } = await AI.check(model)
 
-  return valid
+  return {
+    valid,
+    error
+  }
 }
 
 function hasApiKey(provider: Provider) {

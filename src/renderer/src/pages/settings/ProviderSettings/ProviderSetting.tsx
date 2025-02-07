@@ -128,13 +128,19 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     } else {
       setApiChecking(true)
 
-      const valid = await checkApi({ ...provider, apiKey, apiHost }, model)
+      const { valid, error } = await checkApi({ ...provider, apiKey, apiHost }, model)
+
+      const errorMessage = error && error?.message ? ' ' + error?.message : ''
+
       window.message[valid ? 'success' : 'error']({
         key: 'api-check',
         style: { marginTop: '3vh' },
         duration: valid ? 2 : 8,
-        content: valid ? i18n.t('message.api.connection.success') : i18n.t('message.api.connection.failed')
+        content: valid
+          ? i18n.t('message.api.connection.success')
+          : i18n.t('message.api.connection.failed') + errorMessage
       })
+
       setApiValid(valid)
       setApiChecking(false)
       setTimeout(() => setApiValid(false), 3000)

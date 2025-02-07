@@ -4,6 +4,7 @@ import AzureProviderLogo from '@renderer/assets/images/models/microsoft.png'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.jpg'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.png'
 import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png'
+import BaiduCloudProviderLogo from '@renderer/assets/images/providers/baidu-cloud.svg'
 import BailianProviderLogo from '@renderer/assets/images/providers/bailian.png'
 import BytedanceProviderLogo from '@renderer/assets/images/providers/bytedance.png'
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
@@ -91,6 +92,8 @@ export function getProviderLogo(providerId: string) {
       return MistralProviderLogo
     case 'jina':
       return JinaProviderLogo
+    case 'baidu-cloud':
+      return BaiduCloudProviderLogo
     default:
       return undefined
   }
@@ -417,6 +420,17 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI',
       docs: 'https://learn.microsoft.com/en-us/azure/ai-services/openai/',
       models: 'https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models'
+    }
+  },
+  'baidu-cloud': {
+    api: {
+      url: 'https://qianfan.baidubce.com/v2/'
+    },
+    websites: {
+      official: 'https://cloud.baidu.com/',
+      apiKey: 'https://cloud.baidu.com/console/qianfan/apikey',
+      docs: 'https://cloud.baidu.com/doc/index.html',
+      models: 'https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Fm2vrveyu'
     }
   }
 }

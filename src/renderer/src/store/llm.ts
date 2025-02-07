@@ -64,6 +64,16 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'baidu-cloud',
+      name: 'Baidu Cloud',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://qianfan.baidubce.com/v2/',
+      models: SYSTEM_MODELS['baidu-cloud'],
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'ollama',
       name: 'Ollama',
       type: 'openai',
