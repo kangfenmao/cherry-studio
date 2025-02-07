@@ -907,6 +907,10 @@ const migrateConfig = {
       }
     }
     return state
+  },
+  '64': (state: RootState) => {
+    state.llm.providers = state.llm.providers.filter((provider) => provider.id !== 'qwenlm')
+    return state
   }
 }
 

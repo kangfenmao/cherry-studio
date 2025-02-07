@@ -23,7 +23,6 @@ import OcoolAiProviderLogo from '@renderer/assets/images/providers/ocoolai.png'
 import OllamaProviderLogo from '@renderer/assets/images/providers/ollama.png'
 import OpenAiProviderLogo from '@renderer/assets/images/providers/openai.png'
 import OpenRouterProviderLogo from '@renderer/assets/images/providers/openrouter.png'
-import QwenLMProviderLogo from '@renderer/assets/images/providers/qwenlm.png'
 import SiliconFlowProviderLogo from '@renderer/assets/images/providers/silicon.png'
 import StepProviderLogo from '@renderer/assets/images/providers/step.png'
 import TogetherProviderLogo from '@renderer/assets/images/providers/together.png'
@@ -92,8 +91,6 @@ export function getProviderLogo(providerId: string) {
       return MistralProviderLogo
     case 'jina':
       return JinaProviderLogo
-    case 'qwenlm':
-      return QwenLMProviderLogo
     default:
       return undefined
   }
@@ -420,17 +417,6 @@ export const PROVIDER_CONFIG = {
       apiKey: 'https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI',
       docs: 'https://learn.microsoft.com/en-us/azure/ai-services/openai/',
       models: 'https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models'
-    }
-  },
-  qwenlm: {
-    api: {
-      url: 'https://chat.qwenlm.ai/api/'
-    },
-    websites: {
-      official: 'https://chat.qwenlm.ai',
-      apiKey: 'https://chat.qwenlm.ai',
-      docs: 'https://chat.qwenlm.ai',
-      models: 'https://chat.qwenlm.ai'
     }
   }
 }
