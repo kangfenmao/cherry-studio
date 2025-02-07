@@ -142,9 +142,17 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   private getReasoningEffort(assistant: Assistant, model: Model) {
-    if (isReasoningModel(model)) return assistant?.settings?.reasoning_effort
+    if (this.provider.id === 'groq') {
+      return {}
+    }
 
-    return undefined
+    if (isReasoningModel(model)) {
+      return {
+        reasoning_effort: assistant?.settings?.reasoning_effort
+      }
+    }
+
+    return {}
   }
 
   async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
@@ -192,7 +200,7 @@ export default class OpenAIProvider extends BaseProvider {
       max_tokens: maxTokens,
       keep_alive: this.keepAliveTime,
       stream: isSupportStreamOutput(),
-      reasoning_effort: this.getReasoningEffort(assistant, model),
+      ...this.getReasoningEffort(assistant, model),
       ...getOpenAIWebSearchParams(assistant, model),
       ...this.getProviderSpecificParameters(model),
       ...this.getCustomParameters(assistant)
