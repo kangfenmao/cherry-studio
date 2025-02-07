@@ -492,6 +492,7 @@
         "docs_check": "チェック",
         "docs_more_details": "詳細を確認",
         "get_api_key": "APIキーを取得",
+        "charge": "充電",
         "no_models": "API接続をチェックする前に、モデルを追加してください",
         "not_checked": "未チェック",
         "remove_duplicate_keys": "重複キーを削除",
@@ -683,7 +684,8 @@
       "oauth_button": "{{provider}}で認証",
       "get_key": "取得",
       "get_key_success": "APIキーの自動取得に成功しました",
-      "login": "認証"
+      "login": "認証",
+      "error": "APIキーの自動取得に失敗しました。手動で取得してください"
     }
   }
 }

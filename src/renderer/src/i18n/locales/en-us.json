@@ -501,6 +501,7 @@
         "docs_check": "Check",
         "docs_more_details": "for more details",
         "get_api_key": "Get API Key",
+        "charge": "Charge",
         "no_models": "Please add models first before checking the API connection",
         "not_checked": "Not Checked",
         "remove_duplicate_keys": "Remove Duplicate Keys",
@@ -703,7 +704,8 @@
       "oauth_button": "Auth with {{provider}}",
       "get_key": "Get",
       "get_key_success": "API key automatically obtained successfully",
-      "login": "Login"
+      "login": "Login",
+      "error": "API key automatically obtained failed, please get it manually"
     }
   }
 }

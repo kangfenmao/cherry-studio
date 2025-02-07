@@ -163,7 +163,7 @@ export class WindowService {
     mainWindow.webContents.setWindowOpenHandler((details) => {
       const { url } = details
 
-      const oauthProviderUrls = ['https://account.siliconflow.cn/oauth']
+      const oauthProviderUrls = ['https://account.siliconflow.cn/oauth', 'https://aihubmix.com/oauth']
 
       if (oauthProviderUrls.some((link) => url.startsWith(link))) {
         return {
