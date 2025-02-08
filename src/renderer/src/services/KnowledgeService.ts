@@ -90,8 +90,10 @@ export const getKnowledgeReferences = async (base: KnowledgeBase, message: Messa
     })
   )
 
+  const documentCount = base.documentCount || 6
+
   const references = await Promise.all(
-    take(_searchResults, 6).map(async (item, index) => {
+    take(_searchResults, documentCount).map(async (item, index) => {
       const baseItem = base.items.find((i) => i.uniqueId === item.metadata.uniqueLoaderId)
       return {
         id: index,
