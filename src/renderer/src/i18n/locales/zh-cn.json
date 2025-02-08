@@ -631,7 +631,16 @@
       "chunk_size": "分段大小",
       "chunk_overlap": "重叠大小",
       "not_set": "未设置",
-      "settings": "知识库设置"
+      "settings": "知识库设置",
+      "document_count": "请求文档数量",
+      "document_count_help": "请求文档数量越多，附带的信息越多，但需要消耗的 Token 也越多",
+      "document_count_default": "默认",
+      "chunk_size_placeholder": "默认值（不建议修改）",
+      "chunk_overlap_placeholder": "默认值（不建议修改）",
+      "chunk_size_tooltip": "将文档切割分段，每段的大小，不能超过模型上下文限制",
+      "chunk_overlap_tooltip": "相邻文本块之间重复的内容量，确保分段后的文本块之间仍然有上下文联系，提升模型处理长文本的整体效果",
+      "chunk_size_change_warning": "分段大小和重叠大小修改只针对新添加的内容有效",
+      "chunk_size_too_large": "分段大小不能超过模型上下文限制（{{max_context}}）"
     },
     "models": {
       "pinned": "已固定",

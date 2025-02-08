@@ -234,6 +234,7 @@ export interface KnowledgeBase {
   created_at: number
   updated_at: number
   version: number
+  documentCount?: number
   chunkSize?: number
   chunkOverlap?: number
 }

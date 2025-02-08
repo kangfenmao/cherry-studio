@@ -624,7 +624,16 @@
       "chunk_size": "チャンクサイズ",
       "chunk_overlap": "チャンクの重なり",
       "not_set": "未設定",
-      "settings": "ナレッジベース設定"
+      "settings": "ナレッジベース設定",
+      "document_count": "要求されたドキュメント数",
+      "document_count_help": "要求されたドキュメント数が多いほど、付随する情報が多くなりますが、トークンの消費量も増加します",
+      "document_count_default": "デフォルト",
+      "chunk_size_placeholder": "デフォルト（変更しないでください）",
+      "chunk_overlap_placeholder": "デフォルト（変更しないでください）",
+      "chunk_size_tooltip": "ドキュメントを分割し、各チャンクのサイズ。モデルのコンテキスト制限を超えないようにしてください。",
+      "chunk_overlap_tooltip": "隣接するチャンク間の重複内容量。チャンク間のコンテキスト関連性を確保し、長文テキストの処理効果を向上させます。",
+      "chunk_size_change_warning": "チャンクサイズと重複サイズの変更は、新しく追加された内容にのみ適用されます",
+      "chunk_size_too_large": "チャンクサイズはモデルのコンテキスト制限を超えることはできません（{{max_context}}）"
     },
     "models": {
       "pinned": "固定済み",

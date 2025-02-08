@@ -644,7 +644,16 @@
       "chunk_size": "Chunk Size",
       "chunk_overlap": "Chunk Overlap",
       "not_set": "Not Set",
-      "settings": "Knowledge Base Settings"
+      "settings": "Knowledge Base Settings",
+      "document_count": "Requested Document Count",
+      "document_count_help": "The more documents requested, the more information is included, but the more tokens are consumed",
+      "document_count_default": "Default",
+      "chunk_size_placeholder": "Default (not recommended to change)",
+      "chunk_overlap_placeholder": "Default (not recommended to change)",
+      "chunk_size_tooltip": "Split documents into chunks, each chunk size, not exceeding model context limit",
+      "chunk_overlap_tooltip": "The amount of duplicate content between adjacent chunks, ensuring that the chunks are still contextually related, improving the overall effect of processing long text",
+      "chunk_size_change_warning": "Chunk size and overlap size changes only apply to new content",
+      "chunk_size_too_large": "Chunk size cannot exceed model context limit ({{max_context}})"
     },
     "models": {
       "pinned": "Pinned",

@@ -35,6 +35,7 @@ class KnowledgeService {
     baseURL,
     dimensions
   }: KnowledgeBaseParams): Promise<RAGApplication> => {
+    const batchSize = 10
     return new RAGApplicationBuilder()
       .setModel('NO_MODEL')
       .setEmbeddingModel(
@@ -45,14 +46,14 @@ class KnowledgeService {
               azureOpenAIApiDeploymentName: model,
               azureOpenAIApiInstanceName: getInstanceName(baseURL),
               dimensions,
-              batchSize: 5
+              batchSize
             })
           : new OpenAiEmbeddings({
               model,
               apiKey,
               configuration: { baseURL },
               dimensions,
-              batchSize: 5
+              batchSize
             })
       )
       .setVectorDatabase(new LibSqlDb({ path: path.join(this.storageDir, id) }))
@@ -110,6 +111,7 @@ class KnowledgeService {
 
     if (item.type === 'note') {
       const content = item.content as string
+      console.debug('chunkSize', base.chunkSize)
       return await ragApplication.addLoader(
         new TextLoader({ text: content, chunkSize: base.chunkSize, chunkOverlap: base.chunkOverlap }),
         forceReload

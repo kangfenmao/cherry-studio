@@ -630,7 +630,16 @@
       "chunk_size": "分段大小",
       "chunk_overlap": "重疊大小",
       "not_set": "未設置",
-      "settings": "知識庫設定"
+      "settings": "知識庫設定",
+      "document_count": "請求文件數量",
+      "document_count_help": "請求文件數量越多，附帶的資訊越多，但需要消耗的 Token 也越多",
+      "document_count_default": "預設",
+      "chunk_size_placeholder": "預設值（不建議修改）",
+      "chunk_overlap_placeholder": "預設值（不建議修改）",
+      "chunk_size_tooltip": "將文件切割分段，每段的大小，不能超過模型上下文限制",
+      "chunk_overlap_tooltip": "相鄰文本塊之間重複的內容量，確保分段後的文本塊之間仍然有上下文聯繫，提升模型處理長文本的整體效果",
+      "chunk_size_change_warning": "分段大小和重疊大小修改只針對新添加的內容有效",
+      "chunk_size_too_large": "分段大小不能超過模型上下文限制（{{max_context}}）"
     },
     "models": {
       "pinned": "已固定",
