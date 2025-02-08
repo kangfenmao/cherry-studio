@@ -16,6 +16,12 @@ if (!app.requestSingleInstanceLock()) {
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
+
+  if (process.platform === 'darwin') {
+    // Enable local network access
+    app.commandLine.appendSwitch('enable-local-network-access')
+  }
+
   app.whenReady().then(async () => {
     await updateUserDataPath()
 
