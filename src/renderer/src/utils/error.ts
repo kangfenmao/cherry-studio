@@ -43,6 +43,22 @@ export function formatErrorMessage(error: any): string {
   }
 }
 
+export function formatMessageError(error: any): Record<string, any> {
+  try {
+    const detailedError = getErrorDetails(error)
+    delete detailedError?.headers
+    delete detailedError?.stack
+    delete detailedError?.request_id
+    return detailedError
+  } catch (e) {
+    try {
+      return { message: String(error) }
+    } catch {
+      return { message: 'Error: Unable to format error message' }
+    }
+  }
+}
+
 export function getErrorMessage(error: any): string {
   return error?.message || error?.toString() || ''
 }

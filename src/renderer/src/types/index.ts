@@ -70,6 +70,7 @@ export type Message = {
   }
   askId?: string
   useful?: boolean
+  error?: Record<string, any>
 }
 
 export type Metrics = {

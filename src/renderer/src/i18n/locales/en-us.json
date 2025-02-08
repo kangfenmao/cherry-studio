@@ -172,6 +172,17 @@
       "render": {
         "title": "Render Error",
         "description": "Failed to render formula. Please check if the formula format is correct"
+      },
+      "http": {
+        "400": "Request failed. Please check if the request parameters are correct. If you have changed the model settings, please reset them to the default settings",
+        "401": "Authentication failed. Please check if your API key is correct",
+        "403": "Access denied. Please check if your account is verified, or contact the service provider for more information",
+        "404": "Model not found or request path is incorrect",
+        "429": "Too many requests. Please try again later",
+        "500": "Server error. Please try again later",
+        "502": "Gateway error. Please try again later",
+        "503": "Service unavailable. Please try again later",
+        "504": "Gateway timeout. Please try again later"
       }
     },
     "export": {
