@@ -44,22 +44,22 @@ const initialState: LlmState = {
       enabled: false
     },
     {
-      id: 'ocoolai',
-      name: 'ocoolAI',
-      type: 'openai',
-      apiKey: '',
-      apiHost: 'https://one.ooo.cool',
-      models: SYSTEM_MODELS.ocoolai,
-      isSystem: true,
-      enabled: false
-    },
-    {
       id: 'deepseek',
       name: 'deepseek',
       type: 'openai',
       apiKey: '',
       apiHost: 'https://api.deepseek.com',
       models: SYSTEM_MODELS.deepseek,
+      isSystem: true,
+      enabled: false
+    },
+    {
+      id: 'ocoolai',
+      name: 'ocoolAI',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://one.ooo.cool',
+      models: SYSTEM_MODELS.ocoolai,
       isSystem: true,
       enabled: false
     },
