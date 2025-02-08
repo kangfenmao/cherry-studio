@@ -7,6 +7,7 @@ import {
   PlusOutlined,
   SettingOutlined
 } from '@ant-design/icons'
+import { HStack } from '@renderer/components/Layout'
 import ModelTags from '@renderer/components/ModelTags'
 import OAuthButton from '@renderer/components/OAuth/OAuthButton'
 import { EMBEDDING_REGEX, getModelLogo, REASONING_REGEX, VISION_REGEX } from '@renderer/config/models'
@@ -17,10 +18,11 @@ import { useProvider } from '@renderer/hooks/useProvider'
 import i18n from '@renderer/i18n'
 import { isOpenAIProvider } from '@renderer/providers/ProviderFactory'
 import { checkApi } from '@renderer/services/ApiService'
-import { isProviderSupportAuth } from '@renderer/services/ProviderService'
+import { isProviderSupportAuth, isProviderSupportCharge } from '@renderer/services/ProviderService'
 import { useAppDispatch } from '@renderer/store'
 import { setModel } from '@renderer/store/assistants'
 import { Model, ModelType, Provider } from '@renderer/types'
+import { aihubmixCharge } from '@renderer/utils/oauth'
 import { Avatar, Button, Card, Checkbox, Divider, Flex, Input, Popover, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
 import { groupBy, isEmpty } from 'lodash'
@@ -270,9 +272,14 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       </Space.Compact>
       {apiKeyWebsite && (
         <SettingHelpTextRow style={{ justifyContent: 'space-between' }}>
-          <SettingHelpLink target="_blank" href={apiKeyWebsite}>
-            {t('settings.provider.get_api_key')}
-          </SettingHelpLink>
+          <HStack gap={10}>
+            <SettingHelpLink target="_blank" href={apiKeyWebsite}>
+              {t('settings.provider.get_api_key')}
+            </SettingHelpLink>
+            {isProviderSupportCharge(provider) && (
+              <SettingHelpLink onClick={aihubmixCharge}>{t('settings.provider.charge')}</SettingHelpLink>
+            )}
+          </HStack>
           <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
         </SettingHelpTextRow>
       )}

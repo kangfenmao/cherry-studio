@@ -57,3 +57,12 @@ export const oauthWithAihubmix = async (setKey) => {
   window.removeEventListener('message', messageHandler)
   window.addEventListener('message', messageHandler)
 }
+
+export const aihubmixCharge = async () => {
+  const chargeUrl = `https://aihubmix.com/topup?client_id=cherry_studio_oauth&lang=${getLanguageCode()}&aff=SJyh`
+  window.open(
+    chargeUrl,
+    'oauth',
+    'width=720,height=900,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,alwaysOnTop=yes,alwaysRaised=yes'
+  )
+}

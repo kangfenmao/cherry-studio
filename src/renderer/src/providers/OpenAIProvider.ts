@@ -164,10 +164,10 @@ export default class OpenAIProvider extends BaseProvider {
     if (['o1', 'o1-2024-12-17'].includes(model.id) || model.id.startsWith('o3')) {
       systemMessage = {
         role: 'developer',
-        content: `Formatting re-enabled${systemMessage ? "\n" + systemMessage.content : ""}`
-      };
+        content: `Formatting re-enabled${systemMessage ? '\n' + systemMessage.content : ''}`
+      }
     }
-    
+
     const userMessages: ChatCompletionMessageParam[] = []
 
     const _messages = filterContextMessages(takeRight(messages, contextCount + 1))
@@ -199,9 +199,7 @@ export default class OpenAIProvider extends BaseProvider {
     // @ts-ignore key is not typed
     const stream = await this.sdk.chat.completions.create({
       model: model.id,
-      messages: [systemMessage, ...userMessages].filter(
-        Boolean
-      ) as ChatCompletionMessageParam[],
+      messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
       temperature: this.getTemperature(assistant, model),
       top_p: this.getTopP(assistant, model),
       max_tokens: maxTokens,
