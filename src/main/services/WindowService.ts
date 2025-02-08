@@ -165,6 +165,7 @@ export class WindowService {
 
       const oauthProviderUrls = [
         'https://account.siliconflow.cn/oauth',
+        'https://cloud.siliconflow.cn/expensebill',
         'https://aihubmix.com/oauth',
         'https://aihubmix.com/topup'
       ]

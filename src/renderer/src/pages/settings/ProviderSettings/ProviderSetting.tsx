@@ -22,7 +22,7 @@ import { isProviderSupportAuth, isProviderSupportCharge } from '@renderer/servic
 import { useAppDispatch } from '@renderer/store'
 import { setModel } from '@renderer/store/assistants'
 import { Model, ModelType, Provider } from '@renderer/types'
-import { aihubmixCharge } from '@renderer/utils/oauth'
+import { providerCharge } from '@renderer/utils/oauth'
 import { Avatar, Button, Card, Checkbox, Divider, Flex, Input, Popover, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
 import { groupBy, isEmpty } from 'lodash'
@@ -272,12 +272,14 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
       </Space.Compact>
       {apiKeyWebsite && (
         <SettingHelpTextRow style={{ justifyContent: 'space-between' }}>
-          <HStack gap={10}>
+          <HStack gap={5}>
             <SettingHelpLink target="_blank" href={apiKeyWebsite}>
               {t('settings.provider.get_api_key')}
             </SettingHelpLink>
             {isProviderSupportCharge(provider) && (
-              <SettingHelpLink onClick={aihubmixCharge}>{t('settings.provider.charge')}</SettingHelpLink>
+              <SettingHelpLink onClick={() => providerCharge(provider.id)}>
+                {t('settings.provider.charge')}
+              </SettingHelpLink>
             )}
           </HStack>
           <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>

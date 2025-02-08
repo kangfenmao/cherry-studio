@@ -58,11 +58,25 @@ export const oauthWithAihubmix = async (setKey) => {
   window.addEventListener('message', messageHandler)
 }
 
-export const aihubmixCharge = async () => {
-  const chargeUrl = `https://aihubmix.com/topup?client_id=cherry_studio_oauth&lang=${getLanguageCode()}&aff=SJyh`
+export const providerCharge = async (provider: string) => {
+  const chargeUrlMap = {
+    silicon: {
+      url: 'https://cloud.siliconflow.cn/expensebill',
+      width: 900,
+      height: 700
+    },
+    aihubmix: {
+      url: `https://aihubmix.com/topup?client_id=cherry_studio_oauth&lang=${getLanguageCode()}&aff=SJyh`,
+      width: 720,
+      height: 900
+    }
+  }
+
+  const { url, width, height } = chargeUrlMap[provider]
+
   window.open(
-    chargeUrl,
+    url,
     'oauth',
-    'width=720,height=900,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,alwaysOnTop=yes,alwaysRaised=yes'
+    `width=${width},height=${height},toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,alwaysOnTop=yes,alwaysRaised=yes`
   )
 }

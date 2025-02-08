@@ -21,6 +21,6 @@ export function isProviderSupportAuth(provider: Provider) {
 }
 
 export function isProviderSupportCharge(provider: Provider) {
-  const supportProviders = ['aihubmix']
+  const supportProviders = ['silicon', 'aihubmix']
   return supportProviders.includes(provider.id)
 }

@@ -1,5 +1,6 @@
 import { WarningOutlined } from '@ant-design/icons'
 import { TopView } from '@renderer/components/TopView'
+import { DEFAULT_KNOWLEDGE_DOCUMENT_COUNT } from '@renderer/config/constant'
 import { getEmbeddingMaxContext } from '@renderer/config/embedings'
 import { isEmbeddingModel } from '@renderer/config/models'
 import { useKnowledge } from '@renderer/hooks/useKnowledge'
@@ -59,7 +60,7 @@ const PopupContainer: React.FC<Props> = ({ base: _base, resolve }) => {
       const newBase = {
         ...base,
         name: values.name,
-        documentCount: values.documentCount,
+        documentCount: values.documentCount || DEFAULT_KNOWLEDGE_DOCUMENT_COUNT,
         chunkSize: values.chunkSize,
         chunkOverlap: values.chunkOverlap
       }
@@ -89,6 +90,7 @@ const PopupContainer: React.FC<Props> = ({ base: _base, resolve }) => {
       onCancel={onCancel}
       afterClose={onClose}
       destroyOnClose
+      maskClosable={false}
       centered>
       <Form form={form} layout="vertical">
         <Form.Item
