@@ -25,7 +25,7 @@ export const getKnowledgeBaseParams = (base: KnowledgeBase): KnowledgeBaseParams
     if (chunkSize && chunkSize > maxChunkSize) {
       chunkSize = maxChunkSize
     }
-    if (!chunkSize) {
+    if (!chunkSize && maxChunkSize < 1024) {
       chunkSize = maxChunkSize
     }
   }
