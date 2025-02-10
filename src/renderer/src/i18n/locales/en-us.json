@@ -1285,6 +1285,10 @@
         "back": "Back",
         "forward": "Forward",
         "multiple": "Multiple Select"
+      },
+      "privacy": {
+        "title": "Privacy Settings",
+        "enable_privacy_mode": "Anonymous reporting of errors and statistics"
       }
     },
     "translate": {

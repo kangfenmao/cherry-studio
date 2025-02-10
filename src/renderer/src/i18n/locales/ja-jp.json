@@ -1285,6 +1285,10 @@
         "back": "戻る",
         "forward": "進む",
         "multiple": "複数選択"
+      },
+      "privacy": {
+        "title": "プライバシー設定",
+        "enable_privacy_mode": "匿名エラーレポートとデータ統計の送信"
       }
     },
     "translate": {

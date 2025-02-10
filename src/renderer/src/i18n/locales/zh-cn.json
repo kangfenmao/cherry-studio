@@ -1285,6 +1285,10 @@
         "back": "后退",
         "forward": "前进",
         "multiple": "多选"
+      },
+      "privacy": {
+        "title": "隐私设置",
+        "enable_privacy_mode": "匿名发送错误报告和数据统计"
       }
     },
     "translate": {

@@ -1285,6 +1285,10 @@
         "back": "後退",
         "forward": "前進",
         "multiple": "多選"
+      },
+      "privacy": {
+        "title": "隱私設定",
+        "enable_privacy_mode": "匿名發送錯誤報告和資料統計"
       }
     },
     "translate": {
