@@ -115,6 +115,7 @@
       "topics.edit.placeholder": "Enter new name",
       "topics.edit.title": "Edit Name",
       "topics.export.image": "Export as image",
+      "topics.export.notion": "Export to Notion",
       "topics.export.md": "Export as markdown",
       "topics.export.title": "Export",
       "topics.export.word": "Export as Word",
@@ -296,7 +297,11 @@
       "error.get_embedding_dimensions": "Failed to get embedding dimensions",
       "group.delete.title": "Delete Group Message",
       "group.delete.content": "Deleting a group message will delete the user's question and all assistant's answers",
-      "mention.title": "Switch model answer"
+      "mention.title": "Switch model answer",
+      "error.notion.export": "Notion import failed",
+      "error.notion.no_api_key": "Notion ApiKey or Notion DatabaseID is not configured",
+      "success.notion.export": "Notion import successful",
+      "warn.notion.exporting": "Notion is importing, please do not import repeatedly"
     },
     "minapp": {
       "title": "MinApp",
@@ -421,7 +426,11 @@
         "webdav.autoSync.off": "Off",
         "webdav.noSync": "Waiting for next backup",
         "webdav.syncError": "Backup Error",
-        "webdav.lastSync": "Last Backup"
+        "webdav.lastSync": "Last Backup",
+        "notion.api_key":"Notion API Key",
+        "notion.database_id":"Notion Database ID",
+        "notion.title":"Notion Configuration"
+
       },
       "quickAssistant": {
         "title": "Quick Assistant",

@@ -65,6 +65,8 @@ export interface SettingsState {
   enableQuickAssistant: boolean
   clickTrayToShowQuickAssistant: boolean
   multiModelMessageStyle: MultiModelMessageStyle
+  notionDatabaseID: string | null
+  notionApiKey: string | null
 }
 
 export type MultiModelMessageStyle = 'horizontal' | 'vertical' | 'fold'
@@ -115,7 +117,9 @@ const initialState: SettingsState = {
   narrowMode: false,
   enableQuickAssistant: false,
   clickTrayToShowQuickAssistant: false,
-  multiModelMessageStyle: 'fold'
+  multiModelMessageStyle: 'fold',
+  notionDatabaseID: '',
+  notionApiKey: ''
 }
 
 const settingsSlice = createSlice({
@@ -263,6 +267,12 @@ const settingsSlice = createSlice({
     },
     setMultiModelMessageStyle: (state, action: PayloadAction<'horizontal' | 'vertical' | 'fold'>) => {
       state.multiModelMessageStyle = action.payload
+    },
+    setNotionDatabaseID: (state, action: PayloadAction<string>) => {
+      state.notionDatabaseID = action.payload
+    },
+    setNotionApiKey: (state, action: PayloadAction<string>) => {
+      state.notionApiKey = action.payload
     }
   }
 })
@@ -312,7 +322,9 @@ export const {
   setNarrowMode,
   setClickTrayToShowQuickAssistant,
   setEnableQuickAssistant,
-  setMultiModelMessageStyle
+  setMultiModelMessageStyle,
+  setNotionDatabaseID,
+  setNotionApiKey
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

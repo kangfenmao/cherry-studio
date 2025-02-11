@@ -116,6 +116,7 @@
       "topics.edit.title": "編輯名稱",
       "topics.export.image": "匯出為圖片",
       "topics.export.md": "匯出為 Markdown",
+      "topics.export.notion": "匯出到 Notion",
       "topics.export.title": "匯出",
       "topics.export.word": "導出為 Word",
       "topics.list": "話題列表",
@@ -296,7 +297,11 @@
       "error.get_embedding_dimensions": "獲取嵌入維度失敗",
       "group.delete.title": "刪除分組消息",
       "group.delete.content": "刪除分組消息會刪除用戶提問和所有助手的回答",
-      "mention.title": "切換模型回答"
+      "mention.title": "切換模型回答",
+      "error.notion.export": "Notion 匯入失敗",
+      "error.notion.no_api_key": "未配置 Notion ApiKey 或 Notion DatabaseID",
+      "success.notion.export": "匯入 Notion 成功",
+      "warn.notion.exporting": "Notion 正在匯入，請勿重複匯入"
     },
     "minapp": {
       "title": "小程序",
@@ -419,7 +424,10 @@
         "webdav.autoSync.off": "關閉",
         "webdav.noSync": "等待下次備份",
         "webdav.syncError": "備份錯誤",
-        "webdav.lastSync": "上次同步時間"
+        "webdav.lastSync": "上次同步時間",
+        "notion.api_key": "Notion 金鑰",
+        "notion.database_id": "Notion 資料庫 ID",
+        "notion.title": "Notion 配置"
       },
       "quickAssistant": {
         "title": "快捷助手",
