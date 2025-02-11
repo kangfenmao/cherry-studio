@@ -20,7 +20,8 @@ export default defineConfig({
           '@llm-tools/embedjs-loader-xml',
           '@llm-tools/embedjs-loader-pdf',
           '@llm-tools/embedjs-loader-sitemap',
-          '@llm-tools/embedjs-libsql'
+          '@llm-tools/embedjs-libsql',
+          '@llm-tools/embedjs-loader-image'
         ]
       }),
       ...visualizerPlugin('main')

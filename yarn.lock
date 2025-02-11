@@ -1531,6 +1531,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@llm-tools/embedjs-loader-image@npm:^0.1.28":
+  version: 0.1.28
+  resolution: "@llm-tools/embedjs-loader-image@npm:0.1.28"
+  dependencies:
+    "@langchain/core": "npm:^0.3.26"
+    "@llm-tools/embedjs-interfaces": "npm:0.1.28"
+    "@llm-tools/embedjs-utils": "npm:0.1.28"
+    debug: "npm:^4.4.0"
+    exifremove: "npm:^1.0.1"
+    md5: "npm:^2.3.0"
+    mime: "npm:^4.0.6"
+    stream-mime-type: "npm:^2.0.0"
+  checksum: 10c0/e9414dde0d10afe1541bfe464b80f5cb61ec523f28dce62ab931a3f4ffde93c5589fde8e7a7f5751e7dc20d68fe2d28883925ba65e2542ee9d43002591568af1
+  languageName: node
+  linkType: hard
+
 "@llm-tools/embedjs-loader-markdown@npm:0.1.28":
   version: 0.1.28
   resolution: "@llm-tools/embedjs-loader-markdown@npm:0.1.28"
@@ -2972,6 +2988,7 @@ __metadata:
     "@llm-tools/embedjs": "patch:@llm-tools/embedjs@npm%3A0.1.28#~/.yarn/patches/@llm-tools-embedjs-npm-0.1.28-8e4393fa2d.patch"
     "@llm-tools/embedjs-libsql": "npm:^0.1.28"
     "@llm-tools/embedjs-loader-csv": "npm:^0.1.28"
+    "@llm-tools/embedjs-loader-image": "npm:^0.1.28"
     "@llm-tools/embedjs-loader-markdown": "patch:@llm-tools/embedjs-loader-markdown@npm%3A0.1.28#~/.yarn/patches/@llm-tools-embedjs-loader-markdown-npm-0.1.28-81647ffac6.patch"
     "@llm-tools/embedjs-loader-msoffice": "npm:^0.1.28"
     "@llm-tools/embedjs-loader-pdf": "npm:^0.1.28"
@@ -5942,6 +5959,13 @@ __metadata:
   version: 0.1.12
   resolution: "exif-parser@npm:0.1.12"
   checksum: 10c0/ef1df84edbba50621fcfe19510c8db3ddd9e7fb374459d3f77c9256c24584767c7fb4cf1b15aef46e87a06528d3c48e44de02cecc314656d22a5cf954a0e7192
+  languageName: node
+  linkType: hard
+
+"exifremove@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "exifremove@npm:1.0.1"
+  checksum: 10c0/df5a30087b262a35f2932e4d8b567206ec5f39518740c1552361e9a6eee0a38819359bd8ab2bd5df391647c4dea8d572995852f355cf8fc504df6b1685d82921
   languageName: node
   linkType: hard
 
