@@ -341,7 +341,11 @@ export default class OpenAIProvider extends BaseProvider {
       max_tokens: 1000
     })
 
-    return removeSpecialCharacters(response.choices[0].message?.content?.substring(0, 50) || '')
+    // 针对思考类模型的返回，总结仅截取</think>之后的内容
+    let content = response.choices[0].message?.content || ''
+    content = content.replace(/^<think>(.*?)<\/think>/s, '')
+    
+    return removeSpecialCharacters(content.substring(0, 50))
   }
 
   public async generateText({ prompt, content }: { prompt: string; content: string }): Promise<string> {
