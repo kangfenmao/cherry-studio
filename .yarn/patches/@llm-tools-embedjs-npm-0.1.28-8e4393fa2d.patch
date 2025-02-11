@@ -1,72 +1,21 @@
-diff --git a/src/core/rag-embedding.js b/src/core/rag-embedding.js
-index 50c3c4064af17bc4c7c46554d8f2419b3afceb0e..632c9b2e04d2e0e3bb09ef1cd8f29d2560e6afc1 100644
---- a/src/core/rag-embedding.js
-+++ b/src/core/rag-embedding.js
-@@ -1,10 +1,8 @@
- export class RAGEmbedding {
-     static singleton;
-     static async init(embeddingModel) {
--        if (!this.singleton) {
--            await embeddingModel.init();
--            this.singleton = new RAGEmbedding(embeddingModel);
--        }
-+        await embeddingModel.init();
-+        this.singleton = new RAGEmbedding(embeddingModel);
-     }
-     static getInstance() {
-         return RAGEmbedding.singleton;
 diff --git a/src/loaders/local-path-loader.d.ts b/src/loaders/local-path-loader.d.ts
-index 48c20e68c469cd309be2dc8f28e44c1bd04a26e9..87002be39e7305a02e2a607b0c0d95cbbc359f9d 100644
+index 48c20e68c469cd309be2dc8f28e44c1bd04a26e9..1c16d83bcbf9b7140292793d6cbb8c04281949d9 100644
 --- a/src/loaders/local-path-loader.d.ts
 +++ b/src/loaders/local-path-loader.d.ts
-@@ -1,19 +1,29 @@
--import { BaseLoader } from '@llm-tools/embedjs-interfaces';
-+import { BaseLoader } from "@llm-tools/embedjs-interfaces";
- export declare class LocalPathLoader extends BaseLoader<{
--    type: 'LocalPathLoader';
-+  type: "LocalPathLoader";
+@@ -4,8 +4,10 @@ export declare class LocalPathLoader extends BaseLoader<{
  }> {
--    private readonly debug;
--    private readonly path;
+     private readonly debug;
+     private readonly path;
 -    constructor({ path }: {
--        path: string;
--    });
--    getUnfilteredChunks(): AsyncGenerator<{
--        metadata: {
--            type: "LocalPathLoader";
--            originalPath: string;
--            source: string;
--        };
--        pageContent: string;
--    }, void, unknown>;
--    private recursivelyAddPath;
-+  private readonly debug;
-+  private readonly path;
-+  constructor({
-+    path,
-+    chunkSize,
-+    chunkOverlap,
-+  }: {
-+    path: string;
-+    chunkSize?: number;
-+    chunkOverlap?: number;
-+  });
-+  getUnfilteredChunks(): AsyncGenerator<
-+    {
-+      metadata: {
-+        type: "LocalPathLoader";
-+        originalPath: string;
-+        source: string;
-+      };
-+      pageContent: string;
-+    },
-+    void,
-+    unknown
-+  >;
-+  private recursivelyAddPath;
- }
++    constructor({ path, chunkSize, chunkOverlap }: {
+         path: string;
++        chunkSize?: number;
++        chunkOverlap?: number;
+     });
+     getUnfilteredChunks(): AsyncGenerator<{
+         metadata: {
 diff --git a/src/loaders/local-path-loader.js b/src/loaders/local-path-loader.js
-index 4cf8a6bd1d890244c8ec49d4a05ee3bd58861c79..fd0fe1951c73da315b0c9bf4a8f33effbadb9f8f 100644
+index 4cf8a6bd1d890244c8ec49d4a05ee3bd58861c79..ec8215b01195a21ef20f3c5d56ecc99f186bb596 100644
 --- a/src/loaders/local-path-loader.js
 +++ b/src/loaders/local-path-loader.js
 @@ -8,8 +8,8 @@ import { BaseLoader } from '@llm-tools/embedjs-interfaces';
@@ -75,7 +24,7 @@ index 4cf8a6bd1d890244c8ec49d4a05ee3bd58861c79..fd0fe1951c73da315b0c9bf4a8f33eff
      path;
 -    constructor({ path }) {
 -        super(`LocalPathLoader_${md5(path)}`, { path });
-+    constructor({ path, chunkSize, chunkOverlap}) {
++    constructor({ path, chunkSize, chunkOverlap }) {
 +        super(`LocalPathLoader_${md5(path)}`, { path }, chunkSize ?? 1000, chunkOverlap ?? 0);
          this.path = path;
      }
@@ -95,21 +44,15 @@ index 4cf8a6bd1d890244c8ec49d4a05ee3bd58861c79..fd0fe1951c73da315b0c9bf4a8f33eff
                      yield {
                          pageContent: result.pageContent,
 diff --git a/src/util/mime.d.ts b/src/util/mime.d.ts
-index 57f56a1b8edc98366af9f84d671676c41c2f01ca..f53856fa9c78afbeee9e085c7ed0b3a131f8ee5a 100644
+index 57f56a1b8edc98366af9f84d671676c41c2f01ca..14be3b5727cff6eb1978838045e9a788f8f53bfb 100644
 --- a/src/util/mime.d.ts
 +++ b/src/util/mime.d.ts
-@@ -1,2 +1,7 @@
--import { BaseLoader } from '@llm-tools/embedjs-interfaces';
+@@ -1,2 +1,2 @@
+ import { BaseLoader } from '@llm-tools/embedjs-interfaces';
 -export declare function createLoaderFromMimeType(loaderData: string, mimeType: string): Promise<BaseLoader>;
-+import { BaseLoader } from "@llm-tools/embedjs-interfaces";
-+export declare function createLoaderFromMimeType(
-+  loaderData: string,
-+  mimeType: string,
-+  chunkSize?: number,
-+  chunkOverlap?: number
-+): Promise<BaseLoader>;
++export declare function createLoaderFromMimeType(loaderData: string, mimeType: string, chunkSize?: number, chunkOverlap?: number): Promise<BaseLoader>;
 diff --git a/src/util/mime.js b/src/util/mime.js
-index 9af30bd5b8cf42985f547073a4c19756292c33a3..54ae20343131a533ab70236d3060b6accc8f6126 100644
+index b6426a859968e2bf6206795f70333e90ae27aeb7..16ae2adb863f8d7abfa757f1c5cc39f6bb1c44fa 100644
 --- a/src/util/mime.js
 +++ b/src/util/mime.js
 @@ -1,7 +1,9 @@
@@ -117,7 +60,7 @@ index 9af30bd5b8cf42985f547073a4c19756292c33a3..54ae20343131a533ab70236d3060b6ac
  import createDebugMessages from 'debug';
  import { TextLoader } from '../loaders/text-loader.js';
 -export async function createLoaderFromMimeType(loaderData, mimeType) {
-+import fs from 'node:fs';
++import fs from 'node:fs'
 +
 +export async function createLoaderFromMimeType(loaderData, mimeType, chunkSize, chunkOverlap) {
      createDebugMessages('embedjs:util:createLoaderFromMimeType')(`Incoming mime type '${mimeType}'`);
@@ -137,7 +80,7 @@ index 9af30bd5b8cf42985f547073a4c19756292c33a3..54ae20343131a533ab70236d3060b6ac
              });
              createDebugMessages('embedjs:util:createLoaderFromMimeType')('Dynamically imported ExcelLoader');
 -            return new ExcelLoader({ filePathOrUrl: loaderData });
-+            return new ExcelLoader({ filePathOrUrl: loaderData, chunkSize, chunkOverlap });
++            return new ExcelLoader({ filePathOrUrl: loaderData, chunkSize, chunkOverlap  });
          }
          case 'application/pdf': {
              const { PdfLoader } = await import('@llm-tools/embedjs-loader-pdf').catch(() => {
@@ -157,19 +100,17 @@ index 9af30bd5b8cf42985f547073a4c19756292c33a3..54ae20343131a533ab70236d3060b6ac
          }
          case 'text/plain': {
              const fineType = mime.getType(loaderData);
-@@ -42,24 +44,26 @@ export async function createLoaderFromMimeType(loaderData, mimeType) {
+@@ -42,24 +44,24 @@ export async function createLoaderFromMimeType(loaderData, mimeType) {
                      throw new Error('Package `@llm-tools/embedjs-loader-csv` needs to be installed to load CSV files');
                  });
                  createDebugMessages('embedjs:util:createLoaderFromMimeType')('Dynamically imported CsvLoader');
 -                return new CsvLoader({ filePathOrUrl: loaderData });
 +                return new CsvLoader({ filePathOrUrl: loaderData, chunkSize, chunkOverlap });
-+            }
-+            else{
-+                const content = fs.readFileSync(loaderData, 'utf-8');
-+                return new TextLoader({ text: content, chunkSize, chunkOverlap });
              }
 -            else
 -                return new TextLoader({ text: loaderData });
++            const content = fs.readFileSync(loaderData, 'utf-8');
++            return new TextLoader({ text: content, chunkSize, chunkOverlap });
          }
          case 'application/csv': {
              const { CsvLoader } = await import('@llm-tools/embedjs-loader-csv').catch(() => {
@@ -189,7 +130,7 @@ index 9af30bd5b8cf42985f547073a4c19756292c33a3..54ae20343131a533ab70236d3060b6ac
          }
          case 'text/xml': {
              const { SitemapLoader } = await import('@llm-tools/embedjs-loader-sitemap').catch(() => {
-@@ -67,14 +71,14 @@ export async function createLoaderFromMimeType(loaderData, mimeType) {
+@@ -67,14 +69,14 @@ export async function createLoaderFromMimeType(loaderData, mimeType) {
              });
              createDebugMessages('embedjs:util:createLoaderFromMimeType')('Dynamically imported SitemapLoader');
              if (await SitemapLoader.test(loaderData)) {
@@ -206,12 +147,12 @@ index 9af30bd5b8cf42985f547073a4c19756292c33a3..54ae20343131a533ab70236d3060b6ac
          }
          case 'text/x-markdown':
          case 'text/markdown': {
-@@ -82,7 +86,7 @@ export async function createLoaderFromMimeType(loaderData, mimeType) {
+@@ -82,7 +84,7 @@ export async function createLoaderFromMimeType(loaderData, mimeType) {
                  throw new Error('Package `@llm-tools/embedjs-loader-markdown` needs to be installed to load markdown files');
              });
              createDebugMessages('embedjs:util:createLoaderFromMimeType')('Dynamically imported MarkdownLoader');
 -            return new MarkdownLoader({ filePathOrUrl: loaderData });
 +            return new MarkdownLoader({ filePathOrUrl: loaderData, chunkSize, chunkOverlap });
          }
-         case undefined:
-             throw new Error(`MIME type could not be detected. Please file an issue if you think this is a bug.`);
+         case 'image/png':
+         case 'image/jpeg': {
