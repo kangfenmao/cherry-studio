@@ -96,7 +96,7 @@ const initialState: SettingsState = {
   renderInputMessageAsMarkdown: false,
   codeShowLineNumbers: false,
   codeCollapsible: false,
-  mathEngine: 'MathJax',
+  mathEngine: 'KaTeX',
   messageStyle: 'plain',
   codeStyle: 'auto',
   webdavHost: '',
