@@ -123,12 +123,21 @@ export default class OpenAIProvider extends BaseProvider {
     return assistant?.settings?.temperature
   }
 
-  private getProviderSpecificParameters(model: Model) {
+  private getProviderSpecificParameters(assistant: Assistant, model: Model) {
+    const { maxTokens } = getAssistantSettings(assistant)
+
     if (this.provider.id === 'openrouter') {
       if (model.id.includes('deepseek-r1')) {
         return {
           include_reasoning: true
         }
+      }
+    }
+
+    if (this.isOpenAIo1(model)) {
+      return {
+        max_tokens: undefined,
+        max_completion_tokens: maxTokens
       }
     }
 
@@ -153,6 +162,10 @@ export default class OpenAIProvider extends BaseProvider {
     }
 
     return {}
+  }
+
+  private isOpenAIo1(model: Model) {
+    return model.id.startsWith('o1')
   }
 
   async completions({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
@@ -184,7 +197,7 @@ export default class OpenAIProvider extends BaseProvider {
       userMessages.push(await this.getMessageParam(message, model))
     }
 
-    const isOpenAIo1 = model.id.startsWith('o1')
+    const isOpenAIo1 = this.isOpenAIo1(model)
 
     const isSupportStreamOutput = () => {
       if (isOpenAIo1) {
@@ -208,7 +221,7 @@ export default class OpenAIProvider extends BaseProvider {
       stream: isSupportStreamOutput(),
       ...this.getReasoningEffort(assistant, model),
       ...getOpenAIWebSearchParams(assistant, model),
-      ...this.getProviderSpecificParameters(model),
+      ...this.getProviderSpecificParameters(assistant, model),
       ...this.getCustomParameters(assistant)
     })
 
@@ -271,7 +284,7 @@ export default class OpenAIProvider extends BaseProvider {
       { role: 'user', content: message.content }
     ]
 
-    const isOpenAIo1 = model.id.startsWith('o1')
+    const isOpenAIo1 = this.isOpenAIo1(model)
 
     const isSupportedStreamOutput = () => {
       if (!onResponse) {
