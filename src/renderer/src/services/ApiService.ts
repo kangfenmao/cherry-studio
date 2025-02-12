@@ -219,7 +219,7 @@ export async function checkApi(provider: Provider, model: Model) {
       window.message.error({ content: i18n.t('message.error.enter.api.key'), key, style })
       return {
         valid: false,
-        error: new Error('message.error.enter.api.key')
+        error: new Error(i18n.t('message.error.enter.api.key'))
       }
     }
   }
