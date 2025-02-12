@@ -433,10 +433,9 @@
         "webdav.noSync": "Waiting for next backup",
         "webdav.syncError": "Backup Error",
         "webdav.lastSync": "Last Backup",
-        "notion.api_key":"Notion API Key",
-        "notion.database_id":"Notion Database ID",
-        "notion.title":"Notion Configuration"
-
+        "notion.api_key": "Notion API Key",
+        "notion.database_id": "Notion Database ID",
+        "notion.title": "Notion Configuration"
       },
       "quickAssistant": {
         "title": "Quick Assistant",
@@ -677,8 +676,8 @@
       "chunk_overlap": "Chunk Overlap",
       "not_set": "Not Set",
       "settings": "Knowledge Base Settings",
-      "document_count": "Requested Document Count",
-      "document_count_help": "The more documents requested, the more information is included, but the more tokens are consumed",
+      "document_count": "Requested Document Chunks",
+      "document_count_help": "The more document chunks requested, the more information is included, but the more tokens are consumed",
       "document_count_default": "Default",
       "chunk_size_placeholder": "Default (not recommended to change)",
       "chunk_overlap_placeholder": "Default (not recommended to change)",

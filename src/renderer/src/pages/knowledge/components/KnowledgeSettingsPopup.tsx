@@ -121,9 +121,9 @@ const PopupContainer: React.FC<Props> = ({ base: _base, resolve }) => {
           <Slider
             style={{ width: '100%' }}
             min={1}
-            max={15}
+            max={30}
             step={1}
-            marks={{ 1: '1', 6: t('knowledge.document_count_default'), 15: '15' }}
+            marks={{ 1: '1', 6: t('knowledge.document_count_default'), 30: '30' }}
           />
         </Form.Item>
 

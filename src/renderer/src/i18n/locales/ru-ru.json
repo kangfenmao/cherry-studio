@@ -425,9 +425,9 @@
         "webdav.noSync": "Ожидание следующего резервного копирования",
         "webdav.syncError": "Ошибка резервного копирования",
         "webdav.lastSync": "Последняя синхронизация",
-        "notion.api_key":"Ключ API Notion",
-        "notion.database_id":"ID базы данных Notion",
-        "notion.title":"Настройки Notion"
+        "notion.api_key": "Ключ API Notion",
+        "notion.database_id": "ID базы данных Notion",
+        "notion.title": "Настройки Notion"
       },
       "quickAssistant": {
         "title": "Быстрый помощник",

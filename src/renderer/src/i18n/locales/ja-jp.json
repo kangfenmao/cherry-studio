@@ -424,9 +424,9 @@
         "webdav.noSync": "次回のバックアップを待っています",
         "webdav.syncError": "バックアップエラー",
         "webdav.lastSync": "最終同期",
-        "notion.api_key":"Notion APIキー",
-        "notion.database_id":"Notion データベースID",
-        "notion.title":"Notion 設定"
+        "notion.api_key": "Notion APIキー",
+        "notion.database_id": "Notion データベースID",
+        "notion.title": "Notion 設定"
       },
       "quickAssistant": {
         "title": "クイックアシスタント",
@@ -655,8 +655,8 @@
       "chunk_overlap": "チャンクの重なり",
       "not_set": "未設定",
       "settings": "ナレッジベース設定",
-      "document_count": "要求されたドキュメント数",
-      "document_count_help": "要求されたドキュメント数が多いほど、付随する情報が多くなりますが、トークンの消費量も増加します",
+      "document_count": "要求されたドキュメント分段数",
+      "document_count_help": "要求されたドキュメント分段数が多いほど、付随する情報が多くなりますが、トークンの消費量も増加します",
       "document_count_default": "デフォルト",
       "chunk_size_placeholder": "デフォルト（変更しないでください）",
       "chunk_overlap_placeholder": "デフォルト（変更しないでください）",
