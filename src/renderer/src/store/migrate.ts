@@ -71,7 +71,7 @@ const migrateConfig = {
             id: 'ollama',
             name: 'Ollama',
             apiKey: '',
-            apiHost: 'http://localhost:11434/v1/',
+            apiHost: 'http://localhost:11434',
             isSystem: true,
             models: []
           }

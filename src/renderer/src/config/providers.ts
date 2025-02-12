@@ -9,11 +9,11 @@ import BailianProviderLogo from '@renderer/assets/images/providers/bailian.png'
 import BytedanceProviderLogo from '@renderer/assets/images/providers/bytedance.png'
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
 import FireworksProviderLogo from '@renderer/assets/images/providers/fireworks.png'
+import GiteeAIProviderLogo from '@renderer/assets/images/providers/gitee-ai.png'
 import GithubProviderLogo from '@renderer/assets/images/providers/github.png'
 import GoogleProviderLogo from '@renderer/assets/images/providers/google.png'
 import GraphRagProviderLogo from '@renderer/assets/images/providers/graph-rag.png'
 import GrokProviderLogo from '@renderer/assets/images/providers/grok.png'
-import GiteeAIProviderLogo from '@renderer/assets/images/providers/gitee-ai.png'
 import GroqProviderLogo from '@renderer/assets/images/providers/groq.png'
 import HyperbolicProviderLogo from '@renderer/assets/images/providers/hyperbolic.png'
 import JinaProviderLogo from '@renderer/assets/images/providers/jina.png'
@@ -324,7 +324,7 @@ export const PROVIDER_CONFIG = {
   },
   ollama: {
     api: {
-      url: 'http://localhost:11434/v1/'
+      url: 'http://localhost:11434'
     },
     websites: {
       official: 'https://ollama.com/',

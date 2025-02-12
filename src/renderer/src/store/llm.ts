@@ -78,7 +78,7 @@ const initialState: LlmState = {
       name: 'Ollama',
       type: 'openai',
       apiKey: '',
-      apiHost: 'http://localhost:11434/v1/',
+      apiHost: 'http://localhost:11434',
       models: SYSTEM_MODELS.ollama,
       isSystem: true,
       enabled: false
