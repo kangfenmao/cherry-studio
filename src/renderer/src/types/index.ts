@@ -37,7 +37,6 @@ export type AssistantSettings = {
   streamOutput: boolean
   hideMessages: boolean
   defaultModel?: Model
-  autoResetModel: boolean
   customParameters?: AssistantSettingCustomParameters[]
   reasoning_effort?: 'low' | 'medium' | 'high'
 }

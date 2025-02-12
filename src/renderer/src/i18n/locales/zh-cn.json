@@ -42,8 +42,6 @@
       "save.success": "保存成功",
       "save.title": "保存到智能体",
       "search": "搜索助手",
-      "settings.auto_reset_model": "自动重置模型",
-      "settings.auto_reset_model.tip": "创建新话题时自动重置模型",
       "settings.default_model": "默认模型",
       "settings.knowledge_base": "知识库设置",
       "settings.model": "模型设置",

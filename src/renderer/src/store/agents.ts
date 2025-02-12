@@ -41,8 +41,7 @@ const assistantsSlice = createSlice({
                 enableMaxTokens: false,
                 maxTokens: 0,
                 streamOutput: true,
-                hideMessages: false,
-                autoResetModel: false
+                hideMessages: false
               }
             }
             agent.settings[key] = settings[key]

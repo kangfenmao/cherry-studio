@@ -106,7 +106,6 @@ const SettingsTab: FC<Props> = (props) => {
         maxTokens: DEFAULT_MAX_TOKENS,
         streamOutput: true,
         hideMessages: false,
-        autoResetModel: false,
         customParameters: []
       }
     })

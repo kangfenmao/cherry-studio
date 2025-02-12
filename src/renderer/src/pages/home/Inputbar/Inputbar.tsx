@@ -254,9 +254,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     await addAssistantMessagesToTopic({ assistant, topic })
 
     // Reset to assistant default model
-    if (assistant.settings?.autoResetModel) {
-      assistant.defaultModel && setModel(assistant.defaultModel)
-    }
+    assistant.defaultModel && setModel(assistant.defaultModel)
 
     addTopic(topic)
     setActiveTopic(topic)

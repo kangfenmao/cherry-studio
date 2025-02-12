@@ -22,7 +22,6 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [contextCount, setContextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
-  const [autoResetModel, setAutoResetModel] = useState(assistant?.settings?.autoResetModel ?? false)
   const [reasoningEffort, setReasoningEffort] = useState(assistant?.settings?.reasoning_effort ?? 'medium')
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const [defaultModel, setDefaultModel] = useState(assistant?.defaultModel)
@@ -192,31 +191,26 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
       <Row align="middle" style={{ marginBottom: 10 }}>
         <Label style={{ marginBottom: 10 }}>{t('assistants.settings.default_model')}</Label>
         <Col span={24}>
-          <HStack alignItems="center">
+          <HStack alignItems="center" gap={5}>
             <Button
               icon={defaultModel ? <ModelAvatar model={defaultModel} size={20} /> : <PlusOutlined />}
               onClick={onSelectModel}>
               {defaultModel ? defaultModel.name : t('agents.edit.model.select.title')}
             </Button>
+            {defaultModel && (
+              <Button
+                icon={<DeleteOutlined />}
+                type="text"
+                onClick={() => {
+                  setDefaultModel(undefined)
+                  updateAssistant({ ...assistant, defaultModel: undefined })
+                }}
+                danger
+              />
+            )}
           </HStack>
         </Col>
       </Row>
-      <Divider style={{ margin: '10px 0' }} />
-      <SettingRow style={{ minHeight: 30 }}>
-        <Label>
-          {t('assistants.settings.auto_reset_model')}{' '}
-          <Tooltip title={t('assistants.settings.auto_reset_model.tip')}>
-            <QuestionIcon />
-          </Tooltip>
-        </Label>
-        <Switch
-          value={autoResetModel}
-          onChange={(checked) => {
-            setAutoResetModel(checked)
-            setTimeout(() => updateAssistantSettings({ autoResetModel: checked }), 500)
-          }}
-        />
-      </SettingRow>
       <Divider style={{ margin: '10px 0' }} />
       <Row align="middle">
         <Label>{t('chat.settings.temperature')}</Label>

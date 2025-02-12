@@ -42,8 +42,6 @@
       "save.success": "Saved successfully",
       "save.title": "Save to agent",
       "search": "Search assistants...",
-      "settings.auto_reset_model": "Auto Reset Model",
-      "settings.auto_reset_model.tip": "Automatically reset the model when a new topic is created.",
       "settings.default_model": "Default Model",
       "settings.knowledge_base": "Knowledge Base Settings",
       "settings.model": "Model Settings",

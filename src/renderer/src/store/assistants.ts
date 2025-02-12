@@ -49,8 +49,7 @@ const assistantsSlice = createSlice({
                 enableMaxTokens: false,
                 maxTokens: 0,
                 streamOutput: true,
-                hideMessages: false,
-                autoResetModel: false
+                hideMessages: false
               }
             }
             assistant.settings[key] = settings[key]

@@ -42,8 +42,6 @@
       "save.success": "Успешно сохранено",
       "save.title": "Сохранить в агента",
       "search": "Поиск ассистентов...",
-      "settings.auto_reset_model": "Автосброс модели",
-      "settings.auto_reset_model.tip": "Автоматически сбрасывать модель при создании нового топика.",
       "settings.default_model": "Модель по умолчанию",
       "settings.knowledge_base": "Настройки базы знаний",
       "settings.model": "Настройки модели",
