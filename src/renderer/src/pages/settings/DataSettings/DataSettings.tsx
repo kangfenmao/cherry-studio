@@ -5,7 +5,7 @@ import { backup, reset, restore } from '@renderer/services/BackupService'
 import { RootState, useAppDispatch } from '@renderer/store'
 import { setNotionApiKey, setNotionDatabaseID } from '@renderer/store/settings'
 import { AppInfo } from '@renderer/types'
-import { Button,Modal, Typography } from 'antd'
+import { Button, Modal, Typography } from 'antd'
 import Input from 'antd/es/input/Input'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,17 +23,16 @@ const NotionSettings: FC = () => {
 
   // 这里可以添加 Notion 相关的状态和逻辑
   // 例如：
-  const notionApiKey = useSelector((state: RootState) => state.settings.notionApiKey);
-  const notionDatabaseID = useSelector((state: RootState) => state.settings.notionDatabaseID);
+  const notionApiKey = useSelector((state: RootState) => state.settings.notionApiKey)
+  const notionDatabaseID = useSelector((state: RootState) => state.settings.notionDatabaseID)
 
   const handleNotionTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setNotionApiKey(e.target.value))
-  };
+  }
 
   const handleNotionDatabaseIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setNotionDatabaseID(e.target.value))
-  };
-
+  }
 
   return (
     <SettingGroup theme={theme}>
@@ -42,8 +41,8 @@ const NotionSettings: FC = () => {
       <SettingRow>
         <SettingRowTitle>{t('settings.data.notion.api_key')}</SettingRowTitle>
         <HStack alignItems="center" gap="5px">
-          <Input.Password
-            type="text"
+          <Input
+            type="password"
             value={notionApiKey || ''}
             onChange={handleNotionTokenChange}
             onBlur={handleNotionTokenChange}
@@ -165,7 +164,6 @@ const DataSettings: FC = () => {
           </HStack>
         </SettingRow>
       </SettingGroup>
-   
     </SettingContainer>
   )
 }

@@ -433,6 +433,8 @@
         "webdav.noSync": "Waiting for next backup",
         "webdav.syncError": "Backup Error",
         "webdav.lastSync": "Last Backup",
+        "webdav.restore.title": "Restore from WebDAV",
+        "webdav.restore.content": "Restore from WebDAV will overwrite the current data, continue?",
         "notion.api_key": "Notion API Key",
         "notion.database_id": "Notion Database ID",
         "notion.title": "Notion Configuration"

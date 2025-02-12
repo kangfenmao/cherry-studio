@@ -425,6 +425,8 @@
         "webdav.noSync": "Ожидание следующего резервного копирования",
         "webdav.syncError": "Ошибка резервного копирования",
         "webdav.lastSync": "Последняя синхронизация",
+        "webdav.restore.title": "Восстановление с WebDAV",
+        "webdav.restore.content": "Восстановление с WebDAV перезапишет текущие данные, продолжить?",
         "notion.api_key": "Ключ API Notion",
         "notion.database_id": "ID базы данных Notion",
         "notion.title": "Настройки Notion"

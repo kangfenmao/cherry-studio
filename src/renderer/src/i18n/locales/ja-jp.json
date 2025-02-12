@@ -424,6 +424,8 @@
         "webdav.noSync": "次回のバックアップを待っています",
         "webdav.syncError": "バックアップエラー",
         "webdav.lastSync": "最終同期",
+        "webdav.restore.title": "WebDAVから復元",
+        "webdav.restore.content": "WebDAVから復元すると、現在のデータが上書きされます。続行しますか？",
         "notion.api_key": "Notion APIキー",
         "notion.database_id": "Notion データベースID",
         "notion.title": "Notion 設定"

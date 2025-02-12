@@ -161,6 +161,7 @@ export default class OpenAIProvider extends BaseProvider {
     const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
     let systemMessage = assistant.prompt ? { role: 'system', content: assistant.prompt } : undefined
+
     if (['o1', 'o1-2024-12-17'].includes(model.id) || model.id.startsWith('o3')) {
       systemMessage = {
         role: 'developer',
@@ -344,7 +345,7 @@ export default class OpenAIProvider extends BaseProvider {
     // 针对思考类模型的返回，总结仅截取</think>之后的内容
     let content = response.choices[0].message?.content || ''
     content = content.replace(/^<think>(.*?)<\/think>/s, '')
-    
+
     return removeSpecialCharacters(content.substring(0, 50))
   }
 

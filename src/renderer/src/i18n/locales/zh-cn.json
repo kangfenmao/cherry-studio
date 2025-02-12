@@ -432,6 +432,8 @@
         "webdav.noSync": "等待下次备份",
         "webdav.syncError": "备份错误",
         "webdav.lastSync": "上次备份时间",
+        "webdav.restore.title": "从 WebDAV 恢复",
+        "webdav.restore.content": "从 WebDAV 恢复将覆盖当前数据，是否继续？",
         "notion.api_key": "Notion 密钥",
         "notion.database_id": "Notion 数据库ID",
         "notion.title": "Notion 配置"

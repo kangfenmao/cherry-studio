@@ -66,6 +66,15 @@ const WebDavSettings: FC = () => {
     setRestoring(false)
   }
 
+  const onPressRestore = () => {
+    window.modal.confirm({
+      title: t('settings.data.webdav.restore.title'),
+      content: t('settings.data.webdav.restore.content'),
+      centered: true,
+      onOk: onRestore
+    })
+  }
+
   const onSyncIntervalChange = (value: number) => {
     setSyncInterval(value)
     dispatch(_setWebdavSyncInterval(value))
@@ -158,7 +167,7 @@ const WebDavSettings: FC = () => {
           <Button onClick={onBackup} icon={<SaveOutlined />} loading={backuping}>
             {t('settings.data.webdav.backup.button')}
           </Button>
-          <Button onClick={onRestore} icon={<FolderOpenOutlined />} loading={restoring}>
+          <Button onClick={onPressRestore} icon={<FolderOpenOutlined />} loading={restoring}>
             {t('settings.data.webdav.restore.button')}
           </Button>
         </HStack>
