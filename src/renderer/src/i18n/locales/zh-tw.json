@@ -32,7 +32,7 @@
       "title": "智能體"
     },
     "assistants": {
-      "abbr": "助",
+      "abbr": "助手",
       "clear.content": "清空話題會刪除助手下所有主題和文件，確定要繼續嗎？",
       "clear.title": "清空話題",
       "copy.title": "複製助手",
