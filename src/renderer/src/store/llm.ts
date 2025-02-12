@@ -64,6 +64,16 @@ const initialState: LlmState = {
       enabled: false
     },
     {
+      id: 'ppio',
+      name: 'PPIO',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://api.ppinfra.com/v3/openai',
+      models: SYSTEM_MODELS.ppio,
+      isSystem: true,
+      enabled: false
+    },
+    {
       id: 'ocoolai',
       name: 'ocoolAI',
       type: 'openai',
