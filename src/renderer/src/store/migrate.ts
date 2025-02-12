@@ -925,6 +925,32 @@ const migrateConfig = {
   '65': (state: RootState) => {
     state.settings.targetLanguage = 'english'
     return state
+  },
+  '66': (state: RootState) => {
+    state.llm.providers.push(
+      {
+        id: 'gitee-ai',
+        name: 'gitee ai',
+        type: 'openai',
+        apiKey: '',
+        apiHost: 'https://ai.gitee.com',
+        models: SYSTEM_MODELS['gitee-ai'],
+        isSystem: true,
+        enabled: false
+      },
+      {
+        id: 'ppio',
+        name: 'PPIO',
+        type: 'openai',
+        apiKey: '',
+        apiHost: 'https://api.ppinfra.com/v3/openai',
+        models: SYSTEM_MODELS.ppio,
+        isSystem: true,
+        enabled: false
+      }
+    )
+    state.llm.providers = state.llm.providers.filter((provider) => provider.id !== 'graphrag-kylin-mountain')
+    return state
   }
 }
 
