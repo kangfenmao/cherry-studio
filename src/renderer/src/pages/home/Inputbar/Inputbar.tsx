@@ -85,6 +85,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const [isTranslating, setIsTranslating] = useState(false)
   const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState<KnowledgeBase | undefined>(_base)
   const [mentionModels, setMentionModels] = useState<Model[]>([])
+  const [isMentionPopupOpen, setIsMentionPopupOpen] = useState(false)
 
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
@@ -165,6 +166,24 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isEnterPressed = event.keyCode == 13
 
+    if (event.key === '@') {
+      const textArea = textareaRef.current?.resizableTextArea?.textArea
+      if (textArea) {
+        const cursorPosition = textArea.selectionStart
+        const textBeforeCursor = text.substring(0, cursorPosition)
+        if (cursorPosition === 0 || textBeforeCursor.endsWith(' ')) {
+          EventEmitter.emit(EVENT_NAMES.SHOW_MODEL_SELECTOR)
+          setIsMentionPopupOpen(true)
+          return
+        }
+      }
+    }
+
+    if (event.key === 'Escape' && isMentionPopupOpen) {
+      setIsMentionPopupOpen(false)
+      return
+    }
+
     if (autoTranslateWithSpace) {
       if (event.key === ' ') {
         setSpaceClickCount((prev) => prev + 1)
@@ -193,25 +212,34 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
       }
     }
 
-    if (sendMessageShortcut === 'Enter' && isEnterPressed) {
-      if (event.shiftKey) {
-        return
+    if (isEnterPressed && !event.shiftKey && sendMessageShortcut === 'Enter') {
+      if (isMentionPopupOpen) {
+        return event.preventDefault()
       }
       sendMessage()
       return event.preventDefault()
     }
 
     if (sendMessageShortcut === 'Shift+Enter' && isEnterPressed && event.shiftKey) {
+      if (isMentionPopupOpen) {
+        return event.preventDefault()
+      }
       sendMessage()
       return event.preventDefault()
     }
 
     if (sendMessageShortcut === 'Ctrl+Enter' && isEnterPressed && event.ctrlKey) {
+      if (isMentionPopupOpen) {
+        return event.preventDefault()
+      }
       sendMessage()
       return event.preventDefault()
     }
 
     if (sendMessageShortcut === 'Command+Enter' && isEnterPressed && event.metaKey) {
+      if (isMentionPopupOpen) {
+        return event.preventDefault()
+      }
       sendMessage()
       return event.preventDefault()
     }
@@ -279,6 +307,23 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   }
 
   const onInput = () => !expended && resizeTextArea()
+
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value
+    setText(newText)
+
+    // Check if @ was deleted
+    const textArea = textareaRef.current?.resizableTextArea?.textArea
+    if (textArea) {
+      const cursorPosition = textArea.selectionStart
+      const textBeforeCursor = newText.substring(0, cursorPosition)
+      const lastAtIndex = textBeforeCursor.lastIndexOf('@')
+
+      if (lastAtIndex === -1 || textBeforeCursor.slice(lastAtIndex + 1).includes(' ')) {
+        setIsMentionPopupOpen(false)
+      }
+    }
+  }
 
   const onPaste = useCallback(
     async (event: ClipboardEvent) => {
@@ -420,17 +465,22 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     setSelectedKnowledgeBase(base)
   }
 
-  const onMentionModel = useCallback(
-    (model: Model) => {
-      const isSelected = mentionModels.some((m) => m.id === model.id)
-      if (isSelected) {
-        setMentionModels(mentionModels.filter((m) => m.id !== model.id))
-      } else {
-        setMentionModels([...mentionModels, model])
+  const onMentionModel = (model: Model) => {
+    const textArea = textareaRef.current?.resizableTextArea?.textArea
+    if (textArea) {
+      const cursorPosition = textArea.selectionStart
+      const textBeforeCursor = text.substring(0, cursorPosition)
+      const lastAtIndex = textBeforeCursor.lastIndexOf('@')
+
+      if (lastAtIndex !== -1) {
+        const newText = text.substring(0, lastAtIndex) + text.substring(cursorPosition)
+        setText(newText)
       }
-    },
-    [mentionModels]
-  )
+
+      setMentionModels((prev) => [...prev, model])
+      setIsMentionPopupOpen(false)
+    }
+  }
 
   const handleRemoveModel = (model: Model) => {
     setMentionModels(mentionModels.filter((m) => m.id !== model.id))
@@ -447,7 +497,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
           <MentionModelsInput selectedModels={mentionModels} onRemoveModel={handleRemoveModel} />
           <Textarea
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={onChange}
             onKeyDown={handleKeyDown}
             placeholder={isTranslating ? t('chat.input.translating') : t('chat.input.placeholder')}
             autoFocus
