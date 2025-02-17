@@ -33,6 +33,11 @@ const KnowledgeBaseSelector: FC<Props> = ({ selectedBases, onSelect }) => {
           placeholder={t('agents.add.knowledge_base.placeholder')}
           menuItemSelectedIcon={<CheckOutlined />}
           options={knowledgeOptions}
+          filterOption={(input, option) =>
+            String(option?.label ?? '')
+              .toLowerCase()
+              .includes(input.toLowerCase())
+          }
           onChange={(ids) => {
             const newSelected = knowledgeState.bases.filter((base) => ids.includes(base.id))
             onSelect(newSelected)

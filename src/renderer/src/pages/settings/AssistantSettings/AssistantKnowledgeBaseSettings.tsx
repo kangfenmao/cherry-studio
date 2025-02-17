@@ -16,14 +16,10 @@ const AssistantKnowledgeBaseSettings: React.FC<Props> = ({ assistant, updateAssi
   const { t } = useTranslation()
 
   const knowledgeState = useAppSelector((state) => state.knowledge)
-  const knowledgeOptions: SelectProps['options'] = []
-
-  knowledgeState.bases.forEach((base) => {
-    knowledgeOptions.push({
-      label: base.name,
-      value: base.id
-    })
-  })
+  const knowledgeOptions: SelectProps['options'] = knowledgeState.bases.map((base) => ({
+    label: base.name,
+    value: base.id
+  }))
 
   const onUpdate = (value) => {
     const knowledge_bases = value.map((id) => knowledgeState.bases.find((b) => b.id === id))
@@ -44,6 +40,11 @@ const AssistantKnowledgeBaseSettings: React.FC<Props> = ({ assistant, updateAssi
         menuItemSelectedIcon={<CheckOutlined />}
         options={knowledgeOptions}
         onChange={(value) => onUpdate(value)}
+        filterOption={(input, option) =>
+          String(option?.label ?? '')
+            .toLowerCase()
+            .includes(input.toLowerCase())
+        }
       />
     </Container>
   )

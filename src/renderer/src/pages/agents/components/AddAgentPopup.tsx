@@ -37,8 +37,8 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const [emoji, setEmoji] = useState('')
   const [loading, setLoading] = useState(false)
   const knowledgeState = useAppSelector((state) => state.knowledge)
-  const knowledgeOptions: SelectProps['options'] = []
   const showKnowledgeIcon = useSidebarIconShow('knowledge')
+  const knowledgeOptions: SelectProps['options'] = []
 
   knowledgeState.bases.forEach((base) => {
     knowledgeOptions.push({
@@ -163,6 +163,11 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
               placeholder={t('agents.add.knowledge_base.placeholder')}
               menuItemSelectedIcon={<CheckOutlined />}
               options={knowledgeOptions}
+              filterOption={(input, option) =>
+                String(option?.label ?? '')
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
             />
           </Form.Item>
         )}
