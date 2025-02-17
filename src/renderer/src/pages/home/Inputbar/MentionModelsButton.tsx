@@ -44,7 +44,7 @@ const MentionModelsButton: FC<Props> = ({ mentionModels, onMentionModel: onSelec
 
   const handleModelSelect = (model: Model) => {
     // Check if model is already selected
-    if (mentionModels.some((selected) => selected.id === model.id)) {
+    if (mentionModels.some((selected) => getModelUniqId(selected) === getModelUniqId(model))) {
       return
     }
     onSelect(model)
@@ -209,7 +209,7 @@ const MentionModelsButton: FC<Props> = ({ mentionModels, onMentionModel: onSelec
         e.preventDefault()
         if (selectedIndex >= 0 && selectedIndex < flatModelItems.length) {
           const selectedModel = flatModelItems[selectedIndex].model
-          if (!mentionModels.some((selected) => selected.id === selectedModel.id)) {
+          if (!mentionModels.some((selected) => getModelUniqId(selected) === getModelUniqId(selectedModel))) {
             flatModelItems[selectedIndex].onClick()
           }
           setIsOpen(false)
