@@ -641,6 +641,8 @@
       "messages.math_engine": "数学公式引擎",
       "messages.grid_columns": "消息网格展示列数",
       "messages.grid_popover_trigger": "网格详情触发",
+      "messages.grid_popover_trigger.hover": "悬停显示",
+      "messages.grid_popover_trigger.click": "点击显示",
       "messages.metrics": "首字时延 {{time_first_token_millsec}}ms | 每秒 {{token_speed}} tokens",
       "messages.model.title": "模型设置",
       "messages.title": "消息设置",

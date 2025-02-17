@@ -642,6 +642,8 @@
       "messages.model.title": "Настройки модели",
       "messages.grid_columns": "Количество столбцов сетки сообщений",
       "messages.grid_popover_trigger": "Триггер для отображения подробной информации в сетке",
+      "messages.grid_popover_trigger.hover": "Наведение для отображения",
+      "messages.grid_popover_trigger.click": "Нажатие для отображения",
       "messages.title": "Настройки сообщений",
       "messages.use_serif_font": "Использовать serif шрифт",
       "model": "Модель по умолчанию",

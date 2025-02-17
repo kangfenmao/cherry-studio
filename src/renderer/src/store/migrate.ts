@@ -1071,6 +1071,8 @@ const migrateConfig = {
         state.minapps.enabled.push(coze)
       }
     }
+    state.settings.gridColumns = 2
+    state.settings.gridPopoverTrigger = 'hover'
     return state
   }
 }

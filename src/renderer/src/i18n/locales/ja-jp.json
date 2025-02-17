@@ -641,6 +641,8 @@
       "messages.math_engine": "数式エンジン",
       "messages.grid_columns": "メッセージグリッドの表示列数",
       "messages.grid_popover_trigger": "グリッド詳細トリガー",
+      "messages.grid_popover_trigger.hover": "ホバーで表示",
+      "messages.grid_popover_trigger.click": "クリックで表示",
       "messages.metrics": "最初のトークンまでの時間 {{time_first_token_millsec}}ms | トークン速度 {{token_speed}} tok/sec",
       "messages.model.title": "モデル設定",
       "messages.title": "メッセージ設定",

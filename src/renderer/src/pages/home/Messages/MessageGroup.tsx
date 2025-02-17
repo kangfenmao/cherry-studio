@@ -10,9 +10,10 @@ import { HStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { MultiModelMessageStyle } from '@renderer/store/settings'
+import { useAppDispatch } from '@renderer/store'
+import { MultiModelMessageStyle, setGridColumns, setGridPopoverTrigger } from '@renderer/store/settings'
 import { Message, Model, Topic } from '@renderer/types'
-import { Button, Popover, Segmented as AntdSegmented } from 'antd'
+import { Button, Popover, Segmented as AntdSegmented, Select, Slider } from 'antd'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
@@ -38,14 +39,18 @@ const MessageGroup: FC<Props> = ({
   onGetMessages,
   onDeleteGroupMessages
 }) => {
-  const { multiModelMessageStyle: multiModelMessageStyleSetting, gridColumns, gridPopoverTrigger } = useSettings()
+  const { multiModelMessageStyle: multiModelMessageStyleSetting, gridColumns } = useSettings()
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const [gridColumnsValue, setGridColumnsValue] = useState(gridColumns)
 
   const [multiModelMessageStyle, setMultiModelMessageStyle] =
     useState<MultiModelMessageStyle>(multiModelMessageStyleSetting)
 
   const messageLength = messages.length
   const [selectedIndex, setSelectedIndex] = useState(messageLength - 1)
+
+  const { gridPopoverTrigger } = useSettings()
 
   const isGrouped = messageLength > 1
 
@@ -193,6 +198,26 @@ const MessageGroup: FC<Props> = ({
                 />
               </ModelsContainer>
             )}
+            {multiModelMessageStyle === 'grid' && (
+              <HStack style={{ marginLeft: 20, gap: 20, alignItems: 'center' }}>
+                <Select
+                  value={gridPopoverTrigger || 'hover'}
+                  onChange={(value) => dispatch(setGridPopoverTrigger(value))}
+                  size="small">
+                  <Select.Option value="hover">{t('settings.messages.grid_popover_trigger.hover')}</Select.Option>
+                  <Select.Option value="click">{t('settings.messages.grid_popover_trigger.click')}</Select.Option>
+                </Select>
+                <Slider
+                  style={{ width: 80 }}
+                  value={gridColumnsValue}
+                  onChange={(value) => setGridColumnsValue(value)}
+                  onChangeComplete={(value) => dispatch(setGridColumns(value))}
+                  min={2}
+                  max={6}
+                  step={1}
+                />
+              </HStack>
+            )}
           </HStack>
           <Button
             type="text"
@@ -231,6 +256,7 @@ const GridContainer = styled.div<{ $count: number; $layout: MultiModelMessageSty
       grid-template-columns: repeat(${$count > 1 ? $gridColumns || 2 : 1}, minmax(0, 1fr));
       grid-template-rows: auto;
       gap: 16px;
+      margin-top: 20px;
     `}
 `
 
@@ -274,11 +300,11 @@ const MessageWrapper = styled(Scrollbar)<MessageWrapperProps>`
           border: 0.5px solid var(--color-border);
           padding: 10px;
           border-radius: 6px;
+          background-color: var(--color-background);
         `
       : css`
           overflow-y: auto;
           border: 0.5px solid transparent;
-          padding: 0 10px;
           border-radius: 6px;
         `}
 `
@@ -295,7 +321,7 @@ const GroupMenuBar = styled.div<{ $layout: MultiModelMessageStyle }>`
   overflow: hidden;
   border: 0.5px solid var(--color-border);
   height: 40px;
-  margin-left: ${({ $layout }) => ($layout === 'horizontal' ? '0' : '40px')};
+  margin-left: ${({ $layout }) => (['horizontal', 'grid'].includes($layout) ? '0' : '40px')};
   transition: all 0.3s ease;
 `
 
