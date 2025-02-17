@@ -277,14 +277,13 @@ const MessageWrapper = styled(Scrollbar)<MessageWrapperProps>`
       ? css`
           max-height: ${$isInPopover ? '50vh' : '300px'};
           overflow-y: auto;
-          border: 0.5px solid var(--color-border);
+          border: 0.5px solid ${$isInPopover ? 'transparent' : 'var(--color-border)'};
           padding: 10px;
           border-radius: 6px;
           background-color: var(--color-background);
         `
       : css`
           overflow-y: auto;
-          border: 0.5px solid transparent;
           border-radius: 6px;
         `}
 `
