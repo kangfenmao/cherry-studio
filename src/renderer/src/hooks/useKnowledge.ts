@@ -307,16 +307,22 @@ export const useKnowledgeBases = () => {
 
     // remove assistant knowledge_base
     const _assistants = assistants.map((assistant) => {
-      if (assistant.knowledge_base?.id === baseId) {
-        return { ...assistant, knowledge_base: undefined }
+      if (assistant.knowledge_bases?.find((kb) => kb.id === baseId)) {
+        return {
+          ...assistant,
+          knowledge_bases: assistant.knowledge_bases.filter((kb) => kb.id !== baseId)
+        }
       }
       return assistant
     })
 
     // remove agent knowledge_base
     const _agents = agents.map((agent) => {
-      if (agent.knowledge_base?.id === baseId) {
-        return { ...agent, knowledge_base: undefined }
+      if (agent.knowledge_bases?.find((kb) => kb.id === baseId)) {
+        return {
+          ...agent,
+          knowledge_bases: agent.knowledge_bases.filter((kb) => kb.id !== baseId)
+        }
       }
       return agent
     })

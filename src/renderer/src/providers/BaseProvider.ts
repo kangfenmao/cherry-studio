@@ -5,6 +5,7 @@ import { getKnowledgeReferences } from '@renderer/services/KnowledgeService'
 import store from '@renderer/store'
 import { Assistant, GenerateImageParams, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { delay, isJSON, parseJSON } from '@renderer/utils'
+import { t } from 'i18next'
 import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
@@ -83,21 +84,35 @@ export default abstract class BaseProvider {
       return message.content
     }
 
-    const knowledgeId = message.knowledgeBaseIds[0]
-    const base = store.getState().knowledge.bases.find((kb) => kb.id === knowledgeId)
+    const bases = store.getState().knowledge.bases.filter((kb) => message.knowledgeBaseIds?.includes(kb.id))
 
-    if (!base) {
+    if (!bases || bases.length === 0) {
       return message.content
     }
 
-    const { referencesContent, referencesCount } = await getKnowledgeReferences(base, message)
+    const allReferencesPromises = bases.map(async (base) => {
+      const references = await getKnowledgeReferences(base, message)
 
-    // 如果知识库中未检索到内容则使用通用逻辑
-    if (referencesCount === 0) {
+      return {
+        knowledgeBaseId: base.id,
+        references
+      }
+    })
+    const allReferences = (await Promise.all(allReferencesPromises))
+      .filter((result) => result.references && result.references.length > 0)
+      .flat()
+
+    if (allReferences.length === 0) {
+      window.message.info({
+        content: t('knowledge.no_match'),
+        duration: 4,
+        key: 'knowledge-base-no-match-info'
+      })
       return message.content
     }
+    const allReferencesContent = `\`\`\`json\n${JSON.stringify(allReferences, null, 2)}\n\`\`\``
 
-    return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', referencesContent)
+    return REFERENCE_PROMPT.replace('{question}', message.content).replace('{references}', allReferencesContent)
   }
 
   protected getCustomParameters(assistant: Assistant) {
