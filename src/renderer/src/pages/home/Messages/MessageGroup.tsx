@@ -10,15 +10,15 @@ import { HStack } from '@renderer/components/Layout'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { useAppDispatch } from '@renderer/store'
-import { MultiModelMessageStyle, setGridColumns, setGridPopoverTrigger } from '@renderer/store/settings'
+import { MultiModelMessageStyle } from '@renderer/store/settings'
 import { Message, Model, Topic } from '@renderer/types'
-import { Button, Popover, Segmented as AntdSegmented, Select, Slider } from 'antd'
+import { Button, Popover, Segmented as AntdSegmented } from 'antd'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import MessageItem from './Message'
+import MessageGroupSettings from './MessageGroupSettings'
 
 interface Props {
   messages: (Message & { index: number })[]
@@ -41,8 +41,6 @@ const MessageGroup: FC<Props> = ({
 }) => {
   const { multiModelMessageStyle: multiModelMessageStyleSetting, gridColumns } = useSettings()
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
-  const [gridColumnsValue, setGridColumnsValue] = useState(gridColumns)
 
   const [multiModelMessageStyle, setMultiModelMessageStyle] =
     useState<MultiModelMessageStyle>(multiModelMessageStyleSetting)
@@ -198,26 +196,7 @@ const MessageGroup: FC<Props> = ({
                 />
               </ModelsContainer>
             )}
-            {multiModelMessageStyle === 'grid' && (
-              <HStack style={{ marginLeft: 20, gap: 20, alignItems: 'center' }}>
-                <Select
-                  value={gridPopoverTrigger || 'hover'}
-                  onChange={(value) => dispatch(setGridPopoverTrigger(value))}
-                  size="small">
-                  <Select.Option value="hover">{t('settings.messages.grid_popover_trigger.hover')}</Select.Option>
-                  <Select.Option value="click">{t('settings.messages.grid_popover_trigger.click')}</Select.Option>
-                </Select>
-                <Slider
-                  style={{ width: 80 }}
-                  value={gridColumnsValue}
-                  onChange={(value) => setGridColumnsValue(value)}
-                  onChangeComplete={(value) => dispatch(setGridColumns(value))}
-                  min={2}
-                  max={6}
-                  step={1}
-                />
-              </HStack>
-            )}
+            {multiModelMessageStyle === 'grid' && <MessageGroupSettings />}
           </HStack>
           <Button
             type="text"
@@ -278,6 +257,7 @@ const MessageWrapper = styled(Scrollbar)<MessageWrapperProps>`
     }
     return 'block'
   }};
+
   ${({ $layout, $isGrouped }) => {
     if ($layout === 'horizontal' && $isGrouped) {
       return css`
