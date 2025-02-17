@@ -18,7 +18,7 @@ import { useKnowledge } from '@renderer/hooks/useKnowledge'
 import FileManager from '@renderer/services/FileManager'
 import { getProviderName } from '@renderer/services/ProviderService'
 import { FileType, FileTypes, KnowledgeBase } from '@renderer/types'
-import { bookExts, documentExts, textExts } from '@shared/config/constant'
+import { bookExts, documentExts, textExts, thirdPartyApplicationExts } from '@shared/config/constant'
 import { Alert, Button, Card, Divider, message, Tag, Tooltip, Typography, Upload } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -35,7 +35,7 @@ interface KnowledgeContentProps {
   selectedBase: KnowledgeBase
 }
 
-const fileTypes = [...bookExts, ...documentExts, ...textExts]
+const fileTypes = [...bookExts, ...thirdPartyApplicationExts, ...documentExts, ...textExts]
 const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   const { t } = useTranslation()
 

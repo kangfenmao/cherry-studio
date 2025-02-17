@@ -1,17 +1,18 @@
 import * as fs from 'node:fs'
 
-import { LocalPathLoader, RAGApplication, TextLoader } from '@llm-tools/embedjs'
+import { JsonLoader, LocalPathLoader, RAGApplication, TextLoader } from '@llm-tools/embedjs'
 import type { AddLoaderReturn } from '@llm-tools/embedjs-interfaces'
 import { WebLoader } from '@llm-tools/embedjs-loader-web'
 import { LoaderReturn } from '@shared/config/types'
 import { FileType, KnowledgeBaseParams } from '@types'
 import Logger from 'electron-log'
 
+import { DraftsExportLoader } from './draftsExportLoader'
 import { EpubLoader } from './epubLoader'
 import { OdLoader, OdType } from './odLoader'
 
 // embedjs内置loader类型
-const commonExts = ['.pdf', '.csv', '.json', '.docx', '.pptx', '.xlsx', '.md']
+const commonExts = ['.pdf', '.csv', '.docx', '.pptx', '.xlsx', '.md']
 
 export async function addOdLoader(
   ragApplication: RAGApplication,
@@ -89,7 +90,19 @@ export async function addFileLoader(
     } as LoaderReturn
   }
 
+  // DraftsExport类型 (file.ext会自动转换成小写)
+  if (['.draftsexport'].includes(file.ext)) {
+    const loaderReturn = await ragApplication.addLoader(new DraftsExportLoader(file.path) as any, forceReload)
+    return {
+      entriesAdded: loaderReturn.entriesAdded,
+      uniqueId: loaderReturn.uniqueId,
+      uniqueIds: [loaderReturn.uniqueId],
+      loaderType: loaderReturn.loaderType
+    }
+  }
+
   const fileContent = fs.readFileSync(file.path, 'utf-8')
+
   // HTML类型
   if (['.html', '.htm'].includes(file.ext)) {
     const loaderReturn = await ragApplication.addLoader(
@@ -100,6 +113,18 @@ export async function addFileLoader(
       }) as any,
       forceReload
     )
+    return {
+      entriesAdded: loaderReturn.entriesAdded,
+      uniqueId: loaderReturn.uniqueId,
+      uniqueIds: [loaderReturn.uniqueId],
+      loaderType: loaderReturn.loaderType
+    }
+  }
+
+  // JSON类型
+  if (['.json'].includes(file.ext)) {
+    const jsonObject = JSON.parse(fileContent)
+    const loaderReturn = await ragApplication.addLoader(new JsonLoader({ object: jsonObject }))
     return {
       entriesAdded: loaderReturn.entriesAdded,
       uniqueId: loaderReturn.uniqueId,
