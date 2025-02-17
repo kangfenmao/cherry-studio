@@ -64,6 +64,10 @@
     &:first-child {
       margin-top: 0;
     }
+
+    &:has(+ ul) {
+      margin-bottom: 0;
+    }
   }
 
   ul {
