@@ -560,7 +560,9 @@
         },
         "data.title": "数据目录",
         "notion.api_key": "Notion 密钥",
-        "notion.database_id": "Notion 数据库ID",
+        "notion.api_key_placeholder": "请输入Notion 密钥",
+        "notion.database_id": "Notion 数据库 ID",
+        "notion.database_id_placeholder": "请输入Notion 数据库 ID",
         "notion.title": "Notion 配置",
         "notion.check": {
           "button": "检查",

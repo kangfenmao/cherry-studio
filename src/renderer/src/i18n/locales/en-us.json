@@ -560,7 +560,9 @@
         },
         "data.title": "Data Directory",
         "notion.api_key": "Notion API Key",
+        "notion.api_key_placeholder": "Enter Notion API Key",
         "notion.database_id": "Notion Database ID",
+        "notion.database_id_placeholder": "Enter Notion Database ID",
         "notion.title": "Notion Configuration",
         "notion.check": {
           "button": "Check",

@@ -560,7 +560,9 @@
         },
         "data.title": "データディレクトリ",
         "notion.api_key": "Notion APIキー",
+        "notion.api_key_placeholder": "Notion APIキーを入力してください",
         "notion.database_id": "Notion データベースID",
+        "notion.database_id_placeholder": "Notion データベースIDを入力してください",
         "notion.title": "Notion 設定",
         "notion.check": {
           "button": "確認",

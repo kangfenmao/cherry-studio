@@ -558,7 +558,9 @@
         },
         "data.title": "數據目錄",
         "notion.api_key": "Notion 金鑰",
+        "notion.api_key_placeholder": "請輸入Notion 密鑰",
         "notion.database_id": "Notion 資料庫 ID",
+        "notion.database_id_placeholder": "請輸入Notion 資料庫 ID",
         "notion.title": "Notion 配置",
         "notion.check": {
           "button": "檢查",

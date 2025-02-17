@@ -1,6 +1,7 @@
-import { FileSearchOutlined, FolderOpenOutlined, SaveOutlined } from '@ant-design/icons'
+import { FileSearchOutlined, FolderOpenOutlined, InfoCircleOutlined, SaveOutlined } from '@ant-design/icons'
 import { Client } from '@notionhq/client'
 import { HStack } from '@renderer/components/Layout'
+import MinApp from '@renderer/components/MinApp'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { backup, reset, restore } from '@renderer/services/BackupService'
 import { RootState, useAppDispatch } from '@renderer/store'
@@ -60,9 +61,23 @@ const NotionSettings: FC = () => {
       })
   }
 
+  const handleNotionTitleClick = () => {
+    MinApp.start({
+      id: 'notion-help',
+      name: 'Notion Help',
+      url: 'https://docs.cherry-ai.com/advanced-basic/notion'
+    })
+  }
+
   return (
     <SettingGroup theme={theme}>
-      <SettingTitle>{t('settings.data.notion.title')}</SettingTitle>
+      <SettingTitle style={{ justifyContent: 'flex-start', gap: 10 }}>
+        {t('settings.data.notion.title')}
+        <InfoCircleOutlined
+          style={{ color: 'var(--color-text-2)', cursor: 'pointer' }}
+          onClick={handleNotionTitleClick}
+        />
+      </SettingTitle>
       <SettingDivider />
       <SettingRow>
         <SettingRowTitle>{t('settings.data.notion.database_id')}</SettingRowTitle>
@@ -73,6 +88,7 @@ const NotionSettings: FC = () => {
             onChange={handleNotionDatabaseIdChange}
             onBlur={handleNotionDatabaseIdChange}
             style={{ width: 315 }}
+            placeholder={t('settings.data.notion.database_id_placeholder')}
           />
         </HStack>
       </SettingRow>
@@ -86,6 +102,7 @@ const NotionSettings: FC = () => {
             onChange={handleNotionTokenChange}
             onBlur={handleNotionTokenChange}
             style={{ width: 250 }}
+            placeholder={t('settings.data.notion.api_key_placeholder')}
           />
           <Button onClick={handleNotionConnectionCheck} style={{ width: 60 }}>
             {t('settings.data.notion.check.button')}

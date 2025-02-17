@@ -560,7 +560,9 @@
         },
         "data.title": "Каталог данных",
         "notion.api_key": "Ключ API Notion",
+        "notion.api_key_placeholder": "Введите ключ API Notion",
         "notion.database_id": "ID базы данных Notion",
+        "notion.database_id_placeholder": "Введите ID базы данных Notion",
         "notion.title": "Настройки Notion",
         "notion.check": {
           "button": "Проверить",
