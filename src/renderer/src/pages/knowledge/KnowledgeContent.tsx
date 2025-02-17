@@ -217,7 +217,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
           style={{ marginTop: 10, background: 'transparent' }}>
           <p className="ant-upload-text">{t('knowledge.drag_file')}</p>
           <p className="ant-upload-hint">
-            {t('knowledge.file_hint', { file_types: fileTypes.slice(0, 6).join(', ').replaceAll('.', '') })}
+            {t('knowledge.file_hint', { file_types: 'TXT, MD, HTML, PDF, DOCX, PPTX, XLSX, EPUB...' })}
           </p>
         </Dragger>
       </FileSection>
