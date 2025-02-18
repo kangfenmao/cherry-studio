@@ -33,6 +33,7 @@ const MessageThought: FC<Props> = ({ message }) => {
 
   const thinkingTime = message.metrics?.time_thinking_millsec || 0
   const thinkingTimeSeconds = (thinkingTime / 1000).toFixed(1)
+  const isPaused = message.status === 'paused'
 
   return (
     <CollapseContainer
@@ -48,7 +49,7 @@ const MessageThought: FC<Props> = ({ message }) => {
               <TinkingText>
                 {isThinking ? t('chat.thinking') : t('chat.deeply_thought', { secounds: thinkingTimeSeconds })}
               </TinkingText>
-              {isThinking && <BarLoader color="#9254de" />}
+              {isThinking && !isPaused && <BarLoader color="#9254de" />}
             </MessageTitleLabel>
           ),
           children: (
