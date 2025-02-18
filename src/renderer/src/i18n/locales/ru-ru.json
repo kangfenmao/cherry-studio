@@ -52,6 +52,7 @@
       "settings.reasoning_effort.high": "Длинная",
       "settings.reasoning_effort.low": "Короткая",
       "settings.reasoning_effort.medium": "Средняя",
+      "settings.reasoning_effort.off": "Выключено",
       "settings.reasoning_effort.tip": "Эта настройка поддерживается только моделями с рассуждением"
     },
     "auth": {

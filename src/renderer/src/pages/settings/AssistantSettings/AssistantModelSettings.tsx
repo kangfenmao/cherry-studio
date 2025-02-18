@@ -23,7 +23,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [contextCount, setContextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
-  const [reasoningEffort, setReasoningEffort] = useState(assistant?.settings?.reasoning_effort ?? 'medium')
+  const [reasoningEffort, setReasoningEffort] = useState(assistant?.settings?.reasoning_effort)
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
   const [defaultModel, setDefaultModel] = useState(assistant?.defaultModel)
   const [topP, setTopP] = useState(assistant?.settings?.topP ?? 1)
@@ -391,6 +391,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
           <Radio.Button value="low">{t('assistants.settings.reasoning_effort.low')}</Radio.Button>
           <Radio.Button value="medium">{t('assistants.settings.reasoning_effort.medium')}</Radio.Button>
           <Radio.Button value="high">{t('assistants.settings.reasoning_effort.high')}</Radio.Button>
+          <Radio.Button value={undefined}>{t('assistants.settings.reasoning_effort.off')}</Radio.Button>
         </Radio.Group>
       </SettingRow>
       <Divider style={{ margin: '10px 0' }} />

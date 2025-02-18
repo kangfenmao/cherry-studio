@@ -51,6 +51,7 @@
       "settings.reasoning_effort.high": "長",
       "settings.reasoning_effort.low": "短",
       "settings.reasoning_effort.medium": "中",
+      "settings.reasoning_effort.off": "關",
       "settings.reasoning_effort.tip": "該設置僅支持推理模型",
       "title": "助手"
     },
