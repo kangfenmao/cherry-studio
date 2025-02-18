@@ -1,11 +1,12 @@
+import { useSettings } from '@renderer/hooks/useSettings'
 import { Message } from '@renderer/types'
 import { Collapse } from 'antd'
-import { FC, useEffect, useState, useMemo } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import BarLoader from 'react-spinners/BarLoader'
 import styled from 'styled-components'
+
 import Markdown from '../Markdown/Markdown'
-import { useSettings } from '@renderer/hooks/useSettings'
 
 interface Props {
   message: Message
@@ -36,6 +37,7 @@ const MessageThought: FC<Props> = ({ message }) => {
   return (
     <CollapseContainer
       activeKey={activeKey}
+      size="small"
       onChange={() => setActiveKey((key) => (key ? '' : 'thought'))}
       className="message-thought-container"
       items={[
