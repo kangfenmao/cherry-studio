@@ -42,7 +42,7 @@ interface Props {
 
 const SettingsTab: FC<Props> = (props) => {
   const { assistant, updateAssistantSettings, updateAssistant } = useAssistant(props.assistant.id)
-  const { messageStyle, codeStyle, fontSize, language, gridColumns } = useSettings()
+  const { messageStyle, codeStyle, fontSize, language } = useSettings()
 
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setContextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
@@ -69,8 +69,7 @@ const SettingsTab: FC<Props> = (props) => {
     mathEngine,
     autoTranslateWithSpace,
     pasteLongTextThreshold,
-    multiModelMessageStyle,
-    gridPopoverTrigger
+    multiModelMessageStyle
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {

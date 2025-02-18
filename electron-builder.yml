@@ -80,11 +80,9 @@ afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    增加服务商 LM Studio、魔搭、Perplexity、无问芯穹、DMXAPI
-    提及功能支持上下按键循环选择模型
-    小程序增加小艺
-    增加Notion连接检测功能
-    编辑模型弹窗搜索模型时，同时搜索模型的名字和ID
-    编辑模型弹窗增加推理模型筛选按钮
-    修复思考模型思考时间显示错误
-    修复部分模型翻译出错
+    消息分组支持网格模式
+    知识库支持多选
+    支持库增加 DRAFTS, EPUB
+    知识库支持调节匹配度阈值
+    添加 NotebookLM, Coze 小程序
+    增加话题提示词
