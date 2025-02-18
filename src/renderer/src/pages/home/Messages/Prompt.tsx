@@ -1,3 +1,4 @@
+import { useTheme } from '@renderer/context/ThemeProvider'
 import AssistantSettingsPopup from '@renderer/pages/settings/AssistantSettings'
 import { Assistant, Topic } from '@renderer/types'
 import { FC } from 'react'
@@ -11,26 +12,30 @@ interface Props {
 
 const Prompt: FC<Props> = ({ assistant, topic }) => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const prompt = assistant.prompt || t('chat.default.description')
   const topicPrompt = topic?.prompt || ''
+  const isDark = theme === 'dark'
+
   if (!prompt && !topicPrompt) {
     return null
   }
+
   return (
-    <Container className="system-prompt" onClick={() => AssistantSettingsPopup.show({ assistant })}>
+    <Container className="system-prompt" onClick={() => AssistantSettingsPopup.show({ assistant })} $isDark={isDark}>
       <Text>{prompt}</Text>
     </Container>
   )
 }
 
-const Container = styled.div`
+const Container = styled.div<{ $isDark: boolean }>`
   padding: 10px 20px;
-  background-color: var(--color-background-soft);
   margin: 4px 20px 0 20px;
   border-radius: 6px;
   cursor: pointer;
   border: 0.5px solid var(--color-border);
+  background-color: ${({ $isDark }) => ($isDark ? 'var(--color-background-soft)' : 'transparent')};
 `
 
 const Text = styled.div`
