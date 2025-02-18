@@ -25,7 +25,7 @@ type FieldType = {
   id: string
   name: string
   prompt: string
-  knowledge_base_id: string[]
+  knowledge_base_ids: string[]
 }
 
 const PopupContainer: React.FC<Props> = ({ resolve }) => {
@@ -57,9 +57,9 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
     const _agent: Agent = {
       id: uuid(),
       name: values.name,
-      knowledge_bases: values.knowledge_base_id
-        .map((id) => knowledgeState.bases.find((t) => t.id === id))
-        .filter((base): base is KnowledgeBase => base !== undefined),
+      knowledge_bases: values.knowledge_base_ids
+        ?.map((id) => knowledgeState.bases.find((t) => t.id === id))
+        ?.filter((base): base is KnowledgeBase => base !== undefined),
       emoji: _emoji,
       prompt: values.prompt,
       defaultModel: getDefaultModel(),
@@ -156,7 +156,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
           />
         </div>
         {showKnowledgeIcon && (
-          <Form.Item name="knowledge_base_id" label={t('agents.add.knowledge_base')} rules={[{ required: false }]}>
+          <Form.Item name="knowledge_base_ids" label={t('agents.add.knowledge_base')} rules={[{ required: false }]}>
             <Select
               mode="multiple"
               allowClear
