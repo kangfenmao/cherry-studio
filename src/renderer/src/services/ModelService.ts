@@ -20,6 +20,11 @@ export const hasModel = (m?: Model) => {
 export function getModelName(model?: Model) {
   const provider = store.getState().llm.providers.find((p) => p.id === model?.provider)
   const modelName = model?.name || model?.id || ''
-  const providerName = provider?.isSystem ? t(`provider.${provider.id}`) : provider?.name
-  return `${modelName} | ${providerName}`
+
+  if (provider) {
+    const providerName = provider?.isSystem ? t(`provider.${provider.id}`) : provider?.name
+    return `${modelName} | ${providerName}`
+  }
+
+  return modelName
 }
