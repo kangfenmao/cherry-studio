@@ -202,7 +202,7 @@ const MessageWrapper = styled(Scrollbar)<MessageWrapperProps>`
       return props.$selected ? 'block' : 'none'
     }
     if (props.$layout === 'horizontal') {
-      return 'inline-flex'
+      return 'inline-block'
     }
     return 'block'
   }};
