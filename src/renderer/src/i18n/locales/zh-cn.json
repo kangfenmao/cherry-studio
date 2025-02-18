@@ -74,6 +74,8 @@
       "add.assistant.title": "添加助手",
       "artifacts.button.download": "下载",
       "artifacts.button.preview": "预览",
+      "artifacts.button.openExternal": "外部浏览器打开",
+      "artifacts.preview.openExternal.error.content": "外部浏览器打开出错",
       "assistant.search.placeholder": "搜索",
       "deeply_thought": "已深度思考（用时 {{secounds}} 秒）",
       "default.description": "你好，我是默认助手。你可以立刻开始跟我聊天。",

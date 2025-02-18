@@ -140,7 +140,9 @@
       "translate": "翻譯",
       "topics.prompt": "話題提示詞",
       "topics.prompt.tips": "話題提示詞：針對目前話題提供額外的補充提示詞",
-      "topics.prompt.edit.title": "編輯話題提示詞"
+      "topics.prompt.edit.title": "編輯話題提示詞",
+      "artifacts.button.openExternal": "外部瀏覽器打開",
+      "artifacts.preview.openExternal.error.content": "外部瀏覽器打開出錯"
     },
     "common": {
       "add": "添加",
