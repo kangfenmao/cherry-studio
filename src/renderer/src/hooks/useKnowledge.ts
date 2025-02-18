@@ -198,6 +198,23 @@ export const useKnowledge = (baseId: string) => {
     return base?.items.filter((item) => item.type === type && item.processingStatus !== undefined) || []
   }
 
+  // 获取目录处理进度
+  const getDirectoryProcessingPercent = (itemId: string) => {
+    const [percent, setPercent] = useState<number>(0)
+
+    useEffect(() => {
+      const cleanup = window.electron.ipcRenderer.on(itemId, (_, progressingPercent: number) => {
+        setPercent(progressingPercent)
+      })
+
+      return () => {
+        cleanup()
+      }
+    }, [itemId])
+
+    return percent
+  }
+
   // 清除已完成的项目
   const clearCompleted = () => {
     dispatch(clearCompletedProcessing({ baseId }))
@@ -280,6 +297,7 @@ export const useKnowledge = (baseId: string) => {
     refreshItem,
     getProcessingStatus,
     getProcessingItemsByType,
+    getDirectoryProcessingPercent,
     clearCompleted,
     clearAll,
     removeItem,

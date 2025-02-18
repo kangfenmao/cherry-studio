@@ -15,6 +15,8 @@ import { FileType, KnowledgeBaseParams, KnowledgeItem } from '@types'
 import { app } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 
+import { windowService } from './WindowService'
+
 class KnowledgeService {
   private storageDir = path.join(app.getPath('userData'), 'Data', 'KnowledgeBase')
 
@@ -83,10 +85,23 @@ class KnowledgeService {
   ): Promise<LoaderReturn> => {
     const ragApplication = await this.getRagApplication(base)
 
+    const sendDirectoryProcessingPercent = (totalFiles: number, processedFiles: number) => {
+      const mainWindow = windowService.getMainWindow()
+      mainWindow?.webContents.send(base.id, (processedFiles / totalFiles) * 100)
+    }
+
     if (item.type === 'directory') {
       const directory = item.content as string
       const files = getAllFiles(directory)
-      const loaderPromises = files.map((file) => addFileLoader(ragApplication, file, base, forceReload))
+      const totalFiles = files.length
+      let processedFiles = 0
+      const loaderPromises = files.map(async (file) => {
+        const result = await addFileLoader(ragApplication, file, base, forceReload)
+        processedFiles++
+
+        sendDirectoryProcessingPercent(totalFiles, processedFiles)
+        return result
+      })
       const loaderResults = await Promise.all(loaderPromises)
       const uniqueIds = loaderResults.map((result) => result.uniqueId)
       return {
