@@ -61,6 +61,20 @@ Cherry Studio 是一款支持多个大语言模型（LLM）服务商的桌面客
    - 📝 完整的 Markdown 渲染
    - 🤲 便捷的内容分享功能
 
+# 📝 待辦事項
+
+- [x] 快捷彈窗 (讀取剪貼簿、快速提問、解釋、翻譯、總結）
+- [x] 多模型回答對比
+- [x] 支援使用服務供應商提供的 SSO 進行登入
+- [ ] 全部模型支援連網（開發中...）
+- [ ] 推出第一個正式版
+- [ ] 插件功能（JavaScript）
+- [ ] 瀏覽器插件（劃詞翻譯、總結、新增至知識庫）
+- [ ] iOS & Android 客戶端
+- [ ] AI 筆記
+- [ ] 語音輸入輸出（AI 通話）
+- [ ] 資料備份支援自訂備份內容
+
 # 🖥️ 开发
 
 ## IDE 设置
@@ -118,7 +132,8 @@ $ yarn build:linux
 感谢您的支持和贡献！
 
 ## 相关项目
-* [one-api](https://github.com/songquanpeng/one-api):LLM API管理及分发系统，支持OpenAI、Azure、Anthropic等主流模型，统一API接口，可用于密钥管理与二次分发。
+
+- [one-api](https://github.com/songquanpeng/one-api):LLM API管理及分发系统，支持OpenAI、Azure、Anthropic等主流模型，统一API接口，可用于密钥管理与二次分发。
 
 # 🚀 贡献者
 
