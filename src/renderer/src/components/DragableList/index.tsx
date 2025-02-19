@@ -51,7 +51,7 @@ const DragableList: FC<Props<any>> = ({
               const id = item.id || item
               return (
                 <Draggable key={`draggable_${id}_${index}`} draggableId={id} index={index}>
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
@@ -59,7 +59,7 @@ const DragableList: FC<Props<any>> = ({
                       style={{
                         ...listStyle,
                         ...provided.draggableProps.style,
-                        marginBottom: index === list.length - 1 && !snapshot.isDragging ? 0 : 8
+                        marginBottom: 8
                       }}>
                       {children(item, index)}
                     </div>

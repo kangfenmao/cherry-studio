@@ -153,7 +153,7 @@ const Assistants: FC<Props> = ({
         }}
       </DragableList>
       {!dragging && (
-        <AssistantItem onClick={onCreateAssistant} style={{ marginTop: 5 }}>
+        <AssistantItem onClick={onCreateAssistant}>
           <AssistantName>
             <PlusOutlined style={{ color: 'var(--color-text-2)', marginRight: 4 }} />
             {t('chat.add.assistant.title')}
