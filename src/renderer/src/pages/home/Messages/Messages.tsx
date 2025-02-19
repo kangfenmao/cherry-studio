@@ -166,7 +166,8 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         setMessages([])
         setDisplayMessages([])
         const defaultTopic = getDefaultTopic(assistant.id)
-        updateTopic({ ...topic, name: defaultTopic.name, messages: [] })
+        const _topic = getTopic(assistant, topic.id)
+        _topic && updateTopic({ ..._topic, name: defaultTopic.name, messages: [] })
         TopicManager.clearTopicMessages(topic.id)
       }),
       EventEmitter.on(EVENT_NAMES.EXPORT_TOPIC_IMAGE, async () => {
