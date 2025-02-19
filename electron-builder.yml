@@ -83,7 +83,8 @@ releaseInfo:
     消息分组支持网格模式
     知识库支持多选
     知识库添加目录支持显示进度
-    知识库增加 DRAFTS, EPUB
+    知识库支持 DRAFTS, EPUB、代码等
     知识库支持调节匹配度阈值
     添加 NotebookLM, Coze 小程序
     增加话题提示词
+    OpenRouter 支持 Web 搜索
