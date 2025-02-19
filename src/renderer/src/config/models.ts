@@ -1671,10 +1671,15 @@ export function isWebSearchModel(model: Model): boolean {
   if (provider.id === 'zhipu') {
     return model?.id?.startsWith('glm-4-')
   }
+
   if (provider.id === 'dashscope') {
     const models = ['qwen-turbo', 'qwen-max', 'qwen-plus']
     // matches id like qwen-max-0919, qwen-max-latest
     return models.some((i) => model.id.startsWith(i))
+  }
+
+  if (provider.id === 'openrouter') {
+    return true
   }
 
   return false
@@ -1688,6 +1693,7 @@ export function getOpenAIWebSearchParams(assistant: Assistant, model: Model): Re
       if (model.provider === 'hunyuan') {
         return { enable_enhancement: true }
       }
+
       if (model.provider === 'dashscope') {
         return {
           enable_search: true,
@@ -1696,6 +1702,13 @@ export function getOpenAIWebSearchParams(assistant: Assistant, model: Model): Re
           }
         }
       }
+
+      if (model.provider === 'openrouter') {
+        return {
+          plugins: [{ id: 'web' }]
+        }
+      }
+
       return {
         tools: webSearchTools
       }
