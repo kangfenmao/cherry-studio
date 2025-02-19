@@ -64,6 +64,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
   if (!base) {
     return null
   }
+
   const progressingPercent = getDirectoryProcessingPercent(base?.id)
 
   const handleAddFile = () => {
@@ -115,7 +116,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       inputPlaceholder: t('knowledge.url_placeholder'),
       inputProps: {
         rows: 10,
-        onPressEnter: () => { }
+        onPressEnter: () => {}
       }
     })
 

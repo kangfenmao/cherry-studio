@@ -65,6 +65,7 @@ const KnowledgePage: FC = () => {
               title: t('knowledge.delete_confirm'),
               centered: true,
               onOk: () => {
+                setSelectedBase(undefined)
                 deleteKnowledgeBase(base.id)
               }
             })

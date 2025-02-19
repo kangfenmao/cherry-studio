@@ -199,10 +199,14 @@ export const useKnowledge = (baseId: string) => {
   }
 
   // 获取目录处理进度
-  const getDirectoryProcessingPercent = (itemId: string) => {
+  const getDirectoryProcessingPercent = (itemId?: string) => {
     const [percent, setPercent] = useState<number>(0)
 
     useEffect(() => {
+      if (!itemId) {
+        return
+      }
+
       const cleanup = window.electron.ipcRenderer.on(itemId, (_, progressingPercent: number) => {
         setPercent(progressingPercent)
       })
