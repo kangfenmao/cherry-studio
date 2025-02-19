@@ -1074,6 +1074,14 @@ const migrateConfig = {
     state.settings.gridColumns = 2
     state.settings.gridPopoverTrigger = 'hover'
     return state
+  },
+  '70': (state: RootState) => {
+    state.llm.providers.forEach((provider) => {
+      if (provider.id === 'dmxapi') {
+        provider.apiHost = 'https://www.dmxapi.cn'
+      }
+    })
+    return state
   }
 }
 
