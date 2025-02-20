@@ -1095,6 +1095,8 @@ const migrateConfig = {
       })
     }
 
+    state.settings.thoughtAutoCollapse = true
+
     return state
   }
 }
