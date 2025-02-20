@@ -139,7 +139,6 @@
       "topics.pinned": "トピックを固定",
       "topics.title": "トピック",
       "topics.unpinned": "固定解除",
-      "topics.delete.title": "このトピックを削除してもよろしいですか？この操作は元に戻せません",
       "topics.delete.shortcut": "{{key}}キーを押しながらで直接削除",
       "translate": "翻訳",
       "topics.prompt": "トピック提示語",
