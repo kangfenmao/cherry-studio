@@ -1095,8 +1095,6 @@ const migrateConfig = {
       })
     }
 
-    state.settings.gridColumns = 2
-    state.settings.gridPopoverTrigger = 'hover'
     return state
   }
 }
