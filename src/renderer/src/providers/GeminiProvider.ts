@@ -16,6 +16,7 @@ import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
+import { addAbortController, removeAbortController } from '@renderer/store/abortController'
 import { Assistant, FileType, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
 import axios from 'axios'
@@ -24,7 +25,6 @@ import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
-
 export default class GeminiProvider extends BaseProvider {
   private sdk: GoogleGenerativeAI
   private requestOptions: RequestOptions
@@ -204,7 +204,19 @@ export default class GeminiProvider extends BaseProvider {
       return
     }
 
-    const userMessagesStream = await chat.sendMessageStream(messageContents.parts)
+    const abortController = new AbortController()
+    const { signal } = abortController
+    // 获取最后一条用户消息的 ID 作为 askId
+    const lastUserMessage = userMessages.findLast((m) => m.role === 'user')
+    if (lastUserMessage?.id) {
+      addAbortController(lastUserMessage.id, () => abortController.abort())
+    }
+
+    const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal }).finally(() => {
+      if (lastUserMessage?.id) {
+        removeAbortController(lastUserMessage.id)
+      }
+    })
     let time_first_token_millsec = 0
 
     for await (const chunk of userMessagesStream.stream) {

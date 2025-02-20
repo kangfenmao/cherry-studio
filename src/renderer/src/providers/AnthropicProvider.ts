@@ -6,6 +6,7 @@ import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
+import { addAbortController, removeAbortController } from '@renderer/store/abortController'
 import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
 import { first, flatten, sum, takeRight } from 'lodash'
@@ -13,7 +14,6 @@ import OpenAI from 'openai'
 
 import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
-
 export default class AnthropicProvider extends BaseProvider {
   private sdk: Anthropic
 
@@ -107,10 +107,16 @@ export default class AnthropicProvider extends BaseProvider {
         }
       })
     }
-
+    const abortController = new AbortController()
+    const { signal } = abortController
+    // 获取最后一条用户消息的 ID 作为 askId
+    const lastUserMessage = _messages.findLast((m) => m.role === 'user')
+    if (lastUserMessage?.id) {
+      addAbortController(lastUserMessage.id, () => abortController.abort())
+    }
     return new Promise<void>((resolve, reject) => {
       const stream = this.sdk.messages
-        .stream({ ...body, stream: true })
+        .stream({ ...body, stream: true }, { signal })
         .on('text', (text) => {
           if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) {
             stream.controller.abort()
@@ -146,6 +152,10 @@ export default class AnthropicProvider extends BaseProvider {
           resolve()
         })
         .on('error', (error) => reject(error))
+    }).finally(() => {
+      if (lastUserMessage?.id) {
+        removeAbortController(lastUserMessage.id)
+      }
     })
   }
 

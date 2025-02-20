@@ -4,6 +4,7 @@ import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
+import { addAbortController, removeAbortController } from '@renderer/store/abortController'
 import { Assistant, FileTypes, GenerateImageParams, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
 import { takeRight } from 'lodash'
@@ -213,21 +214,40 @@ export default class OpenAIProvider extends BaseProvider {
     let time_first_token_millsec = 0
     let time_first_content_millsec = 0
     const start_time_millsec = new Date().getTime()
+    const abortController = new AbortController()
+    const { signal } = abortController
 
-    // @ts-ignore key is not typed
-    const stream = await this.sdk.chat.completions.create({
-      model: model.id,
-      messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
-      temperature: this.getTemperature(assistant, model),
-      top_p: this.getTopP(assistant, model),
-      max_tokens: maxTokens,
-      keep_alive: this.keepAliveTime,
-      stream: isSupportStreamOutput(),
-      ...this.getReasoningEffort(assistant, model),
-      ...getOpenAIWebSearchParams(assistant, model),
-      ...this.getProviderSpecificParameters(assistant, model),
-      ...this.getCustomParameters(assistant)
-    })
+    // 获取最后一条用户消息的 ID 作为 askId
+    const lastUserMessage = _messages.findLast((m) => m.role === 'user')
+    if (lastUserMessage?.id) {
+      addAbortController(lastUserMessage.id, () => abortController.abort())
+    }
+
+    const stream = await this.sdk.chat.completions
+      // @ts-ignore key is not typed
+      .create(
+        {
+          model: model.id,
+          messages: [systemMessage, ...userMessages].filter(Boolean) as ChatCompletionMessageParam[],
+          temperature: this.getTemperature(assistant, model),
+          top_p: this.getTopP(assistant, model),
+          max_tokens: maxTokens,
+          keep_alive: this.keepAliveTime,
+          stream: isSupportStreamOutput(),
+          ...this.getReasoningEffort(assistant, model),
+          ...getOpenAIWebSearchParams(assistant, model),
+          ...this.getProviderSpecificParameters(assistant, model),
+          ...this.getCustomParameters(assistant)
+        },
+        {
+          signal
+        }
+      )
+      .finally(() => {
+        if (lastUserMessage?.id) {
+          removeAbortController(lastUserMessage.id)
+        }
+      })
 
     if (!isSupportStreamOutput()) {
       const time_completion_millsec = new Date().getTime() - start_time_millsec
