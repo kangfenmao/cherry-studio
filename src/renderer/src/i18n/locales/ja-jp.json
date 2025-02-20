@@ -768,7 +768,8 @@
         "toggle_show_topics": "トピックの表示を切り替え",
         "zoom_in": "ズームイン",
         "zoom_out": "ズームアウト",
-        "zoom_reset": "ズームをリセット"
+        "zoom_reset": "ズームをリセット",
+        "show_settings": "設定を開く"
       },
       "theme.auto": "自動",
       "theme.dark": "ダークテーマ",

@@ -757,7 +757,8 @@
         "toggle_show_topics": "Toggle Topics",
         "zoom_in": "Zoom In",
         "zoom_out": "Zoom Out",
-        "zoom_reset": "Reset Zoom"
+        "zoom_reset": "Reset Zoom",
+        "show_settings": "Open Settings"
       },
       "theme.auto": "Auto",
       "theme.dark": "Dark",

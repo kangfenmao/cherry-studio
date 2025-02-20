@@ -748,7 +748,8 @@
         "toggle_show_topics": "切換話題顯示",
         "zoom_in": "放大界面",
         "zoom_out": "縮小界面",
-        "zoom_reset": "重置縮放"
+        "zoom_reset": "重置縮放",
+        "show_settings": "打開設定"
       },
       "theme.auto": "自動",
       "theme.dark": "深色主題",
