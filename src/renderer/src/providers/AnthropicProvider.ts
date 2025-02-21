@@ -6,7 +6,6 @@ import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
-import { addAbortController, removeAbortController } from '@renderer/store/abortController'
 import { Assistant, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
 import { first, flatten, sum, takeRight } from 'lodash'
@@ -107,13 +106,12 @@ export default class AnthropicProvider extends BaseProvider {
         }
       })
     }
-    const abortController = new AbortController()
-    const { signal } = abortController
-    // 获取最后一条用户消息的 ID 作为 askId
+
     const lastUserMessage = _messages.findLast((m) => m.role === 'user')
-    if (lastUserMessage?.id) {
-      addAbortController(lastUserMessage.id, () => abortController.abort())
-    }
+
+    const { abortController, cleanup } = this.createAbortController(lastUserMessage?.id)
+    const { signal } = abortController
+
     return new Promise<void>((resolve, reject) => {
       const stream = this.sdk.messages
         .stream({ ...body, stream: true }, { signal })
@@ -152,11 +150,7 @@ export default class AnthropicProvider extends BaseProvider {
           resolve()
         })
         .on('error', (error) => reject(error))
-    }).finally(() => {
-      if (lastUserMessage?.id) {
-        removeAbortController(lastUserMessage.id)
-      }
-    })
+    }).finally(cleanup)
   }
 
   public async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {

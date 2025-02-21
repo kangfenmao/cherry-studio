@@ -1,8 +1,8 @@
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
-import { addAbortController } from '@renderer/store/abortController'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
+import { addAbortController } from '@renderer/utils/abortController'
 import { formatMessageError } from '@renderer/utils/error'
 import { isEmpty } from 'lodash'
 

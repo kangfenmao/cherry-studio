@@ -16,7 +16,6 @@ import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages } from '@renderer/services/MessagesService'
-import { addAbortController, removeAbortController } from '@renderer/store/abortController'
 import { Assistant, FileType, FileTypes, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharacters } from '@renderer/utils'
 import axios from 'axios'
@@ -204,19 +203,11 @@ export default class GeminiProvider extends BaseProvider {
       return
     }
 
-    const abortController = new AbortController()
-    const { signal } = abortController
-    // 获取最后一条用户消息的 ID 作为 askId
     const lastUserMessage = userMessages.findLast((m) => m.role === 'user')
-    if (lastUserMessage?.id) {
-      addAbortController(lastUserMessage.id, () => abortController.abort())
-    }
+    const { abortController, cleanup } = this.createAbortController(lastUserMessage?.id)
+    const { signal } = abortController
 
-    const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal }).finally(() => {
-      if (lastUserMessage?.id) {
-        removeAbortController(lastUserMessage.id)
-      }
-    })
+    const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal }).finally(cleanup)
     let time_first_token_millsec = 0
 
     for await (const chunk of userMessagesStream.stream) {
