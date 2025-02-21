@@ -162,10 +162,19 @@ const Messages: FC<Props> = ({ assistant, topic, setActiveTopic }) => {
         setTimeout(() => EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME), 100)
       }),
       EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic),
-      EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, () => {
+      EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, (data: Topic) => {
+        const defaultTopic = getDefaultTopic(assistant.id)
+
+        // Clear messages of other topics
+        if (data && data.id !== topic.id) {
+          TopicManager.clearTopicMessages(data.id)
+          updateTopic({ ...data, name: defaultTopic.name, messages: [] })
+          return
+        }
+
+        // Clear messages of current topic
         setMessages([])
         setDisplayMessages([])
-        const defaultTopic = getDefaultTopic(assistant.id)
         const _topic = getTopic(assistant, topic.id)
         _topic && updateTopic({ ..._topic, name: defaultTopic.name, messages: [] })
         TopicManager.clearTopicMessages(topic.id)

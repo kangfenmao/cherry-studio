@@ -60,17 +60,17 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
     deleteTimerRef.current = setTimeout(() => setDeletingTopicId(null), 2000)
   }, [])
 
-  const onClearMessages = useCallback(() => {
+  const onClearMessages = useCallback((topic: Topic) => {
     window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
     store.dispatch(setGenerating(false))
-    EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES)
+    EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES, topic)
   }, [])
 
   const handleConfirmDelete = useCallback(
     async (topic: Topic, e: React.MouseEvent) => {
       e.stopPropagation()
       if (assistant.topics.length === 1) {
-        return onClearMessages()
+        return onClearMessages(topic)
       }
       await modelGenerating()
       const index = findIndex(assistant.topics, (t) => t.id === topic.id)
@@ -187,7 +187,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
             window.modal.confirm({
               title: t('chat.input.clear.content'),
               centered: true,
-              onOk: onClearMessages
+              onOk: () => onClearMessages(topic)
             })
           }
         },
