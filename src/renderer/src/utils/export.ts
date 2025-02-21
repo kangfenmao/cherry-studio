@@ -1,6 +1,7 @@
 import { Client } from '@notionhq/client'
 import db from '@renderer/databases'
 import i18n from '@renderer/i18n'
+import { getMessageTitle } from '@renderer/services/MessagesService'
 import store from '@renderer/store'
 import { setExportState } from '@renderer/store/runtime'
 import { Message, Topic } from '@renderer/types'
@@ -34,24 +35,32 @@ export const exportTopicAsMarkdown = async (topic: Topic) => {
   window.api.file.save(fileName, markdown)
 }
 
-export const exportTopicToNotion = async (topic: Topic) => {
+export const exportMessageAsMarkdown = async (message: Message) => {
+  const fileName = getMessageTitle(message) + '.md'
+  const markdown = messageToMarkdown(message)
+  window.api.file.save(fileName, markdown)
+}
+
+export const exportMarkdownToNotion = async (title: string, content: string) => {
   const { isExporting } = store.getState().runtime.export
+
   if (isExporting) {
     window.message.warning({ content: i18n.t('message.warn.notion.exporting'), key: 'notion-exporting' })
     return
   }
-  setExportState({
-    isExporting: true
-  })
+
+  setExportState({ isExporting: true })
+
   const { notionDatabaseID, notionApiKey } = store.getState().settings
+
   if (!notionApiKey || !notionDatabaseID) {
     window.message.error({ content: i18n.t('message.error.notion.no_api_key'), key: 'notion-no-apikey-error' })
     return
   }
+
   try {
     const notion = new Client({ auth: notionApiKey })
-    const markdown = await topicToMarkdown(topic)
-    const requestBody = JSON.stringify({ md: markdown })
+    const requestBody = JSON.stringify({ md: content })
 
     const res = await fetch('https://md2notion.hilars.dev', {
       method: 'POST',
@@ -68,10 +77,10 @@ export const exportTopicToNotion = async (topic: Topic) => {
       parent: { database_id: notionDatabaseID },
       properties: {
         [store.getState().settings.notionPageNameKey || 'Name']: {
-          title: [{ text: { content: topic.name } }]
+          title: [{ text: { content: title } }]
         }
       },
-      children: notionBlocks // 使用转换后的块
+      children: notionBlocks
     })
 
     window.message.success({ content: i18n.t('message.success.notion.export'), key: 'notion-success' })

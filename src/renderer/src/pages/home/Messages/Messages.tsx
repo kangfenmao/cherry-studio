@@ -347,7 +347,6 @@ const LoaderContainer = styled.div<LoaderProps>`
 const ScrollContainer = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  padding: 0 20px;
 `
 
 interface ContainerProps {

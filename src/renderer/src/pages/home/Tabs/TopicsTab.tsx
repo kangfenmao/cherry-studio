@@ -1,7 +1,6 @@
 import {
   ClearOutlined,
   CloseOutlined,
-  CopyOutlined,
   DeleteOutlined,
   EditOutlined,
   FolderOutlined,
@@ -10,6 +9,7 @@ import {
   UploadOutlined
 } from '@ant-design/icons'
 import DragableList from '@renderer/components/DragableList'
+import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { isMac } from '@renderer/config/constant'
@@ -23,7 +23,7 @@ import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
 import { copyTopicAsMarkdown } from '@renderer/utils/copy'
-import { exportTopicAsMarkdown, exportTopicToNotion, topicToMarkdown } from '@renderer/utils/export'
+import { exportMarkdownToNotion, exportTopicAsMarkdown, topicToMarkdown } from '@renderer/utils/export'
 import { Dropdown, MenuProps, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { findIndex } from 'lodash'
@@ -194,7 +194,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
         {
           label: t('chat.topics.copy.title'),
           key: 'copy',
-          icon: <CopyOutlined />,
+          icon: <CopyIcon />,
           children: [
             {
               label: t('chat.topics.copy.image'),
@@ -235,7 +235,10 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
             {
               label: t('chat.topics.export.notion'),
               key: 'notion',
-              onClick: () => exportTopicToNotion(topic)
+              onClick: async () => {
+                const markdown = await topicToMarkdown(topic)
+                exportMarkdownToNotion(topic.name, markdown)
+              }
             }
           ]
         }
