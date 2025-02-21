@@ -190,13 +190,11 @@ const TranslatePage: FC = () => {
         <HistoryContainner $historyDrawerVisible={historyDrawerVisible}>
           <OperationBar>
             <span style={{ fontSize: 16 }}>{t('translate.history.title')}</span>
-            {translateHistory?.length && (
+            {!isEmpty(translateHistory) && (
               <Popconfirm
                 title={t('translate.history.clear')}
                 description={t('translate.history.clear_description')}
-                onConfirm={clearHistory}
-                okText="Yes"
-                cancelText="No">
+                onConfirm={clearHistory}>
                 <Button type="text" size="small" danger icon={<DeleteOutlined />}>
                   {t('translate.history.clear')}
                 </Button>
