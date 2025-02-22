@@ -37,7 +37,7 @@ const AssistantPromptSettings: React.FC<Props> = ({ assistant, updateAssistant, 
 
   const handleEmojiDelete = () => {
     setEmoji('')
-    const _assistant = { ...assistant, name: name.trim(), prompt, emoji: undefined }
+    const _assistant = { ...assistant, name: name.trim(), prompt, emoji: '' }
     updateAssistant(_assistant)
   }
 
