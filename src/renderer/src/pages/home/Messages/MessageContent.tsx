@@ -188,8 +188,6 @@ const CitationsTitle = styled.div`
   color: var(--color-text-1);
 `
 
-const CitationItem = styled.li``
-
 const CitationLink = styled.a`
   font-size: 14px;
   line-height: 1.6;

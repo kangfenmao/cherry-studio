@@ -2351,13 +2351,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tavily/core@npm:^0.3.1":
+"@tavily/core@npm:0.3.1":
   version: 0.3.1
   resolution: "@tavily/core@npm:0.3.1"
   dependencies:
     axios: "npm:^1.7.7"
-    js-tiktoken: "npm:^1.0.14"
   checksum: 10c0/ddf711848f09c9dfe7f094ffdf4ea1291f7af980a8335a52e5c534a62ed9fbd234b3405e3b7baa598926cdd241425e0a4890badc85f883281c03840145de6d98
+  languageName: node
+  linkType: hard
+
+"@tavily/core@patch:@tavily/core@npm%3A0.3.1#~/.yarn/patches/@tavily-core-npm-0.3.1-fe69bf2bea.patch":
+  version: 0.3.1
+  resolution: "@tavily/core@patch:@tavily/core@npm%3A0.3.1#~/.yarn/patches/@tavily-core-npm-0.3.1-fe69bf2bea.patch::version=0.3.1&hash=d1f3ab"
+  dependencies:
+    axios: "npm:^1.7.7"
+  checksum: 10c0/e25a76960491a8a463ae8f38a058b8b48d2d72314aa12d922aea4bf8d2cb1231c5357d1b0f7ed9650c48a756fc68617f0de3e1ff929aaca3fc5319dc250a545c
   languageName: node
   linkType: hard
 
@@ -3011,7 +3019,7 @@ __metadata:
     "@llm-tools/embedjs-openai": "npm:^0.1.28"
     "@notionhq/client": "npm:^2.2.15"
     "@reduxjs/toolkit": "npm:^2.2.5"
-    "@tavily/core": "npm:^0.3.1"
+    "@tavily/core": "patch:@tavily/core@npm%3A0.3.1#~/.yarn/patches/@tavily-core-npm-0.3.1-fe69bf2bea.patch"
     "@types/adm-zip": "npm:^0"
     "@types/fs-extra": "npm:^11"
     "@types/lodash": "npm:^4.17.5"
@@ -8061,15 +8069,6 @@ __metadata:
   dependencies:
     base64-js: "npm:^1.5.1"
   checksum: 10c0/9c3b7ff9b675334eb939f97fb83da31bb499b2a34cc7da42ee7c1a72f4286b40d2c78c7dca375eece5cc20c35a00f2b6b343387fa14f2472e615cf09b755cfdd
-  languageName: node
-  linkType: hard
-
-"js-tiktoken@npm:^1.0.14":
-  version: 1.0.19
-  resolution: "js-tiktoken@npm:1.0.19"
-  dependencies:
-    base64-js: "npm:^1.5.1"
-  checksum: 10c0/528779571e4f72ba2f8d07c3840214401225652481a5c1619a84b634da635dc07fb1db09fd6b3580a5c2f926405dea57822c56684e0fe21b89bef2af3ab19427
   languageName: node
   linkType: hard
 
