@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons'
 import { PicCenterOutlined } from '@ant-design/icons'
 import TranslateButton from '@renderer/components/TranslateButton'
-import { isVisionModel, isWebSearchModel } from '@renderer/config/models'
+import { isVisionModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
@@ -21,6 +21,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import FileManager from '@renderer/services/FileManager'
 import { estimateTextTokens as estimateTxtTokens } from '@renderer/services/TokenService'
 import { translateText } from '@renderer/services/TranslateService'
+import WebSearchService from '@renderer/services/WebSearchService'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, KnowledgeBase, Message, Model, Topic } from '@renderer/types'
@@ -545,7 +546,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                 onMentionModel={onMentionModel}
                 ToolbarButton={ToolbarButton}
               />
-              {isWebSearchModel(model) && (
+              {WebSearchService.isWebSearchEnabled() && (
                 <Tooltip placement="top" title={t('chat.input.web_search')} arrow>
                   <ToolbarButton
                     type="text"

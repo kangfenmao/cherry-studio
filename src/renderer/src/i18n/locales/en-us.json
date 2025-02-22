@@ -401,7 +401,9 @@
       "upgrade.success.button": "Restart",
       "upgrade.success.content": "Please restart the application to complete the upgrade",
       "upgrade.success.title": "Upgrade successfully",
-      "warn.notion.exporting": "Exporting to Notion, please do not request export repeatedly!"
+      "warn.notion.exporting": "Exporting to Notion, please do not request export repeatedly!",
+      "searching": "Searching the internet...",
+      "ignore.knowledge.base": "Web search mode is enabled, ignore knowledge base"
     },
     "minapp": {
       "sidebar.add.title": "Add to sidebar",
@@ -799,7 +801,17 @@
       "topic.position.left": "Left",
       "topic.position.right": "Right",
       "topic.show.time": "Show topic time",
-      "tray.title": "Enable System Tray Icon"
+      "tray.title": "Enable System Tray Icon",
+      "websearch": {
+        "title": "Web Search",
+        "get_api_key": "Get API Key",
+        "tavily": {
+          "title": "Tavily",
+          "description": "Tavily is a web search tool that integrates multiple search engines. It supports multiple languages and search engines.",
+          "api_key": "Tavily API Key",
+          "api_key.placeholder": "Enter Tavily API Key"
+        }
+      }
     },
     "translate": {
       "any.language": "Any language",

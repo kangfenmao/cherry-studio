@@ -401,7 +401,9 @@
       "upgrade.success.button": "Перезапустить",
       "upgrade.success.content": "Пожалуйста, перезапустите приложение для завершения обновления",
       "upgrade.success.title": "Обновление успешно",
-      "warn.notion.exporting": "Экспортируется в Notion, пожалуйста, не отправляйте повторные запросы!"
+      "warn.notion.exporting": "Экспортируется в Notion, пожалуйста, не отправляйте повторные запросы!",
+      "searching": "Поиск в Интернете...",
+      "ignore.knowledge.base": "Режим сети включен, игнорировать базу знаний"
     },
     "minapp": {
       "sidebar.add.title": "Добавить в боковую панель",
@@ -785,7 +787,17 @@
       "topic.position.left": "Слева",
       "topic.position.right": "Справа",
       "topic.show.time": "Показывать время топика",
-      "tray.title": "Включить значок системного трея"
+      "tray.title": "Включить значок системного трея",
+      "websearch": {
+        "title": "Поиск в Интернете",
+        "get_api_key": "Получить ключ API",
+        "tavily": {
+          "title": "Tavily",
+          "description": "Tavily — это инструмент поиска в Интернете, интегрирующий несколько поисковых систем. Он поддерживает несколько языков и поисковых систем.",
+          "api_key": "Ключ API Tavily",
+          "api_key.placeholder": "Введите ключ API Tavily"
+        }
+      }
     },
     "translate": {
       "any.language": "Любой язык",
