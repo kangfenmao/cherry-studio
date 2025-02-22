@@ -1110,6 +1110,17 @@ const migrateConfig = {
         state.minapps.enabled.push(monica)
       }
     }
+
+    // remove duplicate lmstudio providers
+    const emptyLmStudioProviderIndex = state.llm.providers.findLastIndex(
+      (provider) => provider.id === 'lmstudio' && provider.models.length === 0
+    )
+
+    if (emptyLmStudioProviderIndex !== -1) {
+      state.llm.providers.splice(emptyLmStudioProviderIndex, 1)
+    }
+
+    return state
   }
 }
 
