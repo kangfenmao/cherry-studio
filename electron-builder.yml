@@ -81,5 +81,4 @@ afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    修复助手 Emoji 选择问题
-    添加Notion导出自动分页功能
+    全部模型支持 Web 搜索
