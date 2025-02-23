@@ -14,6 +14,7 @@ import styled from 'styled-components'
 import Markdown from '../Markdown/Markdown'
 import MessageAttachments from './MessageAttachments'
 import MessageError from './MessageError'
+import MessageSearchResults from './MessageSearchResults'
 import MessageThought from './MessageThought'
 
 interface Props {
@@ -111,6 +112,7 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
           )}
         </Fragment>
       )}
+      <MessageSearchResults message={message} />
       {formattedCitations && (
         <CitationsContainer>
           <CitationsTitle>
@@ -134,7 +136,9 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
             <HStack key={result.url} style={{ alignItems: 'center', gap: 8 }}>
               <span style={{ fontSize: 13, color: 'var(--color-text-2)' }}>{index + 1}.</span>
               <Favicon src={`https://icon.horse/icon/${new URL(result.url).hostname}`} alt={result.title} />
-              <CitationLink>{result.title}</CitationLink>
+              <CitationLink href={result.url} target="_blank" rel="noopener noreferrer">
+                {result.title}
+              </CitationLink>
             </HStack>
           ))}
         </CitationsContainer>

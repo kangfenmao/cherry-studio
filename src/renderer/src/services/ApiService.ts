@@ -5,7 +5,7 @@ import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { addAbortController } from '@renderer/utils/abortController'
 import { formatMessageError } from '@renderer/utils/error'
-import { isEmpty, last } from 'lodash'
+import { findLast, isEmpty } from 'lodash'
 
 import AiProvider from '../providers/AiProvider'
 import {
@@ -51,13 +51,13 @@ export async function fetchChatCompletion({
   try {
     let _messages: Message[] = []
     let isFirstChunk = true
-    const lastMessage = last(messages)
 
     // Search web
     if (WebSearchService.isWebSearchEnabled() && assistant.enableWebSearch && assistant.model) {
       const webSearchParams = getOpenAIWebSearchParams(assistant, assistant.model)
 
       if (isEmpty(webSearchParams)) {
+        const lastMessage = findLast(messages, (m) => m.role === 'user')
         const hasKnowledgeBase = !isEmpty(lastMessage?.knowledgeBaseIds)
         if (lastMessage) {
           if (hasKnowledgeBase) {

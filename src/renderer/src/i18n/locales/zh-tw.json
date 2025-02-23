@@ -101,6 +101,9 @@
       "input.upload": "上傳圖片或文檔",
       "input.upload.document": "上傳文檔（模型不支持圖片）",
       "input.web_search": "開啟網路搜索",
+      "input.web_search.enable": "開啟網路搜索",
+      "input.web_search.enable_content": "需要先在設定中開啟網路搜索",
+      "input.web_search.button.ok": "去設定",
       "message.new.branch": "分支",
       "message.new.branch.created": "新分支已建立",
       "message.new.context": "新上下文",
@@ -403,7 +406,8 @@
       "upgrade.success.title": "升級成功",
       "warn.notion.exporting": "正在導出到Notion，請勿重複請求導出！",
       "searching": "正在網路搜索...",
-      "ignore.knowledge.base": "網路模式開啟，忽略知識庫"
+      "ignore.knowledge.base": "網路模式開啟，忽略知識庫",
+      "info.notion.block_reach_limit": "對話過長，自動分頁導出到Notion"
     },
     "minapp": {
       "sidebar.add.title": "添加到側邊欄",
@@ -594,11 +598,11 @@
         "notion.api_key_placeholder": "請輸入Notion 密鑰",
         "notion.check": {
           "button": "檢查",
-          "empty_api_key": "未配置Api_key",
-          "empty_database_id": "未配置Database_id",
-          "error": "連接異常，請檢查網絡及Api_key和Database_id是否正確",
           "fail": "連接失敗，請檢查網絡及Api_key和Database_id是否正確",
-          "success": "連線成功"
+          "success": "連線成功",
+          "error": "連接異常，請檢查網絡及Api_key和Database_id是否正確",
+          "empty_api_key": "未配置Api_key",
+          "empty_database_id": "未配置Database_id"
         },
         "notion.database_id": "Notion 資料庫 ID",
         "notion.database_id_placeholder": "請輸入Notion 資料庫 ID",
@@ -606,15 +610,6 @@
         "notion.page_name_key": "頁面標題欄位名稱",
         "notion.page_name_key_placeholder": "請輸入頁面標題欄位名稱，預設為 Name",
         "notion.title": "Notion 配置",
-        "notion.help": "Notion 配置文檔",
-        "notion.check": {
-          "button": "檢查",
-          "fail": "連接失敗，請檢查網絡及Api_key和Database_id是否正確",
-          "success": "連線成功",
-          "error": "連接異常，請檢查網絡及Api_key和Database_id是否正確",
-          "empty_api_key": "未配置Api_key",
-          "empty_database_id": "未配置Database_id"
-        },
         "notion.auto_split": "導出對話時自動分頁",
         "notion.auto_split_tip": "當要導出的話題過長時自動分頁導出到Notion",
         "notion.split_size": "自動分頁大小",
