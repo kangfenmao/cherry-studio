@@ -808,7 +808,7 @@
       "tray.title": "启用系统托盘图标",
       "websearch": {
         "title": "网络搜索",
-        "get_api_key": "点击这里获取 API 密钥",
+        "get_api_key": "点击这里获取密钥",
         "tavily": {
           "title": "Tavily",
           "description": "Tavily 是一个集成了多个搜索引擎的网络搜索工具，支持多种语言和多种搜索引擎。",

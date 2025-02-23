@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons'
 import { PicCenterOutlined } from '@ant-design/icons'
 import TranslateButton from '@renderer/components/TranslateButton'
-import { isVisionModel } from '@renderer/config/models'
+import { isVisionModel, isWebSearchModel } from '@renderer/config/models'
 import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
@@ -501,21 +501,29 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
   }
 
   const onEnableWebSearch = () => {
-    if (!WebSearchService.isWebSearchEnabled()) {
-      window.modal.confirm({
-        title: t('chat.input.web_search.enable'),
-        content: t('chat.input.web_search.enable_content'),
-        centered: true,
-        okText: t('chat.input.web_search.button.ok'),
-        onOk: () => {
-          navigate('/settings/web-search')
-        }
-      })
-      return
+    if (!isWebSearchModel(model)) {
+      if (!WebSearchService.isWebSearchEnabled()) {
+        window.modal.confirm({
+          title: t('chat.input.web_search.enable'),
+          content: t('chat.input.web_search.enable_content'),
+          centered: true,
+          okText: t('chat.input.web_search.button.ok'),
+          onOk: () => {
+            navigate('/settings/web-search')
+          }
+        })
+        return
+      }
     }
 
     updateAssistant({ ...assistant, enableWebSearch: !assistant.enableWebSearch })
   }
+
+  useEffect(() => {
+    if (!isWebSearchModel(model) && !WebSearchService.isWebSearchEnabled() && assistant.enableWebSearch) {
+      updateAssistant({ ...assistant, enableWebSearch: false })
+    }
+  }, [assistant, model, updateAssistant])
 
   return (
     <Container onDragOver={handleDragOver} onDrop={handleDrop} className="inputbar">

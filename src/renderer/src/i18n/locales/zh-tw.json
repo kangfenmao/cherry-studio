@@ -799,7 +799,7 @@
       "tray.title": "啟用系統托盤圖標",
       "websearch": {
         "title": "網路搜索",
-        "get_api_key": "點擊這裡獲取 API 密鑰",
+        "get_api_key": "點擊這裡獲取密鑰",
         "tavily": {
           "title": "Tavily",
           "description": "Tavily 是一個集成了多個搜索引擎的網路搜索工具，支持多種語言和多種搜索引擎。",

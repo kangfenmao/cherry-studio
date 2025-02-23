@@ -218,6 +218,7 @@ const Favicon = styled.img`
   width: 16px;
   height: 16px;
   border-radius: 4px;
+  background-color: var(--color-background-mute);
 `
 
 export default React.memo(MessageContent)
