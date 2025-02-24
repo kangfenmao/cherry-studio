@@ -155,7 +155,7 @@ const MessageMenubar: FC<Props> = (props) => {
     resendMessage && onResend()
   }, [message, onEditMessage, onResend, t])
 
-  const onResend = useCallback(async () => {
+  const onResendUserMessage = useCallback(async () => {
     await onEditMessage?.({ ...message, content: message.content })
     onResend && onResend()
   }, [message, onEditMessage, onResend])
@@ -300,7 +300,7 @@ const MessageMenubar: FC<Props> = (props) => {
     <MenusBar className={`menubar ${isLastMessage && 'show'}`}>
       {message.role === 'user' && (
         <Tooltip title={t('common.regenerate')} mouseEnterDelay={0.8}>
-          <ActionButton className="message-action-button" onClick={onResend}>
+          <ActionButton className="message-action-button" onClick={onResendUserMessage}>
             <SyncOutlined />
           </ActionButton>
         </Tooltip>
