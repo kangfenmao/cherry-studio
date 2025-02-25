@@ -25,14 +25,15 @@ class WebSearchService {
 
   public async search(query: string) {
     const searchWithTime = store.getState().websearch.searchWithTime
-    console.log('searchWithTime', searchWithTime)
     let formatted_query = query
+
     if (searchWithTime) {
       formatted_query = `today is ${dayjs().format('YYYY-MM-DD')} \r\n ${query}`
     }
-    console.log('formatted_query', formatted_query)
+
     const provider = this.getWebSearchProvider()
     const tvly = tavily({ apiKey: provider.apiKey })
+
     return await tvly.search(formatted_query, {
       maxResults: 5
     })
