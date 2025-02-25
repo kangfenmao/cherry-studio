@@ -605,10 +605,10 @@
         "notion.api_key_placeholder": "Введите ключ API Notion",
         "notion.check": {
           "button": "Проверить",
-          "empty_api_key": "Не настроен Api_key",
-          "empty_database_id": "Не настроен Database_id",
-          "error": "Аномалия в подключении, пожалуйста, проверьте настройки сети, а также правильность Api_key и Database_id",
-          "fail": "Не удалось подключиться, пожалуйста, проверьте сеть и правильность Api_key и Database_id",
+          "empty_api_key": "Не настроен API key",
+          "empty_database_id": "Не настроен Database ID",
+          "error": "Аномалия в подключении, пожалуйста, проверьте настройки сети, а также правильность API key и Database ID",
+          "fail": "Не удалось подключиться, пожалуйста, проверьте сеть и правильность API key и Database ID",
           "success": "Подключение успешно"
         },
         "notion.database_id": "ID базы данных Notion",

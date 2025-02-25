@@ -605,11 +605,11 @@
         "notion.api_key_placeholder": "请输入Notion 密钥",
         "notion.check": {
           "button": "检查",
-          "fail": "连接失败，请检查网络及Api_key和Database_id是否正确",
+          "fail": "连接失败，请检查网络及 API key 和 Database ID 是否正确",
           "success": "连接成功",
-          "error": "连接异常，请检查网络及Api_key和Database_id是否正确",
-          "empty_api_key": "未配置Api_key",
-          "empty_database_id": "未配置Database_id"
+          "error": "连接异常，请检查网络及 API key 和 Database ID 是否正确",
+          "empty_api_key": "未配置 API key",
+          "empty_database_id": "未配置 Database ID"
         },
         "notion.database_id": "Notion 数据库 ID",
         "notion.database_id_placeholder": "请输入Notion 数据库 ID",

@@ -605,11 +605,11 @@
         "notion.api_key_placeholder": "Enter Notion API Key",
         "notion.check": {
           "button": "Check",
-          "fail": "Connection failed, please check network and Api_key and Database_id",
+          "fail": "Connection failed, please check network and API key and Database ID",
           "success": "Connection successful",
-          "error": "Connection error, please check network configuration and Api_key and Database_id",
-          "empty_api_key": "Api_key is not configured",
-          "empty_database_id": "Database_id is not configured"
+          "error": "Connection error, please check network configuration and API key and Database ID",
+          "empty_api_key": "API key is not configured",
+          "empty_database_id": "Database ID is not configured"
         },
         "notion.database_id": "Notion Database ID",
         "notion.database_id_placeholder": "Enter Notion Database ID",
