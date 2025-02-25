@@ -63,7 +63,7 @@
   --chat-background: #111111;
   --chat-background-user: #28b561;
   --chat-background-assistant: #2c2c2c;
-  --chat-text-user: var(--color-text);
+  --chat-text-user: var(--color-black);
 
   --list-item-border-radius: 16px;
 }
@@ -246,7 +246,7 @@ body,
       color: var(--chat-text-user) !important;
     }
     .message-action-button:hover {
-      background-color: var(--color-text-3);
+      background-color: var(--color-white-soft);
     }
   }
   .group-message-wrapper {
