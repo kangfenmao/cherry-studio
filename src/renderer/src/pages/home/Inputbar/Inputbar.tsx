@@ -27,11 +27,12 @@ import { setGenerating, setSearching } from '@renderer/store/runtime'
 import { Assistant, FileType, KnowledgeBase, Message, Model, Topic } from '@renderer/types'
 import { classNames, delay, getFileExtension, uuid } from '@renderer/utils'
 import { abortCompletion } from '@renderer/utils/abortController'
+import { getFilesFromDropEvent } from '@renderer/utils/input'
 import { documentExts, imageExts, textExts } from '@shared/config/constant'
 import { Button, Popconfirm, Tooltip } from 'antd'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
-import Logger from 'electron-log'
+import Logger from 'electron-log/renderer'
 import { debounce, isEmpty } from 'lodash'
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -391,56 +392,11 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
     e.stopPropagation()
   }
 
-  const filesFromDropEvent = async (e: React.DragEvent<HTMLDivElement>): Promise<FileType[]> => {
-    if (e.dataTransfer.files.length > 0) {
-      const results = await Promise.allSettled([...e.dataTransfer.files].map((file) => window.api.file.get(file.path)))
-      const list: FileType[] = []
-      for (const result of results) {
-        if (result.status === 'fulfilled') {
-          if (result.value !== null) {
-            list.push(result.value)
-          }
-        } else {
-          Logger.error('[src/renderer/src/pages/home/Inputbar/Inputbar.tsx] filesFromDropEvent:', result.reason)
-        }
-      }
-      return list
-    } else {
-      return new Promise((resolve) => {
-        let existCodefilesFormat = false
-        for (const item of e.dataTransfer.items) {
-          const { type } = item
-          if (type === 'codefiles') {
-            item.getAsString(async (filePathListString) => {
-              const filePathList: string[] = JSON.parse(filePathListString)
-              const filePathListPromises = filePathList.map((filePath) => window.api.file.get(filePath))
-              resolve(
-                await Promise.allSettled(filePathListPromises).then((results) =>
-                  results
-                    .filter((result) => result.status === 'fulfilled')
-                    .filter((result) => result.value !== null)
-                    .map((result) => result.value!)
-                )
-              )
-            })
-
-            existCodefilesFormat = true
-            break
-          }
-        }
-
-        if (!existCodefilesFormat) {
-          resolve([])
-        }
-      })
-    }
-  }
-
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
 
-    const files = await filesFromDropEvent(e).catch((err) => {
+    const files = await getFilesFromDropEvent(e).catch((err) => {
       Logger.error('[src/renderer/src/pages/home/Inputbar/Inputbar.tsx] handleDrop:', err)
       return null
     })
