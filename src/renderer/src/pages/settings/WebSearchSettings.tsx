@@ -86,12 +86,12 @@ const WebSearchSettings: FC = () => {
       <SettingGroup theme={theme}>
         <SettingTitle>{t('settings.general.title')}</SettingTitle>
         <SettingDivider />
-
         <SettingRow>
           <SettingRowTitle>{t('settings.websearch.search_with_time')}</SettingRowTitle>
           <Switch checked={searchWithTime} onChange={(checked) => dispatch(setSearchWithTime(checked))} />
         </SettingRow>
-        <SettingRow>
+        <SettingDivider style={{ marginTop: 15, marginBottom: 5 }} />
+        <SettingRow style={{ marginBottom: -10 }}>
           <SettingRowTitle>{t('settings.websearch.search_max_result')}</SettingRowTitle>
           <Slider
             defaultValue={maxResults}
@@ -107,7 +107,7 @@ const WebSearchSettings: FC = () => {
       <SettingGroup theme={theme}>
         <SettingTitle>{t('settings.websearch.blacklist')}</SettingTitle>
         <SettingDivider />
-        <SettingRow>
+        <SettingRow style={{ marginBottom: 10 }}>
           <SettingRowTitle>{t('settings.websearch.blacklist_description')}</SettingRowTitle>
         </SettingRow>
         <TextArea

@@ -825,10 +825,15 @@
         "tavily": {
           "api_key": "Tavily API Key",
           "api_key.placeholder": "Enter Tavily API Key",
-          "description": "Tavily is a web search tool that integrates multiple search engines. It supports multiple languages and search engines.",
+          "description": "Tavily is a search engine tailored for AI agents, delivering real-time, accurate results, intelligent query suggestions, and in-depth research capabilities.",
           "title": "Tavily"
         },
-        "title": "Web Search"
+        "title": "Web Search",
+        "blacklist": "Blacklist",
+        "blacklist_description": "Results from the following websites will not appear in search results",
+        "blacklist_tooltip": "Please use the following format (separated by line breaks)\nexample.com\nhttps://www.example.com\nhttps://example.com\n*://*.example.com",
+        "search_max_result": "Number of search results",
+        "search_result_default": "Default"
       }
     },
     "translate": {
