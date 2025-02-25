@@ -807,7 +807,8 @@
           "description": "Tavily 是一個集成了多個搜索引擎的網路搜索工具，支持多種語言和多種搜索引擎。",
           "api_key": "Tavily API 密鑰",
           "api_key.placeholder": "請輸入 Tavily API 密鑰"
-        }
+        },
+        "search_with_time": "搜尋包含日期"
       }
     },
     "translate": {
