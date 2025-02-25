@@ -79,7 +79,7 @@
       "assistant.search.placeholder": "搜尋",
       "deeply_thought": "已深度思考（用時 {{secounds}} 秒）",
       "default.description": "你好，我是預設助手。你可以立即開始與我聊天。",
-      "default.name": "⭐️ 預設助手",
+      "default.name": "預設助手",
       "default.topic.name": "預設話題",
       "input.clear": "清除 {{Command}}",
       "input.clear.content": "您想要清除當前話題的所有訊息嗎？",

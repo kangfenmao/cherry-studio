@@ -79,7 +79,7 @@
       "assistant.search.placeholder": "搜索",
       "deeply_thought": "已深度思考（用时 {{secounds}} 秒）",
       "default.description": "你好，我是默认助手。你可以立刻开始跟我聊天。",
-      "default.name": "⭐️ 默认助手",
+      "default.name": "默认助手",
       "default.topic.name": "默认话题",
       "input.clear": "清空消息 {{Command}}",
       "input.clear.content": "确定要清除当前会话所有消息吗?",

@@ -79,7 +79,7 @@
       "assistant.search.placeholder": "Поиск",
       "deeply_thought": "Мыслим ({{secounds}} секунд)",
       "default.description": "Привет, я Ассистент по умолчанию. Вы можете начать общаться со мной прямо сейчас",
-      "default.name": "⭐️ Ассистент по умолчанию",
+      "default.name": "Ассистент по умолчанию",
       "default.topic.name": "Топик по умолчанию",
       "input.clear": "Очистить {{Command}}",
       "input.clear.content": "Хотите очистить все сообщения текущего топика?",

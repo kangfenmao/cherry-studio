@@ -79,7 +79,7 @@
       "assistant.search.placeholder": "Search",
       "deeply_thought": "Deeply thought ({{secounds}} seconds)",
       "default.description": "Hello, I'm Default Assistant. You can start chatting with me right away",
-      "default.name": "⭐️ Default Assistant",
+      "default.name": "Default Assistant",
       "default.topic.name": "Default Topic",
       "input.clear": "Clear {{Command}}",
       "input.clear.content": "Do you want to clear all messages of the current topic?",

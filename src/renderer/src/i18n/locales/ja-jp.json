@@ -79,7 +79,7 @@
       "assistant.search.placeholder": "検索",
       "deeply_thought": "深く考えています（{{secounds}} 秒）",
       "default.description": "こんにちは、私はデフォルトのアシスタントです。すぐにチャットを始められます。",
-      "default.name": "⭐️ デフォルトアシスタント",
+      "default.name": "デフォルトアシスタント",
       "default.topic.name": "デフォルトトピック",
       "input.clear": "クリア {{Command}}",
       "input.clear.content": "現在のトピックのすべてのメッセージをクリアしますか？",
