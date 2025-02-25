@@ -1124,6 +1124,8 @@ const migrateConfig = {
   '73': (state: RootState) => {
     if (state.websearch) {
       state.websearch.searchWithTime = true
+      state.websearch.maxResults = 5
+      state.websearch.excludeDomains = []
     }
     if (!state.llm.providers.find((provider) => provider.id === 'lmstudio')) {
       state.llm.providers.push({
