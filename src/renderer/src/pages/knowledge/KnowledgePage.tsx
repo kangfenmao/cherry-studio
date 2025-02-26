@@ -12,6 +12,7 @@ import { HStack } from '@renderer/components/Layout'
 import ListItem from '@renderer/components/ListItem'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
+import { isWindows } from '@renderer/config/constant'
 import { useKnowledgeBases } from '@renderer/hooks/useKnowledge'
 import { useShortcut } from '@renderer/hooks/useShortcuts'
 import { NavbarIcon } from '@renderer/pages/home/Navbar'
@@ -253,7 +254,7 @@ const NarrowIcon = styled(NavbarIcon)`
 
 const NavbarRight = styled(NavbarRightFromComponents)`
   min-width: auto;
-  padding-right: 140px;
+  padding-right: ${isWindows ? '140px' : 15};
 `
 
 export default KnowledgePage

@@ -243,7 +243,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
         </TitleWrapper>
         <Dragger
           showUploadList={false}
-          onDrop={({ dataTransfer }) => handleDrop([...dataTransfer.files])}
+          customRequest={({ file }) => handleDrop([file as File])}
           multiple={true}
           accept={fileTypes.join(',')}
           style={{ marginTop: 10, background: 'transparent' }}>
