@@ -1127,6 +1127,7 @@ const migrateConfig = {
       state.websearch.maxResults = 5
       state.websearch.excludeDomains = []
     }
+
     if (!state.llm.providers.find((provider) => provider.id === 'lmstudio')) {
       state.llm.providers.push({
         id: 'lmstudio',
@@ -1139,6 +1140,18 @@ const migrateConfig = {
         enabled: false
       })
     }
+
+    state.llm.providers.splice(1, 0, {
+      id: 'o3',
+      name: 'O3',
+      apiKey: '',
+      apiHost: 'https://api.o3.fan',
+      models: SYSTEM_MODELS.o3,
+      isSystem: true,
+      type: 'openai',
+      enabled: false
+    })
+
     state.assistants.assistants.forEach((assistant) => {
       const leadingEmoji = getLeadingEmoji(assistant.name)
       if (leadingEmoji) {
@@ -1146,6 +1159,7 @@ const migrateConfig = {
         assistant.name = assistant.name.replace(leadingEmoji, '').trim()
       }
     })
+
     state.agents.agents.forEach((agent) => {
       const leadingEmoji = getLeadingEmoji(agent.name)
       if (leadingEmoji) {
@@ -1153,34 +1167,17 @@ const migrateConfig = {
         agent.name = agent.name.replace(leadingEmoji, '').trim()
       }
     })
+
     const defaultAssistantEmoji = getLeadingEmoji(state.assistants.defaultAssistant.name)
+
     if (defaultAssistantEmoji) {
       state.assistants.defaultAssistant.emoji = defaultAssistantEmoji
       state.assistants.defaultAssistant.name = state.assistants.defaultAssistant.name
         .replace(defaultAssistantEmoji, '')
         .trim()
     }
+
     return state
-  },
-  '74': (state: RootState) => {
-    return {
-      ...state,
-      llm: {
-        ...state.llm,
-        providers: [
-          ...state.llm.providers,
-          {
-            id: 'o3',
-            name: 'O3',
-            apiKey: '',
-            apiHost: 'https://api.o3.fan',
-            models: SYSTEM_MODELS.o3,
-            isSystem: true,
-            enabled: false
-          }
-        ]
-      }
-    }
   }
 }
 
