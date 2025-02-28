@@ -405,6 +405,7 @@
       "reset.double.confirm.content": "所有資料將會被清除，您確定要繼續嗎？",
       "reset.double.confirm.title": "資料將會丟失！！！",
       "restore.success": "恢復成功",
+      "restore.failed": "恢復失敗",
       "save.success.title": "保存成功",
       "searching": "正在網路搜索...",
       "success.notion.export": "成功導出到 Notion",
@@ -841,7 +842,8 @@
         "blacklist_tooltip": "請使用以下格式(換行分隔)\nexample.com\nhttps://www.example.com\nhttps://example.com\n*://*.example.com",
         "search_max_result": "搜索結果個數",
         "search_result_default": "預設"
-      }
+      },
+      "display.assistant.title": "助手設定"
     },
     "translate": {
       "any.language": "任意語言",

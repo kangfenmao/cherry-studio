@@ -405,6 +405,7 @@
       "reset.double.confirm.content": "Все данные будут утеряны, хотите продолжить?",
       "reset.double.confirm.title": "ДАННЫЕ БУДУТ УТЕРЯНЫ !!!",
       "restore.success": "Успешно восстановлено",
+      "restore.failed": "Восстановление не удалось",
       "save.success.title": "Успешно сохранено",
       "searching": "Поиск в Интернете...",
       "success.notion.export": "Успешный экспорт в Notion",

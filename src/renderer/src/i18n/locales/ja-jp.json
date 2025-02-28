@@ -405,6 +405,7 @@
       "reset.double.confirm.content": "すべてのデータが失われます。続行しますか？",
       "reset.double.confirm.title": "データが失われます！！！",
       "restore.success": "復元に成功しました",
+      "restore.failed": "復元に失敗しました",
       "save.success.title": "保存に成功しました",
       "searching": "インターネットで検索中...",
       "success.notion.export": "Notionへのエクスポートに成功しました",

@@ -28,9 +28,9 @@ import {
 } from '@renderer/utils'
 import {
   exportMarkdownToNotion,
+  exportMarkdownToYuque,
   exportMessageAsMarkdown,
-  messageToMarkdown,
-  exportMarkdownToYuque
+  messageToMarkdown
 } from '@renderer/utils/export'
 import { Button, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'

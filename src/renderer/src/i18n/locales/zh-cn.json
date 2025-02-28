@@ -405,6 +405,7 @@
       "reset.double.confirm.content": "你的全部数据都会丢失，如果没有备份数据，将无法恢复，确定要继续吗？",
       "reset.double.confirm.title": "数据丢失！！！",
       "restore.success": "恢复成功",
+      "restore.failed": "恢复失败",
       "save.success.title": "保存成功",
       "searching": "正在联网搜索...",
       "success.notion.export": "成功导出到Notion",
