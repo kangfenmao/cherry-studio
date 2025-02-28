@@ -26,7 +26,7 @@ import { formatApiHost } from '@renderer/utils/api'
 import { providerCharge } from '@renderer/utils/oauth'
 import { Avatar, Button, Card, Divider, Flex, Input, Space, Switch } from 'antd'
 import Link from 'antd/es/typography/Link'
-import { groupBy, isEmpty } from 'lodash'
+import { groupBy, isEmpty, sortBy, toPairs } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -68,6 +68,11 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   const { defaultModel, setDefaultModel } = useDefaultModel()
 
   const modelGroups = groupBy(models, 'group')
+  const sortedModelGroups = sortBy(toPairs(modelGroups), [0]).reduce((acc, [key, value]) => {
+    acc[key] = value
+    return acc
+  }, {})
+
   const isAzureOpenAI = provider.id === 'azure-openai' || provider.type === 'azure-openai'
 
   const providerConfig = PROVIDER_CONFIG[provider.id]
@@ -305,14 +310,14 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
         <GraphRAGSettings provider={provider} />
       )}
       <SettingSubtitle style={{ marginBottom: 5 }}>{t('common.models')}</SettingSubtitle>
-      {Object.keys(modelGroups).map((group) => (
+      {Object.keys(sortedModelGroups).map((group) => (
         <Card
           key={group}
           type="inner"
           title={group}
           style={{ marginBottom: '10px', border: '0.5px solid var(--color-border)' }}
           size="small">
-          {modelGroups[group].map((model) => (
+          {sortedModelGroups[group].map((model) => (
             <ModelListItem key={model.id}>
               <ModelListHeader>
                 <Avatar src={getModelLogo(model.id)} size={22} style={{ marginRight: '8px' }}>
