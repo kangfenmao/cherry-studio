@@ -12,7 +12,7 @@ import {
   setSidebarIcons
 } from '@renderer/store/settings'
 import { ThemeMode } from '@renderer/types'
-import { Button, Input, Select, Switch } from 'antd'
+import { Button, Input, Segmented, Select, Switch } from 'antd'
 import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -98,9 +98,9 @@ const DisplaySettings: FC = () => {
         <SettingDivider />
         <SettingRow>
           <SettingRowTitle>{t('settings.topic.position')}</SettingRowTitle>
-          <Select
+          <Segmented
             value={topicPosition || 'right'}
-            style={{ width: 120 }}
+            shape="round"
             onChange={setTopicPosition}
             options={[
               { value: 'left', label: t('settings.topic.position.left') },

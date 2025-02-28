@@ -176,6 +176,8 @@ const MenuButton = styled.div`
   background-color: var(--color-background);
   right: 9px;
   top: 6px;
+  padding: 0 5px;
+  border: 0.5px solid var(--color-border);
 `
 
 const TopicCount = styled.div`
