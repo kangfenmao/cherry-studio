@@ -1122,29 +1122,6 @@ const migrateConfig = {
     return state
   },
   '73': (state: RootState) => {
-    const tempProviders = state.llm.providers
-    const xirangProvider = tempProviders.find((provider) => provider.id === 'xirang')
-    if (!xirangProvider) {
-      tempProviders.unshift({
-        id: 'xirang',
-        name: 'Xirang',
-        type: 'openai',
-        apiKey: '',
-        apiHost: 'https://wishub-x1.ctyun.cn',
-        models: SYSTEM_MODELS.xirang,
-        isSystem: true,
-        enabled: false
-      })
-    }
-    return {
-      ...state,
-      llm: {
-        ...state.llm,
-        providers: tempProviders
-      }
-    }
-  },
-  '74': (state: RootState) => {
     if (state.websearch) {
       state.websearch.searchWithTime = true
       state.websearch.maxResults = 5
@@ -1200,6 +1177,19 @@ const migrateConfig = {
         .trim()
     }
 
+    return state
+  },
+  '74': (state: RootState) => {
+    state.llm.providers.push({
+      id: 'xirang',
+      name: 'Xirang',
+      type: 'openai',
+      apiKey: '',
+      apiHost: 'https://wishub-x1.ctyun.cn',
+      models: SYSTEM_MODELS.xirang,
+      isSystem: true,
+      enabled: false
+    })
     return state
   }
 }

@@ -124,10 +124,10 @@ import ViduModelLogo from '@renderer/assets/images/models/vidu.png'
 import ViduModelLogoDark from '@renderer/assets/images/models/vidu_dark.png'
 import WenxinModelLogo from '@renderer/assets/images/models/wenxin.png'
 import WenxinModelLogoDark from '@renderer/assets/images/models/wenxin_dark.png'
-import YiModelLogo from '@renderer/assets/images/models/yi.png'
-import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import XirangModelLogo from '@renderer/assets/images/models/xirang.png'
 import XirangModelLogoDark from '@renderer/assets/images/models/xirang_dark.png'
+import YiModelLogo from '@renderer/assets/images/models/yi.png'
+import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import { Assistant, Model } from '@renderer/types'
 import OpenAI from 'openai'
@@ -1718,20 +1718,7 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'Jina'
     }
   ],
-  xirang: [
-    {
-      id: 'xirang-1',
-      name: 'DeepSeek-R1',
-      provider: 'xirang',
-      group: 'xirang'
-    },
-    {
-      id: 'xirang-2',
-      name: 'DeepSeek-V3',
-      provider: 'xirang',
-      group: 'xirang'
-    }
-  ]
+  xirang: []
 }
 
 export const TEXT_TO_IMAGES_MODELS = [
