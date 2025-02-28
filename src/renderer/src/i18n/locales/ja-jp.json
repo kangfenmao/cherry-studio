@@ -683,6 +683,7 @@
       "display.sidebar.visible": "アイコンを表示",
       "display.title": "表示設定",
       "display.topic.title": "トピック設定",
+      "display.assistant.title": "アシスタント設定",
       "font_size.title": "メッセージのフォントサイズ",
       "general": "一般設定",
       "general.backup.button": "バックアップ",
@@ -813,8 +814,8 @@
         "zoom_reset": "ズームをリセット"
       },
       "theme.auto": "自動",
-      "theme.dark": "ダークテーマ",
-      "theme.light": "ライトテーマ",
+      "theme.dark": "ダーク",
+      "theme.light": "ライト",
       "theme.title": "テーマ",
       "theme.window.style.opaque": "不透明ウィンドウ",
       "theme.window.style.title": "ウィンドウスタイル",
@@ -824,6 +825,7 @@
       "topic.position.left": "左",
       "topic.position.right": "右",
       "topic.show.time": "トピックの時間を表示",
+      "assistant.show.icon": "モデルアイコンを表示",
       "tray.title": "システムトレイアイコンを有効にする",
       "websearch": {
         "get_api_key": "APIキーを取得",

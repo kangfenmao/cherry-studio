@@ -683,6 +683,7 @@
       "display.sidebar.visible": "Show icons",
       "display.title": "Display Settings",
       "display.topic.title": "Topic Settings",
+      "display.assistant.title": "Assistant Settings",
       "font_size.title": "Message font size",
       "general": "General Settings",
       "general.backup.button": "Backup",
@@ -824,6 +825,7 @@
       "topic.position.left": "Left",
       "topic.position.right": "Right",
       "topic.show.time": "Show topic time",
+      "assistant.show.icon": "Show model icon",
       "tray.title": "Enable System Tray Icon",
       "websearch": {
         "get_api_key": "Get API Key",

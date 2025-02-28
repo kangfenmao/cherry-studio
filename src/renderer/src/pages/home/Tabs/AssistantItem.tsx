@@ -1,10 +1,11 @@
 import { DeleteOutlined, EditOutlined, MinusCircleOutlined, SaveOutlined } from '@ant-design/icons'
+import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
 import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { modelGenerating } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
 import AssistantSettingsPopup from '@renderer/pages/settings/AssistantSettings'
-import { getDefaultTopic } from '@renderer/services/AssistantService'
+import { getDefaultModel, getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant } from '@renderer/types'
 import { uuid } from '@renderer/utils'
@@ -28,7 +29,8 @@ interface AssistantItemProps {
 const AssistantItem: FC<AssistantItemProps> = ({ assistant, isActive, onSwitch, onDelete, addAgent, addAssistant }) => {
   const { t } = useTranslation()
   const { removeAllTopics } = useAssistant(assistant.id) // 使用当前助手的ID
-  const { clickAssistantToShowTopic, topicPosition } = useSettings()
+  const { clickAssistantToShowTopic, topicPosition, showAssistantIcon } = useSettings()
+  const defaultModel = getDefaultModel()
 
   const getMenuItems = useCallback(
     (assistant: Assistant): ItemType[] => [
@@ -114,7 +116,8 @@ const AssistantItem: FC<AssistantItemProps> = ({ assistant, isActive, onSwitch, 
     <Dropdown menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
       <Container onClick={handleSwitch} className={isActive ? 'active' : ''}>
         <AssistantName className="name" title={fullAssistantName}>
-          {fullAssistantName}
+          {showAssistantIcon && <ModelAvatar model={assistant.model || defaultModel} size={22} />}
+          {showAssistantIcon ? assistantName : fullAssistantName}
         </AssistantName>
         {isActive && (
           <MenuButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
@@ -149,6 +152,7 @@ const Container = styled.div`
     background-color: var(--color-background-soft);
     border: 0.5px solid var(--color-border);
     .name {
+      font-weight: 500;
     }
   }
 `
@@ -160,6 +164,10 @@ const AssistantName = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-size: 13px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 `
 
 const MenuButton = styled.div`

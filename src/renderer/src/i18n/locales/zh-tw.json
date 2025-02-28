@@ -813,8 +813,8 @@
         "zoom_reset": "重置縮放"
       },
       "theme.auto": "自動",
-      "theme.dark": "深色主題",
-      "theme.light": "淺色主題",
+      "theme.dark": "深色",
+      "theme.light": "淺色",
       "theme.title": "主題",
       "theme.window.style.opaque": "不透明視窗",
       "theme.window.style.title": "視窗樣式",
@@ -824,6 +824,7 @@
       "topic.position.left": "左側",
       "topic.position.right": "右側",
       "topic.show.time": "顯示話題時間",
+      "assistant.show.icon": "顯示模型圖標",
       "tray.title": "啟用系統托盤圖標",
       "websearch": {
         "get_api_key": "點擊這裡獲取密鑰",
