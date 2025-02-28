@@ -98,14 +98,7 @@ const HomeTabs: FC<Props> = ({ activeAssistant, activeTopic, setActiveAssistant,
       {showTab && (
         <Segmented
           value={tab}
-          style={{
-            borderRadius: 0,
-            padding: '10px 0',
-            margin: '0 10px',
-            paddingBottom: 10,
-            borderBottom: '0.5px solid var(--color-border)',
-            gap: 2
-          }}
+          style={{ borderRadius: 16, paddingTop: 10, margin: '0 10px', gap: 2 }}
           options={
             [
               position === 'left' && topicPosition === 'left' ? assistantTab : undefined,
@@ -173,6 +166,8 @@ const Segmented = styled(AntSegmented)`
     line-height: 34px;
     background-color: transparent;
     user-select: none;
+    border-radius: var(--list-item-border-radius);
+    box-shadow: none;
   }
   .ant-segmented-item-selected {
     background-color: var(--color-background-soft);
@@ -204,7 +199,18 @@ const Segmented = styled(AntSegmented)`
     transition: none !important;
     background-color: var(--color-background-soft);
     border: 0.5px solid var(--color-border);
+    border-radius: var(--list-item-border-radius);
+    box-shadow: none;
   }
+
+  /* Added styles from AntdProvider */
+  &.ant-segmented {
+    background-color: transparent;
+  }
+
+  /* These styles ensure the same appearance as before */
+  border-radius: 16px;
+  box-shadow: none;
 `
 
 export default HomeTabs
