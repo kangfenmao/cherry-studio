@@ -133,10 +133,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 7px 12px;
+  padding: 7px 10px;
   position: relative;
   margin: 0 10px;
-  padding-right: 35px;
   font-family: Ubuntu;
   border-radius: var(--list-item-border-radius);
   border: 0.5px solid transparent;
@@ -152,7 +151,6 @@ const Container = styled.div`
     background-color: var(--color-background-soft);
     border: 0.5px solid var(--color-border);
     .name {
-      font-weight: 500;
     }
   }
 `

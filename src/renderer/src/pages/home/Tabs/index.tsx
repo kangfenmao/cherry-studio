@@ -159,6 +159,12 @@ const TabContent = styled.div`
 `
 
 const Segmented = styled(AntSegmented)`
+  &.ant-segmented {
+    background-color: transparent;
+    border-radius: 0 !important;
+    border-bottom: 0.5px solid var(--color-border);
+    padding-bottom: 10px;
+  }
   .ant-segmented-item {
     overflow: hidden;
     transition: none !important;
@@ -202,14 +208,8 @@ const Segmented = styled(AntSegmented)`
     border-radius: var(--list-item-border-radius);
     box-shadow: none;
   }
-
-  /* Added styles from AntdProvider */
-  &.ant-segmented {
-    background-color: transparent;
-  }
-
   /* These styles ensure the same appearance as before */
-  border-radius: 16px;
+  border-radius: 0;
   box-shadow: none;
 `
 

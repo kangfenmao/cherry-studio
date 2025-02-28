@@ -388,7 +388,6 @@ const TopicListItem = styled.div`
     background-color: var(--color-background-soft);
     border: 0.5px solid var(--color-border);
     .name {
-      font-weight: 500;
     }
     .menu {
       opacity: 1;
