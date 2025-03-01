@@ -653,7 +653,8 @@ const InputBarContainer = styled.div`
   border: 0.5px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
-  margin: 15px 20px;
+  margin: 14px 20px;
+  margin-top: 12px;
   border-radius: 15px;
   background-color: var(--color-background-opacity);
 `
