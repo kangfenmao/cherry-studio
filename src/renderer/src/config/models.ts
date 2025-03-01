@@ -1408,6 +1408,18 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       provider: 'hunyuan',
       name: 'hunyuan-turbo',
       group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-turbos-latest',
+      provider: 'hunyuan',
+      name: 'hunyuan-turbos-latest',
+      group: 'Hunyuan'
+    },
+    {
+      id: 'hunyuan-embedding',
+      provider: 'hunyuan',
+      name: 'hunyuan-embedding',
+      group: 'Embedding'
     }
   ],
   nvidia: [
@@ -1855,6 +1867,12 @@ export function isWebSearchModel(model: Model): boolean {
   const provider = getProviderByModel(model)
 
   if (!provider) {
+    return false
+  }
+
+  const isEmbedding = isEmbeddingModel(model)
+
+  if (isEmbedding) {
     return false
   }
 
