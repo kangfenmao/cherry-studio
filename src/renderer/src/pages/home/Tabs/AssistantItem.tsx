@@ -115,10 +115,10 @@ const AssistantItem: FC<AssistantItemProps> = ({ assistant, isActive, onSwitch, 
   return (
     <Dropdown menu={{ items: getMenuItems(assistant) }} trigger={['contextMenu']}>
       <Container onClick={handleSwitch} className={isActive ? 'active' : ''}>
-        <AssistantName className="name" title={fullAssistantName}>
+        <AssistantNameRow className="name" title={fullAssistantName}>
           {showAssistantIcon && <ModelAvatar model={assistant.model || defaultModel} size={22} />}
-          {showAssistantIcon ? assistantName : fullAssistantName}
-        </AssistantName>
+          <AssistantName className="text-nowrap">{showAssistantIcon ? assistantName : fullAssistantName}</AssistantName>
+        </AssistantNameRow>
         {isActive && (
           <MenuButton onClick={() => EventEmitter.emit(EVENT_NAMES.SWITCH_TOPIC_SIDEBAR)}>
             <TopicCount className="topics-count">{assistant.topics.length}</TopicCount>
@@ -155,18 +155,16 @@ const Container = styled.div`
   }
 `
 
-const AssistantName = styled.div`
+const AssistantNameRow = styled.div`
   color: var(--color-text);
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   font-size: 13px;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 5px;
 `
+
+const AssistantName = styled.div``
 
 const MenuButton = styled.div`
   display: flex;
