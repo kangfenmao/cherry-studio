@@ -13,10 +13,8 @@ import { getAllFiles } from '@main/utils/file'
 import type { LoaderReturn } from '@shared/config/types'
 import { FileType, KnowledgeBaseParams, KnowledgeItem } from '@types'
 import { app } from 'electron'
-import { ProxyAgent, setGlobalDispatcher } from 'undici'
 import { v4 as uuidv4 } from 'uuid'
 
-import { proxyManager } from './ProxyManager'
 import { windowService } from './WindowService'
 
 class KnowledgeService {
@@ -50,14 +48,13 @@ class KnowledgeService {
               azureOpenAIApiVersion: apiVersion,
               azureOpenAIApiDeploymentName: model,
               azureOpenAIApiInstanceName: getInstanceName(baseURL),
-              configuration: { httpAgent: proxyManager.getProxyAgent() },
               dimensions,
               batchSize
             })
           : new OpenAiEmbeddings({
               model,
               apiKey,
-              configuration: { baseURL, httpAgent: proxyManager.getProxyAgent() },
+              configuration: { baseURL },
               dimensions,
               batchSize
             })
@@ -86,7 +83,6 @@ class KnowledgeService {
     _: Electron.IpcMainInvokeEvent,
     { base, item, forceReload = false }: { base: KnowledgeBaseParams; item: KnowledgeItem; forceReload: boolean }
   ): Promise<LoaderReturn> => {
-    setGlobalDispatcher(new ProxyAgent(proxyManager.getProxyUrl() || ''))
     const ragApplication = await this.getRagApplication(base)
 
     const sendDirectoryProcessingPercent = (totalFiles: number, processedFiles: number) => {
