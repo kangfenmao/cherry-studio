@@ -4,15 +4,15 @@ import ImageStorage from '@renderer/services/ImageStorage'
 import { useAppDispatch } from '@renderer/store'
 import { setAvatar } from '@renderer/store/runtime'
 import { setUserName } from '@renderer/store/settings'
-import { compressImage } from '@renderer/utils'
-import { Avatar , Input, Modal, Popover, Upload, Dropdown } from 'antd'
+import { compressImage, isEmoji } from '@renderer/utils'
+import { Avatar, Dropdown, Input, Modal, Popover, Upload } from 'antd'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import EmojiPicker from '../EmojiPicker'
 import { Center, HStack, VStack } from '../Layout'
 import { TopView } from '../TopView'
-import EmojiPicker from '../EmojiPicker'
 
 interface Props {
   resolve: (data: any) => void
@@ -51,12 +51,6 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
     }
   }
 
-  // modify the judgment function, more accurately detect Emoji
-  const isEmoji = (str: string) => {
-    // check if it is a string and is not base64 or URL format
-    return str && typeof str === 'string' && !str.startsWith('data:') && !str.startsWith('http');
-  }
-
   const items = [
     {
       key: 'upload',
@@ -88,11 +82,12 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
     {
       key: 'emoji',
       label: (
-        <div onClick={(e) => {
-          e.stopPropagation()
-          setEmojiPickerOpen(true)
-          setDropdownOpen(false)
-        }}>
+        <div
+          onClick={(e) => {
+            e.stopPropagation()
+            setEmojiPickerOpen(true)
+            setDropdownOpen(false)
+          }}>
           {t('settings.general.emoji_picker')}
         </div>
       )
@@ -111,8 +106,8 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
       centered>
       <Center mt="30px">
         <VStack alignItems="center" gap="10px">
-          <Dropdown 
-            menu={{ items }} 
+          <Dropdown
+            menu={{ items }}
             trigger={['click']}
             open={dropdownOpen}
             align={{ offset: [0, 4] }}
@@ -134,11 +129,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
                 }
               }}
               placement="bottom">
-              {isEmoji(avatar) ? (
-                <EmojiAvatar>{avatar}</EmojiAvatar>
-              ) : (
-                <UserAvatar src={avatar} />
-              )}
+              {isEmoji(avatar) ? <EmojiAvatar>{avatar}</EmojiAvatar> : <UserAvatar src={avatar} />}
             </Popover>
           </Dropdown>
         </VStack>
@@ -147,7 +138,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
         <Input
           placeholder={t('settings.general.user_name.placeholder')}
           value={userName}
-          onChange={(e) => dispatch(setUserName(e.target.value))}
+          onChange={(e) => dispatch(setUserName(e.target.value.trim()))}
           style={{ flex: 1, textAlign: 'center', width: '100%' }}
           maxLength={30}
         />

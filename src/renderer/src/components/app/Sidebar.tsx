@@ -12,6 +12,7 @@ import useAvatar from '@renderer/hooks/useAvatar'
 import { useMinapps } from '@renderer/hooks/useMinapps'
 import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
 import { useSettings } from '@renderer/hooks/useSettings'
+import { isEmoji } from '@renderer/utils'
 import type { MenuProps } from 'antd'
 import { Tooltip } from 'antd'
 import { Avatar } from 'antd'
@@ -57,10 +58,6 @@ const Sidebar: FC = () => {
     })
   }
 
-  const isEmoji = (str: string) => {
-    return str && typeof str === 'string' && !str.startsWith('data:') && !str.startsWith('http');
-  }
-
   return (
     <Container
       id="app-sidebar"
@@ -69,7 +66,7 @@ const Sidebar: FC = () => {
         zIndex: minappShow ? 10000 : 'initial'
       }}>
       {isEmoji(avatar) ? (
-        <EmojiAvatarSidebar onClick={onEditUser}>{avatar}</EmojiAvatarSidebar>
+        <EmojiAvatar onClick={onEditUser}>{avatar}</EmojiAvatar>
       ) : (
         <AvatarImg src={avatar || UserAvatar} draggable={false} className="nodrag" onClick={onEditUser} />
       )}
@@ -229,7 +226,7 @@ const AvatarImg = styled(Avatar)`
   cursor: pointer;
 `
 
-const EmojiAvatarSidebar = styled.div`
+const EmojiAvatar = styled.div`
   width: 31px;
   height: 31px;
   background-color: var(--color-background-soft);
@@ -242,6 +239,7 @@ const EmojiAvatarSidebar = styled.div`
   font-size: 16px;
   cursor: pointer;
   -webkit-app-region: none;
+  border: 0.5px solid var(--color-border);
 `
 
 const MainMenusContainer = styled.div`

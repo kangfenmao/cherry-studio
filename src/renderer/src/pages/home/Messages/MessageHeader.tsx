@@ -8,16 +8,12 @@ import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
 import { getMessageModelId } from '@renderer/services/MessagesService'
 import { getModelName } from '@renderer/services/ModelService'
 import { Assistant, Message, Model } from '@renderer/types'
-import { firstLetter, removeLeadingEmoji } from '@renderer/utils'
+import { firstLetter, isEmoji, removeLeadingEmoji } from '@renderer/utils'
 import { Avatar } from 'antd'
 import dayjs from 'dayjs'
 import { CSSProperties, FC, memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const isEmoji = (str: string) => {
-  return str && typeof str === 'string' && !str.startsWith('data:') && !str.startsWith('http');
-}
 
 interface Props {
   message: Message
