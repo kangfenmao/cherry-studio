@@ -1,3 +1,18 @@
+/**
+ * Knowledge Service - Manages knowledge bases using RAG (Retrieval-Augmented Generation)
+ *
+ * This service handles creation, management, and querying of knowledge bases from various sources
+ * including files, directories, URLs, sitemaps, and notes.
+ *
+ * Features:
+ * - Concurrent task processing with workload management
+ * - Multiple data source support
+ * - Vector database integration
+ *
+ * For detailed documentation, see:
+ * @see {@link ../../../docs/technical/KnowledgeService.md}
+ */
+
 import * as fs from 'node:fs'
 import path from 'node:path'
 
