@@ -114,9 +114,11 @@ export async function fetchChatCompletion({
         assistant,
         messages: [..._messages, message]
       })
-      // 设置 metrics.completion_tokens
-      if (message.metrics && message.usage.completion_tokens && !message.metrics.completion_tokens) {
-        message.metrics.completion_tokens = message.usage.completion_tokens
+      // Set metrics.completion_tokens
+      if (message.metrics && message?.usage?.completion_tokens) {
+        if (!message.metrics?.completion_tokens) {
+          message.metrics.completion_tokens = message.usage.completion_tokens
+        }
       }
     }
   } catch (error: any) {
