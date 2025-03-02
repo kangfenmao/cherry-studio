@@ -1196,12 +1196,10 @@ const migrateConfig = {
     if (state.minapps) {
       const you = DEFAULT_MIN_APPS.find((app) => app.id === 'you')
       const cici = DEFAULT_MIN_APPS.find((app) => app.id === 'cici')
-      if (you) {
-        state.minapps.enabled.push(you)
-      }
-      if (cici) {
-        state.minapps.enabled.push(cici)
-      }
+      const zhihu = DEFAULT_MIN_APPS.find((app) => app.id === 'zhihu')
+      you && state.minapps.enabled.push(you)
+      cici && state.minapps.enabled.push(cici)
+      zhihu && state.minapps.enabled.push(zhihu)
     }
     return state
   }

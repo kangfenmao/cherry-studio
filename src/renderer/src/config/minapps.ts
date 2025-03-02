@@ -41,6 +41,7 @@ import XiaoYiAppLogo from '@renderer/assets/images/apps/xiaoyi.webp?url'
 import YouLogo from '@renderer/assets/images/apps/you.jpg?url'
 import TencentYuanbaoAppLogo from '@renderer/assets/images/apps/yuanbao.webp?url'
 import YuewenAppLogo from '@renderer/assets/images/apps/yuewen.png?url'
+import ZhihuAppLogo from '@renderer/assets/images/apps/zhihu.png?url'
 import ClaudeAppLogo from '@renderer/assets/images/models/claude.png?url'
 import HailuoModelLogo from '@renderer/assets/images/models/hailuo.png?url'
 import QwenModelLogo from '@renderer/assets/images/models/qwen.png?url'
@@ -385,6 +386,13 @@ export const DEFAULT_MIN_APPS: MinAppType[] = [
     name: 'You',
     logo: YouLogo,
     url: 'https://you.com/'
+  },
+  {
+    id: 'zhihu',
+    name: '知乎直答',
+    logo: ZhihuAppLogo,
+    url: 'https://zhida.zhihu.com/',
+    bodered: true
   }
 ]
 
