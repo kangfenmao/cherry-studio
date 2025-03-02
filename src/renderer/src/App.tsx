@@ -1,15 +1,14 @@
 import '@renderer/databases'
 
-import isPropValid from '@emotion/is-prop-valid'
 import store, { persistor } from '@renderer/store'
 import { Provider } from 'react-redux'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
-import { StyleSheetManager } from 'styled-components'
 
 import Sidebar from './components/app/Sidebar'
 import TopViewContainer from './components/TopView'
 import AntdProvider from './context/AntdProvider'
+import StyleSheetManager from './context/StyleSheetManager'
 import { SyntaxHighlighterProvider } from './context/SyntaxHighlighterProvider'
 import { ThemeProvider } from './context/ThemeProvider'
 import NavigationHandler from './handler/NavigationHandler'
@@ -21,18 +20,11 @@ import KnowledgePage from './pages/knowledge/KnowledgePage'
 import PaintingsPage from './pages/paintings/PaintingsPage'
 import SettingsPage from './pages/settings/SettingsPage'
 import TranslatePage from './pages/translate/TranslatePage'
+
 function App(): JSX.Element {
   return (
     <Provider store={store}>
-      <StyleSheetManager
-        shouldForwardProp={(prop, element) => {
-          // 对于 HTML 元素，使用 isPropValid 检查
-          if (typeof element === 'string') {
-            return isPropValid(prop)
-          }
-          // 对于自定义组件，允许所有非特殊属性通过
-          return prop !== '$' && !prop.startsWith('$')
-        }}>
+      <StyleSheetManager>
         <ThemeProvider>
           <AntdProvider>
             <SyntaxHighlighterProvider>
@@ -40,7 +32,6 @@ function App(): JSX.Element {
                 <TopViewContainer>
                   <HashRouter>
                     <NavigationHandler />
-                    {/* 添加导航处理组件 */}
                     <Sidebar />
                     <Routes>
                       <Route path="/" element={<HomePage />} />
