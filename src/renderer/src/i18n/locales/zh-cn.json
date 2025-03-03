@@ -897,6 +897,20 @@
         "compressing": "压缩文件...",
         "completed": "备份完成"
       }
+    },
+    "restore": {
+      "title": "数据恢复",
+      "confirm": "确定要恢复数据吗？",
+      "confirm.button": "选择备份文件",
+      "content": "恢复操作将使用备份数据覆盖当前所有应用数据。请注意，恢复过程可能需要一些时间，感谢您的耐心等待。",
+      "progress": {
+        "title": "恢复进度",
+        "preparing": "准备恢复...",
+        "extracting": "解压备份...",
+        "reading_data": "读取数据...",
+        "copying_files": "复制文件... {{progress}}%",
+        "completed": "恢复完成"
+      }
     }
   }
 }

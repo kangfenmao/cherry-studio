@@ -897,6 +897,20 @@
         "compressing": "Compressing files...",
         "completed": "Backup completed"
       }
+    },
+    "restore": {
+      "title": "Data Restore",
+      "confirm": "Are you sure you want to restore data?",
+      "confirm.button": "Select Backup File",
+      "content": "Restore operation will overwrite all current application data with the backup data. Please note that the restore process may take some time, thank you for your patience.",
+      "progress": {
+        "title": "Restore Progress",
+        "preparing": "Preparing restore...",
+        "extracting": "Extracting backup...",
+        "reading_data": "Reading data...",
+        "copying_files": "Copying files... {{progress}}%",
+        "completed": "Restore completed"
+      }
     }
   }
 }

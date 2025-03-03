@@ -897,6 +897,20 @@
         "compressing": "圧縮中...",
         "completed": "バックアップ完了"
       }
+    },
+    "restore": {
+      "title": "データ復元",
+      "confirm": "データを復元しますか？",
+      "confirm.button": "バックアップファイルを選択",
+      "content": "復元操作は現在のアプリデータをバックアップデータで上書きします。復元処理には時間がかかる場合があります。",
+      "progress": {
+        "title": "復元進捗",
+        "preparing": "復元準備中...",
+        "extracting": "バックアップ解凍中...",
+        "reading_data": "データ読み込み中...",
+        "copying_files": "ファイルコピー中... {{progress}}%",
+        "completed": "復元完了"
+      }
     }
   }
 }

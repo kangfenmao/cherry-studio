@@ -125,6 +125,90 @@ class BackupManager {
     }
   }
 
+  async restore(_: Electron.IpcMainInvokeEvent, backupPath: string): Promise<string> {
+    const mainWindow = windowService.getMainWindow()
+
+    const onProgress = (processData: { stage: string; progress: number; total: number }) => {
+      mainWindow?.webContents.send('restore-progress', processData)
+      Logger.log('[BackupManager] restore progress', processData)
+    }
+
+    try {
+      // 创建临时目录
+      await fs.ensureDir(this.tempDir)
+      onProgress({ stage: 'preparing', progress: 0, total: 100 })
+
+      Logger.log('[backup] step 1: unzip backup file', this.tempDir)
+      // 使用 adm-zip 解压
+      const zip = new AdmZip(backupPath)
+      zip.extractAllTo(this.tempDir, true) // true 表示覆盖已存在的文件
+      onProgress({ stage: 'extracting', progress: 20, total: 100 })
+
+      Logger.log('[backup] step 2: read data.json')
+      // 读取 data.json
+      const dataPath = path.join(this.tempDir, 'data.json')
+      const data = await fs.readFile(dataPath, 'utf-8')
+      onProgress({ stage: 'reading_data', progress: 40, total: 100 })
+
+      Logger.log('[backup] step 3: restore Data directory')
+      // 恢复 Data 目录
+      const sourcePath = path.join(this.tempDir, 'Data')
+      const destPath = path.join(app.getPath('userData'), 'Data')
+
+      // 获取源目录总大小
+      const totalSize = await this.getDirSize(sourcePath)
+      let copiedSize = 0
+
+      await this.setWritableRecursive(destPath)
+      await fs.remove(destPath)
+
+      // 使用流式复制
+      await this.copyDirWithProgress(sourcePath, destPath, (size) => {
+        copiedSize += size
+        const progress = Math.min(90, 40 + Math.floor((copiedSize / totalSize) * 50))
+        onProgress({ stage: 'copying_files', progress, total: 100 })
+      })
+
+      Logger.log('[backup] step 4: clean up temp directory')
+      // 清理临时目录
+      await this.setWritableRecursive(this.tempDir)
+      await fs.remove(this.tempDir)
+      onProgress({ stage: 'completed', progress: 100, total: 100 })
+
+      Logger.log('[backup] step 5: Restore completed successfully')
+
+      return data
+    } catch (error) {
+      Logger.error('[backup] Restore failed:', error)
+      await fs.remove(this.tempDir).catch(() => {})
+      throw error
+    }
+  }
+
+  async backupToWebdav(_: Electron.IpcMainInvokeEvent, data: string, webdavConfig: WebDavConfig) {
+    const filename = 'cherry-studio.backup.zip'
+    const backupedFilePath = await this.backup(_, filename, data)
+    const webdavClient = new WebDav(webdavConfig)
+    return await webdavClient.putFileContents(filename, fs.createReadStream(backupedFilePath), {
+      overwrite: true
+    })
+  }
+
+  async restoreFromWebdav(_: Electron.IpcMainInvokeEvent, webdavConfig: WebDavConfig) {
+    const filename = 'cherry-studio.backup.zip'
+    const webdavClient = new WebDav(webdavConfig)
+    const retrievedFile = await webdavClient.getFileContents(filename)
+    const backupedFilePath = path.join(this.backupDir, filename)
+
+    if (!fs.existsSync(this.backupDir)) {
+      fs.mkdirSync(this.backupDir, { recursive: true })
+    }
+
+    await fs.writeFileSync(backupedFilePath, retrievedFile as Buffer)
+
+    return await this.restore(_, backupedFilePath)
+  }
+
   private async getDirSize(dirPath: string): Promise<number> {
     let size = 0
     const items = await fs.readdir(dirPath, { withFileTypes: true })
@@ -161,72 +245,6 @@ class BackupManager {
         onProgress(stats.size)
       }
     }
-  }
-
-  async restore(_: Electron.IpcMainInvokeEvent, backupPath: string): Promise<string> {
-    try {
-      // 创建临时目录
-      await fs.ensureDir(this.tempDir)
-
-      Logger.log('[backup] step 1: unzip backup file', this.tempDir)
-
-      // 使用 adm-zip 解压
-      const zip = new AdmZip(backupPath)
-      zip.extractAllTo(this.tempDir, true) // true 表示覆盖已存在的文件
-
-      Logger.log('[backup] step 2: read data.json')
-
-      // 读取 data.json
-      const dataPath = path.join(this.tempDir, 'data.json')
-      const data = await fs.readFile(dataPath, 'utf-8')
-
-      Logger.log('[backup] step 3: restore Data directory')
-
-      // 恢复 Data 目录
-      const sourcePath = path.join(this.tempDir, 'Data')
-      const destPath = path.join(app.getPath('userData'), 'Data')
-      await this.setWritableRecursive(destPath)
-      await fs.remove(destPath)
-      await fs.copy(sourcePath, destPath)
-
-      Logger.log('[backup] step 4: clean up temp directory')
-
-      // 清理临时目录
-      await this.setWritableRecursive(this.tempDir)
-      await fs.remove(this.tempDir)
-
-      Logger.log('[backup] step 5: Restore completed successfully')
-
-      return data
-    } catch (error) {
-      Logger.error('[backup] Restore failed:', error)
-      await fs.remove(this.tempDir).catch(() => {})
-      throw error
-    }
-  }
-
-  async backupToWebdav(_: Electron.IpcMainInvokeEvent, data: string, webdavConfig: WebDavConfig) {
-    const filename = 'cherry-studio.backup.zip'
-    const backupedFilePath = await this.backup(_, filename, data)
-    const webdavClient = new WebDav(webdavConfig)
-    return await webdavClient.putFileContents(filename, fs.createReadStream(backupedFilePath), {
-      overwrite: true
-    })
-  }
-
-  async restoreFromWebdav(_: Electron.IpcMainInvokeEvent, webdavConfig: WebDavConfig) {
-    const filename = 'cherry-studio.backup.zip'
-    const webdavClient = new WebDav(webdavConfig)
-    const retrievedFile = await webdavClient.getFileContents(filename)
-    const backupedFilePath = path.join(this.backupDir, filename)
-
-    if (!fs.existsSync(this.backupDir)) {
-      fs.mkdirSync(this.backupDir, { recursive: true })
-    }
-
-    await fs.writeFileSync(backupedFilePath, retrievedFile as Buffer)
-
-    return await this.restore(_, backupedFilePath)
   }
 }
 

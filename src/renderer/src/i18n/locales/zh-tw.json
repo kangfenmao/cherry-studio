@@ -897,6 +897,20 @@
         "compressing": "壓縮文件...",
         "completed": "備份完成"
       }
+    },
+    "restore": {
+      "title": "資料復原",
+      "confirm": "確定要復原資料嗎？",
+      "confirm.button": "選擇備份檔案",
+      "content": "復原操作將使用備份資料覆蓋當前所有應用資料。請注意，復原過程可能需要一些時間，感謝您的耐心等待。",
+      "progress": {
+        "title": "復原進度",
+        "preparing": "準備復原...",
+        "extracting": "解壓備份...",
+        "reading_data": "讀取資料...",
+        "copying_files": "複製文件... {{progress}}%",
+        "completed": "復原完成"
+      }
     }
   }
 }
