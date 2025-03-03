@@ -595,6 +595,10 @@
       "data": {
         "app_data": "App Data",
         "app_logs": "App Logs",
+        "app_knowledge": "Knowledge Base Files",
+        "app_knowledge.remove_all": "Remove Files",
+        "app_knowledge.remove_all_confirm": "Removing knowledge base files will not delete the knowledge base itself, which will reduce the storage space occupied. Continue?",
+        "app_knowledge.remove_all_success": "Files removed successfully",
         "clear_cache": {
           "button": "Clear Cache",
           "confirm": "Clearing the cache will delete application cache data, including minapp data. This action is irreversible, continue?",

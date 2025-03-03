@@ -595,6 +595,10 @@
       "data": {
         "app_data": "應用數據",
         "app_logs": "應用日誌",
+        "app_knowledge": "知識庫文件",
+        "app_knowledge.remove_all": "刪除文件",
+        "app_knowledge.remove_all_confirm": "刪除知識庫文件不會刪除知識庫本身，可以減少存儲空間占用，刪除之後文件無法再打開，是否繼續？",
+        "app_knowledge.remove_all_success": "文件刪除成功",
         "clear_cache": {
           "button": "清除緩存",
           "confirm": "清除緩存將刪除應用緩存數據，包括小程序數據。此操作不可恢復，是否繼續？",
