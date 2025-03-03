@@ -883,6 +883,20 @@
       "quit": "終了",
       "show_window": "ウィンドウを表示",
       "visualization": "可視化"
+    },
+    "backup": {
+      "title": "データバックアップ",
+      "confirm": "データをバックアップしますか？",
+      "confirm.button": "バックアップ位置を選択",
+      "content": "バックアップ操作はすべてのアプリデータを含むため、時間がかかる場合があります。",
+      "progress": {
+        "title": "バックアップ進捗",
+        "preparing": "バックアップ準備中...",
+        "writing_data": "データ書き込み中...",
+        "copying_files": "ファイルコピー中... {{progress}}%",
+        "compressing": "圧縮中...",
+        "completed": "バックアップ完了"
+      }
     }
   }
 }

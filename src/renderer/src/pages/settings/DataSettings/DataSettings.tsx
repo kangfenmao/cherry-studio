@@ -2,8 +2,9 @@ import { FileSearchOutlined, FolderOpenOutlined, InfoCircleOutlined, SaveOutline
 import { Client } from '@notionhq/client'
 import { HStack } from '@renderer/components/Layout'
 import MinApp from '@renderer/components/MinApp'
+import BackupPopup from '@renderer/components/Popups/BackupPopup'
 import { useTheme } from '@renderer/context/ThemeProvider'
-import { backup, reset, restore } from '@renderer/services/BackupService'
+import { reset, restore } from '@renderer/services/BackupService'
 import { RootState, useAppDispatch } from '@renderer/store'
 import {
   setNotionApiKey,
@@ -332,6 +333,8 @@ const DataSettings: FC = () => {
     })
   }
 
+  const handleBackup = () => BackupPopup.show()
+
   return (
     <SettingContainer theme={theme}>
       <SettingGroup theme={theme}>
@@ -340,7 +343,7 @@ const DataSettings: FC = () => {
         <SettingRow>
           <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
           <HStack gap="5px" justifyContent="space-between">
-            <Button onClick={backup} icon={<SaveOutlined />}>
+            <Button onClick={handleBackup} icon={<SaveOutlined />}>
               {t('settings.general.backup.button')}
             </Button>
             <Button onClick={restore} icon={<FolderOpenOutlined />}>

@@ -883,6 +883,20 @@
       "quit": "退出",
       "show_window": "显示窗口",
       "visualization": "可视化"
+    },
+    "backup": {
+      "title": "数据备份",
+      "confirm": "确定要备份数据吗？",
+      "confirm.button": "选择备份位置",
+      "content": "备份操作将涵盖所有应用数据，包括聊天记录、设置、知识库等所有数据。请注意，备份过程可能需要一些时间，感谢您的耐心等待。",
+      "progress": {
+        "title": "备份进度",
+        "preparing": "准备备份...",
+        "writing_data": "写入数据...",
+        "copying_files": "复制文件... {{progress}}%",
+        "compressing": "压缩文件...",
+        "completed": "备份完成"
+      }
     }
   }
 }

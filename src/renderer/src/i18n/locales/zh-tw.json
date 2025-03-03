@@ -883,6 +883,20 @@
       "quit": "退出",
       "show_window": "顯示視窗",
       "visualization": "可視化"
+    },
+    "backup": {
+      "title": "資料備份",
+      "confirm": "確定要備份資料嗎？",
+      "confirm.button": "選擇備份位置",
+      "content": "備份操作將涵蓋所有應用資料，包括聊天記錄、設定、知識庫等全部資料。請注意，備份過程可能需要一些時間，感謝您的耐心等待。",
+      "progress": {
+        "title": "備份進度",
+        "preparing": "準備備份...",
+        "writing_data": "寫入資料...",
+        "copying_files": "複製文件... {{progress}}%",
+        "compressing": "壓縮文件...",
+        "completed": "備份完成"
+      }
     }
   }
 }
