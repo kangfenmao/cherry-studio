@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { getProviderLogo } from '@renderer/config/providers'
@@ -126,6 +126,8 @@ const ProvidersList: FC = () => {
             type="text"
             placeholder={t('settings.provider.search')}
             value={searchText}
+            style={{ borderRadius: 'var(--list-item-border-radius)', height: 35 }}
+            suffix={<SearchOutlined style={{ color: 'var(--color-text-3)' }} />}
             onChange={(e) => setSearchText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Escape') {
@@ -191,7 +193,11 @@ const ProvidersList: FC = () => {
           </ProviderList>
         </Scrollbar>
         <AddButtonWrapper>
-          <Button style={{ width: '100%' }} icon={<PlusOutlined />} onClick={onAddProvider} disabled={dragging}>
+          <Button
+            style={{ width: '100%', borderRadius: 'var(--list-item-border-radius)' }}
+            icon={<PlusOutlined />}
+            onClick={onAddProvider}
+            disabled={dragging}>
             {t('button.add')}
           </Button>
         </AddButtonWrapper>
