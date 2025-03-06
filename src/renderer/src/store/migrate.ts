@@ -1230,6 +1230,7 @@ const migrateConfig = {
         delete p.enabled
       })
     }
+
     return state
   }
 }
