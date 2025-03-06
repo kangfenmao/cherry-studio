@@ -317,7 +317,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           title={group}
           extra={
             <Tooltip title={t('settings.models.manage.remove_whole_group')}>
-              <RemoveIcon
+              <HoveredRemoveIcon
                 onClick={() =>
                   modelGroups[group]
                     .filter((model) => provider.models.some((m) => m.id === model.id))
@@ -407,6 +407,14 @@ const RemoveIcon = styled(MinusCircleOutlined)`
   color: var(--color-error);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+`
+
+const HoveredRemoveIcon = styled(RemoveIcon)`
+  opacity: 0;
+  margin-top: 2px;
+  &:hover {
+    opacity: 1;
+  }
 `
 
 const SettingIcon = styled(SettingOutlined)`

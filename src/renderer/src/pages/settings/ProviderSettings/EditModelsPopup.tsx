@@ -169,62 +169,67 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
         />
       </SearchContainer>
       <ListContainer>
-        {Object.keys(modelGroups).map((group) => (
-          <div key={group}>
-            <ListHeader key={group}>
-              {group}
-              <div>
-                <Button
-                  type="text"
-                  icon={<PlusOutlined />}
-                  title={t(`settings.models.manage.add_whole_group`)}
-                  onClick={() => {
-                    modelGroups[group].filter((model) => !isModelInProvider(provider, model.id)).forEach(onAddModel)
-                  }}
-                />
-                <Button
-                  type="text"
-                  icon={<MinusOutlined />}
-                  title={t(`settings.models.manage.remove_whole_group`)}
-                  onClick={() => {
-                    modelGroups[group].filter((model) => isModelInProvider(provider, model.id)).forEach(onRemoveModel)
-                  }}
-                />
-              </div>
-            </ListHeader>
-            {modelGroups[group].map((model) => {
-              return (
-                <ListItem key={model.id}>
-                  <ListItemHeader>
-                    <Avatar src={getModelLogo(model.id)} size={24}>
-                      {model?.name?.[0]?.toUpperCase()}
-                    </Avatar>
-                    <ListItemName>
-                      <Tooltip title={model.id} placement="top">
-                        <span style={{ cursor: 'help' }}>{model.name}</span>
-                      </Tooltip>
-                      <ModelTags model={model} />
-                      {!isEmpty(model.description) && (
-                        <Popover
-                          trigger="click"
-                          title={model.name}
-                          content={model.description}
-                          overlayStyle={{ maxWidth: 600 }}>
-                          <Question />
-                        </Popover>
-                      )}
-                    </ListItemName>
-                  </ListItemHeader>
-                  {isModelInProvider(provider, model.id) ? (
-                    <Button type="default" onClick={() => onRemoveModel(model)} icon={<MinusOutlined />} />
-                  ) : (
-                    <Button type="primary" onClick={() => onAddModel(model)} icon={<PlusOutlined />} />
-                  )}
-                </ListItem>
-              )
-            })}
-          </div>
-        ))}
+        {Object.keys(modelGroups).map((group) => {
+          const isAllInProvider = modelGroups[group].every((model) => isModelInProvider(provider, model.id))
+          return (
+            <div key={group}>
+              <ListHeader key={group}>
+                {group}
+                <div>
+                  <Button
+                    type="text"
+                    icon={isAllInProvider ? <MinusOutlined /> : <PlusOutlined />}
+                    title={
+                      isAllInProvider
+                        ? t(`settings.models.manage.remove_whole_group`)
+                        : t(`settings.models.manage.add_whole_group`)
+                    }
+                    onClick={() => {
+                      if (isAllInProvider) {
+                        modelGroups[group]
+                          .filter((model) => isModelInProvider(provider, model.id))
+                          .forEach(onRemoveModel)
+                      } else {
+                        modelGroups[group].filter((model) => !isModelInProvider(provider, model.id)).forEach(onAddModel)
+                      }
+                    }}
+                  />
+                </div>
+              </ListHeader>
+              {modelGroups[group].map((model) => {
+                return (
+                  <ListItem key={model.id}>
+                    <ListItemHeader>
+                      <Avatar src={getModelLogo(model.id)} size={24}>
+                        {model?.name?.[0]?.toUpperCase()}
+                      </Avatar>
+                      <ListItemName>
+                        <Tooltip title={model.id} placement="top">
+                          <span style={{ cursor: 'help' }}>{model.name}</span>
+                        </Tooltip>
+                        <ModelTags model={model} />
+                        {!isEmpty(model.description) && (
+                          <Popover
+                            trigger="click"
+                            title={model.name}
+                            content={model.description}
+                            overlayStyle={{ maxWidth: 600 }}>
+                            <Question />
+                          </Popover>
+                        )}
+                      </ListItemName>
+                    </ListItemHeader>
+                    {isModelInProvider(provider, model.id) ? (
+                      <Button type="default" onClick={() => onRemoveModel(model)} icon={<MinusOutlined />} />
+                    ) : (
+                      <Button type="primary" onClick={() => onAddModel(model)} icon={<PlusOutlined />} />
+                    )}
+                  </ListItem>
+                )
+              })}
+            </div>
+          )
+        })}
         {isEmpty(list) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('settings.models.empty')} />}
       </ListContainer>
     </Modal>
