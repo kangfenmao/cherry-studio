@@ -1219,11 +1219,18 @@ const migrateConfig = {
   '77': (state: RootState) => {
     if (state.websearch) {
       if (!state.websearch.providers.find((p) => p.id === 'searxng')) {
-        state.websearch.providers.push({
-          id: 'searxng',
-          name: 'Searxng',
-          apiHost: ''
-        })
+        state.websearch.providers.push(
+          {
+            id: 'searxng',
+            name: 'Searxng',
+            apiHost: ''
+          },
+          {
+            id: 'exa',
+            name: 'Exa',
+            apiKey: ''
+          }
+        )
       }
       state.websearch.providers.forEach((p) => {
         // @ts-ignore eslint-disable-next-line
@@ -1231,15 +1238,6 @@ const migrateConfig = {
       })
     }
 
-    return state
-  },
-  '77': (state: RootState) => {
-    state.websearch.providers.push({
-      id: 'exa',
-      name: 'Exa',
-      enabled: false,
-      apiKey: ''
-    })
     return state
   }
 }
