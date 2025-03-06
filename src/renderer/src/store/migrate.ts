@@ -1214,16 +1214,22 @@ const migrateConfig = {
       isSystem: true,
       enabled: false
     })
-    const existWebsearchProvider = state.websearch.providers.find((p) => p.id === 'tavily')
-    if (existWebsearchProvider && existWebsearchProvider.apiKey !== '') {
-      existWebsearchProvider.enabled = true
+    return state
+  },
+  '77': (state: RootState) => {
+    if (state.websearch) {
+      if (!state.websearch.providers.find((p) => p.id === 'searxng')) {
+        state.websearch.providers.push({
+          id: 'searxng',
+          name: 'Searxng',
+          apiHost: ''
+        })
+      }
+      state.websearch.providers.forEach((p) => {
+        // @ts-ignore eslint-disable-next-line
+        delete p.enabled
+      })
     }
-    state.websearch.providers.push({
-      id: 'searxng',
-      name: 'Searxng',
-      enabled: false,
-      apiHost: ''
-    })
     return state
   }
 }
