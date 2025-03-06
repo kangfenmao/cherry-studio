@@ -1214,6 +1214,16 @@ const migrateConfig = {
       isSystem: true,
       enabled: false
     })
+    const existWebsearchProvider = state.websearch.providers.find((p) => p.id === 'tavily')
+    if (existWebsearchProvider && existWebsearchProvider.apiKey !== '') {
+      existWebsearchProvider.enabled = true
+    }
+    state.websearch.providers.push({
+      id: 'searxng',
+      name: 'Searxng',
+      enabled: false,
+      apiHost: ''
+    })
     return state
   }
 }
