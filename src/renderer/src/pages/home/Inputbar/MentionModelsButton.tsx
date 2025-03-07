@@ -8,7 +8,7 @@ import { getModelUniqId } from '@renderer/services/ModelService'
 import { Model, Provider } from '@renderer/types'
 import { Avatar, Dropdown, Tooltip } from 'antd'
 import { first, sortBy } from 'lodash'
-import { FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { createGlobalStyle } from 'styled-components'
 
@@ -37,23 +37,29 @@ const MentionModelsButton: FC<Props> = ({ mentionModels, onMentionModel: onSelec
     itemRefs.current[index] = el
   }
 
-  const togglePin = async (modelId: string) => {
-    const newPinnedModels = pinnedModels.includes(modelId)
-      ? pinnedModels.filter((id) => id !== modelId)
-      : [...pinnedModels, modelId]
+  const togglePin = useCallback(
+    async (modelId: string) => {
+      const newPinnedModels = pinnedModels.includes(modelId)
+        ? pinnedModels.filter((id) => id !== modelId)
+        : [...pinnedModels, modelId]
 
-    await db.settings.put({ id: 'pinned:models', value: newPinnedModels })
-    setPinnedModels(newPinnedModels)
-  }
+      await db.settings.put({ id: 'pinned:models', value: newPinnedModels })
+      setPinnedModels(newPinnedModels)
+    },
+    [pinnedModels]
+  )
 
-  const handleModelSelect = (model: Model) => {
-    // Check if model is already selected
-    if (mentionModels.some((selected) => getModelUniqId(selected) === getModelUniqId(model))) {
-      return
-    }
-    onSelect(model, fromKeyboard)
-    setIsOpen(false)
-  }
+  const handleModelSelect = useCallback(
+    (model: Model) => {
+      // Check if model is already selected
+      if (mentionModels.some((selected) => getModelUniqId(selected) === getModelUniqId(model))) {
+        return
+      }
+      onSelect(model, fromKeyboard)
+      setIsOpen(false)
+    },
+    [fromKeyboard, mentionModels, onSelect]
+  )
 
   const modelMenuItems = useMemo(() => {
     const items = providers
@@ -161,7 +167,7 @@ const MentionModelsButton: FC<Props> = ({ mentionModels, onMentionModel: onSelec
 
     // Remove empty groups
     return items.filter((group) => group.children.length > 0)
-  }, [providers, pinnedModels, t, onSelect, mentionModels, searchText])
+  }, [providers, pinnedModels, t, searchText, togglePin, handleModelSelect])
 
   // Get flattened list of all model items
   const flatModelItems = useMemo(() => {
@@ -345,14 +351,13 @@ const MentionModelsButton: FC<Props> = ({ mentionModels, onMentionModel: onSelec
     <>
       <DropdownMenuStyle />
       <Dropdown
+        overlayStyle={{ marginBottom: 20 }}
         dropdownRender={() => menu}
         trigger={['click']}
         open={isOpen}
         onOpenChange={(open) => {
           setIsOpen(open)
-          if (open) {
-            setFromKeyboard(false) // Set fromKeyboard to false when opened by button click
-          }
+          open && setFromKeyboard(false) // Set fromKeyboard to false when opened by button click
         }}
         overlayClassName="mention-models-dropdown">
         <Tooltip placement="top" title={t('agents.edit.model.select.title')} arrow>
@@ -366,25 +371,27 @@ const MentionModelsButton: FC<Props> = ({ mentionModels, onMentionModel: onSelec
 }
 
 const DropdownMenuStyle = createGlobalStyle`
-  /* Apply background to all animation states */
-  .ant-dropdown,
-  .ant-slide-up-enter .ant-dropdown-menu,
-  .ant-slide-up-appear .ant-dropdown-menu,
-  .ant-slide-up-leave .ant-dropdown-menu,
-  .ant-slide-up-enter-active .ant-dropdown-menu,
-  .ant-slide-up-appear-active .ant-dropdown-menu,
-  .ant-slide-up-leave-active .ant-dropdown-menu {
-    background: rgba(var(--color-base-rgb), 0.65) !important;
-    backdrop-filter: blur(35px) saturate(150%) !important;
-  }
-
+  /* 将样式限定在 mention-models-dropdown 类下 */
   .mention-models-dropdown {
     &.ant-dropdown {
+      background: rgba(var(--color-base-rgb), 0.65) !important;
+      backdrop-filter: blur(35px) saturate(150%) !important;
       animation-duration: 0.15s !important;
-      margin-top: 4px;
+    }
+
+    /* 移动其他样式到 mention-models-dropdown 类下 */
+    .ant-slide-up-enter .ant-dropdown-menu,
+    .ant-slide-up-appear .ant-dropdown-menu,
+    .ant-slide-up-leave .ant-dropdown-menu,
+    .ant-slide-up-enter-active .ant-dropdown-menu,
+    .ant-slide-up-appear-active .ant-dropdown-menu,
+    .ant-slide-up-leave-active .ant-dropdown-menu {
+      background: rgba(var(--color-base-rgb), 0.65) !important;
+      backdrop-filter: blur(35px) saturate(150%) !important;
     }
 
     .ant-dropdown-menu {
+      /* 保持原有的下拉菜单样式，但限定在 mention-models-dropdown 类下 */
       max-height: 400px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -401,6 +408,7 @@ const DropdownMenuStyle = createGlobalStyle`
       transform-origin: top;
       will-change: transform, opacity;
       transition: all 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
+      margin-bottom: 0;
 
       &.no-scrollbar {
         padding-right: 12px;
@@ -445,7 +453,7 @@ const DropdownMenuStyle = createGlobalStyle`
 
     .ant-dropdown-menu-item-group {
       margin-bottom: 4px;
-      
+
       &:not(:first-child) {
         margin-top: 4px;
       }
@@ -469,7 +477,7 @@ const DropdownMenuStyle = createGlobalStyle`
       font-size: 13px;
       opacity: 0.8;
       margin-bottom: 40px;
-      
+
       &:hover {
         background: none;
       }
