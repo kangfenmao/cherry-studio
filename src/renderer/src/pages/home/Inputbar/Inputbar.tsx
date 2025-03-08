@@ -685,7 +685,6 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                 onMentionModel={(model) => onMentionModel(model, mentionFromKeyboard)}
                 ToolbarButton={ToolbarButton}
               />
-              <MCPToolsButton enabledMCPs={enabledMCPs} onEnableMCP={toggelEnableMCP} ToolbarButton={ToolbarButton} />
               <Tooltip placement="top" title={t('chat.input.web_search')} arrow>
                 <ToolbarButton type="text" onClick={onEnableWebSearch}>
                   <GlobalOutlined
@@ -693,6 +692,16 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                   />
                 </ToolbarButton>
               </Tooltip>
+              {showKnowledgeIcon && (
+                <KnowledgeBaseButton
+                  selectedBases={selectedKnowledgeBases}
+                  onSelect={handleKnowledgeBaseSelect}
+                  ToolbarButton={ToolbarButton}
+                  disabled={files.length > 0}
+                />
+              )}
+              <MCPToolsButton enabledMCPs={enabledMCPs} onEnableMCP={toggelEnableMCP} ToolbarButton={ToolbarButton} />
+              <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
               <Tooltip placement="top" title={t('chat.input.clear', { Command: cleanTopicShortcut })} arrow>
                 <Popconfirm
                   title={t('chat.input.clear.content')}
@@ -706,15 +715,6 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic }) => {
                   </ToolbarButton>
                 </Popconfirm>
               </Tooltip>
-              {showKnowledgeIcon && (
-                <KnowledgeBaseButton
-                  selectedBases={selectedKnowledgeBases}
-                  onSelect={handleKnowledgeBaseSelect}
-                  ToolbarButton={ToolbarButton}
-                  disabled={files.length > 0}
-                />
-              )}
-              <AttachmentButton model={model} files={files} setFiles={setFiles} ToolbarButton={ToolbarButton} />
               <Tooltip placement="top" title={t('chat.input.new.context', { Command: newContextShortcut })} arrow>
                 <ToolbarButton type="text" onClick={onNewContext}>
                   <PicCenterOutlined />
