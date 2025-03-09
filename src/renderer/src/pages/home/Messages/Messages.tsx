@@ -26,7 +26,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import BeatLoader from 'react-spinners/BeatLoader'
 import styled from 'styled-components'
 
-import Suggestions from '../components/Suggestions'
 import MessageGroup from './MessageGroup'
 import NarrowLayout from './NarrowLayout'
 import Prompt from './Prompt'
@@ -223,7 +222,6 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
       ref={containerRef}
       $right={topicPosition === 'left'}>
       <NarrowLayout style={{ display: 'flex', flexDirection: 'column-reverse' }}>
-        <Suggestions assistant={assistant} messages={messages} />
         <InfiniteScroll
           dataLength={displayMessages.length}
           next={loadMoreMessages}
