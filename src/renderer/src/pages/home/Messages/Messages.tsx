@@ -19,7 +19,7 @@ import {
 } from '@renderer/store/messages'
 import type { Assistant, Message, Topic } from '@renderer/types'
 import { captureScrollableDivAsBlob, captureScrollableDivAsDataURL, runAsyncFunction } from '@renderer/utils'
-import { last } from 'lodash'
+import { isEmpty, last } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -92,8 +92,14 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
   }, [])
 
   const autoRenameTopic = useCallback(async () => {
-    const messages = messagesRef.current
+    let messages = [...messagesRef.current]
     const _topic = getTopic(assistant, topic.id)
+
+    if (isEmpty(messages)) {
+      return
+    }
+
+    messages = messages.filter((m) => m.status === 'success')
 
     if (!enableTopicNaming) {
       const topicName = messages[0]?.content.substring(0, 50)
