@@ -45,7 +45,7 @@ export function getAllFiles(dirPath: string, arrayOfFiles: FileType[] = []): Fil
         count: 1,
         origin_name: name,
         type: fileType,
-        created_at: new Date()
+        created_at: new Date().toISOString()
       }
 
       arrayOfFiles.push(fileItem)
