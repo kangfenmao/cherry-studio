@@ -5,7 +5,7 @@ import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { addAbortController } from '@renderer/utils/abortController'
 import { formatMessageError } from '@renderer/utils/error'
-import { findLast, isEmpty } from 'lodash'
+import { cloneDeep, findLast, isEmpty } from 'lodash'
 
 import AiProvider from '../providers/AiProvider'
 import {
@@ -99,7 +99,7 @@ export async function fetchChatCompletion({
         }
 
         if (mcpToolResponse) {
-          message.metadata = { ...message.metadata, mcpTools: mcpToolResponse }
+          message.metadata = { ...message.metadata, mcpTools: cloneDeep(mcpToolResponse) }
         }
 
         // Handle citations from Perplexity API
