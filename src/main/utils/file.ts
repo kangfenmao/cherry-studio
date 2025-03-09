@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import { audioExts, documentExts, imageExts, textExts, videoExts } from '@shared/config/constant'
 import { FileType, FileTypes } from '@types'
+import { app } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
 
 export function getFileType(ext: string): FileTypes {
@@ -14,6 +15,7 @@ export function getFileType(ext: string): FileTypes {
   if (documentExts.includes(ext)) return FileTypes.DOCUMENT
   return FileTypes.OTHER
 }
+
 export function getAllFiles(dirPath: string, arrayOfFiles: FileType[] = []): FileType[] {
   const files = fs.readdirSync(dirPath)
 
@@ -53,4 +55,12 @@ export function getAllFiles(dirPath: string, arrayOfFiles: FileType[] = []): Fil
   })
 
   return arrayOfFiles
+}
+
+export function getTempDir() {
+  return path.join(app.getPath('temp'), 'CherryStudio')
+}
+
+export function getFilesDir() {
+  return path.join(app.getPath('userData'), 'Data', 'Files')
 }

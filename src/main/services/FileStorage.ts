@@ -1,9 +1,8 @@
-import { getFileType } from '@main/utils/file'
+import { getFilesDir, getFileType, getTempDir } from '@main/utils/file'
 import { documentExts, imageExts } from '@shared/config/constant'
 import { FileType } from '@types'
 import * as crypto from 'crypto'
 import {
-  app,
   dialog,
   OpenDialogOptions,
   OpenDialogReturnValue,
@@ -21,8 +20,8 @@ import { chdir } from 'process'
 import { v4 as uuidv4 } from 'uuid'
 
 class FileStorage {
-  private storageDir = path.join(app.getPath('userData'), 'Data', 'Files')
-  private tempDir = path.join(app.getPath('temp'), 'CherryStudio')
+  private storageDir = getFilesDir()
+  private tempDir = getTempDir()
 
   constructor() {
     this.initStorageDir()
