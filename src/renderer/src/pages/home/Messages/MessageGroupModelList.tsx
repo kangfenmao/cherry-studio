@@ -19,22 +19,19 @@ type DisplayMode = 'compact' | 'expanded'
 const MessageGroupModelList: FC<MessageGroupModelListProps> = ({ messages, selectedIndex, setSelectedIndex }) => {
   const { t } = useTranslation()
   const [displayMode, setDisplayMode] = useState<DisplayMode>('expanded')
+  const isCompact = displayMode === 'compact'
 
   return (
     <ModelsWrapper>
-      <DisplayModeToggle displayMode={displayMode}>
+      <DisplayModeToggle displayMode={displayMode} onClick={() => setDisplayMode(isCompact ? 'expanded' : 'compact')}>
         <Tooltip
           title={
             displayMode === 'compact'
-              ? t('message.message.multi_model_style.fold.expand')
+              ? t(`message.message.multi_model_style.fold.expand`)
               : t('message.message.multi_model_style.fold.compress')
           }
           placement="top">
-          {displayMode === 'compact' ? (
-            <ArrowsAltOutlined onClick={() => setDisplayMode('expanded')} />
-          ) : (
-            <ShrinkOutlined onClick={() => setDisplayMode('compact')} />
-          )}
+          {displayMode === 'compact' ? <ArrowsAltOutlined /> : <ShrinkOutlined />}
         </Tooltip>
       </DisplayModeToggle>
 
@@ -204,7 +201,7 @@ const AvatarWrapper = styled.div<{ isSelected: boolean }>`
     `
     border: 2px solid var(--color-primary);
     z-index: 2;
-    
+
     &:hover {
       /* z-index is applied immediately, not part of the transition */
       z-index: 10;
