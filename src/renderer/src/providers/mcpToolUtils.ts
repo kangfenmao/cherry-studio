@@ -142,7 +142,7 @@ export function upsertMCPToolResponse(
     results.push(resp)
   } finally {
     onChunk({
-      text: '',
+      text: '\n',
       mcpToolResponse: results
     })
   }
