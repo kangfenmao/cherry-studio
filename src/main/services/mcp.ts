@@ -1,12 +1,12 @@
 import { MCPServer, MCPTool } from '@types'
 import log from 'electron-log'
-import Store from 'electron-store'
 import { EventEmitter } from 'events'
 import { v4 as uuidv4 } from 'uuid'
 
-const store = new Store()
+import { windowService } from './WindowService'
 
 export default class MCPService extends EventEmitter {
+  private servers: MCPServer[] = []
   private activeServers: Map<string, any> = new Map()
   private clients: { [key: string]: any } = {}
   private Client: any
@@ -14,15 +14,73 @@ export default class MCPService extends EventEmitter {
   private sseTransport: any
   private initialized = false
   private initPromise: Promise<void> | null = null
+  private serversLoaded = false
+  private serversLoadedPromise: Promise<void> | null = null
+  private serversLoadedResolve: (() => void) | null = null
 
   constructor() {
     super()
-    this.init().catch((err) => {
-      log.error('[MCP] Failed to initialize MCP service:', err)
+
+    // Create a promise that will be resolved when servers are loaded from Redux
+    this.serversLoadedPromise = new Promise((resolve) => {
+      this.serversLoadedResolve = resolve
     })
+
+    // Request servers from Redux on initialization
+    this.requestServers()
   }
-  private getServersFromStore(): MCPServer[] {
-    return store.get('mcp.servers', []) as MCPServer[]
+
+  /**
+   * Request server data from renderer process Redux
+   */
+  public requestServers(): void {
+    const mainWindow = windowService.getMainWindow()
+    if (mainWindow) {
+      log.info('[MCP] Requesting servers from Redux')
+      mainWindow.webContents.send('mcp:request-servers')
+    } else {
+      log.warn('[MCP] Main window not available, cannot request servers')
+    }
+  }
+
+  /**
+   * Set servers received from Redux
+   */
+  public setServers(servers: MCPServer[]): void {
+    log.info(`[MCP] Received ${servers.length} servers from Redux`)
+    this.servers = servers
+    this.serversLoaded = true
+
+    // Resolve the promise to unlock initialization
+    if (this.serversLoadedResolve) {
+      this.serversLoadedResolve()
+      this.serversLoadedResolve = null
+    }
+
+    // Initialize if not already initialized
+    if (!this.initialized) {
+      this.init().catch((err) => {
+        log.error('[MCP] Failed to initialize MCP service:', err)
+      })
+    }
+  }
+
+  /**
+   * Get the current servers
+   */
+  private getServers(): MCPServer[] {
+    return this.servers
+  }
+
+  /**
+   * Wait for servers to be loaded from Redux
+   */
+  private async waitForServers(): Promise<void> {
+    if (!this.serversLoaded && this.serversLoadedPromise) {
+      log.info('[MCP] Waiting for servers data from Redux...')
+      await this.serversLoadedPromise
+      log.info('[MCP] Servers received, continuing initialization')
+    }
   }
 
   public async init() {
@@ -35,6 +93,9 @@ export default class MCPService extends EventEmitter {
     // Create and store the initialization promise
     this.initPromise = (async () => {
       try {
+        // Wait for servers to be loaded from Redux
+        await this.waitForServers()
+
         log.info('[MCP] Starting initialization')
         this.Client = await this.importClient()
         this.stoioTransport = await this.importStdioClientTransport()
@@ -43,7 +104,7 @@ export default class MCPService extends EventEmitter {
         // Mark as initialized before loading servers to prevent recursive initialization
         this.initialized = true
 
-        await this.load(this.getServersFromStore())
+        await this.load(this.getServers())
         log.info('[MCP] Initialization completed successfully')
       } catch (err) {
         this.initialized = false // Reset flag on error
@@ -89,7 +150,7 @@ export default class MCPService extends EventEmitter {
 
   public async listAvailableServices(): Promise<MCPServer[]> {
     await this.ensureInitialized()
-    return this.getServersFromStore()
+    return this.getServers()
   }
 
   private async ensureInitialized() {
@@ -102,13 +163,13 @@ export default class MCPService extends EventEmitter {
   public async addServer(server: MCPServer): Promise<void> {
     await this.ensureInitialized()
     try {
-      const servers = this.getServersFromStore()
+      const servers = this.getServers()
       if (servers.some((s) => s.name === server.name)) {
         throw new Error(`Server with name ${server.name} already exists`)
       }
 
       servers.push(server)
-      store.set('mcp.servers', servers)
+      this.notifyReduxServersChanged(servers)
 
       if (server.isActive) {
         await this.activate(server)
@@ -122,7 +183,7 @@ export default class MCPService extends EventEmitter {
   public async updateServer(server: MCPServer): Promise<void> {
     await this.ensureInitialized()
     try {
-      const servers = this.getServersFromStore()
+      const servers = this.getServers()
       const index = servers.findIndex((s) => s.name === server.name)
 
       if (index === -1) {
@@ -137,7 +198,7 @@ export default class MCPService extends EventEmitter {
       }
 
       servers[index] = server
-      store.set('mcp.servers', servers)
+      this.notifyReduxServersChanged(servers)
     } catch (error) {
       log.error('Failed to update MCP server:', error)
       throw error
@@ -151,9 +212,10 @@ export default class MCPService extends EventEmitter {
         await this.deactivate(serverName)
       }
 
-      const servers = this.getServersFromStore()
+      const servers = this.getServers()
       const filteredServers = servers.filter((s) => s.name !== serverName)
-      store.set('mcp.servers', filteredServers)
+      this.servers = filteredServers
+      this.notifyReduxServersChanged(filteredServers)
     } catch (error) {
       log.error('Failed to delete MCP server:', error)
       throw error
@@ -164,7 +226,7 @@ export default class MCPService extends EventEmitter {
     await this.ensureInitialized()
     try {
       const { name, isActive } = params
-      const servers = this.getServersFromStore()
+      const servers = this.getServers()
       const server = servers.find((s) => s.name === name)
 
       if (!server) {
@@ -172,7 +234,7 @@ export default class MCPService extends EventEmitter {
       }
 
       server.isActive = isActive
-      store.set('mcp.servers', servers)
+      this.notifyReduxServersChanged(servers)
 
       if (isActive) {
         await this.activate(server)
@@ -182,6 +244,16 @@ export default class MCPService extends EventEmitter {
     } catch (error) {
       log.error('Failed to set MCP server active status:', error)
       throw error
+    }
+  }
+
+  /**
+   * Notify Redux in the renderer process about server changes
+   */
+  private notifyReduxServersChanged(servers: MCPServer[]): void {
+    const mainWindow = windowService.getMainWindow()
+    if (mainWindow) {
+      mainWindow.webContents.send('mcp:servers-changed', servers)
     }
   }
 

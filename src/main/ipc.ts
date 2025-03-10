@@ -213,6 +213,10 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   )
 
   // Register MCP handlers
+  ipcMain.on('mcp:servers-from-renderer', (_event, servers) => {
+    mcpService.setServers(servers)
+  })
+
   ipcMain.handle('mcp:list-servers', async () => {
     return mcpService.listAvailableServices()
   })
@@ -245,6 +249,11 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle('mcp:cleanup', async () => {
     return mcpService.cleanup()
+  })
+
+  // Listen for changes in MCP servers and notify renderer
+  mcpService.on('servers-updated', (servers) => {
+    mainWindow?.webContents.send('mcp:servers-updated', servers)
   })
 
   // Clean up MCP services when app quits
