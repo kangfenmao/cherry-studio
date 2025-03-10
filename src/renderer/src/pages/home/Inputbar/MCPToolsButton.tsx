@@ -1,4 +1,4 @@
-import { ToolOutlined } from '@ant-design/icons'
+import { CodeOutlined } from '@ant-design/icons'
 import { useMCPServers } from '@renderer/hooks/useMCPServers'
 import { MCPServer } from '@renderer/types'
 import { Dropdown, Switch, Tooltip } from 'antd'
@@ -72,7 +72,7 @@ const MCPToolsButton: FC<Props> = ({ enabledMCPs, onEnableMCP, ToolbarButton }) 
           ))
       ) : (
         <div className="ant-dropdown-menu-item-group">
-          <div className="ant-dropdown-menu-item no-results">{t('models.no_matches')}</div>
+          <div className="ant-dropdown-menu-item no-results">{t('settings.mcp.noServers')}</div>
         </div>
       )}
     </div>
@@ -87,7 +87,7 @@ const MCPToolsButton: FC<Props> = ({ enabledMCPs, onEnableMCP, ToolbarButton }) 
       overlayClassName="mention-models-dropdown">
       <Tooltip placement="top" title={t('settings.mcp.title')} arrow>
         <ToolbarButton type="text" ref={dropdownRef}>
-          <ToolOutlined style={{ color: enabledMCPs.length > 0 ? '#d97757' : 'var(--color-icon)' }} />
+          <CodeOutlined style={{ color: enabledMCPs.length > 0 ? '#d97757' : 'var(--color-icon)' }} />
         </ToolbarButton>
       </Tooltip>
     </Dropdown>
