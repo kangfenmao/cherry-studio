@@ -91,20 +91,20 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
     const userMessages = findUserMessages()
     const assistantMessages = findAssistantMessages()
     if (userMessages.length === 0 && assistantMessages.length === 0) {
-      message.info(t('chat.navigation.last'))
+      message.info({ content: t('chat.navigation.last'), key: 'navigation-last' })
       return
     }
 
     const visibleIndex = getCurrentVisibleIndex('down')
     if (visibleIndex === -1) {
-      message.info(t('chat.navigation.last'))
+      message.info({ content: t('chat.navigation.last'), key: 'navigation-last' })
       return
     }
 
     const targetIndex = visibleIndex - 1
 
     if (targetIndex < 0) {
-      message.info(t('chat.navigation.last'))
+      message.info({ content: t('chat.navigation.last'), key: 'navigation-last' })
       return
     }
 
@@ -116,20 +116,20 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
     const userMessages = findUserMessages()
     const assistantMessages = findAssistantMessages()
     if (userMessages.length === 0 && assistantMessages.length === 0) {
-      message.info(t('chat.navigation.first'))
+      message.info({ content: t('chat.navigation.first'), key: 'navigation-first' })
       return
     }
 
     const visibleIndex = getCurrentVisibleIndex('up')
     if (visibleIndex === -1) {
-      message.info(t('chat.navigation.first'))
+      message.info({ content: t('chat.navigation.first'), key: 'navigation-first' })
       return
     }
 
     const targetIndex = visibleIndex + 1
 
     if (targetIndex >= userMessages.length) {
-      message.info(t('chat.navigation.first'))
+      message.info({ content: t('chat.navigation.first'), key: 'navigation-first' })
       return
     }
 
