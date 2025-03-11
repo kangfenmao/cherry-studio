@@ -1,20 +1,25 @@
 import db from '@renderer/databases'
+import i18n from '@renderer/i18n'
 import { deleteMessageFiles } from '@renderer/services/MessagesService'
 import store from '@renderer/store'
+import { updateTopic } from '@renderer/store/assistants'
 import { prepareTopicMessages } from '@renderer/store/messages'
 import { Assistant, Topic } from '@renderer/types'
-import { find } from 'lodash'
+import { find, isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 
 import { useAssistant } from './useAssistant'
+import { getStoreSetting } from './useSettings'
 
 let _activeTopic: Topic
+let _setActiveTopic: (topic: Topic) => void
 
 export function useActiveTopic(_assistant: Assistant, topic?: Topic) {
   const { assistant } = useAssistant(_assistant.id)
   const [activeTopic, setActiveTopic] = useState(topic || _activeTopic || assistant?.topics[0])
 
   _activeTopic = activeTopic
+  _setActiveTopic = setActiveTopic
 
   useEffect(() => {
     if (activeTopic) {
@@ -46,6 +51,35 @@ export async function getTopicById(topicId: string) {
   const topic = topics.find((topic) => topic.id === topicId)
   const messages = await TopicManager.getTopicMessages(topicId)
   return { ...topic, messages } as Topic
+}
+
+export const autoRenameTopic = async (assistant: Assistant, topicId: string) => {
+  const topic = await getTopicById(topicId)
+  const enableTopicNaming = getStoreSetting('enableTopicNaming')
+
+  if (isEmpty(topic.messages)) {
+    return
+  }
+
+  if (!enableTopicNaming) {
+    const topicName = topic.messages[0]?.content.substring(0, 50)
+    if (topicName) {
+      const data = { ...topic, name: topicName } as Topic
+      _setActiveTopic(data)
+      store.dispatch(updateTopic({ assistantId: assistant.id, topic: data }))
+    }
+    return
+  }
+
+  if (topic && topic.name === i18n.t('chat.default.topic.name') && topic.messages.length >= 2) {
+    const { fetchMessagesSummary } = await import('@renderer/services/ApiService')
+    const summaryText = await fetchMessagesSummary({ messages: topic.messages, assistant })
+    if (summaryText) {
+      const data = { ...topic, name: summaryText }
+      _setActiveTopic(data)
+      store.dispatch(updateTopic({ assistantId: assistant.id, topic: data }))
+    }
+  }
 }
 
 // Convert class to object with functions since class only has static methods

@@ -5,8 +5,7 @@ import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useMessageOperations } from '@renderer/hooks/useMessageOperations'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { useShortcut } from '@renderer/hooks/useShortcuts'
-import { getTopic } from '@renderer/hooks/useTopic'
-import { fetchMessagesSummary } from '@renderer/services/ApiService'
+import { autoRenameTopic, getTopic } from '@renderer/hooks/useTopic'
 import { getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getContextCount, getGroupedMessages, getUserMessage } from '@renderer/services/MessagesService'
@@ -19,7 +18,7 @@ import {
   removeSpecialCharactersForFileName,
   runAsyncFunction
 } from '@renderer/utils'
-import { flatten, isEmpty, last, take } from 'lodash'
+import { flatten, last, take } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -39,7 +38,7 @@ interface MessagesProps {
 
 const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic }) => {
   const { t } = useTranslation()
-  const { showTopics, topicPosition, showAssistants, enableTopicNaming } = useSettings()
+  const { showTopics, topicPosition, showAssistants } = useSettings()
   const { updateTopic, addTopic } = useAssistant(assistant.id)
   const dispatch = useAppDispatch()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -66,36 +65,6 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
   const scrollToBottom = useCallback(() => {
     setTimeout(() => containerRef.current?.scrollTo({ top: containerRef.current.scrollHeight, behavior: 'auto' }), 50)
   }, [])
-
-  const autoRenameTopic = useCallback(async () => {
-    const _topic = getTopic(assistant, topic.id)
-
-    if (isEmpty(messages)) {
-      return
-    }
-
-    const filteredMessages = messages.filter((m) => m.status === 'success')
-
-    if (!enableTopicNaming) {
-      const topicName = filteredMessages[0]?.content.substring(0, 50)
-      if (topicName) {
-        const data = { ..._topic, name: topicName } as Topic
-        setActiveTopic(data)
-        updateTopic(data)
-      }
-      return
-    }
-
-    if (_topic && _topic.name === t('chat.default.topic.name') && filteredMessages.length >= 2) {
-      const summaryText = await fetchMessagesSummary({ messages: filteredMessages, assistant })
-      if (summaryText) {
-        const data = { ..._topic, name: summaryText }
-        setActiveTopic(data)
-        updateTopic(data)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assistant, topic.id, enableTopicNaming, t, setActiveTopic, updateTopic, messages])
 
   useEffect(() => {
     const unsubscribes = [
@@ -157,7 +126,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
         await db.topics.add({ id: newTopic.id, messages: branchMessages })
         addTopic(newTopic)
         setActiveTopic(newTopic)
-        autoRenameTopic()
+        autoRenameTopic(assistant, newTopic.id)
 
         // 由于复制了消息，消息中附带的文件的总数变了，需要更新
         const filesArr = branchMessages.map((m) => m.files)
@@ -171,16 +140,8 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
     ]
 
     return () => unsubscribes.forEach((unsub) => unsub())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assistant, dispatch, scrollToBottom, topic, updateTopic])
-
-  useEffect(() => {
-    const unsubscribes = [EventEmitter.on(EVENT_NAMES.AI_AUTO_RENAME, autoRenameTopic)]
-    return () => {
-      for (const unsub of unsubscribes) {
-        unsub()
-      }
-    }
-  }, [autoRenameTopic])
 
   useEffect(() => {
     runAsyncFunction(async () => {

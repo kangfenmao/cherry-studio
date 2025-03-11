@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import db from '@renderer/databases'
-import { TopicManager } from '@renderer/hooks/useTopic'
+import { autoRenameTopic, TopicManager } from '@renderer/hooks/useTopic'
 import { fetchChatCompletion } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getAssistantMessage, resetAssistantMessage } from '@renderer/services/MessagesService'
@@ -205,6 +205,7 @@ export const {
 } = messagesSlice.actions
 
 const handleResponseMessageUpdate = (
+  assistant: Assistant,
   message: Message,
   topicId: string,
   dispatch: AppDispatch,
@@ -214,7 +215,7 @@ const handleResponseMessageUpdate = (
   if (message.status !== 'pending') {
     // When message is complete, commit to messages and sync with DB
     if (message.status === 'success') {
-      EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME)
+      autoRenameTopic(assistant, topicId)
     }
     if (message.status !== 'sending') {
       dispatch(commitStreamMessage({ topicId, messageId: message.id }))
@@ -347,6 +348,7 @@ export const sendMessage =
                 // 创建节流函数，限制Redux更新频率
                 // 使用节流函数更新Redux
                 throttledDispatch(
+                  assistant,
                   {
                     ...assistantMessage,
                     ...updateMessage
