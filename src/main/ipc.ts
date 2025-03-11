@@ -214,43 +214,23 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   )
 
   // Register MCP handlers
-  ipcMain.on('mcp:servers-from-renderer', (_event, servers) => {
-    mcpService.setServers(servers)
-  })
-
-  ipcMain.handle('mcp:list-servers', async () => {
-    return mcpService.listAvailableServices()
-  })
-
-  ipcMain.handle('mcp:add-server', async (_, server: MCPServer) => {
-    return mcpService.addServer(server)
-  })
-
-  ipcMain.handle('mcp:update-server', async (_, server: MCPServer) => {
-    return mcpService.updateServer(server)
-  })
-
-  ipcMain.handle('mcp:delete-server', async (_, serverName: string) => {
-    return mcpService.deleteServer(serverName)
-  })
-
-  ipcMain.handle('mcp:set-server-active', async (_, { name, isActive }) => {
-    return mcpService.setServerActive({ name, isActive })
-  })
+  ipcMain.on('mcp:servers-from-renderer', (_, servers) => mcpService.setServers(servers))
+  ipcMain.handle('mcp:list-servers', async () => mcpService.listAvailableServices())
+  ipcMain.handle('mcp:add-server', async (_, server: MCPServer) => mcpService.addServer(server))
+  ipcMain.handle('mcp:update-server', async (_, server: MCPServer) => mcpService.updateServer(server))
+  ipcMain.handle('mcp:delete-server', async (_, serverName: string) => mcpService.deleteServer(serverName))
+  ipcMain.handle('mcp:set-server-active', async (_, { name, isActive }) =>
+    mcpService.setServerActive({ name, isActive })
+  )
 
   // According to preload, this should take no parameters, but our implementation accepts
   // an optional serverName for better flexibility
-  ipcMain.handle('mcp:list-tools', async (_, serverName?: string) => {
-    return mcpService.listTools(serverName)
-  })
+  ipcMain.handle('mcp:list-tools', async (_, serverName?: string) => mcpService.listTools(serverName))
+  ipcMain.handle('mcp:call-tool', async (_, params: { client: string; name: string; args: any }) =>
+    mcpService.callTool(params)
+  )
 
-  ipcMain.handle('mcp:call-tool', async (_, params: { client: string; name: string; args: any }) => {
-    return mcpService.callTool(params)
-  })
-
-  ipcMain.handle('mcp:cleanup', async () => {
-    return mcpService.cleanup()
-  })
+  ipcMain.handle('mcp:cleanup', async () => mcpService.cleanup())
 
   // Listen for changes in MCP servers and notify renderer
   mcpService.on('servers-updated', (servers) => {
@@ -258,7 +238,5 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   })
 
   // Clean up MCP services when app quits
-  app.on('before-quit', async () => {
-    await mcpService.cleanup()
-  })
+  app.on('before-quit', () => mcpService.cleanup())
 }

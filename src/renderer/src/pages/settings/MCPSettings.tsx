@@ -134,6 +134,7 @@ const MCPSettings: FC = () => {
           window.api.mcp
             .addServer(mcpServer)
             .then(() => {
+              dispatch(addMCPServer(mcpServer))
               window.message.success(t('settings.mcp.addSuccess'))
               setLoading(false)
               setIsModalVisible(false)
@@ -143,7 +144,6 @@ const MCPSettings: FC = () => {
               window.message.error(`${t('settings.mcp.addError')}: ${error.message}`)
               setLoading(false)
             })
-          dispatch(addMCPServer(mcpServer))
         }
       })
       .catch(() => {
