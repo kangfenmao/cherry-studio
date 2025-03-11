@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { setMCPServers as _setMCPServers } from '@renderer/store/mcp'
+import store, { useAppDispatch, useAppSelector } from '@renderer/store'
+import { setMCPServers } from '@renderer/store/mcp'
 import { MCPServer } from '@renderer/types'
 import { useEffect } from 'react'
 
@@ -7,17 +7,13 @@ const ipcRenderer = window.electron.ipcRenderer
 
 // Set up IPC listener for main process requests
 ipcRenderer.on('mcp:request-servers', () => {
-  // This needs to access Redux outside of a hook, so we use the store directly
-  const { store } = require('@renderer/store')
   const servers = store.getState().mcp.servers
   ipcRenderer.send('mcp:servers-from-renderer', servers)
 })
 
 // Listen for server changes from main process
 ipcRenderer.on('mcp:servers-changed', (_event, servers) => {
-  // This needs to dispatch outside of a hook, so we use the store directly
-  const { store } = require('@renderer/store')
-  store.dispatch(_setMCPServers(servers))
+  store.dispatch(setMCPServers(servers))
 })
 
 export const useMCPServers = () => {
@@ -33,8 +29,8 @@ export const useMCPServers = () => {
   useEffect(() => {
     const loadServers = async () => {
       try {
-        const servers = await ipcRenderer.invoke('mcp:list-servers')
-        dispatch(_setMCPServers(servers))
+        const servers = await window.api.mcp.listServers()
+        dispatch(setMCPServers(servers))
       } catch (error) {
         console.error('Failed to load MCP servers:', error)
       }
@@ -45,7 +41,7 @@ export const useMCPServers = () => {
 
   const addMCPServer = async (server: MCPServer) => {
     try {
-      await ipcRenderer.invoke('mcp:add-server', server)
+      await window.api.mcp.addServer(server)
       // Main process will send back updated servers via mcp:servers-changed
     } catch (error) {
       console.error('Failed to add MCP server:', error)
@@ -55,7 +51,7 @@ export const useMCPServers = () => {
 
   const updateMCPServer = async (server: MCPServer) => {
     try {
-      await ipcRenderer.invoke('mcp:update-server', server)
+      await window.api.mcp.updateServer(server)
       // Main process will send back updated servers via mcp:servers-changed
     } catch (error) {
       console.error('Failed to update MCP server:', error)
@@ -65,7 +61,7 @@ export const useMCPServers = () => {
 
   const deleteMCPServer = async (name: string) => {
     try {
-      await ipcRenderer.invoke('mcp:delete-server', name)
+      await window.api.mcp.deleteServer(name)
       // Main process will send back updated servers via mcp:servers-changed
     } catch (error) {
       console.error('Failed to delete MCP server:', error)
@@ -75,7 +71,7 @@ export const useMCPServers = () => {
 
   const setMCPServerActive = async (name: string, isActive: boolean) => {
     try {
-      await ipcRenderer.invoke('mcp:set-server-active', { name, isActive })
+      await window.api.mcp.setServerActive(name, isActive)
       // Main process will send back updated servers via mcp:servers-changed
     } catch (error) {
       console.error('Failed to set MCP server active status:', error)

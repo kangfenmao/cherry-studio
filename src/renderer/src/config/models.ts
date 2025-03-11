@@ -178,7 +178,7 @@ export const EMBEDDING_REGEX = /(?:^text-|embed|bge-|e5-|LLM2Vec|retrieval|uae-|
 export const NOT_SUPPORTED_REGEX = /(?:^tts|rerank|whisper|speech)/i
 
 // Tool calling models
-export const TOOL_CALLING_MODELS = ['gpt-4o', 'gpt-4o-mini', 'gpt-4', 'gpt-4.5', 'claude']
+export const TOOL_CALLING_MODELS = ['gpt-4o', 'gpt-4o-mini', 'gpt-4', 'gpt-4.5', 'claude', 'qwen']
 export const TOOL_CALLING_REGEX = new RegExp(`\\b(?:${TOOL_CALLING_MODELS.join('|')})\\b`, 'i')
 export function isToolCallingModel(model: Model): boolean {
   if (['gemini', 'deepseek', 'anthropic'].includes(model.provider)) {

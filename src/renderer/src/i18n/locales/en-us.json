@@ -222,7 +222,8 @@
       "select": "Select",
       "topics": "Topics",
       "warning": "Warning",
-      "you": "You"
+      "you": "You",
+      "more": "More"
     },
     "docs": {
       "title": "Docs"

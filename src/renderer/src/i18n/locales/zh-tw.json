@@ -222,7 +222,8 @@
       "select": "選擇",
       "topics": "話題",
       "warning": "警告",
-      "you": "您"
+      "you": "您",
+      "more": "更多"
     },
     "docs": {
       "title": "說明文件"

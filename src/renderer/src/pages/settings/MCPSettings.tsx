@@ -3,7 +3,7 @@ import { useTheme } from '@renderer/context/ThemeProvider'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
 import { addMCPServer, deleteMCPServer, setMCPServerActive, updateMCPServer } from '@renderer/store/mcp'
 import { MCPServer } from '@renderer/types'
-import { Button, Card, Form, Input, message, Modal, Radio, Space, Switch, Table, Tag, Tooltip, Typography } from 'antd'
+import { Button, Card, Form, Input, Modal, Radio, Space, Switch, Table, Tag, Tooltip, Typography } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -113,20 +113,20 @@ const MCPSettings: FC = () => {
           window.api.mcp
             .updateServer(mcpServer)
             .then(() => {
-              message.success(t('settings.mcp.updateSuccess'))
+              window.message.success(t('settings.mcp.updateSuccess'))
               setLoading(false)
               setIsModalVisible(false)
               form.resetFields()
             })
             .catch((error) => {
-              message.error(`${t('settings.mcp.updateError')}: ${error.message}`)
+              window.message.error(`${t('settings.mcp.updateError')}: ${error.message}`)
               setLoading(false)
             })
           dispatch(updateMCPServer(mcpServer))
         } else {
           // Check for duplicate name
           if (mcpServers.some((server: MCPServer) => server.name === mcpServer.name)) {
-            message.error(t('settings.mcp.duplicateName'))
+            window.message.error(t('settings.mcp.duplicateName'))
             setLoading(false)
             return
           }
@@ -134,13 +134,13 @@ const MCPSettings: FC = () => {
           window.api.mcp
             .addServer(mcpServer)
             .then(() => {
-              message.success(t('settings.mcp.addSuccess'))
+              window.message.success(t('settings.mcp.addSuccess'))
               setLoading(false)
               setIsModalVisible(false)
               form.resetFields()
             })
             .catch((error) => {
-              message.error(`${t('settings.mcp.addError')}: ${error.message}`)
+              window.message.error(`${t('settings.mcp.addError')}: ${error.message}`)
               setLoading(false)
             })
           dispatch(addMCPServer(mcpServer))
@@ -152,20 +152,21 @@ const MCPSettings: FC = () => {
   }
 
   const handleDelete = (serverName: string) => {
-    Modal.confirm({
+    window.modal.confirm({
       title: t('settings.mcp.confirmDelete'),
       content: t('settings.mcp.confirmDeleteMessage'),
       okText: t('common.delete'),
       okButtonProps: { danger: true },
       cancelText: t('common.cancel'),
+      centered: true,
       onOk: () => {
         window.api.mcp
           .deleteServer(serverName)
           .then(() => {
-            message.success(t('settings.mcp.deleteSuccess'))
+            window.message.success(t('settings.mcp.deleteSuccess'))
           })
           .catch((error) => {
-            message.error(`${t('settings.mcp.deleteError')}: ${error.message}`)
+            window.message.error(`${t('settings.mcp.deleteError')}: ${error.message}`)
           })
         dispatch(deleteMCPServer(serverName))
       }
@@ -179,7 +180,7 @@ const MCPSettings: FC = () => {
         // Optional: Show success message or update UI
       })
       .catch((error) => {
-        message.error(`${t('settings.mcp.toggleError')}: ${error.message}`)
+        window.message.error(`${t('settings.mcp.toggleError')}: ${error.message}`)
       })
     dispatch(setMCPServerActive({ name, isActive }))
   }
@@ -217,7 +218,7 @@ const MCPSettings: FC = () => {
             ellipsis={{
               rows: 1,
               expandable: 'collapsible',
-              symbol: 'more',
+              symbol: t('common.more'),
               onExpand: () => {}, // Empty callback required for proper functionality
               tooltip: true
             }}
