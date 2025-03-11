@@ -5,12 +5,6 @@ import { useEffect } from 'react'
 
 const ipcRenderer = window.electron.ipcRenderer
 
-// Set up IPC listener for main process requests
-ipcRenderer.on('mcp:request-servers', () => {
-  const servers = store.getState().mcp.servers
-  ipcRenderer.send('mcp:servers-from-renderer', servers)
-})
-
 // Listen for server changes from main process
 ipcRenderer.on('mcp:servers-changed', (_event, servers) => {
   store.dispatch(setMCPServers(servers))

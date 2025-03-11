@@ -505,13 +505,14 @@
       "reasoning": "Reasoning",
       "search": "Search models...",
       "stream_output": "Stream output",
-      "tool_calling": "Tool Calling",
+      "function_calling": "Function Calling",
       "type": {
         "embedding": "Embedding",
         "reasoning": "Reasoning",
         "select": "Select Model Types",
         "text": "Text",
-        "vision": "Vision"
+        "vision": "Vision",
+        "function_calling": "Function Calling"
       },
       "vision": "Vision",
       "websearch": "WebSearch"

@@ -505,13 +505,14 @@
       "reasoning": "Рассуждение",
       "search": "Поиск моделей...",
       "stream_output": "Потоковый вывод",
-      "tool_calling": "Инструмент вызова",
+      "function_calling": "Вызов функции",
       "type": {
         "embedding": "Встраиваемые",
         "reasoning": "Рассуждение",
         "select": "Выберите тип модели",
         "text": "Текст",
-        "vision": "Изображение"
+        "vision": "Изображение",
+        "function_calling": "Вызов функции"
       },
       "vision": "Визуальные",
       "websearch": "Веб-поисковые"

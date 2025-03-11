@@ -505,13 +505,14 @@
       "reasoning": "推理",
       "search": "搜尋模型...",
       "stream_output": "串流輸出",
-      "tool_calling": "工具調用",
+      "function_calling": "函數調用",
       "type": {
         "embedding": "嵌入",
         "reasoning": "推理",
         "select": "選擇模型類型",
         "text": "文字",
-        "vision": "影像"
+        "vision": "影像",
+        "function_calling": "函數調用"
       },
       "vision": "視覺",
       "websearch": "網路搜尋"

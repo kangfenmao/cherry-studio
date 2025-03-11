@@ -505,13 +505,14 @@
       "reasoning": "推理",
       "search": "搜索模型...",
       "stream_output": "流式输出",
-      "tool_calling": "工具调用",
+      "function_calling": "函数调用",
       "type": {
         "embedding": "嵌入",
         "reasoning": "推理",
         "select": "选择模型类型",
         "text": "文本",
-        "vision": "图像"
+        "vision": "图像",
+        "function_calling": "函数调用"
       },
       "vision": "视觉",
       "websearch": "联网"

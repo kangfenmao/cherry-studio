@@ -505,13 +505,14 @@
       "reasoning": "推論",
       "search": "モデルを検索...",
       "stream_output": "ストリーム出力",
-      "tool_calling": "ツールコール",
+      "function_calling": "関数呼び出し",
       "type": {
         "embedding": "埋め込み",
         "reasoning": "推論",
         "select": "モデルタイプを選択",
         "text": "テキスト",
-        "vision": "画像"
+        "vision": "画像",
+        "function_calling": "関数呼び出し"
       },
       "vision": "画像",
       "websearch": "ウェブ検索"

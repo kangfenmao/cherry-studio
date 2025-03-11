@@ -28,7 +28,6 @@ export default class MCPService extends EventEmitter {
   constructor() {
     super()
     this.createServerLoadingPromise()
-    this.requestServers()
   }
 
   /**
@@ -38,19 +37,6 @@ export default class MCPService extends EventEmitter {
     this.readyState.promise = new Promise<void>((resolve) => {
       this.readyState.resolve = resolve
     })
-  }
-
-  /**
-   * Request server data from renderer process Redux
-   */
-  public requestServers(): void {
-    const mainWindow = windowService.getMainWindow()
-    if (mainWindow) {
-      log.info('[MCP] Requesting servers from Redux')
-      mainWindow.webContents.send('mcp:request-servers')
-    } else {
-      log.warn('[MCP] Main window not available, cannot request servers')
-    }
   }
 
   /**

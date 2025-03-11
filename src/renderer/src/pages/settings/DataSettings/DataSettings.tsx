@@ -8,7 +8,7 @@ import { useKnowledgeFiles } from '@renderer/hooks/useKnowledgeFiles'
 import { reset } from '@renderer/services/BackupService'
 import { AppInfo } from '@renderer/types'
 import { formatFileSize } from '@renderer/utils'
-import { Button, Modal, Typography } from 'antd'
+import { Button, Typography } from 'antd'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -49,7 +49,7 @@ const DataSettings: FC = () => {
   }
 
   const handleClearCache = () => {
-    Modal.confirm({
+    window.modal.confirm({
       title: t('settings.data.clear_cache.title'),
       content: t('settings.data.clear_cache.confirm'),
       okText: t('settings.data.clear_cache.button'),
@@ -69,7 +69,7 @@ const DataSettings: FC = () => {
   }
 
   const handleRemoveAllFiles = () => {
-    Modal.confirm({
+    window.modal.confirm({
       centered: true,
       title: t('settings.data.app_knowledge.remove_all') + ` (${formatFileSize(size)}) `,
       content: t('settings.data.app_knowledge.remove_all_confirm'),
