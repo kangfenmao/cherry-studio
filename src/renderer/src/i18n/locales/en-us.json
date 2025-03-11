@@ -806,7 +806,8 @@
         "title": "MCP Servers",
         "type": "Type",
         "updateSuccess": "Server updated successfully",
-        "url": "URL"
+        "url": "URL",
+        "toggleError": "Toggle failed"
       },
       "messages.divider": "Show divider between messages",
       "messages.grid_columns": "Message grid display columns",

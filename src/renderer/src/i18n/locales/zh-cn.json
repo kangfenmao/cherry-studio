@@ -806,7 +806,8 @@
         "title": "MCP 服务器",
         "type": "类型",
         "updateSuccess": "服务器更新成功",
-        "url": "URL"
+        "url": "URL",
+        "toggleError": "切换失败"
       },
       "messages.divider": "消息分割线",
       "messages.grid_columns": "消息网格展示列数",

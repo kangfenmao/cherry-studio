@@ -1,7 +1,6 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import { useTheme } from '@renderer/context/ThemeProvider'
-import { useAppDispatch, useAppSelector } from '@renderer/store'
-import { addMCPServer, deleteMCPServer, setMCPServerActive, updateMCPServer } from '@renderer/store/mcp'
+import { useAppSelector } from '@renderer/store'
 import { MCPServer } from '@renderer/types'
 import { Button, Card, Form, Input, Modal, Radio, Space, Switch, Table, Tag, Tooltip, Typography } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
@@ -25,7 +24,6 @@ const MCPSettings: FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { Paragraph, Text } = Typography
-  const dispatch = useAppDispatch()
   const mcpServers = useAppSelector((state) => state.mcp.servers)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -78,77 +76,69 @@ const MCPSettings: FC = () => {
     form.resetFields()
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true)
-    form
-      .validateFields()
-      .then((values) => {
-        const mcpServer: MCPServer = {
-          name: values.name,
-          description: values.description,
-          isActive: values.isActive
-        }
+    try {
+      const values = await form.validateFields()
+      const mcpServer: MCPServer = {
+        name: values.name,
+        description: values.description,
+        isActive: values.isActive
+      }
 
-        if (values.serverType === 'sse') {
-          mcpServer.baseUrl = values.baseUrl
-        } else {
-          mcpServer.command = values.command
-          mcpServer.args = values.args ? values.args.split('\n').filter((arg) => arg.trim() !== '') : []
+      if (values.serverType === 'sse') {
+        mcpServer.baseUrl = values.baseUrl
+      } else {
+        mcpServer.command = values.command
+        mcpServer.args = values.args ? values.args.split('\n').filter((arg) => arg.trim() !== '') : []
 
-          const env: Record<string, string> = {}
-          if (values.env) {
-            values.env.split('\n').forEach((line) => {
-              if (line.trim()) {
-                const [key, value] = line.split('=')
-                if (key && value) {
-                  env[key.trim()] = value.trim()
-                }
+        const env: Record<string, string> = {}
+        if (values.env) {
+          values.env.split('\n').forEach((line) => {
+            if (line.trim()) {
+              const [key, value] = line.split('=')
+              if (key && value) {
+                env[key.trim()] = value.trim()
               }
-            })
-          }
-          mcpServer.env = Object.keys(env).length > 0 ? env : undefined
+            }
+          })
+        }
+        mcpServer.env = Object.keys(env).length > 0 ? env : undefined
+      }
+
+      if (editingServer) {
+        try {
+          await window.api.mcp.updateServer(mcpServer)
+          window.message.success(t('settings.mcp.updateSuccess'))
+          setLoading(false)
+          setIsModalVisible(false)
+          form.resetFields()
+        } catch (error: any) {
+          window.message.error(`${t('settings.mcp.updateError')}: ${error.message}`)
+          setLoading(false)
+        }
+      } else {
+        // Check for duplicate name
+        if (mcpServers.some((server: MCPServer) => server.name === mcpServer.name)) {
+          window.message.error(t('settings.mcp.duplicateName'))
+          setLoading(false)
+          return
         }
 
-        if (editingServer) {
-          window.api.mcp
-            .updateServer(mcpServer)
-            .then(() => {
-              window.message.success(t('settings.mcp.updateSuccess'))
-              setLoading(false)
-              setIsModalVisible(false)
-              form.resetFields()
-            })
-            .catch((error) => {
-              window.message.error(`${t('settings.mcp.updateError')}: ${error.message}`)
-              setLoading(false)
-            })
-          dispatch(updateMCPServer(mcpServer))
-        } else {
-          // Check for duplicate name
-          if (mcpServers.some((server: MCPServer) => server.name === mcpServer.name)) {
-            window.message.error(t('settings.mcp.duplicateName'))
-            setLoading(false)
-            return
-          }
-
-          window.api.mcp
-            .addServer(mcpServer)
-            .then(() => {
-              dispatch(addMCPServer(mcpServer))
-              window.message.success(t('settings.mcp.addSuccess'))
-              setLoading(false)
-              setIsModalVisible(false)
-              form.resetFields()
-            })
-            .catch((error) => {
-              window.message.error(`${t('settings.mcp.addError')}: ${error.message}`)
-              setLoading(false)
-            })
+        try {
+          await window.api.mcp.addServer(mcpServer)
+          window.message.success(t('settings.mcp.addSuccess'))
+          setLoading(false)
+          setIsModalVisible(false)
+          form.resetFields()
+        } catch (error: any) {
+          window.message.error(`${t('settings.mcp.addError')}: ${error.message}`)
+          setLoading(false)
         }
-      })
-      .catch(() => {
-        setLoading(false)
-      })
+      }
+    } catch (error: any) {
+      setLoading(false)
+    }
   }
 
   const handleDelete = (serverName: string) => {
@@ -159,30 +149,23 @@ const MCPSettings: FC = () => {
       okButtonProps: { danger: true },
       cancelText: t('common.cancel'),
       centered: true,
-      onOk: () => {
-        window.api.mcp
-          .deleteServer(serverName)
-          .then(() => {
-            window.message.success(t('settings.mcp.deleteSuccess'))
-          })
-          .catch((error) => {
-            window.message.error(`${t('settings.mcp.deleteError')}: ${error.message}`)
-          })
-        dispatch(deleteMCPServer(serverName))
+      onOk: async () => {
+        try {
+          await window.api.mcp.deleteServer(serverName)
+          window.message.success(t('settings.mcp.deleteSuccess'))
+        } catch (error: any) {
+          window.message.error(`${t('settings.mcp.deleteError')}: ${error.message}`)
+        }
       }
     })
   }
 
   const handleToggleActive = (name: string, isActive: boolean) => {
-    window.api.mcp
-      .setServerActive(name, isActive)
-      .then(() => {
-        // Optional: Show success message or update UI
-      })
-      .catch((error) => {
-        window.message.error(`${t('settings.mcp.toggleError')}: ${error.message}`)
-      })
-    dispatch(setMCPServerActive({ name, isActive }))
+    try {
+      window.api.mcp.setServerActive(name, isActive)
+    } catch (error: any) {
+      window.message.error(`${t('settings.mcp.toggleError')}: ${error.message}`)
+    }
   }
 
   const columns = [

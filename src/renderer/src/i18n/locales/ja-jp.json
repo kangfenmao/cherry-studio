@@ -806,7 +806,8 @@
         "title": "MCP サーバー",
         "type": "タイプ",
         "updateSuccess": "サーバーが正常に更新されました",
-        "url": "URL"
+        "url": "URL",
+        "toggleError": "切り替えに失敗しました"
       },
       "messages.divider": "メッセージ間に区切り線を表示",
       "messages.grid_columns": "メッセージグリッドの表示列数",

@@ -806,7 +806,8 @@
         "title": "MCP 伺服器",
         "type": "類型",
         "updateSuccess": "伺服器更新成功",
-        "url": "URL"
+        "url": "URL",
+        "toggleError": "切換失敗"
       },
       "messages.divider": "訊息間顯示分隔線",
       "messages.grid_columns": "訊息網格展示列數",
