@@ -1,6 +1,6 @@
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
 import { Button, Tooltip } from 'antd'
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -12,8 +12,6 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
   const { t } = useTranslation()
   const [isVisible, setIsVisible] = useState(false)
   const [hideTimer, setHideTimer] = useState<NodeJS.Timeout | null>(null)
-
-  const container = useMemo(() => document.getElementById(containerId), [containerId])
 
   const resetHideTimer = useCallback(() => {
     if (hideTimer) {
@@ -27,6 +25,7 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
   }, [hideTimer])
 
   const findUserMessages = () => {
+    const container = document.getElementById(containerId)
     if (!container) return []
 
     const userMessages = Array.from(container.getElementsByClassName('message-user'))
@@ -34,6 +33,8 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
   }
 
   const findAssistantMessages = () => {
+    const container = document.getElementById(containerId)
+
     if (!container) return []
 
     const assistantMessages = Array.from(container.getElementsByClassName('message-assistant'))
@@ -45,18 +46,20 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
   }
 
   const scrollToTop = () => {
-    if (!container) return
-    container.scrollTo({ top: 0, behavior: 'smooth' })
+    const container = document.getElementById(containerId)
+    container && container.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const scrollToBottom = () => {
-    if (!container) return
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+    const container = document.getElementById(containerId)
+    container && container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
   }
 
   const getCurrentVisibleIndex = (direction: 'up' | 'down') => {
     const userMessages = findUserMessages()
     const assistantMessages = findAssistantMessages()
+    const container = document.getElementById(containerId)
+
     if (!container) return -1
 
     const containerRect = container.getBoundingClientRect()
