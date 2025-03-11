@@ -10,6 +10,7 @@ import {
   selectTopicLoading,
   selectTopicMessages,
   setStreamMessage,
+  setTopicLoading,
   updateMessage,
   updateMessages
 } from '@renderer/store/messages'
@@ -155,14 +156,18 @@ export function useMessageOperations(topic: Topic) {
    * 暂停消息生成
    */
   const pauseMessage = useCallback(
-    async (messageId: string) => {
+    // 存的是用户消息的id，也就是助手消息的askId
+    async (askId: string, messageId: string) => {
       // 1. 调用 abort
-      abortCompletion(messageId)
-
+      abortCompletion(askId)
+      console.log('messageId', messageId)
       // 2. 更新消息状态
       await editMessage(messageId, { status: 'paused' })
 
-      // 3. 清理流式消息
+      // 3.更改loading状态
+      dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
+
+      // 4. 清理流式消息
       clearStreamMessageAction(messageId)
     },
     [editMessage, clearStreamMessageAction]
@@ -173,15 +178,13 @@ export function useMessageOperations(topic: Topic) {
     const streamMessages = store.getState().messages.streamMessagesByTopic[topic.id]
     if (streamMessages) {
       // 获取所有流式消息的 askId
-      const askIds = new Set(
-        Object.values(streamMessages)
-          .map((msg) => msg.askId)
-          .filter(Boolean)
-      )
+      const askIds = Object.values(streamMessages)
+        .map((msg) => [msg.askId, msg.id])
+        .filter(([askId, id]) => askId && id)
 
       // 对每个 askId 执行暂停
-      for (const askId of askIds) {
-        await pauseMessage(askId)
+      for (const [askId, id] of askIds) {
+        await pauseMessage(askId, id)
       }
     }
   }, [topic.id, pauseMessage])

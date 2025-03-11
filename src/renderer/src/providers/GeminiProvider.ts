@@ -197,9 +197,10 @@ export default class GeminiProvider extends BaseProvider {
     const messageContents = await this.getMessageContents(userLastMessage!)
 
     const start_time_millsec = new Date().getTime()
-
+    const { abortController, cleanup } = this.createAbortController(userLastMessage?.id)
+    const { signal } = abortController
     if (!streamOutput) {
-      const { response } = await chat.sendMessage(messageContents.parts)
+      const { response } = await chat.sendMessage(messageContents.parts, { signal })
       const time_completion_millsec = new Date().getTime() - start_time_millsec
       onChunk({
         text: response.candidates?.[0].content.parts[0].text,
@@ -218,13 +219,8 @@ export default class GeminiProvider extends BaseProvider {
       return
     }
 
-    const lastUserMessage = userMessages.findLast((m) => m.role === 'user')
-    const { abortController, cleanup } = this.createAbortController(lastUserMessage?.id)
-    const { signal } = abortController
-
     const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal })
     let time_first_token_millsec = 0
-
     const processStream = async (stream: GenerateContentStreamResult) => {
       for await (const chunk of stream.stream) {
         if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break
@@ -297,7 +293,6 @@ export default class GeminiProvider extends BaseProvider {
         })
       }
     }
-
     await processStream(userMessagesStream).finally(cleanup)
   }
 

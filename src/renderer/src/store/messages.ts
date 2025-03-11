@@ -345,7 +345,6 @@ export const sendMessage =
               onResponse: async (msg) => {
                 // 允许在回调外维护一个最新的消息状态，每次都更新这个对象，但只通过节流函数分发到Redux
                 const updateMessage = { ...msg, status: msg.status || 'pending', content: msg.content || '' }
-                // 创建节流函数，限制Redux更新频率
                 // 使用节流函数更新Redux
                 throttledDispatch(
                   assistant,

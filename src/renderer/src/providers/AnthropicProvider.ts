@@ -208,7 +208,7 @@ export default class AnthropicProvider extends BaseProvider {
     const { signal } = abortController
     const toolResponses: MCPToolResponse[] = []
 
-    const processStream = async (body: MessageCreateParamsNonStreaming) => {
+    const processStream = (body: MessageCreateParamsNonStreaming) => {
       return new Promise<void>((resolve, reject) => {
         const toolCalls: ToolUseBlock[] = []
         let hasThinkingContent = false
@@ -326,7 +326,12 @@ export default class AnthropicProvider extends BaseProvider {
       })
     }
 
-    await processStream(body).finally(cleanup)
+    await processStream(body)
+      .catch((error) => {
+        // 不加这个错误抛不出来
+        throw error
+      })
+      .finally(cleanup)
   }
 
   public async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {
