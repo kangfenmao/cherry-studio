@@ -37,6 +37,7 @@ export async function upgradeToV5(tx: Transaction): Promise<void> {
   }
 }
 
+// 为每个 topic 添加时间戳,兼容老数据,默认按照最新的时间戳来,不确定是否要加
 export async function upgradeToV6(tx: Transaction): Promise<void> {
   const topics = await tx.table('topics').toArray()
 

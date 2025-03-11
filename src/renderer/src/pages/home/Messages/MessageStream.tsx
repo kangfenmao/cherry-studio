@@ -52,7 +52,6 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   // 在hooks调用后进行条件判断
   const isStreaming = !!(streamMessage && streamMessage.id === _message.id)
   const message = isStreaming ? streamMessage : regularMessage
-  console.log('isStreaming', isStreaming)
   return (
     <MessageStreamContainer>
       <MessageItem

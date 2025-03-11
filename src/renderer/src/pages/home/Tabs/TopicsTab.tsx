@@ -67,7 +67,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   }, [])
 
   const onClearMessages = useCallback((topic: Topic) => {
-    window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
+    // window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, true)
     store.dispatch(setGenerating(false))
     EventEmitter.emit(EVENT_NAMES.CLEAR_MESSAGES, topic)
   }, [])

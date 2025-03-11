@@ -428,7 +428,6 @@ export default class OpenAIProvider extends BaseProvider {
                 signal
               }
             )
-            .finally(cleanup)
           await processStream(newStream)
         }
 
@@ -469,9 +468,8 @@ export default class OpenAIProvider extends BaseProvider {
           signal
         }
       )
-      .finally(cleanup)
 
-    await processStream(stream)
+    await processStream(stream).finally(cleanup)
   }
 
   async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {

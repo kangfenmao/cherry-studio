@@ -222,7 +222,7 @@ export default class GeminiProvider extends BaseProvider {
     const { abortController, cleanup } = this.createAbortController(lastUserMessage?.id)
     const { signal } = abortController
 
-    const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal }).finally(cleanup)
+    const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal })
     let time_first_token_millsec = 0
 
     const processStream = async (stream: GenerateContentStreamResult) => {
@@ -275,8 +275,8 @@ export default class GeminiProvider extends BaseProvider {
               parts: fcallParts
             })
             const newChat = geminiModel.startChat({ history })
-            const newStream = await newChat.sendMessageStream(fcRespParts, { signal }).finally(cleanup)
-            await processStream(newStream)
+            const newStream = await newChat.sendMessageStream(fcRespParts, { signal })
+            await processStream(newStream).finally(cleanup)
           }
         }
 
@@ -298,7 +298,7 @@ export default class GeminiProvider extends BaseProvider {
       }
     }
 
-    await processStream(userMessagesStream)
+    await processStream(userMessagesStream).finally(cleanup)
   }
 
   async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {

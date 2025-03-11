@@ -323,10 +323,10 @@ export default class AnthropicProvider extends BaseProvider {
             resolve()
           })
           .on('error', (error) => reject(error))
-      }).finally(cleanup)
+      })
     }
 
-    await processStream(body)
+    await processStream(body).finally(cleanup)
   }
 
   public async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {

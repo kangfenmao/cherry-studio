@@ -3,7 +3,6 @@ import i18n from '@renderer/i18n'
 import store from '@renderer/store'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Message, Model, Provider, Suggestion } from '@renderer/types'
-import { addAbortController } from '@renderer/utils/abortController'
 import { formatMessageError } from '@renderer/utils/error'
 import { cloneDeep, findLast, isEmpty } from 'lodash'
 
@@ -31,24 +30,15 @@ export async function fetchChatCompletion({
   assistant: Assistant
   onResponse: (message: Message) => void
 }) {
-  window.keyv.set(EVENT_NAMES.CHAT_COMPLETION_PAUSED, false)
-
   const provider = getAssistantProvider(assistant)
   const webSearchProvider = WebSearchService.getWebSearchProvider()
   const AI = new AiProvider(provider)
 
-  store.dispatch(setGenerating(true))
+  // store.dispatch(setGenerating(true))
 
-  onResponse({ ...message })
+  // onResponse({ ...message })
 
-  const pauseFn = (message: Message) => {
-    message.status = 'paused'
-    EventEmitter.emit(EVENT_NAMES.RECEIVE_MESSAGE, message)
-    store.dispatch(setGenerating(false))
-    onResponse({ ...message, status: 'paused' })
-  }
-
-  addAbortController(message.askId ?? message.id, pauseFn.bind(null, message))
+  // addAbortController(message.askId ?? message.id)
 
   try {
     let _messages: Message[] = []
@@ -135,9 +125,6 @@ export async function fetchChatCompletion({
     message.status = 'error'
     message.error = formatMessageError(error)
   }
-
-  // Update message status
-  message.status = window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED) ? 'paused' : message.status
 
   // Emit chat completion event
   EventEmitter.emit(EVENT_NAMES.RECEIVE_MESSAGE, message)

@@ -1,5 +1,6 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
+import store from '@renderer/store'
 import {
   clearStreamMessage,
   clearTopicMessages,
@@ -13,6 +14,7 @@ import {
   updateMessages
 } from '@renderer/store/messages'
 import type { Assistant, Message, Topic } from '@renderer/types'
+import { abortCompletion } from '@renderer/utils/abortController'
 import { useCallback } from 'react'
 /**
  * 自定义Hook，提供消息操作相关的功能
@@ -149,6 +151,52 @@ export function useMessageOperations(topic: Topic) {
   //  */
   // const getMessages = useCallback(() => messages, [messages])
 
+  /**
+   * 暂停消息生成
+   */
+  const pauseMessage = useCallback(
+    async (messageId: string) => {
+      // 1. 调用 abort
+      abortCompletion(messageId)
+
+      // 2. 更新消息状态
+      await editMessage(messageId, { status: 'paused' })
+
+      // 3. 清理流式消息
+      clearStreamMessageAction(messageId)
+    },
+    [editMessage, clearStreamMessageAction]
+  )
+
+  const pauseMessages = useCallback(async () => {
+    // 从 store 获取当前 topic 的所有流式消息
+    const streamMessages = store.getState().messages.streamMessagesByTopic[topic.id]
+    if (streamMessages) {
+      // 获取所有流式消息的 askId
+      const askIds = new Set(
+        Object.values(streamMessages)
+          .map((msg) => msg.askId)
+          .filter(Boolean)
+      )
+
+      // 对每个 askId 执行暂停
+      for (const askId of askIds) {
+        await pauseMessage(askId)
+      }
+    }
+  }, [topic.id, pauseMessage])
+
+  /**
+   * 恢复/重发消息
+   * 暂时不需要
+   */
+  const resumeMessage = useCallback(
+    async (message: Message, assistant: Assistant) => {
+      return resendMessageAction(message, assistant)
+    },
+    [resendMessageAction]
+  )
+
   return {
     messages,
     loading,
@@ -163,6 +211,9 @@ export function useMessageOperations(topic: Topic) {
     commitStreamMessage: commitStreamMessageAction,
     clearStreamMessage: clearStreamMessageAction,
     createNewContext,
-    clearTopicMessages: clearTopicMessagesAction
+    clearTopicMessages: clearTopicMessagesAction,
+    pauseMessage,
+    pauseMessages,
+    resumeMessage
   }
 }
