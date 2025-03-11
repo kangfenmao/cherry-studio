@@ -204,21 +204,27 @@ export const {
   clearStreamMessage
 } = messagesSlice.actions
 
-const handleResponseMessageUpdate = (message, topicId, dispatch) => {
-  // When message is complete, commit to messages and sync with DB
-  // if (message.status !== 'pending') {
-  //   if (message.status === 'success') {
-  //     EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME)
-  //   }
-  //   if (message.status !== 'sending') {
-  //     dispatch(commitStreamMessage({ topicId, messageId: message.id }))
-  //     const state = getState()
-  //     const topicMessages = state.messages.messagesByTopic[topicId]
-  //     if (topicMessages) {
-  //       syncMessagesWithDB(topicId, topicMessages)
-  //     }
-  //   }
-  // }
+const handleResponseMessageUpdate = (
+  message: Message,
+  topicId: string,
+  dispatch: AppDispatch,
+  getState: () => RootState
+) => {
+  dispatch(setStreamMessage({ topicId, message }))
+  if (message.status !== 'pending') {
+    // When message is complete, commit to messages and sync with DB
+    if (message.status === 'success') {
+      EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME)
+    }
+    if (message.status !== 'sending') {
+      dispatch(commitStreamMessage({ topicId, messageId: message.id }))
+      const state = getState()
+      const topicMessages = state.messages.messagesByTopic[topicId]
+      if (topicMessages) {
+        syncMessagesWithDB(topicId, topicMessages)
+      }
+    }
+  }
 }
 
 // Helper function to sync messages with database
@@ -326,13 +332,7 @@ export const sendMessage =
             }
 
             // 节流
-            const throttledDispatch = throttle(
-              (topicId, message) => dispatch(setStreamMessage({ topicId, message })),
-              100,
-              { trailing: true }
-            ) // 100ms的节流时间应足够平衡用户体验和性能
-
-            let resultMessage: Message = { ...assistantMessage }
+            const throttledDispatch = throttle(handleResponseMessageUpdate, 100, { trailing: true }) // 100ms的节流时间应足够平衡用户体验和性能
 
             await fetchChatCompletion({
               message: { ...assistantMessage },
@@ -346,26 +346,19 @@ export const sendMessage =
               onResponse: async (msg) => {
                 // 允许在回调外维护一个最新的消息状态，每次都更新这个对象，但只通过节流函数分发到Redux
                 const updateMessage = { ...msg, status: msg.status || 'pending', content: msg.content || '' }
-                resultMessage = {
-                  ...assistantMessage,
-                  ...updateMessage
-                }
                 // 创建节流函数，限制Redux更新频率
                 // 使用节流函数更新Redux
-                throttledDispatch(topic.id, resultMessage)
+                throttledDispatch(
+                  {
+                    ...assistantMessage,
+                    ...updateMessage
+                  },
+                  topic.id,
+                  dispatch,
+                  getState
+                )
               }
             })
-            if (resultMessage?.status === 'success') {
-              EventEmitter.emit(EVENT_NAMES.AI_AUTO_RENAME)
-            }
-            if (resultMessage?.status !== 'sending') {
-              dispatch(commitStreamMessage({ topicId: topic.id, messageId: assistantMessage.id }))
-              const state = getState()
-              const topicMessages = state.messages.messagesByTopic[topic.id]
-              if (topicMessages) {
-                syncMessagesWithDB(topic.id, topicMessages)
-              }
-            }
           } catch (error: any) {
             console.error('Error in chat completion:', error)
             dispatch(
