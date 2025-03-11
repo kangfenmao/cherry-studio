@@ -10,7 +10,11 @@ import { getStoreSetting } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
 import { getAssistantSettings, getDefaultModel, getTopNamingModel } from '@renderer/services/AssistantService'
 import { EVENT_NAMES } from '@renderer/services/EventService'
-import { filterContextMessages, filterUserRoleStartMessages } from '@renderer/services/MessagesService'
+import {
+  filterContextMessages,
+  filterEmptyMessages,
+  filterUserRoleStartMessages
+} from '@renderer/services/MessagesService'
 import {
   Assistant,
   FileTypes,
@@ -22,6 +26,13 @@ import {
   Suggestion
 } from '@renderer/types'
 import { removeSpecialCharactersForTopicName } from '@renderer/utils'
+import {
+  callMCPTool,
+  filterMCPTools,
+  mcpToolsToOpenAITools,
+  openAIToolsToMcpTool,
+  upsertMCPToolResponse
+} from '@renderer/utils/mcp-tools'
 import { takeRight } from 'lodash'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
@@ -35,13 +46,6 @@ import {
 
 import { CompletionsParams } from '.'
 import BaseProvider from './BaseProvider'
-import {
-  callMCPTool,
-  filterMCPTools,
-  mcpToolsToOpenAITools,
-  openAIToolsToMcpTool,
-  upsertMCPToolResponse
-} from './mcpToolUtils'
 
 type ReasoningEffort = 'high' | 'medium' | 'low'
 
@@ -248,7 +252,10 @@ export default class OpenAIProvider extends BaseProvider {
 
     const userMessages: ChatCompletionMessageParam[] = []
 
-    const _messages = filterUserRoleStartMessages(filterContextMessages(takeRight(messages, contextCount + 1)))
+    const _messages = filterUserRoleStartMessages(
+      filterContextMessages(filterEmptyMessages(takeRight(messages, contextCount + 1)))
+    )
+
     onFilterMessages(_messages)
 
     for (const message of _messages) {

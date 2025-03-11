@@ -212,7 +212,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
           inverse={true}
           scrollableTarget="messages">
           <ScrollContainer>
-            <LoaderContainer $loading={loading || isLoadingMore}>
+            <LoaderContainer $loading={isLoadingMore}>
               <BeatLoader size={8} color="var(--color-text-2)" />
             </LoaderContainer>
             {Object.entries(getGroupedMessages(displayMessages)).map(([key, groupMessages]) => (

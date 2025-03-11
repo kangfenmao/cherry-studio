@@ -18,18 +18,18 @@ import {
 } from '@renderer/services/MessagesService'
 import { Assistant, FileTypes, MCPToolResponse, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharactersForTopicName } from '@renderer/utils'
-import { first, flatten, sum, takeRight } from 'lodash'
-import OpenAI from 'openai'
-
-import { CompletionsParams } from '.'
-import BaseProvider from './BaseProvider'
 import {
   anthropicToolUseToMcpTool,
   callMCPTool,
   filterMCPTools,
   mcpToolsToAnthropicTools,
   upsertMCPToolResponse
-} from './mcpToolUtils'
+} from '@renderer/utils/mcp-tools'
+import { first, flatten, isEmpty, sum, takeRight } from 'lodash'
+import OpenAI from 'openai'
+
+import { CompletionsParams } from '.'
+import BaseProvider from './BaseProvider'
 
 type ReasoningEffort = 'high' | 'medium' | 'low'
 
@@ -159,7 +159,7 @@ export default class AnthropicProvider extends BaseProvider {
     const body: MessageCreateParamsNonStreaming = {
       model: model.id,
       messages: userMessages,
-      tools: tools,
+      tools: isEmpty(tools) ? undefined : tools,
       max_tokens: maxTokens || DEFAULT_MAX_TOKENS,
       temperature: this.getTemperature(assistant, model),
       top_p: this.getTopP(assistant, model),

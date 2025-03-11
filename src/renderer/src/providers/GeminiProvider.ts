@@ -21,19 +21,19 @@ import { EVENT_NAMES } from '@renderer/services/EventService'
 import { filterContextMessages, filterUserRoleStartMessages } from '@renderer/services/MessagesService'
 import { Assistant, FileType, FileTypes, MCPToolResponse, Message, Model, Provider, Suggestion } from '@renderer/types'
 import { removeSpecialCharactersForTopicName } from '@renderer/utils'
-import axios from 'axios'
-import { isEmpty, takeRight } from 'lodash'
-import OpenAI from 'openai'
-
-import { CompletionsParams } from '.'
-import BaseProvider from './BaseProvider'
 import {
   callMCPTool,
   filterMCPTools,
   geminiFunctionCallToMcpTool,
   mcpToolsToGeminiTools,
   upsertMCPToolResponse
-} from './mcpToolUtils'
+} from '@renderer/utils/mcp-tools'
+import axios from 'axios'
+import { isEmpty, takeRight } from 'lodash'
+import OpenAI from 'openai'
+
+import { CompletionsParams } from '.'
+import BaseProvider from './BaseProvider'
 
 export default class GeminiProvider extends BaseProvider {
   private sdk: GoogleGenerativeAI
