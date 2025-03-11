@@ -444,16 +444,16 @@
       "restore.success": "恢复成功",
       "save.success.title": "保存成功",
       "searching": "正在联网搜索...",
-      "success.markdown.export.preconf": "成功导出Markdown文件到预先设定的路径",
-      "success.markdown.export.specified": "成功导出Markdown文件",
-      "success.notion.export": "成功导出到Notion",
+      "success.markdown.export.preconf": "成功导出 Markdown 文件到预先设定的路径",
+      "success.markdown.export.specified": "成功导出 Markdown 文件",
+      "success.notion.export": "成功导出到 Notion",
       "success.yuque.export": "成功导出到语雀",
       "switch.disabled": "请等待当前回复完成后操作",
       "topic.added": "话题添加成功",
       "upgrade.success.button": "重启",
       "upgrade.success.content": "重启用以完成升级",
       "upgrade.success.title": "升级成功",
-      "warn.notion.exporting": "正在导出到Notion, 请勿重复请求导出!"
+      "warn.notion.exporting": "正在导出到 Notion, 请勿重复请求导出!"
     },
     "minapp": {
       "sidebar.add.title": "添加到侧边栏",
