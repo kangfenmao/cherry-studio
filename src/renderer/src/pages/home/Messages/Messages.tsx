@@ -1,5 +1,6 @@
 import Scrollbar from '@renderer/components/Scrollbar'
 import { LOAD_MORE_COUNT } from '@renderer/config/constant'
+import db from '@renderer/databases'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useMessageOperations } from '@renderer/hooks/useMessageOperations'
 import { useSettings } from '@renderer/hooks/useSettings'
@@ -18,7 +19,7 @@ import {
   removeSpecialCharactersForFileName,
   runAsyncFunction
 } from '@renderer/utils'
-import { isEmpty, last } from 'lodash'
+import { flatten, isEmpty, last, take } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -39,13 +40,13 @@ interface MessagesProps {
 const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic }) => {
   const { t } = useTranslation()
   const { showTopics, topicPosition, showAssistants, enableTopicNaming } = useSettings()
-  const { updateTopic } = useAssistant(assistant.id)
+  const { updateTopic, addTopic } = useAssistant(assistant.id)
   const dispatch = useAppDispatch()
   const containerRef = useRef<HTMLDivElement>(null)
   const [displayMessages, setDisplayMessages] = useState<Message[]>([])
   const [hasMore, setHasMore] = useState(false)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const { messages, loading, displayCount, updateMessages, clearTopicMessages } = useMessageOperations(topic)
+  const { messages, displayCount, updateMessages, clearTopicMessages, deleteMessage } = useMessageOperations(topic)
 
   useEffect(() => {
     const reversedMessages = [...messages].reverse()
@@ -132,9 +133,9 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
       }),
       EventEmitter.on(EVENT_NAMES.NEW_CONTEXT, async () => {
         const lastMessage = last(messages)
+
         if (lastMessage?.type === 'clear') {
-          // TODO
-          // handleDeleteMessage(lastMessage)
+          deleteMessage(lastMessage)
           scrollToBottom()
           return
         }
@@ -144,15 +145,32 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
         const clearMessage = getUserMessage({ assistant, topic, type: 'clear' })
         const newMessages = [...messages, clearMessage]
         await updateMessages(newMessages)
+
         scrollToBottom()
+      }),
+      EventEmitter.on(EVENT_NAMES.NEW_BRANCH, async (index: number) => {
+        const newTopic = getDefaultTopic(assistant.id)
+        newTopic.name = topic.name
+        const branchMessages = take(messages, messages.length - index)
+
+        // 将分支的消息放入数据库
+        await db.topics.add({ id: newTopic.id, messages: branchMessages })
+        addTopic(newTopic)
+        setActiveTopic(newTopic)
+        autoRenameTopic()
+
+        // 由于复制了消息，消息中附带的文件的总数变了，需要更新
+        const filesArr = branchMessages.map((m) => m.files)
+        const files = flatten(filesArr).filter(Boolean)
+
+        files.map(async (f) => {
+          const file = await db.files.get({ id: f?.id })
+          file && db.files.update(file.id, { count: file.count + 1 })
+        })
       })
     ]
 
-    return () => {
-      for (const unsub of unsubscribes) {
-        unsub()
-      }
-    }
+    return () => unsubscribes.forEach((unsub) => unsub())
   }, [assistant, dispatch, scrollToBottom, topic, updateTopic])
 
   useEffect(() => {
