@@ -1,13 +1,12 @@
 import db from '@renderer/databases'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { useAppDispatch, useAppSelector } from '@renderer/store'
+import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   clearStreamMessage,
   clearTopicMessages,
   commitStreamMessage,
   resendMessage,
   selectDisplayCount,
-  selectStreamMessages,
   selectTopicLoading,
   selectTopicMessages,
   setStreamMessage,
@@ -27,7 +26,6 @@ import { useCallback } from 'react'
 export function useMessageOperations(topic: Topic) {
   const dispatch = useAppDispatch()
   const messages = useAppSelector((state) => selectTopicMessages(state, topic.id))
-  const streamMessages = useAppSelector((state) => selectStreamMessages(state, topic.id))
 
   /**
    * 删除单个消息
@@ -179,13 +177,15 @@ export function useMessageOperations(topic: Topic) {
   )
 
   const pauseMessages = useCallback(async () => {
+    const streamMessages = store.getState().messages.streamMessagesByTopic[topic.id]
+
     if (streamMessages) {
       const streamMessagesList = Object.values(streamMessages).filter((msg) => msg?.askId && msg?.id)
       for (const message of streamMessagesList) {
         message && (await pauseMessage(message))
       }
     }
-  }, [streamMessages, pauseMessage])
+  }, [pauseMessage, topic.id])
 
   /**
    * 恢复/重发消息

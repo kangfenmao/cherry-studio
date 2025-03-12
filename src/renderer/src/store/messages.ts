@@ -482,11 +482,6 @@ export const selectTopicMessages = createSelector(
   (messagesByTopic, topicId) => (topicId ? (messagesByTopic[topicId] ?? []) : [])
 )
 
-export const selectStreamMessages = createSelector(
-  [(state: RootState) => state.messages.streamMessagesByTopic, (_, topicId: string) => topicId],
-  (streamMessagesByTopic, topicId) => (topicId ? (streamMessagesByTopic[topicId] ?? {}) : {})
-)
-
 // 获取特定话题的loading状态
 export const selectTopicLoading = (state: RootState, topicId?: string): boolean => {
   const messagesState = state.messages as MessagesState
