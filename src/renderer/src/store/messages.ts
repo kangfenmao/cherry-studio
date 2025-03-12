@@ -190,20 +190,6 @@ const messagesSlice = createSlice({
   // }
 })
 
-export const {
-  setTopicLoading,
-  setError,
-  setDisplayCount,
-  addMessage,
-  updateMessage,
-  setCurrentTopic,
-  clearTopicMessages,
-  loadTopicMessages,
-  setStreamMessage,
-  commitStreamMessage,
-  clearStreamMessage
-} = messagesSlice.actions
-
 const handleResponseMessageUpdate = (
   assistant: Assistant,
   message: Message,
@@ -522,5 +508,19 @@ export const selectStreamMessage = (state: RootState, topicId: string, messageId
   const messagesState = state.messages as MessagesState
   return messagesState.streamMessagesByTopic[topicId]?.[messageId] || null
 }
+
+export const {
+  setTopicLoading,
+  setError,
+  setDisplayCount,
+  addMessage,
+  updateMessage,
+  setCurrentTopic,
+  clearTopicMessages,
+  loadTopicMessages,
+  setStreamMessage,
+  commitStreamMessage,
+  clearStreamMessage
+} = messagesSlice.actions
 
 export default messagesSlice.reducer

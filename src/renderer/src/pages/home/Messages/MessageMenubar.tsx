@@ -250,9 +250,6 @@ const MessageMenubar: FC<Props> = (props) => {
     await modelGenerating()
     const selectedModel = await SelectModelPopup.show({ model })
     if (!selectedModel) return
-
-    // const mentionModelMessage: Message = resetAssistantMessage(message, selectedModel)
-    // dispatch(updateMessage({ topicId: topic.id, messageId: message.id, updates: _message }))
     resendMessage(message, { ...assistant, model: selectedModel }, true)
   }
 
