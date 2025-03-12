@@ -1,12 +1,12 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { useAppDispatch, useAppSelector } from '@renderer/store'
-import store from '@renderer/store'
 import {
   clearStreamMessage,
   clearTopicMessages,
   commitStreamMessage,
   resendMessage,
   selectDisplayCount,
+  selectStreamMessages,
   selectTopicLoading,
   selectTopicMessages,
   setStreamMessage,
@@ -26,6 +26,7 @@ import { useCallback } from 'react'
 export function useMessageOperations(topic: Topic) {
   const dispatch = useAppDispatch()
   const messages = useAppSelector((state) => selectTopicMessages(state, topic.id))
+  const streamMessages = useAppSelector((state) => selectStreamMessages(state, topic.id))
 
   /**
    * 删除单个消息
@@ -157,37 +158,30 @@ export function useMessageOperations(topic: Topic) {
    */
   const pauseMessage = useCallback(
     // 存的是用户消息的id，也就是助手消息的askId
-    async (askId: string, messageId: string) => {
+    async (message: Message) => {
       // 1. 调用 abort
-      abortCompletion(askId)
-      console.log('messageId', messageId)
+      message.askId && abortCompletion(message.askId)
+
       // 2. 更新消息状态
-      await editMessage(messageId, { status: 'paused' })
+      await editMessage(message.id, { status: 'paused', content: message.content })
 
       // 3.更改loading状态
-      dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
+      dispatch(setTopicLoading({ topicId: message.topicId, loading: false }))
 
       // 4. 清理流式消息
-      clearStreamMessageAction(messageId)
+      clearStreamMessageAction(message.id)
     },
-    [editMessage, clearStreamMessageAction]
+    [editMessage, dispatch, clearStreamMessageAction]
   )
 
   const pauseMessages = useCallback(async () => {
-    // 从 store 获取当前 topic 的所有流式消息
-    const streamMessages = store.getState().messages.streamMessagesByTopic[topic.id]
     if (streamMessages) {
-      // 获取所有流式消息的 askId
-      const askIds = Object.values(streamMessages)
-        .map((msg) => [msg.askId, msg.id])
-        .filter(([askId, id]) => askId && id)
-
-      // 对每个 askId 执行暂停
-      for (const [askId, id] of askIds) {
-        await pauseMessage(askId, id)
+      const streamMessagesList = Object.values(streamMessages).filter((msg) => msg?.askId && msg?.id)
+      for (const message of streamMessagesList) {
+        message && (await pauseMessage(message))
       }
     }
-  }, [topic.id, pauseMessage])
+  }, [streamMessages, pauseMessage])
 
   /**
    * 恢复/重发消息
