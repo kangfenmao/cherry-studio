@@ -11,12 +11,11 @@ interface ChatNavigationProps {
 
 const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
   const { t } = useTranslation()
-  const { showTopics, topicPosition } = useSettings()
   const [isVisible, setIsVisible] = useState(false)
   const [hideTimer, setHideTimer] = useState<NodeJS.Timeout | null>(null)
-
-  // 计算导航按钮的位置
-  const navigationPosition = showTopics && topicPosition === 'right' ? 'var(--assistants-width)' : '0'
+  const { topicPosition, showTopics } = useSettings()
+  const showRightTopics = topicPosition === 'right' && showTopics
+  const right = showRightTopics ? 'calc(var(--topic-list-width) + 16px)' : '16px'
 
   const resetHideTimer = useCallback(() => {
     if (hideTimer) {
@@ -176,12 +175,8 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
 
   return (
     <>
-      <TriggerArea
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => resetHideTimer()}
-        $position={navigationPosition}
-      />
-      <NavigationContainer $isVisible={isVisible} $position={navigationPosition}>
+      <TriggerArea $right={right} onMouseEnter={() => setIsVisible(true)} onMouseLeave={() => resetHideTimer()} />
+      <NavigationContainer $isVisible={isVisible} $right={right}>
         <ButtonGroup>
           <Tooltip title={t('chat.navigation.prev')} placement="left">
             <NavigationButton
@@ -208,27 +203,23 @@ const ChatNavigation: FC<ChatNavigationProps> = ({ containerId }) => {
   )
 }
 
-interface PositionProps {
-  $position: string
-}
-
-const TriggerArea = styled.div<PositionProps>`
+const TriggerArea = styled.div<{ $right: string }>`
   position: fixed;
-  right: calc(${(props) => props.$position} + 0px);
+  right: ${(props) => props.$right};
   top: 40%;
   width: 20px;
   height: 20%;
   z-index: 998;
-  background: transparent;
 `
 
-interface NavigationContainerProps extends PositionProps {
+interface NavigationContainerProps {
   $isVisible: boolean
+  $right: string
 }
 
 const NavigationContainer = styled.div<NavigationContainerProps>`
   position: fixed;
-  right: calc(${(props) => props.$position} + 16px);
+  right: ${(props) => props.$right};
   top: 50%;
   transform: translateY(-50%) translateX(${(props) => (props.$isVisible ? 0 : '100%')});
   z-index: 999;
