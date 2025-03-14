@@ -17,6 +17,8 @@ import {
 import type { Assistant, Message, Topic } from '@renderer/types'
 import { abortCompletion } from '@renderer/utils/abortController'
 import { useCallback } from 'react'
+
+import { TopicManager } from './useTopic'
 /**
  * 自定义Hook，提供消息操作相关的功能
  *
@@ -126,7 +128,9 @@ export function useMessageOperations(topic: Topic) {
    */
   const clearTopicMessagesAction = useCallback(
     async (_topicId?: string) => {
-      await dispatch(clearTopicMessages(_topicId || topic.id))
+      const topicId = _topicId || topic.id
+      await dispatch(clearTopicMessages(topicId))
+      await TopicManager.clearTopicMessages(topicId)
     },
     [dispatch, topic.id]
   )
