@@ -285,6 +285,55 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   /**
+   * Check if the model is a Glm-4-alltools
+   * @param model - The model
+   * @returns True if the model is a Glm-4-alltools, false otherwise
+   */
+  private isZhipuTool(model: Model) {
+    return model.id.includes('glm-4-alltools')
+  }
+
+  /**
+   * Clean the tool call arguments
+   * @param toolCall - The tool call
+   * @returns The cleaned tool call
+   */
+  private cleanToolCallArgs(toolCall: ChatCompletionMessageToolCall): ChatCompletionMessageToolCall {
+    if (toolCall.function.arguments) {
+      let args = toolCall.function.arguments
+      const codeBlockRegex = /```(?:\w*\n)?([\s\S]*?)```/
+      const match = args.match(codeBlockRegex)
+      if (match) {
+        // Extract content from code block
+        let extractedArgs = match[1].trim()
+        // Clean function call format like tool_call(name1=value1,name2=value2)
+        const functionCallRegex = /^\s*\w+\s*\(([\s\S]*?)\)\s*$/
+        const functionMatch = extractedArgs.match(functionCallRegex)
+        if (functionMatch) {
+          // Try to convert parameters to JSON format
+          const params = functionMatch[1].split(',').filter(Boolean)
+          const paramsObj = {}
+          params.forEach((param) => {
+            const [name, value] = param.split('=').map((p) => p.trim())
+            if (name && value !== undefined) {
+              paramsObj[name] = value
+            }
+          })
+          extractedArgs = JSON.stringify(paramsObj)
+        }
+        toolCall.function.arguments = extractedArgs
+      }
+      args = toolCall.function.arguments
+      const firstBraceIndex = args.indexOf('{')
+      const lastBraceIndex = args.lastIndexOf('}')
+      if (firstBraceIndex !== -1 && lastBraceIndex !== -1 && firstBraceIndex < lastBraceIndex) {
+        toolCall.function.arguments = args.substring(firstBraceIndex, lastBraceIndex + 1)
+      }
+    }
+    return toolCall
+  }
+
+  /**
    * Generate completions for the assistant
    * @param messages - The messages
    * @param assistant - The assistant
@@ -443,11 +492,19 @@ export default class OpenAIProvider extends BaseProvider {
         }
 
         if (finishReason === 'tool_calls') {
-          const toolCalls = Object.values(final_tool_calls)
-          reqMessages.push({
-            role: 'assistant',
-            tool_calls: toolCalls
-          } as ChatCompletionAssistantMessageParam)
+          const toolCalls = Object.values(final_tool_calls).map(this.cleanToolCallArgs)
+          console.log('start invoke tools', toolCalls)
+          if (this.isZhipuTool(model)) {
+            reqMessages.push({
+              role: 'assistant',
+              content: `argments=${JSON.stringify(toolCalls[0].function.arguments)}`
+            })
+          } else {
+            reqMessages.push({
+              role: 'assistant',
+              tool_calls: toolCalls
+            } as ChatCompletionAssistantMessageParam)
+          }
 
           for (const toolCall of toolCalls) {
             const mcpTool = openAIToolsToMcpTool(mcpTools, toolCall)
