@@ -321,7 +321,7 @@ export default class OpenAIProvider extends BaseProvider {
 
     const toolResponses: MCPToolResponse[] = []
 
-    const processStream = async (stream: any) => {
+    const processStream = async (stream: any, idx: number) => {
       if (!isSupportStreamOutput()) {
         const time_completion_millsec = new Date().getTime() - start_time_millsec
         return onChunk({
@@ -365,30 +365,29 @@ export default class OpenAIProvider extends BaseProvider {
 
         if (delta?.tool_calls) {
           const chunkToolCalls = delta.tool_calls
-          if (finishReason !== 'tool_calls') {
-            for (const t of chunkToolCalls) {
-              const { index, id, function: fn, type } = t
-              const args = fn && typeof fn.arguments === 'string' ? fn.arguments : ''
-              if (!(index in final_tool_calls)) {
-                final_tool_calls[index] = {
-                  id,
-                  function: {
-                    name: fn?.name,
-                    arguments: args
-                  },
-                  type
-                } as ChatCompletionMessageToolCall
-              } else {
-                final_tool_calls[index].function.arguments += args
-              }
+          for (const t of chunkToolCalls) {
+            const { index, id, function: fn, type } = t
+            const args = fn && typeof fn.arguments === 'string' ? fn.arguments : ''
+            if (!(index in final_tool_calls)) {
+              final_tool_calls[index] = {
+                id,
+                function: {
+                  name: fn?.name,
+                  arguments: args
+                },
+                type
+              } as ChatCompletionMessageToolCall
+            } else {
+              final_tool_calls[index].function.arguments += args
             }
+          }
+          if (finishReason !== 'tool_calls') {
             continue
           }
         }
 
         if (finishReason === 'tool_calls') {
           const toolCalls = Object.values(final_tool_calls)
-          console.log('start invoke tools', toolCalls)
           reqMessages.push({
             role: 'assistant',
             tool_calls: toolCalls
@@ -400,11 +399,9 @@ export default class OpenAIProvider extends BaseProvider {
               continue
             }
 
-            upsertMCPToolResponse(toolResponses, { tool: mcpTool, status: 'invoking' }, onChunk)
+            upsertMCPToolResponse(toolResponses, { tool: mcpTool, status: 'invoking', id: toolCall.id }, onChunk)
 
             const toolCallResponse = await callMCPTool(mcpTool)
-
-            console.log('[OpenAIProvider] toolCallResponse', toolCallResponse)
 
             reqMessages.push({
               role: 'tool',
@@ -414,9 +411,12 @@ export default class OpenAIProvider extends BaseProvider {
               tool_call_id: toolCall.id
             } as ChatCompletionToolMessageParam)
 
-            upsertMCPToolResponse(toolResponses, { tool: mcpTool, status: 'done', response: toolCallResponse }, onChunk)
+            upsertMCPToolResponse(
+              toolResponses,
+              { tool: mcpTool, status: 'done', response: toolCallResponse, id: toolCall.id },
+              onChunk
+            )
           }
-
           const newStream = await this.sdk.chat.completions
             // @ts-ignore key is not typed
             .create(
@@ -438,7 +438,7 @@ export default class OpenAIProvider extends BaseProvider {
                 signal
               }
             )
-          await processStream(newStream)
+          await processStream(newStream, idx + 1)
         }
 
         onChunk({
@@ -479,7 +479,7 @@ export default class OpenAIProvider extends BaseProvider {
         }
       )
 
-    await processStream(stream).finally(cleanup)
+    await processStream(stream, 0).finally(cleanup)
   }
 
   async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {

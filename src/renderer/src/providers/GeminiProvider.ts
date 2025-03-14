@@ -221,7 +221,7 @@ export default class GeminiProvider extends BaseProvider {
 
     const userMessagesStream = await chat.sendMessageStream(messageContents.parts, { signal })
     let time_first_token_millsec = 0
-    const processStream = async (stream: GenerateContentStreamResult) => {
+    const processStream = async (stream: GenerateContentStreamResult, idx: number) => {
       for await (const chunk of stream.stream) {
         if (window.keyv.get(EVENT_NAMES.CHAT_COMPLETION_PAUSED)) break
         if (time_first_token_millsec == 0) {
@@ -242,7 +242,8 @@ export default class GeminiProvider extends BaseProvider {
                 toolResponses,
                 {
                   tool: mcpTool,
-                  status: 'invoking'
+                  status: 'invoking',
+                  id: `${call.name}-${idx}`
                 },
                 onChunk
               )
@@ -258,7 +259,8 @@ export default class GeminiProvider extends BaseProvider {
                 {
                   tool: mcpTool,
                   status: 'done',
-                  response: toolCallResponse
+                  response: toolCallResponse,
+                  id: `${call.name}-${idx}`
                 },
                 onChunk
               )
@@ -272,7 +274,7 @@ export default class GeminiProvider extends BaseProvider {
             })
             const newChat = geminiModel.startChat({ history })
             const newStream = await newChat.sendMessageStream(fcRespParts, { signal })
-            await processStream(newStream).finally(cleanup)
+            await processStream(newStream, idx + 1).finally(cleanup)
           }
         }
 
@@ -293,7 +295,7 @@ export default class GeminiProvider extends BaseProvider {
         })
       }
     }
-    await processStream(userMessagesStream).finally(cleanup)
+    await processStream(userMessagesStream, 0).finally(cleanup)
   }
 
   async translate(message: Message, assistant: Assistant, onResponse?: (text: string) => void) {

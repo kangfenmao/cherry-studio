@@ -208,7 +208,7 @@ export default class AnthropicProvider extends BaseProvider {
     const { signal } = abortController
     const toolResponses: MCPToolResponse[] = []
 
-    const processStream = (body: MessageCreateParamsNonStreaming) => {
+    const processStream = (body: MessageCreateParamsNonStreaming, idx: number) => {
       return new Promise<void>((resolve, reject) => {
         const toolCalls: ToolUseBlock[] = []
         let hasThinkingContent = false
@@ -274,10 +274,14 @@ export default class AnthropicProvider extends BaseProvider {
               for (const toolCall of toolCalls) {
                 const mcpTool = anthropicToolUseToMcpTool(mcpTools, toolCall)
                 if (mcpTool) {
-                  upsertMCPToolResponse(toolResponses, { tool: mcpTool, status: 'invoking' }, onChunk)
+                  upsertMCPToolResponse(toolResponses, { tool: mcpTool, status: 'invoking', id: toolCall.id }, onChunk)
                   const resp = await callMCPTool(mcpTool)
                   toolCallResults.push({ type: 'tool_result', tool_use_id: toolCall.id, content: resp.content })
-                  upsertMCPToolResponse(toolResponses, { tool: mcpTool, status: 'done', response: resp }, onChunk)
+                  upsertMCPToolResponse(
+                    toolResponses,
+                    { tool: mcpTool, status: 'done', response: resp, id: toolCall.id },
+                    onChunk
+                  )
                 }
               }
 
@@ -295,7 +299,7 @@ export default class AnthropicProvider extends BaseProvider {
                 const newBody = body
                 body.messages = userMessages
 
-                await processStream(newBody)
+                await processStream(newBody, idx + 1)
               }
             }
 
@@ -326,7 +330,7 @@ export default class AnthropicProvider extends BaseProvider {
       })
     }
 
-    await processStream(body)
+    await processStream(body, 0)
       .catch((error) => {
         // 不加这个错误抛不出来
         throw error
