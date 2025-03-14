@@ -243,6 +243,7 @@ export const sendMessage =
 
       // Initialize topic messages if not exists
       const initialState = getState()
+
       if (!initialState.messages.messagesByTopic[topic.id]) {
         dispatch(clearTopicMessages(topic.id))
       }
@@ -278,6 +279,7 @@ export const sendMessage =
           assistantMessage.status = 'sending'
           assistantMessages.push(assistantMessage)
         }
+
         dispatch(
           addMessage({
             topicId: topic.id,
@@ -287,6 +289,7 @@ export const sendMessage =
       }
 
       const queue = getTopicQueue(topic.id)
+
       for (const assistantMessage of assistantMessages) {
         // Set as stream message instead of adding to messages
         dispatch(setStreamMessage({ topicId: topic.id, message: assistantMessage }))
@@ -298,6 +301,7 @@ export const sendMessage =
         if (currentTopicMessages) {
           await syncMessagesWithDB(topic.id, currentTopicMessages)
         }
+
         // 保证请求有序，防止请求静态，限制并发数量
         await queue.add(async () => {
           try {

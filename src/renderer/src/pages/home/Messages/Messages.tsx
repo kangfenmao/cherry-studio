@@ -200,7 +200,6 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
                 messages={groupMessages}
                 topic={topic}
                 hidePresetMessages={assistant.settings?.hideMessages}
-                onSetMessages={setDisplayMessages}
               />
             ))}
           </ScrollContainer>
