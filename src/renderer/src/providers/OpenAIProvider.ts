@@ -288,12 +288,12 @@ export default class OpenAIProvider extends BaseProvider {
    * Generate completions for the assistant
    * @param messages - The messages
    * @param assistant - The assistant
+   * @param mcpTools - The MCP tools
    * @param onChunk - The onChunk callback
    * @param onFilterMessages - The onFilterMessages callback
-   * @param mcpTools - The MCP tools
    * @returns The completions
    */
-  async completions({ messages, assistant, onChunk, onFilterMessages, mcpTools }: CompletionsParams): Promise<void> {
+  async completions({ messages, assistant, mcpTools, onChunk, onFilterMessages }: CompletionsParams): Promise<void> {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
