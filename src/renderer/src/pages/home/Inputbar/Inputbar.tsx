@@ -175,7 +175,11 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
       userMessage.usage = await estimateMessageUsage(userMessage)
       currentMessageId.current = userMessage.id
 
-      dispatch(_sendMessage(userMessage, assistant, topic))
+      dispatch(
+        _sendMessage(userMessage, assistant, topic, {
+          mentions: mentionModels
+        })
+      )
 
       // Clear input
       setText('')

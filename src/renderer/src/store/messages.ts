@@ -6,6 +6,7 @@ import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getAssistantMessage, resetAssistantMessage } from '@renderer/services/MessagesService'
 import type { AppDispatch, RootState } from '@renderer/store'
 import type { Assistant, Message, Topic } from '@renderer/types'
+import { Model } from '@renderer/types'
 import { clearTopicQueue, getTopicQueue, waitForTopicQueue } from '@renderer/utils/queue'
 import { throttle } from 'lodash'
 
@@ -103,6 +104,29 @@ const messagesSlice = createSlice({
       } else {
         // 添加单条消息
         state.messagesByTopic[topicId].push(messages)
+      }
+    },
+    appendMessage: (
+      state,
+      action: PayloadAction<{ topicId: string; messages: Message | Message[]; position?: number }>
+    ) => {
+      const { topicId, messages, position } = action.payload
+      if (!state.messagesByTopic[topicId]) {
+        state.messagesByTopic[topicId] = []
+      }
+
+      // 确保消息数组存在并且拿到引用
+      const messagesList = state.messagesByTopic[topicId]
+
+      // 要插入的消息
+      const messagesToInsert = Array.isArray(messages) ? messages : [messages]
+
+      if (position !== undefined && position >= 0 && position <= messagesList.length) {
+        // 如果指定了位置，在特定位置插入消息
+        messagesList.splice(position, 0, ...messagesToInsert)
+      } else {
+        // 否则默认添加到末尾
+        messagesList.push(...messagesToInsert)
       }
     },
     updateMessage: (
@@ -233,8 +257,9 @@ export const sendMessage =
     assistant: Assistant,
     topic: Topic,
     options?: {
-      resendAssistantMessage?: Message
+      resendAssistantMessage?: Message | Message[]
       isMentionModel?: boolean
+      mentions?: Model[]
     }
   ) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -255,17 +280,27 @@ export const sendMessage =
       if (options?.resendAssistantMessage) {
         // 直接使用传入的助手消息，进行重置
         const messageToReset = options.resendAssistantMessage
-        const { model, id } = messageToReset
-        const resetMessage = resetAssistantMessage(messageToReset, model)
-        // 更新状态
-        dispatch(updateMessage({ topicId: topic.id, messageId: id, updates: resetMessage }))
-        // 使用重置后的消息
-        assistantMessages.push(resetMessage)
+        if (Array.isArray(messageToReset)) {
+          assistantMessages = messageToReset.map((m) => {
+            const { model, id } = m
+            const resetMessage = resetAssistantMessage(m, model)
+            // 更新状态
+            dispatch(updateMessage({ topicId: topic.id, messageId: id, updates: resetMessage }))
+            // 使用重置后的消息
+            return resetMessage
+          })
+        } else {
+          const { model, id } = messageToReset
+          const resetMessage = resetAssistantMessage(messageToReset, model)
+          // 更新状态
+          dispatch(updateMessage({ topicId: topic.id, messageId: id, updates: resetMessage }))
+          // 使用重置后的消息
+          assistantMessages.push(resetMessage)
+        }
       } else {
-        // 不是重发情况
-        if (userMessage.mentions?.length) {
-          // 为每个被 mention 的模型创建一个助手消息
-          assistantMessages = userMessage.mentions.map((m) => {
+        // 为每个被 mention 的模型创建一个助手消息
+        if (options?.mentions?.length) {
+          assistantMessages = options?.mentions.map((m) => {
             const assistantMessage = getAssistantMessage({ assistant: { ...assistant, model: m }, topic })
             assistantMessage.model = m
             assistantMessage.askId = userMessage.id
@@ -280,19 +315,36 @@ export const sendMessage =
           assistantMessages.push(assistantMessage)
         }
 
+        // 获取当前消息列表
+        const currentMessages = getState().messages.messagesByTopic[topic.id]
+
+        // 最后一个具有相同askId的助手消息，在其后插入
+        let position: number | undefined
+        if (options?.isMentionModel) {
+          const lastAssistantIndex = currentMessages.findLastIndex(
+            (m) => m.role === 'assistant' && m.askId === userMessage.id
+          )
+          if (lastAssistantIndex !== -1) {
+            position = lastAssistantIndex + 1
+          }
+        }
+
         dispatch(
-          addMessage({
+          appendMessage({
             topicId: topic.id,
-            messages: !options?.isMentionModel ? [userMessage, ...assistantMessages] : assistantMessages
+            messages: !options?.isMentionModel ? [userMessage, ...assistantMessages] : assistantMessages,
+            position
           })
         )
       }
-
+      for (const assistantMessage of assistantMessages) {
+        // for of会收到await 影响,在暂停的时候会因为异步的原因有概率拿不到数据
+        dispatch(setStreamMessage({ topicId: topic.id, message: assistantMessage }))
+      }
       const queue = getTopicQueue(topic.id)
 
       for (const assistantMessage of assistantMessages) {
         // Set as stream message instead of adding to messages
-        dispatch(setStreamMessage({ topicId: topic.id, message: assistantMessage }))
 
         // Sync user message with database
         const state = getState()
@@ -303,7 +355,7 @@ export const sendMessage =
         }
 
         // 保证请求有序，防止请求静态，限制并发数量
-        await queue.add(async () => {
+        queue.add(async () => {
           try {
             const messages = getState().messages.messagesByTopic[topic.id]
             if (!messages) {
@@ -324,13 +376,30 @@ export const sendMessage =
 
             // 节流
             const throttledDispatch = throttle(handleResponseMessageUpdate, 100, { trailing: true }) // 100ms的节流时间应足够平衡用户体验和性能
+            // 寻找当前正在处理的消息在消息列表中的位置
+            // const messageIndex = messages.findIndex((m) => m.id === assistantMessage.id)
+            const handleMessages = (): Message[] => {
+              // 找到对应的用户消息位置
+              const userMessageIndex = messages.findIndex((m) => m.id === assistantMessage.askId)
 
-            const messageIndex = messages.findIndex((m) => m.id === assistantMessage.id)
+              if (userMessageIndex !== -1) {
+                // 先截取到用户消息为止的所有消息，再进行过滤
+                const messagesUpToUser = messages.slice(0, userMessageIndex + 1)
+                return messagesUpToUser.filter((m) => !m.status?.includes('ing'))
+              }
+
+              // 如果找不到对应的用户消息，使用原有逻辑
+              // 按理说不会找不到 先注释掉看看
+              // if (messageIndex !== -1) {
+              //   const messagesUpToAssistant = messages.slice(0, messageIndex)
+              //   return messagesUpToAssistant.filter((m) => !m.status?.includes('ing'))
+              // }
+              // 没有找到消息索引的情况，过滤所有消息
+              return messages.filter((m) => !m.status?.includes('ing'))
+            }
             await fetchChatCompletion({
               message: { ...assistantMessage },
-              messages: messages
-                .filter((m) => !m.status?.includes('ing'))
-                .slice(0, messageIndex !== -1 ? messageIndex : undefined),
+              messages: handleMessages(),
               assistant: assistantWithModel,
               onResponse: async (msg) => {
                 // 允许在回调外维护一个最新的消息状态，每次都更新这个对象，但只通过节流函数分发到Redux
@@ -362,12 +431,13 @@ export const sendMessage =
           }
         })
       }
-      // 等待所有请求完成,设置loading
-      await queue.onIdle()
-      dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
     } catch (error: any) {
       console.error('Error in sendMessage:', error)
       dispatch(setError(error.message))
+      dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
+    } finally {
+      // 等待所有请求完成,设置loading
+      await waitForTopicQueue(topic.id)
       dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
     }
   }
@@ -385,7 +455,7 @@ export const resendMessage =
       // 如果是用户消息，直接重发
       if (message.role === 'user') {
         // 查找此用户消息对应的助手消息
-        const assistantMessage = topicMessages.find((m) => m.role === 'assistant' && m.askId === message.id)
+        const assistantMessage = topicMessages.filter((m) => m.role === 'assistant' && m.askId === message.id)
         return dispatch(
           sendMessage(message, assistant, topic, {
             resendAssistantMessage: assistantMessage,
@@ -408,6 +478,7 @@ export const resendMessage =
         return dispatch(sendMessage(userMessage, assistant, topic, { isMentionModel }))
       }
 
+      console.log('assistantMessage', message)
       dispatch(
         sendMessage(userMessage, assistant, topic, {
           resendAssistantMessage: message
@@ -521,7 +592,8 @@ export const {
   loadTopicMessages,
   setStreamMessage,
   commitStreamMessage,
-  clearStreamMessage
+  clearStreamMessage,
+  appendMessage
 } = messagesSlice.actions
 
 export default messagesSlice.reducer

@@ -92,10 +92,10 @@ const MessageMenubar: FC<Props> = (props) => {
 
       // Resend all grouped messages
       if (!isEmpty(groupdMessages)) {
-        for (const assistantMessage of groupdMessages) {
-          const _model = assistantMessage.model || assistantModel
-          await resendMessage({ ...assistantMessage, model: _model }, assistant)
-        }
+        // for (const assistantMessage of groupdMessages) {
+        // const _model = assistantMessage.model || assistantModel
+        await resendMessage(message, assistant)
+        // }
         return
       }
 
