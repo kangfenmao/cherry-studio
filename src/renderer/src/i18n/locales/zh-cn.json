@@ -170,6 +170,7 @@
       "topics.prompt.tips": "话题提示词: 针对当前话题提供额外的补充提示词",
       "topics.title": "话题",
       "topics.unpinned": "取消固定",
+      "topics.new": "开始新对话",
       "translate": "翻译",
       "navigation": {
         "prev": "上一条消息",
