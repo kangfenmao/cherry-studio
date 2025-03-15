@@ -3,7 +3,6 @@ import db from '@renderer/databases'
 import { autoRenameTopic, TopicManager } from '@renderer/hooks/useTopic'
 import i18n from '@renderer/i18n'
 import { fetchChatCompletion } from '@renderer/services/ApiService'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getAssistantMessage, resetAssistantMessage } from '@renderer/services/MessagesService'
 import type { AppDispatch, RootState } from '@renderer/store'
 import type { Assistant, Message, Topic } from '@renderer/types'
@@ -283,8 +282,6 @@ export const sendMessage =
       if (!initialState.messages.messagesByTopic[topic.id]) {
         dispatch(clearTopicMessages(topic.id))
       }
-
-      EventEmitter.emit(EVENT_NAMES.SEND_MESSAGE)
 
       // 处理助手消息
       let assistantMessages: Message[] = []
