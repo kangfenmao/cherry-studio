@@ -402,6 +402,7 @@
       "citations": "参考文献",
       "copied": "コピーしました！",
       "copy.success": "コピーしました！",
+      "copy.failed": "コピーに失敗しました",
       "error.chunk_overlap_too_large": "チャンクの重なりは、チャンクサイズを超えることはできません",
       "error.dimension_too_large": "内容のサイズが大きすぎます",
       "error.enter.api.host": "APIホストを入力してください",

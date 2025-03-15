@@ -408,6 +408,7 @@
       "citations": "Источники",
       "copied": "Скопировано!",
       "copy.success": "Скопировано!",
+      "copy.failed": "Не удалось скопировать",
       "error.chunk_overlap_too_large": "Перекрытие фрагментов не может быть больше размера фрагмента.",
       "error.dimension_too_large": "Размер содержимого слишком велик",
       "error.enter.api.host": "Пожалуйста, введите ваш API хост",

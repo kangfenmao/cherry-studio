@@ -402,6 +402,7 @@
       "citations": "References",
       "copied": "Copied!",
       "copy.success": "Copied!",
+      "copy.failed": "Copy failed",
       "error.chunk_overlap_too_large": "Chunk overlap cannot be greater than chunk size",
       "error.dimension_too_large": "Content size is too large",
       "error.enter.api.host": "Please enter your API host first",

@@ -402,6 +402,7 @@
       "citations": "引用内容",
       "copied": "已复制",
       "copy.success": "复制成功",
+      "copy.failed": "复制失败",
       "error.chunk_overlap_too_large": "分段重叠不能大于分段大小",
       "error.dimension_too_large": "内容尺寸过大",
       "error.enter.api.host": "请输入您的 API 地址",
