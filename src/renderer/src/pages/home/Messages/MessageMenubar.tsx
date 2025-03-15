@@ -86,22 +86,19 @@ const MessageMenubar: FC<Props> = (props) => {
 
   const handleResendUserMessage = useCallback(
     async (messageUpdate?: Message) => {
-      // messageUpdate 为了处理用户消息更改后的message
-      if (loading) return
-      const groupdMessages = messages.filter((m) => m.askId === message.id)
+      if (!loading) {
+        const groupdMessages = messages.filter((m) => m.askId === message.id)
 
-      // Resend all grouped messages
-      if (!isEmpty(groupdMessages)) {
-        // for (const assistantMessage of groupdMessages) {
-        // const _model = assistantMessage.model || assistantModel
-        await resendMessage(message, assistant)
-        // }
-        return
+        // Resend all grouped messages
+        if (!isEmpty(groupdMessages)) {
+          await resendMessage(message, assistant)
+          return
+        }
+
+        await resendMessage(messageUpdate ?? message, assistant)
       }
-
-      await resendMessage(messageUpdate ?? message, assistant)
     },
-    [message, assistantModel, resendMessage, assistant, messages, loading]
+    [message, resendMessage, assistant, messages, loading]
   )
 
   const onEdit = useCallback(async () => {

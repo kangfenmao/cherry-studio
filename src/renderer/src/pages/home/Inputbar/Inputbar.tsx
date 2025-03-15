@@ -77,7 +77,6 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
   const [expended, setExpend] = useState(false)
   const [estimateTokenCount, setEstimateTokenCount] = useState(0)
   const [contextCount, setContextCount] = useState({ current: 0, max: 0 })
-  // const generating = useAppSelector((state) => state.runtime.generating)
   const textareaRef = useRef<TextAreaRef>(null)
   const [files, setFiles] = useState<FileType[]>(_files)
   const { t } = useTranslation()
@@ -110,18 +109,21 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
   const [mentionFromKeyboard, setMentionFromKeyboard] = useState(false)
 
   const debouncedEstimate = useCallback(
-    debounce((newText) => {
+    (newText: string) => {
       if (showInputEstimatedTokens) {
         const count = estimateTxtTokens(newText) || 0
         setTokenCount(count)
       }
-    }, 500),
+    },
     [showInputEstimatedTokens]
   )
 
+  const debouncedEstimateWithDelay = debounce(debouncedEstimate, 500)
+
   useEffect(() => {
-    debouncedEstimate(text)
-  }, [text, debouncedEstimate])
+    debouncedEstimateWithDelay(text)
+    return () => debouncedEstimateWithDelay.cancel()
+  }, [text, debouncedEstimateWithDelay])
 
   const inputTokenCount = showInputEstimatedTokens ? tokenCount : 0
 
@@ -438,7 +440,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
         }
       }
     },
-    [pasteLongTextAsFile, pasteLongTextThreshold, supportExts, t, text]
+    [model, pasteLongTextAsFile, pasteLongTextThreshold, resizeTextArea, supportExts, t, text]
   )
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -548,7 +550,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
       })
     ]
     return () => unsubscribes.forEach((unsub) => unsub())
-  }, [addNewTopic])
+  }, [addNewTopic, resizeTextArea])
 
   useEffect(() => {
     textareaRef.current?.focus()
@@ -556,6 +558,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
 
   useEffect(() => {
     setTimeout(() => resizeTextArea(), 0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
