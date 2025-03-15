@@ -106,22 +106,20 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
 
   const [mentionFromKeyboard, setMentionFromKeyboard] = useState(false)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedEstimate = useCallback(
-    (newText: string) => {
+    debounce((newText) => {
       if (showInputEstimatedTokens) {
         const count = estimateTxtTokens(newText) || 0
         setTokenCount(count)
       }
-    },
+    }, 500),
     [showInputEstimatedTokens]
   )
 
-  const debouncedEstimateWithDelay = debounce(debouncedEstimate, 500)
-
   useEffect(() => {
-    debouncedEstimateWithDelay(text)
-    return () => debouncedEstimateWithDelay.cancel()
-  }, [text, debouncedEstimateWithDelay])
+    debouncedEstimate(text)
+  }, [text, debouncedEstimate])
 
   const inputTokenCount = showInputEstimatedTokens ? tokenCount : 0
 
