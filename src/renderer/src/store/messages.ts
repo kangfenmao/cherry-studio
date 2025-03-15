@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import db from '@renderer/databases'
 import { autoRenameTopic, TopicManager } from '@renderer/hooks/useTopic'
+import i18n from '@renderer/i18n'
 import { fetchChatCompletion } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getAssistantMessage, resetAssistantMessage } from '@renderer/services/MessagesService'
@@ -8,7 +9,7 @@ import type { AppDispatch, RootState } from '@renderer/store'
 import type { Assistant, Message, Topic } from '@renderer/types'
 import { Model } from '@renderer/types'
 import { clearTopicQueue, getTopicQueue, waitForTopicQueue } from '@renderer/utils/queue'
-import { throttle } from 'lodash'
+import { cloneDeep, throttle } from 'lodash'
 
 export interface MessagesState {
   messagesByTopic: Record<string, Message[]>
@@ -139,6 +140,9 @@ const messagesSlice = createSlice({
         const message = topicMessages.find((msg) => msg.id === messageId)
         if (message) {
           Object.assign(message, updates)
+          db.topics.update(topicId, {
+            messages: topicMessages.map((m) => (m.id === message.id ? cloneDeep(message) : m))
+          })
         }
       }
     },
@@ -282,10 +286,9 @@ export const sendMessage =
         const messageToReset = options.resendAssistantMessage
         if (Array.isArray(messageToReset)) {
           assistantMessages = messageToReset.map((m) => {
-            const { model, id } = m
-            const resetMessage = resetAssistantMessage(m, model)
+            const resetMessage = resetAssistantMessage(m, assistant.model)
             // 更新状态
-            dispatch(updateMessage({ topicId: topic.id, messageId: id, updates: resetMessage }))
+            dispatch(updateMessage({ topicId: topic.id, messageId: m.id, updates: resetMessage }))
             // 使用重置后的消息
             return resetMessage
           })
@@ -337,10 +340,12 @@ export const sendMessage =
           })
         )
       }
+
       for (const assistantMessage of assistantMessages) {
         // for of会收到await 影响,在暂停的时候会因为异步的原因有概率拿不到数据
         dispatch(setStreamMessage({ topicId: topic.id, message: assistantMessage }))
       }
+
       const queue = getTopicQueue(topic.id)
 
       for (const assistantMessage of assistantMessages) {
@@ -469,8 +474,15 @@ export const resendMessage =
       // 如果是助手消息，找到对应的用户消息
       const userMessage = topicMessages.find((m) => m.id === message.askId && m.role === 'user')
       if (!userMessage) {
-        console.error('Cannot find original user message to resend')
-        return dispatch(setError('Cannot find original user message to resend'))
+        dispatch(
+          updateMessage({
+            topicId: topic.id,
+            messageId: message.id,
+            updates: { status: 'error', error: { message: i18n.t('error.user_message_not_found') } }
+          })
+        )
+        console.error(i18n.t('error.user_message_not_found'))
+        return dispatch(setError(i18n.t('error.user_message_not_found')))
       }
 
       if (isMentionModel) {
@@ -509,6 +521,7 @@ export const loadTopicMessagesThunk = (topic: Topic) => async (dispatch: AppDisp
     dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
   }
 }
+
 // Modified clearMessages thunk
 export const clearTopicMessagesThunk = (topic: Topic) => async (dispatch: AppDispatch) => {
   try {

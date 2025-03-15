@@ -248,7 +248,8 @@
       "render": {
         "description": "Failed to render formula. Please check if the formula format is correct",
         "title": "Render Error"
-      }
+      },
+      "user_message_not_found": "Cannot find original user message to resend"
     },
     "export": {
       "assistant": "Assistant",

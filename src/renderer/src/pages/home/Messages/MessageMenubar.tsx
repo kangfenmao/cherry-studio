@@ -120,10 +120,10 @@ const MessageMenubar: FC<Props> = (props) => {
         ) : null
       }
     })
-    if (editedText && editedText !== message.content && resendMessage) {
-      // 同步修改store中用户消息
+
+    if (editedText && editedText !== message.content) {
       await editMessage(message.id, { content: editedText })
-      handleResendUserMessage({ ...message, content: editedText })
+      resendMessage && handleResendUserMessage({ ...message, content: editedText })
     }
   }, [message, editMessage, handleResendUserMessage, t])
 

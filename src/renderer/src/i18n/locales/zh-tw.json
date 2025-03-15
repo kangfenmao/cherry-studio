@@ -248,7 +248,8 @@
       "render": {
         "description": "渲染公式失敗，請檢查公式格式是否正確",
         "title": "渲染錯誤"
-      }
+      },
+      "user_message_not_found": "無法找到原始用戶訊息"
     },
     "export": {
       "assistant": "助手",

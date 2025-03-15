@@ -68,9 +68,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
 
   useEffect(() => {
     const unsubscribes = [
-      EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, () => {
-        scrollToBottom()
-      }),
+      EventEmitter.on(EVENT_NAMES.SEND_MESSAGE, scrollToBottom),
       EventEmitter.on(EVENT_NAMES.CLEAR_MESSAGES, async (data: Topic) => {
         const defaultTopic = getDefaultTopic(assistant.id)
 
