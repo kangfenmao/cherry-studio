@@ -30,7 +30,6 @@ import {
 } from '@renderer/utils/export'
 import { Button, Dropdown, Popconfirm, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { isEmpty } from 'lodash'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -55,7 +54,6 @@ const MessageMenubar: FC<Props> = (props) => {
   const [isTranslating, setIsTranslating] = useState(false)
   const assistantModel = assistant?.model
   const {
-    messages,
     loading,
     editMessage,
     setStreamMessage,
@@ -87,18 +85,10 @@ const MessageMenubar: FC<Props> = (props) => {
   const handleResendUserMessage = useCallback(
     async (messageUpdate?: Message) => {
       if (!loading) {
-        const groupdMessages = messages.filter((m) => m.askId === message.id)
-
-        // Resend all grouped messages
-        if (!isEmpty(groupdMessages)) {
-          await resendMessage(message, assistant)
-          return
-        }
-
         await resendMessage(messageUpdate ?? message, assistant)
       }
     },
-    [message, resendMessage, assistant, messages, loading]
+    [assistant, loading, message, resendMessage]
   )
 
   const onEdit = useCallback(async () => {
@@ -331,19 +321,17 @@ const MessageMenubar: FC<Props> = (props) => {
           </ActionButton>
         </Tooltip>
       )}
-      {!isGrouped && (
-        <Popconfirm
-          title={t('message.message.delete.content')}
-          okButtonProps={{ danger: true }}
-          icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-          onConfirm={() => deleteMessage(message)}>
-          <ActionButton className="message-action-button" onClick={(e) => e.stopPropagation()}>
-            <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
-              <DeleteOutlined />
-            </Tooltip>
-          </ActionButton>
-        </Popconfirm>
-      )}
+      <Popconfirm
+        title={t('message.message.delete.content')}
+        okButtonProps={{ danger: true }}
+        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+        onConfirm={() => deleteMessage(message)}>
+        <ActionButton className="message-action-button" onClick={(e) => e.stopPropagation()}>
+          <Tooltip title={t('common.delete')} mouseEnterDelay={1}>
+            <DeleteOutlined />
+          </Tooltip>
+        </ActionButton>
+      </Popconfirm>
       {!isUserMessage && (
         <Dropdown
           menu={{ items: dropdownItems, onClick: (e) => e.domEvent.stopPropagation() }}

@@ -29,6 +29,8 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
+  margin-top: -10px;
 `
 
 const Button = styled(AntdButton)<{ $theme: ThemeMode }>`
