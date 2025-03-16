@@ -835,7 +835,10 @@
           "usage": "使用法",
           "npm": "NPM",
           "version": "バージョン",
-          "actions": "アクション"
+          "actions": "アクション",
+          "scope_required": "npm スコープを入力してください",
+          "no_packages": "パッケージが見つかりません",
+          "search_error": "パッケージの検索に失敗しました"
         }
       },
       "messages.divider": "メッセージ間に区切り線を表示",

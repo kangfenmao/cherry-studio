@@ -835,7 +835,10 @@
           "usage": "Usage",
           "npm": "NPM",
           "version": "Version",
-          "actions": "Actions"
+          "actions": "Actions",
+          "scope_required": "Please enter npm scope",
+          "no_packages": "No packages found",
+          "search_error": "Search error"
         }
       },
       "messages.divider": "Show divider between messages",

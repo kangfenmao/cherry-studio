@@ -835,7 +835,10 @@
           "usage": "用法",
           "npm": "NPM",
           "version": "版本",
-          "actions": "操作"
+          "actions": "操作",
+          "scope_required": "請輸入 npm 作用域",
+          "no_packages": "未找到包",
+          "search_error": "搜索失敗"
         }
       },
       "messages.divider": "訊息間顯示分隔線",
