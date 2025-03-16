@@ -1,4 +1,4 @@
-import store, { useAppDispatch, useAppSelector } from '@renderer/store'
+import store, { useAppSelector } from '@renderer/store'
 import { setMCPServers } from '@renderer/store/mcp'
 import { MCPServer } from '@renderer/types'
 import { useEffect } from 'react'
@@ -12,21 +12,6 @@ ipcRenderer.on('mcp:servers-changed', (_event, servers) => {
 
 export const useMCPServers = () => {
   const mcpServers = useAppSelector((state) => state.mcp.servers)
-  const dispatch = useAppDispatch()
-
-  // Initial load of MCP servers from main process
-  useEffect(() => {
-    const loadServers = async () => {
-      try {
-        const servers = await window.api.mcp.listServers()
-        dispatch(setMCPServers(servers))
-      } catch (error) {
-        console.error('Failed to load MCP servers:', error)
-      }
-    }
-
-    loadServers()
-  }, [dispatch])
 
   const addMCPServer = async (server: MCPServer) => {
     try {
@@ -84,9 +69,24 @@ export const useMCPServers = () => {
 
 export const useInitMCPServers = () => {
   const mcpServers = useAppSelector((state) => state.mcp.servers)
+  // const dispatch = useAppDispatch()
 
   // Send servers to main process when they change in Redux
   useEffect(() => {
     ipcRenderer.send('mcp:servers-from-renderer', mcpServers)
   }, [mcpServers])
+
+  // Initial load of MCP servers from main process
+  // useEffect(() => {
+  //   const loadServers = async () => {
+  //     try {
+  //       const servers = await window.api.mcp.listServers()
+  //       dispatch(setMCPServers(servers))
+  //     } catch (error) {
+  //       console.error('Failed to load MCP servers:', error)
+  //     }
+  //   }
+
+  //   loadServers()
+  // }, [dispatch])
 }

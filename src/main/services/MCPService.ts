@@ -75,10 +75,10 @@ export default class MCPService extends EventEmitter {
 
     this.initPromise = (async () => {
       try {
+        log.info('[MCP] Starting initialization')
+
         // Wait for servers to be loaded from Redux
         await this.waitForServers()
-
-        log.info('[MCP] Starting initialization')
 
         // Load SDK components in parallel for better performance
         const [Client, StdioTransport, SSETransport] = await Promise.all([
@@ -96,7 +96,7 @@ export default class MCPService extends EventEmitter {
 
         // Load active servers
         await this.loadActiveServers()
-        log.info('[MCP] Initialization completed successfully')
+        log.info('[MCP] Initialization successfully')
 
         return
       } catch (err) {
@@ -333,7 +333,7 @@ export default class MCPService extends EventEmitter {
       this.clients[name] = client
       this.activeServers.set(name, { client, server })
 
-      log.info(`[MCP] Server ${name} started successfully`)
+      log.info(`[MCP] Activated server: ${server.name}`)
       this.emit('server-started', { name })
     } catch (error) {
       log.error(`[MCP] Error activating server ${name}:`, error)
@@ -476,14 +476,13 @@ export default class MCPService extends EventEmitter {
       return
     }
 
-    log.info(`[MCP] Loading ${activeServers.length} active servers`)
+    log.info(`[MCP] Start loading ${activeServers.length} active servers`)
 
     // Activate servers in parallel for better performance
     await Promise.allSettled(
       activeServers.map(async (server) => {
         try {
           await this.activate(server)
-          log.info(`[MCP] Successfully activated server: ${server.name}`)
         } catch (error) {
           this.logError(`Failed to activate server ${server.name}`)
           this.emit('server-error', { name: server.name, error })
@@ -491,7 +490,7 @@ export default class MCPService extends EventEmitter {
       })
     )
 
-    log.info(`[MCP] Loaded and activated ${Object.keys(this.clients).length} servers`)
+    log.info(`[MCP] End loading ${Object.keys(this.clients).length} active servers`)
   }
 
   /**
