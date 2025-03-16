@@ -224,15 +224,31 @@ export default class MCPService extends EventEmitter {
       await this.deactivate(server.name)
     } else if (!wasActive && server.isActive) {
       await this.activate(server)
+    } else {
+      await this.restartServer(server)
     }
 
     // Update servers list
     const updatedServers = [...this.servers]
     updatedServers[index] = server
     this.servers = updatedServers
+
+    // Notify Redux
     this.notifyReduxServersChanged(updatedServers)
   }
 
+  public async restartServer(_server: MCPServer): Promise<void> {
+    await this.ensureInitialized()
+
+    const server = this.servers.find((s) => s.name === _server.name)
+
+    if (server) {
+      if (server.isActive) {
+        await this.deactivate(server.name)
+      }
+      await this.activate(server)
+    }
+  }
   /**
    * Delete an MCP server
    */
