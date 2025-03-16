@@ -10,18 +10,9 @@ ipcRenderer.on('mcp:servers-changed', (_event, servers) => {
   store.dispatch(setMCPServers(servers))
 })
 
-// Send initial servers state to main process
-const initialServers = store.getState().mcp.servers
-ipcRenderer.send('mcp:servers-from-renderer', initialServers)
-
 export const useMCPServers = () => {
   const mcpServers = useAppSelector((state) => state.mcp.servers)
   const dispatch = useAppDispatch()
-
-  // Send servers to main process when they change in Redux
-  useEffect(() => {
-    ipcRenderer.send('mcp:servers-from-renderer', mcpServers)
-  }, [mcpServers])
 
   // Initial load of MCP servers from main process
   useEffect(() => {
@@ -89,4 +80,13 @@ export const useMCPServers = () => {
     setMCPServerActive,
     getActiveMCPServers
   }
+}
+
+export const useInitMCPServers = () => {
+  const mcpServers = useAppSelector((state) => state.mcp.servers)
+
+  // Send servers to main process when they change in Redux
+  useEffect(() => {
+    ipcRenderer.send('mcp:servers-from-renderer', mcpServers)
+  }, [mcpServers])
 }
