@@ -24,7 +24,7 @@ const NpxSearch: FC = () => {
   const { Paragraph, Text } = Typography
 
   // Add new state variables for npm scope search
-  const [npmScope, setNpmScope] = useState('')
+  const [npmScope, setNpmScope] = useState('@modelcontextprotocol')
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
 
