@@ -67,7 +67,7 @@ const NpxSearch: FC = () => {
   }
 
   return (
-    <SettingGroup theme={theme} style={{ marginTop: 15 }}>
+    <SettingGroup theme={theme}>
       <SettingTitle>{t('settings.mcp.npx_list.title')}</SettingTitle>
       <SettingDivider />
       <Paragraph type="secondary" style={{ margin: '0 0 10px 0' }}>

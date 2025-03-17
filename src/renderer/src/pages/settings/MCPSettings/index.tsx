@@ -19,6 +19,8 @@ const MCPSettings: FC = () => {
   const { Paragraph, Text } = Typography
   const mcpServers = useAppSelector((state) => state.mcp.servers)
 
+  console.debug(mcpServers)
+
   const handleDelete = (serverName: string) => {
     window.modal.confirm({
       title: t('settings.mcp.confirmDelete'),
@@ -145,24 +147,18 @@ const MCPSettings: FC = () => {
             {t('settings.mcp.editJson')}
           </Button>
         </HStack>
+        <Table
+          dataSource={mcpServers}
+          columns={columns}
+          rowKey="name"
+          pagination={false}
+          size="small"
+          locale={{ emptyText: t('settings.mcp.noServers') }}
+          rowClassName={(record) => (!record.isActive ? 'inactive-row' : '')}
+          onRow={(record) => ({ style: !record.isActive ? inactiveRowStyle : {} })}
+          style={{ marginTop: 15 }}
+        />
       </SettingGroup>
-      <Table
-        dataSource={mcpServers}
-        columns={columns}
-        rowKey="name"
-        pagination={false}
-        size="small"
-        locale={{ emptyText: t('settings.mcp.noServers') }}
-        rowClassName={(record) => (!record.isActive ? 'inactive-row' : '')}
-        onRow={(record) => ({
-          style: !record.isActive ? inactiveRowStyle : {}
-        })}
-        style={{
-          borderRadius: '8px',
-          overflow: 'hidden',
-          border: '0.5px solid var(--color-border)'
-        }}
-      />
       <NpxSearch />
     </SettingContainer>
   )
