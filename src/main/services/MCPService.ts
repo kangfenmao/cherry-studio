@@ -1,10 +1,13 @@
 import { isLinux, isMac, isWin } from '@main/constant'
+import { getBinaryPath, isBinaryExists, runInstallScript } from '@main/utils/process'
 import type { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import type { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js'
 import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { MCPServer, MCPTool } from '@types'
 import log from 'electron-log'
 import { EventEmitter } from 'events'
+import os from 'os'
+import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 import { windowService } from './WindowService'
@@ -32,6 +35,7 @@ export default class MCPService extends EventEmitter {
   constructor() {
     super()
     this.createServerLoadingPromise()
+    this.init().catch((err) => this.logError('Failed to initialize MCP service', err))
   }
 
   /**
@@ -59,7 +63,7 @@ export default class MCPService extends EventEmitter {
 
     // Initialize if not already initialized
     if (!this.initialized) {
-      this.init().catch(this.logError('Failed to initialize MCP service'))
+      this.init().catch((err) => this.logError('Failed to initialize MCP service', err))
     }
   }
 
@@ -125,8 +129,8 @@ export default class MCPService extends EventEmitter {
   /**
    * Helper to create consistent error logging functions
    */
-  private logError(message: string) {
-    return (err: Error) => log.error(`[MCP] ${message}:`, err)
+  private logError(message: string, err?: any): void {
+    log.error(`[MCP] ${message}`, err)
   }
 
   /**
@@ -137,7 +141,7 @@ export default class MCPService extends EventEmitter {
       const { Client } = await import('@modelcontextprotocol/sdk/client/index.js')
       return Client
     } catch (err) {
-      log.error('[MCP] Failed to import Client:', err)
+      this.logError('Failed to import Client:', err)
       throw err
     }
   }
@@ -323,10 +327,38 @@ export default class MCPService extends EventEmitter {
         transport = new this.sseTransport!(new URL(baseUrl))
       } else if (command) {
         let cmd: string = command
+        const binariesDir = path.join(os.homedir(), '.cherrystudio', 'bin')
+        log.info(`[MCP] Using binaries directory: ${binariesDir}`)
         if (command === 'npx') {
-          cmd = process.platform === 'win32' ? `${command}.cmd` : command
+          // check if cmd exists, if not exist, install it using `node scripts/install-bun.js`
+          const isBunExist = await isBinaryExists('bun')
+          if (!isBunExist) {
+            log.info(`[MCP] Installing bun...`)
+            await runInstallScript('install-bun.js')
+          }
+          cmd = getBinaryPath('bun')
+          log.info(`[MCP] Using command: ${cmd}`)
+
+          // add -x to args if args exist
+          if (args && args.length > 0) {
+            if (!args.includes('-y')) {
+              args.unshift('-y')
+            }
+            if (!args.includes('x')) {
+              args.unshift('x')
+            }
+          }
+        } else if (command === 'uvx') {
+          // check if cmd exists, if not exist, install it using `node scripts/install-uv.js`
+          const isUvxExist = await isBinaryExists('uvx')
+          if (!isUvxExist) {
+            log.info(`[MCP] Installing uvx...`)
+            await runInstallScript('install-uv.js')
+          }
+          cmd = getBinaryPath('uvx')
         }
 
+        log.info(`[MCP] Starting server with command: ${cmd} ${args ? args.join(' ') : ''}`)
         transport = new this.stdioTransport!({
           command: cmd,
           args,
@@ -386,6 +418,7 @@ export default class MCPService extends EventEmitter {
    */
   public async listTools(serverName?: string): Promise<MCPTool[]> {
     await this.ensureInitialized()
+    log.info(`[MCP] Listing tools from ${serverName || 'all active servers'}`)
 
     try {
       // If server name provided, list tools for that server only
@@ -397,18 +430,19 @@ export default class MCPService extends EventEmitter {
       let allTools: MCPTool[] = []
 
       for (const clientName in this.clients) {
+        log.info(`[MCP] Listing tools from ${clientName}`)
         try {
           const tools = await this.listToolsFromServer(clientName)
           allTools = allTools.concat(tools)
         } catch (error) {
-          this.logError(`[MCP] Error listing tools for ${clientName}`)
+          this.logError(`Error listing tools for ${clientName}`, error)
         }
       }
 
       log.info(`[MCP] Total tools listed: ${allTools.length}`)
       return allTools
     } catch (error) {
-      this.logError('Error listing tools:')
+      this.logError('Error listing tools:', error)
       return []
     }
   }
@@ -417,11 +451,13 @@ export default class MCPService extends EventEmitter {
    * Helper method to list tools from a specific server
    */
   private async listToolsFromServer(serverName: string): Promise<MCPTool[]> {
+    log.info(`[MCP] start list tools from ${serverName}:`)
     if (!this.clients[serverName]) {
       throw new Error(`MCP Client ${serverName} not found`)
     }
-
     const { tools } = await this.clients[serverName].listTools()
+
+    log.info(`[MCP] Tools from ${serverName}:`, tools)
     return tools.map((tool: any) => ({
       ...tool,
       serverName,
@@ -500,7 +536,7 @@ export default class MCPService extends EventEmitter {
         try {
           await this.activate(server)
         } catch (error) {
-          this.logError(`Failed to activate server ${server.name}`)
+          this.logError(`Failed to activate server ${server.name}`, error)
           this.emit('server-error', { name: server.name, error })
         }
       })

@@ -36,6 +36,7 @@ const NpxSearch: FC = () => {
     }
 
     setSearchLoading(true)
+
     try {
       // Call npxFinder to search for packages
       const packages = await npxFinder(npmScope)

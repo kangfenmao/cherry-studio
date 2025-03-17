@@ -825,6 +825,12 @@
         "updateError": "サーバーの更新に失敗しました",
         "url": "URL",
         "toggleError": "切り替えに失敗しました",
+        "dependenciesInstalling": "依存関係をインストール中...",
+        "dependenciesInstall": "依存関係をインストール",
+        "installSuccess": "依存関係のインストールに成功しました",
+        "installError": "依存関係のインストールに失敗しました",
+        "missingDependencies": "が不足しています。続行するにはインストールしてください。",
+        "install": "インストール",
         "npx_list": {
           "title": "NPX パッケージリスト",
           "desc": "npm パッケージを検索して MCP サーバーとして追加",

@@ -825,6 +825,12 @@
         "updateError": "更新伺服器失敗",
         "url": "URL",
         "toggleError": "切換失敗",
+        "dependenciesInstalling": "正在安裝相依套件...",
+        "dependenciesInstall": "安裝相依套件",
+        "installSuccess": "相依套件安裝成功",
+        "installError": "安裝相依套件失敗",
+        "missingDependencies": "缺失，請安裝它以繼續",
+        "install": "安裝",
         "npx_list": {
           "title": "NPX 包列表",
           "desc": "搜索並添加 npm 包作為 MCP 服務",

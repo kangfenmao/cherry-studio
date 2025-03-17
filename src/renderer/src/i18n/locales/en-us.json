@@ -825,6 +825,12 @@
         "updateError": "Failed to update server",
         "url": "URL",
         "toggleError": "Toggle failed",
+        "dependenciesInstalling": "Installing dependencies...",
+        "dependenciesInstall": "Install Dependencies",
+        "installSuccess": "Dependencies installed successfully",
+        "installError": "Failed to install dependencies",
+        "missingDependencies": "is Missing, please install it to continue.",
+        "install": "Install",
         "npx_list": {
           "title": "NPX Package List",
           "desc": "Search and add npm packages as MCP servers",

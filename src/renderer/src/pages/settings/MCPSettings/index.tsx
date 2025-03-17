@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingTitle } from '..'
 import AddMcpServerPopup from './AddMcpServerPopup'
+import InstallNpxUv from './InstallNpxUv'
 import NpxSearch from './NpxSearch'
 
 const MCPSettings: FC = () => {
@@ -199,6 +200,7 @@ const MCPSettings: FC = () => {
 
   return (
     <SettingContainer theme={theme}>
+      <InstallNpxUv />
       <SettingGroup theme={theme}>
         <SettingTitle>
           {t('settings.mcp.title')}
@@ -207,7 +209,7 @@ const MCPSettings: FC = () => {
           </Tooltip>
         </SettingTitle>
         <SettingDivider />
-        <Paragraph type="secondary" style={{ margin: '0 0 20px 0' }}>
+        <Paragraph type="secondary" style={{ margin: 0 }}>
           {t('settings.mcp.config_description')}
         </Paragraph>
 
@@ -239,6 +241,7 @@ const MCPSettings: FC = () => {
                       columns={columns}
                       rowKey="name"
                       pagination={false}
+                      size="small"
                       locale={{ emptyText: t('settings.mcp.noServers') }}
                       rowClassName={(record) => (!record.isActive ? 'inactive-row' : '')}
                       onRow={(record) => ({
