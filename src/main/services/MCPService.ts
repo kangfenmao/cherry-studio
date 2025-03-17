@@ -309,7 +309,8 @@ export default class MCPService extends EventEmitter {
   public async activate(server: MCPServer): Promise<void> {
     await this.ensureInitialized()
 
-    const { name, baseUrl, command, args, env } = server
+    const { name, baseUrl, command, env } = server
+    const args = [...(server.args || [])]
 
     // Skip if already running
     if (this.clients[name]) {
