@@ -204,7 +204,12 @@ async function installUv() {
 }
 
 // Run the installation
-installUv().catch((error) => {
-  console.error('Installation failed:', error)
-  process.exit(1)
-})
+installUv()
+  .then(() => {
+    console.log('Installation successful')
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error('Installation failed:', error)
+    process.exit(1)
+  })

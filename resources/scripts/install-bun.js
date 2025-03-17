@@ -194,7 +194,12 @@ async function installBun() {
 }
 
 // Run the installation
-installBun().catch((error) => {
-  console.error('Installation failed:', error)
-  process.exit(1)
-})
+installBun()
+  .then(() => {
+    console.log('Installation successful')
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error('Installation failed:', error)
+    process.exit(1)
+  })
