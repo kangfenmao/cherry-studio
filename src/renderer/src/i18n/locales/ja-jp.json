@@ -846,8 +846,7 @@
           "no_packages": "パッケージが見つかりません",
           "search_error": "パッケージの検索に失敗しました"
         },
-        "jsonMode": "JSONスキーマ",
-        "normalMode": "通常モード",
+        "editJson": "JSONを編集",
         "jsonModeHint": "MCPサーバー設定のJSON表現を編集します。保存する前に、フォーマットが正しいことを確認してください。",
         "jsonFormatError": "JSONフォーマットエラー",
         "jsonSaveSuccess": "JSON設定が保存されました。",

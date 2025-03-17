@@ -846,8 +846,7 @@
           "no_packages": "未找到包",
           "search_error": "搜索失敗"
         },
-        "jsonMode": "JSON模式",
-        "normalMode": "常規模式",
+        "editJson": "編輯JSON",
         "jsonModeHint": "編輯MCP伺服器配置的JSON表示。保存前請確保格式正確。",
         "jsonFormatError": "JSON格式錯誤",
         "jsonSaveSuccess": "JSON配置已儲存",
