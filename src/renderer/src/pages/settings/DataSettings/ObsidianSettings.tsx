@@ -94,8 +94,8 @@ const ObsidianSettings: FC = () => {
       </SettingRow>
       <SettingDivider />
       <SettingRow>
-        <SettingRowTitle>
-          {t('settings.data.obsidian.api_key')}
+        <SettingRowTitle style={{ display: 'flex', alignItems: 'center' }}>
+          <span>{t('settings.data.obsidian.api_key')}</span>
           <Tooltip title={t('settings.data.obsidian.help')} placement="left">
             <InfoCircleOutlined
               style={{ color: 'var(--color-text-2)', cursor: 'pointer', marginLeft: 4 }}

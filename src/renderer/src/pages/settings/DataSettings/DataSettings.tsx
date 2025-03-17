@@ -24,10 +24,9 @@ import styled from 'styled-components'
 import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '..'
 import MarkdownExportSettings from './MarkdownExportSettings'
 import NotionSettings from './NotionSettings'
+import ObsidianSettings from './ObsidianSettings'
 import WebDavSettings from './WebDavSettings'
 import YuqueSettings from './YuqueSettings'
-import ObsidianSettings from './ObsidianSettings'
-import ObsidianIcon from '@renderer/assets/images/apps/obsidian.svg'
 
 const DataSettings: FC = () => {
   const { t } = useTranslation()
@@ -45,11 +44,15 @@ const DataSettings: FC = () => {
       icon: <FileMarkdownOutlined style={{ fontSize: 16 }} />
     },
     { key: 'notion', title: 'settings.data.notion.title', icon: <i className="iconfont icon-notion" /> },
-    { key: 'yuque', title: 'settings.data.yuque.title', icon: <YuqueOutlined style={{ fontSize: 16 }} /> },
+    {
+      key: 'yuque',
+      title: 'settings.data.yuque.title',
+      icon: <YuqueOutlined style={{ fontSize: 16 }} />
+    },
     {
       key: 'obsidian',
       title: 'settings.data.obsidian.title',
-      icon: <img src={ObsidianIcon} alt="obsidian" style={{ width: '16px', height: '16px' }} />
+      icon: <i className="iconfont icon-obsidian" />
     }
   ]
 
@@ -215,6 +218,10 @@ const MenuList = styled.div`
   padding: 12px;
   border-right: 0.5px solid var(--color-border);
   height: 100%;
+  .iconfont {
+    color: var(--color-text-2);
+    line-height: 16px;
+  }
 `
 
 export default DataSettings

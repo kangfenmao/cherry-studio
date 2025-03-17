@@ -26,7 +26,6 @@ import { Assistant, Topic } from '@renderer/types'
 import { removeSpecialCharactersForFileName } from '@renderer/utils'
 import { copyTopicAsMarkdown } from '@renderer/utils/copy'
 import {
-  exportMarkdownToNotion,
   exportMarkdownToYuque,
   exportTopicAsMarkdown,
   exportTopicToNotion,
