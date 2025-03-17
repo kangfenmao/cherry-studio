@@ -19,8 +19,6 @@ const MCPSettings: FC = () => {
   const { Paragraph, Text } = Typography
   const mcpServers = useAppSelector((state) => state.mcp.servers)
 
-  console.debug(mcpServers)
-
   const handleDelete = (serverName: string) => {
     window.modal.confirm({
       title: t('settings.mcp.confirmDelete'),
