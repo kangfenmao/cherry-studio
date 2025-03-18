@@ -984,7 +984,8 @@
         "click_tray_to_show": "點選工具列圖示啟動",
         "enable_quick_assistant": "啟用快捷助手",
         "title": "快捷助手",
-        "use_shortcut_to_show": "右鍵點選工具列圖示或使用快捷鍵啟動"
+        "use_shortcut_to_show": "右鍵點選工具列圖示或使用快捷鍵啟動",
+        "read_clipboard_at_startup": "啟動時讀取剪貼簿"
       },
       "shortcuts": {
         "action": "操作",

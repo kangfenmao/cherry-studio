@@ -984,7 +984,8 @@
         "click_tray_to_show": "点击托盘图标启动",
         "enable_quick_assistant": "启用快捷助手",
         "title": "快捷助手",
-        "use_shortcut_to_show": "右键点击托盘图标或使用快捷键启动"
+        "use_shortcut_to_show": "右键点击托盘图标或使用快捷键启动",
+        "read_clipboard_at_startup": "启动时读取剪贴板"
       },
       "shortcuts": {
         "action": "操作",
