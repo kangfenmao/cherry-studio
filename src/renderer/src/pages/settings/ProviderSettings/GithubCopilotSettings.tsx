@@ -182,6 +182,7 @@ const GithubCopilotSettings: FC<GithubCopilotSettingsProps> = ({ provider: initi
         return (
           <>
             <Alert
+              style={{ marginTop: 12, marginBottom: 12 }}
               type="info"
               message={t('settings.provider.copilot.code_generated_title')}
               description={
@@ -212,6 +213,7 @@ const GithubCopilotSettings: FC<GithubCopilotSettingsProps> = ({ provider: initi
         return (
           <>
             <Alert
+              style={{ marginTop: 12, marginBottom: 12 }}
               type="warning"
               message={t('settings.provider.copilot.tooltip')}
               description={t('settings.provider.copilot.description')}

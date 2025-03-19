@@ -982,7 +982,7 @@
         "search_placeholder": "Search model id or name",
         "title": "Model Provider",
         "copilot": {
-          "tooltip": "You need to log in to Github before using Github Copilot in Cherry Studio.",
+          "tooltip": "You need to log in to Github before using Github Copilot",
           "description": "Your GitHub account needs to subscribe to Copilot.",
           "login": "Log in to Github",
           "connect": "Connect to Github",
