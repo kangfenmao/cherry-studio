@@ -34,7 +34,7 @@ import {
   openAIToolsToMcpTool,
   upsertMCPToolResponse
 } from '@renderer/utils/mcp-tools'
-import { takeRight } from 'lodash'
+import { isEmpty, takeRight } from 'lodash'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
   ChatCompletionAssistantMessageParam,
@@ -92,7 +92,7 @@ export default class OpenAIProvider extends BaseProvider {
    * @returns The file content
    */
   private async extractFileContent(message: Message) {
-    if (message.files) {
+    if (message.files && message.files.length > 0) {
       const textFiles = message.files.filter((file) => [FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type))
 
       if (textFiles.length > 0) {
@@ -126,7 +126,7 @@ export default class OpenAIProvider extends BaseProvider {
     const content = await this.getMessageContent(message)
 
     // If the message does not have files, return the message
-    if (!message.files) {
+    if (isEmpty(message.files)) {
       return {
         role: message.role,
         content
