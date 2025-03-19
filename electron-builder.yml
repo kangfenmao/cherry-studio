@@ -72,8 +72,11 @@ linux:
   maintainer: electronjs.org
   category: Utility
 publish:
-  provider: generic
-  url: https://cherrystudio.ocool.online
+  # provider: generic
+  # url: https://cherrystudio.ocool.online
+  provider: github
+  repo: cherry-studio
+  owner: CherryHQ
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
 afterPack: scripts/after-pack.js
