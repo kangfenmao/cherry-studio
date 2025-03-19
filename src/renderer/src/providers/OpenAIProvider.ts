@@ -29,7 +29,6 @@ import {
 import { removeSpecialCharactersForTopicName } from '@renderer/utils'
 import {
   callMCPTool,
-  filterMCPTools,
   mcpToolsToOpenAITools,
   openAIToolsToMcpTool,
   upsertMCPToolResponse
@@ -426,7 +425,6 @@ export default class OpenAIProvider extends BaseProvider {
     const { signal } = abortController
     await this.checkIsCopilot()
 
-    mcpTools = filterMCPTools(mcpTools, lastUserMessage?.enabledMCPs)
     const tools = mcpTools && mcpTools.length > 0 ? mcpToolsToOpenAITools(mcpTools) : undefined
 
     const reqMessages: ChatCompletionMessageParam[] = [systemMessage, ...userMessages].filter(
