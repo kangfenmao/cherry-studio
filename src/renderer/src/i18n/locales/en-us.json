@@ -982,6 +982,7 @@
         "search": "Search Providers...",
         "search_placeholder": "Search model id or name",
         "title": "Model Provider",
+        "is_not_support_array_content": "Enable compatible mode",
         "copilot": {
           "tooltip": "You need to log in to Github before using Github Copilot",
           "description": "Your GitHub account needs to subscribe to Copilot.",

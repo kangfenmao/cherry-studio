@@ -982,6 +982,7 @@
         "search": "搜索模型平台...",
         "search_placeholder": "搜索模型 ID 或名称",
         "title": "模型服务",
+        "is_not_support_array_content": "开启兼容模式",
         "copilot": {
           "tooltip": "使用 Github Copilot 需要先登录 Github",
           "description": "您的 Github 账号需要订阅 Copilot",

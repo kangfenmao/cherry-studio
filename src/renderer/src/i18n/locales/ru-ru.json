@@ -982,6 +982,7 @@
         "search": "Поиск поставщиков...",
         "search_placeholder": "Поиск по ID или имени модели",
         "title": "Провайдеры моделей",
+        "is_not_support_array_content": "Включить совместимый режим",
         "copilot": {
           "tooltip": "Для использования Github Copilot необходимо сначала войти в Github.",
           "description": "Ваша учетная запись Github должна подписаться на Copilot.",

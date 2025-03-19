@@ -982,6 +982,7 @@
         "search": "プロバイダーを検索...",
         "search_placeholder": "モデルIDまたは名前を検索",
         "title": "モデルプロバイダー",
+        "is_not_support_array_content": "互換モードを有効にする",
         "copilot": {
           "tooltip": "Github Copilot を使用するには、まず Github にログインする必要があります。",
           "description": "あなたのGithubアカウントはCopilotを購読する必要があります。",

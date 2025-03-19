@@ -82,7 +82,12 @@ export default class OpenAIProvider extends BaseProvider {
    * @returns True if the provider does not support files, false otherwise
    */
   private get isNotSupportFiles() {
+    if (this.provider?.isNotSupportArrayContent) {
+      return true
+    }
+
     const providers = ['deepseek', 'baichuan', 'minimax', 'xirang']
+
     return providers.includes(this.provider.id)
   }
 
