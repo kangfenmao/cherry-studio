@@ -486,6 +486,42 @@ export default class GeminiProvider extends BaseProvider {
   }
 
   /**
+   * Summarize a message for search
+   * @param messages - The messages
+   * @param assistant - The assistant
+   * @returns The summary
+   */
+  public async summaryForSearch(messages: Message[], assistant: Assistant): Promise<string> {
+    const model = assistant.model || getDefaultModel()
+
+    const systemMessage = {
+      role: 'system',
+      content: assistant.prompt
+    }
+
+    const userMessage = {
+      role: 'user',
+      content: messages.map((m) => m.content).join('\n')
+    }
+
+    const geminiModel = this.sdk.getGenerativeModel(
+      {
+        model: model.id,
+        systemInstruction: systemMessage.content,
+        generationConfig: {
+          temperature: assistant?.settings?.temperature
+        }
+      },
+      this.requestOptions
+    )
+
+    const chat = await geminiModel.startChat()
+    const { response } = await chat.sendMessage(userMessage.content)
+
+    return response.text()
+  }
+
+  /**
    * Generate an image
    * @returns The generated image
    */

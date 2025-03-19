@@ -749,6 +749,40 @@ export default class OpenAIProvider extends BaseProvider {
   }
 
   /**
+   * Summarize a message for search
+   * @param messages - The messages
+   * @param assistant - The assistant
+   * @returns The summary
+   */
+  public async summaryForSearch(messages: Message[], assistant: Assistant): Promise<string | null> {
+    const model = assistant.model || getDefaultModel()
+
+    const systemMessage = {
+      role: 'system',
+      content: assistant.prompt
+    }
+
+    const userMessage = {
+      role: 'user',
+      content: messages.map((m) => m.content).join('\n')
+    }
+    // @ts-ignore key is not typed
+    const response = await this.sdk.chat.completions.create({
+      model: model.id,
+      messages: [systemMessage, userMessage] as ChatCompletionMessageParam[],
+      stream: false,
+      keep_alive: this.keepAliveTime,
+      max_tokens: 1000
+    })
+
+    // 针对思考类模型的返回，总结仅截取</think>之后的内容
+    let content = response.choices[0].message?.content || ''
+    content = content.replace(/^<think>(.*?)<\/think>/s, '')
+
+    return content
+  }
+
+  /**
    * Generate text
    * @param prompt - The prompt
    * @param content - The content
