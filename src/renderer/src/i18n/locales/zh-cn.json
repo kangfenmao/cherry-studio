@@ -856,6 +856,7 @@
         "editServer": "编辑服务器",
         "env": "环境变量",
         "envTooltip": "格式：KEY=value，每行一个",
+        "findMore": "更多 MCP 服务器",
         "name": "名称",
         "nameRequired": "请输入服务器名称",
         "noServers": "未配置服务器",

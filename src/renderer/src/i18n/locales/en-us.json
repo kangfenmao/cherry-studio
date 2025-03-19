@@ -856,6 +856,7 @@
         "editServer": "Edit Server",
         "env": "Environment Variables",
         "envTooltip": "Format: KEY=value, one per line",
+        "findMore": "Find More MCP Servers",
         "name": "Name",
         "nameRequired": "Please enter a server name",
         "noServers": "No servers configured",
