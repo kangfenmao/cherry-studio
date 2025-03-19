@@ -52,8 +52,9 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 - 🔤 AI-powered Translation
 - 🎯 Drag-and-drop Sorting
 - 🔌 Mini Program Support
+- ⚙️ MCP(Model Context Protocol) Server
 
-5. **Enhanced User Experience**:
+1. **Enhanced User Experience**:
 
 - 🖥️ Cross-platform Support for Windows, Mac, and Linux
 - 📦 Ready to Use, No Environment Setup Required
