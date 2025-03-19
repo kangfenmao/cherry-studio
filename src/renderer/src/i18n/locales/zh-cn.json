@@ -235,7 +235,8 @@
       "topics": "话题",
       "warning": "警告",
       "you": "用户",
-      "more": "更多"
+      "more": "更多",
+      "advanced_settings": "高级设置"
     },
     "docs": {
       "title": "帮助文档"
@@ -324,9 +325,9 @@
       "delete_confirm": "确定要删除此知识库吗?",
       "directories": "目录",
       "directory_placeholder": "请输入目录路径",
-      "document_count": "请求文档分段数量",
+      "document_count": "请求文档片段数量",
       "document_count_default": "默认",
-      "document_count_help": "请求文档分段数量越多，附带的信息越多，但需要消耗的 Token 也越多",
+      "document_count_help": "请求文档片段数量越多，附带的信息越多，但需要消耗的 Token 也越多",
       "drag_file": "拖拽文件到这里",
       "edit_remark": "修改备注",
       "edit_remark_placeholder": "请输入备注内容",
