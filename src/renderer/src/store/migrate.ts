@@ -791,6 +791,9 @@ const migrateConfig = {
   },
   '83': (state: RootState) => {
     state.settings.messageNavigation = 'buttons'
+    state.settings.launchOnBoot = false
+    state.settings.launchToTray = false
+    state.settings.trayOnClose = true
     return state
   }
 }
