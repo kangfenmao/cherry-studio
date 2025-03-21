@@ -18,6 +18,7 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '..'
+import { formatFileSize } from '@renderer/utils'
 
 interface BackupFile {
   fileName: string
@@ -170,7 +171,7 @@ const WebDavSettings: FC = () => {
 
   const formatFileOption = (file: BackupFile) => {
     const date = dayjs(file.modifiedTime).format('YYYY-MM-DD HH:mm:ss')
-    const size = `${(file.size / 1024).toFixed(2)} KB`
+    const size = formatFileSize(file.size)
     return {
       label: `${file.fileName} (${date}, ${size})`,
       value: file.fileName

@@ -89,7 +89,7 @@
     "tar": "^7.4.3",
     "tokenx": "^0.4.1",
     "undici": "^7.4.0",
-    "webdav": "4.11.4",
+    "webdav": "^5.8.0",
     "zipread": "^1.3.3"
   },
   "devDependencies": {
