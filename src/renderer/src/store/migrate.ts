@@ -788,6 +788,10 @@ const migrateConfig = {
       delete runtimeState.webdavSync
     }
     return state
+  },
+  '83': (state: RootState) => {
+    state.settings.messageNavigation = 'buttons'
+    return state
   }
 }
 
