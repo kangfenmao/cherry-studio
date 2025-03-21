@@ -119,10 +119,10 @@ class BackupManager {
       await fs.remove(this.tempDir)
       onProgress({ stage: 'completed', progress: 100, total: 100 })
 
-      Logger.log('Backup completed successfully')
+      Logger.log('[BackupManager] Backup completed successfully')
       return backupedFilePath
     } catch (error) {
-      Logger.error('Backup failed:', error)
+      Logger.error('[BackupManager] Backup failed:', error)
       throw error
     }
   }
