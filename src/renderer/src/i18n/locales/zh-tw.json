@@ -565,7 +565,7 @@
         "string": "文字"
       },
       "pinned": "已固定",
-      "rerank_model": "重排序模型",
+      "rerank_model": "重排模型",
       "rerank_model_support_provider": "目前重排序模型僅支持部分服務商 ({{provider}})",
       "rerank_model_tooltip": "在設定->模型服務中點擊管理按鈕添加",
       "search": "搜尋模型...",
