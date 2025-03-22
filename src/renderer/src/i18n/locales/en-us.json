@@ -182,7 +182,7 @@
       "topics.export.obsidian_source": "Source",
       "topics.export.obsidian_source_placeholder": "Please enter the source",
       "topics.export.obsidian_tags": "Tags",
-      "topics.export.obsidian_tags_placeholder": "Please enter tags, separate multiple tags with commas in English,In Obsidian, pure numbers cannot be used.",
+      "topics.export.obsidian_tags_placeholder": "Please enter tags, separate multiple tags with commas",
       "topics.export.obsidian_title": "Title",
       "topics.export.obsidian_title_placeholder": "Please enter the title",
       "topics.export.obsidian_title_required": "The title cannot be empty",
@@ -776,7 +776,7 @@
           "folder": "Folder",
           "folder_placeholder": "Please enter the folder name",
           "tags": "Global Tags",
-          "tags_placeholder": "Please enter the tag name, separate multiple tags with commas in English,In Obsidian, pure numbers cannot be used.",
+          "tags_placeholder": "Please enter the tag name, separate multiple tags with commas",
           "title": "Obsidian Configuration",
           "vault": "Vault",
           "vault_placeholder": "Please enter the vault name"

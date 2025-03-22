@@ -182,7 +182,7 @@
       "topics.export.obsidian_source": "来源",
       "topics.export.obsidian_source_placeholder": "请输入来源",
       "topics.export.obsidian_tags": "标签",
-      "topics.export.obsidian_tags_placeholder": "请输入标签，多个标签用英文逗号分隔,Obsidian不可用纯数字",
+      "topics.export.obsidian_tags_placeholder": "请输入标签，多个标签用英文逗号分隔",
       "topics.export.obsidian_title": "标题",
       "topics.export.obsidian_title_placeholder": "请输入标题",
       "topics.export.obsidian_title_required": "标题不能为空",
@@ -776,7 +776,7 @@
           "folder": "文件夹",
           "folder_placeholder": "请输入文件夹名称",
           "tags": "全局标签",
-          "tags_placeholder": "请输入标签名称, 多个标签用英文逗号分隔,Obsidian不可用纯数字",
+          "tags_placeholder": "请输入标签名称, 多个标签用英文逗号分隔",
           "title": "Obsidian 配置",
           "vault": "保管库",
           "vault_placeholder": "请输入保管库名称"

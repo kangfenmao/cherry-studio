@@ -184,7 +184,7 @@
       "topics.export.obsidian_source": "來源",
       "topics.export.obsidian_source_placeholder": "請輸入來源",
       "topics.export.obsidian_tags": "標籤",
-      "topics.export.obsidian_tags_placeholder": "請輸入標籤名稱，多個標籤用英文逗號分隔。Obsidian 不可用純數字。",
+      "topics.export.obsidian_tags_placeholder": "請輸入標籤名稱，多個標籤用英文逗號分隔",
       "topics.export.obsidian_title": "標題",
       "topics.export.obsidian_title_placeholder": "請輸入標題",
       "topics.export.obsidian_title_required": "標題不能為空",
