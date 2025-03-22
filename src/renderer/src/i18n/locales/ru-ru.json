@@ -105,6 +105,8 @@
       "input.estimated_tokens.tip": "Затраты токенов",
       "input.expand": "Развернуть",
       "input.file_not_supported": "Модель не поддерживает этот тип файла",
+      "input.generate_image": "Сгенерировать изображение",
+      "input.generate_image_not_supported": "Модель не поддерживает генерацию изображений.",
       "input.knowledge_base": "База знаний",
       "input.new.context": "Очистить контекст {{Command}}",
       "input.new_topic": "Новый топик {{Command}}",
@@ -198,16 +200,7 @@
       "topics.prompt.tips": "Тематические подсказки: Дополнительные подсказки, предоставленные для текущей темы",
       "topics.title": "Топики",
       "topics.unpinned": "Открепленные темы",
-      "topics.new": "Новый топик",
-      "translate": "Перевести",
-      "navigation": {
-        "prev": "Предыдущее сообщение",
-        "next": "Следующее сообщение",
-        "first": "Уже первое сообщение",
-        "last": "Уже последнее сообщение"
-      },
-      "input.generate_image": "Сгенерировать изображение",
-      "input.generate_image_not_supported": "Модель не поддерживает генерацию изображений."
+      "translate": "Перевести"
     },
     "code_block": {
       "collapse": "Свернуть",
