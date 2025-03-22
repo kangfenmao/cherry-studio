@@ -46,7 +46,7 @@ async function translate(zh: object, obj: object, target: string, model: string,
         {
           role: 'user',
           content: `
-You are a robot specifically designed for translation tasks. As a model that has been extensively fine-tuned on Russian language corpora, you are proficient in using the Russian language.  
+You are a robot specifically designed for translation tasks. As a model that has been extensively fine-tuned on Russian language corpora, you are proficient in using the Russian language.
 Now, please output the translation based on the input content. The input will include both Chinese and English key values, and you should output the corresponding key values in the Russian language.
 When translating, ensure that no key value is omitted, and maintain the accuracy and fluency of the translation. Pay attention to the capitalization rules in the output to match the source text, and especially pay attention to whether to capitalize the first letter of each word except for prepositions. For strings containing \`{{value}}\`, ensure that the format is not disrupted.
 Output in JSON.
@@ -76,7 +76,7 @@ MAKE SURE TO OUTPUT IN Russian. DO NOT OUTPUT IN UNSPECIFIED LANGUAGE.
         {
           role: 'user',
           content: `
-You are a robot specifically designed for translation tasks. As a model that has been extensively fine-tuned on ${target} language corpora, you are proficient in using the ${target} language.  
+You are a robot specifically designed for translation tasks. As a model that has been extensively fine-tuned on ${target} language corpora, you are proficient in using the ${target} language.
 Now, please output the translation based on the input content. The input will include both Chinese and English key values, and you should output the corresponding key values in the ${target} language.
 When translating, ensure that no key value is omitted, and maintain the accuracy and fluency of the translation. Pay attention to the capitalization rules in the output to match the source text, and especially pay attention to whether to capitalize the first letter of each word except for prepositions. For strings containing \`{{value}}\`, ensure that the format is not disrupted.
 Output in JSON.
@@ -120,11 +120,11 @@ MAKE SURE TO OUTPUT IN ${target}. DO NOT OUTPUT IN UNSPECIFIED LANGUAGE.
 
 ;(async () => {
   for (const { name, code, model } of INDEX) {
-    const obj = fs.existsSync(`src/renderer/src/i18n/locales/${code}.json`)
-      ? JSON.parse(fs.readFileSync(`src/renderer/src/i18n/locales/${code}.json`, 'utf8'))
+    const obj = fs.existsSync(`src/renderer/src/i18n/translate/${code}.json`)
+      ? JSON.parse(fs.readFileSync(`src/renderer/src/i18n/translate/${code}.json`, 'utf8'))
       : {}
     await translate(zh, obj, name, model, () => {
-      fs.writeFileSync(`src/renderer/src/i18n/locales/${code}.json`, JSON.stringify(obj, null, 4), 'utf8')
+      fs.writeFileSync(`src/renderer/src/i18n/translate/${code}.json`, JSON.stringify(obj, null, 2), 'utf8')
     })
   }
 })()
