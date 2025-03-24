@@ -18,6 +18,10 @@ Cherry Studio は、複数の LLM プロバイダーをサポートするデス�
 
 ❤️ Cherry Studio をお気に入りにしましたか？小さな星をつけてください 🌟 または [スポンサー](sponsor.md) をして開発をサポートしてください！❤️
 
+# 📖 ガイド
+
+https://docs.cherry-ai.com
+
 # 🌠 スクリーンショット
 
 ![](https://github.com/user-attachments/assets/28585d83-4bf0-4714-b561-8c7bf57cc600)
@@ -118,7 +122,7 @@ Cherry Studio への貢献を歓迎します！以下の方法で貢献できま
 
 # コミュニティ
 
-[Telegram](https://t.me/CherryStudioAI) | [Email](mailto:kangfenmao@gmail.com) | [Twitter](https://x.com/kangfenmao)
+[Telegram](https://t.me/CherryStudioAI) | [Email](mailto:support@cherry-ai.com) | [Twitter](https://x.com/kangfenmao)
 
 # スポンサー
 

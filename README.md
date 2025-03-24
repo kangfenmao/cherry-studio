@@ -17,6 +17,10 @@ Cherry Studio is a desktop client that supports for multiple LLM providers, avai
 
 ❤️ Like Cherry Studio? Give it a star 🌟 or [Sponsor](docs/sponsor.md) to support the development!
 
+# 📖 Guide
+
+https://docs.cherry-ai.com
+
 # 🌠 Screenshot
 
 ![](https://github.com/user-attachments/assets/28585d83-4bf0-4714-b561-8c7bf57cc600)
@@ -120,7 +124,7 @@ Thank you for your support and contributions!
 
 # 🌐 Community
 
-[Telegram](https://t.me/CherryStudioAI) | [Email](mailto:kangfenmao@gmail.com) | [Twitter](https://x.com/kangfenmao)
+[Telegram](https://t.me/CherryStudioAI) | [Email](mailto:support@cherry-ai.com) | [Twitter](https://x.com/kangfenmao)
 
 # ☕ Sponsor
 
