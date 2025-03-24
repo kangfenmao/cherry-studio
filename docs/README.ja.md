@@ -131,6 +131,10 @@ Cherry Studio への貢献を歓迎します！以下の方法で貢献できま
 
 [LICENSE](../LICENSE)
 
+# ✉️ お問い合わせ
+
+yinsenho@cherry-ai.com
+
 # ⭐️ スター履歴
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)

@@ -133,6 +133,10 @@ Thank you for your support and contributions!
 
 [LICENSE](./LICENSE)
 
+# ✉️ Contact
+
+yinsenho@cherry-ai.com
+
 # ⭐️ Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)

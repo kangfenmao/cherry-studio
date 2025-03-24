@@ -131,6 +131,10 @@ Cherry Studio 是一款支持多个大语言模型（LLM）服务商的桌面客
 
 [LICENSE](../LICENSE)
 
+# ✉️ 联系我们
+
+yinsenho@cherry-ai.com
+
 # ⭐️ Star 记录
 
 [![Star History Chart](https://api.star-history.com/svg?repos=kangfenmao/cherry-studio&type=Timeline)](https://star-history.com/#kangfenmao/cherry-studio&Timeline)
