@@ -83,6 +83,13 @@ https://docs.cherry-ai.com
 - [ ] 音声入出力（AI コール）
 - [ ] データバックアップはカスタムバックアップコンテンツをサポート
 
+# 🌈 テーマ
+
+テーマギャラリー: https://cherrycss.com  
+Aero テーマ: https://github.com/hakadao/CherryStudio-Aero
+
+より多くのテーマのPRを歓迎します
+
 # 🖥️ 開発
 
 参考[開発ドキュメント](dev.md)

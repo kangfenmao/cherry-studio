@@ -83,6 +83,13 @@ https://docs.cherry-ai.com
 - [ ] 语音输入输出（AI 通话）
 - [ ] 数据备份支持自定义备份内容
 
+# 🌈 主题
+
+主题库：https://cherrycss.com  
+Aero 主题：https://github.com/hakadao/CherryStudio-Aero
+
+欢迎 PR 更多主题
+
 # 🖥️ 开发
 
 参考[开发文档](dev.md)

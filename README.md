@@ -82,6 +82,13 @@ https://docs.cherry-ai.com
 - [ ] Voice input and output (AI call)
 - [ ] Data backup supports custom backup content
 
+# 🌈 Theme
+
+Theme Gallery: https://cherrycss.com  
+Aero Theme: https://github.com/hakadao/CherryStudio-Aero
+
+Welcome PR for more themes
+
 # 🖥️ Develop
 
 Refer to the [development documentation](docs/dev.md)
