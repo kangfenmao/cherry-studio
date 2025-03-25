@@ -90,12 +90,9 @@ export interface SettingsState {
   yuqueToken: string | null
   yuqueUrl: string | null
   yuqueRepoId: string | null
-  //obsidian settings   obsidianVault, obisidanFolder
-  obsidianValut: string | null
-  obsidianFolder: string | null
-  obsidianTages: string | null
   joplinToken: string | null
   joplinUrl: string | null
+  defaultObsidianVault: string | null
   // 思源笔记配置
   siyuanApiUrl: string | null
   siyuanToken: string | null
@@ -172,11 +169,9 @@ const initialState: SettingsState = {
   yuqueToken: '',
   yuqueUrl: '',
   yuqueRepoId: '',
-  obsidianValut: '',
-  obsidianFolder: '',
-  obsidianTages: '',
   joplinToken: '',
   joplinUrl: '',
+  defaultObsidianVault: null,
   // 思源笔记配置初始值
   siyuanApiUrl: null,
   siyuanToken: null,
@@ -386,15 +381,6 @@ const settingsSlice = createSlice({
     setYuqueUrl: (state, action: PayloadAction<string>) => {
       state.yuqueUrl = action.payload
     },
-    setObsidianValut: (state, action: PayloadAction<string>) => {
-      state.obsidianValut = action.payload
-    },
-    setObsidianFolder: (state, action: PayloadAction<string>) => {
-      state.obsidianFolder = action.payload
-    },
-    setObsidianTages: (state, action: PayloadAction<string>) => {
-      state.obsidianTages = action.payload
-    },
     setJoplinToken: (state, action: PayloadAction<string>) => {
       state.joplinToken = action.payload
     },
@@ -415,6 +401,9 @@ const settingsSlice = createSlice({
     },
     setMessageNavigation: (state, action: PayloadAction<'none' | 'buttons' | 'anchor'>) => {
       state.messageNavigation = action.payload
+    },
+    setDefaultObsidianVault: (state, action: PayloadAction<string>) => {
+      state.defaultObsidianVault = action.payload
     }
   }
 })
@@ -484,16 +473,14 @@ export const {
   setYuqueToken,
   setYuqueRepoId,
   setYuqueUrl,
-  setObsidianValut,
-  setObsidianFolder,
-  setObsidianTages,
   setJoplinToken,
   setJoplinUrl,
+  setMessageNavigation,
+  setDefaultObsidianVault,
   setSiyuanApiUrl,
   setSiyuanToken,
   setSiyuanBoxId,
-  setSiyuanRootPath,
-  setMessageNavigation
+  setSiyuanRootPath
 } = settingsSlice.actions
 
 export default settingsSlice.reducer
