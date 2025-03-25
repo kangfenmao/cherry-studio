@@ -890,8 +890,7 @@
           "pathSelector.return": "返回",
           "pathSelector.currentPath": "當前路徑",
           "new_folder.button.confirm": "確定",
-          "new_folder.button.cancel": "取消",
-          "new_folder.button": "新建文件夾"
+          "new_folder.button.cancel": "取消"
         }
       },
       "display.assistant.title": "助手設定",
@@ -922,7 +921,6 @@
       "general.display.title": "顯示設定",
       "general.emoji_picker": "表情選擇器",
       "general.image_upload": "圖片上傳",
-      "general.manually_check_update.title": "關閉更新檢查",
       "general.reset.button": "重設",
       "general.reset.title": "資料重設",
       "general.restore.button": "復原",
@@ -1196,7 +1194,8 @@
           "title": "Tavily"
         },
         "title": "網路搜尋"
-      }
+      },
+      "general.auto_check_update.title": "啟用自動更新檢查"
     },
     "translate": {
       "any.language": "任意語言",

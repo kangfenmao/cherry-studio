@@ -890,8 +890,7 @@
           "pathSelector.return": "Назад",
           "pathSelector.currentPath": "Текущий путь",
           "new_folder.button.confirm": "Подтвердить",
-          "new_folder.button.cancel": "Отмена",
-          "new_folder.button": "Новая папка"
+          "new_folder.button.cancel": "Отмена"
         }
       },
       "display.assistant.title": "Настройки ассистентов",
@@ -922,7 +921,6 @@
       "general.display.title": "Настройки отображения",
       "general.emoji_picker": "Выбор эмодзи",
       "general.image_upload": "Загрузка изображений",
-      "general.manually_check_update.title": "Отключить проверку обновлений",
       "general.reset.button": "Сброс",
       "general.reset.title": "Сброс данных",
       "general.restore.button": "Восстановление",
@@ -1196,7 +1194,8 @@
           "title": "Tavily"
         },
         "title": "Поиск в Интернете"
-      }
+      },
+      "general.auto_check_update.title": "Включить автоматическую проверку обновлений"
     },
     "translate": {
       "any.language": "Любой язык",

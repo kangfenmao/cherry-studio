@@ -532,7 +532,8 @@
     "minapp": {
       "sidebar.add.title": "Add to sidebar",
       "sidebar.remove.title": "Remove from sidebar",
-      "title": "MinApp"
+      "title": "MinApp",
+      "sidebar.hide.title": "Hide MinApp"
     },
     "miniwindow": {
       "clipboard": {
@@ -889,8 +890,7 @@
           "pathSelector.return": "Return",
           "pathSelector.currentPath": "Current Path",
           "new_folder.button.confirm": "Confirm",
-          "new_folder.button.cancel": "Cancel",
-          "new_folder.button": "New Folder"
+          "new_folder.button.cancel": "Cancel"
         }
       },
       "display.assistant.title": "Assistant Settings",

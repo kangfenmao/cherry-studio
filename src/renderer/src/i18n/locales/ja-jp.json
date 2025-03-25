@@ -526,7 +526,8 @@
       "error.siyuan.no_config": "思源ノートのAPIアドレスまたはトークンが設定されていません",
       "success.siyuan.export": "思源ノートへのエクスポートに成功しました",
       "warn.yuque.exporting": "語雀にエクスポート中です。重複してエクスポートしないでください!",
-      "warn.siyuan.exporting": "思源ノートにエクスポート中です。重複してエクスポートしないでください!"
+      "warn.siyuan.exporting": "思源ノートにエクスポート中です。重複してエクスポートしないでください!",
+      "error.yuque.no_config": "語雀のAPIアドレスまたはトークンが設定されていません"
     },
     "minapp": {
       "sidebar.add.title": "サイドバーに追加",
@@ -889,8 +890,7 @@
           "pathSelector.return": "戻る",
           "pathSelector.currentPath": "現在のパス",
           "new_folder.button.confirm": "確認",
-          "new_folder.button.cancel": "キャンセル",
-          "new_folder.button": "新しいフォルダ"
+          "new_folder.button.cancel": "キャンセル"
         }
       },
       "display.assistant.title": "アシスタント設定",
@@ -921,7 +921,6 @@
       "general.display.title": "表示設定",
       "general.emoji_picker": "絵文字ピッカー",
       "general.image_upload": "画像アップロード",
-      "general.manually_check_update.title": "更新チェックを無効にする",
       "general.reset.button": "リセット",
       "general.reset.title": "データをリセット",
       "general.restore.button": "復元",
@@ -1195,7 +1194,8 @@
           "title": "Tavily"
         },
         "title": "ウェブ検索"
-      }
+      },
+      "general.auto_check_update.title": "自動更新チェックを有効にする"
     },
     "translate": {
       "any.language": "任意の言語",
