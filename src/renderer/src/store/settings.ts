@@ -96,6 +96,11 @@ export interface SettingsState {
   obsidianTages: string | null
   joplinToken: string | null
   joplinUrl: string | null
+  // 思源笔记配置
+  siyuanApiUrl: string | null
+  siyuanToken: string | null
+  siyuanBoxId: string | null
+  siyuanRootPath: string | null
 }
 
 export type MultiModelMessageStyle = 'horizontal' | 'vertical' | 'fold' | 'grid'
@@ -171,7 +176,12 @@ const initialState: SettingsState = {
   obsidianFolder: '',
   obsidianTages: '',
   joplinToken: '',
-  joplinUrl: ''
+  joplinUrl: '',
+  // 思源笔记配置初始值
+  siyuanApiUrl: null,
+  siyuanToken: null,
+  siyuanBoxId: null,
+  siyuanRootPath: null
 }
 
 const settingsSlice = createSlice({
@@ -391,6 +401,18 @@ const settingsSlice = createSlice({
     setJoplinUrl: (state, action: PayloadAction<string>) => {
       state.joplinUrl = action.payload
     },
+    setSiyuanApiUrl: (state, action: PayloadAction<string>) => {
+      state.siyuanApiUrl = action.payload
+    },
+    setSiyuanToken: (state, action: PayloadAction<string>) => {
+      state.siyuanToken = action.payload
+    },
+    setSiyuanBoxId: (state, action: PayloadAction<string>) => {
+      state.siyuanBoxId = action.payload
+    },
+    setSiyuanRootPath: (state, action: PayloadAction<string>) => {
+      state.siyuanRootPath = action.payload
+    },
     setMessageNavigation: (state, action: PayloadAction<'none' | 'buttons' | 'anchor'>) => {
       state.messageNavigation = action.payload
     }
@@ -467,6 +489,10 @@ export const {
   setObsidianTages,
   setJoplinToken,
   setJoplinUrl,
+  setSiyuanApiUrl,
+  setSiyuanToken,
+  setSiyuanBoxId,
+  setSiyuanRootPath,
   setMessageNavigation
 } = settingsSlice.actions
 
