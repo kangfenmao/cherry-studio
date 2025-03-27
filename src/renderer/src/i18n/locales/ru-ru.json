@@ -32,7 +32,9 @@
       "title": "Агенты"
     },
     "assistants": {
+      "title": "Ассистенты",
       "abbr": "Ассистент",
+      "settings.title": "Настройки ассистента",
       "clear.content": "Очистка топика удалит все топики и файлы в ассистенте. Вы уверены, что хотите продолжить?",
       "clear.title": "Очистить топики",
       "copy.title": "Копировать ассистента",
@@ -53,7 +55,7 @@
       "settings.reasoning_effort.medium": "Средняя",
       "settings.reasoning_effort.off": "Выключено",
       "settings.reasoning_effort.tip": "Поддерживается только моделями с рассуждением OpenAI o-series и Anthropic",
-      "title": "Ассистенты"
+      "settings.more": "Настройки ассистента"
     },
     "auth": {
       "error": "Автоматический получение ключа API не удалось, пожалуйста, получите ключ вручную",

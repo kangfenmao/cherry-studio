@@ -32,7 +32,9 @@
       "title": "智能体"
     },
     "assistants": {
+      "title": "助手",
       "abbr": "助手",
+      "settings.title": "助手设置",
       "clear.content": "清空话题会删除助手下所有话题和文件，确定要继续吗？",
       "clear.title": "清空话题",
       "copy.title": "复制助手",
@@ -53,7 +55,7 @@
       "settings.reasoning_effort.medium": "中",
       "settings.reasoning_effort.off": "关",
       "settings.reasoning_effort.tip": "仅支持 OpenAI o-series 和 Anthropic 推理模型",
-      "title": "助手"
+      "settings.more": "助手设置"
     },
     "auth": {
       "error": "自动获取密钥失败，请手动获取",

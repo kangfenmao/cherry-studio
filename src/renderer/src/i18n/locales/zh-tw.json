@@ -32,7 +32,9 @@
       "title": "智慧代理人"
     },
     "assistants": {
+      "title": "助手",
       "abbr": "助手",
+      "settings.title": "助手設定",
       "clear.content": "清空話題會刪除助手下所有主題和檔案，確定要繼續嗎？",
       "clear.title": "清空話題",
       "copy.title": "複製助手",
@@ -52,8 +54,8 @@
       "settings.reasoning_effort.low": "短",
       "settings.reasoning_effort.medium": "中",
       "settings.reasoning_effort.off": "關",
-      "settings.reasoning_effort.tip": "僅支援 OpenAI o 系列和 Anthropic 推理模型",
-      "title": "助手"
+      "settings.reasoning_effort.tip": "僅支援 OpenAI o-series 和 Anthropic 推理模型",
+      "settings.more": "助手設定"
     },
     "auth": {
       "error": "自動取得金鑰失敗，請手動取得",
