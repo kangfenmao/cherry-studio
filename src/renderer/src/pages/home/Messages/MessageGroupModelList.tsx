@@ -25,7 +25,9 @@ const MessageGroupModelList: FC<MessageGroupModelListProps> = ({ messages, setSe
 
   return (
     <ModelsWrapper>
-      <DisplayModeToggle displayMode={foldDisplayMode} onClick={() => dispatch(setFoldDisplayMode(isCompact ? 'expanded' : 'compact'))}>
+      <DisplayModeToggle
+        displayMode={foldDisplayMode}
+        onClick={() => dispatch(setFoldDisplayMode(isCompact ? 'expanded' : 'compact'))}>
         <Tooltip
           title={
             foldDisplayMode === 'compact'
