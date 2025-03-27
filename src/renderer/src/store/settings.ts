@@ -138,7 +138,7 @@ const initialState: SettingsState = {
   codeStyle: 'auto',
   foldDisplayMode: 'expanded',
   gridColumns: 2,
-  gridPopoverTrigger: 'hover',
+  gridPopoverTrigger: 'click',
   messageNavigation: 'none',
   webdavHost: '',
   webdavUser: '',

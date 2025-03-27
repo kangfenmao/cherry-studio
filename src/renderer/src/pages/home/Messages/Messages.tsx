@@ -240,6 +240,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
       window.message.success(t('message.copy.success'))
     }
   })
+
   return (
     <Container
       id="messages"
@@ -272,9 +273,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic })
         </InfiniteScroll>
         <Prompt assistant={assistant} key={assistant.prompt} topic={topic} />
       </NarrowLayout>
-
       {messageNavigation === 'anchor' && <MessageAnchorLine messages={displayMessages} />}
-
       {messageNavigation === 'buttons' && <ChatNavigation containerId="messages" />}
     </Container>
   )

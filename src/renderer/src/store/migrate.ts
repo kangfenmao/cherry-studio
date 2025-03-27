@@ -805,6 +805,7 @@ const migrateConfig = {
     state.settings.autoCheckUpdate = !state.settings.manualUpdateCheck
     // @ts-ignore eslint-disable-next-line
     delete state.settings.manualUpdateCheck
+    state.settings.gridPopoverTrigger = 'click'
     return state
   }
 }
