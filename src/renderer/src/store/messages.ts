@@ -278,6 +278,7 @@ export const sendMessage =
           const assistantMessage = getAssistantMessage({ assistant, topic })
           assistantMessage.askId = userMessage.id
           assistantMessage.status = 'sending'
+          assistantMessage.foldSelected = true
           assistantMessages.push(assistantMessage)
         }
 
