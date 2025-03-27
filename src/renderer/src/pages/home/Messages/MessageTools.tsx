@@ -100,7 +100,7 @@ const MessageTools: FC<Props> = ({ message }) => {
           </MessageTitleLabel>
         ),
         children: isDone && result && (
-          <ToolResponseContainer style={{ fontFamily, fontSize }}>
+          <ToolResponseContainer style={{ fontFamily, fontSize: '12px' }}>
             <pre>{JSON.stringify(result, null, 2)}</pre>
           </ToolResponseContainer>
         )
@@ -129,9 +129,8 @@ const MessageTools: FC<Props> = ({ message }) => {
         onCancel={() => setExpandedResponse(null)}
         footer={null}
         width="80%"
-        styles={{
-          body: { maxHeight: '80vh', overflow: 'auto' }
-        }}>
+        centered
+        styles={{ body: { maxHeight: '80vh', overflow: 'auto' } }}>
         {expandedResponse && (
           <ExpandedResponseContainer style={{ fontFamily, fontSize }}>
             <ActionButton
@@ -157,7 +156,6 @@ const CollapseContainer = styled(Collapse)`
   margin-bottom: 15px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
   .ant-collapse-header {
     background-color: var(--color-bg-2);

@@ -27,7 +27,7 @@ const InstallNpxUv: FC = () => {
       setIsUvInstalled(true)
       setIsInstallingUv(false)
     } catch (error: any) {
-      window.message.error(`${t('settings.mcp.installError')}: ${error.message}`)
+      window.message.error({ content: `${t('settings.mcp.installError')}: ${error.message}`, key: 'mcp-install-error' })
       setIsInstallingUv(false)
       checkBinaries()
     }
@@ -40,7 +40,10 @@ const InstallNpxUv: FC = () => {
       setIsBunInstalled(true)
       setIsInstallingBun(false)
     } catch (error: any) {
-      window.message.error(`${t('settings.mcp.installError')}: ${error.message}`)
+      window.message.error({
+        content: `${t('settings.mcp.installError')}: ${error.message}`,
+        key: 'mcp-install-error'
+      })
       setIsInstallingBun(false)
       checkBinaries()
     }
@@ -63,7 +66,7 @@ const InstallNpxUv: FC = () => {
           style={{ padding: 8 }}
           description={
             <SettingRow>
-              <SettingSubtitle style={{ margin: 0 }}>
+              <SettingSubtitle style={{ margin: 0, fontWeight: 'normal' }}>
                 {isUvInstalled ? 'UV Installed' : `UV ${t('settings.mcp.missingDependencies')}`}
               </SettingSubtitle>
               <Button
@@ -85,7 +88,7 @@ const InstallNpxUv: FC = () => {
           style={{ padding: 8 }}
           description={
             <SettingRow>
-              <SettingSubtitle style={{ margin: 0 }}>
+              <SettingSubtitle style={{ margin: 0, fontWeight: 'normal' }}>
                 {isBunInstalled ? 'Bun Installed' : `Bun ${t('settings.mcp.missingDependencies')}`}
               </SettingSubtitle>
               <Button

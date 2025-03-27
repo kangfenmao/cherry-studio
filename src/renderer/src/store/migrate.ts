@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit'
 import { isMac } from '@renderer/config/constant'
 import { DEFAULT_MIN_APPS } from '@renderer/config/minapps'
 import { SYSTEM_MODELS } from '@renderer/config/models'
@@ -806,6 +807,15 @@ const migrateConfig = {
     // @ts-ignore eslint-disable-next-line
     delete state.settings.manualUpdateCheck
     state.settings.gridPopoverTrigger = 'click'
+    return state
+  },
+  '86': (state: RootState) => {
+    if (state.mcp.servers) {
+      state.mcp.servers = state.mcp.servers.map((server) => ({
+        ...server,
+        id: nanoid()
+      }))
+    }
     return state
   }
 }
