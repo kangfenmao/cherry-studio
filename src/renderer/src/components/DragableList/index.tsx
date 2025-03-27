@@ -8,6 +8,7 @@ import {
   OnDragStartResponder,
   ResponderProvided
 } from '@hello-pangea/dnd'
+import VirtualList from 'rc-virtual-list'
 import { droppableReorder } from '@renderer/utils'
 import { FC } from 'react'
 
@@ -47,26 +48,28 @@ const DragableList: FC<Props<any>> = ({
       <Droppable droppableId="droppable" {...droppableProps}>
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef} style={style}>
-            {list.map((item, index) => {
-              const id = item.id || item
-              return (
-                <Draggable key={`draggable_${id}_${index}`} draggableId={id} index={index}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={{
-                        ...listStyle,
-                        ...provided.draggableProps.style,
-                        marginBottom: 8
-                      }}>
-                      {children(item, index)}
-                    </div>
-                  )}
-                </Draggable>
-              )
-            })}
+            <VirtualList data={list} itemKey="id">
+              {(item, index) => {
+                const id = item.id || item
+                return (
+                  <Draggable key={`draggable_${id}_${index}`} draggableId={id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          ...listStyle,
+                          ...provided.draggableProps.style,
+                          marginBottom: 8
+                        }}>
+                        {children(item, index)}
+                      </div>
+                    )}
+                  </Draggable>
+                )
+              }}
+            </VirtualList>
             {provided.placeholder}
           </div>
         )}

@@ -56,7 +56,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
   const borderRadius = showTopicTime ? 12 : 'var(--list-item-border-radius)'
 
   const [deletingTopicId, setDeletingTopicId] = useState<string | null>(null)
-  const deleteTimerRef = useRef<NodeJS.Timeout>()
+  const deleteTimerRef = useRef<NodeJS.Timeout>(null)
 
   const pendingTopics = useMemo(() => {
     return new Set<string>()
