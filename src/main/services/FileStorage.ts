@@ -213,11 +213,6 @@ class FileStorage {
 
   public readFile = async (_: Electron.IpcMainInvokeEvent, id: string): Promise<string> => {
     const filePath = path.join(this.storageDir, id)
-    const stats = await fs.promises.stat(filePath)
-
-    if (stats.isDirectory()) {
-      throw new Error(`Cannot read directory: ${filePath}`)
-    }
 
     if (documentExts.includes(path.extname(filePath))) {
       const originalCwd = process.cwd()
