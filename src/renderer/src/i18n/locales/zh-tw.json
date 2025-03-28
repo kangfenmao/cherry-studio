@@ -1012,7 +1012,12 @@
         "updateSuccess": "伺服器更新成功",
         "url": "URL",
         "editMcpJson": "編輯 MCP 配置",
-        "installHelp": "獲取安裝幫助"
+        "installHelp": "獲取安裝幫助",
+        "tools": {
+          "inputSchema": "輸入參數",
+          "availableTools": "可用工具",
+          "noToolsAvailable": "沒有可用工具"
+        }
       },
       "messages.divider": "訊息間顯示分隔線",
       "messages.grid_columns": "訊息網格展示列數",

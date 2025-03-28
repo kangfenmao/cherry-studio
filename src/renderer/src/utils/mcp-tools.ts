@@ -61,7 +61,7 @@ export function mcpToolsToOpenAITools(mcpTools: MCPTool[]): Array<ChatCompletion
     type: 'function',
     name: tool.name,
     function: {
-      name: tool.serverId,
+      name: tool.id,
       description: tool.description,
       parameters: {
         type: 'object',
@@ -79,9 +79,10 @@ export function openAIToolsToMcpTool(
     return undefined
   }
 
-  const tool = mcpTools.find((mcptool) => mcptool.serverId === llmTool.function.name)
+  const tool = mcpTools.find((mcptool) => mcptool.id === llmTool.function.name)
 
   if (!tool) {
+    console.warn('No MCP Tool found for tool call:', llmTool)
     return undefined
   }
 

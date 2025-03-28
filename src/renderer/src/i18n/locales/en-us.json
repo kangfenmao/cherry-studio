@@ -1013,7 +1013,12 @@
         "updateSuccess": "Server updated successfully",
         "url": "URL",
         "editMcpJson": "Edit MCP Configuration",
-        "installHelp": "Get Installation Help"
+        "installHelp": "Get Installation Help",
+        "tools": {
+          "inputSchema": "Input Schema",
+          "availableTools": "Available Tools",
+          "noToolsAvailable": "No tools available"
+        }
       },
       "messages.divider": "Show divider between messages",
       "messages.grid_columns": "Message grid display columns",

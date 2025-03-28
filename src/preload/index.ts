@@ -121,6 +121,8 @@ const api = {
   },
   mcp: {
     removeServer: (server: MCPServer) => ipcRenderer.invoke('mcp:remove-server', server),
+    restartServer: (server: MCPServer) => ipcRenderer.invoke('mcp:restart-server', server),
+    stopServer: (server: MCPServer) => ipcRenderer.invoke('mcp:stop-server', server),
     listTools: (server: MCPServer) => ipcRenderer.invoke('mcp:list-tools', server),
     callTool: ({ server, name, args }: { server: MCPServer; name: string; args: any }) =>
       ipcRenderer.invoke('mcp:call-tool', { server, name, args }),

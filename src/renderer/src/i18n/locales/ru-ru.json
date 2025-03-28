@@ -1011,8 +1011,13 @@
         "updateError": "Ошибка обновления сервера",
         "updateSuccess": "Сервер успешно обновлен",
         "url": "URL",
-        "editMcpJson": "Редактировать MCP 配置",
-        "installHelp": "Получить помощь по установке"
+        "editMcpJson": "Редактировать MCP",
+        "installHelp": "Получить помощь по установке",
+        "tools": {
+          "inputSchema": "входные параметры",
+          "availableTools": "доступные инструменты",
+          "noToolsAvailable": "нет доступных инструментов"
+        }
       },
       "messages.divider": "Показывать разделитель между сообщениями",
       "messages.grid_columns": "Количество столбцов сетки сообщений",

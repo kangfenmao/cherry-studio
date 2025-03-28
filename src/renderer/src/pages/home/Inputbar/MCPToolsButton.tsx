@@ -13,7 +13,7 @@ interface Props {
 }
 
 const MCPToolsButton: FC<Props> = ({ enabledMCPs, toggelEnableMCP, ToolbarButton }) => {
-  const { mcpServers, activedMcpServers } = useMCPServers()
+  const { activedMcpServers } = useMCPServers()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<any>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -25,14 +25,15 @@ const MCPToolsButton: FC<Props> = ({ enabledMCPs, toggelEnableMCP, ToolbarButton
   }
 
   // Check if all active servers are enabled
-  const activeServers = mcpServers.filter((s) => s.isActive)
 
-  const anyEnable = activeServers.some((server) => enabledMCPs.some((enabledServer) => enabledServer.id === server.id))
+  const anyEnable = activedMcpServers.some((server) =>
+    enabledMCPs.some((enabledServer) => enabledServer.id === server.id)
+  )
 
-  const enableAll = () => mcpServers.forEach(toggelEnableMCP)
+  const enableAll = () => activedMcpServers.forEach(toggelEnableMCP)
 
   const disableAll = () =>
-    mcpServers.forEach((s) => {
+    activedMcpServers.forEach((s) => {
       enabledMCPs.forEach((enabledServer) => {
         if (enabledServer.id === s.id) {
           toggelEnableMCP(s)
@@ -60,27 +61,25 @@ const MCPToolsButton: FC<Props> = ({ enabledMCPs, toggelEnableMCP, ToolbarButton
         </div>
       </DropdownHeader>
       <DropdownBody>
-        {mcpServers.length > 0 ? (
-          mcpServers
-            .filter((s) => s.isActive)
-            .map((server) => (
-              <McpServerItems key={server.id} className="ant-dropdown-menu-item">
-                <div className="server-info">
-                  <div className="server-name">{server.name}</div>
-                  {server.description && (
-                    <Tooltip title={server.description} placement="bottom">
-                      <div className="server-description">{truncateText(server.description)}</div>
-                    </Tooltip>
-                  )}
-                  {server.baseUrl && <div className="server-url">{server.baseUrl}</div>}
-                </div>
-                <Switch
-                  size="small"
-                  checked={enabledMCPs.some((s) => s.id === server.id)}
-                  onChange={() => toggelEnableMCP(server)}
-                />
-              </McpServerItems>
-            ))
+        {activedMcpServers.length > 0 ? (
+          activedMcpServers.map((server) => (
+            <McpServerItems key={server.id} className="ant-dropdown-menu-item">
+              <div className="server-info">
+                <div className="server-name">{server.name}</div>
+                {server.description && (
+                  <Tooltip title={server.description} placement="bottom">
+                    <div className="server-description">{truncateText(server.description)}</div>
+                  </Tooltip>
+                )}
+                {server.baseUrl && <div className="server-url">{server.baseUrl}</div>}
+              </div>
+              <Switch
+                size="small"
+                checked={enabledMCPs.some((s) => s.id === server.id)}
+                onChange={() => toggelEnableMCP(server)}
+              />
+            </McpServerItems>
+          ))
         ) : (
           <div className="ant-dropdown-menu-item-group">
             <div className="ant-dropdown-menu-item no-results">{t('settings.mcp.noServers')}</div>

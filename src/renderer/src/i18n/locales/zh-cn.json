@@ -1013,7 +1013,12 @@
         "updateSuccess": "服务器更新成功",
         "url": "URL",
         "editMcpJson": "编辑 MCP 配置",
-        "installHelp": "获取安装帮助"
+        "installHelp": "获取安装帮助",
+        "tools": {
+          "inputSchema": "输入参数",
+          "availableTools": "可用工具",
+          "noToolsAvailable": "没有可用工具"
+        }
       },
       "messages.divider": "消息分割线",
       "messages.grid_columns": "消息网格展示列数",

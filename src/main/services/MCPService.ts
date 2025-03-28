@@ -5,12 +5,14 @@ import { getBinaryName, getBinaryPath } from '@main/utils/process'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js'
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
-import { MCPServer } from '@types'
+import { nanoid } from '@reduxjs/toolkit'
+import { MCPServer, MCPTool } from '@types'
 import { app } from 'electron'
 import Logger from 'electron-log'
 
+import { CacheService } from './CacheService'
+
 class McpService {
-  private client: Client | null = null
   private clients: Map<string, Client> = new Map()
 
   private getServerKey(server: MCPServer): string {
@@ -29,25 +31,30 @@ class McpService {
     this.callTool = this.callTool.bind(this)
     this.closeClient = this.closeClient.bind(this)
     this.removeServer = this.removeServer.bind(this)
+    this.restartServer = this.restartServer.bind(this)
+    this.stopServer = this.stopServer.bind(this)
   }
 
-  async initClient(server: MCPServer) {
+  async initClient(server: MCPServer): Promise<Client> {
     const serverKey = this.getServerKey(server)
 
     // Check if we already have a client for this server configuration
     const existingClient = this.clients.get(serverKey)
     if (existingClient) {
-      this.client = existingClient
-      return
-    }
-
-    // If there's an existing client for a different server, close it
-    if (this.client) {
-      await this.closeClient()
+      // Check if the existing client is still connected
+      const pingResult = await existingClient.ping()
+      Logger.info(`[MCP] Ping result for ${server.name}:`, pingResult)
+      // If the ping fails, remove the client from the cache
+      // and create a new one
+      if (!pingResult) {
+        this.clients.delete(serverKey)
+      } else {
+        return existingClient
+      }
     }
 
     // Create new client instance for each connection
-    this.client = new Client({ name: 'Cherry Studio', version: app.getVersion() }, { capabilities: {} })
+    const client = new Client({ name: 'Cherry Studio', version: app.getVersion() }, { capabilities: {} })
 
     const args = [...(server.args || [])]
 
@@ -95,46 +102,76 @@ class McpService {
         throw new Error('Either baseUrl or command must be provided')
       }
 
-      await this.client.connect(transport)
+      await client.connect(transport)
 
       // Store the new client in the cache
-      this.clients.set(serverKey, this.client)
+      this.clients.set(serverKey, client)
 
       Logger.info(`[MCP] Activated server: ${server.name}`)
+      return client
     } catch (error: any) {
       Logger.error(`[MCP] Error activating server ${server.name}:`, error)
       throw error
     }
   }
 
-  async closeClient() {
-    if (this.client) {
+  async closeClient(serverKey: string) {
+    const client = this.clients.get(serverKey)
+    if (client) {
       // Remove the client from the cache
-      for (const [key, client] of this.clients.entries()) {
-        if (client === this.client) {
-          this.clients.delete(key)
-          break
-        }
-      }
-
-      await this.client.close()
-      this.client = null
+      await client.close()
+      Logger.info(`[MCP] Closed server: ${serverKey}`)
+      this.clients.delete(serverKey)
+    } else {
+      Logger.warn(`[MCP] No client found for server: ${serverKey}`)
     }
   }
 
+  async stopServer(_: Electron.IpcMainInvokeEvent, server: MCPServer) {
+    const serverKey = this.getServerKey(server)
+    Logger.info(`[MCP] Stopping server: ${server.name}`)
+    await this.closeClient(serverKey)
+  }
+
   async removeServer(_: Electron.IpcMainInvokeEvent, server: MCPServer) {
-    await this.closeClient()
-    this.clients.delete(this.getServerKey(server))
+    const serverKey = this.getServerKey(server)
+    const existingClient = this.clients.get(serverKey)
+    if (existingClient) {
+      await this.closeClient(serverKey)
+    }
+  }
+
+  async restartServer(_: Electron.IpcMainInvokeEvent, server: MCPServer) {
+    Logger.info(`[MCP] Restarting server: ${server.name}`)
+    const serverKey = this.getServerKey(server)
+    await this.closeClient(serverKey)
+    await this.initClient(server)
   }
 
   async listTools(_: Electron.IpcMainInvokeEvent, server: MCPServer) {
-    await this.initClient(server)
-    const { tools } = await this.client!.listTools()
-    return tools.map((tool) => ({
-      ...tool,
-      serverId: server.id,
-      serverName: server.name
-    }))
+    const client = await this.initClient(server)
+    const cacheKey = `mcp:list_tool:${server.id}`
+    if (CacheService.has(cacheKey)) {
+      Logger.info(`[MCP] Tools from ${server.name} loaded from cache`)
+      const cachedTools = CacheService.get<MCPTool[]>(cacheKey)
+      if (cachedTools && cachedTools.length > 0) {
+        return cachedTools
+      }
+    }
+    Logger.info(`[MCP] Listing tools for server: ${server.name}`)
+    const { tools } = await client.listTools()
+    const serverTools: MCPTool[] = []
+    tools.map((tool: any) => {
+      const serverTool: MCPTool = {
+        ...tool,
+        id: nanoid(),
+        serverId: server.id,
+        serverName: server.name
+      }
+      serverTools.push(serverTool)
+    })
+    CacheService.set(cacheKey, serverTools, 5 * 60 * 1000)
+    return serverTools
   }
 
   /**
@@ -144,11 +181,10 @@ class McpService {
     _: Electron.IpcMainInvokeEvent,
     { server, name, args }: { server: MCPServer; name: string; args: any }
   ): Promise<any> {
-    await this.initClient(server)
-
     try {
       Logger.info('[MCP] Calling:', server.name, name, args)
-      const result = await this.client!.callTool({ name, arguments: args })
+      const client = await this.initClient(server)
+      const result = await client.callTool({ name, arguments: args })
       return result
     } catch (error) {
       Logger.error(`[MCP] Error calling tool ${name} on ${server.name}:`, error)
