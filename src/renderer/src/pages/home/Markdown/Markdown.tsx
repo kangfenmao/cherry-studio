@@ -83,6 +83,7 @@ const Markdown: FC<Props> = ({ message, citationsData }) => {
       remarkPlugins={[remarkMath, remarkGfm]}
       className="markdown"
       components={components()}
+      disallowedElements={['iframe']}
       remarkRehypeOptions={{
         footnoteLabel: t('common.footnotes'),
         footnoteLabelTagName: 'h4',
