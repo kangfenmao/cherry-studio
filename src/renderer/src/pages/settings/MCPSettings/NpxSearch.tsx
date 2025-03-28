@@ -22,6 +22,8 @@ interface SearchResult {
 
 const npmScopes = ['@mcpmarket', '@modelcontextprotocol', '@gongrzhe']
 
+let _searchResults: SearchResult[] = []
+
 const NpxSearch: FC = () => {
   const { theme } = useTheme()
   const { t } = useTranslation()
@@ -30,8 +32,10 @@ const NpxSearch: FC = () => {
   // Add new state variables for npm scope search
   const [npmScope, setNpmScope] = useState('@modelcontextprotocol')
   const [searchLoading, setSearchLoading] = useState(false)
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+  const [searchResults, setSearchResults] = useState<SearchResult[]>(_searchResults)
   const { addMCPServer } = useMCPServers()
+
+  _searchResults = searchResults
 
   // Add new function to handle npm scope search
   const handleNpmSearch = async () => {
