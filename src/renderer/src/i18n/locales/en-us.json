@@ -1010,7 +1010,9 @@
         "type": "Type",
         "updateError": "Failed to update server",
         "updateSuccess": "Server updated successfully",
-        "url": "URL"
+        "url": "URL",
+        "editMcpJson": "Edit MCP Configuration",
+        "installHelp": "Get Installation Help"
       },
       "messages.divider": "Show divider between messages",
       "messages.grid_columns": "Message grid display columns",

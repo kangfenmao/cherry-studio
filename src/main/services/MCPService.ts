@@ -1,4 +1,7 @@
-import { getBinaryPath } from '@main/utils/process'
+import os from 'node:os'
+import path from 'node:path'
+
+import { getBinaryName, getBinaryPath } from '@main/utils/process'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js'
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
@@ -151,6 +154,15 @@ class McpService {
       Logger.error(`[MCP] Error calling tool ${name} on ${server.name}:`, error)
       throw error
     }
+  }
+
+  public async getInstallInfo() {
+    const dir = path.join(os.homedir(), '.cherrystudio', 'bin')
+    const uvName = await getBinaryName('uv')
+    const bunName = await getBinaryName('bun')
+    const uvPath = path.join(dir, uvName)
+    const bunPath = path.join(dir, bunName)
+    return { dir, uvPath, bunPath }
   }
 }
 

@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingTitle } from '..'
-import InstallNpxUv from './InstallNpxUv'
 
 interface Props {
   server: MCPServer
@@ -165,7 +164,6 @@ const McpSettings: React.FC<Props> = ({ server }) => {
 
   return (
     <SettingContainer style={{ background: 'transparent' }}>
-      <InstallNpxUv />
       <SettingTitle>
         <Flex align="center" gap={8}>
           <ServerName>{server?.name}</ServerName>

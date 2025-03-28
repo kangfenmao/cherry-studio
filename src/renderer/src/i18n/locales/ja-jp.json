@@ -1009,7 +1009,9 @@
         "url": "URL",
         "errors": {
           "32000": "MCP サーバーが起動しませんでした。パラメーターを確認してください"
-        }
+        },
+        "editMcpJson": "MCP 設定を編集",
+        "installHelp": "インストールヘルプを取得"
       },
       "messages.divider": "メッセージ間に区切り線を表示",
       "messages.grid_columns": "メッセージグリッドの表示列数",

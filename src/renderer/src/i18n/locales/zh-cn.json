@@ -1010,7 +1010,9 @@
         "type": "类型",
         "updateError": "更新服务器失败",
         "updateSuccess": "服务器更新成功",
-        "url": "URL"
+        "url": "URL",
+        "editMcpJson": "编辑 MCP 配置",
+        "installHelp": "获取安装帮助"
       },
       "messages.divider": "消息分割线",
       "messages.grid_columns": "消息网格展示列数",

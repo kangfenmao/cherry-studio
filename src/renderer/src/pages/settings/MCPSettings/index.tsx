@@ -1,21 +1,22 @@
-import { CodeOutlined, DeleteOutlined, ExportOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { CodeOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { nanoid } from '@reduxjs/toolkit'
-import { NavbarRight } from '@renderer/components/app/Navbar'
 import DragableList from '@renderer/components/DragableList'
 import IndicatorLight from '@renderer/components/IndicatorLight'
 import { HStack } from '@renderer/components/Layout'
 import ListItem from '@renderer/components/ListItem'
 import Scrollbar from '@renderer/components/Scrollbar'
+import { useTheme } from '@renderer/context/ThemeProvider'
 import { useMCPServers } from '@renderer/hooks/useMCPServers'
 import { EventEmitter } from '@renderer/services/EventService'
 import { MCPServer } from '@renderer/types'
-import { Button, Dropdown, MenuProps } from 'antd'
+import { Dropdown, MenuProps } from 'antd'
 import { isEmpty } from 'lodash'
 import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingContainer } from '..'
+import InstallNpxUv from './InstallNpxUv'
 import McpSettings from './McpSettings'
 import NpxSearch from './NpxSearch'
 
@@ -23,11 +24,15 @@ const MCPSettings: FC = () => {
   const { t } = useTranslation()
   const { mcpServers, addMCPServer, updateMcpServers, deleteMCPServer } = useMCPServers()
   const [selectedMcpServer, setSelectedMcpServer] = useState<MCPServer | null>(mcpServers[0])
-  const [isNpxSearch, setIsNpxSearch] = useState(false)
+  const [route, setRoute] = useState<'npx-search' | 'mcp-install' | null>(null)
+  const { theme } = useTheme()
 
   useEffect(() => {
-    const unsub = EventEmitter.on('open-npx-search', () => setIsNpxSearch(true))
-    return () => unsub()
+    const unsubs = [
+      EventEmitter.on('mcp:npx-search', () => setRoute('npx-search')),
+      EventEmitter.on('mcp:mcp-install', () => setRoute('mcp-install'))
+    ]
+    return () => unsubs.forEach((unsub) => unsub())
   }, [])
 
   const onAddMcpServer = async () => {
@@ -83,6 +88,30 @@ const MCPSettings: FC = () => {
     setSelectedMcpServer(_selectedMcpServer || mcpServers[0])
   }, [mcpServers, selectedMcpServer])
 
+  const MainContent = () => {
+    if (route === 'npx-search' || isEmpty(mcpServers)) {
+      return (
+        <SettingContainer theme={theme}>
+          <NpxSearch />
+        </SettingContainer>
+      )
+    }
+
+    if (route === 'mcp-install') {
+      return (
+        <SettingContainer theme={theme}>
+          <InstallNpxUv />
+        </SettingContainer>
+      )
+    }
+
+    if (selectedMcpServer) {
+      return <McpSettings server={selectedMcpServer} />
+    }
+
+    return <NpxSearch />
+  }
+
   return (
     <Container>
       <McpList>
@@ -105,7 +134,7 @@ const MCPSettings: FC = () => {
                   active={selectedMcpServer?.id === server.id}
                   onClick={() => {
                     setSelectedMcpServer(server)
-                    setIsNpxSearch(false)
+                    setRoute(null)
                   }}
                   titleStyle={{ fontWeight: 500 }}
                   icon={<CodeOutlined />}
@@ -124,45 +153,8 @@ const MCPSettings: FC = () => {
           )}
         </DragableList>
       </McpList>
-
-      {isNpxSearch || isEmpty(mcpServers) ? (
-        <SettingContainer>
-          <NpxSearch />
-        </SettingContainer>
-      ) : (
-        selectedMcpServer && <McpSettings server={selectedMcpServer} />
-      )}
+      <MainContent />
     </Container>
-  )
-}
-
-export const McpSettingsNavbar = () => {
-  const { t } = useTranslation()
-  const onClick = () => window.open('https://mcp.so/', '_blank')
-
-  return (
-    <NavbarRight>
-      <HStack alignItems="center" gap={5}>
-        <Button
-          size="small"
-          type="text"
-          onClick={() => EventEmitter.emit('open-npx-search')}
-          icon={<SearchOutlined />}
-          className="nodrag"
-          style={{ fontSize: 14 }}>
-          {t('settings.mcp.searchNpx')}
-        </Button>
-        <Button
-          size="small"
-          type="text"
-          onClick={onClick}
-          icon={<ExportOutlined />}
-          className="nodrag"
-          style={{ fontSize: 14 }}>
-          {t('settings.mcp.findMore')}
-        </Button>
-      </HStack>
-    </NavbarRight>
   )
 }
 

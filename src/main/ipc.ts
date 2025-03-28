@@ -266,6 +266,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle('mcp:remove-server', mcpService.removeServer)
   ipcMain.handle('mcp:list-tools', mcpService.listTools)
   ipcMain.handle('mcp:call-tool', mcpService.callTool)
+  ipcMain.handle('mcp:get-install-info', mcpService.getInstallInfo)
 
   ipcMain.handle('app:is-binary-exist', (_, name: string) => isBinaryExists(name))
   ipcMain.handle('app:get-binary-path', (_, name: string) => getBinaryPath(name))

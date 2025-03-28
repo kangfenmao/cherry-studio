@@ -123,7 +123,8 @@ const api = {
     removeServer: (server: MCPServer) => ipcRenderer.invoke('mcp:remove-server', server),
     listTools: (server: MCPServer) => ipcRenderer.invoke('mcp:list-tools', server),
     callTool: ({ server, name, args }: { server: MCPServer; name: string; args: any }) =>
-      ipcRenderer.invoke('mcp:call-tool', { server, name, args })
+      ipcRenderer.invoke('mcp:call-tool', { server, name, args }),
+    getInstallInfo: () => ipcRenderer.invoke('mcp:get-install-info')
   },
   shell: {
     openExternal: shell.openExternal

@@ -101,7 +101,7 @@ const MessageTools: FC<Props> = ({ message }) => {
         ),
         children: isDone && result && (
           <ToolResponseContainer style={{ fontFamily, fontSize: '12px' }}>
-            <pre>{JSON.stringify(result, null, 2)}</pre>
+            <CodeBlock>{JSON.stringify(result, null, 2)}</CodeBlock>
           </ToolResponseContainer>
         )
       })
@@ -144,7 +144,7 @@ const MessageTools: FC<Props> = ({ message }) => {
               aria-label={t('common.copy')}>
               <i className="iconfont icon-copy"></i>
             </ActionButton>
-            <pre>{expandedResponse.content}</pre>
+            <CodeBlock>{expandedResponse.content}</CodeBlock>
           </ExpandedResponseContainer>
         )}
       </Modal>
@@ -255,13 +255,14 @@ const ToolResponseContainer = styled.div`
   max-height: 300px;
   border-top: 1px solid var(--color-border);
   position: relative;
+`
 
-  pre {
-    margin: 0;
-    white-space: pre-wrap;
-    word-break: break-word;
-    color: var(--color-text);
-  }
+const CodeBlock = styled.pre`
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--color-text);
+  font-family: ubuntu;
 `
 
 const ExpandedResponseContainer = styled.div`

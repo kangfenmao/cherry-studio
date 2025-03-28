@@ -1009,7 +1009,9 @@
         "type": "類型",
         "updateError": "更新伺服器失敗",
         "updateSuccess": "伺服器更新成功",
-        "url": "URL"
+        "url": "URL",
+        "editMcpJson": "編輯 MCP 配置",
+        "installHelp": "獲取安裝幫助"
       },
       "messages.divider": "訊息間顯示分隔線",
       "messages.grid_columns": "訊息網格展示列數",
