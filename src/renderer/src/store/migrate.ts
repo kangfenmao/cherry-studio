@@ -810,12 +810,18 @@ const migrateConfig = {
     return state
   },
   '86': (state: RootState) => {
-    if (state.mcp.servers) {
-      state.mcp.servers = state.mcp.servers.map((server) => ({
-        ...server,
-        id: nanoid()
-      }))
+    try {
+      if (state?.mcp?.servers) {
+        state.mcp.servers = state.mcp.servers.map((server) => ({
+          ...server,
+          id: nanoid()
+        }))
+      }
+    } catch (error) {
+      console.error(error)
+      return state
     }
+
     return state
   }
 }
