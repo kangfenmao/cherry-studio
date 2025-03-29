@@ -1,3 +1,4 @@
+import { DeleteOutlined, SaveOutlined } from '@ant-design/icons'
 import { useMCPServers } from '@renderer/hooks/useMCPServers'
 import { MCPServer, MCPTool } from '@renderer/types'
 import { Button, Flex, Form, Input, Radio, Switch } from 'antd'
@@ -159,9 +160,16 @@ const McpSettings: React.FC<Props> = ({ server }) => {
   const onDeleteMcpServer = useCallback(
     async (server: MCPServer) => {
       try {
-        await window.api.mcp.removeServer(server)
-        deleteMCPServer(server.id)
-        window.message.success({ content: t('settings.mcp.deleteSuccess'), key: 'mcp-list' })
+        window.modal.confirm({
+          title: t('settings.mcp.deleteServer'),
+          content: t('settings.mcp.deleteServerConfirm'),
+          centered: true,
+          onOk: async () => {
+            await window.api.mcp.removeServer(server)
+            deleteMCPServer(server.id)
+            window.message.success({ content: t('settings.mcp.deleteSuccess'), key: 'mcp-list' })
+          }
+        })
       } catch (error: any) {
         window.message.error({
           content: `${t('settings.mcp.deleteError')}: ${error.message}`,
@@ -214,7 +222,10 @@ const McpSettings: React.FC<Props> = ({ server }) => {
     <SettingContainer>
       <SettingGroup style={{ marginBottom: 0 }}>
         <SettingTitle>
-          <ServerName>{server?.name}</ServerName>
+          <Flex justify="space-between" align="center" gap={5} style={{ marginRight: 10 }}>
+            <ServerName className="text-nowrap">{server?.name}</ServerName>
+            <Button danger icon={<DeleteOutlined />} type="text" onClick={() => onDeleteMcpServer(server)} />
+          </Flex>
           <Flex align="center" gap={16}>
             <Switch
               value={server.isActive}
@@ -222,11 +233,8 @@ const McpSettings: React.FC<Props> = ({ server }) => {
               loading={loadingServer === server.id}
               onChange={onToggleActive}
             />
-            <Button type="primary" size="small" onClick={onSave} loading={loading} disabled={!isFormChanged}>
+            <Button type="primary" icon={<SaveOutlined />} onClick={onSave} loading={loading} disabled={!isFormChanged}>
               {t('common.save')}
-            </Button>
-            <Button danger type="primary" size="small" onClick={() => onDeleteMcpServer(server)} loading={loading}>
-              {t('common.delete')}
             </Button>
           </Flex>
         </SettingTitle>
@@ -288,7 +296,6 @@ const McpSettings: React.FC<Props> = ({ server }) => {
             </>
           )}
         </Form>
-
         {server.isActive && <MCPToolsSection tools={tools} />}
       </SettingGroup>
     </SettingContainer>

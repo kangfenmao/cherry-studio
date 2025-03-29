@@ -39,8 +39,10 @@ const NpxSearch: FC = () => {
   _searchResults = searchResults
 
   // Add new function to handle npm scope search
-  const handleNpmSearch = async () => {
-    if (!npmScope.trim()) {
+  const handleNpmSearch = async (scopeOverride?: string) => {
+    const searchScope = scopeOverride || npmScope
+    console.log('handleNpmSearch', searchScope)
+    if (!searchScope.trim()) {
       window.message.warning({ content: t('settings.mcp.npx_list.scope_required'), key: 'mcp-npx-scope-required' })
       return
     }
@@ -53,7 +55,7 @@ const NpxSearch: FC = () => {
 
     try {
       // Call npxFinder to search for packages
-      const packages = await npxFinder(npmScope)
+      const packages = await npxFinder(searchScope)
 
       // Map the packages to our desired format
       const formattedResults = packages.map((pkg) => {
@@ -74,6 +76,8 @@ const NpxSearch: FC = () => {
         window.message.info({ content: t('settings.mcp.npx_list.no_packages'), key: 'mcp-npx-no-packages' })
       }
     } catch (error: unknown) {
+      setSearchResults([])
+      _searchResults = []
       if (error instanceof Error) {
         window.message.error({
           content: `${t('settings.mcp.npx_list.search_error')}: ${error.message}`,
@@ -101,9 +105,9 @@ const NpxSearch: FC = () => {
               placeholder={t('settings.mcp.npx_list.scope_placeholder')}
               value={npmScope}
               onChange={(e) => setNpmScope(e.target.value)}
-              onPressEnter={handleNpmSearch}
+              onPressEnter={() => handleNpmSearch(npmScope)}
             />
-            <Button icon={<SearchOutlined />} onClick={handleNpmSearch} disabled={searchLoading}>
+            <Button icon={<SearchOutlined />} onClick={() => handleNpmSearch(npmScope)} disabled={searchLoading}>
               {t('settings.mcp.npx_list.search')}
             </Button>
           </Space.Compact>
@@ -112,10 +116,8 @@ const NpxSearch: FC = () => {
               <Tag
                 key={scope}
                 onClick={() => {
-                  if (!searchLoading) {
-                    setNpmScope(scope)
-                    setTimeout(handleNpmSearch, 100)
-                  }
+                  setNpmScope(scope)
+                  handleNpmSearch(scope)
                 }}
                 style={{ cursor: searchLoading ? 'not-allowed' : 'pointer' }}>
                 {scope}

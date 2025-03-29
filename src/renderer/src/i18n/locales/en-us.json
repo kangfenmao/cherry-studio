@@ -1027,7 +1027,9 @@
           "inputSchema": "Input Schema",
           "availableTools": "Available Tools",
           "noToolsAvailable": "No tools available"
-        }
+        },
+        "deleteServer": "Delete Server",
+        "deleteServerConfirm": "Are you sure you want to delete this server?"
       },
       "messages.divider": "Show divider between messages",
       "messages.grid_columns": "Message grid display columns",

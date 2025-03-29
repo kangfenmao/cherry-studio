@@ -1026,7 +1026,9 @@
           "inputSchema": "輸入參數",
           "availableTools": "可用工具",
           "noToolsAvailable": "沒有可用工具"
-        }
+        },
+        "deleteServer": "刪除伺服器",
+        "deleteServerConfirm": "確定要刪除此伺服器嗎？"
       },
       "messages.divider": "訊息間顯示分隔線",
       "messages.grid_columns": "訊息網格展示列數",

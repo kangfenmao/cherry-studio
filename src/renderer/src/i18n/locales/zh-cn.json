@@ -1027,7 +1027,9 @@
           "inputSchema": "输入参数",
           "availableTools": "可用工具",
           "noToolsAvailable": "没有可用工具"
-        }
+        },
+        "deleteServer": "删除服务器",
+        "deleteServerConfirm": "确定要删除此服务器吗？"
       },
       "messages.divider": "消息分割线",
       "messages.grid_columns": "消息网格展示列数",
