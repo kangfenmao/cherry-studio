@@ -83,6 +83,6 @@ afterPack: scripts/after-pack.js
 afterSign: scripts/notarize.js
 releaseInfo:
   releaseNotes: |
-    增加坚果云登录和数据同步
-    增加思源笔记导出功能
-    MCP 功能改进和优化
+    小程序支持多开
+    支持 GPT-4o 图像生成
+    修复 MCP 服务器无法使用问题
