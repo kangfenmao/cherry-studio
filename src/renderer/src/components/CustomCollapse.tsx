@@ -2,7 +2,7 @@ import { Collapse } from 'antd'
 import { FC, memo } from 'react'
 
 interface CustomCollapseProps {
-  label: string
+  label: React.ReactNode
   extra: React.ReactNode
   children: React.ReactNode
 }
@@ -24,7 +24,6 @@ const CustomCollapse: FC<CustomCollapseProps> = ({ label, extra, children }) => 
   }
   return (
     <Collapse
-      collapsible="header"
       bordered={false}
       style={CollapseStyle}
       defaultActiveKey={['1']}

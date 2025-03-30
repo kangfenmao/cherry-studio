@@ -8,6 +8,7 @@ import {
   SettingOutlined
 } from '@ant-design/icons'
 import Ellipsis from '@renderer/components/Ellipsis'
+import { HStack } from '@renderer/components/Layout'
 import PromptPopup from '@renderer/components/Popups/PromptPopup'
 import TextEditPopup from '@renderer/components/Popups/TextEditPopup'
 import Scrollbar from '@renderer/components/Scrollbar'
@@ -17,7 +18,7 @@ import { getProviderName } from '@renderer/services/ProviderService'
 import { FileType, FileTypes, KnowledgeBase, KnowledgeItem } from '@renderer/types'
 import { formatFileSize } from '@renderer/utils'
 import { bookExts, documentExts, textExts, thirdPartyApplicationExts } from '@shared/config/constant'
-import { Alert, Button, Divider, Dropdown, Empty, message, Tag, Tooltip, Upload } from 'antd'
+import { Alert, Button, Dropdown, Empty, message, Tag, Tooltip, Upload } from 'antd'
 import dayjs from 'dayjs'
 import VirtualList from 'rc-virtual-list'
 import { FC } from 'react'
@@ -237,9 +238,16 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       )}
 
       <CustomCollapse
-        label={t('files.title')}
+        label={<CollapseLabel label={t('files.title')} count={fileItems.length} />}
         extra={
-          <Button type="text" icon={<PlusOutlined />} onClick={handleAddFile} disabled={disabled}>
+          <Button
+            type="text"
+            icon={<PlusOutlined />}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleAddFile()
+            }}
+            disabled={disabled}>
             {t('knowledge.add_file')}
           </Button>
         }>
@@ -257,7 +265,7 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
 
         <FlexColumn>
           {fileItems.length === 0 ? (
-            <Empty />
+            <EmptyView />
           ) : (
             <VirtualList
               data={fileItems.reverse()}
@@ -315,14 +323,21 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       </CustomCollapse>
 
       <CustomCollapse
-        label={t('knowledge.directories')}
+        label={<CollapseLabel label={t('knowledge.directories')} count={directoryItems.length} />}
         extra={
-          <Button type="text" icon={<PlusOutlined />} onClick={handleAddDirectory} disabled={disabled}>
+          <Button
+            type="text"
+            icon={<PlusOutlined />}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleAddDirectory()
+            }}
+            disabled={disabled}>
             {t('knowledge.add_directory')}
           </Button>
         }>
         <FlexColumn>
-          {directoryItems.length === 0 && <Empty />}
+          {directoryItems.length === 0 && <EmptyView />}
           {directoryItems.reverse().map((item) => (
             <FileItem
               key={item.id}
@@ -358,14 +373,21 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       </CustomCollapse>
 
       <CustomCollapse
-        label={t('knowledge.urls')}
+        label={<CollapseLabel label={t('knowledge.urls')} count={urlItems.length} />}
         extra={
-          <Button type="text" icon={<PlusOutlined />} onClick={handleAddUrl} disabled={disabled}>
+          <Button
+            type="text"
+            icon={<PlusOutlined />}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleAddUrl()
+            }}
+            disabled={disabled}>
             {t('knowledge.add_url')}
           </Button>
         }>
         <FlexColumn>
-          {urlItems.length === 0 && <Empty />}
+          {urlItems.length === 0 && <EmptyView />}
           {urlItems.reverse().map((item) => (
             <FileItem
               key={item.id}
@@ -421,14 +443,21 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       </CustomCollapse>
 
       <CustomCollapse
-        label={t('knowledge.sitemaps')}
+        label={<CollapseLabel label={t('knowledge.sitemaps')} count={sitemapItems.length} />}
         extra={
-          <Button type="text" icon={<PlusOutlined />} onClick={handleAddSitemap} disabled={disabled}>
+          <Button
+            type="text"
+            icon={<PlusOutlined />}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleAddSitemap()
+            }}
+            disabled={disabled}>
             {t('knowledge.add_sitemap')}
           </Button>
         }>
         <FlexColumn>
-          {sitemapItems.length === 0 && <Empty />}
+          {sitemapItems.length === 0 && <EmptyView />}
           {sitemapItems.reverse().map((item) => (
             <FileItem
               key={item.id}
@@ -467,14 +496,21 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
       </CustomCollapse>
 
       <CustomCollapse
-        label={t('knowledge.notes')}
+        label={<CollapseLabel label={t('knowledge.notes')} count={noteItems.length} />}
         extra={
-          <Button type="text" icon={<PlusOutlined />} onClick={handleAddNote} disabled={disabled}>
+          <Button
+            type="text"
+            icon={<PlusOutlined />}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleAddNote()
+            }}
+            disabled={disabled}>
             {t('knowledge.add_note')}
           </Button>
         }>
         <FlexColumn>
-          {noteItems.length === 0 && <Empty />}
+          {noteItems.length === 0 && <EmptyView />}
           {noteItems.reverse().map((note) => (
             <FileItem
               key={note.id}
@@ -501,8 +537,6 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
           ))}
         </FlexColumn>
       </CustomCollapse>
-
-      <Divider style={{ margin: '10px 0' }} />
       <ModelInfo>
         <div className="model-header">
           <label>{t('knowledge.model_info')}</label>
@@ -545,6 +579,19 @@ const KnowledgeContent: FC<KnowledgeContentProps> = ({ selectedBase }) => {
 
       <BottomSpacer />
     </MainContent>
+  )
+}
+
+const EmptyView = () => <Empty style={{ margin: 0 }} styles={{ image: { display: 'none' } }} />
+
+const CollapseLabel = ({ label, count }: { label: string; count: number }) => {
+  return (
+    <HStack alignItems="center" gap={10}>
+      <label>{label}</label>
+      <Tag style={{ borderRadius: 100, padding: '0 10px' }} color={count ? 'green' : 'default'}>
+        {count}
+      </Tag>
+    </HStack>
   )
 }
 

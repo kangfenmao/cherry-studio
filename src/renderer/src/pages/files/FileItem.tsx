@@ -122,7 +122,6 @@ const FileIcon = styled.div`
 
 const FileName = styled.div`
   font-size: 15px;
-  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -130,7 +129,6 @@ const FileName = styled.div`
   transition: color 0.2s ease;
   span {
     font-size: 15px;
-    font-weight: bold;
   }
   &:hover {
     color: var(--color-primary);
