@@ -368,6 +368,7 @@ export interface MCPServer {
   description?: string
   baseUrl?: string
   command?: string
+  registryUrl?: string
   args?: string[]
   env?: Record<string, string>
   isActive: boolean
