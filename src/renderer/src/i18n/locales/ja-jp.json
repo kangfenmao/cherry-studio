@@ -922,7 +922,9 @@
           "new_folder.button.confirm": "確認",
           "new_folder.button.cancel": "キャンセル",
           "new_folder.button": "新しいフォルダー"
-        }
+        },
+        "message_title.use_topic_naming.title": "トピック命名モデルを使用してメッセージのタイトルを作成",
+        "message_title.use_topic_naming.help": "この設定は、すべてのMarkdownエクスポート方法に影響します。"
       },
       "display.assistant.title": "アシスタント設定",
       "display.custom.css": "カスタムCSS",
@@ -1249,9 +1251,7 @@
         },
         "title": "ウェブ検索"
       },
-      "general.auto_check_update.title": "自動更新チェックを有効にする",
-      "message_title.use_topic_naming.title": "エクスポートされたメッセージのタイトル作成にトピック命名モデルを使用",
-      "message_title.use_topic_naming.help": "有効にすると、エクスポートされたメッセージのタイトル作成にトピック命名モデルを使用します。これはすべてのMarkdownエクスポート方式にも影響します。"
+      "general.auto_check_update.title": "自動更新チェックを有効にする"
     },
     "translate": {
       "any.language": "任意の言語",

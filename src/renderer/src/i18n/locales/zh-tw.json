@@ -922,7 +922,9 @@
           "new_folder.button.confirm": "確定",
           "new_folder.button.cancel": "取消",
           "new_folder.button": "新建文件夾"
-        }
+        },
+        "message_title.use_topic_naming.title": "使用話題命名模型為導出的消息創建標題",
+        "message_title.use_topic_naming.help": "此設定會影響所有通過Markdown導出的方式，如Notion、語雀等。"
       },
       "display.assistant.title": "助手設定",
       "display.custom.css": "自訂 CSS",
@@ -1249,9 +1251,7 @@
         },
         "title": "網路搜尋"
       },
-      "general.auto_check_update.title": "啟用自動更新檢查",
-      "message_title.use_topic_naming.title": "使用話題命名模型為匯出的訊息建立標題",
-      "message_title.use_topic_naming.help": "開啟後，使用話題命名模型為匯出的訊息建立標題。該項也會影響所有透過Markdown匯出的方式。"
+      "general.auto_check_update.title": "啟用自動更新檢查"
     },
     "translate": {
       "any.language": "任意語言",

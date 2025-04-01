@@ -922,7 +922,9 @@
           "new_folder.button.confirm": "Подтвердить",
           "new_folder.button.cancel": "Отмена",
           "new_folder.button": "Новая папка"
-        }
+        },
+        "message_title.use_topic_naming.title": "Использовать модель именования тем для создания заголовков сообщений",
+        "message_title.use_topic_naming.help": "Этот параметр влияет на все методы экспорта в Markdown, такие как Notion, Yuque и т.д."
       },
       "display.assistant.title": "Настройки ассистентов",
       "display.custom.css": "Пользовательский CSS",
@@ -1249,9 +1251,7 @@
         },
         "title": "Поиск в Интернете"
       },
-      "general.auto_check_update.title": "Включить автоматическую проверку обновлений",
-      "message_title.use_topic_naming.title": "Использовать модель именования тем для создания заголовков экспортируемых сообщений",
-      "message_title.use_topic_naming.help": "При включении использует модель именования тем для создания заголовков экспортируемых сообщений. Это также повлияет на все методы экспорта Markdown."
+      "general.auto_check_update.title": "Включить автоматическую проверку обновлений"
     },
     "translate": {
       "any.language": "Любой язык",
