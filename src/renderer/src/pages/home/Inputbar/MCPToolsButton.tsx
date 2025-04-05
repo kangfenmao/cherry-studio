@@ -1,9 +1,11 @@
 import { CodeOutlined } from '@ant-design/icons'
 import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { initializeMCPServers } from '@renderer/store/mcp'
 import { MCPServer } from '@renderer/types'
 import { Dropdown, Switch, Tooltip } from 'antd'
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
 interface Props {
@@ -13,15 +15,20 @@ interface Props {
 }
 
 const MCPToolsButton: FC<Props> = ({ enabledMCPs, toggelEnableMCP, ToolbarButton }) => {
-  const { activedMcpServers } = useMCPServers()
+  const { activedMcpServers, mcpServers } = useMCPServers()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<any>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
   const availableMCPs = activedMcpServers.filter((server) => enabledMCPs.some((s) => s.id === server.id))
-
   const buttonEnabled = availableMCPs.length > 0
+
+  useEffect(() => {
+    initializeMCPServers(mcpServers, dispatch)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const truncateText = (text: string, maxLength: number = 50) => {
     if (!text || text.length <= maxLength) return text
