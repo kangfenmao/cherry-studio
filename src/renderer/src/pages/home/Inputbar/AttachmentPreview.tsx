@@ -51,7 +51,7 @@ const AttachmentPreview: FC<Props> = ({ files, setFiles }) => {
                   window.api.file.openPath(path)
                 }
               }}>
-              {file.origin_name || file.name}
+              {FileManager.formatFileName(file)}
               {isImage(file.ext) && (
                 <Image
                   style={{ display: 'none' }}
@@ -78,7 +78,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 4px 0;
-  padding: 5px 15px 0;
+  padding: 5px 15px 0 10px;
 `
 
 const FileName = styled.span`
