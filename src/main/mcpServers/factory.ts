@@ -2,7 +2,6 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import Logger from 'electron-log'
 
 import BraveSearchServer from './brave-search'
-import EverythingServer from './everything'
 import FetchServer from './fetch'
 import FileSystemServer from './filesystem'
 import MemoryServer from './memory'
@@ -20,9 +19,6 @@ export function createInMemoryMCPServer(name: string, args: string[] = [], envs:
     }
     case '@cherry/brave-search': {
       return new BraveSearchServer(envs.BRAVE_API_KEY).server
-    }
-    case '@cherry/everything': {
-      return new EverythingServer().server
     }
     case '@cherry/fetch': {
       return new FetchServer().server

@@ -33,6 +33,25 @@ class KnowledgeGraphManager {
 
   constructor(memoryPath: string) {
     this.memoryPath = memoryPath
+    this.ensureMemoryPathExists()
+  }
+
+  private async ensureMemoryPathExists(): Promise<void> {
+    try {
+      // Ensure the directory exists
+      const directory = path.dirname(this.memoryPath)
+      await fs.mkdir(directory, { recursive: true })
+
+      // Check if the file exists, if not create an empty one
+      try {
+        await fs.access(this.memoryPath)
+      } catch (error) {
+        // File doesn't exist, create an empty file
+        await fs.writeFile(this.memoryPath, '')
+      }
+    } catch (error) {
+      console.error('Failed to create memory path:', error)
+    }
   }
 
   private async loadGraph(): Promise<KnowledgeGraph> {

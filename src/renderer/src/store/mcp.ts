@@ -86,14 +86,6 @@ export const builtinMCPServers: MCPServer[] = [
   },
   {
     id: nanoid(),
-    name: '@cherry/everything',
-    type: 'inMemory',
-    description:
-      'This MCP server attempts to exercise all the features of the MCP protocol. It is not intended to be a useful server, but rather a test server for builders of MCP clients. It implements prompts, tools, resources, sampling, and more to showcase MCP capabilities.',
-    isActive: true
-  },
-  {
-    id: nanoid(),
     name: '@cherry/fetch',
     type: 'inMemory',
     description: 'An MCP server for fetching URLs / Youtube video transcript.',
