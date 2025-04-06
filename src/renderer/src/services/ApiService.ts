@@ -289,10 +289,6 @@ export async function fetchSuggestions({
     return []
   }
 
-  if (model.owned_by !== 'graphrag') {
-    return []
-  }
-
   if (model.id.endsWith('global')) {
     return []
   }
