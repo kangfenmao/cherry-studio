@@ -142,7 +142,7 @@ const McpSettings: React.FC<Props> = ({ server }) => {
       const mcpServer: MCPServer = {
         id: server.id,
         name: values.name,
-        type: values.serverType,
+        type: values.serverType || server.type,
         description: values.description,
         isActive: values.isActive,
         registryUrl: values.registryUrl
@@ -343,22 +343,26 @@ const McpSettings: React.FC<Props> = ({ server }) => {
             paddingRight: '10px'
           }}>
           <Form.Item name="name" label={t('settings.mcp.name')} rules={[{ required: true, message: '' }]}>
-            <Input placeholder={t('common.name')} />
+            <Input placeholder={t('common.name')} disabled={server.type === 'inMemory'} />
           </Form.Item>
           <Form.Item name="description" label={t('settings.mcp.description')}>
             <TextArea rows={2} placeholder={t('common.description')} />
           </Form.Item>
-          <Form.Item name="serverType" label={t('settings.mcp.type')} rules={[{ required: true }]} initialValue="stdio">
-            <Radio.Group
-              onChange={(e) => setServerType(e.target.value)}
-              disabled={server.type === 'inMemory'}
-              options={[
-                { label: t('settings.mcp.stdio'), value: 'stdio' },
-                { label: t('settings.mcp.sse'), value: 'sse' },
-                { label: t('settings.mcp.inMemory'), value: 'inMemory' }
-              ]}
-            />
-          </Form.Item>
+          {server.type !== 'inMemory' && (
+            <Form.Item
+              name="serverType"
+              label={t('settings.mcp.type')}
+              rules={[{ required: true }]}
+              initialValue="stdio">
+              <Radio.Group
+                onChange={(e) => setServerType(e.target.value)}
+                options={[
+                  { label: t('settings.mcp.stdio'), value: 'stdio' },
+                  { label: t('settings.mcp.sse'), value: 'sse' }
+                ]}
+              />
+            </Form.Item>
+          )}
           {serverType === 'sse' && (
             <Form.Item
               name="baseUrl"
