@@ -320,7 +320,9 @@ export class WindowService {
       mainWindow.hide()
 
       //for mac users, should hide dock icon if close to tray
-      app.dock?.hide()
+      if (isMac && isTrayOnClose) {
+        app.dock?.hide()
+      }
     })
 
     mainWindow.on('closed', () => {
