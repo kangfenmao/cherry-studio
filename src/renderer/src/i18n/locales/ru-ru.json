@@ -737,7 +737,8 @@
       "yi": "Yi",
       "zhinao": "360AI",
       "zhipu": "ZHIPU AI",
-      "voyageai": "Voyage AI"
+      "voyageai": "Voyage AI",
+      "qiniu": "Qiniu"
     },
     "restore": {
       "confirm": "Вы уверены, что хотите восстановить данные?",
