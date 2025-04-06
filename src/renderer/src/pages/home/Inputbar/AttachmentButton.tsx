@@ -3,7 +3,7 @@ import { isVisionModel } from '@renderer/config/models'
 import { FileType, Model } from '@renderer/types'
 import { documentExts, imageExts, textExts } from '@shared/config/constant'
 import { Tooltip } from 'antd'
-import { FC, useCallback, useImperativeHandle } from 'react'
+import { FC, useCallback, useImperativeHandle, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export interface AttachmentButtonRef {
@@ -21,9 +21,11 @@ interface Props {
 
 const AttachmentButton: FC<Props> = ({ ref, model, files, setFiles, ToolbarButton, disabled }) => {
   const { t } = useTranslation()
-  const extensions = isVisionModel(model)
-    ? [...imageExts, ...documentExts, ...textExts]
-    : [...documentExts, ...textExts]
+
+  const extensions = useMemo(
+    () => (isVisionModel(model) ? [...imageExts, ...documentExts, ...textExts] : [...documentExts, ...textExts]),
+    [model]
+  )
 
   const onSelectFile = useCallback(async () => {
     const _files = await window.api.file.select({
@@ -39,7 +41,7 @@ const AttachmentButton: FC<Props> = ({ ref, model, files, setFiles, ToolbarButto
     if (_files) {
       setFiles([...files, ..._files])
     }
-  }, [files, setFiles])
+  }, [extensions, files, setFiles])
 
   const openQuickPanel = useCallback(() => {
     onSelectFile()

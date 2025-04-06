@@ -5,7 +5,9 @@ import 'katex/dist/contrib/mhchem'
 import MarkdownShadowDOMRenderer from '@renderer/components/MarkdownShadowDOMRenderer'
 import { useSettings } from '@renderer/hooks/useSettings'
 import type { Message } from '@renderer/types'
+import { parseJSON } from '@renderer/utils'
 import { escapeBrackets, removeSvgEmptyLines, withGeminiGrounding } from '@renderer/utils/formats'
+import { findCitationInChildren } from '@renderer/utils/markdown'
 import { isEmpty } from 'lodash'
 import { type FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -51,44 +53,13 @@ const Markdown: FC<Props> = ({ message }) => {
 
   const components = useMemo(() => {
     const baseComponents = {
-      a: (props: any) => {
-        // 更彻底的查找方法，递归搜索所有子元素
-        const findCitationInChildren = (children) => {
-          if (!children) return null
-
-          // 直接搜索子元素
-          for (const child of Array.isArray(children) ? children : [children]) {
-            if (typeof child === 'object' && child?.props?.['data-citation']) {
-              return child.props['data-citation']
-            }
-
-            // 递归查找更深层次
-            if (typeof child === 'object' && child?.props?.children) {
-              const found = findCitationInChildren(child.props.children)
-              if (found) return found
-            }
-          }
-
-          return null
-        }
-
-        // 然后在组件中使用
-        const citationData = findCitationInChildren(props.children)
-        if (citationData) {
-          try {
-            return <Link {...props} citationData={JSON.parse(citationData)} />
-          } catch (e) {
-            console.error('Failed to parse citation data', e)
-          }
-        }
-        return <Link {...props} />
-      },
+      a: (props: any) => <Link {...props} citationData={parseJSON(findCitationInChildren(props.children))} />,
       code: CodeBlock,
       img: ImagePreview,
       pre: (props: any) => <pre style={{ overflow: 'visible' }} {...props} />
     } as Partial<Components>
     return baseComponents
-  }, [messageContent])
+  }, [])
 
   if (message.role === 'user' && !renderInputMessageAsMarkdown) {
     return <p style={{ marginBottom: 5, whiteSpace: 'pre-wrap' }}>{messageContent}</p>

@@ -367,7 +367,27 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic 
 
       return menus
     },
-    [assistant, assistants, onClearMessages, onDeleteTopic, onPinTopic, onMoveTopic, t, updateTopic, exportMenuOptions]
+    [
+      activeTopic.id,
+      assistant,
+      assistants,
+      exportMenuOptions.docx,
+      exportMenuOptions.image,
+      exportMenuOptions.joplin,
+      exportMenuOptions.markdown,
+      exportMenuOptions.markdown_reason,
+      exportMenuOptions.notion,
+      exportMenuOptions.obsidian,
+      exportMenuOptions.siyuan,
+      exportMenuOptions.yuque,
+      onClearMessages,
+      onDeleteTopic,
+      onMoveTopic,
+      onPinTopic,
+      setActiveTopic,
+      t,
+      updateTopic
+    ]
   )
 
   return (
