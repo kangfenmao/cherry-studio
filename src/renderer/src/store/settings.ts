@@ -110,6 +110,17 @@ export interface SettingsState {
   showOpenedMinappsInSidebar: boolean
   // 隐私设置
   enableDataCollection: boolean
+  exportMenuOptions: {
+    image: boolean
+    markdown: boolean
+    markdown_reason: boolean
+    notion: boolean
+    yuque: boolean
+    joplin: boolean
+    obsidian: boolean
+    siyuan: boolean
+    docx: boolean
+  }
 }
 
 export type MultiModelMessageStyle = 'horizontal' | 'vertical' | 'fold' | 'grid'
@@ -196,7 +207,18 @@ const initialState: SettingsState = {
   siyuanRootPath: null,
   maxKeepAliveMinapps: 3,
   showOpenedMinappsInSidebar: true,
-  enableDataCollection: false
+  enableDataCollection: false,
+  exportMenuOptions: {
+    image: true,
+    markdown: true,
+    markdown_reason: true,
+    notion: true,
+    yuque: true,
+    joplin: true,
+    obsidian: true,
+    siyuan: true,
+    docx: true
+  }
 }
 
 const settingsSlice = createSlice({
@@ -451,6 +473,9 @@ const settingsSlice = createSlice({
     },
     setEnableDataCollection: (state, action: PayloadAction<boolean>) => {
       state.enableDataCollection = action.payload
+    },
+    setExportMenuOptions: (state, action: PayloadAction<typeof initialState.exportMenuOptions>) => {
+      state.exportMenuOptions = action.payload
     }
   }
 })
@@ -536,7 +561,8 @@ export const {
   setSiyuanRootPath,
   setMaxKeepAliveMinapps,
   setShowOpenedMinappsInSidebar,
-  setEnableDataCollection
+  setEnableDataCollection,
+  setExportMenuOptions
 } = settingsSlice.actions
 
 export default settingsSlice.reducer
