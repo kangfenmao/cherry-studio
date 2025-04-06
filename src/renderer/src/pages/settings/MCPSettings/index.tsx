@@ -29,7 +29,7 @@ const MCPSettings: FC = () => {
   const [route, setRoute] = useState<'npx-search' | 'mcp-install' | null>(null)
   const { theme } = useTheme()
   const dispatch = useDispatch()
-  const [mcpListType, setMcpListType] = useState<'system' | 'user'>('system')
+  const [mcpListType, setMcpListType] = useState<'system' | 'user'>('user')
 
   const systemServers = mcpServers.filter((server) => {
     return server.type === 'inMemory'
@@ -141,8 +141,8 @@ const MCPSettings: FC = () => {
             shape="round"
             value={mcpListType}
             options={[
-              { value: 'user', label: '我的' },
-              { value: 'system', label: '系统' }
+              { value: 'user', label: t('settings.mcp.user') },
+              { value: 'system', label: t('settings.mcp.system') }
             ]}
             onChange={(value) => setMcpListType(value as 'system' | 'user')}
           />
@@ -156,7 +156,7 @@ const MCPSettings: FC = () => {
               onClick={onAddMcpServer}
               icon={<PlusOutlined />}
               titleStyle={{ fontWeight: 500 }}
-              style={{ width: '100%' }}
+              style={{ width: '100%', marginTop: -2 }}
             />
           )}
           <DragableList list={servers} onUpdate={updateMcpServers}>
