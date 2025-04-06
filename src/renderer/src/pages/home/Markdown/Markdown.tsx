@@ -67,14 +67,17 @@ const Markdown: FC<Props> = ({ message, citationsData }) => {
       },
       code: CodeBlock,
       img: ImagePreview,
-      pre: (props: any) => <pre style={{ overflow: 'visible' }} {...props} />,
-      style: MarkdownShadowDOMRenderer as any
+      pre: (props: any) => <pre style={{ overflow: 'visible' }} {...props} />
     } as Partial<Components>
     return baseComponents
   }, [citationsData])
 
   if (message.role === 'user' && !renderInputMessageAsMarkdown) {
     return <p style={{ marginBottom: 5, whiteSpace: 'pre-wrap' }}>{messageContent}</p>
+  }
+
+  if (messageContent.includes('<style>')) {
+    components.style = MarkdownShadowDOMRenderer as any
   }
 
   return (
