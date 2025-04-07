@@ -169,13 +169,6 @@ const McpListContainer = styled(VStack)`
   height: calc(100vh - var(--navbar-height));
 `
 
-const McpListHeader = styled(HStack)`
-  width: 100%;
-  padding: 10px 12px;
-  padding-bottom: 0;
-  justify-content: center;
-`
-
 const McpList = styled(Scrollbar)`
   display: flex;
   flex: 1;
