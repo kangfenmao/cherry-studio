@@ -497,8 +497,9 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
     // Clear previous state
     // Reset to assistant default model
     assistant.defaultModel && setModel(assistant.defaultModel)
+
     // Reset to assistant knowledge mcp servers
-    setEnabledMCPs(assistant.mcpServers || [])
+    !isEmpty(assistant.mcpServers) && setEnabledMCPs(assistant.mcpServers || [])
 
     addTopic(topic)
     setActiveTopic(topic)

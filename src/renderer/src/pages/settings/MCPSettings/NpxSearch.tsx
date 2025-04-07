@@ -3,7 +3,7 @@ import { nanoid } from '@reduxjs/toolkit'
 import { HStack } from '@renderer/components/Layout'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useMCPServers } from '@renderer/hooks/useMCPServers'
-import type { MCPServer } from '@renderer/types'
+import { builtinMCPServers } from '@renderer/store/mcp'
 import { Button, Card, Flex, Input, Space, Spin, Tag, Typography } from 'antd'
 import { npxFinder } from 'npx-scope-finder'
 import { type FC, useEffect, useState } from 'react'
@@ -19,9 +19,10 @@ interface SearchResult {
   usage: string
   npmLink: string
   fullName: string
+  type: 'stdio' | 'sse' | 'inMemory'
 }
 
-const npmScopes = ['@modelcontextprotocol', '@gongrzhe', '@mcpmarket']
+const npmScopes = ['@cherry', '@modelcontextprotocol', '@gongrzhe', '@mcpmarket']
 
 let _searchResults: SearchResult[] = []
 
@@ -31,7 +32,7 @@ const NpxSearch: FC = () => {
   const { Text, Link } = Typography
 
   // Add new state variables for npm scope search
-  const [npmScope, setNpmScope] = useState('@modelcontextprotocol')
+  const [npmScope, setNpmScope] = useState('@cherry')
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResult[]>(_searchResults)
   const { addMCPServer } = useMCPServers()
@@ -41,13 +42,29 @@ const NpxSearch: FC = () => {
   // Add new function to handle npm scope search
   const handleNpmSearch = async (scopeOverride?: string) => {
     const searchScope = scopeOverride || npmScope
-    console.log('handleNpmSearch', searchScope)
+
     if (!searchScope.trim()) {
       window.message.warning({ content: t('settings.mcp.npx_list.scope_required'), key: 'mcp-npx-scope-required' })
       return
     }
 
     if (searchLoading) {
+      return
+    }
+
+    if (searchScope === '@cherry') {
+      setSearchResults(
+        builtinMCPServers.map((server) => ({
+          key: server.id,
+          name: server.name,
+          description: server.description || '',
+          version: '1.0.0',
+          usage: '参考下方链接中的使用说明',
+          npmLink: 'https://docs.cherry-ai.com/advanced-basic/mcp/in-memory',
+          fullName: server.name,
+          type: server.type || 'inMemory'
+        }))
+      )
       return
     }
 
@@ -58,7 +75,7 @@ const NpxSearch: FC = () => {
       const packages = await npxFinder(searchScope)
 
       // Map the packages to our desired format
-      const formattedResults = packages.map((pkg) => {
+      const formattedResults: SearchResult[] = packages.map((pkg) => {
         return {
           key: pkg.name,
           name: pkg.name?.split('/')[1] || '',
@@ -66,7 +83,8 @@ const NpxSearch: FC = () => {
           version: pkg.version || 'Latest',
           usage: `npx ${pkg.name}`,
           npmLink: pkg.links?.npm || `https://www.npmjs.com/package/${pkg.name}`,
-          fullName: pkg.name || ''
+          fullName: pkg.name || '',
+          type: 'stdio'
         }
       })
 
@@ -157,16 +175,22 @@ const NpxSearch: FC = () => {
                     icon={<PlusOutlined />}
                     size="small"
                     onClick={() => {
-                      // 创建一个临时的 MCP 服务器对象
-                      const tempServer: MCPServer = {
+                      const buildInServer = builtinMCPServers.find((server) => server.name === record.name)
+
+                      if (buildInServer) {
+                        addMCPServer(buildInServer)
+                        return
+                      }
+
+                      addMCPServer({
                         id: nanoid(),
                         name: record.name,
                         description: `${record.description}\n\n${t('settings.mcp.npx_list.usage')}: ${record.usage}\n${t('settings.mcp.npx_list.npm')}: ${record.npmLink}`,
                         command: 'npx',
                         args: ['-y', record.fullName],
-                        isActive: false
-                      }
-                      addMCPServer(tempServer)
+                        isActive: false,
+                        type: record.type
+                      })
                     }}
                   />
                 </Flex>
