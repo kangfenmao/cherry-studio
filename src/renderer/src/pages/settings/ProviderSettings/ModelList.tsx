@@ -251,7 +251,7 @@ const ModelList: React.FC<ModelListProps> = ({ providerId, modelStatuses = [], s
             key={group}
             label={
               <Flex align="center" gap={10}>
-                <span>{group}</span>
+                <span style={{ fontWeight: 600 }}>{group}</span>
                 <CustomTag color="#02B96B" size={10}>
                   {modelGroups[group].length}
                 </CustomTag>
@@ -308,7 +308,6 @@ const ModelList: React.FC<ModelListProps> = ({ providerId, modelStatuses = [], s
                         <Flex gap={4} align="center">
                           {renderLatencyText(modelStatus)}
                           {renderStatusIndicator(modelStatus)}
-
                           <Button
                             type="text"
                             onClick={() => !isChecking && onEditModel(model)}

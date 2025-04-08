@@ -85,8 +85,8 @@ const ModelTagsWithLabel: FC<ModelTagsProps> = ({
         </CustomTag>
       )}
       {showToolsCalling && isFunctionCallingModel(model) && (
-        <CustomTag size={size} color="#d45ea3" icon={<ToolOutlined />} tooltip={t('models.function_calling')}>
-          {_showLabel ? t('models.function_calling') : ''}
+        <CustomTag size={size} color="#f18737" icon={<ToolOutlined />} tooltip={t('models.type.function_calling')}>
+          {_showLabel ? t('models.type.function_calling') : ''}
         </CustomTag>
       )}
       {isEmbeddingModel(model) && (

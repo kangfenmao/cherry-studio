@@ -7,6 +7,7 @@ interface CustomCollapseProps {
   children: React.ReactNode
   destroyInactivePanel?: boolean
   defaultActiveKey?: string[]
+  activeKey?: string[]
   collapsible?: 'header' | 'icon' | 'disabled'
 }
 
@@ -16,6 +17,7 @@ const CustomCollapse: FC<CustomCollapseProps> = ({
   children,
   destroyInactivePanel = false,
   defaultActiveKey = ['1'],
+  activeKey,
   collapsible = undefined
 }) => {
   const CollapseStyle = {
@@ -27,7 +29,10 @@ const CustomCollapse: FC<CustomCollapseProps> = ({
     header: {
       padding: '8px 16px',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      background: 'var(--color-background-soft)',
+      borderTopLeftRadius: '8px',
+      borderTopRightRadius: '8px'
     },
     body: {
       borderTop: '0.5px solid var(--color-border)'
@@ -38,6 +43,7 @@ const CustomCollapse: FC<CustomCollapseProps> = ({
       bordered={false}
       style={CollapseStyle}
       defaultActiveKey={defaultActiveKey}
+      activeKey={activeKey}
       destroyInactivePanel={destroyInactivePanel}
       collapsible={collapsible}
       items={[

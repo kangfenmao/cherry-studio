@@ -93,7 +93,6 @@ const FileItem: React.FC<FileItemProps> = ({ fileInfo, style }) => {
 }
 
 const FileItemCard = styled.div`
-  background: rgba(255, 255, 255, 0.04);
   border-radius: 8px;
   overflow: hidden;
   border: 0.5px solid var(--color-border);
