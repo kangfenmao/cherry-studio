@@ -299,7 +299,12 @@
       "topics": "Topics",
       "warning": "Warning",
       "you": "You",
-      "reasoning_content": "Deep reasoning"
+      "reasoning_content": "Deep reasoning",
+      "sort": {
+        "pinyin": "Sort by Pinyin",
+        "pinyin.asc": "Sort by Pinyin (A-Z)",
+        "pinyin.desc": "Sort by Pinyin (Z-A)"
+      }
     },
     "docs": {
       "title": "Docs"

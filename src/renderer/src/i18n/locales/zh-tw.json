@@ -299,7 +299,12 @@
       "topics": "話題",
       "warning": "警告",
       "you": "您",
-      "reasoning_content": "已深度思考"
+      "reasoning_content": "已深度思考",
+      "sort": {
+        "pinyin": "按拼音排序",
+        "pinyin.asc": "按拼音升序",
+        "pinyin.desc": "按拼音降序"
+      }
     },
     "docs": {
       "title": "說明文件"
