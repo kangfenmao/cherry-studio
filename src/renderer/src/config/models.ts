@@ -186,7 +186,7 @@ export const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview|
 
 // Reasoning models
 export const REASONING_REGEX =
-  /^(o\d+(?:-[\w-]+)?|.*\b(?:reasoner|thinking)\b.*|.*-[rR]\d+.*|.*\bqwq(?:-[\w-]+)?\b.*|.*\bhunyuan-t1(?:-[\w-]+)?\b.*|.*\bglm-zero-preview\b.*)$/i
+  /^(o\d+(?:-[\w-]+)?|.*\b(?:reasoner|thinking)\b.*|.*-[rR]\d+.*|.*\bqwq(?:-[\w-]+)?\b.*|.*\bhunyuan-t1(?:-[\w-]+)?\b.*|.*\bglm-zero-preview\b.*|.*\bgrok-3-mini(?:-[\w-]+)?\b.*)$/i
 
 // Embedding models
 export const EMBEDDING_REGEX =
@@ -2202,12 +2202,29 @@ export function isOpenAIWebSearch(model: Model): boolean {
   return model.id.includes('gpt-4o-search-preview') || model.id.includes('gpt-4o-mini-search-preview')
 }
 
-export function isSupportedResoningEffortModel(model?: Model): boolean {
+export function isSupportedReasoningEffortModel(model?: Model): boolean {
   if (!model) {
     return false
   }
 
-  if (model.id.includes('claude-3-7-sonnet') || model.id.includes('claude-3.7-sonnet') || isOpenAIoSeries(model)) {
+  if (
+    model.id.includes('claude-3-7-sonnet') ||
+    model.id.includes('claude-3.7-sonnet') ||
+    isOpenAIoSeries(model) ||
+    isGrokReasoningModel(model)
+  ) {
+    return true
+  }
+
+  return false
+}
+
+export function isGrokReasoningModel(model?: Model): boolean {
+  if (!model) {
+    return false
+  }
+
+  if (model.id.includes('grok-3-mini')) {
     return true
   }
 
