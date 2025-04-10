@@ -1,10 +1,9 @@
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useDefaultWebSearchProvider, useWebSearchProviders } from '@renderer/hooks/useWebSearchProviders'
-import { defaultWebSearchProviders } from '@renderer/store/websearch'
 import { WebSearchProvider } from '@renderer/types'
 import { hasObjectKey } from '@renderer/utils'
 import { Select } from 'antd'
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '..'
@@ -13,15 +12,13 @@ import BlacklistSettings from './BlacklistSettings'
 import WebSearchProviderSetting from './WebSearchProviderSetting'
 
 const WebSearchSettings: FC = () => {
-  const { providers, addWebSearchProvider } = useWebSearchProviders()
+  const { providers } = useWebSearchProviders()
   const { provider: defaultProvider, setDefaultProvider } = useDefaultWebSearchProvider()
   const { t } = useTranslation()
   const [selectedProvider, setSelectedProvider] = useState<WebSearchProvider | undefined>(defaultProvider)
   const { theme: themeMode } = useTheme()
 
-  useEffect(() => {
-    defaultWebSearchProviders.map((p) => addWebSearchProvider(p))
-  })
+  const isLocalProvider = selectedProvider?.id.startsWith('local')
 
   function updateSelectedWebSearchProvider(providerId: string) {
     const provider = providers.find((p) => p.id === providerId)
@@ -45,19 +42,19 @@ const WebSearchSettings: FC = () => {
               style={{ width: '200px' }}
               onChange={(value: string) => updateSelectedWebSearchProvider(value)}
               placeholder={t('settings.websearch.search_provider_placeholder')}
-              options={providers
-                .toSorted((p1, p2) => p1.name.localeCompare(p2.name))
-                .map((p) => ({
-                  value: p.id,
-                  label: `${p.name} (${hasObjectKey(p, 'apiKey') ? 'ApiKey' : 'Free'})`
-                }))}
+              options={providers.map((p) => ({
+                value: p.id,
+                label: `${p.name} (${hasObjectKey(p, 'apiKey') ? t('settings.websearch.apikey') : t('settings.websearch.free')})`
+              }))}
             />
           </div>
         </SettingRow>
       </SettingGroup>
-      <SettingGroup theme={themeMode}>
-        {selectedProvider && <WebSearchProviderSetting provider={selectedProvider} />}
-      </SettingGroup>
+      {!isLocalProvider && (
+        <SettingGroup theme={themeMode}>
+          {selectedProvider && <WebSearchProviderSetting provider={selectedProvider} />}
+        </SettingGroup>
+      )}
       <BasicSettings />
       <BlacklistSettings />
     </SettingContainer>

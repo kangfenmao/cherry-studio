@@ -83,7 +83,7 @@ export default class LocalSearchProvider extends BaseWebSearchProvider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected parseValidUrls(htmlContent: string): SearchItem[] {
+  protected parseValidUrls(_htmlContent: string): SearchItem[] {
     throw new Error('Not implemented')
   }
 

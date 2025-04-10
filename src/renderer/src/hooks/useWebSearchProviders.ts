@@ -25,6 +25,7 @@ export const useDefaultWebSearchProvider = () => {
 
 export const useWebSearchProviders = () => {
   const providers = useAppSelector((state) => state.websearch.providers)
+
   const dispatch = useAppDispatch()
 
   return {
@@ -45,6 +46,7 @@ export const useWebSearchProvider = (id: string) => {
   const providers = useAppSelector((state) => state.websearch.providers)
   const provider = providers.find((provider) => provider.id === id)
   const dispatch = useAppDispatch()
+
   if (!provider) {
     throw new Error(`Web search provider with id ${id} not found`)
   }
