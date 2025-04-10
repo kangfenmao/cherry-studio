@@ -1198,6 +1198,10 @@ const migrateConfig = {
       addWebSearchProvider(state, 'local-google')
       addWebSearchProvider(state, 'local-bing')
       addWebSearchProvider(state, 'local-baidu')
+      const qiniuProvider = state.llm.providers.find((provider) => provider.id === 'qiniu')
+      if (qiniuProvider && isEmpty(qiniuProvider.models)) {
+        qiniuProvider.models = SYSTEM_MODELS.qiniu
+      }
       return state
     } catch (error) {
       return state
