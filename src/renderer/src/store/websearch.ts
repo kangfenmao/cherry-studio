@@ -35,6 +35,21 @@ const initialState: WebSearchState = {
       id: 'exa',
       name: 'Exa',
       apiKey: ''
+    },
+    {
+      id: 'local-google',
+      name: 'Google',
+      url: 'https://www.google.com/search?q=%s'
+    },
+    {
+      id: 'local-bing',
+      name: 'Bing',
+      url: 'https://cn.bing.com/search?q=%s&ensearch=1'
+    },
+    {
+      id: 'local-baidu',
+      name: 'Baidu',
+      url: 'https://www.baidu.com/s?wd=%s'
     }
   ],
   searchWithTime: true,
@@ -43,6 +58,8 @@ const initialState: WebSearchState = {
   enhanceMode: false,
   overwrite: false
 }
+
+export const defaultWebSearchProviders = initialState.providers
 
 const websearchSlice = createSlice({
   name: 'websearch',
@@ -77,6 +94,15 @@ const websearchSlice = createSlice({
     },
     setOverwrite: (state, action: PayloadAction<boolean>) => {
       state.overwrite = action.payload
+    },
+    addWebSearchProvider: (state, action: PayloadAction<WebSearchProvider>) => {
+      // Check if provider with same ID already exists
+      const exists = state.providers.some((provider) => provider.id === action.payload.id)
+
+      if (!exists) {
+        // Add the new provider to the array
+        state.providers.push(action.payload)
+      }
     }
   }
 })
@@ -90,7 +116,8 @@ export const {
   setExcludeDomains,
   setMaxResult,
   setEnhanceMode,
-  setOverwrite
+  setOverwrite,
+  addWebSearchProvider
 } = websearchSlice.actions
 
 export default websearchSlice.reducer

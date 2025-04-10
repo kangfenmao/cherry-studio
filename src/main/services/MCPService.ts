@@ -147,8 +147,12 @@ class McpService {
             ...getDefaultEnvironment(),
             PATH: this.getEnhancedPath(process.env.PATH || ''),
             ...server.env
-          }
+          },
+          stderr: 'pipe'
         })
+        transport.stderr?.on('data', (data) =>
+          Logger.info(`[MCP] Stdio stderr for server: ${server.name} `, data.toString())
+        )
       } else {
         throw new Error('Either baseUrl or command must be provided')
       }

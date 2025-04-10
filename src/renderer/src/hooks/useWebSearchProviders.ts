@@ -29,7 +29,15 @@ export const useWebSearchProviders = () => {
 
   return {
     providers,
-    updateWebSearchProviders: (providers: WebSearchProvider[]) => dispatch(updateWebSearchProviders(providers))
+    updateWebSearchProviders: (providers: WebSearchProvider[]) => dispatch(updateWebSearchProviders(providers)),
+    addWebSearchProvider: (provider: WebSearchProvider) => {
+      // Check if provider exists
+      const exists = providers.some((p) => p.id === provider.id)
+      if (!exists) {
+        // Use the existing update action to add the new provider
+        dispatch(updateWebSearchProviders([...providers, provider]))
+      }
+    }
   }
 }
 
