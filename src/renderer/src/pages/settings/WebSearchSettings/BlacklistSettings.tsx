@@ -18,6 +18,7 @@ interface DataType {
   url: string
   name: string
 }
+
 const columns: TableProps<DataType>['columns'] = [
   { title: t('common.name'), dataIndex: 'name', key: 'name' },
   {
@@ -26,6 +27,7 @@ const columns: TableProps<DataType>['columns'] = [
     key: 'url'
   }
 ]
+
 const BlacklistSettings: FC = () => {
   const [errFormat, setErrFormat] = useState(false)
   const [blacklistInput, setBlacklistInput] = useState('')
@@ -231,26 +233,27 @@ const BlacklistSettings: FC = () => {
           {t('common.save')}
         </Button>
         {errFormat && <Alert message={t('settings.websearch.blacklist_tooltip')} type="error" />}
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle>
+          {t('settings.websearch.subscribe')}
+          <Button
+            type={subscribeValid ? 'primary' : 'default'}
+            ghost={subscribeValid}
+            disabled={subscribeChecking}
+            onClick={handleAddSubscribe}>
+            {t('settings.websearch.subscribe_add')}
+          </Button>
+        </SettingTitle>
         <SettingDivider />
-        <SettingTitle>{t('settings.websearch.subscribe')}</SettingTitle>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <SettingRow>
-            {t('settings.websearch.subscribe_tooltip')}
-            <Button
-              type={subscribeValid ? 'primary' : 'default'}
-              ghost={subscribeValid}
-              disabled={subscribeChecking}
-              onClick={handleAddSubscribe}>
-              {t('settings.websearch.subscribe_add')}
-            </Button>
-          </SettingRow>
           <Table<DataType>
             rowSelection={{ type: 'checkbox', ...rowSelection }}
             columns={columns}
             dataSource={dataSource}
             pagination={{ position: ['none'] }}
           />
-          <SettingRow>
+          <SettingRow style={{ height: 50 }}>
             <Button
               type={subscribeValid ? 'primary' : 'default'}
               ghost={subscribeValid}
