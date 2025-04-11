@@ -43,8 +43,8 @@ const InstallNpxUv: FC<Props> = ({ mini = false }) => {
     } catch (error: any) {
       window.message.error({ content: `${t('settings.mcp.installError')}: ${error.message}`, key: 'mcp-install-error' })
       setIsInstallingUv(false)
-      checkBinaries()
     }
+    setTimeout(checkBinaries, 1000)
   }
 
   const installBun = async () => {
@@ -59,8 +59,8 @@ const InstallNpxUv: FC<Props> = ({ mini = false }) => {
         key: 'mcp-install-error'
       })
       setIsInstallingBun(false)
-      checkBinaries()
     }
+    setTimeout(checkBinaries, 1000)
   }
 
   useEffect(() => {
