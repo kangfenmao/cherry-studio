@@ -206,8 +206,9 @@ export async function filterResultWithBlacklist(
   websearch: WebSearchState
 ): Promise<WebSearchResponse> {
   console.log('filterResultWithBlacklist', response)
+
   // 没有结果或者没有黑名单规则时，直接返回原始结果
-  if (!response.results?.length || (!websearch.excludeDomains.length && !websearch.subscribeSources.length)) {
+  if (!response.results?.length || (!websearch?.excludeDomains?.length && !websearch?.subscribeSources?.length)) {
     return response
   }
 
