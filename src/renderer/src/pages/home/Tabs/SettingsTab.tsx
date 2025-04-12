@@ -149,7 +149,9 @@ const SettingsTab: FC<Props> = (props) => {
     setMaxTokens(assistant?.settings?.maxTokens ?? DEFAULT_MAX_TOKENS)
     setStreamOutput(assistant?.settings?.streamOutput ?? true)
     setReasoningEffort(assistant?.settings?.reasoning_effort)
+  }, [assistant])
 
+  useEffect(() => {
     // 当是Grok模型时，处理reasoning_effort的设置
     // For Grok models, only 'low' and 'high' reasoning efforts are supported.
     // This ensures compatibility with the model's capabilities and avoids unsupported configurations.
@@ -163,7 +165,7 @@ const SettingsTab: FC<Props> = (props) => {
         onReasoningEffortChange('high')
       }
     }
-  }, [assistant, onReasoningEffortChange])
+  }, [assistant?.model, assistant?.settings?.reasoning_effort, onReasoningEffortChange])
 
   const formatSliderTooltip = (value?: number) => {
     if (value === undefined) return ''
