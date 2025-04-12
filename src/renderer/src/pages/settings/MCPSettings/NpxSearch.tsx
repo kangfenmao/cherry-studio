@@ -9,7 +9,7 @@ import { Button, Card, Flex, Input, Space, Spin, Tag, Typography } from 'antd'
 import { npxFinder } from 'npx-scope-finder'
 import { type FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { SettingDivider, SettingGroup, SettingTitle } from '..'
 
@@ -27,7 +27,10 @@ const npmScopes = ['@cherry', '@modelcontextprotocol', '@gongrzhe', '@mcpmarket'
 
 let _searchResults: SearchResult[] = []
 
-const NpxSearch: FC = () => {
+const NpxSearch: FC<{
+  setSelectedMcpServer: (server: MCPServer) => void
+  setRoute: (route: string | null) => void
+}> = ({ setSelectedMcpServer, setRoute }) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const { Text, Link } = Typography
@@ -116,7 +119,7 @@ const NpxSearch: FC = () => {
   }, [])
 
   return (
-    <SettingGroup theme={theme} css={SettingGroupCss}>
+    <SettingGroup theme={theme} css={SettingGroup}>
       <div>
         <SettingTitle>
           {t('settings.mcp.npx_list.title')} <Text type="secondary">{t('settings.mcp.npx_list.desc')}</Text>
@@ -181,10 +184,11 @@ const NpxSearch: FC = () => {
                       if (buildInServer) {
                         addMCPServer(buildInServer)
                         window.message.success({ content: t('settings.mcp.addSuccess'), key: 'mcp-add-server' })
+                        setSelectedMcpServer(buildInServer)
+                        setRoute(null)
                         return
                       }
-
-                      addMCPServer({
+                      const newServer = {
                         id: nanoid(),
                         name: record.name,
                         description: `${record.description}\n\n${t('settings.mcp.npx_list.usage')}: ${record.usage}\n${t('settings.mcp.npx_list.npm')}: ${record.npmLink}`,
@@ -192,8 +196,12 @@ const NpxSearch: FC = () => {
                         args: ['-y', record.fullName],
                         isActive: false,
                         type: record.type
-                      })
+                      }
+
+                      addMCPServer(newServer)
                       window.message.success({ content: t('settings.mcp.addSuccess'), key: 'mcp-add-server' })
+                      setSelectedMcpServer(newServer)
+                      setRoute(null)
                     }}
                   />
                 </Flex>
@@ -214,14 +222,6 @@ const NpxSearch: FC = () => {
     </SettingGroup>
   )
 }
-
-const SettingGroupCss = css`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 0;
-`
 
 const ResultList = styled.div`
   flex: 1;
