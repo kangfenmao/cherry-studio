@@ -199,7 +199,8 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
           return (
             <CustomCollapse
               key={i}
-              defaultActiveKey={i >= 5 ? [] : ['1']}
+              defaultActiveKey={['1']}
+              styles={{ body: { padding: '0 10px' } }}
               label={
                 <Flex align="center" gap={10}>
                   <span style={{ fontWeight: 600 }}>{group}</span>
@@ -233,13 +234,15 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
                   />
                 </Tooltip>
               }>
-              <FlexColumn>
+              <FlexColumn style={{ margin: '10px 0' }}>
                 {modelGroups[group].map((model) => (
                   <FileItem
                     style={{
                       backgroundColor: isModelInProvider(provider, model.id)
                         ? 'rgba(0, 126, 0, 0.06)'
-                        : 'rgba(255, 255, 255, 0.04)'
+                        : 'rgba(255, 255, 255, 0.04)',
+                      border: 'none',
+                      boxShadow: 'none'
                     }}
                     key={model.id}
                     fileInfo={{
