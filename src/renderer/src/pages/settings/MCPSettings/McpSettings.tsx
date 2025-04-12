@@ -5,6 +5,7 @@ import { Button, Flex, Form, Input, Radio, Switch, Tabs } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import styled from 'styled-components'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingTitle } from '..'
@@ -57,6 +58,8 @@ const McpSettings: React.FC<Props> = ({ server }) => {
   const [prompts, setPrompts] = useState<MCPPrompt[]>([])
   const [isShowRegistry, setIsShowRegistry] = useState(false)
   const [registry, setRegistry] = useState<Registry[]>()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const serverType: MCPServer['type'] = server.type || (server.baseUrl ? 'sse' : 'stdio')
@@ -114,10 +117,9 @@ const McpSettings: React.FC<Props> = ({ server }) => {
         setLoadingServer(server.id)
         const localTools = await window.api.mcp.listTools(server)
         setTools(localTools)
-        // window.message.success(t('settings.mcp.toolsLoaded'))
       } catch (error) {
         window.message.error({
-          content: t('settings.mcp.toolsLoadError') + formatError(error),
+          content: t('settings.mcp.tools.loadError') + ' ' + formatError(error),
           key: 'mcp-tools-error'
         })
       } finally {
@@ -134,7 +136,7 @@ const McpSettings: React.FC<Props> = ({ server }) => {
         setPrompts(localPrompts)
       } catch (error) {
         window.message.error({
-          content: t('settings.mcp.promptsLoadError') + formatError(error),
+          content: t('settings.mcp.prompts.loadError') + ' ' + formatError(error),
           key: 'mcp-prompts-error'
         })
         setPrompts([])
@@ -258,6 +260,7 @@ const McpSettings: React.FC<Props> = ({ server }) => {
             await window.api.mcp.removeServer(server)
             deleteMCPServer(server.id)
             window.message.success({ content: t('settings.mcp.deleteSuccess'), key: 'mcp-list' })
+            navigate('/settings/mcp')
           }
         })
       } catch (error: any) {

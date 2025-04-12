@@ -1,17 +1,17 @@
 import { ArrowLeftOutlined, CodeOutlined, PlusOutlined } from '@ant-design/icons'
 import { nanoid } from '@reduxjs/toolkit'
 import IndicatorLight from '@renderer/components/IndicatorLight'
-import { HStack, VStack } from '@renderer/components/Layout'
+import { VStack } from '@renderer/components/Layout'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useMCPServers } from '@renderer/hooks/useMCPServers'
-import { EventEmitter } from '@renderer/services/EventService'
 import { MCPServer } from '@renderer/types'
-import { isEmpty } from 'lodash'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Route, Routes, useLocation, useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { SettingContainer } from '..'
+import { SettingContainer, SettingTitle } from '..'
 import InstallNpxUv from './InstallNpxUv'
 import McpSettings from './McpSettings'
 import NpxSearch from './NpxSearch'
@@ -20,18 +20,13 @@ const MCPSettings: FC = () => {
   const { t } = useTranslation()
   const { mcpServers, addMCPServer } = useMCPServers()
   const [selectedMcpServer, setSelectedMcpServer] = useState<MCPServer | null>(null)
-  const [route, setRoute] = useState<'npx-search' | 'mcp-install' | null>(null)
   const { theme } = useTheme()
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    const unsubs = [
-      EventEmitter.on('mcp:npx-search', () => setRoute('npx-search')),
-      EventEmitter.on('mcp:mcp-install', () => setRoute('mcp-install'))
-    ]
-    return () => unsubs.forEach((unsub) => unsub())
-  }, [])
+  const location = useLocation()
+  const pathname = location.pathname
 
-  const onAddMcpServer = async () => {
+  const onAddMcpServer = useCallback(async () => {
     const newServer = {
       id: nanoid(),
       name: t('settings.mcp.newServer'),
@@ -45,13 +40,12 @@ const MCPSettings: FC = () => {
     addMCPServer(newServer)
     window.message.success({ content: t('settings.mcp.addSuccess'), key: 'mcp-list' })
     setSelectedMcpServer(newServer)
-    setRoute(null)
-  }
+  }, [addMCPServer, t])
 
   useEffect(() => {
     const _selectedMcpServer = mcpServers.find((server) => server.id === selectedMcpServer?.id)
     setSelectedMcpServer(_selectedMcpServer || mcpServers[0])
-  }, [mcpServers, route, selectedMcpServer])
+  }, [mcpServers, selectedMcpServer])
 
   useEffect(() => {
     // Check if the selected server still exists in the updated mcpServers list
@@ -65,98 +59,90 @@ const MCPSettings: FC = () => {
     }
   }, [mcpServers, selectedMcpServer])
 
-  const MainContent = useMemo(() => {
-    if (route === 'npx-search' || isEmpty(mcpServers)) {
-      return (
-        <SettingContainer theme={theme}>
-          <NpxSearch
-            setRoute={(route) => setRoute(route as 'npx-search' | 'mcp-install' | null)}
-            setSelectedMcpServer={setSelectedMcpServer}
-          />
-        </SettingContainer>
-      )
-    }
+  const McpServersList = useCallback(
+    () => (
+      <GridContainer>
+        <GridHeader>
+          <SettingTitle>{t('settings.mcp.newServer')}</SettingTitle>
+        </GridHeader>
+        <ServersGrid>
+          <AddServerCard onClick={onAddMcpServer}>
+            <PlusOutlined style={{ fontSize: 24 }} />
+            <AddServerText>{t('settings.mcp.addServer')}</AddServerText>
+          </AddServerCard>
+          {mcpServers.map((server) => (
+            <ServerCard
+              key={server.id}
+              onClick={() => {
+                setSelectedMcpServer(server)
+                navigate(`/settings/mcp/server/${server.id}`)
+              }}>
+              <ServerHeader>
+                <ServerIcon>
+                  <CodeOutlined />
+                </ServerIcon>
+                <ServerName>{server.name}</ServerName>
+                <StatusIndicator>
+                  <IndicatorLight
+                    size={6}
+                    color={server.isActive ? 'green' : 'var(--color-text-3)'}
+                    animation={server.isActive}
+                    shadow={false}
+                  />
+                </StatusIndicator>
+              </ServerHeader>
+              <ServerDescription>
+                {server.description &&
+                  server.description.substring(0, 60) + (server.description.length > 60 ? '...' : '')}
+              </ServerDescription>
+            </ServerCard>
+          ))}
+        </ServersGrid>
+      </GridContainer>
+    ),
+    [mcpServers, navigate, onAddMcpServer, t]
+  )
 
-    if (route === 'mcp-install') {
-      return (
-        <SettingContainer theme={theme}>
-          <InstallNpxUv />
-        </SettingContainer>
-      )
-    }
-    if (selectedMcpServer) {
-      return <McpSettings server={selectedMcpServer} />
-    }
-
-    return (
-      <NpxSearch
-        setRoute={(route) => setRoute(route as 'npx-search' | 'mcp-install' | null)}
-        setSelectedMcpServer={setSelectedMcpServer}
-      />
-    )
-  }, [mcpServers, route, selectedMcpServer, theme])
-
-  const goBackToGrid = () => {
-    setSelectedMcpServer(null)
-  }
+  const isHome = pathname === '/settings/mcp'
 
   return (
     <Container>
-      {selectedMcpServer ? (
-        <DetailViewContainer>
-          <BackButtonContainer>
-            <BackButton onClick={goBackToGrid}>
+      {!isHome && (
+        <BackButtonContainer>
+          <Link to="/settings/mcp">
+            <BackButton>
               <ArrowLeftOutlined /> {t('common.back')}
             </BackButton>
-          </BackButtonContainer>
-          <DetailContent>{MainContent}</DetailContent>
-        </DetailViewContainer>
-      ) : (
-        <GridContainer>
-          <GridHeader>
-            <h2>{t('settings.mcp.newServer')}</h2>
-          </GridHeader>
-          <ServersGrid>
-            <AddServerCard onClick={onAddMcpServer}>
-              <PlusOutlined style={{ fontSize: 24 }} />
-              <AddServerText>{t('settings.mcp.addServer')}</AddServerText>
-            </AddServerCard>
-
-            {mcpServers.map((server) => (
-              <ServerCard
-                key={server.id}
-                onClick={() => {
-                  setSelectedMcpServer(server)
-                  setRoute(null)
-                }}>
-                <ServerHeader>
-                  <ServerIcon>
-                    <CodeOutlined />
-                  </ServerIcon>
-                  <ServerName>{server.name}</ServerName>
-                  <StatusIndicator>
-                    <IndicatorLight
-                      size={6}
-                      color={server.isActive ? 'green' : 'var(--color-text-3)'}
-                      animation={server.isActive}
-                      shadow={false}
-                    />
-                  </StatusIndicator>
-                </ServerHeader>
-                <ServerDescription>
-                  {server.description &&
-                    server.description.substring(0, 60) + (server.description.length > 60 ? '...' : '')}
-                </ServerDescription>
-              </ServerCard>
-            ))}
-          </ServersGrid>
-        </GridContainer>
+          </Link>
+        </BackButtonContainer>
       )}
+      <MainContainer>
+        <Routes>
+          <Route path="/" element={<McpServersList />} />
+          <Route path="server/:id" element={selectedMcpServer ? <McpSettings server={selectedMcpServer} /> : null} />
+          <Route
+            path="npx-search"
+            element={
+              <SettingContainer theme={theme}>
+                <NpxSearch setSelectedMcpServer={setSelectedMcpServer} />
+              </SettingContainer>
+            }
+          />
+          <Route
+            path="mcp-install"
+            element={
+              <SettingContainer theme={theme}>
+                <InstallNpxUv />
+              </SettingContainer>
+            }
+          />
+        </Routes>
+      </MainContainer>
     </Container>
   )
 }
 
-const Container = styled(HStack)`
+const Container = styled(VStack)`
   flex: 1;
 `
 
@@ -251,20 +237,13 @@ const AddServerText = styled.div`
   font-weight: 500;
 `
 
-const DetailViewContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  position: relative;
-`
-
 const BackButtonContainer = styled.div`
-  padding: 16px 0 0 20px;
+  padding: 12px 0 0 12px;
   width: 100%;
+  background-color: var(--color-background);
 `
 
-const DetailContent = styled.div`
+const MainContainer = styled.div`
   flex: 1;
   width: 100%;
 `

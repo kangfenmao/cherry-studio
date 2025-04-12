@@ -1064,7 +1064,6 @@
         "newServer": "MCP 服务器",
         "npx_list": {
           "actions": "操作",
-          "desc": "搜索并添加 npm 包作为 MCP 服务",
           "description": "描述",
           "no_packages": "未找到包",
           "npm": "NPM",
@@ -1073,7 +1072,6 @@
           "scope_required": "请输入 npm 作用域",
           "search": "搜索",
           "search_error": "搜索失败",
-          "title": "NPX 包列表",
           "usage": "用法",
           "version": "版本"
         },
@@ -1099,14 +1097,16 @@
         "tools": {
           "inputSchema": "输入模式",
           "availableTools": "可用工具",
-          "noToolsAvailable": "无可用工具"
+          "noToolsAvailable": "无可用工具",
+          "loadError": "获取工具失败"
         },
         "prompts": {
           "availablePrompts": "可用提示",
           "noPromptsAvailable": "无可用提示",
           "arguments": "参数",
           "requiredField": "必填字段",
-          "genericError": "获取提示错误"
+          "genericError": "获取提示错误",
+          "loadError": "获取提示失败"
         },
         "deleteServer": "删除服务器",
         "deleteServerConfirm": "确定要删除此服务器吗？",
