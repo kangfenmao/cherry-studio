@@ -237,6 +237,7 @@ export type AppInfo = {
   resourcesPath: string
   filesPath: string
   logsPath: string
+  arch: string
 }
 
 export interface Shortcut {
