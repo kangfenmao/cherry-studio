@@ -932,7 +932,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
             <ToolbarMenu>
               <Tooltip placement="top" title={t('chat.input.new_topic', { Command: newTopicShortcut })} arrow>
                 <ToolbarButton type="text" onClick={addNewTopic}>
-                  <MessageSquareDiff size={18} />
+                  <MessageSquareDiff size={19} />
                 </ToolbarButton>
               </Tooltip>
               <AttachmentButton

@@ -12,15 +12,15 @@ import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Tooltip } from 'antd'
 import {
   CircleHelp,
+  FileSearch,
   Folder,
   Languages,
   LayoutGrid,
-  LibraryBig,
   MessageSquareQuote,
   Moon,
   Palette,
   Settings,
-  Sparkles,
+  Sparkle,
   Sun
 } from 'lucide-react'
 import { FC, useEffect } from 'react'
@@ -131,11 +131,11 @@ const MainMenus: FC = () => {
 
   const iconMap = {
     assistants: <MessageSquareQuote size={18} className="icon" />,
-    agents: <Sparkles size={18} className="icon" />,
+    agents: <Sparkle size={18} className="icon" />,
     paintings: <Palette size={18} className="icon" />,
     translate: <Languages size={18} className="icon" />,
     minapp: <LayoutGrid size={18} className="icon" />,
-    knowledge: <LibraryBig size={18} className="icon" />,
+    knowledge: <FileSearch size={18} className="icon" />,
     files: <Folder size={17} className="icon" />
   }
 
