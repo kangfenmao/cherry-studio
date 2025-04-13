@@ -1112,6 +1112,16 @@
           "genericError": "获取提示错误",
           "loadError": "获取提示失败"
         },
+        "resources": {
+          "noResourcesAvailable": "无可用资源",
+          "availableResources": "可用资源",
+          "uri": "URI",
+          "mimeType": "MIME类型",
+          "size": "大小",
+          "blob": "二进制数据",
+          "blobInvisible": "隐藏二进制数据",
+          "text": "文本"
+        },
         "deleteServer": "删除服务器",
         "deleteServerConfirm": "确定要删除此服务器吗？",
         "registry": "包管理源",

@@ -1112,6 +1112,16 @@
           "genericError": "Get prompt Error",
           "loadError": "Get prompts Error"
         },
+        "resources": {
+          "noResourcesAvailable": "No resources available",
+          "availableResources": "Available Resources",
+          "uri": "URI",
+          "mimeType": "MIME Type",
+          "size": "Size",
+          "blob": "Blob",
+          "blobInvisible": "Blob Invisible",
+          "text": "Text"
+        },
         "deleteServer": "Delete Server",
         "deleteServerConfirm": "Are you sure you want to delete this server?",
         "registry": "Package Registry",

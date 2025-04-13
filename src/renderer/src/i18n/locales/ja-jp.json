@@ -1111,6 +1111,16 @@
           "genericError": "プロンプト取得エラー",
           "loadError": "プロンプト取得エラー"
         },
+        "resources": {
+          "noResourcesAvailable": "利用可能なリソースはありません",
+          "availableResources": "利用可能なリソース",
+          "uri": "URI",
+          "mimeType": "MIMEタイプ",
+          "size": "サイズ",
+          "blob": "バイナリデータ",
+          "blobInvisible": "バイナリデータを非表示",
+          "text": "テキスト"
+        },
         "deleteServer": "サーバーを削除",
         "deleteServerConfirm": "このサーバーを削除してもよろしいですか？",
         "registry": "パッケージ管理レジストリ",

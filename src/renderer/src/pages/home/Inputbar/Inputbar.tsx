@@ -355,12 +355,21 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
         }
       },
       {
-        label: 'MCP Prompt',
+        label: `MCP ${t('settings.mcp.tabs.prompts')}`,
         description: '',
         icon: <CodeOutlined />,
         isMenu: true,
         action: () => {
           mcpToolsButtonRef.current?.openPromptList()
+        }
+      },
+      {
+        label: `MCP ${t('settings.mcp.tabs.resources')}`,
+        description: '',
+        icon: <CodeOutlined />,
+        isMenu: true,
+        action: () => {
+          mcpToolsButtonRef.current?.openResourcesList()
         }
       },
       {

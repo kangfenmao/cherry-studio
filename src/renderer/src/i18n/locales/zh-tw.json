@@ -1111,6 +1111,16 @@
           "genericError": "獲取提示錯誤",
           "loadError": "獲取提示失敗"
         },
+        "resources": {
+          "noResourcesAvailable": "無可用資源",
+          "availableResources": "可用資源",
+          "uri": "URI",
+          "mimeType": "MIME類型",
+          "size": "大小",
+          "blob": "二進位數據",
+          "blobInvisible": "隱藏二進位數據",
+          "text": "文字"
+        },
         "deleteServer": "刪除伺服器",
         "deleteServerConfirm": "確定要刪除此伺服器嗎？",
         "registry": "套件管理源",

@@ -1111,6 +1111,16 @@
           "genericError": "Ошибка получения подсказки",
           "loadError": "Ошибка получения подсказок"
         },
+        "resources": {
+          "noResourcesAvailable": "Нет доступных ресурсов",
+          "availableResources": "Доступные ресурсы",
+          "uri": "URI",
+          "mimeType": "MIME-тип",
+          "size": "Размер",
+          "blob": "Двоичные данные",
+          "blobInvisible": "Скрытые двоичные данные",
+          "text": "Текст"
+        },
         "deleteServer": "Удалить сервер",
         "deleteServerConfirm": "Вы уверены, что хотите удалить этот сервер?",
         "registry": "Реестр пакетов",
