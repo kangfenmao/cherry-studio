@@ -1,11 +1,6 @@
 import {
-  ClearOutlined,
   CodeOutlined,
   FileSearchOutlined,
-  FormOutlined,
-  FullscreenExitOutlined,
-  FullscreenOutlined,
-  GlobalOutlined,
   HolderOutlined,
   PaperClipOutlined,
   PauseCircleOutlined,
@@ -44,6 +39,7 @@ import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import dayjs from 'dayjs'
 import Logger from 'electron-log/renderer'
 import { debounce, isEmpty } from 'lodash'
+import { Globe, Maximize, MessageSquareDiff, Minimize, PaintbrushVertical } from 'lucide-react'
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -935,7 +931,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
             <ToolbarMenu>
               <Tooltip placement="top" title={t('chat.input.new_topic', { Command: newTopicShortcut })} arrow>
                 <ToolbarButton type="text" onClick={addNewTopic}>
-                  <FormOutlined />
+                  <MessageSquareDiff size={18} />
                 </ToolbarButton>
               </Tooltip>
               <AttachmentButton
@@ -947,7 +943,8 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
               />
               <Tooltip placement="top" title={t('chat.input.web_search')} arrow>
                 <ToolbarButton type="text" onClick={onEnableWebSearch}>
-                  <GlobalOutlined
+                  <Globe
+                    size={18}
                     style={{ color: assistant.enableWebSearch ? 'var(--color-link)' : 'var(--color-icon)' }}
                   />
                 </ToolbarButton>
@@ -989,12 +986,12 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
               />
               <Tooltip placement="top" title={t('chat.input.clear', { Command: cleanTopicShortcut })} arrow>
                 <ToolbarButton type="text" onClick={clearTopic}>
-                  <ClearOutlined style={{ fontSize: 17 }} />
+                  <PaintbrushVertical size={18} />
                 </ToolbarButton>
               </Tooltip>
               <Tooltip placement="top" title={isExpended ? t('chat.input.collapse') : t('chat.input.expand')} arrow>
                 <ToolbarButton type="text" onClick={onToggleExpended}>
-                  {isExpended ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+                  {isExpended ? <Minimize size={18} /> : <Maximize size={18} />}
                 </ToolbarButton>
               </Tooltip>
               <NewContextButton onNewContext={onNewContext} ToolbarButton={ToolbarButton} />

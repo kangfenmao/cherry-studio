@@ -1,4 +1,4 @@
-import { LoadingOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { LoadingOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import CustomCollapse from '@renderer/components/CustomCollapse'
 import CustomTag from '@renderer/components/CustomTag'
 import ModelTagsWithLabel from '@renderer/components/ModelTagsWithLabel'
@@ -21,6 +21,7 @@ import { getDefaultGroupName, isFreeModel, runAsyncFunction } from '@renderer/ut
 import { Avatar, Button, Empty, Flex, Modal, Tabs, Tooltip, Typography } from 'antd'
 import Input from 'antd/es/input/Input'
 import { groupBy, isEmpty, uniqBy } from 'lodash'
+import { Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -180,7 +181,7 @@ const PopupContainer: React.FC<Props> = ({ provider: _provider, resolve }) => {
       centered>
       <SearchContainer>
         <Input
-          prefix={<SearchOutlined />}
+          prefix={<Search size={14} />}
           size="large"
           ref={searchInputRef}
           placeholder={t('settings.provider.search_placeholder')}
