@@ -1,6 +1,6 @@
 import { useShortcut, useShortcutDisplay } from '@renderer/hooks/useShortcuts'
 import { Tooltip } from 'antd'
-import { CircleFadingPlus } from 'lucide-react'
+import { Eraser } from 'lucide-react'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -20,7 +20,7 @@ const NewContextButton: FC<Props> = ({ onNewContext, ToolbarButton }) => {
     <Container>
       <Tooltip placement="top" title={t('chat.input.new.context', { Command: newContextShortcut })} arrow>
         <ToolbarButton type="text" onClick={onNewContext}>
-          <CircleFadingPlus size={18} />
+          <Eraser size={18} />
         </ToolbarButton>
       </Tooltip>
     </Container>

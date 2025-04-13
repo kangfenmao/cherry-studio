@@ -172,7 +172,17 @@ const AssistantItem: FC<AssistantItemProps> = ({ assistant, isActive, onSwitch, 
         }
       }
     ],
-    [addAgent, addAssistant, onSwitch, removeAllTopics, t, onDelete, sortByPinyinAsc, sortByPinyinDesc]
+    [
+      addAgent,
+      addAssistant,
+      onDelete,
+      onSwitch,
+      removeAllTopics,
+      setAssistantIconType,
+      sortByPinyinAsc,
+      sortByPinyinDesc,
+      t
+    ]
   )
 
   const handleSwitch = useCallback(async () => {
