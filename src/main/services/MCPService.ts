@@ -7,7 +7,7 @@ import { createInMemoryMCPServer } from '@main/mcpServers/factory'
 import { makeSureDirExists } from '@main/utils'
 import { getBinaryName, getBinaryPath } from '@main/utils/process'
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
-import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js'
+import { SSEClientTransport, SSEClientTransportOptions } from '@modelcontextprotocol/sdk/client/sse.js'
 import { getDefaultEnvironment, StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory'
 import { nanoid } from '@reduxjs/toolkit'
@@ -137,12 +137,19 @@ class McpService {
         transport = clientTransport
       } else if (server.baseUrl) {
         if (server.type === 'streamableHttp') {
-          transport = new StreamableHTTPClientTransport(
-            new URL(server.baseUrl!),
-            {} as StreamableHTTPClientTransportOptions
-          )
+          const options: StreamableHTTPClientTransportOptions = {
+            requestInit: {
+              headers: server.headers || {}
+            }
+          }
+          transport = new StreamableHTTPClientTransport(new URL(server.baseUrl!), options)
         } else if (server.type === 'sse') {
-          transport = new SSEClientTransport(new URL(server.baseUrl!))
+          const options: SSEClientTransportOptions = {
+            requestInit: {
+              headers: server.headers || {}
+            }
+          }
+          transport = new SSEClientTransport(new URL(server.baseUrl!), options)
         } else {
           throw new Error('Invalid server type')
         }
