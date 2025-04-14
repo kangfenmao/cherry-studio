@@ -23,9 +23,6 @@ async function afterBuild() {
   console.log('[After build] hook started...')
 
   try {
-    // First rename files with spaces
-    await renameFilesWithSpaces()
-
     // Read the latest.yml file
     const latestYmlPath = path.join('dist', 'latest.yml')
     const yamlContent = fs.readFileSync(latestYmlPath, 'utf8')
@@ -61,6 +58,9 @@ async function afterBuild() {
     })
 
     fs.writeFileSync(latestYmlPath, newYamlContent, 'utf8')
+
+    // Rename files with spaces
+    await renameFilesWithSpaces()
 
     console.log('Successfully cleaned up latest.yml data')
   } catch (error) {
