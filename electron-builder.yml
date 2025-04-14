@@ -35,7 +35,13 @@ win:
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   target:
     - target: nsis
+      arch:
+        - x64
+        - arm64
     - target: portable
+      arch:
+        - x64
+        - arm64
 nsis:
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   shortcutName: ${productName}
@@ -74,11 +80,8 @@ linux:
   maintainer: electronjs.org
   category: Utility
 publish:
-  # provider: generic
-  # url: https://cherrystudio.ocool.online
-  provider: github
-  repo: cherry-studio
-  owner: CherryHQ
+  provider: generic
+  url: https://releases.cherry-ai.com
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
 afterPack: scripts/after-pack.js
