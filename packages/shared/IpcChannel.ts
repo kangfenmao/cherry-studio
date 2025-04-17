@@ -12,6 +12,7 @@ export enum IpcChannel {
   App_SetTrayOnClose = 'app:set-tray-on-close',
   App_RestartTray = 'app:restart-tray',
   App_SetTheme = 'app:set-theme',
+  App_SetCustomCss = 'app:set-custom-css',
 
   App_IsBinaryExist = 'app:is-binary-exist',
   App_GetBinaryPath = 'app:get-binary-path',

@@ -130,6 +130,22 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
       mainWindow.setTitleBarOverlay(theme === 'dark' ? titleBarOverlayDark : titleBarOverlayLight)
   })
 
+  // custom css
+  ipcMain.handle(IpcChannel.App_SetCustomCss, (event, css: string) => {
+    if (css === configManager.getCustomCss()) return
+    configManager.setCustomCss(css)
+
+    // Broadcast to all windows including the mini window
+    const senderWindowId = event.sender.id
+    const windows = BrowserWindow.getAllWindows()
+    // 向其他窗口广播主题变化
+    windows.forEach((win) => {
+      if (win.webContents.id !== senderWindowId) {
+        win.webContents.send('custom-css:update', css)
+      }
+    })
+  })
+
   // clear cache
   ipcMain.handle(IpcChannel.App_ClearCache, async () => {
     const sessions = [session.defaultSession, session.fromPartition('persist:webview')]

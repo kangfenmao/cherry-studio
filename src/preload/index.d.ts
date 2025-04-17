@@ -29,6 +29,7 @@ declare global {
       setTrayOnClose: (isActive: boolean) => void
       restartTray: () => void
       setTheme: (theme: 'light' | 'dark') => void
+      setCustomCss: (css: string) => void
       reload: () => void
       clearCache: () => Promise<{ success: boolean; error?: string }>
       system: {
