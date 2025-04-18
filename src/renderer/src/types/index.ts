@@ -346,6 +346,8 @@ export type WebSearchProvider = {
   apiHost?: string
   engines?: string[]
   url?: string
+  basicAuthUsername?: string
+  basicAuthPassword?: string
   contentLimit?: number
   usingBrowser?: boolean
 }
