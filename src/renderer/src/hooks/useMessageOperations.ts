@@ -1,6 +1,5 @@
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { estimateMessageUsage } from '@renderer/services/TokenService'
-import { translateText } from '@renderer/services/TranslateService'
 import store, { useAppDispatch, useAppSelector } from '@renderer/store'
 import {
   clearStreamMessage,
@@ -19,10 +18,8 @@ import {
 import type { Assistant, Message, Topic } from '@renderer/types'
 import { abortCompletion } from '@renderer/utils/abortController'
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { TopicManager } from './useTopic'
-
 /**
  * 自定义Hook，提供消息操作相关的功能
  *
@@ -31,7 +28,6 @@ import { TopicManager } from './useTopic'
  */
 export function useMessageOperations(topic: Topic) {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation()
 
   /**
    * 删除单个消息
@@ -64,7 +60,8 @@ export function useMessageOperations(topic: Topic) {
         const message = messages?.find((m) => m.id === messageId)
         if (message) {
           const updatedMessage = { ...message, ...updates }
-          updates.usage = await estimateMessageUsage(updatedMessage)
+          const usage = await estimateMessageUsage(updatedMessage)
+          updates.usage = usage
         }
       }
       await dispatch(updateMessageThunk(topic.id, messageId, updates))
@@ -131,7 +128,7 @@ export function useMessageOperations(topic: Topic) {
   const clearTopicMessagesAction = useCallback(
     async (_topicId?: string) => {
       const topicId = _topicId || topic.id
-      dispatch(clearTopicMessages(topicId))
+      await dispatch(clearTopicMessages(topicId))
       await TopicManager.clearTopicMessages(topicId)
     },
     [dispatch, topic.id]
@@ -151,7 +148,7 @@ export function useMessageOperations(topic: Topic) {
    * 创建新的上下文（clear message）
    */
   const createNewContext = useCallback(async () => {
-    await EventEmitter.emit(EVENT_NAMES.NEW_CONTEXT)
+    EventEmitter.emit(EVENT_NAMES.NEW_CONTEXT)
   }, [])
 
   const displayCount = useAppSelector(selectDisplayCount)
@@ -193,28 +190,6 @@ export function useMessageOperations(topic: Topic) {
     dispatch(setTopicLoading({ topicId: topic.id, loading: false }))
   }, [topic.id, dispatch])
 
-  const translateMessage = useCallback(
-    async (messageId: string, language: string) => {
-      const messages = store.getState().messages.messagesByTopic[topic.id]
-      const message = messages?.find((m) => m.id === messageId)
-      if (!message) return
-
-      translateText(message.content, language, (text) => {
-        setStreamMessageAction({ ...message, translatedContent: text })
-      })
-        .then(() => {
-          commitStreamMessageAction(messageId)
-        })
-        .catch((error) => {
-          console.error('Translation failed:', error)
-          window.message.error({ content: t('translate.error.failed'), key: 'translate-message' })
-          editMessage(messageId, { translatedContent: undefined })
-          clearStreamMessageAction(messageId)
-        })
-    },
-    [topic.id, editMessage, t, clearStreamMessageAction, setStreamMessageAction, commitStreamMessageAction]
-  )
-
   /**
    * 恢复/重发消息
    * 暂时不需要
@@ -241,15 +216,16 @@ export function useMessageOperations(topic: Topic) {
     clearTopicMessages: clearTopicMessagesAction,
     // pauseMessage,
     pauseMessages,
-    resumeMessage,
-    translateMessage
+    resumeMessage
   }
 }
 
 export const useTopicMessages = (topic: Topic) => {
-  return useAppSelector((state) => selectTopicMessages(state, topic.id))
+  const messages = useAppSelector((state) => selectTopicMessages(state, topic.id))
+  return messages
 }
 
 export const useTopicLoading = (topic: Topic) => {
-  return useAppSelector((state) => selectTopicLoading(state, topic.id))
+  const loading = useAppSelector((state) => selectTopicLoading(state, topic.id))
+  return loading
 }
