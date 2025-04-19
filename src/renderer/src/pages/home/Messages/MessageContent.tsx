@@ -1,4 +1,4 @@
-import { DownOutlined, InfoCircleOutlined, SyncOutlined, TranslationOutlined, UpOutlined } from '@ant-design/icons'
+import { SyncOutlined, TranslationOutlined } from '@ant-design/icons'
 import { isOpenAIWebSearch } from '@renderer/config/models'
 import { getModelUniqId } from '@renderer/services/ModelService'
 import { Message, Model } from '@renderer/types'
@@ -7,7 +7,7 @@ import { withMessageThought } from '@renderer/utils/formats'
 import { Divider, Flex } from 'antd'
 import { clone } from 'lodash'
 import { Search } from 'lucide-react'
-import React, { Fragment, useMemo, useState } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import BarLoader from 'react-spinners/BarLoader'
 import BeatLoader from 'react-spinners/BeatLoader'
@@ -30,7 +30,6 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
   const { t } = useTranslation()
   const message = withMessageThought(clone(_message))
   const isWebCitation = model && (isOpenAIWebSearch(model) || model.provider === 'openrouter')
-  const [citationsCollapsed, setCitationsCollapsed] = useState(true)
 
   // HTML实体编码辅助函数
   const encodeHTML = (str: string) => {
@@ -140,10 +139,11 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
     return data
   }, [
     formattedCitations,
-    message?.metadata?.annotations,
-    message?.metadata?.groundingMetadata?.groundingChunks,
-    message?.metadata?.webSearch?.results,
-    message?.metadata?.webSearchInfo
+    message.metadata?.annotations,
+    message.metadata?.groundingMetadata?.groundingChunks,
+    message.metadata?.knowledge,
+    message.metadata?.webSearch?.results,
+    message.metadata?.webSearchInfo
   ])
 
   // Process content to make citation numbers clickable
@@ -251,83 +251,71 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
         </Fragment>
       )}
       {hasCitations && (
-        <CitationsContainer>
-          <CitationsHeader onClick={() => setCitationsCollapsed(!citationsCollapsed)}>
-            <div>
-              {t('message.citations')}
-              <InfoCircleOutlined style={{ fontSize: '14px', marginLeft: '4px', opacity: 0.6 }} />
-            </div>
-            {citationsCollapsed ? <DownOutlined /> : <UpOutlined />}
-          </CitationsHeader>
-
-          {!citationsCollapsed && (
-            <CitationsContent>
-              {message?.metadata?.groundingMetadata && message.status === 'success' && (
-                <>
-                  <CitationsList
-                    citations={
-                      message.metadata.groundingMetadata?.groundingChunks?.map((chunk, index) => ({
-                        number: index + 1,
-                        url: chunk?.web?.uri || '',
-                        title: chunk?.web?.title,
-                        showFavicon: false
-                      })) || []
-                    }
-                  />
-                  <SearchEntryPoint
-                    dangerouslySetInnerHTML={{
-                      __html: message.metadata.groundingMetadata?.searchEntryPoint?.renderedContent
-                        ? message.metadata.groundingMetadata.searchEntryPoint.renderedContent
-                            .replace(/@media \(prefers-color-scheme: light\)/g, 'body[theme-mode="light"]')
-                            .replace(/@media \(prefers-color-scheme: dark\)/g, 'body[theme-mode="dark"]')
-                        : ''
-                    }}
-                  />
-                </>
-              )}
-              {formattedCitations && (
-                <CitationsList
-                  citations={formattedCitations.map((citation) => ({
-                    number: citation.number,
-                    url: citation.url,
-                    hostname: citation.hostname,
-                    showFavicon: isWebCitation
-                  }))}
-                />
-              )}
-              {(message?.metadata?.webSearch || message.metadata?.knowledge) && message.status === 'success' && (
-                <CitationsList
-                  citations={[
-                    ...(message.metadata.webSearch?.results.map((result, index) => ({
-                      number: index + 1,
-                      url: result.url,
-                      title: result.title,
-                      showFavicon: true,
-                      type: 'websearch'
-                    })) || []),
-                    ...(message.metadata.knowledge?.map((result, index) => ({
-                      number: (message.metadata?.webSearch?.results?.length || 0) + index + 1,
-                      url: result.sourceUrl,
-                      title: result.sourceUrl,
-                      showFavicon: true,
-                      type: 'knowledge'
-                    })) || [])
-                  ]}
-                />
-              )}
-              {message?.metadata?.webSearchInfo && message.status === 'success' && (
-                <CitationsList
-                  citations={message.metadata.webSearchInfo.map((result, index) => ({
+        <>
+          {message?.metadata?.groundingMetadata && message.status === 'success' && (
+            <>
+              <CitationsList
+                citations={
+                  message.metadata.groundingMetadata?.groundingChunks?.map((chunk, index) => ({
                     number: index + 1,
-                    url: result.link || result.url,
-                    title: result.title,
-                    showFavicon: true
-                  }))}
-                />
-              )}
-            </CitationsContent>
+                    url: chunk?.web?.uri || '',
+                    title: chunk?.web?.title,
+                    showFavicon: false
+                  })) || []
+                }
+              />
+              <SearchEntryPoint
+                dangerouslySetInnerHTML={{
+                  __html: message.metadata.groundingMetadata?.searchEntryPoint?.renderedContent
+                    ? message.metadata.groundingMetadata.searchEntryPoint.renderedContent
+                        .replace(/@media \(prefers-color-scheme: light\)/g, 'body[theme-mode="light"]')
+                        .replace(/@media \(prefers-color-scheme: dark\)/g, 'body[theme-mode="dark"]')
+                    : ''
+                }}
+              />
+            </>
           )}
-        </CitationsContainer>
+          {formattedCitations && (
+            <CitationsList
+              citations={formattedCitations.map((citation) => ({
+                number: citation.number,
+                url: citation.url,
+                hostname: citation.hostname,
+                showFavicon: isWebCitation
+              }))}
+            />
+          )}
+          {(message?.metadata?.webSearch || message.metadata?.knowledge) && message.status === 'success' && (
+            <CitationsList
+              citations={[
+                ...(message.metadata.webSearch?.results.map((result, index) => ({
+                  number: index + 1,
+                  url: result.url,
+                  title: result.title,
+                  showFavicon: true,
+                  type: 'websearch'
+                })) || []),
+                ...(message.metadata.knowledge?.map((result, index) => ({
+                  number: (message.metadata?.webSearch?.results?.length || 0) + index + 1,
+                  url: result.sourceUrl,
+                  title: result.sourceUrl,
+                  showFavicon: true,
+                  type: 'knowledge'
+                })) || [])
+              ]}
+            />
+          )}
+          {message?.metadata?.webSearchInfo && message.status === 'success' && (
+            <CitationsList
+              citations={message.metadata.webSearchInfo.map((result, index) => ({
+                number: index + 1,
+                url: result.link || result.url,
+                title: result.title,
+                showFavicon: true
+              }))}
+            />
+          )}
+        </>
       )}
 
       <MessageAttachments message={message} />
@@ -335,30 +323,6 @@ const MessageContent: React.FC<Props> = ({ message: _message, model }) => {
   )
 }
 
-const CitationsContainer = styled.div`
-  margin-top: 12px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  overflow: hidden;
-`
-
-const CitationsHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: var(--color-background-mute);
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--color-border);
-  }
-`
-
-const CitationsContent = styled.div`
-  padding: 10px;
-  background-color: var(--color-background-mute);
-`
 const MessageContentLoading = styled.div`
   display: flex;
   flex-direction: row;
