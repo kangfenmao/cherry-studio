@@ -502,3 +502,11 @@ export interface QuickPhrase {
   updatedAt: number
   order?: number
 }
+
+export interface Citation {
+  number: number
+  url: string
+  hostname: string
+  title?: string
+  content?: string
+}
