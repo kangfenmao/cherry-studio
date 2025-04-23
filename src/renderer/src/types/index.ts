@@ -510,3 +510,5 @@ export interface Citation {
   title?: string
   content?: string
 }
+
+export type MathEngine = 'KaTeX' | 'MathJax' | 'none'
