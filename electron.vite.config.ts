@@ -69,7 +69,7 @@ export default defineConfig({
       }),
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
-        org: 'cherry-ai-d6',
+        org: 'cherry-ai',
         project: 'cherry-studio'
       }),
       ...visualizerPlugin('renderer')
