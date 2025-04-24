@@ -2657,9 +2657,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/sdk@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@modelcontextprotocol/sdk@npm:1.9.0"
+"@modelcontextprotocol/sdk@npm:^1.10.2":
+  version: 1.10.2
+  resolution: "@modelcontextprotocol/sdk@npm:1.10.2"
   dependencies:
     content-type: "npm:^1.0.5"
     cors: "npm:^2.8.5"
@@ -2671,7 +2671,7 @@ __metadata:
     raw-body: "npm:^3.0.0"
     zod: "npm:^3.23.8"
     zod-to-json-schema: "npm:^3.24.1"
-  checksum: 10c0/d93653990c114690c20db606076afdc1836cdf41e1b0249fb6c3432877caad1577ef2ff9bf9476e259bfaaf422a281cda2b77e9b61eaa9b64b359f3b511b2074
+  checksum: 10c0/a2a146dec37d13c8108b4c42912d65f1f5b0e8f3adda4c300336369519f3caa52e996afb65d6a6c03ae3b6fc1e2425cad4af1e619206b6ee3e15327b4ee01d4c
   languageName: node
   linkType: hard
 
@@ -4311,7 +4311,7 @@ __metadata:
     "@hello-pangea/dnd": "npm:^16.6.0"
     "@kangfenmao/keyv-storage": "npm:^0.1.0"
     "@langchain/community": "npm:^0.3.36"
-    "@modelcontextprotocol/sdk": "npm:^1.9.0"
+    "@modelcontextprotocol/sdk": "npm:^1.10.2"
     "@mozilla/readability": "npm:^0.6.0"
     "@notionhq/client": "npm:^2.2.15"
     "@reduxjs/toolkit": "npm:^2.2.5"

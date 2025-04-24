@@ -123,7 +123,7 @@
     "@google/genai": "^0.10.0",
     "@hello-pangea/dnd": "^16.6.0",
     "@kangfenmao/keyv-storage": "^0.1.0",
-    "@modelcontextprotocol/sdk": "^1.9.0",
+    "@modelcontextprotocol/sdk": "^1.10.2",
     "@notionhq/client": "^2.2.15",
     "@reduxjs/toolkit": "^2.2.5",
     "@swc/plugin-styled-components": "^7.1.3",
