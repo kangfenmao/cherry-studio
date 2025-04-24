@@ -1155,7 +1155,13 @@
         "registryDefault": "По умолчанию",
         "not_support": "Модель не поддерживается",
         "user": "Пользователь",
-        "system": "Система"
+        "system": "Система",
+        "types": {
+          "inMemory": "Встроенный",
+          "sse": "SSE",
+          "streamableHttp": "Потоковый HTTP",
+          "stdio": "STDIO"
+        }
       },
       "messages.divider": "Показывать разделитель между сообщениями",
       "messages.grid_columns": "Количество столбцов сетки сообщений",

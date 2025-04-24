@@ -1156,7 +1156,13 @@
         "registryDefault": "Default",
         "not_support": "Model not supported",
         "user": "User",
-        "system": "System"
+        "system": "System",
+        "types": {
+          "inMemory": "In Memory",
+          "sse": "SSE",
+          "streamableHttp": "Streamable HTTP",
+          "stdio": "STDIO"
+        }
       },
       "messages.divider": "Show divider between messages",
       "messages.grid_columns": "Message grid display columns",

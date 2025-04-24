@@ -1155,7 +1155,13 @@
         "registryDefault": "デフォルト",
         "not_support": "モデルはサポートされていません",
         "user": "ユーザー",
-        "system": "システム"
+        "system": "システム",
+        "types": {
+          "inMemory": "組み込み",
+          "sse": "SSE",
+          "streamableHttp": "ストリーミング",
+          "stdio": "STDIO"
+        }
       },
       "messages.divider": "メッセージ間に区切り線を表示",
       "messages.grid_columns": "メッセージグリッドの表示列数",

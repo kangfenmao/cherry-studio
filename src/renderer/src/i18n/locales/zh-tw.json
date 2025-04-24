@@ -1155,7 +1155,13 @@
         "registryDefault": "預設",
         "not_support": "不支援此模型",
         "user": "用戶",
-        "system": "系統"
+        "system": "系統",
+        "types": {
+          "inMemory": "內置",
+          "sse": "SSE",
+          "streamableHttp": "流式",
+          "stdio": "STDIO"
+        }
       },
       "messages.divider": "訊息間顯示分隔線",
       "messages.grid_columns": "訊息網格展示列數",
