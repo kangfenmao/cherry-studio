@@ -75,6 +75,7 @@ export interface SettingsState {
   webdavMaxBackups: number
   translateModelPrompt: string
   autoTranslateWithSpace: boolean
+  showTranslateConfirm: boolean
   enableTopicNaming: boolean
   customCss: string
   topicNamingPrompt: string
@@ -182,6 +183,7 @@ export const initialState: SettingsState = {
   webdavMaxBackups: 0,
   translateModelPrompt: TRANSLATE_PROMPT,
   autoTranslateWithSpace: false,
+  showTranslateConfirm: true,
   enableTopicNaming: true,
   customCss: '',
   topicNamingPrompt: '',
@@ -388,6 +390,9 @@ const settingsSlice = createSlice({
     setAutoTranslateWithSpace: (state, action: PayloadAction<boolean>) => {
       state.autoTranslateWithSpace = action.payload
     },
+    setShowTranslateConfirm: (state, action: PayloadAction<boolean>) => {
+      state.showTranslateConfirm = action.payload
+    },
     setEnableTopicNaming: (state, action: PayloadAction<boolean>) => {
       state.enableTopicNaming = action.payload
     },
@@ -554,6 +559,7 @@ export const {
   setCodeStyle,
   setTranslateModelPrompt,
   setAutoTranslateWithSpace,
+  setShowTranslateConfirm,
   setEnableTopicNaming,
   setPasteLongTextThreshold,
   setCustomCss,
