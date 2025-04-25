@@ -1171,6 +1171,22 @@
           "sse": "SSE",
           "streamableHttp": "Streamable HTTP",
           "stdio": "STDIO"
+        },
+        "sync": {
+          "title": "Sync Servers",
+          "selectProvider": "Select Provider:",
+          "discoverMcpServers": "Discover MCP Servers",
+          "discoverMcpServersDescription": "Visit the platform to discover available MCP servers",
+          "getToken": "Get API Token",
+          "getTokenDescription": "Retrieve your personal API token from your account",
+          "setToken": "Enter Your Token",
+          "tokenRequired": "API Token is required",
+          "tokenPlaceholder": "Enter API token here",
+          "button": "Sync",
+          "error": "Sync MCP Servers error",
+          "success": "Sync MCP Servers successful",
+          "unauthorized": "Sync Unauthorized",
+          "noServersAvailable": "No MCP servers available"
         }
       },
       "messages.divider": "Show divider between messages",
