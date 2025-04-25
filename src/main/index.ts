@@ -75,14 +75,6 @@ if (!app.requestSingleInstanceLock()) {
     handleProtocolUrl(url)
   })
 
-  registerProtocolClient(app)
-
-  // macOS specific: handle protocol when app is already running
-  app.on('open-url', (event, url) => {
-    event.preventDefault()
-    handleProtocolUrl(url)
-  })
-
   // Listen for second instance
   app.on('second-instance', (_event, argv) => {
     windowService.showMainWindow()

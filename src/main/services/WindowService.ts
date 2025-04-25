@@ -11,6 +11,7 @@ import icon from '../../../build/icon.png?asset'
 import { titleBarOverlayDark, titleBarOverlayLight } from '../config'
 import { locales } from '../utils/locales'
 import { configManager } from './ConfigManager'
+import { initSessionUserAgent } from './WebviewService'
 
 export class WindowService {
   private static instance: WindowService | null = null
@@ -80,6 +81,9 @@ export class WindowService {
     if (enableQuickAssistant && !this.miniWindow) {
       this.miniWindow = this.createMiniWindow(true)
     }
+
+    //init the MinApp webviews' useragent
+    initSessionUserAgent()
 
     return this.mainWindow
   }
