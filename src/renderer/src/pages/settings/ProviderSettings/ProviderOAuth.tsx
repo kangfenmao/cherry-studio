@@ -77,7 +77,7 @@ const ProviderLogo = styled.img`
 `
 
 const Description = styled.div`
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-text-2);
   display: flex;
   align-items: center;

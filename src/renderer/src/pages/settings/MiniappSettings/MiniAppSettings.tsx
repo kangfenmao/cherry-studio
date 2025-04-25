@@ -93,7 +93,7 @@ const MiniAppSettings: FC = () => {
           />
         </BorderedContainer>
         <SettingDivider />
-        <SettingRow>
+        <SettingRow style={{ height: 40, alignItems: 'center' }}>
           <SettingLabelGroup>
             <SettingRowTitle>{t('settings.miniapps.open_link_external.title')}</SettingRowTitle>
           </SettingLabelGroup>

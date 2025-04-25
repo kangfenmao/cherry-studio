@@ -149,7 +149,7 @@ export const initialState: SettingsState = {
   trayOnClose: true,
   tray: true,
   theme: ThemeMode.auto,
-  windowStyle: 'transparent',
+  windowStyle: 'opaque',
   fontSize: 14,
   topicPosition: 'left',
   showTopicTime: false,
