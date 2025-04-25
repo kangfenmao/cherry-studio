@@ -1256,10 +1256,16 @@
         "basic_auth.user_name.tip": "空欄で無効化",
         "basic_auth.password": "パスワード",
         "basic_auth.password.tip": "",
-        "charge": "充電",
+        "charge": "残高充電",
+        "bills": "費用帳單",
         "check": "チェック",
         "check_all_keys": "すべてのキーをチェック",
         "check_multiple_keys": "複数のAPIキーをチェック",
+        "oauth": {
+          "button": "{{provider}} アカウントでログイン",
+          "description": "本サービスは<website>{{provider}}</website>によって提供されます",
+          "official_website": "公式サイト"
+        },
         "copilot": {
           "auth_failed": "Github Copilotの認証に失敗しました。",
           "auth_success": "Github Copilotの認証が成功しました",

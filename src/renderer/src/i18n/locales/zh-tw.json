@@ -1256,10 +1256,16 @@
         "basic_auth.user_name.tip": "留空以停用",
         "basic_auth.password": "密碼",
         "basic_auth.password.tip": "",
-        "charge": "儲值",
+        "charge": "餘額充值",
+        "bills": "費用帳單",
         "check": "檢查",
         "check_all_keys": "檢查所有金鑰",
         "check_multiple_keys": "檢查多個 API 金鑰",
+        "oauth": {
+          "button": "使用{{provider}}帳號登入",
+          "description": "本服務由<website>{{provider}}</website>提供",
+          "official_website": "官方網站"
+        },
         "copilot": {
           "auth_failed": "Github Copilot認證失敗",
           "auth_success": "Github Copilot 認證成功",

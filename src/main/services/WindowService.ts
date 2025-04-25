@@ -208,9 +208,11 @@ export class WindowService {
 
       const oauthProviderUrls = [
         'https://account.siliconflow.cn/oauth',
+        'https://cloud.siliconflow.cn/bills',
         'https://cloud.siliconflow.cn/expensebill',
         'https://aihubmix.com/token',
-        'https://aihubmix.com/topup'
+        'https://aihubmix.com/topup',
+        'https://aihubmix.com/statistics'
       ]
 
       if (oauthProviderUrls.some((link) => url.startsWith(link))) {
