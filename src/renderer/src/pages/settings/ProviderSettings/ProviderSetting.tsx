@@ -35,7 +35,6 @@ import HealthCheckPopup from './HealthCheckPopup'
 import LMStudioSettings from './LMStudioSettings'
 import ModelList, { ModelStatus } from './ModelList'
 import ModelListSearchBar from './ModelListSearchBar'
-import OllamSettings from './OllamaSettings'
 import ProviderOAuth from './ProviderOAuth'
 import ProviderSettingsPopup from './ProviderSettingsPopup'
 import SelectProviderModelPopup from './SelectProviderModelPopup'
@@ -348,7 +347,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
             onUpdateApiKey()
           }}
           spellCheck={false}
-          autoFocus={provider.enabled && apiKey === ''}
+          autoFocus={provider.enabled && apiKey === '' && !isProviderSupportAuth(provider)}
           disabled={provider.id === 'copilot'}
         />
         <Button
@@ -405,7 +404,6 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
           </Space.Compact>
         </>
       )}
-      {provider.id === 'ollama' && <OllamSettings />}
       {provider.id === 'lmstudio' && <LMStudioSettings />}
       {provider.id === 'gpustack' && <GPUStackSettings />}
       {provider.id === 'copilot' && <GithubCopilotSettings provider={provider} setApiKey={setApiKey} />}
