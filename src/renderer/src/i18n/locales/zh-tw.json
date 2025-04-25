@@ -562,7 +562,9 @@
       "tools": {
         "completed": "已完成",
         "invoking": "調用中",
-        "error": "發生錯誤"
+        "error": "發生錯誤",
+        "raw": "原始碼",
+        "preview": "預覽"
       },
       "topic.added": "新話題已新增",
       "upgrade.success.button": "重新啟動",

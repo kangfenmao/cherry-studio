@@ -562,7 +562,9 @@
       "tools": {
         "completed": "Completed",
         "invoking": "Invoking",
-        "error": "Error occurred"
+        "error": "Error occurred",
+        "raw": "Raw",
+        "preview": "Preview"
       },
       "topic.added": "New topic added",
       "upgrade.success.button": "Restart",
