@@ -178,19 +178,7 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   // check for update
   ipcMain.handle(IpcChannel.App_CheckForUpdate, async () => {
-    if (isWin && 'PORTABLE_EXECUTABLE_DIR' in process.env) {
-      return {
-        currentVersion: app.getVersion(),
-        updateInfo: null
-      }
-    }
-
-    const update = await appUpdater.autoUpdater.checkForUpdates()
-
-    return {
-      currentVersion: appUpdater.autoUpdater.currentVersion,
-      updateInfo: update?.updateInfo
-    }
+    await appUpdater.checkForUpdates()
   })
 
   // zip
