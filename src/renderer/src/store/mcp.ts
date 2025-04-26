@@ -67,7 +67,10 @@ export const builtinMCPServers: MCPServer[] = [
     type: 'inMemory',
     description:
       '基于本地知识图谱的持久性记忆基础实现。这使得模型能够在不同对话间记住用户的相关信息。需要配置 MEMORY_FILE_PATH 环境变量。https://github.com/modelcontextprotocol/servers/tree/main/src/memory',
-    isActive: true
+    isActive: true,
+    env: {
+      MEMORY_FILE_PATH: 'YOUR_MEMORY_FILE_PATH'
+    }
   },
   {
     id: nanoid(),
@@ -82,7 +85,10 @@ export const builtinMCPServers: MCPServer[] = [
     type: 'inMemory',
     description:
       '一个集成了Brave 搜索 API 的 MCP 服务器实现，提供网页与本地搜索双重功能。需要配置 BRAVE_API_KEY 环境变量',
-    isActive: false
+    isActive: false,
+    env: {
+      BRAVE_API_KEY: 'YOUR_API_KEY'
+    }
   },
   {
     id: nanoid(),
@@ -103,7 +109,10 @@ export const builtinMCPServers: MCPServer[] = [
     name: '@cherry/dify-knowledge',
     type: 'inMemory',
     description: 'Dify 的 MCP 服务器实现，提供了一个简单的 API 来与 Dify 进行交互',
-    isActive: false
+    isActive: false,
+    env: {
+      DIFY_KEY: 'YOUR_DIFY_KEY'
+    }
   }
 ]
 
