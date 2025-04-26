@@ -1436,7 +1436,8 @@
       "privacy": {
         "title": "Настройки приватности",
         "enable_privacy_mode": "Анонимная отправка отчетов об ошибках и статистики"
-      }
+      },
+      "input.show_translate_confirm": "[to be translated]:显示翻译确认对话框"
     },
     "translate": {
       "any.language": "Любой язык",

@@ -1436,7 +1436,8 @@
       "privacy": {
         "title": "プライバシー設定",
         "enable_privacy_mode": "匿名エラーレポートとデータ統計の送信"
-      }
+      },
+      "input.show_translate_confirm": "[to be translated]:显示翻译确认对话框"
     },
     "translate": {
       "any.language": "任意の言語",
