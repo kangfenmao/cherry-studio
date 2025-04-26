@@ -17,7 +17,7 @@ import {
 import { registerShortcuts } from './services/ShortcutService'
 import { TrayService } from './services/TrayService'
 import { windowService } from './services/WindowService'
-import { setAppDataDir } from './utils/file'
+import { setUserDataDir } from './utils/file'
 
 // Check for single instance lock
 if (!app.requestSingleInstanceLock()) {
@@ -56,7 +56,7 @@ if (!app.requestSingleInstanceLock()) {
 
     replaceDevtoolsFont(mainWindow)
 
-    setAppDataDir()
+    setUserDataDir()
 
     // Setup deep link for AppImage on Linux
     await setupAppImageDeepLink()
