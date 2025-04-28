@@ -1,4 +1,4 @@
-import { CheckOutlined, FileTextOutlined, LoadingOutlined } from '@ant-design/icons'
+import { CheckOutlined, LoadingOutlined } from '@ant-design/icons'
 import { StreamlineGoodHealthAndWellBeing } from '@renderer/components/Icons/SVGIcon'
 import { HStack } from '@renderer/components/Layout'
 import { isEmbeddingModel, isRerankModel } from '@renderer/config/models'
@@ -15,7 +15,7 @@ import { formatApiHost } from '@renderer/utils/api'
 import { Button, Divider, Flex, Input, Space, Switch, Tooltip } from 'antd'
 import Link from 'antd/es/typography/Link'
 import { debounce, isEmpty } from 'lodash'
-import { Settings, SquareArrowOutUpRight } from 'lucide-react'
+import { Settings2, SquareArrowOutUpRight } from 'lucide-react'
 import { FC, useCallback, useDeferredValue, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -35,7 +35,6 @@ import HealthCheckPopup from './HealthCheckPopup'
 import LMStudioSettings from './LMStudioSettings'
 import ModelList, { ModelStatus } from './ModelList'
 import ModelListSearchBar from './ModelListSearchBar'
-import ModelNotesPopup from './ModelNotesPopup'
 import ProviderOAuth from './ProviderOAuth'
 import ProviderSettingsPopup from './ProviderSettingsPopup'
 import SelectProviderModelPopup from './SelectProviderModelPopup'
@@ -274,10 +273,6 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
     return formatApiHost(apiHost) + 'chat/completions'
   }
 
-  const onShowNotes = useCallback(() => {
-    ModelNotesPopup.show({ provider })
-  }, [provider])
-
   useEffect(() => {
     if (provider.id === 'copilot') {
       return
@@ -298,24 +293,21 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
   return (
     <SettingContainer theme={theme} style={{ background: 'var(--color-background)' }}>
       <SettingTitle>
-        <Flex align="center" gap={8}>
+        <Flex align="center" gap={5}>
           <ProviderName>{provider.isSystem ? t(`provider.${provider.id}`) : provider.name}</ProviderName>
-          {officialWebsite! && (
+          {officialWebsite && (
             <Link target="_blank" href={providerConfig.websites.official} style={{ display: 'flex' }}>
-              <SquareArrowOutUpRight size={14} color="var(--color-text)" />
+              <Button type="text" size="small" icon={<SquareArrowOutUpRight size={14} />} />
             </Link>
           )}
           {!provider.isSystem && (
-            <Settings
+            <Button
               type="text"
-              size={16}
-              style={{ cursor: 'pointer' }}
+              size="small"
               onClick={() => ProviderSettingsPopup.show({ provider })}
+              icon={<Settings2 size={14} />}
             />
           )}
-          <Tooltip title={t('settings.provider.notes.title')}>
-            <Button type="text" onClick={onShowNotes} icon={<FileTextOutlined />} />
-          </Tooltip>
         </Flex>
         <Switch
           value={provider.enabled}
@@ -442,6 +434,7 @@ const ProviderSetting: FC<Props> = ({ provider: _provider }) => {
 const ProviderName = styled.span`
   font-size: 14px;
   font-weight: 500;
+  margin-right: -2px;
 `
 
 export default ProviderSetting
