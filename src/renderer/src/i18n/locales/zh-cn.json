@@ -1329,7 +1329,12 @@
         "remove_invalid_keys": "删除无效密钥",
         "search": "搜索模型平台...",
         "search_placeholder": "搜索模型 ID 或名称",
-        "title": "模型服务"
+        "title": "模型服务",
+        "notes": {
+          "title": "模型备注",
+          "placeholder": "请输入Markdown格式内容...",
+          "markdown_editor_default_value": "预览区域"
+        }
       },
       "proxy": {
         "mode": {

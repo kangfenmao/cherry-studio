@@ -1329,7 +1329,12 @@
         "remove_invalid_keys": "Remove Invalid Keys",
         "search": "Search Providers...",
         "search_placeholder": "Search model id or name",
-        "title": "Model Provider"
+        "title": "Model Provider",
+        "notes": {
+          "title": "Model Notes",
+          "placeholder": "Enter Markdown content...",
+          "markdown_editor_default_value": "Preview area"
+        }
       },
       "proxy": {
         "mode": {

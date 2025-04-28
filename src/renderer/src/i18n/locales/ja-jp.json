@@ -1327,7 +1327,12 @@
         "remove_invalid_keys": "無効なキーを削除",
         "search": "プロバイダーを検索...",
         "search_placeholder": "モデルIDまたは名前を検索",
-        "title": "モデルプロバイダー"
+        "title": "モデルプロバイダー",
+        "notes": {
+          "title": "モデルノート",
+          "placeholder": "Markdown形式の内容を入力してください...",
+          "markdown_editor_default_value": "プレビュー領域"
+        }
       },
       "proxy": {
         "mode": {

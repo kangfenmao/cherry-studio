@@ -1327,7 +1327,12 @@
         "remove_invalid_keys": "Удалить недействительные ключи",
         "search": "Поиск поставщиков...",
         "search_placeholder": "Поиск по ID или имени модели",
-        "title": "Провайдеры моделей"
+        "title": "Провайдеры моделей",
+        "notes": {
+          "title": "Заметки модели",
+          "placeholder": "Введите содержимое в формате Markdown...",
+          "markdown_editor_default_value": "Область предварительного просмотра"
+        }
       },
       "proxy": {
         "mode": {
