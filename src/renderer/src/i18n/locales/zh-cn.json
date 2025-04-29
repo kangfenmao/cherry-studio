@@ -545,6 +545,7 @@
       "message.style": "消息样式",
       "message.style.bubble": "气泡",
       "message.style.plain": "简洁",
+      "processing": "正在处理...",
       "regenerate.confirm": "重新生成会覆盖当前消息",
       "reset.confirm.content": "确定要重置所有数据吗？",
       "reset.double.confirm.content": "你的全部数据都会丢失，如果没有备份数据，将无法恢复，确定要继续吗？",

@@ -1,7 +1,9 @@
-import { GroundingMetadata } from '@google/genai'
-import OpenAI from 'openai'
+import type { GroundingMetadata } from '@google/genai'
+import type OpenAI from 'openai'
 import React from 'react'
 import { BuiltinTheme } from 'shiki'
+
+import type { Message } from './newMessage'
 
 export type Assistant = {
   id: string
@@ -49,7 +51,7 @@ export type Agent = Omit<Assistant, 'model'> & {
   group?: string[]
 }
 
-export type Message = {
+export type LegacyMessage = {
   id: string
   assistantId: string
   role: 'user' | 'assistant'
@@ -341,6 +343,13 @@ export interface TranslateHistory {
 
 export type SidebarIcon = 'assistants' | 'agents' | 'paintings' | 'translate' | 'minapp' | 'knowledge' | 'files'
 
+export type ExternalToolResult = {
+  mcpTools?: MCPTool[]
+  toolUse?: MCPToolResponse[]
+  webSearch?: WebSearchResponse
+  knowledge?: KnowledgeReference[]
+}
+
 export type WebSearchProvider = {
   id: string
   name: string
@@ -354,15 +363,37 @@ export type WebSearchProvider = {
   usingBrowser?: boolean
 }
 
-export type WebSearchResponse = {
-  query?: string
-  results: WebSearchResult[]
-}
-
-export type WebSearchResult = {
+export type WebSearchProviderResult = {
   title: string
   content: string
   url: string
+}
+
+export type WebSearchProviderResponse = {
+  query?: string
+  results: WebSearchProviderResult[]
+}
+
+export type WebSearchResults =
+  | WebSearchProviderResponse
+  | GroundingMetadata
+  | OpenAI.Chat.Completions.ChatCompletionMessage.Annotation.URLCitation[]
+  | any[]
+
+export enum WebSearchSource {
+  WEBSEARCH = 'websearch',
+  OPENAI = 'openai',
+  OPENROUTER = 'openrouter',
+  GEMINI = 'gemini',
+  PERPLEXITY = 'perplexity',
+  QWEN = 'qwen',
+  HUNYUAN = 'hunyuan',
+  ZHIPU = 'zhipu'
+}
+
+export type WebSearchResponse = {
+  results: WebSearchResults
+  source: WebSearchSource
 }
 
 export type KnowledgeReference = {

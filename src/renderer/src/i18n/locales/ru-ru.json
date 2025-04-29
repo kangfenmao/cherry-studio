@@ -545,6 +545,7 @@
       "message.style": "Стиль сообщения",
       "message.style.bubble": "Пузырь",
       "message.style.plain": "Простой",
+      "processing": "Обрабатывается...",
       "regenerate.confirm": "Перегенерация заменит текущее сообщение",
       "reset.confirm.content": "Вы уверены, что хотите очистить все данные?",
       "reset.double.confirm.content": "Все данные будут утеряны, хотите продолжить?",

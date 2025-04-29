@@ -544,6 +544,7 @@
       "message.style": "メッセージスタイル",
       "message.style.bubble": "バブル",
       "message.style.plain": "プレーン",
+      "processing": "処理中...",
       "regenerate.confirm": "再生成すると現在のメッセージが置き換えられます",
       "reset.confirm.content": "すべてのデータをリセットしてもよろしいですか？",
       "reset.double.confirm.content": "すべてのデータが失われます。続行しますか？",

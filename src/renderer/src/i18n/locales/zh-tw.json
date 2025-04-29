@@ -545,6 +545,7 @@
       "message.style": "訊息樣式",
       "message.style.bubble": "氣泡",
       "message.style.plain": "簡潔",
+      "processing": "正在處理...",
       "regenerate.confirm": "重新生成會覆蓋目前訊息",
       "reset.confirm.content": "確定要清除所有資料嗎？",
       "reset.double.confirm.content": "所有資料將會被清除，您確定要繼續嗎？",
