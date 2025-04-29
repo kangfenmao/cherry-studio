@@ -1,5 +1,9 @@
 import { getOpenAIWebSearchParams, isOpenAIWebSearch } from '@renderer/config/models'
-import { SEARCH_SUMMARY_PROMPT } from '@renderer/config/prompts'
+import {
+  SEARCH_SUMMARY_PROMPT,
+  SEARCH_SUMMARY_PROMPT_KNOWLEDGE_ONLY,
+  SEARCH_SUMMARY_PROMPT_WEB_ONLY
+} from '@renderer/config/prompts'
 import i18n from '@renderer/i18n'
 import {
   Assistant,
@@ -53,14 +57,19 @@ async function fetchExternalTool(
     // Notify UI that extraction/searching is starting
     onChunkReceived({ type: ChunkType.EXTERNEL_TOOL_IN_PROGRESS })
 
-    const tools: string[] = []
+    let prompt = ''
 
-    if (shouldWebSearch) tools.push('websearch')
-    if (hasKnowledgeBase) tools.push('knowledge')
+    if (shouldWebSearch && !hasKnowledgeBase) {
+      prompt = SEARCH_SUMMARY_PROMPT_WEB_ONLY
+    } else if (!shouldWebSearch && hasKnowledgeBase) {
+      prompt = SEARCH_SUMMARY_PROMPT_KNOWLEDGE_ONLY
+    } else {
+      prompt = SEARCH_SUMMARY_PROMPT
+    }
 
     const summaryAssistant = getDefaultAssistant()
     summaryAssistant.model = assistant.model || getDefaultModel()
-    summaryAssistant.prompt = SEARCH_SUMMARY_PROMPT.replace('{tools}', tools.join(', '))
+    summaryAssistant.prompt = prompt
 
     const getFallbackResult = (): ExtractResults => {
       const fallbackContent = getMainTextContent(lastUserMessage)
