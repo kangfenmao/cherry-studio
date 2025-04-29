@@ -1,4 +1,4 @@
-import { getOpenAIWebSearchParams, isOpenAIWebSearch, isWebSearchModel } from '@renderer/config/models'
+import { getOpenAIWebSearchParams, isOpenAIWebSearch } from '@renderer/config/models'
 import { SEARCH_SUMMARY_PROMPT } from '@renderer/config/prompts'
 import i18n from '@renderer/i18n'
 import {
@@ -42,7 +42,7 @@ async function fetchExternalTool(
   // 可能会有重复？
   const knowledgeBaseIds = getKnowledgeBaseIds(lastUserMessage)
   const hasKnowledgeBase = !isEmpty(knowledgeBaseIds)
-  const webSearchProvider = WebSearchService.getWebSearchProvider()
+  const webSearchProvider = WebSearchService.getWebSearchProvider(assistant.webSearchProviderId)
 
   // --- Keyword/Question Extraction Function ---
   const extract = async (): Promise<ExtractResults | undefined> => {
@@ -120,7 +120,7 @@ async function fetchExternalTool(
       // Use the consolidated processWebsearch function
       WebSearchService.createAbortSignal(lastUserMessage.id)
       return {
-        results: await WebSearchService.processWebsearch(webSearchProvider, extractResults),
+        results: await WebSearchService.processWebsearch(webSearchProvider!, extractResults),
         source: WebSearchSource.WEBSEARCH
       }
     } catch (error) {
@@ -157,8 +157,7 @@ async function fetchExternalTool(
     }
   }
 
-  const shouldWebSearch =
-    assistant.enableWebSearch && (!isWebSearchModel(assistant.model!) || WebSearchService.isOverwriteEnabled())
+  const shouldWebSearch = !!assistant.webSearchProviderId
 
   // --- Execute Extraction and Searches ---
   const extractResults = await extract()

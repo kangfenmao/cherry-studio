@@ -338,6 +338,7 @@ export default class OpenAIProvider extends BaseProvider {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
     const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
+    const isEnabledWebSearch = assistant.enableWebSearch || !!assistant.webSearchProviderId
     messages = addImageFileToContents(messages)
     let systemMessage = { role: 'system', content: assistant.prompt || '' }
     if (isOpenAIoSeries(model) && !OPENAI_NO_SUPPORT_DEV_ROLE_MODELS.includes(model.id)) {
@@ -636,7 +637,7 @@ export default class OpenAIProvider extends BaseProvider {
               } as LLMWebSearchCompleteChunk)
             }
           }
-          if (assistant.enableWebSearch && isZhipuModel(model) && finishReason === 'stop' && chunk?.web_search) {
+          if (isEnabledWebSearch && isZhipuModel(model) && finishReason === 'stop' && chunk?.web_search) {
             onChunk({
               type: ChunkType.LLM_WEB_SEARCH_COMPLETE,
               llm_web_search: {
@@ -645,7 +646,7 @@ export default class OpenAIProvider extends BaseProvider {
               }
             } as LLMWebSearchCompleteChunk)
           }
-          if (assistant.enableWebSearch && isHunyuanSearchModel(model) && chunk?.search_info?.search_results) {
+          if (isEnabledWebSearch && isHunyuanSearchModel(model) && chunk?.search_info?.search_results) {
             onChunk({
               type: ChunkType.LLM_WEB_SEARCH_COMPLETE,
               llm_web_search: {
