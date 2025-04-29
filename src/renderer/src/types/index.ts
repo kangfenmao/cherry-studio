@@ -163,11 +163,14 @@ export type Suggestion = {
   content: string
 }
 
-export interface Painting {
+export type PaintingParams = {
   id: string
-  model?: string
   urls: string[]
   files: FileType[]
+}
+
+export interface Painting extends PaintingParams {
+  model?: string
   prompt?: string
   negativePrompt?: string
   imageSize?: string
@@ -176,6 +179,61 @@ export interface Painting {
   steps?: number
   guidanceScale?: number
   promptEnhancement?: boolean
+}
+
+export interface GeneratePainting extends PaintingParams {
+  model: string
+  prompt: string
+  aspectRatio?: string
+  numImages?: number
+  styleType?: string
+  seed?: string
+  negativePrompt?: string
+  magicPromptOption?: boolean
+}
+
+export interface EditPainting extends PaintingParams {
+  imageFile: string
+  mask: FileType
+  model: string
+  prompt: string
+  numImages?: number
+  styleType?: string
+  seed?: string
+  magicPromptOption?: boolean
+}
+
+export interface RemixPainting extends PaintingParams {
+  imageFile: string
+  model: string
+  prompt: string
+  aspectRatio?: string
+  imageWeight: number
+  numImages?: number
+  styleType?: string
+  seed?: string
+  negativePrompt?: string
+  magicPromptOption?: boolean
+}
+
+export interface ScalePainting extends PaintingParams {
+  imageFile: string
+  prompt: string
+  resemblance?: number
+  detail?: number
+  numImages?: number
+  seed?: string
+  magicPromptOption?: boolean
+}
+
+export type PaintingAction = Partial<GeneratePainting & RemixPainting & EditPainting & ScalePainting> & PaintingParams
+
+export interface PaintingsState {
+  paintings: Painting[]
+  generate: Partial<GeneratePainting> & PaintingParams[]
+  remix: Partial<RemixPainting> & PaintingParams[]
+  edit: Partial<EditPainting> & PaintingParams[]
+  upscale: Partial<ScalePainting> & PaintingParams[]
 }
 
 export type MinAppType = {
