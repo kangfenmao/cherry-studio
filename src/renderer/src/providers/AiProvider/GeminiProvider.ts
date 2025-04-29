@@ -447,26 +447,27 @@ export default class GeminiProvider extends BaseProvider {
           final_time_completion_millsec = new Date().getTime() - start_time_millsec
         }
 
-        // 3. Grounding/Search Metadata
-        const groundingMetadata = chunk.candidates?.[0]?.groundingMetadata
-        if (groundingMetadata) {
-          onChunk({
-            type: ChunkType.LLM_WEB_SEARCH_COMPLETE,
-            llm_web_search: {
-              results: groundingMetadata,
-              source: WebSearchSource.GEMINI
-            }
-          } as LLMWebSearchCompleteChunk)
-        }
-
         // 4. Image Generation
         const generateImage = this.processGeminiImageResponse(chunk)
         if (generateImage?.images?.length) {
           onChunk({ type: ChunkType.IMAGE_COMPLETE, image: generateImage })
         }
 
-        if (chunk.candidates?.[0]?.finishReason && chunk.text) {
-          onChunk({ type: ChunkType.TEXT_COMPLETE, text: content })
+        if (chunk.candidates?.[0]?.finishReason) {
+          if (chunk.text) {
+            onChunk({ type: ChunkType.TEXT_COMPLETE, text: content })
+          }
+          if (chunk.candidates?.[0]?.groundingMetadata) {
+            // 3. Grounding/Search Metadata
+            const groundingMetadata = chunk.candidates?.[0]?.groundingMetadata
+            onChunk({
+              type: ChunkType.LLM_WEB_SEARCH_COMPLETE,
+              llm_web_search: {
+                results: groundingMetadata,
+                source: WebSearchSource.GEMINI
+              }
+            } as LLMWebSearchCompleteChunk)
+          }
           onChunk({
             type: ChunkType.BLOCK_COMPLETE,
             response: {
