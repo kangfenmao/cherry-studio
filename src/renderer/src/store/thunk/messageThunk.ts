@@ -483,6 +483,12 @@ const fetchAndProcessAssistantResponseImpl = async (
           console.error('[onExternalToolComplete] citationBlockId is null. Cannot update.')
         }
       },
+      onLLMWebSearchInProgress: () => {
+        const citationBlock = createCitationBlock(assistantMsgId, {}, { status: MessageBlockStatus.PROCESSING })
+        citationBlockId = citationBlock.id
+        handleBlockTransition(citationBlock, MessageBlockType.CITATION)
+        saveUpdatedBlockToDB(citationBlock.id, assistantMsgId, topicId, getState)
+      },
       onLLMWebSearchComplete(llmWebSearchResult) {
         if (citationBlockId) {
           const changes: Partial<CitationMessageBlock> = {
