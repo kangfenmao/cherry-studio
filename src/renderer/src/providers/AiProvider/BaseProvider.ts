@@ -1,9 +1,13 @@
+import { isFunctionCallingModel } from '@renderer/config/models'
 import { REFERENCE_PROMPT } from '@renderer/config/prompts'
 import { getLMStudioKeepAliveTime } from '@renderer/hooks/useLMStudio'
 import type {
   Assistant,
   GenerateImageParams,
   KnowledgeReference,
+  MCPCallToolResponse,
+  MCPTool,
+  MCPToolResponse,
   Model,
   Provider,
   Suggestion,
@@ -22,9 +26,14 @@ import type OpenAI from 'openai'
 import type { CompletionsParams } from '.'
 
 export default abstract class BaseProvider {
+  // Threshold for determining whether to use system prompt for tools
+  private static readonly SYSTEM_PROMPT_THRESHOLD: number = 128
+
   protected provider: Provider
   protected host: string
   protected apiKey: string
+
+  protected useSystemPromptForTools: boolean = true
 
   constructor(provider: Provider) {
     this.provider = provider
@@ -47,6 +56,12 @@ export default abstract class BaseProvider {
   abstract generateImage(params: GenerateImageParams): Promise<string[]>
   abstract generateImageByChat({ messages, assistant, onChunk, onFilterMessages }: CompletionsParams): Promise<void>
   abstract getEmbeddingDimensions(model: Model): Promise<number>
+  public abstract convertMcpTools<T>(mcpTools: MCPTool[]): T[]
+  public abstract mcpToolCallResponseToMessage(
+    mcpToolResponse: MCPToolResponse,
+    resp: MCPCallToolResponse,
+    model: Model
+  ): any
 
   public getBaseURL(): string {
     const host = this.provider.apiHost
@@ -228,5 +243,32 @@ export default abstract class BaseProvider {
       abortController,
       cleanup
     }
+  }
+
+  // Setup tools configuration based on provided parameters
+  protected setupToolsConfig<T>(params: { mcpTools?: MCPTool[]; model: Model; enableToolUse?: boolean }): {
+    tools: T[]
+  } {
+    const { mcpTools, model, enableToolUse } = params
+    let tools: T[] = []
+
+    // If there are no tools, return an empty array
+    if (!mcpTools?.length) {
+      return { tools }
+    }
+
+    // If the number of tools exceeds the threshold, use the system prompt
+    if (mcpTools.length > BaseProvider.SYSTEM_PROMPT_THRESHOLD) {
+      this.useSystemPromptForTools = true
+      return { tools }
+    }
+
+    // If the model supports function calling and tool usage is enabled
+    if (isFunctionCallingModel(model) && enableToolUse) {
+      tools = this.convertMcpTools<T>(mcpTools)
+      this.useSystemPromptForTools = false
+    }
+
+    return { tools }
   }
 }

@@ -423,7 +423,17 @@ const fetchAndProcessAssistantResponseImpl = async (
         }
       },
       onToolCallInProgress: (toolResponse: MCPToolResponse) => {
-        if (toolResponse.status === 'invoking') {
+        if (lastBlockType === MessageBlockType.UNKNOWN && lastBlockId) {
+          lastBlockType = MessageBlockType.TOOL
+          const changes = {
+            type: MessageBlockType.TOOL,
+            status: MessageBlockStatus.PROCESSING,
+            metadata: { rawMcpToolResponse: toolResponse }
+          }
+          dispatch(updateOneBlock({ id: lastBlockId, changes }))
+          saveUpdatedBlockToDB(lastBlockId, assistantMsgId, topicId, getState)
+          toolCallIdToBlockIdMap.set(toolResponse.id, lastBlockId)
+        } else if (toolResponse.status === 'invoking') {
           const toolBlock = createToolBlock(assistantMsgId, toolResponse.id, {
             toolName: toolResponse.tool.name,
             status: MessageBlockStatus.PROCESSING,
