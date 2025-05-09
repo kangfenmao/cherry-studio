@@ -25,7 +25,7 @@ import {
   filterEmptyMessages,
   filterUserRoleStartMessages
 } from '@renderer/services/MessagesService'
-import { processReqMessages } from '@renderer/services/ModelMessageService'
+import { processPostsuffixQwen3Model, processReqMessages } from '@renderer/services/ModelMessageService'
 import store from '@renderer/store'
 import {
   Assistant,
@@ -400,6 +400,20 @@ export default class OpenAICompatibleProvider extends BaseOpenAiProvider {
     const { abortController, cleanup, signalPromise } = this.createAbortController(lastUserMessage?.id, true)
     const { signal } = abortController
     await this.checkIsCopilot()
+
+    const lastUserMsg = userMessages.findLast((m) => m.role === 'user')
+    if (lastUserMsg) {
+      const postsuffix = '/no_think'
+      // qwenThinkMode === true 表示思考模式啓用，此時不應添加 /no_think，如果存在則移除
+      const qwenThinkModeEnabled = assistant.settings?.qwenThinkMode === true
+      const currentContent = lastUserMsg.content // content 類型：string | ChatCompletionContentPart[] | null
+
+      lastUserMsg.content = processPostsuffixQwen3Model(
+        currentContent,
+        postsuffix,
+        qwenThinkModeEnabled
+      ) as ChatCompletionContentPart[]
+    }
 
     //当 systemMessage 内容为空时不发送 systemMessage
     let reqMessages: ChatCompletionMessageParam[]
