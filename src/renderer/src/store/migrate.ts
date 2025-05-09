@@ -1252,15 +1252,6 @@ const migrateConfig = {
     } catch (error) {
       return state
     }
-  },
-  '99': (state: RootState) => {
-    try {
-      addProvider(state, 'paratera')
-
-      return state
-    } catch (error) {
-      return state
-    }
   }
 }
 
