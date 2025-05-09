@@ -25,6 +25,9 @@
           "invalid_format": "無効なエージェント形式：必須フィールドが不足しています"
         }
       },
+      "export": {
+        "agent": "エージェントをエクスポート"
+      },
       "delete.popup.content": "このエージェントを削除してもよろしいですか？",
       "edit.message.add.title": "追加",
       "edit.message.assistant.placeholder": "アシスタントのメッセージを入力",

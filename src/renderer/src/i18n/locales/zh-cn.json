@@ -25,6 +25,9 @@
           "invalid_format": "无效的代理格式：缺少必填字段"
         }
       },
+      "export": {
+        "agent": "导出智能体"
+      },
       "delete.popup.content": "确定要删除此智能体吗？",
       "edit.message.add.title": "添加",
       "edit.message.assistant.placeholder": "输入助手消息",

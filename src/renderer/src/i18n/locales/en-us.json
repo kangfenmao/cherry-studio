@@ -25,6 +25,9 @@
           "invalid_format": "Invalid agent format: missing required fields"
         }
       },
+      "export": {
+        "agent": "Export Agent"
+      },
       "delete.popup.content": "Are you sure you want to delete this agent?",
       "edit.message.add.title": "Add",
       "edit.message.assistant.placeholder": "Enter assistant message",

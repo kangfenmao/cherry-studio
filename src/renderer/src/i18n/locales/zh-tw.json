@@ -25,6 +25,9 @@
           "invalid_format": "無效的代理人格式：缺少必填欄位"
         }
       },
+      "export": {
+        "agent": "匯出智慧代理人"
+      },
       "delete.popup.content": "確定要刪除此智慧代理人嗎？",
       "edit.message.add.title": "新增",
       "edit.message.assistant.placeholder": "輸入助手訊息",
