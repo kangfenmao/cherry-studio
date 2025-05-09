@@ -57,8 +57,10 @@ const MainTextBlock: React.FC<Props> = ({ block, citationBlockId, role, mentions
         title: citation.title || citation.hostname || '',
         content: citation.content?.substring(0, 200)
       }
+      const isLink = citation.url.startsWith('http')
       const citationJson = encodeHTML(JSON.stringify(supData))
-      const citationTag = `[<sup data-citation='${citationJson}'>${citationNum}</sup>](${citation.url})`
+      const supTag = `<sup data-citation='${citationJson}'>${citationNum}</sup>`
+      const citationTag = isLink ? `[${supTag}](${citation.url})` : supTag
 
       // Replace all occurrences of [citationNum] with the formatted citation
       const regex = new RegExp(`\\[${citationNum}\\]`, 'g')
