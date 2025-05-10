@@ -620,7 +620,9 @@
       "error.siyuan.no_config": "Не настроен API адрес или токен Siyuan",
       "success.siyuan.export": "Успешный экспорт в Siyuan",
       "warn.yuque.exporting": "Экспортируется в Yuque, пожалуйста, не отправляйте повторные запросы!",
-      "warn.siyuan.exporting": "Экспортируется в Siyuan, пожалуйста, не отправляйте повторные запросы!"
+      "warn.siyuan.exporting": "Экспортируется в Siyuan, пожалуйста, не отправляйте повторные запросы!",
+      "download.success": "Скачано успешно",
+      "download.failed": "Скачивание не удалось"
     },
     "minapp": {
       "popup": {

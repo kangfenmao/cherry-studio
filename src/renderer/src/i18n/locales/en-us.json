@@ -620,7 +620,9 @@
       "error.siyuan.no_config": "Siyuan Note API address or token is not configured",
       "success.siyuan.export": "Successfully exported to Siyuan Note",
       "warn.yuque.exporting": "Exporting to Yuque, please do not request export repeatedly!",
-      "warn.siyuan.exporting": "Exporting to Siyuan Note, please do not request export repeatedly!"
+      "warn.siyuan.exporting": "Exporting to Siyuan Note, please do not request export repeatedly!",
+      "download.success": "Download successfully",
+      "download.failed": "Download failed"
     },
     "minapp": {
       "popup": {

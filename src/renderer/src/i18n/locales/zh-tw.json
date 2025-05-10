@@ -620,7 +620,9 @@
       "error.siyuan.no_config": "未配置思源筆記API地址或令牌",
       "success.siyuan.export": "導出到思源筆記成功",
       "warn.yuque.exporting": "正在導出語雀，請勿重複請求導出！",
-      "warn.siyuan.exporting": "正在導出到思源筆記，請勿重複請求導出！"
+      "warn.siyuan.exporting": "正在導出到思源筆記，請勿重複請求導出！",
+      "download.success": "下載成功",
+      "download.failed": "下載失敗"
     },
     "minapp": {
       "popup": {
