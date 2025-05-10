@@ -37,8 +37,8 @@ import {
   setPasteLongTextThreshold,
   setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
-  setShowPrompt,
   setShowMessageDivider,
+  setShowPrompt,
   setShowTranslateConfirm,
   setThoughtAutoCollapse
 } from '@renderer/store/settings'

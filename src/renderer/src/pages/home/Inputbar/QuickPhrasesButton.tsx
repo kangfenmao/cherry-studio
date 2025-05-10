@@ -162,7 +162,8 @@ const QuickPhrasesButton = ({ ref, setInputValue, resizeTextArea, ToolbarButton,
           setIsModalOpen(false)
           setFormData({ title: '', content: '', location: 'global' })
         }}
-        width={520}>
+        width={520}
+        centered>
         <Space direction="vertical" style={{ width: '100%' }} size="middle">
           <div>
             <Label>{t('settings.quickPhrase.titleLabel')}</Label>

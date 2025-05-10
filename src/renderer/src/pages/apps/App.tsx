@@ -179,7 +179,8 @@ const App: FC<Props> = ({ app, onClick, size = 60, isLast }) => {
           setIsModalVisible(false)
           setFileList([])
         }}
-        footer={null}>
+        footer={null}
+        centered>
         <Form form={form} onFinish={handleAddCustomApp} layout="vertical">
           <Form.Item
             name="id"

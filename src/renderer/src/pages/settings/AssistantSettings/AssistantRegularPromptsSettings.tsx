@@ -135,7 +135,8 @@ const AssistantRegularPromptsSettings: FC<AssistantRegularPromptsSettingsProps> 
         open={isModalOpen}
         onOk={handleModalOk}
         onCancel={() => setIsModalOpen(false)}
-        width={520}>
+        width={520}
+        centered>
         <Space direction="vertical" style={{ width: '100%' }} size="middle">
           <div>
             <Label>{t('assistants.settings.regular_phrases.titleLabel', 'Title')}</Label>

@@ -347,7 +347,7 @@ const MessageMenubar: FC<Props> = (props) => {
         ].filter(Boolean)
       }
     ],
-    [message, messageContainerRef, onEdit, mainTextContent, onNewBranch, t, topic.name, exportMenuOptions]
+    [message, messageContainerRef, isEditable, onEdit, mainTextContent, onNewBranch, t, topic.name, exportMenuOptions]
   )
 
   const onRegenerate = async (e: React.MouseEvent | undefined) => {
