@@ -1267,11 +1267,15 @@ const migrateConfig = {
   },
   '99': (state: RootState) => {
     try {
+      state.settings.showPrompt = true
+
       addWebSearchProvider(state, 'bocha')
+
       updateWebSearchProvider(state, {
         id: 'exa',
         apiHost: 'https://api.exa.ai'
       })
+
       updateWebSearchProvider(state, {
         id: 'tavily',
         apiHost: 'https://api.tavily.com'

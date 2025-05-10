@@ -1342,6 +1342,7 @@
         "providerPlaceholder": "Имя провайдера",
         "advancedSettings": "Расширенные настройки"
       },
+      "messages.prompt": "Показывать подсказки",
       "messages.divider": "Показывать разделитель между сообщениями",
       "messages.grid_columns": "Количество столбцов сетки сообщений",
       "messages.grid_popover_trigger": "Триггер для отображения подробной информации в сетке",
