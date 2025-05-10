@@ -84,7 +84,18 @@
       "settings.knowledge_base.recognition.tip": "The assistant will use the large model's intent recognition capability to determine whether to use the knowledge base for answering. This feature will depend on the model's capabilities",
       "settings.knowledge_base.recognition": "Use Knowledge Base",
       "settings.knowledge_base.recognition.off": "Force Search",
-      "settings.knowledge_base.recognition.on": "Intent Recognition"
+      "settings.knowledge_base.recognition.on": "Intent Recognition",
+      "settings.regular_phrases": {
+        "title": "Regular Phrase",
+        "add": "Add Phrase",
+        "edit": "Edit Phrase",
+        "delete": "Delete Phrase",
+        "deleteConfirm": "Are you sure to delete this phrase?",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter title",
+        "contentLabel": "Content",
+        "contentPlaceholder": "Please enter phrase content, support using variables, and press Tab to quickly locate the variable to modify. For example: \nHelp me plan a route from ${from} to ${to}, and send it to ${email}."
+      }
     },
     "auth": {
       "error": "API key automatically obtained failed, please get it manually",
@@ -1586,7 +1597,10 @@
         "titlePlaceholder": "Please enter phrase title",
         "contentPlaceholder": "Please enter phrase content, support using variables, and press Tab to quickly locate the variable to modify. For example: \nHelp me plan a route from ${from} to ${to}, and send it to ${email}.",
         "delete": "Delete Phrase",
-        "deleteConfirm": "The phrase cannot be recovered after deletion, continue?"
+        "deleteConfirm": "The phrase cannot be recovered after deletion, continue?",
+        "locationLabel": "Add Location",
+        "global": "Global Phrases",
+        "assistant": "Assistant Phrases"
       },
       "quickPanel": {
         "title": "Quick Menu",
