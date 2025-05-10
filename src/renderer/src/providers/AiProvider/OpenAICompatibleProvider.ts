@@ -402,7 +402,7 @@ export default class OpenAICompatibleProvider extends BaseOpenAiProvider {
     await this.checkIsCopilot()
 
     const lastUserMsg = userMessages.findLast((m) => m.role === 'user')
-    if (lastUserMsg) {
+    if (lastUserMsg && isSupportedThinkingTokenQwenModel(model)) {
       const postsuffix = '/no_think'
       // qwenThinkMode === true 表示思考模式啓用，此時不應添加 /no_think，如果存在則移除
       const qwenThinkModeEnabled = assistant.settings?.qwenThinkMode === true
