@@ -12940,7 +12940,7 @@ __metadata:
 
 "openai@patch:openai@npm%3A4.96.0#~/.yarn/patches/openai-npm-4.96.0-0665b05cb9.patch":
   version: 4.96.0
-  resolution: "openai@patch:openai@npm%3A4.96.0#~/.yarn/patches/openai-npm-4.96.0-0665b05cb9.patch::version=4.96.0&hash=17e659"
+  resolution: "openai@patch:openai@npm%3A4.96.0#~/.yarn/patches/openai-npm-4.96.0-0665b05cb9.patch::version=4.96.0&hash=645779"
   dependencies:
     "@types/node": "npm:^18.11.18"
     "@types/node-fetch": "npm:^2.6.4"
@@ -12959,7 +12959,7 @@ __metadata:
       optional: true
   bin:
     openai: bin/cli
-  checksum: 10c0/b1f6162017ede2e0c3338ca94ea0e0c6ababc39ef8abea9e1a04d747725cf6ca3fbd0e4682c231af03a6473228b25a16ce52aac03c3cc4feb302d03b9603e06b
+  checksum: 10c0/8c16fcf1812294220eddd4616e298c2af87398acb479287b7565548c8c1979c6d5c487fb7a9c25b0ac59f778de74c23d94ce1a34362c49260ae7a14acf22abc2
   languageName: node
   linkType: hard
 
