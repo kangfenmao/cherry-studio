@@ -178,6 +178,7 @@ const App: FC<Props> = ({ app, onClick, size = 60, isLast }) => {
           setFileList([])
         }}
         footer={null}
+        transitionName="animation-move-down"
         centered>
         <Form form={form} onFinish={handleAddCustomApp} layout="vertical">
           <Form.Item

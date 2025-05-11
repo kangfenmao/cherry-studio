@@ -170,6 +170,7 @@ const MessageTools: FC<Props> = ({ blocks }) => {
         footer={null}
         width="80%"
         centered
+        transitionName="animation-move-down"
         styles={{ body: { maxHeight: '80vh', overflow: 'auto' } }}>
         {expandedResponse && (
           <ExpandedResponseContainer style={{ fontFamily, fontSize }}>
