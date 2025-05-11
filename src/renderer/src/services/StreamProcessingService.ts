@@ -59,7 +59,7 @@ export function createStreamProcessor(callbacks: StreamProcessorCallbacks = {}) 
         callbacks.onTextComplete(data.text)
       }
       if (data.type === ChunkType.THINKING_DELTA && callbacks.onThinkingChunk) {
-        callbacks.onThinkingChunk(data.text, data.thinking_millsec)
+        callbacks.onThinkingChunk(data.text)
       }
       if (data.type === ChunkType.THINKING_COMPLETE && callbacks.onThinkingComplete) {
         callbacks.onThinkingComplete(data.text, data.thinking_millsec)
