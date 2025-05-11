@@ -333,6 +333,36 @@ export function useMessageOperations(topic: Topic) {
     [dispatch, topic.id]
   )
 
+  /**
+   * Removes a specific block from a message.
+   */
+  const removeMessageBlock = useCallback(
+    async (messageId: string, blockIdToRemove: string) => {
+      if (!topic?.id) {
+        console.error('[removeMessageBlock] Topic prop is not valid.')
+        return
+      }
+
+      const state = store.getState()
+      const message = state.messages.entities[messageId]
+      if (!message || !message.blocks) {
+        console.error('[removeMessageBlock] Message not found or has no blocks:', messageId)
+        return
+      }
+
+      const updatedBlocks = message.blocks.filter((blockId) => blockId !== blockIdToRemove)
+
+      const messageUpdates: Partial<Message> & Pick<Message, 'id'> = {
+        id: messageId,
+        updatedAt: new Date().toISOString(),
+        blocks: updatedBlocks
+      }
+
+      await dispatch(updateMessageAndBlocksThunk(topic.id, messageUpdates, []))
+    },
+    [dispatch, topic?.id]
+  )
+
   return {
     displayCount,
     deleteMessage,
@@ -348,7 +378,8 @@ export function useMessageOperations(topic: Topic) {
     resumeMessage,
     getTranslationUpdater,
     createTopicBranch,
-    editMessageBlocks
+    editMessageBlocks,
+    removeMessageBlock
   }
 }
 
