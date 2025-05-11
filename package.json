@@ -94,7 +94,6 @@
     "markdown-it": "^14.1.0",
     "node-stream-zip": "^1.15.0",
     "officeparser": "^4.1.1",
-    "opendal": "^0.47.11",
     "os-proxy-config": "^1.1.2",
     "proxy-agent": "^6.5.0",
     "rc-virtual-list": "^3.18.6",
