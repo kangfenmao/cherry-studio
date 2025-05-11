@@ -2,12 +2,35 @@ import { CheckOutlined } from '@ant-design/icons'
 import { useSettings } from '@renderer/hooks/useSettings'
 import { MessageBlockStatus, type ThinkingMessageBlock } from '@renderer/types/newMessage'
 import { Collapse, message as antdMessage, Tooltip } from 'antd'
+import { Lightbulb } from 'lucide-react'
+import { motion } from 'motion/react'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import BarLoader from 'react-spinners/BarLoader'
 import styled from 'styled-components'
 
 import Markdown from '../../Markdown/Markdown'
+
+// Define variants outside the component if they don't depend on component's props/state directly
+// or inside if they do (though for this case, outside is fine).
+const lightbulbVariants = {
+  thinking: {
+    opacity: [1, 0.2, 1],
+    transition: {
+      duration: 1.2,
+      ease: 'easeInOut',
+      times: [0, 0.5, 1],
+      repeat: Infinity
+    }
+  },
+  idle: {
+    opacity: 1,
+    transition: {
+      duration: 0.3, // Smooth transition to idle state
+      ease: 'easeInOut'
+    }
+  }
+}
+
 interface Props {
   block: ThinkingMessageBlock
 }
@@ -63,17 +86,25 @@ const ThinkingBlock: React.FC<Props> = ({ block }) => {
       size="small"
       onChange={() => setActiveKey((key) => (key ? '' : 'thought'))}
       className="message-thought-container"
+      expandIconPosition="end"
       items={[
         {
           key: 'thought',
           label: (
             <MessageTitleLabel>
+              <motion.span
+                style={{ height: '18px' }}
+                variants={lightbulbVariants}
+                animate={isThinking ? 'thinking' : 'idle'}
+                initial="idle">
+                <Lightbulb size={18} />
+              </motion.span>
               <ThinkingText>
                 {t(isThinking ? 'chat.thinking' : 'chat.deeply_thought', {
                   seconds: thinkingTimeSeconds
                 })}
               </ThinkingText>
-              {isThinking && <BarLoader color="#9254de" />}
+              {/* {isThinking && <BarLoader color="#9254de" />} */}
               {!isThinking && (
                 <Tooltip title={t('common.copy')} mouseEnterDelay={0.8}>
                   <ActionButton
@@ -104,6 +135,7 @@ const ThinkingBlock: React.FC<Props> = ({ block }) => {
 
 const CollapseContainer = styled(Collapse)`
   margin-bottom: 15px;
+  max-width: 960px;
 `
 
 const MessageTitleLabel = styled.div`
@@ -111,7 +143,7 @@ const MessageTitleLabel = styled.div`
   flex-direction: row;
   align-items: center;
   height: 22px;
-  gap: 15px;
+  gap: 4px;
 `
 
 const ThinkingText = styled.span`
