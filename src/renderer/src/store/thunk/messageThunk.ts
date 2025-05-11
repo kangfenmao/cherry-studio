@@ -91,7 +91,7 @@ const updateExistingMessageAndBlocksInDB = async (
           const newMessages = [...topic.messages]
           // Apply the updates passed in updatedMessage
           Object.assign(newMessages[messageIndex], updatedMessage)
-          // console.log('updateExistingMessageAndBlocksInDB', updatedMessage)
+          // Logger.log('updateExistingMessageAndBlocksInDB', updatedMessage)
           await db.topics.update(updatedMessage.topicId, { messages: newMessages })
         } else {
           console.error(`[updateExistingMsg] Message ${updatedMessage.id} not found in topic ${updatedMessage.topicId}`)
@@ -1102,7 +1102,7 @@ export const initiateTranslationThunk =
 export const updateTranslationBlockThunk =
   (blockId: string, accumulatedText: string, isComplete: boolean = false) =>
   async (dispatch: AppDispatch) => {
-    // console.log(`[updateTranslationBlockThunk] 更新翻译块 ${blockId}, isComplete: ${isComplete}`)
+    // Logger.log(`[updateTranslationBlockThunk] 更新翻译块 ${blockId}, isComplete: ${isComplete}`)
     try {
       const status = isComplete ? MessageBlockStatus.SUCCESS : MessageBlockStatus.STREAMING
       const changes: Partial<MessageBlock> = {
@@ -1115,7 +1115,7 @@ export const updateTranslationBlockThunk =
 
       // 更新数据库
       await db.message_blocks.update(blockId, changes)
-      // console.log(`[updateTranslationBlockThunk] Successfully updated translation block ${blockId}.`)
+      // Logger.log(`[updateTranslationBlockThunk] Successfully updated translation block ${blockId}.`)
     } catch (error) {
       console.error(`[updateTranslationBlockThunk] Failed to update translation block ${blockId}:`, error)
     }
