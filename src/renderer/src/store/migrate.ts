@@ -1309,6 +1309,9 @@ const migrateConfig = {
           provider.type = 'openai-response'
         }
       })
+      state.assistants.assistants.forEach((assistant) => {
+        assistant.knowledgeRecognition = 'off'
+      })
       return state
     } catch (error) {
       return state

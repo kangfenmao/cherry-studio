@@ -1011,6 +1011,7 @@ export default class OpenAIProvider extends BaseOpenAiProvider {
     }
 
     const lastUserMessage = messages[messages.length - 1]
+
     const { abortController, cleanup } = this.createAbortController(lastUserMessage?.id)
     const { signal } = abortController
 

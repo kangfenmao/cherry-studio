@@ -925,18 +925,23 @@ export abstract class BaseOpenAiProvider extends BaseProvider {
   }
 
   public async summaryForSearch(messages: Message[], assistant: Assistant): Promise<string | null> {
-    const model = getTopNamingModel() || assistant.model || getDefaultModel()
+    const model = assistant.model || getDefaultModel()
+
     const systemMessage: OpenAI.Responses.EasyInputMessage = {
       role: 'system',
       content: assistant.prompt
     }
+
     const messageContents = messages.map((m) => getMainTextContent(m))
     const userMessageContent = messageContents.join('\n')
+
     const userMessage: OpenAI.Responses.EasyInputMessage = {
       role: 'user',
       content: userMessageContent
     }
+
     const lastUserMessage = messages[messages.length - 1]
+
     const { abortController, cleanup } = this.createAbortController(lastUserMessage?.id)
     const { signal } = abortController
 
