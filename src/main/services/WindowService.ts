@@ -468,7 +468,7 @@ export class WindowService {
     })
 
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      this.miniWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/src/windows/mini/index.html')
+      this.miniWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '/miniWindow.html')
     } else {
       this.miniWindow.loadFile(join(__dirname, '../renderer/miniWindow.html'))
     }
