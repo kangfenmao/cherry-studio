@@ -773,6 +773,8 @@
       "proxy_required": "現在、プロキシを開く必要があります。これは、将来サポートされる予定です",
       "image_file_required": "画像を先にアップロードしてください",
       "image_file_retry": "画像を先にアップロードしてください",
+      "image_placeholder": "画像がありません",
+      "image_retry": "再試行",
       "mode": {
         "generate": "画像生成",
         "edit": "部分編集",
@@ -1384,6 +1386,7 @@
       "models.add.group_name.tooltip": "例：ChatGPT",
       "models.add.model_id": "モデルID",
       "models.add.model_id.placeholder": "必須 例：gpt-3.5-turbo",
+      "models.add.model_id.select.placeholder": "モデルを選択",
       "models.add.model_id.tooltip": "例：gpt-3.5-turbo",
       "models.add.model_name": "モデル名",
       "models.add.model_name.placeholder": "例：GPT-3.5",

@@ -773,6 +773,8 @@
       "proxy_required": "Сейчас необходимо открыть прокси для просмотра сгенерированных изображений, в будущем будет поддерживаться прямое соединение",
       "image_file_required": "Пожалуйста, сначала загрузите изображение",
       "image_file_retry": "Пожалуйста, сначала загрузите изображение",
+      "image_placeholder": "Изображение недоступно",
+      "image_retry": "Попробовать снова",
       "mode": {
         "generate": "Рисование",
         "edit": "Редактирование",
@@ -1384,6 +1386,7 @@
       "models.add.group_name.tooltip": "Необязательно, например, ChatGPT",
       "models.add.model_id": "ID модели",
       "models.add.model_id.placeholder": "Обязательно, например, gpt-3.5-turbo",
+      "models.add.model_id.select.placeholder": "Выберите модель",
       "models.add.model_id.tooltip": "Пример: gpt-3.5-turbo",
       "models.add.model_name": "Имя модели",
       "models.add.model_name.placeholder": "Необязательно, например, GPT-4",
