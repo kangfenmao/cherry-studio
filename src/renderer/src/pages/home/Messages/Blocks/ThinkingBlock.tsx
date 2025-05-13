@@ -89,7 +89,8 @@ const ThinkingBlock: React.FC<Props> = ({ block }) => {
 
     return () => {
       if (intervalId.current) {
-        window.clearInterval(intervalId.current)
+        clearInterval(intervalId.current)
+        intervalId.current = null
       }
     }
   }, [isThinking])
