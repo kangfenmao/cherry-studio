@@ -256,12 +256,11 @@ const PopupContainer: React.FC<Props> = ({ model, resolve }) => {
   const handleItemClick = useCallback(
     (item: FlatListItem) => {
       if (item.type === 'model') {
-        setScrollTrigger('initial')
         resolve(item.model)
         setOpen(false)
       }
     },
-    [resolve, setScrollTrigger]
+    [resolve]
   )
 
   // 处理键盘导航
@@ -633,16 +632,7 @@ export class SelectModelPopup {
 
   static show(params: PopupParams) {
     return new Promise<Model | undefined>((resolve) => {
-      TopView.show(
-        <PopupContainer
-          {...params}
-          resolve={(v) => {
-            resolve(v)
-            TopView.hide(TopViewKey)
-          }}
-        />,
-        TopViewKey
-      )
+      TopView.show(<PopupContainer {...params} resolve={(v) => resolve(v)} />, TopViewKey)
     })
   }
 }
