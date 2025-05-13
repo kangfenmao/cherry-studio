@@ -135,6 +135,9 @@ export enum IpcChannel {
   System_GetDeviceType = 'system:getDeviceType',
   System_GetHostname = 'system:getHostname',
 
+  // DevTools
+  System_ToggleDevTools = 'system:toggleDevTools',
+
   // events
   BackupProgress = 'backup-progress',
   ThemeChange = 'theme:change',
