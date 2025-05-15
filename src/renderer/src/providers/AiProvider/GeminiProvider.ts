@@ -1,6 +1,7 @@
 import {
   Content,
   File,
+  FinishReason,
   FunctionCall,
   GenerateContentConfig,
   GenerateContentResponse,
@@ -912,14 +913,32 @@ export default class GeminiProvider extends BaseProvider {
       return { valid: false, error: new Error('No model found') }
     }
 
+    let config: GenerateContentConfig = {
+      maxOutputTokens: 1
+    }
+    if (isGeminiReasoningModel(model)) {
+      config = {
+        ...config,
+        thinkingConfig: {
+          includeThoughts: false
+        } as ThinkingConfig
+      }
+    }
+
+    if (isGenerateImageModel(model)) {
+      config = {
+        ...config,
+        responseModalities: [Modality.TEXT, Modality.IMAGE],
+        responseMimeType: 'text/plain'
+      }
+    }
+
     try {
       if (!stream) {
         const result = await this.sdk.models.generateContent({
           model: model.id,
           contents: [{ role: 'user', parts: [{ text: 'hi' }] }],
-          config: {
-            maxOutputTokens: 1
-          }
+          config: config
         })
         if (isEmpty(result.text)) {
           throw new Error('Empty response')
@@ -928,14 +947,12 @@ export default class GeminiProvider extends BaseProvider {
         const response = await this.sdk.models.generateContentStream({
           model: model.id,
           contents: [{ role: 'user', parts: [{ text: 'hi' }] }],
-          config: {
-            maxOutputTokens: 1
-          }
+          config: config
         })
         // 等待整个流式响应结束
         let hasContent = false
         for await (const chunk of response) {
-          if (chunk.text && chunk.text.length > 0) {
+          if (chunk.candidates && chunk.candidates[0].finishReason === FinishReason.MAX_TOKENS) {
             hasContent = true
             break
           }
