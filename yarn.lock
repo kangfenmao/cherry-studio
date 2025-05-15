@@ -4431,7 +4431,6 @@ __metadata:
     fast-xml-parser: "npm:^5.2.0"
     fetch-socks: "npm:^1.3.2"
     fs-extra: "npm:^11.2.0"
-    go-get-folder-size: "npm:^0.5.5"
     got-scraping: "npm:^4.1.1"
     html-to-image: "npm:^1.11.13"
     husky: "npm:^9.1.7"
@@ -4484,7 +4483,6 @@ __metadata:
     turndown: "npm:^7.2.0"
     turndown-plugin-gfm: "npm:^1.0.2"
     typescript: "npm:^5.6.2"
-    undici: "npm:^7.4.0"
     uuid: "npm:^10.0.0"
     vite: "npm:6.2.6"
     vitest: "npm:^3.1.1"
@@ -8942,17 +8940,6 @@ __metadata:
     merge2: "npm:^1.4.1"
     slash: "npm:^3.0.0"
   checksum: 10c0/b39511b4afe4bd8a7aead3a27c4ade2b9968649abab0a6c28b1a90141b96ca68ca5db1302f7c7bd29eab66bf51e13916b8e0a3d0ac08f75e1e84a39b35691189
-  languageName: node
-  linkType: hard
-
-"go-get-folder-size@npm:^0.5.5":
-  version: 0.5.5
-  resolution: "go-get-folder-size@npm:0.5.5"
-  dependencies:
-    std-env: "npm:^3.7.0"
-  bin:
-    go-get-folder-size: bin/cli.js
-  checksum: 10c0/eb69b686952218cc114dccf65763e0dff5056050fa3e9b2afa6161b933c3978500455503b104f9f28d96aab2fedd64ccb0255d6ea16d699fe020795f431ed7b8
   languageName: node
   linkType: hard
 
@@ -15945,7 +15932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"std-env@npm:^3.7.0, std-env@npm:^3.8.1":
+"std-env@npm:^3.8.1":
   version: 3.9.0
   resolution: "std-env@npm:3.9.0"
   checksum: 10c0/4a6f9218aef3f41046c3c7ecf1f98df00b30a07f4f35c6d47b28329bc2531eef820828951c7d7b39a1c5eb19ad8a46e3ddfc7deb28f0a2f3ceebee11bab7ba50
@@ -16901,7 +16888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:>=6, undici@npm:^7.4.0":
+"undici@npm:>=6":
   version: 7.8.0
   resolution: "undici@npm:7.8.0"
   checksum: 10c0/7141f63ea405208a88120d211d83d77bf21327b16b451d3149fb266c28884fbcf78ec370ac2d3412a0e68ba6132ab85265ba85a2f4fde24cb47dc77f5c5a158c
