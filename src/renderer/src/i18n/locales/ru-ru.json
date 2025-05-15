@@ -88,6 +88,9 @@
       "settings.knowledge_base.recognition": "Использование базы знаний",
       "settings.knowledge_base.recognition.off": "Принудительный поиск",
       "settings.knowledge_base.recognition.on": "Распознавание намерений",
+      "settings.tool_use_mode": "Режим использования инструментов",
+      "settings.tool_use_mode.function": "Функция",
+      "settings.tool_use_mode.prompt": "Подсказка",
       "settings.regular_phrases": {
         "title": "Регулярные подсказки",
         "add": "Добавить подсказку",

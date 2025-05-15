@@ -54,6 +54,7 @@ import type { Message, Response } from '@renderer/types/newMessage'
 import { removeSpecialCharactersForTopicName } from '@renderer/utils'
 import {
   geminiFunctionCallToMcpTool,
+  isEnabledToolUse,
   mcpToolCallResponseToGeminiMessage,
   mcpToolsToGeminiTools,
   parseAndCallTools
@@ -340,7 +341,7 @@ export default class GeminiProvider extends BaseProvider {
       await this.generateImageByChat({ messages, assistant, onChunk })
       return
     }
-    const { contextCount, maxTokens, streamOutput, enableToolUse } = getAssistantSettings(assistant)
+    const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
 
     const userMessages = filterUserRoleStartMessages(
       filterEmptyMessages(filterContextMessages(takeRight(messages, contextCount + 2)))
@@ -360,7 +361,7 @@ export default class GeminiProvider extends BaseProvider {
     const { tools } = this.setupToolsConfig<Tool>({
       mcpTools,
       model,
-      enableToolUse
+      enableToolUse: isEnabledToolUse(assistant)
     })
 
     if (this.useSystemPromptForTools) {

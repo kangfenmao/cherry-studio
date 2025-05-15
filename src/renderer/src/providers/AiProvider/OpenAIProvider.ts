@@ -53,6 +53,7 @@ import {
   convertLinksToZhipu
 } from '@renderer/utils/linkConverter'
 import {
+  isEnabledToolUse,
   mcpToolCallResponseToOpenAICompatibleMessage,
   mcpToolsToOpenAIChatTools,
   openAIToolsToMcpTool,
@@ -351,7 +352,7 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
     const defaultModel = getDefaultModel()
     const model = assistant.model || defaultModel
 
-    const { contextCount, maxTokens, streamOutput, enableToolUse } = getAssistantSettings(assistant)
+    const { contextCount, maxTokens, streamOutput } = getAssistantSettings(assistant)
     const isEnabledBultinWebSearch = assistant.enableWebSearch
     messages = addImageFileToContents(messages)
     const enableReasoning =
@@ -365,7 +366,11 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
         content: `Formatting re-enabled${systemMessage ? '\n' + systemMessage.content : ''}`
       }
     }
-    const { tools } = this.setupToolsConfig<ChatCompletionTool>({ mcpTools, model, enableToolUse })
+    const { tools } = this.setupToolsConfig<ChatCompletionTool>({
+      mcpTools,
+      model,
+      enableToolUse: isEnabledToolUse(assistant)
+    })
 
     if (this.useSystemPromptForTools) {
       systemMessage.content = buildSystemPrompt(systemMessage.content || '', mcpTools)

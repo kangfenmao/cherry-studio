@@ -98,7 +98,10 @@
       "settings.knowledge_base.recognition.tip": "アシスタントは大規模言語モデルの意図認識能力を使用して、ナレッジベースを参照する必要があるかどうかを判断します。この機能はモデルの能力に依存します",
       "settings.knowledge_base.recognition": "ナレッジベースの呼び出し",
       "settings.knowledge_base.recognition.off": "強制検索",
-      "settings.knowledge_base.recognition.on": "意図認識"
+      "settings.knowledge_base.recognition.on": "意図認識",
+      "settings.tool_use_mode": "工具調用方式",
+      "settings.tool_use_mode.function": "関数",
+      "settings.tool_use_mode.prompt": "提示詞"
     },
     "auth": {
       "error": "APIキーの自動取得に失敗しました。手動で取得してください",

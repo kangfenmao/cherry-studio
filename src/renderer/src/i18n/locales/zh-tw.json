@@ -98,7 +98,10 @@
       "settings.knowledge_base.recognition.tip": "智慧代理人將調用大語言模型的意圖識別能力，判斷是否需要調用知識庫進行回答，該功能將依賴模型的能力",
       "settings.knowledge_base.recognition": "調用知識庫",
       "settings.knowledge_base.recognition.off": "強制檢索",
-      "settings.knowledge_base.recognition.on": "意圖識別"
+      "settings.knowledge_base.recognition.on": "意圖識別",
+      "settings.tool_use_mode": "工具調用方式",
+      "settings.tool_use_mode.function": "函數",
+      "settings.tool_use_mode.prompt": "提示詞"
     },
     "auth": {
       "error": "自動取得金鑰失敗，請手動取得",

@@ -108,7 +108,7 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
     enableMaxTokens: assistant?.settings?.enableMaxTokens ?? false,
     maxTokens: getAssistantMaxTokens(),
     streamOutput: assistant?.settings?.streamOutput ?? true,
-    enableToolUse: assistant?.settings?.enableToolUse ?? false,
+    toolUseMode: assistant?.settings?.toolUseMode ?? 'prompt',
     hideMessages: assistant?.settings?.hideMessages ?? false,
     defaultModel: assistant?.defaultModel ?? undefined,
     customParameters: assistant?.settings?.customParameters ?? []

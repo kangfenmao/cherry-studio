@@ -88,6 +88,9 @@
       "settings.knowledge_base.recognition": "Use Knowledge Base",
       "settings.knowledge_base.recognition.off": "Force Search",
       "settings.knowledge_base.recognition.on": "Intent Recognition",
+      "settings.tool_use_mode": "Tool Use Mode",
+      "settings.tool_use_mode.function": "Function",
+      "settings.tool_use_mode.prompt": "Prompt",
       "settings.regular_phrases": {
         "title": "Regular Phrase",
         "add": "Add Phrase",

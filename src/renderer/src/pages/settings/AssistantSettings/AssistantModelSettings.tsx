@@ -24,7 +24,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
-  const [enableToolUse, setEnableToolUse] = useState(assistant?.settings?.enableToolUse ?? false)
+  const [toolUseMode, setToolUseMode] = useState(assistant?.settings?.toolUseMode ?? 'prompt')
   const [defaultModel, setDefaultModel] = useState(assistant?.defaultModel)
   const [topP, setTopP] = useState(assistant?.settings?.topP ?? 1)
   const [customParameters, setCustomParameters] = useState<AssistantSettingCustomParameters[]>(
@@ -150,6 +150,7 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
     setStreamOutput(true)
     setTopP(1)
     setCustomParameters([])
+    setToolUseMode('prompt')
     updateAssistantSettings({
       temperature: DEFAULT_TEMPERATURE,
       contextCount: DEFAULT_CONTEXTCOUNT,
@@ -157,7 +158,8 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
       maxTokens: 0,
       streamOutput: true,
       topP: 1,
-      customParameters: []
+      customParameters: [],
+      toolUseMode: 'prompt'
     })
   }
 
@@ -379,14 +381,17 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
       </SettingRow>
       <Divider style={{ margin: '10px 0' }} />
       <SettingRow style={{ minHeight: 30 }}>
-        <Label>{t('models.enable_tool_use')}</Label>
-        <Switch
-          checked={enableToolUse}
-          onChange={(checked) => {
-            setEnableToolUse(checked)
-            updateAssistantSettings({ enableToolUse: checked })
-          }}
-        />
+        <Label>{t('assistants.settings.tool_use_mode')}</Label>
+        <Select
+          value={toolUseMode}
+          style={{ width: 110 }}
+          onChange={(value) => {
+            setToolUseMode(value)
+            updateAssistantSettings({ toolUseMode: value })
+          }}>
+          <Select.Option value="prompt">{t('assistants.settings.tool_use_mode.prompt')}</Select.Option>
+          <Select.Option value="function">{t('assistants.settings.tool_use_mode.function')}</Select.Option>
+        </Select>
       </SettingRow>
       <Divider style={{ margin: '10px 0' }} />
       <SettingRow style={{ minHeight: 30 }}>
