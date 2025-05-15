@@ -1,6 +1,6 @@
 {
   "name": "CherryStudio",
-  "version": "1.3.1",
+  "version": "1.3.3",
   "private": true,
   "description": "A powerful AI assistant for producer.",
   "main": "./out/main/index.js",
@@ -50,7 +50,7 @@
     "test:renderer": "vitest run",
     "test:renderer:ui": "vitest --ui",
     "test:renderer:coverage": "vitest run --coverage",
-    "test:lint":"eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
+    "test:lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "postinstall": "electron-builder install-app-deps",
