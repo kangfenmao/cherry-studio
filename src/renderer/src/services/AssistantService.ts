@@ -102,8 +102,7 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
   }
 
   return {
-    enableMaxContexts: assistant?.settings?.enableMaxContexts ?? false,
-    contextCount: contextCount,
+    contextCount: contextCount === 100 ? 100000 : contextCount,
     temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE,
     topP: assistant?.settings?.topP ?? 1,
     enableMaxTokens: assistant?.settings?.enableMaxTokens ?? false,

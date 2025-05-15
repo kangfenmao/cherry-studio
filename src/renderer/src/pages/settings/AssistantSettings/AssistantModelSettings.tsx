@@ -2,14 +2,8 @@ import { DeleteOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-desig
 import ModelAvatar from '@renderer/components/Avatar/ModelAvatar'
 import { HStack } from '@renderer/components/Layout'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
-import {
-  DEFAULT_CONTEXTCOUNT,
-  DEFAULT_TEMPERATURE,
-  EXTENDED_CONTEXT_LIMIT,
-  EXTENDED_CONTEXT_STEP
-} from '@renderer/config/constant'
+import { DEFAULT_CONTEXTCOUNT, DEFAULT_TEMPERATURE } from '@renderer/config/constant'
 import { SettingRow } from '@renderer/pages/settings'
-import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { Assistant, AssistantSettingCustomParameters, AssistantSettings } from '@renderer/types'
 import { modalConfirm } from '@renderer/utils'
 import { Button, Col, Divider, Input, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
@@ -27,7 +21,6 @@ interface Props {
 const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateAssistantSettings }) => {
   const [temperature, setTemperature] = useState(assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE)
   const [contextCount, setContextCount] = useState(assistant?.settings?.contextCount ?? DEFAULT_CONTEXTCOUNT)
-  const [enableMaxContexts, setEnableMaxContexts] = useState(assistant?.settings?.enableMaxContexts ?? false)
   const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens ?? false)
   const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens ?? 0)
   const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput ?? true)
@@ -37,10 +30,6 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
   const [customParameters, setCustomParameters] = useState<AssistantSettingCustomParameters[]>(
     assistant?.settings?.customParameters ?? []
   )
-
-  const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {
-    updateAssistantSettings(settings)
-  }
 
   const customParametersRef = useRef(customParameters)
 
@@ -195,14 +184,6 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
     return value.toString()
   }
 
-  const validAndChangeContextCount = (contextCount, enableMaxContexts, EXTENDED_CONTEXT_LIMIT) => {
-    if ((typeof contextCount === 'number' ? contextCount : 0) > (enableMaxContexts ? EXTENDED_CONTEXT_LIMIT : 10)) {
-      return enableMaxContexts ? EXTENDED_CONTEXT_LIMIT : 10
-    } else {
-      return typeof contextCount === 'number' ? contextCount : 0
-    }
-  }
-
   return (
     <Container>
       <Row align="middle" style={{ marginBottom: 10 }}>
@@ -311,55 +292,32 @@ const AssistantModelSettings: FC<Props> = ({ assistant, updateAssistant, updateA
         <Col span={20}>
           <Slider
             min={0}
-            max={!enableMaxContexts ? 10 : EXTENDED_CONTEXT_LIMIT}
+            max={100}
             onChange={setContextCount}
             onChangeComplete={onContextCountChange}
-            value={validAndChangeContextCount(contextCount, enableMaxContexts, EXTENDED_CONTEXT_LIMIT)}
-            step={!enableMaxContexts ? 1 : EXTENDED_CONTEXT_STEP}
+            value={typeof contextCount === 'number' ? contextCount : 0}
+            marks={{ 0: '0', 25: '25', 50: '50', 75: '75', 100: t('chat.settings.max') }}
+            step={1}
             tooltip={{ formatter: formatSliderTooltip }}
           />
         </Col>
         <Col span={4}>
           <InputNumber
             min={0}
-            max={!enableMaxContexts ? 10 : EXTENDED_CONTEXT_LIMIT}
-            step={!enableMaxContexts ? 1 : EXTENDED_CONTEXT_STEP}
+            max={20}
+            step={1}
             value={contextCount}
             changeOnBlur
             onChange={(value) => {
               if (!isNull(value)) {
                 setContextCount(value)
-                setTimeout(() => {
-                  updateAssistantSettings({ contextCount: value })
-                  onUpdateAssistantSettings({ contextCount: value })
-                }, 500)
+                setTimeout(() => updateAssistantSettings({ contextCount: value }), 500)
               }
             }}
             style={{ width: '100%' }}
           />
         </Col>
       </Row>
-      <Divider style={{ margin: '10px 0' }} />
-      <SettingRow style={{ minHeight: 30 }}>
-        <HStack alignItems="center">
-          <Label>{t('chat.settings.max_contexts')}</Label>
-        </HStack>
-        <Switch
-          checked={enableMaxContexts}
-          onChange={(checked) => {
-            setEnableMaxContexts(checked)
-            updateAssistantSettings({ enableMaxContexts: checked })
-            if (!checked && contextCount > 10) {
-              setContextCount(10)
-              onUpdateAssistantSettings({ contextCount: 10 })
-            }
-            EventEmitter.emit(EVENT_NAMES.MAX_CONTEXTS_CHANGED, {
-              check: checked,
-              context: contextCount
-            })
-          }}
-        />
-      </SettingRow>
       <Divider style={{ margin: '10px 0' }} />
       <SettingRow style={{ minHeight: 30 }}>
         <HStack alignItems="center">
