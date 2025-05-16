@@ -718,9 +718,17 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
             const usage = chunk.usage
             const originalFinishDelta = chunk.delta
             const originalFinishRawChunk = chunk.chunk
-
             if (!isEmpty(finishReason)) {
-              onChunk({ type: ChunkType.TEXT_COMPLETE, text: content })
+              if (content) {
+                onChunk({ type: ChunkType.TEXT_COMPLETE, text: content })
+              }
+              if (thinkingContent) {
+                onChunk({
+                  type: ChunkType.THINKING_COMPLETE,
+                  text: thinkingContent,
+                  thinking_millsec: new Date().getTime() - time_first_token_millsec
+                })
+              }
               if (usage) {
                 finalUsage.completion_tokens += usage.completion_tokens || 0
                 finalUsage.prompt_tokens += usage.prompt_tokens || 0
@@ -812,7 +820,6 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
       if (toolResults.length) {
         await processToolResults(toolResults, idx)
       }
-
       onChunk({
         type: ChunkType.BLOCK_COMPLETE,
         response: {

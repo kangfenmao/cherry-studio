@@ -622,6 +622,14 @@ const fetchAndProcessAssistantResponseImpl = async (
           const contextForUsage = userMsgIndex !== -1 ? orderedMsgs.slice(0, userMsgIndex + 1) : []
           const finalContextWithAssistant = [...contextForUsage, finalAssistantMsg]
 
+          if (lastBlockId) {
+            const changes: Partial<MessageBlock> = {
+              status: MessageBlockStatus.SUCCESS
+            }
+            dispatch(updateOneBlock({ id: lastBlockId, changes }))
+            saveUpdatedBlockToDB(lastBlockId, assistantMsgId, topicId, getState)
+          }
+
           // 更新topic的name
           autoRenameTopic(assistant, topicId)
 
