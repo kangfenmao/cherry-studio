@@ -1,5 +1,4 @@
 import ContextMenu from '@renderer/components/ContextMenu'
-import { FONT_FAMILY } from '@renderer/config/constant'
 import { useAssistant } from '@renderer/hooks/useAssistant'
 import { useModel } from '@renderer/hooks/useModel'
 import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
@@ -10,7 +9,7 @@ import { Assistant, Topic } from '@renderer/types'
 import type { Message } from '@renderer/types/newMessage'
 import { classNames } from '@renderer/utils'
 import { Divider } from 'antd'
-import React, { Dispatch, FC, memo, SetStateAction, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { Dispatch, FC, memo, SetStateAction, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -53,10 +52,6 @@ const MessageItem: FC<Props> = ({
   const isLastMessage = index === 0
   const isAssistantMessage = message.role === 'assistant'
   const showMenubar = !isStreaming && !message.status.includes('ing')
-
-  const fontFamily = useMemo(() => {
-    return messageFont === 'serif' ? FONT_FAMILY.replace('sans-serif', 'serif').replace('Ubuntu, ', '') : FONT_FAMILY
-  }, [messageFont])
 
   const messageBorder = showMessageDivider ? undefined : 'none'
   const messageBackground = getMessageBackground(isBubbleStyle, isAssistantMessage)
@@ -113,7 +108,12 @@ const MessageItem: FC<Props> = ({
                 ? 'message-content-container message-content-container-assistant'
                 : 'message-content-container'
           }
-          style={{ fontFamily, fontSize, background: messageBackground, overflowY: 'visible' }}>
+          style={{
+            fontFamily: messageFont === 'serif' ? 'var(--font-family-serif)' : 'var(--font-family)',
+            fontSize,
+            background: messageBackground,
+            overflowY: 'visible'
+          }}>
           <MessageErrorBoundary>
             <MessageContent message={message} />
           </MessageErrorBoundary>
