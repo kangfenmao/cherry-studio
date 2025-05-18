@@ -50,7 +50,7 @@ import {
   TranslateLanguageVarious
 } from '@renderer/types'
 import { modalConfirm } from '@renderer/utils'
-import { Button, Col, Divider, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
+import { Button, Col, InputNumber, Row, Select, Slider, Switch, Tooltip } from 'antd'
 import { CircleHelp, RotateCcw, Settings2 } from 'lucide-react'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -236,7 +236,7 @@ const SettingsTab: FC<Props> = (props) => {
               />
             </Col>
           </Row>
-          <Divider style={{ margin: '10px 0' }} />
+          <SettingDivider />
           <SettingRow>
             <SettingRowTitleSmall>{t('models.stream_output')}</SettingRowTitleSmall>
             <Switch
@@ -249,7 +249,7 @@ const SettingsTab: FC<Props> = (props) => {
             />
           </SettingRow>
           <SettingDivider />
-          <Row align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+          <SettingRow>
             <HStack alignItems="center">
               <Label>{t('chat.settings.max_tokens')}</Label>
               <Tooltip title={t('chat.settings.max_tokens.tip')}>
@@ -274,7 +274,7 @@ const SettingsTab: FC<Props> = (props) => {
                 onUpdateAssistantSettings({ enableMaxTokens: enabled })
               }}
             />
-          </Row>
+          </SettingRow>
           {enableMaxTokens && (
             <Row align="middle" gutter={10}>
               <Col span={24}>
@@ -292,6 +292,7 @@ const SettingsTab: FC<Props> = (props) => {
               </Col>
             </Row>
           )}
+          <SettingDivider />
         </SettingGroup>
       </CollapsibleSettingGroup>
       <CollapsibleSettingGroup title={t('settings.messages.title')} defaultExpanded={true}>
@@ -408,6 +409,7 @@ const SettingsTab: FC<Props> = (props) => {
               />
             </Col>
           </Row>
+          <SettingDivider />
         </SettingGroup>
       </CollapsibleSettingGroup>
       <CollapsibleSettingGroup title={t('chat.settings.code.title')} defaultExpanded={true}>
@@ -536,6 +538,7 @@ const SettingsTab: FC<Props> = (props) => {
             <Switch size="small" checked={codeWrappable} onChange={(checked) => dispatch(setCodeWrappable(checked))} />
           </SettingRow>
         </SettingGroup>
+        <SettingDivider />
       </CollapsibleSettingGroup>
       <CollapsibleSettingGroup title={t('settings.messages.input.title')} defaultExpanded={true}>
         <SettingGroup>

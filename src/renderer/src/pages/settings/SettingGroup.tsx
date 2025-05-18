@@ -40,7 +40,6 @@ const SettingGroup = styled.div<{ theme?: ThemeMode }>`
   width: 100%;
   margin-top: 0;
   border-radius: 8px;
-  margin-bottom: 10px;
 `
 
 const GroupHeader = styled.div`
