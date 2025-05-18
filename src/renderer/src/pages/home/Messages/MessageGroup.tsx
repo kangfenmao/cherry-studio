@@ -173,7 +173,7 @@ const MessageGroup = ({ messages, topic, hidePresetMessages }: Props) => {
             [multiModelMessageStyle]: isGrouped,
             selected: message.id === selectedMessageId
           })}>
-          {message.id === selectedMessageId && <MessageItem {...messageProps} />}
+          <MessageItem {...messageProps} />
         </MessageWrapper>
       )
 
