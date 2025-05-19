@@ -131,7 +131,10 @@
       "manage": "管理",
       "select_model": "モデルを選択",
       "show.all": "すべて表示",
-      "update_available": "更新可能"
+      "update_available": "更新可能",
+      "includes_user_questions": "ユーザーからの質問を含む",
+      "case_sensitive": "大文字と小文字の区別",
+      "whole_word": "全語一致"
     },
     "chat": {
       "add.assistant.title": "アシスタントを追加",
@@ -163,6 +166,7 @@
       "input.estimated_tokens.tip": "推定トークン数",
       "input.expand": "展開",
       "input.file_not_supported": "モデルはこのファイルタイプをサポートしません",
+      "input.file_error": "ファイル処理エラー",
       "input.generate_image": "画像を生成する",
       "input.generate_image_not_supported": "モデルは画像の生成をサポートしていません。",
       "input.knowledge_base": "ナレッジベース",
@@ -199,6 +203,20 @@
       },
       "resend": "再送信",
       "save": "保存",
+      "settings.code.title": "コード設定",
+      "settings.code_editor": {
+        "title": "コードエディター",
+        "highlight_active_line": "アクティブ行をハイライト",
+        "fold_gutter": "折りたたみガター",
+        "autocompletion": "自動補完",
+        "keymap": "キーマップ"
+      },
+      "settings.code_execution": {
+        "title": "コード実行",
+        "tip": "実行可能なコードブロックのツールバーには実行ボタンが表示されます。危険なコードを実行しないでください！",
+        "timeout_minutes": "タイムアウト時間",
+        "timeout_minutes.tip": "コード実行のタイムアウト時間（分）"
+      },
       "settings.code_collapsible": "コードブロック折り畳み",
       "settings.code_wrappable": "コードブロック折り返し",
       "settings.code_cacheable": "コードブロックキャッシュ",
@@ -304,9 +322,32 @@
     },
     "code_block": {
       "collapse": "折りたたむ",
-      "disable_wrap": "改行解除",
-      "enable_wrap": "改行",
-      "expand": "展開する"
+      "copy.failed": "コピーに失敗しました",
+      "copy.source": "コピー源コード",
+      "copy.success": "コピーしました",
+      "copy": "コピー",
+      "download.failed.network": "ダウンロードに失敗しました。ネットワークを確認してください",
+      "download.png": "PNGとしてダウンロード",
+      "download.source": "ダウンロード源コード",
+      "download.svg": "SVGとしてダウンロード",
+      "download": "ダウンロード",
+      "edit.save.failed.message_not_found": "保存に失敗しました。対応するメッセージが見つかりませんでした",
+      "edit.save.failed": "保存に失敗しました",
+      "edit.save.success": "保存しました",
+      "edit.save": "保存する",
+      "edit": "編集",
+      "expand": "展開する",
+      "more": "もっと",
+      "preview.copy.image": "画像としてコピー",
+      "preview.source": "ソースコードを表示",
+      "preview.zoom_in": "拡大",
+      "preview.zoom_out": "縮小",
+      "preview": "プレビュー",
+      "run": "コードを実行",
+      "split.restore": "分割視圖を解除",
+      "split": "分割視圖",
+      "wrap.off": "改行解除",
+      "wrap.on": "改行"
     },
     "common": {
       "add": "追加",
@@ -360,7 +401,8 @@
         "pinyin": "ピンインでソート",
         "pinyin.asc": "ピンインで昇順ソート",
         "pinyin.desc": "ピンインで降順ソート"
-      }
+      },
+      "no_results": "検索結果なし"
     },
     "docs": {
       "title": "ドキュメント"
@@ -527,21 +569,6 @@
       "keep_alive_time.title": "保持時間",
       "title": "LM Studio"
     },
-    "mermaid": {
-      "download": {
-        "png": "PNGをダウンロード",
-        "svg": "SVGをダウンロード"
-      },
-      "resize": {
-        "zoom-in": "拡大する",
-        "zoom-out": "ズームアウト"
-      },
-      "tabs": {
-        "preview": "プレビュー",
-        "source": "ソース"
-      },
-      "title": "Mermaid図"
-    },
     "message": {
       "agents": {
         "imported": "インポートに成功しました",
@@ -564,7 +591,8 @@
       "copied": "コピーしました！",
       "copy.failed": "コピーに失敗しました",
       "copy.success": "コピーしました！",
-      "error.chunk_overlap_too_large": "チャンクの重なりは、チャンクサイズを超えることはできません",
+      "empty_url": "画像をダウンロードできません。プロンプトに不適切なコンテンツや禁止用語が含まれている可能性があります",
+      "error.chunk_overlap_too_large": "チャンクのオーバーラップがチャンクサイズより大きくなることはできません",
       "error.dimension_too_large": "内容のサイズが大きすぎます",
       "error.enter.api.host": "APIホストを入力してください",
       "error.enter.api.key": "APIキーを入力してください",
@@ -782,6 +810,19 @@
       "image_file_retry": "画像を先にアップロードしてください",
       "image_placeholder": "画像がありません",
       "image_retry": "再試行",
+      "style_types": {
+        "auto": "自動",
+        "general": "一般",
+        "realistic": "リアル",
+        "design": "デザイン",
+        "3d": "3D",
+        "anime": "アニメ"
+      },
+      "rendering_speeds": {
+        "default": "デフォルト",
+        "turbo": "高速",
+        "quality": "高品質"
+      },
       "mode": {
         "generate": "画像生成",
         "edit": "部分編集",
@@ -794,7 +835,8 @@
         "seed_tip": "画像生成のランダム性を制御して、同じ生成結果を再現します",
         "negative_prompt_tip": "画像に含めたくない内容を説明します",
         "magic_prompt_option_tip": "生成効果を向上させるための提示詞を最適化します",
-        "style_type_tip": "画像生成スタイル、V_2 以上のバージョンでのみ適用"
+        "style_type_tip": "画像生成スタイル、V_2 以上のバージョンでのみ適用",
+        "rendering_speed_tip": "レンダリング速度と品質のバランスを調整します。V_3バージョンでのみ利用可能です"
       },
       "edit": {
         "image_file": "編集画像",
@@ -802,7 +844,8 @@
         "number_images_tip": "生成される編集結果の数",
         "style_type_tip": "編集後の画像スタイル、V_2 以上のバージョンでのみ適用",
         "seed_tip": "編集結果のランダム性を制御します",
-        "magic_prompt_option_tip": "編集効果を向上させるための提示詞を最適化します"
+        "magic_prompt_option_tip": "編集効果を向上させるための提示詞を最適化します",
+        "rendering_speed_tip": "レンダリング速度と品質のバランスを調整します。V_3バージョンでのみ利用可能です"
       },
       "remix": {
         "model_tip": "リミックスに使用する AI モデルのバージョンを選択します",
@@ -813,7 +856,8 @@
         "seed_tip": "リミックス結果のランダム性を制御します",
         "style_type_tip": "リミックス後の画像スタイル、V_2 以上のバージョンでのみ適用",
         "negative_prompt_tip": "リミックス結果に含めたくない内容を説明します",
-        "magic_prompt_option_tip": "リミックス効果を向上させるための提示詞を最適化します"
+        "magic_prompt_option_tip": "リミックス効果を向上させるための提示詞を最適化します",
+        "rendering_speed_tip": "レンダリング速度と品質のバランスを調整します。V_3バージョンでのみ利用可能です"
       },
       "upscale": {
         "image_file": "拡大する画像",
@@ -824,19 +868,9 @@
         "number_images_tip": "生成される拡大結果の数",
         "seed_tip": "拡大結果のランダム性を制御します",
         "magic_prompt_option_tip": "拡大効果を向上させるための提示詞を最適化します"
-      }
-    },
-    "plantuml": {
-      "download": {
-        "failed": "ダウンロードに失敗しました。ネットワークを確認してください",
-        "png": "PNG をダウンロード",
-        "svg": "SVG をダウンロード"
       },
-      "tabs": {
-        "preview": "プレビュー",
-        "source": "ソースコード"
-      },
-      "title": "PlantUML 図表"
+      "rendering_speed": "レンダリング速度",
+      "translating": "翻訳中..."
     },
     "prompts": {
       "explanation": "この概念を説明してください",
@@ -943,6 +977,8 @@
         "app_knowledge.remove_all": "ナレッジベースファイルを削除",
         "app_knowledge.remove_all_confirm": "ナレッジベースファイルを削除すると、ナレッジベース自体は削除されません。これにより、ストレージ容量を節約できます。続行しますか？",
         "app_knowledge.remove_all_success": "ファイル削除成功",
+        "backup.skip_file_data_title": "精簡バックアップ",
+        "backup.skip_file_data_help": "バックアップ時に、画像や知識ベースなどのデータファイルをバックアップ対象から除外し、チャット履歴と設定のみをバックアップします。スペースの占有を減らし、バックアップ速度を向上させます。",
         "app_logs": "アプリログ",
         "clear_cache": {
           "button": "キャッシュをクリア",
@@ -1432,6 +1468,8 @@
       "models.translate_model_description": "翻訳サービスに使用されるモデル",
       "models.translate_model_prompt_message": "翻訳モデルのプロンプトを入力してください",
       "models.translate_model_prompt_title": "翻訳モデルのプロンプト",
+      "models.quick_assistant_model": "クイックアシスタントモデル",
+      "models.quick_assistant_model_description": "クイックアシスタントで使用されるデフォルトモデル",
       "moresetting": "詳細設定",
       "moresetting.check.confirm": "選択を確認",
       "moresetting.check.warn": "このオプションを選択する際は慎重に行ってください。誤った選択はモデルの誤動作を引き起こす可能性があります！",
@@ -1541,6 +1579,7 @@
         "reset_defaults_confirm": "すべてのショートカットをリセットしてもよろしいですか？",
         "reset_to_default": "デフォルトにリセット",
         "search_message": "メッセージを検索",
+        "search_message_in_chat": "現在のチャットでメッセージを検索",
         "show_app": "アプリを表示/非表示",
         "show_settings": "設定を開く",
         "title": "ショートカット",

@@ -3,9 +3,40 @@ import { ThemeMode } from '@renderer/types'
 import { setupMarkdownIt } from '@shikijs/markdown-it'
 import MarkdownIt from 'markdown-it'
 import { useEffect, useRef, useState } from 'react'
+import { getTokenStyleObject, ThemedToken } from 'shiki/core'
 
 import { runAsyncFunction } from '.'
 import { getHighlighter } from './highlighter'
+
+/**
+ * Shiki token 样式转换为 React 样式对象
+ *
+ * @param token Shiki themed token
+ * @returns React 样式对象
+ */
+export function getReactStyleFromToken(token: ThemedToken): Record<string, string> {
+  const style = token.htmlStyle || getTokenStyleObject(token)
+  const reactStyle: Record<string, string> = {}
+  for (const [key, value] of Object.entries(style)) {
+    switch (key) {
+      case 'font-style':
+        reactStyle.fontStyle = value
+        break
+      case 'font-weight':
+        reactStyle.fontWeight = value
+        break
+      case 'background-color':
+        reactStyle.backgroundColor = value
+        break
+      case 'text-decoration':
+        reactStyle.textDecoration = value
+        break
+      default:
+        reactStyle[key] = value
+    }
+  }
+  return reactStyle
+}
 
 const defaultOptions = {
   themes: {

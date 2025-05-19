@@ -17,11 +17,6 @@ const MessageTools: FC<Props> = ({ blocks }) => {
   const [expandedResponse, setExpandedResponse] = useState<{ content: string; title: string } | null>(null)
   const { t } = useTranslation()
   const { messageFont, fontSize } = useSettings()
-  const fontFamily = useMemo(() => {
-    return messageFont === 'serif'
-      ? 'serif'
-      : '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans","Helvetica Neue", sans-serif'
-  }, [messageFont])
 
   const toolResponse = blocks.metadata?.rawMcpToolResponse
 
@@ -119,7 +114,11 @@ const MessageTools: FC<Props> = ({ blocks }) => {
         </MessageTitleLabel>
       ),
       children: isDone && result && (
-        <ToolResponseContainer style={{ fontFamily, fontSize: '12px' }}>
+        <ToolResponseContainer
+          style={{
+            fontFamily: messageFont === 'serif' ? 'var(--font-family-serif)' : 'var(--font-family)',
+            fontSize: '12px'
+          }}>
           <CollapsedContent isExpanded={activeKeys.includes(id)} resultString={resultString} />
         </ToolResponseContainer>
       )
@@ -168,7 +167,11 @@ const MessageTools: FC<Props> = ({ blocks }) => {
         transitionName="animation-move-down"
         styles={{ body: { maxHeight: '80vh', overflow: 'auto' } }}>
         {expandedResponse && (
-          <ExpandedResponseContainer style={{ fontFamily, fontSize }}>
+          <ExpandedResponseContainer
+            style={{
+              fontFamily: messageFont === 'serif' ? 'var(--font-family-serif)' : 'var(--font-family)',
+              fontSize
+            }}>
             <Tabs
               tabBarExtraContent={
                 <ActionButton
