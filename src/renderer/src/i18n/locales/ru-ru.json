@@ -1505,6 +1505,9 @@
           "title": "Заметки модели",
           "placeholder": "Введите содержимое в формате Markdown...",
           "markdown_editor_default_value": "Область предварительного просмотра"
+        },
+        "openai": {
+          "alert": "Поставщик OpenAI больше не поддерживает старые методы вызова. Если вы используете сторонний API, создайте нового поставщика услуг."
         }
       },
       "proxy": {
@@ -1632,7 +1635,9 @@
         "title": "Масштаб страницы",
         "reset": "Сбросить"
       },
-      "input.show_translate_confirm": "Показать диалоговое окно подтверждения перевода"
+      "input.show_translate_confirm": "Показать диалоговое окно подтверждения перевода",
+      "about.debug.title": "[to be translated]:Debug",
+      "about.debug.open": "[to be translated]:Open"
     },
     "translate": {
       "any.language": "Любой язык",
