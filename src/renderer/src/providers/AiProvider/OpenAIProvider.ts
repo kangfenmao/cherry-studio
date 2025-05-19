@@ -1,3 +1,4 @@
+import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import {
   findTokenLimit,
   getOpenAIWebSearchParams,
@@ -275,7 +276,10 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
       return {}
     }
     const effortRatio = EFFORT_RATIO[reasoningEffort]
-    const budgetTokens = Math.floor((findTokenLimit(model.id)?.max || 0) * effortRatio)
+    const budgetTokens = Math.floor(
+      (findTokenLimit(model.id)?.max! - findTokenLimit(model.id)?.min!) * effortRatio + findTokenLimit(model.id)?.min!
+    )
+
     // OpenRouter models
     if (model.provider === 'openrouter') {
       if (isSupportedReasoningEffortModel(model)) {
@@ -319,10 +323,11 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
 
     // Claude models
     if (isSupportedThinkingTokenClaudeModel(model)) {
+      const maxTokens = assistant.settings?.maxTokens
       return {
         thinking: {
           type: 'enabled',
-          budget_tokens: budgetTokens
+          budget_tokens: Math.max(1024, Math.min(budgetTokens, (maxTokens || DEFAULT_MAX_TOKENS) * effortRatio))
         }
       }
     }
@@ -1142,8 +1147,8 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
       stream
     }
 
-    if (this.provider.id !== 'github') {
-      body.enable_thinking = false; // qwen3
+    if (isSupportedThinkingTokenQwenModel(model)) {
+      body.enable_thinking = false // qwen3
     }
 
     try {
