@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/imports */
 import Logger from '@renderer/config/logger'
 import db from '@renderer/databases'
 import { upgradeToV7 } from '@renderer/databases/upgrades'

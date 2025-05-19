@@ -244,7 +244,7 @@
       "settings.context_count": "上下文数",
       "settings.context_count.tip": "要保留在上下文中的消息数量，数值越大，上下文越长，消耗的 token 越多。普通聊天建议 5-10",
       "settings.max": "不限",
-      "settings.max_tokens": "最大 Token 数",
+      "settings.max_tokens": "最大 TOKEN 数",
       "settings.max_tokens.confirm": "最大 Token 数",
       "settings.max_tokens.confirm_content": "设置单次交互所用的最大 Token 数, 会影响返回结果的长度。要根据模型上下文限制来设置，否则会报错",
       "settings.max_tokens.tip": "单次交互所用的最大 Token 数, 会影响返回结果的长度。要根据模型上下文限制来设置，否则会报错",
@@ -1678,7 +1678,7 @@
         "reset": "重置"
       },
       "openai": {
-        "title": "OpenAI设置",
+        "title": "OpenAI 设置",
         "summary_text_mode.title": "摘要模式",
         "summary_text_mode.tip": "模型执行的推理摘要",
         "summary_text_mode.auto": "自动",
