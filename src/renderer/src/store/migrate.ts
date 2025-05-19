@@ -1343,6 +1343,17 @@ const migrateConfig = {
     } catch (error) {
       return state
     }
+  },
+  '102': (state: RootState) => {
+    try {
+      state.settings.openAI = {
+        summaryText: 'off',
+        serviceTier: 'auto'
+      }
+      return state
+    } catch (error) {
+      return state
+    }
   }
 }
 
