@@ -31,8 +31,7 @@ const CustomCollapse: FC<CustomCollapseProps> = ({
   const defaultCollapseStyle = {
     width: '100%',
     background: 'transparent',
-    border: '0.5px solid var(--color-border)',
-    overflow: 'hidden'
+    border: '0.5px solid var(--color-border)'
   }
 
   const defaultCollapseItemStyles = {
