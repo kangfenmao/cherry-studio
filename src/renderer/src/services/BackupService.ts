@@ -4,7 +4,6 @@ import db from '@renderer/databases'
 import { upgradeToV7 } from '@renderer/databases/upgrades'
 import i18n from '@renderer/i18n'
 import store from '@renderer/store'
-import { updateKnowledgeBaseFilePath } from '@renderer/services/KnowledgeService'
 import { setWebDAVSyncState } from '@renderer/store/backup'
 import dayjs from 'dayjs'
 
@@ -34,7 +33,6 @@ export async function restore() {
       }
 
       await handleData(data)
-      await updateKnowledgeBaseFilePath()
     } catch (error) {
       Logger.error('[Backup] restore: Error restoring backup file:', error)
       window.message.error({ content: i18n.t('error.backup.file_format'), key: 'restore' })
@@ -214,7 +212,6 @@ export async function restoreFromWebdav(fileName?: string) {
 
   try {
     await handleData(JSON.parse(data))
-    await updateKnowledgeBaseFilePath()
   } catch (error) {
     console.error('[Backup] Error downloading file from WebDAV:', error)
     window.message.error({ content: i18n.t('error.backup.file_format'), key: 'restore' })
