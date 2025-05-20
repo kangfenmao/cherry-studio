@@ -167,6 +167,8 @@ const AddMcpServerModal: FC<AddMcpServerModalProps> = ({ visible, onClose, onSuc
       onCancel={onClose}
       confirmLoading={loading}
       destroyOnClose
+      centered
+      transitionName="animation-move-down"
       width={600}>
       <Form form={form} layout="vertical" name="add_mcp_server_form">
         <Form.Item
