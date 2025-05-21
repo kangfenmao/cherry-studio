@@ -1426,6 +1426,12 @@ const migrateConfig = {
     try {
       state.settings.notification = settingsInitialState.notification
       addMiniApp(state, 'google')
+      if (!state.settings.openAI) {
+        state.settings.openAI = {
+          summaryText: 'off',
+          serviceTier: 'auto'
+        }
+      }
       return state
     } catch (error) {
       return state
