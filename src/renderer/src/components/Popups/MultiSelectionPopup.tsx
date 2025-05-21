@@ -53,14 +53,10 @@ const MultiSelectActionPopup: FC<Props> = ({ topic }) => {
 }
 
 const Container = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
   width: 100%;
   padding: 36px 20px;
   background-color: var(--color-background);
   border-top: 1px solid var(--color-border);
-  z-index: 10;
 `
 
 const ActionBar = styled.div`
