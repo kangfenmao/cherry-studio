@@ -27,16 +27,7 @@ const api = {
   getCacheSize: () => ipcRenderer.invoke(IpcChannel.App_GetCacheSize),
   clearCache: () => ipcRenderer.invoke(IpcChannel.App_ClearCache),
   notification: {
-    send: (notification: Notification) => ipcRenderer.invoke(IpcChannel.App_Notification, notification),
-    onClick: (callback: () => void) => {
-      const listener = () => {
-        callback()
-      }
-      ipcRenderer.on(IpcChannel.App_OnNotificationClick, listener)
-      return () => {
-        ipcRenderer.off(IpcChannel.App_OnNotificationClick, listener)
-      }
-    }
+    send: (notification: Notification) => ipcRenderer.invoke(IpcChannel.Notification_Send, notification)
   },
   system: {
     getDeviceType: () => ipcRenderer.invoke(IpcChannel.System_GetDeviceType),
