@@ -780,6 +780,11 @@
       "hide_sidebar": "隐藏侧边栏",
       "show_sidebar": "显示侧边栏"
     },
+    "notification": {
+      "assistant": "助手响应",
+      "knowledge.success": "成功添加 {{type}} 到知识库",
+      "knowledge.error": "添加 {{type}} 到知识库失败: {{error}}"
+    },
     "ollama": {
       "keep_alive_time.description": "对话后模型在内存中保持的时间（默认：5分钟）",
       "keep_alive_time.placeholder": "分钟",
@@ -1494,6 +1499,12 @@
       "moresetting.check.confirm": "确认勾选",
       "moresetting.check.warn": "请慎重勾选此选项，勾选错误会导致模型无法正常使用！！！",
       "moresetting.warn": "风险警告",
+      "notification": {
+        "title": "通知设置",
+        "assistant": "助手消息",
+        "backup": "备份",
+        "knowledge_embed": "知识嵌入"
+      },
       "provider": {
         "add.name": "提供商名称",
         "add.name.placeholder": "例如 OpenAI",

@@ -1421,6 +1421,14 @@ const migrateConfig = {
     } catch (error) {
       return state
     }
+  },
+  '105': (state: RootState) => {
+    try {
+      state.settings.notification = settingsInitialState.notification
+      return state
+    } catch (error) {
+      return state
+    }
   }
 }
 

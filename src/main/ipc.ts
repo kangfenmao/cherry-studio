@@ -8,6 +8,7 @@ import { IpcChannel } from '@shared/IpcChannel'
 import { Shortcut, ThemeMode } from '@types'
 import { BrowserWindow, ipcMain, nativeTheme, session, shell } from 'electron'
 import log from 'electron-log'
+import { Notification } from 'src/renderer/src/types/notification'
 
 import { titleBarOverlayDark, titleBarOverlayLight } from './config'
 import AppUpdater from './services/AppUpdater'
@@ -20,6 +21,7 @@ import FileStorage from './services/FileStorage'
 import { GeminiService } from './services/GeminiService'
 import KnowledgeService from './services/KnowledgeService'
 import { getMcpInstance } from './services/MCPService'
+import NotificationService from './services/NotificationService'
 import * as NutstoreService from './services/NutstoreService'
 import ObsidianVaultService from './services/ObsidianVaultService'
 import { ProxyConfig, proxyManager } from './services/ProxyManager'
@@ -41,6 +43,7 @@ const obsidianVaultService = new ObsidianVaultService()
 
 export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   const appUpdater = new AppUpdater(mainWindow)
+  const notificationService = new NotificationService(mainWindow)
 
   ipcMain.handle(IpcChannel.App_Info, () => ({
     version: app.getVersion(),
@@ -198,6 +201,14 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   // check for update
   ipcMain.handle(IpcChannel.App_CheckForUpdate, async () => {
     await appUpdater.checkForUpdates()
+  })
+
+  // notification
+  ipcMain.handle(IpcChannel.App_Notification, async (_, notification: Notification) => {
+    await notificationService.sendNotification(notification)
+  })
+  ipcMain.handle(IpcChannel.App_OnNotificationClick, (_, notification: Notification) => {
+    mainWindow.webContents.send('notification-click', notification)
   })
 
   // zip

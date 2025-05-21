@@ -781,6 +781,11 @@
       "hide_sidebar": "隱藏側邊欄",
       "show_sidebar": "顯示側邊欄"
     },
+    "notification": {
+      "assistant": "助手回應",
+      "knowledge.success": "成功將{{type}}新增至知識庫",
+      "knowledge.error": "無法將 {{type}} 加入知識庫: {{error}}"
+    },
     "ollama": {
       "keep_alive_time.description": "對話後模型在記憶體中保持的時間（預設為 5 分鐘）。",
       "keep_alive_time.placeholder": "分鐘",
@@ -1707,6 +1712,12 @@
         "service_tier.auto": "自動",
         "service_tier.default": "預設",
         "service_tier.flex": "彈性"
+      },
+      "notification": {
+        "title": "通知設定",
+        "assistant": "助手訊息",
+        "backup": "備份訊息",
+        "knowledge_embed": "知識庫訊息"
       }
     },
     "translate": {
