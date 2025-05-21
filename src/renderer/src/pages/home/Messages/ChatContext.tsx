@@ -4,7 +4,6 @@ import { RootState } from '@renderer/store'
 import { messageBlocksSelectors } from '@renderer/store/messageBlock'
 import { selectMessagesForTopic } from '@renderer/store/newMessage'
 import { Topic } from '@renderer/types'
-import { Modal } from 'antd'
 import { createContext, FC, ReactNode, use, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from 'react-redux'
@@ -41,8 +40,6 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children, activeTopic }) =
   const { deleteMessage } = useMessageOperations(activeTopic)
   const [isMultiSelectMode, setIsMultiSelectMode] = useState(false)
   const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([])
-  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false)
-  const [messagesToDelete, setMessagesToDelete] = useState<string[]>([])
   const [messageRefs, setMessageRefs] = useState<Map<string, HTMLElement>>(new Map())
 
   const store = useStore<RootState>()
@@ -118,8 +115,22 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children, activeTopic }) =
 
     switch (actionType) {
       case 'delete':
-        setMessagesToDelete(messageIds)
-        setConfirmDeleteVisible(true)
+        window.modal.confirm({
+          title: t('message.delete.confirm.title'),
+          content: t('message.delete.confirm.content', { count: messageIds.length }),
+          okButtonProps: { danger: true },
+          centered: true,
+          onOk: async () => {
+            try {
+              await Promise.all(messageIds.map((messageId) => deleteMessage(messageId)))
+              window.message.success(t('message.delete.success'))
+              toggleMultiSelectMode(false)
+            } catch (error) {
+              console.error('Failed to delete messages:', error)
+              window.message.error(t('message.delete.failed'))
+            }
+          }
+        })
         break
       case 'save': {
         const assistantMessages = messages.filter((msg) => messageIds.includes(msg.id))
@@ -173,25 +184,6 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children, activeTopic }) =
     }
   }
 
-  const confirmDelete = async () => {
-    try {
-      await Promise.all(messagesToDelete.map((messageId) => deleteMessage(messageId)))
-      window.message.success(t('message.delete.success'))
-      setMessagesToDelete([])
-      toggleMultiSelectMode(false)
-    } catch (error) {
-      console.error('Failed to delete messages:', error)
-      window.message.error(t('message.delete.failed'))
-    } finally {
-      setConfirmDeleteVisible(false)
-    }
-  }
-
-  const cancelDelete = () => {
-    setConfirmDeleteVisible(false)
-    setMessagesToDelete([])
-  }
-
   const value = {
     isMultiSelectMode,
     selectedMessageIds,
@@ -204,20 +196,5 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children, activeTopic }) =
     registerMessageElement
   }
 
-  return (
-    <ChatContext value={value}>
-      {children}
-      <Modal
-        title={t('message.delete.confirm.title')}
-        open={confirmDeleteVisible}
-        onOk={confirmDelete}
-        onCancel={cancelDelete}
-        okText={t('common.confirm')}
-        cancelText={t('common.cancel')}
-        okButtonProps={{ danger: true }}
-        centered={true}>
-        <p>{t('message.delete.confirm.content', { count: messagesToDelete.length })}</p>
-      </Modal>
-    </ChatContext>
-  )
+  return <ChatContext value={value}>{children}</ChatContext>
 }
