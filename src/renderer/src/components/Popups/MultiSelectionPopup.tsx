@@ -1,6 +1,6 @@
-import { CloseOutlined, CopyOutlined, DeleteOutlined, SaveOutlined } from '@ant-design/icons'
 import { useChatContext } from '@renderer/pages/home/Messages/ChatContext'
 import { Button, Tooltip } from 'antd'
+import { Copy, Save, Trash, X } from 'lucide-react'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -29,17 +29,17 @@ const MultiSelectActionPopup: FC = () => {
         <SelectionCount>{t('common.selectedMessages', { count: selectedMessageIds.length })}</SelectionCount>
         <ActionButtons>
           <Tooltip title={t('common.save')}>
-            <ActionButton icon={<SaveOutlined />} disabled={isActionDisabled} onClick={() => handleAction('save')} />
+            <ActionButton icon={<Save size={16} />} disabled={isActionDisabled} onClick={() => handleAction('save')} />
           </Tooltip>
           <Tooltip title={t('common.copy')}>
-            <ActionButton icon={<CopyOutlined />} disabled={isActionDisabled} onClick={() => handleAction('copy')} />
+            <ActionButton icon={<Copy size={16} />} disabled={isActionDisabled} onClick={() => handleAction('copy')} />
           </Tooltip>
           <Tooltip title={t('common.delete')}>
-            <ActionButton danger icon={<DeleteOutlined />} onClick={() => handleAction('delete')} />
+            <ActionButton danger icon={<Trash size={16} />} onClick={() => handleAction('delete')} />
           </Tooltip>
         </ActionButtons>
         <Tooltip title={t('chat.navigation.close')}>
-          <ActionButton icon={<CloseOutlined />} onClick={handleClose} />
+          <ActionButton icon={<X size={16} />} onClick={handleClose} />
         </Tooltip>
       </ActionBar>
     </Container>
@@ -73,7 +73,7 @@ const ActionButton = styled(Button)`
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 50%;
   .anticon {
     font-size: 16px;
   }

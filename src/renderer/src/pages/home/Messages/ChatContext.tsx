@@ -1,10 +1,11 @@
 import { useMessageOperations } from '@renderer/hooks/useMessageOperations'
+import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { RootState } from '@renderer/store'
 import { messageBlocksSelectors } from '@renderer/store/messageBlock'
 import { selectMessagesForTopic } from '@renderer/store/newMessage'
 import { Topic } from '@renderer/types'
 import { Modal } from 'antd'
-import { createContext, FC, ReactNode, use, useCallback, useState } from 'react'
+import { createContext, FC, ReactNode, use, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStore } from 'react-redux'
 
@@ -45,6 +46,11 @@ export const ChatProvider: FC<ChatProviderProps> = ({ children, activeTopic }) =
   const [messageRefs, setMessageRefs] = useState<Map<string, HTMLElement>>(new Map())
 
   const store = useStore<RootState>()
+
+  useEffect(() => {
+    const unsubscribe = EventEmitter.on(EVENT_NAMES.CHANGE_TOPIC, () => setIsMultiSelectMode(false))
+    return () => unsubscribe()
+  }, [])
 
   const toggleMultiSelectMode = (value: boolean) => {
     setIsMultiSelectMode(value)

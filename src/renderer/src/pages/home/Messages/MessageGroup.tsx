@@ -10,7 +10,6 @@ import { Popover } from 'antd'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { useChatContext } from './ChatContext'
 import MessageItem from './Message'
 import MessageGroupMenuBar from './MessageGroupMenuBar'
 import SelectableMessage from './MessageSelect'
@@ -25,8 +24,6 @@ interface Props {
 const MessageGroup = ({ messages, topic, hidePresetMessages, registerMessageElement }: Props) => {
   const { editMessage } = useMessageOperations(topic)
   const { multiModelMessageStyle: multiModelMessageStyleSetting, gridColumns, gridPopoverTrigger } = useSettings()
-  const { isMultiSelectMode, selectedMessageIds, handleSelectMessage } = useChatContext()
-  const selectedMessages = useMemo(() => new Set(selectedMessageIds), [selectedMessageIds])
 
   const [multiModelMessageStyle, setMultiModelMessageStyle] = useState<MultiModelMessageStyle>(
     messages[0].multiModelMessageStyle || multiModelMessageStyleSetting
@@ -201,10 +198,6 @@ const MessageGroup = ({ messages, topic, hidePresetMessages, registerMessageElem
       multiModelMessageStyle,
       isHorizontal,
       selectedMessageId,
-      isMultiSelectMode,
-      selectedMessages,
-      registerMessageElement,
-      handleSelectMessage,
       gridPopoverTrigger
     ]
   )

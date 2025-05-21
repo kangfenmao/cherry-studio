@@ -50,7 +50,8 @@ const Container = styled.div`
 `
 
 const CheckboxWrapper = styled.div`
-  padding: 10px 0 10px 20px;
+  padding: 22px 0 10px 20px;
+  margin-right: -10px;
   display: flex;
   align-items: flex-start;
 `
