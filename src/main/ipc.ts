@@ -20,7 +20,7 @@ import FileService from './services/FileService'
 import FileStorage from './services/FileStorage'
 import { GeminiService } from './services/GeminiService'
 import KnowledgeService from './services/KnowledgeService'
-import { getMcpInstance } from './services/MCPService'
+import mcpService from './services/MCPService'
 import NotificationService from './services/NotificationService'
 import * as NutstoreService from './services/NutstoreService'
 import ObsidianVaultService from './services/ObsidianVaultService'
@@ -320,19 +320,17 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   )
 
   // Register MCP handlers
-  ipcMain.handle(IpcChannel.Mcp_RemoveServer, (event, server) => getMcpInstance().removeServer(event, server))
-  ipcMain.handle(IpcChannel.Mcp_RestartServer, (event, server) => getMcpInstance().restartServer(event, server))
-  ipcMain.handle(IpcChannel.Mcp_StopServer, (event, server) => getMcpInstance().stopServer(event, server))
-  ipcMain.handle(IpcChannel.Mcp_ListTools, (event, server) => getMcpInstance().listTools(event, server))
-  ipcMain.handle(IpcChannel.Mcp_CallTool, (event, params) => getMcpInstance().callTool(event, params))
-  ipcMain.handle(IpcChannel.Mcp_ListPrompts, (event, server) => getMcpInstance().listPrompts(event, server))
-  ipcMain.handle(IpcChannel.Mcp_GetPrompt, (event, params) => getMcpInstance().getPrompt(event, params))
-  ipcMain.handle(IpcChannel.Mcp_ListResources, (event, server) => getMcpInstance().listResources(event, server))
-  ipcMain.handle(IpcChannel.Mcp_GetResource, (event, params) => getMcpInstance().getResource(event, params))
-  ipcMain.handle(IpcChannel.Mcp_GetInstallInfo, () => getMcpInstance().getInstallInfo())
-  ipcMain.handle(IpcChannel.Mcp_CheckConnectivity, (event, params) =>
-    getMcpInstance().checkMcpConnectivity(event, params)
-  )
+  ipcMain.handle(IpcChannel.Mcp_RemoveServer, mcpService.removeServer)
+  ipcMain.handle(IpcChannel.Mcp_RestartServer, mcpService.restartServer)
+  ipcMain.handle(IpcChannel.Mcp_StopServer, mcpService.stopServer)
+  ipcMain.handle(IpcChannel.Mcp_ListTools, mcpService.listTools)
+  ipcMain.handle(IpcChannel.Mcp_CallTool, mcpService.callTool)
+  ipcMain.handle(IpcChannel.Mcp_ListPrompts, mcpService.listPrompts)
+  ipcMain.handle(IpcChannel.Mcp_GetPrompt, mcpService.getPrompt)
+  ipcMain.handle(IpcChannel.Mcp_ListResources, mcpService.listResources)
+  ipcMain.handle(IpcChannel.Mcp_GetResource, mcpService.getResource)
+  ipcMain.handle(IpcChannel.Mcp_GetInstallInfo, mcpService.getInstallInfo)
+  ipcMain.handle(IpcChannel.Mcp_CheckConnectivity, mcpService.checkMcpConnectivity)
 
   ipcMain.handle(IpcChannel.App_IsBinaryExist, (_, name: string) => isBinaryExists(name))
   ipcMain.handle(IpcChannel.App_GetBinaryPath, (_, name: string) => getBinaryPath(name))
