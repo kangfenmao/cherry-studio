@@ -162,6 +162,7 @@ const MessageGroup = ({ messages, topic, hidePresetMessages, registerMessageElem
         <SelectableMessage
           key={`selectable-${message.id}`}
           messageId={message.id}
+          topic={topic}
           isClearMessage={message.type === 'clear'}>
           {messageContent}
         </SelectableMessage>

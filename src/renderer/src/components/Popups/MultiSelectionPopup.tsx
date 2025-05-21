@@ -1,13 +1,19 @@
-import { useChatContext } from '@renderer/pages/home/Messages/ChatContext'
+import { useChatContext } from '@renderer/hooks/useChatContext'
+import { Topic } from '@renderer/types'
 import { Button, Tooltip } from 'antd'
 import { Copy, Save, Trash, X } from 'lucide-react'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const MultiSelectActionPopup: FC = () => {
+interface Props {
+  topic: Topic
+}
+
+const MultiSelectActionPopup: FC<Props> = ({ topic }) => {
   const { t } = useTranslation()
-  const { toggleMultiSelectMode, selectedMessageIds, isMultiSelectMode, handleMultiSelectAction } = useChatContext()
+  const { toggleMultiSelectMode, selectedMessageIds, isMultiSelectMode, handleMultiSelectAction } =
+    useChatContext(topic)
 
   const handleAction = (action: string) => {
     handleMultiSelectAction(action, selectedMessageIds)
