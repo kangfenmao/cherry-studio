@@ -1425,6 +1425,7 @@ const migrateConfig = {
   '105': (state: RootState) => {
     try {
       state.settings.notification = settingsInitialState.notification
+      addMiniApp(state, 'google')
       return state
     } catch (error) {
       return state
