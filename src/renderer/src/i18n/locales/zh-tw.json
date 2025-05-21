@@ -1306,6 +1306,7 @@
         "dependenciesInstall": "安裝相依套件",
         "dependenciesInstalling": "正在安裝相依套件...",
         "description": "描述",
+        "noDescriptionAvailable": "描述不存在",
         "duplicateName": "已存在相同名稱的伺服器",
         "editJson": "編輯JSON",
         "editServer": "編輯伺服器",

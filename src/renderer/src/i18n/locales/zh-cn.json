@@ -1306,6 +1306,7 @@
         "dependenciesInstall": "安装依赖项",
         "dependenciesInstalling": "正在安装依赖项...",
         "description": "描述",
+        "noDescriptionAvailable": "暂无描述",
         "duplicateName": "已存在同名服务器",
         "editJson": "编辑JSON",
         "editServer": "编辑服务器",

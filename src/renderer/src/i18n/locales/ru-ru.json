@@ -1303,6 +1303,7 @@
         "dependenciesInstall": "Установить зависимости",
         "dependenciesInstalling": "Установка зависимостей...",
         "description": "Описание",
+        "noDescriptionAvailable": "Описание отсутствует",
         "duplicateName": "Сервер с таким именем уже существует",
         "editJson": "Редактировать JSON",
         "editServer": "Редактировать сервер",

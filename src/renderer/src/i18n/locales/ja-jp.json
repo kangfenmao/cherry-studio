@@ -1303,6 +1303,7 @@
         "dependenciesInstall": "依存関係をインストール",
         "dependenciesInstalling": "依存関係をインストール中...",
         "description": "説明",
+        "noDescriptionAvailable": "説明がありません",
         "duplicateName": "同じ名前のサーバーが既に存在します",
         "editJson": "JSONを編集",
         "editServer": "サーバーを編集",
