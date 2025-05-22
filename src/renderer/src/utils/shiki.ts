@@ -1,7 +1,7 @@
+import { BundledLanguage, BundledTheme } from 'shiki/bundle/web'
 import { getTokenStyleObject, type HighlighterGeneric, SpecialLanguage, ThemedToken } from 'shiki/core'
 
 import { AsyncInitializer } from './asyncInitializer'
-import { BundledLanguage, BundledTheme } from 'shiki/bundle/web'
 
 export const DEFAULT_LANGUAGES = ['javascript', 'typescript', 'python', 'java', 'markdown', 'json']
 export const DEFAULT_THEMES = ['one-light', 'material-theme-darker']
