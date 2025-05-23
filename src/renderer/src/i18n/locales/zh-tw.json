@@ -682,6 +682,8 @@
     "minapp": {
       "popup": {
         "refresh": "重新整理",
+        "goBack": "上一頁",
+        "goForward": "下一頁",
         "close": "關閉小工具",
         "minimize": "最小化小工具",
         "devtools": "開發者工具",
