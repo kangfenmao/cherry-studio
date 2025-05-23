@@ -940,7 +940,8 @@
       "zhinao": "360智脳",
       "zhipu": "智譜AI",
       "voyageai": "Voyage AI",
-      "qiniu": "七牛云"
+      "qiniu": "七牛云",
+      "tokenflux": "TokenFlux"
     },
     "restore": {
       "confirm": "データを復元しますか？",
