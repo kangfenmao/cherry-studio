@@ -47,6 +47,7 @@ win:
     - target: portable
   signtoolOptions:
     sign: scripts/win-sign.js
+  verifyUpdateCodeSignature: false
 nsis:
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   shortcutName: ${productName}
