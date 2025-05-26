@@ -95,13 +95,9 @@ artifactBuildCompleted: scripts/artifact-build-completed.js
 releaseInfo:
   releaseNotes: |
     ⚠️ 注意：升级前请备份数据，否则将无法降级
-    增加 TokenFlux 服务商
-    增加 Claude 4 模型支持
-    Grok 模型增加联网能力
-    小程序支持前进和后退
-    修复 Windows 用户 MCP 无法启动问题
-    修复无法搜索历史消息问题
-    修复 MCP 代理问题
-    修复精简备份恢复覆盖文件问题
-    修复@模型回复插入位置错误问题
-    修复搜索小程序崩溃问题
+    文生图新增服务商 DMXAPI（限时免费）
+    输入框按钮支持拖拽排序
+    修复知识库搜索结果 100% 问题
+    修复拖拽多选消息相关问题
+    修复翻译回复内容导致内存异常问题
+    常规错误修复和优化

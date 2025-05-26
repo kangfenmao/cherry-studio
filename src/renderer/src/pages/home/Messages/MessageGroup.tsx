@@ -190,16 +190,6 @@ const MessageGroup = ({ messages, topic, hidePresetMessages, registerMessageElem
         </MessageWrapper>
       )
 
-      const wrappedMessage = (
-        <SelectableMessage
-          key={`selectable-${message.id}`}
-          messageId={message.id}
-          topic={topic}
-          isClearMessage={message.type === 'clear'}>
-          {messageContent}
-        </SelectableMessage>
-      )
-
       if (isGridGroupMessage) {
         return (
           <Popover
@@ -221,7 +211,15 @@ const MessageGroup = ({ messages, topic, hidePresetMessages, registerMessageElem
         )
       }
 
-      return wrappedMessage
+      return (
+        <SelectableMessage
+          key={`selectable-${message.id}`}
+          messageId={message.id}
+          topic={topic}
+          isClearMessage={message.type === 'clear'}>
+          {messageContent}
+        </SelectableMessage>
+      )
     },
     [
       isGrid,
