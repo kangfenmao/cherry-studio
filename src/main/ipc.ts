@@ -18,7 +18,6 @@ import CopilotService from './services/CopilotService'
 import { ExportService } from './services/ExportService'
 import FileService from './services/FileService'
 import FileStorage from './services/FileStorage'
-import { GeminiService } from './services/GeminiService'
 import KnowledgeService from './services/KnowledgeService'
 import mcpService from './services/MCPService'
 import NotificationService from './services/NotificationService'
@@ -297,13 +296,6 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
       mainWindow?.setSize(1080, height)
     }
   })
-
-  // gemini
-  ipcMain.handle(IpcChannel.Gemini_UploadFile, GeminiService.uploadFile)
-  ipcMain.handle(IpcChannel.Gemini_Base64File, GeminiService.base64File)
-  ipcMain.handle(IpcChannel.Gemini_RetrieveFile, GeminiService.retrieveFile)
-  ipcMain.handle(IpcChannel.Gemini_ListFiles, GeminiService.listFiles)
-  ipcMain.handle(IpcChannel.Gemini_DeleteFile, GeminiService.deleteFile)
 
   // mini window
   ipcMain.handle(IpcChannel.MiniWindow_Show, () => windowService.showMiniWindow())
