@@ -399,7 +399,7 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
     })
 
     if (this.useSystemPromptForTools) {
-      systemMessage.content = buildSystemPrompt(systemMessage.content || '', mcpTools)
+      systemMessage.content = await buildSystemPrompt(systemMessage.content || '', mcpTools)
     }
 
     const userMessages: ChatCompletionMessageParam[] = []
