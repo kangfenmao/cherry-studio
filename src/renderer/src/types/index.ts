@@ -207,6 +207,11 @@ export interface GeneratePainting extends PaintingParams {
   negativePrompt?: string
   magicPromptOption?: boolean
   renderingSpeed?: string
+  quality?: string
+  moderation?: string
+  n?: number
+  size?: string
+  background?: string
 }
 
 export interface EditPainting extends PaintingParams {
