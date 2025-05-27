@@ -185,6 +185,8 @@ export type PaintingParams = {
   files: FileType[]
 }
 
+export type PaintingProvider = 'aihubmix' | 'silicon' | 'dmxapi'
+
 export interface Painting extends PaintingParams {
   model?: string
   prompt?: string
