@@ -53,7 +53,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic, o
     `topic-${topic.id}`
   )
   const { t } = useTranslation()
-  const { showPrompt, showTopics, topicPosition, showAssistants, messageNavigation } = useSettings()
+  const { showPrompt, topicPosition, messageNavigation } = useSettings()
   const { updateTopic, addTopic } = useAssistant(assistant.id)
   const dispatch = useAppDispatch()
   const [displayMessages, setDisplayMessages] = useState<Message[]>([])
@@ -267,8 +267,9 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic, o
 
   const groupedMessages = useMemo(() => Object.entries(getGroupedMessages(displayMessages)), [displayMessages])
   return (
-    <Container
+    <MessagesContainer
       id="messages"
+      className="messages-container"
       ref={scrollContainerRef}
       style={{ position: 'relative', paddingTop: showPrompt ? 10 : 0 }}
       key={assistant.id}
@@ -304,14 +305,13 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic, o
       </NarrowLayout>
       {messageNavigation === 'anchor' && <MessageAnchorLine messages={displayMessages} />}
       {messageNavigation === 'buttons' && <ChatNavigation containerId="messages" />}
-
       <SelectionBox
         isMultiSelectMode={isMultiSelectMode}
         scrollContainerRef={scrollContainerRef}
         messageElements={messageElements.current}
         handleSelectMessage={handleSelectMessage}
       />
-    </Container>
+    </MessagesContainer>
   )
 }
 
@@ -369,7 +369,7 @@ interface ContainerProps {
   $right?: boolean
 }
 
-const Container = styled(Scrollbar)<ContainerProps>`
+const MessagesContainer = styled(Scrollbar)<ContainerProps>`
   display: flex;
   flex-direction: column-reverse;
   padding: 10px 0 20px;

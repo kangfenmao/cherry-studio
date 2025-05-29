@@ -114,16 +114,14 @@ const Chat: FC<Props> = (props) => {
           includeUser={filterIncludeUser}
           onIncludeUserChange={userOutlinedItemClickHandler}
         />
-        <MessagesContainer className="messages-container">
-          <Messages
-            key={props.activeTopic.id}
-            assistant={assistant}
-            topic={props.activeTopic}
-            setActiveTopic={props.setActiveTopic}
-            onComponentUpdate={messagesComponentUpdateHandler}
-            onFirstUpdate={messagesComponentFirstUpdateHandler}
-          />
-        </MessagesContainer>
+        <Messages
+          key={props.activeTopic.id}
+          assistant={assistant}
+          topic={props.activeTopic}
+          setActiveTopic={props.setActiveTopic}
+          onComponentUpdate={messagesComponentUpdateHandler}
+          onFirstUpdate={messagesComponentFirstUpdateHandler}
+        />
         <QuickPanelProvider>
           <Inputbar assistant={assistant} setActiveTopic={props.setActiveTopic} topic={props.activeTopic} />
           {isMultiSelectMode && <MultiSelectActionPopup topic={props.activeTopic} />}
@@ -141,13 +139,6 @@ const Chat: FC<Props> = (props) => {
     </Container>
   )
 }
-
-const MessagesContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  flex: 1;
-`
 
 const Container = styled.div`
   display: flex;
