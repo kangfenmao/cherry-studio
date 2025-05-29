@@ -31,6 +31,10 @@ export interface NutstoreSyncRuntime extends WebDAVSyncState {}
 
 export type AssistantIconType = 'model' | 'emoji' | 'none'
 
+export type UserTheme = {
+  colorPrimary: string
+}
+
 export interface SettingsState {
   showAssistants: boolean
   showTopics: boolean
@@ -49,6 +53,7 @@ export interface SettingsState {
   trayOnClose: boolean
   tray: boolean
   theme: ThemeMode
+  userTheme: UserTheme
   windowStyle: 'transparent' | 'opaque'
   fontSize: number
   topicPosition: 'left' | 'right'
@@ -191,6 +196,9 @@ export const initialState: SettingsState = {
   trayOnClose: true,
   tray: true,
   theme: ThemeMode.auto,
+  userTheme: {
+    colorPrimary: '#00b96b'
+  },
   windowStyle: 'opaque',
   fontSize: 14,
   topicPosition: 'left',
@@ -367,6 +375,9 @@ const settingsSlice = createSlice({
     },
     setCustomCss: (state, action: PayloadAction<string>) => {
       state.customCss = action.payload
+    },
+    setUserTheme: (state, action: PayloadAction<UserTheme>) => {
+      state.userTheme = action.payload
     },
     setFontSize: (state, action: PayloadAction<number>) => {
       state.fontSize = action.payload
@@ -662,6 +673,7 @@ export const {
   setTrayOnClose,
   setTray,
   setTheme,
+  setUserTheme,
   setFontSize,
   setWindowStyle,
   setTopicPosition,
