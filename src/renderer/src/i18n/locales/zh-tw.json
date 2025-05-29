@@ -105,7 +105,7 @@
         "showByTags": "標籤展示"
       },
       "tags": {
-        "untagged": "未分組標籤",
+        "untagged": "未分組",
         "none": "暫無標籤",
         "manage": "標籤管理",
         "add": "添加標籤",

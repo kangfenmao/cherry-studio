@@ -21,7 +21,7 @@ import { useTags } from '@renderer/hooks/useTags'
 import AssistantSettingsPopup from '@renderer/pages/settings/AssistantSettings'
 import { getDefaultModel, getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
-import { Assistant } from '@renderer/types'
+import { Assistant, AssistantsSortType } from '@renderer/types'
 import { uuid } from '@renderer/utils'
 import { hasTopicPendingRequests } from '@renderer/utils/queue'
 import { Dropdown } from 'antd'
@@ -35,14 +35,14 @@ import * as tinyPinyin from 'tiny-pinyin'
 interface AssistantItemProps {
   assistant: Assistant
   isActive: boolean
-  sortBy: 'tags' | 'list'
+  sortBy: AssistantsSortType
   onSwitch: (assistant: Assistant) => void
   onDelete: (assistant: Assistant) => void
   onCreateDefaultAssistant: () => void
   addAgent: (agent: any) => void
   addAssistant: (assistant: Assistant) => void
   onTagClick?: (tag: string) => void
-  handleSortByChange?: (sortType: '' | 'tags' | 'list') => void
+  handleSortByChange?: (sortType: AssistantsSortType) => void
 }
 
 const AssistantItem: FC<AssistantItemProps> = ({

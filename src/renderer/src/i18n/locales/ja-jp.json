@@ -105,7 +105,7 @@
         "showByTags": "タグ表示"
       },
       "tags": {
-        "untagged": "未分類タグ",
+        "untagged": "未分類",
         "none": "タグなし",
         "manage": "タグ管理",
         "add": "タグ追加",
