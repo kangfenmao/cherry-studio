@@ -26,7 +26,7 @@ interface Props {
 
 const Chat: FC<Props> = (props) => {
   const { assistant } = useAssistant(props.assistant.id)
-  const { topicPosition, messageStyle, showAssistants } = useSettings()
+  const { topicPosition, messageStyle } = useSettings()
   const { showTopics } = useShowTopics()
   const { isMultiSelectMode } = useChatContext(props.activeTopic)
 
@@ -36,10 +36,9 @@ const Chat: FC<Props> = (props) => {
 
   const maxWidth = useMemo(() => {
     const showRightTopics = showTopics && topicPosition === 'right'
-    const minusAssistantsWidth = showAssistants ? `- var(--assistants-width) - var(--scrollbar-width)` : ''
-    const minusRightTopicsWidth = showRightTopics ? `- var(--assistants-width) - var(--scrollbar-width)` : ''
-    return `calc(100vw - var(--sidebar-width) ${minusAssistantsWidth} ${minusRightTopicsWidth})`
-  }, [showAssistants, showTopics, topicPosition])
+    const minusRightTopicsWidth = showRightTopics ? `- var(--assistants-width)` : ''
+    return `calc(100vw - var(--sidebar-width) - var(--assistants-width) ${minusRightTopicsWidth})`
+  }, [showTopics, topicPosition])
 
   useHotkeys('esc', () => {
     contentSearchRef.current?.disable()

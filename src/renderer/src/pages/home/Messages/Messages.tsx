@@ -86,13 +86,6 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic, o
     setHasMore(messages.length > displayCount)
   }, [messages, displayCount])
 
-  const maxWidth = useMemo(() => {
-    const showRightTopics = showTopics && topicPosition === 'right'
-    const minusAssistantsWidth = showAssistants ? `- var(--assistants-width) - var(--scrollbar-width)` : ''
-    const minusRightTopicsWidth = showRightTopics ? `- var(--assistants-width) - var(--scrollbar-width)` : ''
-    return `calc(100vw - var(--sidebar-width) ${minusAssistantsWidth} ${minusRightTopicsWidth})`
-  }, [showAssistants, showTopics, topicPosition])
-
   const scrollToBottom = useCallback(() => {
     if (scrollContainerRef.current) {
       requestAnimationFrame(() => {
@@ -277,11 +270,7 @@ const Messages: React.FC<MessagesProps> = ({ assistant, topic, setActiveTopic, o
     <Container
       id="messages"
       ref={scrollContainerRef}
-      style={{
-        position: 'relative',
-        maxWidth,
-        paddingTop: showPrompt ? 10 : 0
-      }}
+      style={{ position: 'relative', paddingTop: showPrompt ? 10 : 0 }}
       key={assistant.id}
       onScroll={handleScrollPosition}
       $right={topicPosition === 'left'}>
