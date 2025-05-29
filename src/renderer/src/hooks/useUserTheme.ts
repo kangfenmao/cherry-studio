@@ -4,6 +4,7 @@ import Color from 'color'
 
 export default function useUserTheme() {
   const userTheme = useAppSelector((state) => state.settings.userTheme)
+
   const dispatch = useAppDispatch()
 
   const initUserTheme = (theme: UserTheme = userTheme) => {
