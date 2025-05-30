@@ -22,7 +22,7 @@
     "dev": "electron-vite dev",
     "debug": "electron-vite -- --inspect --sourcemap --remote-debugging-port=9222",
     "build": "npm run typecheck && electron-vite build",
-    "build:check": "yarn test && yarn typecheck && yarn check:i18n",
+    "build:check": "yarn typecheck && yarn check:i18n && yarn test",
     "build:unpack": "dotenv npm run build && electron-builder --dir",
     "build:win": "dotenv npm run build && electron-builder --win --x64 --arm64",
     "build:win:x64": "dotenv npm run build && electron-builder --win --x64",
