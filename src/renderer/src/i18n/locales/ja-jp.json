@@ -586,7 +586,14 @@
       "korean": "韓国語",
       "portuguese": "ポルトガル語",
       "russian": "ロシア語",
-      "spanish": "スペイン語"
+      "spanish": "スペイン語",
+      "polish": "ポーランド語",
+      "turkish": "トルコ語",
+      "thai": "タイ語",
+      "vietnamese": "ベトナム語",
+      "indonesian": "インドネシア語",
+      "urdu": "ウルドゥー語",
+      "malay": "マレー語"
     },
     "lmstudio": {
       "keep_alive_time.description": "モデルがメモリに保持される時間（デフォルト：5分）",
@@ -1794,6 +1801,8 @@
     },
     "translate": {
       "any.language": "任意の言語",
+      "target_language": "目標言語",
+      "alter_language": "備用言語",
       "button.translate": "翻訳",
       "close": "閉じる",
       "closed": "翻訳は閉じられました",
@@ -1873,6 +1882,9 @@
           "esc_stop": "Escで停止",
           "c_copy": "Cでコピー",
           "r_regenerate": "Rで再生成"
+        },
+        "translate": {
+          "smart_translate_tips": "スマート翻訳：内容は優先的に目標言語に翻訳されます。すでに目標言語の場合は、備用言語に翻訳されます。"
         }
       },
       "settings": {
