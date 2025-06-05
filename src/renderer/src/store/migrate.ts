@@ -1476,6 +1476,9 @@ const migrateConfig = {
   },
   '110': (state: RootState) => {
     try {
+      if (state.paintings && !state.paintings.tokenFluxPaintings) {
+        state.paintings.tokenFluxPaintings = []
+      }
       state.settings.showTokens = true
       return state
     } catch (error) {
