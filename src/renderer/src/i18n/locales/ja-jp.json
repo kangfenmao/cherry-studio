@@ -1130,26 +1130,6 @@
         "markdown_export.show_model_provider.help": "Markdownエクスポート時にモデルプロバイダー（例：OpenAI、Geminiなど）を表示します。",
         "minute_interval_one": "{{count}} 分",
         "minute_interval_other": "{{count}} 分",
-        "notion": {
-          "api_key": "Notion APIキー",
-          "api_key_placeholder": "Notion APIキーを入力してください",
-          "check": {
-            "button": "確認",
-            "empty_api_key": "Api_keyが設定されていません",
-            "empty_database_id": "Database_idが設定されていません",
-            "error": "接続エラー、ネットワーク設定とApi_keyとDatabase_idを確認してください",
-            "fail": "接続エラー、ネットワーク設定とApi_keyとDatabase_idを確認してください",
-            "success": "接続に成功しました。"
-          },
-          "database_id": "Notion データベースID",
-          "database_id_placeholder": "Notion データベースIDを入力してください",
-          "help": "Notion 設定ドキュメント",
-          "page_name_key": "ページタイトルフィールド名",
-          "page_name_key_placeholder": "ページタイトルフィールド名を入力してください。デフォルトは Name です",
-          "title": "Notion 設定",
-          "export_reasoning.title": "エクスポート時に思考チェーンを含める",
-          "export_reasoning.help": "有効にすると、Notionにエクスポートする際に思考チェーンの内容が含まれます。"
-        },
         "title": "データ設定",
         "webdav": {
           "autoSync": "自動バックアップ",
@@ -1269,7 +1249,25 @@
           "new_folder.button": "新しいフォルダー"
         },
         "message_title.use_topic_naming.title": "トピック命名モデルを使用してメッセージのタイトルを作成",
-        "message_title.use_topic_naming.help": "この設定は、すべてのMarkdownエクスポート方法に影響します。"
+        "message_title.use_topic_naming.help": "この設定は、すべてのMarkdownエクスポート方法に影響します。",
+        "notion.api_key": "Notion APIキー",
+        "notion.api_key_placeholder": "Notion APIキーを入力してください",
+        "notion.check": {
+          "button": "確認",
+          "empty_api_key": "Api_keyが設定されていません",
+          "empty_database_id": "Database_idが設定されていません",
+          "error": "接続エラー、ネットワーク設定とApi_keyとDatabase_idを確認してください",
+          "fail": "接続エラー、ネットワーク設定とApi_keyとDatabase_idを確認してください",
+          "success": "接続に成功しました。"
+        },
+        "notion.database_id": "Notion データベースID",
+        "notion.database_id_placeholder": "Notion データベースIDを入力してください",
+        "notion.help": "Notion 設定ドキュメント",
+        "notion.page_name_key": "ページタイトルフィールド名",
+        "notion.page_name_key_placeholder": "ページタイトルフィールド名を入力してください。デフォルトは Name です",
+        "notion.title": "Notion 設定",
+        "notion.export_reasoning.title": "エクスポート時に思考チェーンを含める",
+        "notion.export_reasoning.help": "有効にすると、Notionにエクスポートする際に思考チェーンの内容が含まれます。"
       },
       "display.assistant.title": "アシスタント設定",
       "display.custom.css": "カスタムCSS",
