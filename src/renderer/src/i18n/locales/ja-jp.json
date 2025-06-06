@@ -1758,6 +1758,8 @@
         "content_limit_tooltip": "検索結果の内容長を制限し、制限を超える内容は切り捨てられます。"
       },
       "general.auto_check_update.title": "自動更新",
+      "general.early_access.title": "早期アクセス",
+      "general.early_access.tooltip": "有効にすると、GitHub の最新バージョンを使用します。ダウンロード速度が遅く、不安定な場合があります。データを事前にバックアップしてください。",
       "quickPhrase": {
         "title": "クイックフレーズ",
         "add": "フレーズを追加",

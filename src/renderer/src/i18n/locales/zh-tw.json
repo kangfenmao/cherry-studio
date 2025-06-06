@@ -1760,7 +1760,9 @@
         "content_limit": "內容長度限制",
         "content_limit_tooltip": "限制搜尋結果的內容長度，超過限制的內容將被截斷"
       },
-      "general.auto_check_update.title": "啟用自動更新",
+      "general.auto_check_update.title": "自動更新",
+      "general.early_access.title": "搶先體驗",
+      "general.early_access.tooltip": "開啟後，將使用 GitHub 的最新版本，下載速度可能較慢，請務必提前備份數據",
       "quickPhrase": {
         "title": "快捷短語",
         "add": "新增短語",
