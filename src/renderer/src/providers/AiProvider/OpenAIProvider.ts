@@ -999,12 +999,10 @@ export default class OpenAIProvider extends BaseOpenAIProvider {
   public async summaries(messages: Message[], assistant: Assistant): Promise<string> {
     const model = getTopNamingModel() || assistant.model || getDefaultModel()
 
-    const userMessages = takeRight(messages, 5)
-      .filter((message) => !message.isPreset)
-      .map((message) => ({
-        role: message.role,
-        content: getMainTextContent(message)
-      }))
+    const userMessages = takeRight(messages, 5).map((message) => ({
+      role: message.role,
+      content: getMainTextContent(message)
+    }))
 
     const userMessageContent = userMessages.reduce((prev, curr) => {
       const content = curr.role === 'user' ? `User: ${curr.content}` : `Assistant: ${curr.content}`

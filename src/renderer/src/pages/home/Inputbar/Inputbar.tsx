@@ -18,7 +18,7 @@ import { modelGenerating, useRuntime } from '@renderer/hooks/useRuntime'
 import { useMessageStyle, useSettings } from '@renderer/hooks/useSettings'
 import { useShortcut, useShortcutDisplay } from '@renderer/hooks/useShortcuts'
 import { useSidebarIconShow } from '@renderer/hooks/useSidebarIcon'
-import { addAssistantMessagesToTopic, getDefaultTopic } from '@renderer/services/AssistantService'
+import { getDefaultTopic } from '@renderer/services/AssistantService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import FileManager from '@renderer/services/FileManager'
 import { checkRateLimit, getUserMessage } from '@renderer/services/MessagesService'
@@ -408,7 +408,6 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
     const topic = getDefaultTopic(assistant.id)
 
     await db.topics.add({ id: topic.id, messages: [] })
-    await addAssistantMessagesToTopic({ assistant, topic })
 
     // Clear previous state
     // Reset to assistant default model
