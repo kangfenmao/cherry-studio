@@ -1876,7 +1876,8 @@
           "summary": "Summarize",
           "search": "Search",
           "refine": "Refine",
-          "copy": "Copy"
+          "copy": "Copy",
+          "quote": "Quote"
         },
         "window": {
           "pin": "Pin",

@@ -14,6 +14,7 @@ import { RootState } from '.'
 import { DEFAULT_TOOL_ORDER } from './inputTools'
 import { INITIAL_PROVIDERS, moveProvider } from './llm'
 import { mcpSlice } from './mcp'
+import { defaultActionItems } from './selectionStore'
 import { DEFAULT_SIDEBAR_ICONS, initialState as settingsInitialState } from './settings'
 import { defaultWebSearchProviders } from './websearch'
 
@@ -72,6 +73,17 @@ function updateWebSearchProvider(state: RootState, provider: Partial<WebSearchPr
       state.websearch.providers[index] = {
         ...state.websearch.providers[index],
         ...provider
+      }
+    }
+  }
+}
+
+function addSelectionAction(state: RootState, id: string) {
+  if (state.selectionStore && state.selectionStore.actionItems) {
+    if (!state.selectionStore.actionItems.some((item) => item.id === id)) {
+      const action = defaultActionItems.find((item) => item.id === id)
+      if (action) {
+        state.selectionStore.actionItems.push(action)
       }
     }
   }
@@ -1481,6 +1493,14 @@ const migrateConfig = {
       }
       state.settings.showTokens = true
       state.settings.earlyAccess = false
+      return state
+    } catch (error) {
+      return state
+    }
+  },
+  '111': (state: RootState) => {
+    try {
+      addSelectionAction(state, 'quote')
       return state
     } catch (error) {
       return state
