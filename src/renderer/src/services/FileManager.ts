@@ -8,7 +8,8 @@ import dayjs from 'dayjs'
 
 class FileManager {
   static async selectFiles(options?: Electron.OpenDialogOptions): Promise<FileType[] | null> {
-    return await window.api.file.select(options)
+    const files = await window.api.file.select(options)
+    return files
   }
 
   static async addFile(file: FileType): Promise<FileType> {
