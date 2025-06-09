@@ -8,7 +8,10 @@
       "add.name.placeholder": "Введите имя",
       "add.prompt": "Промпт",
       "add.prompt.placeholder": "Введите промпт",
-      "add.prompt.variables.tip": "Доступные переменные: {{date}}, {{time}}, {{datetime}}, {{system}}, {{arch}}, {{language}}, {{model_name}}",
+      "add.prompt.variables.tip": {
+        "title": "Доступные переменные",
+        "content": "{{date}}:\tДата\n{{time}}:\tВремя\n{{datetime}}:\tДата и время\n{{system}}:\tОперационная система\n{{arch}}:\tАрхитектура процессора\n{{language}}:\tЯзык\n{{model_name}}:\tНазвание модели"
+      },
       "add.title": "Создать агента",
       "delete.popup.content": "Вы уверены, что хотите удалить этого агента?",
       "edit.model.select.title": "Выбрать модель",

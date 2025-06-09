@@ -8,6 +8,10 @@
       "add.name.placeholder": "Digite o Nome",
       "add.prompt": "Prompt",
       "add.prompt.placeholder": "Digite o Prompt",
+      "add.prompt.variables.tip": {
+        "title": "Variáveis disponíveis",
+        "content": "{{date}}:\tData\n{{time}}:\tHora\n{{datetime}}:\tData e hora\n{{system}}:\tSistema operativo\n{{arch}}:\tArquitetura da CPU\n{{language}}:\tIdioma\n{{model_name}}:\tNome do modelo"
+      },
       "add.title": "Criar Agente Inteligente",
       "delete.popup.content": "Tem certeza de que deseja excluir este agente inteligente?",
       "edit.model.select.title": "Selecionar Modelo",

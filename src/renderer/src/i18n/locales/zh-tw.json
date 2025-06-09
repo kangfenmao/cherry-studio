@@ -8,7 +8,10 @@
       "add.name.placeholder": "輸入名稱",
       "add.prompt": "提示詞",
       "add.prompt.placeholder": "輸入提示詞",
-      "add.prompt.variables.tip": "可用的變數：{{date}}, {{time}}, {{datetime}}, {{system}}, {{arch}}, {{language}}, {{model_name}}",
+      "add.prompt.variables.tip": {
+        "title": "可用的變數",
+        "content": "{{date}}:\t日期\n{{time}}:\t時間\n{{datetime}}:\t日期和時間\n{{system}}:\t作業系統\n{{arch}}:\tCPU架構\n{{language}}:\t語言\n{{model_name}}:\t模型名稱"
+      },
       "add.title": "建立智慧代理人",
       "import": {
         "title": "從外部導入",

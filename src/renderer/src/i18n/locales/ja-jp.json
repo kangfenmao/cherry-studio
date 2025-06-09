@@ -8,7 +8,10 @@
       "add.name.placeholder": "名前を入力",
       "add.prompt": "プロンプト",
       "add.prompt.placeholder": "プロンプトを入力",
-      "add.prompt.variables.tip": "利用可能な変数：{{date}}, {{time}}, {{datetime}}, {{system}}, {{arch}}, {{language}}, {{model_name}}",
+      "add.prompt.variables.tip": {
+        "title": "利用可能な変数",
+        "content": "{{date}}:\t日付\n{{time}}:\t時間\n{{datetime}}:\t日付と時間\n{{system}}:\tオペレーティングシステム\n{{arch}}:\tCPUアーキテクチャ\n{{language}}:\t言語\n{{model_name}}:\tモデル名"
+      },
       "add.title": "エージェントを作成",
       "import": {
         "title": "外部からインポート",
