@@ -174,7 +174,8 @@ const MessageItem: FC<Props> = ({
             display: 'flex',
             flexDirection: 'column',
             alignSelf: isAssistantMessage ? 'flex-start' : 'flex-end',
-            flex: isBubbleStyle ? undefined : 1
+            flex: 1,
+            maxWidth: '100%'
           }}>
           <MessageHeader
             message={message}

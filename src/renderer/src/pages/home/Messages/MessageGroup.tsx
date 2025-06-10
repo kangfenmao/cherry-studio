@@ -180,7 +180,8 @@ const MessageGroup = ({ messages, topic, registerMessageElement }: Props) => {
           $isGrouped={isGrouped}
           key={message.id}
           className={classNames({
-            'group-message-wrapper': message.role === 'assistant' && isHorizontal && isGrouped,
+            // 加个卡片布局
+            'group-message-wrapper': message.role === 'assistant' && (isHorizontal || isGrid) && isGrouped,
             [multiModelMessageStyle]: isGrouped,
             selected: message.id === selectedMessageId
           })}>
