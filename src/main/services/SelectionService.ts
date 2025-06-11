@@ -40,7 +40,8 @@ type RelativeOrientation =
 
 enum TriggerMode {
   Selected = 'selected',
-  Ctrlkey = 'ctrlkey'
+  Ctrlkey = 'ctrlkey',
+  Shortcut = 'shortcut'
 }
 
 /** SelectionService is a singleton class that manages the selection hook and the toolbar window
@@ -315,6 +316,8 @@ export class SelectionService {
       this.toolbarWindow.close()
       this.toolbarWindow = null
     }
+    this.closePreloadedActionWindows()
+
     this.started = false
     this.logInfo('SelectionService Stopped')
     return true
@@ -349,6 +352,7 @@ export class SelectionService {
     //sync the new enabled state to all renderer windows
     storeSyncService.syncToRenderer('selectionStore/setSelectionEnabled', newEnabled)
   }
+
   /**
    * Create and configure the toolbar window
    * Sets up window properties, event handlers, and loads the toolbar UI
@@ -393,6 +397,9 @@ export class SelectionService {
 
     // Clean up when closed
     this.toolbarWindow.on('closed', () => {
+      if (!this.toolbarWindow?.isDestroyed()) {
+        this.toolbarWindow?.destroy()
+      }
       this.toolbarWindow = null
     })
 
@@ -576,6 +583,21 @@ export class SelectionService {
 
   private isSameLineWithRectPoint(startTop: Point, startBottom: Point, endTop: Point, endBottom: Point): boolean {
     return startTop.y === endTop.y && startBottom.y === endBottom.y
+  }
+
+  /**
+   * Get the user selected text and process it (trigger by shortcut)
+   *
+   * it's a public method used by shortcut service
+   */
+  public processSelectTextByShortcut(): void {
+    if (!this.selectionHook || this.triggerMode !== TriggerMode.Shortcut) return
+
+    const selectionData = this.selectionHook.getCurrentSelection()
+
+    if (selectionData) {
+      this.processTextSelection(selectionData)
+    }
   }
 
   /**
@@ -869,7 +891,6 @@ export class SelectionService {
     this.lastCtrlkeyDownTime = -1
 
     const selectionData = this.selectionHook!.getCurrentSelection()
-
     if (selectionData) {
       this.processTextSelection(selectionData)
     }
@@ -970,6 +991,17 @@ export class SelectionService {
       }
     } catch (error) {
       this.logError('Failed to initialize preloaded windows:', error as Error)
+    }
+  }
+
+  /**
+   * Close all preloaded action windows
+   */
+  private closePreloadedActionWindows() {
+    for (const actionWindow of this.preloadedActionWindows) {
+      if (!actionWindow.isDestroyed()) {
+        actionWindow.destroy()
+      }
     }
   }
 
@@ -1121,24 +1153,38 @@ export class SelectionService {
    * Manages appropriate event listeners for each mode
    */
   private processTriggerMode() {
-    if (this.triggerMode === TriggerMode.Selected) {
-      if (this.isCtrlkeyListenerActive) {
-        this.selectionHook!.off('key-down', this.handleKeyDownCtrlkeyMode)
-        this.selectionHook!.off('key-up', this.handleKeyUpCtrlkeyMode)
+    switch (this.triggerMode) {
+      case TriggerMode.Selected:
+        if (this.isCtrlkeyListenerActive) {
+          this.selectionHook!.off('key-down', this.handleKeyDownCtrlkeyMode)
+          this.selectionHook!.off('key-up', this.handleKeyUpCtrlkeyMode)
 
-        this.isCtrlkeyListenerActive = false
-      }
+          this.isCtrlkeyListenerActive = false
+        }
 
-      this.selectionHook!.setSelectionPassiveMode(false)
-    } else if (this.triggerMode === TriggerMode.Ctrlkey) {
-      if (!this.isCtrlkeyListenerActive) {
-        this.selectionHook!.on('key-down', this.handleKeyDownCtrlkeyMode)
-        this.selectionHook!.on('key-up', this.handleKeyUpCtrlkeyMode)
+        this.selectionHook!.setSelectionPassiveMode(false)
+        break
+      case TriggerMode.Ctrlkey:
+        if (!this.isCtrlkeyListenerActive) {
+          this.selectionHook!.on('key-down', this.handleKeyDownCtrlkeyMode)
+          this.selectionHook!.on('key-up', this.handleKeyUpCtrlkeyMode)
 
-        this.isCtrlkeyListenerActive = true
-      }
+          this.isCtrlkeyListenerActive = true
+        }
 
-      this.selectionHook!.setSelectionPassiveMode(true)
+        this.selectionHook!.setSelectionPassiveMode(true)
+        break
+      case TriggerMode.Shortcut:
+        //remove the ctrlkey listener, don't need any key listener for shortcut mode
+        if (this.isCtrlkeyListenerActive) {
+          this.selectionHook!.off('key-down', this.handleKeyDownCtrlkeyMode)
+          this.selectionHook!.off('key-up', this.handleKeyUpCtrlkeyMode)
+
+          this.isCtrlkeyListenerActive = false
+        }
+
+        this.selectionHook!.setSelectionPassiveMode(true)
+        break
     }
   }
 
