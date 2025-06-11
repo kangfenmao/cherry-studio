@@ -1508,6 +1508,24 @@ const migrateConfig = {
         state.llm.translateModel = SYSTEM_MODELS.defaultModel[2]
       }
 
+      // Add selection_assistant_toggle shortcut after mini_window if it doesn't exist
+      if (state.shortcuts) {
+        const miniWindowIndex = state.shortcuts.shortcuts.findIndex((shortcut) => shortcut.key === 'mini_window')
+        const hasSelectionAssistant = state.shortcuts.shortcuts.some(
+          (shortcut) => shortcut.key === 'selection_assistant_toggle'
+        )
+
+        if (miniWindowIndex !== -1 && !hasSelectionAssistant) {
+          state.shortcuts.shortcuts.splice(miniWindowIndex + 1, 0, {
+            key: 'selection_assistant_toggle',
+            shortcut: [],
+            editable: true,
+            enabled: false,
+            system: true
+          })
+        }
+      }
+
       return state
     } catch (error) {
       return state
