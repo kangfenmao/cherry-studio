@@ -127,16 +127,6 @@ export const INITIAL_PROVIDERS: Provider[] = [
     enabled: false
   },
   {
-    id: 'o3',
-    name: 'O3',
-    type: 'openai',
-    apiKey: '',
-    apiHost: 'https://api.o3.fan',
-    models: SYSTEM_MODELS.o3,
-    isSystem: true,
-    enabled: false
-  },
-  {
     id: '302ai',
     name: '302.AI',
     type: 'openai',
@@ -144,7 +134,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.302.ai',
     models: SYSTEM_MODELS['302ai'],
     isSystem: true,
-    enabled: true
+    enabled: false
   },
   {
     id: 'cephalon',
@@ -154,7 +144,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://cephalon.cloud/user-center/v1/model',
     models: SYSTEM_MODELS.cephalon,
     isSystem: true,
-    enabled: true
+    enabled: false
   },
   {
     id: 'openrouter',

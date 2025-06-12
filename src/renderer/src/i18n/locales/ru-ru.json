@@ -703,7 +703,8 @@
       "warn.yuque.exporting": "Экспортируется в Yuque, пожалуйста, не отправляйте повторные запросы!",
       "warn.siyuan.exporting": "Экспортируется в Siyuan, пожалуйста, не отправляйте повторные запросы!",
       "download.success": "Скачано успешно",
-      "download.failed": "Скачивание не удалось"
+      "download.failed": "Скачивание не удалось",
+      "error.fetchTopicName": "Не удалось назвать топик"
     },
     "minapp": {
       "popup": {

@@ -1,7 +1,7 @@
 import ZhinaoProviderLogo from '@renderer/assets/images/models/360.png'
 import HunyuanProviderLogo from '@renderer/assets/images/models/hunyuan.png'
 import AzureProviderLogo from '@renderer/assets/images/models/microsoft.png'
-import Ai302ProviderLogo from '@renderer/assets/images/providers/302ai.png'
+import Ai302ProviderLogo from '@renderer/assets/images/providers/302ai.webp'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.webp'
 import AlayaNewProviderLogo from '@renderer/assets/images/providers/alayanew.webp'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.png'
@@ -9,6 +9,7 @@ import BaichuanProviderLogo from '@renderer/assets/images/providers/baichuan.png
 import BaiduCloudProviderLogo from '@renderer/assets/images/providers/baidu-cloud.svg'
 import BailianProviderLogo from '@renderer/assets/images/providers/bailian.png'
 import BurnCloudProviderLogo from '@renderer/assets/images/providers/burncloud.png'
+import CephalonProviderLogo from '@renderer/assets/images/providers/cephalon.jpeg'
 import DeepSeekProviderLogo from '@renderer/assets/images/providers/deepseek.png'
 import DmxapiProviderLogo from '@renderer/assets/images/providers/DMXAPI.png'
 import FireworksProviderLogo from '@renderer/assets/images/providers/fireworks.png'
@@ -45,7 +46,6 @@ import VoyageAIProviderLogo from '@renderer/assets/images/providers/voyageai.png
 import XirangProviderLogo from '@renderer/assets/images/providers/xirang.png'
 import ZeroOneProviderLogo from '@renderer/assets/images/providers/zero-one.png'
 import ZhipuProviderLogo from '@renderer/assets/images/providers/zhipu.png'
-import CephalonProviderLogo from '@renderer/assets/images/providers/cephalon.jpeg'
 
 import { TOKENFLUX_HOST } from './constant'
 
