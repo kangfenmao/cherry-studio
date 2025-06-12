@@ -143,7 +143,7 @@ import YiModelLogoDark from '@renderer/assets/images/models/yi_dark.png'
 import YoudaoLogo from '@renderer/assets/images/providers/netease-youdao.svg'
 import NomicLogo from '@renderer/assets/images/providers/nomic.png'
 import { getProviderByModel } from '@renderer/services/AssistantService'
-import { Assistant, Model } from '@renderer/types'
+import { Model } from '@renderer/types'
 import OpenAI from 'openai'
 
 import { WEB_SEARCH_PROMPT_FOR_OPENROUTER } from './prompts'
@@ -198,6 +198,11 @@ export const VISION_REGEX = new RegExp(
   `\\b(?!(?:${visionExcludedModels.join('|')})\\b)(${visionAllowedModels.join('|')})\\b`,
   'i'
 )
+
+// For middleware to identify models that must use the dedicated Image API
+export const DEDICATED_IMAGE_MODELS = ['grok-2-image', 'dall-e-3', 'dall-e-2', 'gpt-image-1']
+export const isDedicatedImageGenerationModel = (model: Model): boolean =>
+  DEDICATED_IMAGE_MODELS.filter((m) => model.id.includes(m)).length > 0
 
 // Text to image models
 export const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview|janus/i
@@ -2246,14 +2251,24 @@ export const TEXT_TO_IMAGES_MODELS_SUPPORT_IMAGE_ENHANCEMENT = [
   'stabilityai/stable-diffusion-xl-base-1.0'
 ]
 
+export const SUPPORTED_DISABLE_GENERATION_MODELS = [
+  'gemini-2.0-flash-exp',
+  'gpt-4o',
+  'gpt-4o-mini',
+  'gpt-4.1',
+  'gpt-4.1-mini',
+  'gpt-4.1-nano',
+  'o3'
+]
+
 export const GENERATE_IMAGE_MODELS = [
   'gemini-2.0-flash-exp-image-generation',
   'gemini-2.0-flash-preview-image-generation',
-  'gemini-2.0-flash-exp',
   'grok-2-image-1212',
   'grok-2-image',
   'grok-2-image-latest',
-  'gpt-image-1'
+  'gpt-image-1',
+  ...SUPPORTED_DISABLE_GENERATION_MODELS
 ]
 
 export const GEMINI_SEARCH_MODELS = [
@@ -2362,8 +2377,30 @@ export function isSupportedReasoningEffortOpenAIModel(model: Model): boolean {
   )
 }
 
-export function isOpenAIWebSearch(model: Model): boolean {
+export function isOpenAIChatCompletionOnlyModel(model: Model): boolean {
+  if (!model) {
+    return false
+  }
+
+  return (
+    model.id.includes('gpt-4o-search-preview') ||
+    model.id.includes('gpt-4o-mini-search-preview') ||
+    model.id.includes('o1-mini') ||
+    model.id.includes('o1-preview')
+  )
+}
+
+export function isOpenAIWebSearchChatCompletionOnlyModel(model: Model): boolean {
   return model.id.includes('gpt-4o-search-preview') || model.id.includes('gpt-4o-mini-search-preview')
+}
+
+export function isOpenAIWebSearchModel(model: Model): boolean {
+  return (
+    model.id.includes('gpt-4o-search-preview') ||
+    model.id.includes('gpt-4o-mini-search-preview') ||
+    (model.id.includes('gpt-4.1') && !model.id.includes('gpt-4.1-nano')) ||
+    (model.id.includes('gpt-4o') && !model.id.includes('gpt-4o-image'))
+  )
 }
 
 export function isSupportedThinkingTokenModel(model?: Model): boolean {
@@ -2506,7 +2543,7 @@ export function isNotSupportTemperatureAndTopP(model: Model): boolean {
     return true
   }
 
-  if (isOpenAIReasoningModel(model) || isOpenAIWebSearch(model)) {
+  if (isOpenAIReasoningModel(model) || isOpenAIChatCompletionOnlyModel(model)) {
     return true
   }
 
@@ -2536,17 +2573,13 @@ export function isWebSearchModel(model: Model): boolean {
     return false
   }
 
+  // 不管哪个供应商都判断了
   if (model.id.includes('claude')) {
     return CLAUDE_SUPPORTED_WEBSEARCH_REGEX.test(model.id)
   }
 
   if (provider.type === 'openai-response') {
-    if (
-      isOpenAILLMModel(model) &&
-      !isTextToImageModel(model) &&
-      !isOpenAIReasoningModel(model) &&
-      !GENERATE_IMAGE_MODELS.includes(model.id)
-    ) {
+    if (isOpenAIWebSearchModel(model)) {
       return true
     }
 
@@ -2558,12 +2591,7 @@ export function isWebSearchModel(model: Model): boolean {
   }
 
   if (provider.id === 'aihubmix') {
-    if (
-      isOpenAILLMModel(model) &&
-      !isTextToImageModel(model) &&
-      !isOpenAIReasoningModel(model) &&
-      !GENERATE_IMAGE_MODELS.includes(model.id)
-    ) {
+    if (isOpenAIWebSearchModel(model)) {
       return true
     }
 
@@ -2572,7 +2600,7 @@ export function isWebSearchModel(model: Model): boolean {
   }
 
   if (provider?.type === 'openai') {
-    if (GEMINI_SEARCH_MODELS.includes(model?.id) || isOpenAIWebSearch(model)) {
+    if (GEMINI_SEARCH_MODELS.includes(model?.id) || isOpenAIWebSearchModel(model)) {
       return true
     }
   }
@@ -2606,6 +2634,20 @@ export function isWebSearchModel(model: Model): boolean {
   return false
 }
 
+export function isOpenRouterBuiltInWebSearchModel(model: Model): boolean {
+  if (!model) {
+    return false
+  }
+
+  const provider = getProviderByModel(model)
+
+  if (provider.id !== 'openrouter') {
+    return false
+  }
+
+  return isOpenAIWebSearchModel(model) || model.id.includes('sonar')
+}
+
 export function isGenerateImageModel(model: Model): boolean {
   if (!model) {
     return false
@@ -2628,54 +2670,58 @@ export function isGenerateImageModel(model: Model): boolean {
   return false
 }
 
-export function getOpenAIWebSearchParams(assistant: Assistant, model: Model): Record<string, any> {
-  if (isWebSearchModel(model)) {
-    if (assistant.enableWebSearch) {
-      const webSearchTools = getWebSearchTools(model)
+export function isSupportedDisableGenerationModel(model: Model): boolean {
+  if (!model) {
+    return false
+  }
 
-      if (model.provider === 'grok') {
-        return {
-          search_parameters: {
-            mode: 'auto',
-            return_citations: true,
-            sources: [{ type: 'web' }, { type: 'x' }, { type: 'news' }]
-          }
-        }
-      }
+  return SUPPORTED_DISABLE_GENERATION_MODELS.includes(model.id)
+}
 
-      if (model.provider === 'hunyuan') {
-        return { enable_enhancement: true, citation: true, search_info: true }
-      }
+export function getOpenAIWebSearchParams(model: Model, isEnableWebSearch?: boolean): Record<string, any> {
+  if (!isEnableWebSearch) {
+    return {}
+  }
 
-      if (model.provider === 'dashscope') {
-        return {
-          enable_search: true,
-          search_options: {
-            forced_search: true
-          }
-        }
-      }
+  const webSearchTools = getWebSearchTools(model)
 
-      if (model.provider === 'openrouter') {
-        return {
-          plugins: [{ id: 'web', search_prompts: WEB_SEARCH_PROMPT_FOR_OPENROUTER }]
-        }
-      }
-
-      if (isOpenAIWebSearch(model)) {
-        return {
-          web_search_options: {}
-        }
-      }
-
-      return {
-        tools: webSearchTools
-      }
-    } else {
-      if (model.provider === 'hunyuan') {
-        return { enable_enhancement: false }
+  if (model.provider === 'grok') {
+    return {
+      search_parameters: {
+        mode: 'auto',
+        return_citations: true,
+        sources: [{ type: 'web' }, { type: 'x' }, { type: 'news' }]
       }
     }
+  }
+
+  if (model.provider === 'hunyuan') {
+    return { enable_enhancement: true, citation: true, search_info: true }
+  }
+
+  if (model.provider === 'dashscope') {
+    return {
+      enable_search: true,
+      search_options: {
+        forced_search: true
+      }
+    }
+  }
+
+  if (isOpenAIWebSearchChatCompletionOnlyModel(model)) {
+    return {
+      web_search_options: {}
+    }
+  }
+
+  if (model.provider === 'openrouter') {
+    return {
+      plugins: [{ id: 'web', search_prompts: WEB_SEARCH_PROMPT_FOR_OPENROUTER }]
+    }
+  }
+
+  return {
+    tools: webSearchTools
   }
 
   return {}
