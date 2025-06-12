@@ -1566,6 +1566,14 @@ const migrateConfig = {
     } catch (error) {
       return state
     }
+  },
+  '112': (state: RootState) => {
+    try {
+      addProvider(state, '302ai')
+      return state
+    } catch (error) {
+      return state
+    }
   }
 }
 

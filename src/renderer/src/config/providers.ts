@@ -1,6 +1,7 @@
 import ZhinaoProviderLogo from '@renderer/assets/images/models/360.png'
 import HunyuanProviderLogo from '@renderer/assets/images/models/hunyuan.png'
 import AzureProviderLogo from '@renderer/assets/images/models/microsoft.png'
+import Ai302ProviderLogo from '@renderer/assets/images/providers/302ai.png'
 import AiHubMixProviderLogo from '@renderer/assets/images/providers/aihubmix.webp'
 import AlayaNewProviderLogo from '@renderer/assets/images/providers/alayanew.webp'
 import AnthropicProviderLogo from '@renderer/assets/images/providers/anthropic.png'
@@ -49,6 +50,7 @@ import CephalonProviderLogo from '@renderer/assets/images/providers/cephalon.jpe
 import { TOKENFLUX_HOST } from './constant'
 
 const PROVIDER_LOGO_MAP = {
+  '302ai': Ai302ProviderLogo,
   openai: OpenAiProviderLogo,
   silicon: SiliconFlowProviderLogo,
   deepseek: DeepSeekProviderLogo,
@@ -108,6 +110,17 @@ export const NOT_SUPPORTED_REANK_PROVIDERS = ['ollama']
 export const ONLY_SUPPORTED_DIMENSION_PROVIDERS = ['ollama', 'infini']
 
 export const PROVIDER_CONFIG = {
+  '302ai': {
+    api: {
+      url: 'https://api.302.ai'
+    },
+    websites: {
+      official: 'https://302.ai',
+      apiKey: 'https://dash.302.ai/apis/list',
+      docs: 'https://302ai.apifox.cn/api-147522039',
+      models: 'https://302.ai/pricing/'
+    }
+  },
   openai: {
     api: {
       url: 'https://api.openai.com'
