@@ -2,12 +2,15 @@ import { DEFAULT_MAX_TOKENS } from '@renderer/config/constant'
 import Logger from '@renderer/config/logger'
 import {
   findTokenLimit,
+  GEMINI_FLASH_MODEL_REGEX,
   getOpenAIWebSearchParams,
+  isDoubaoThinkingAutoModel,
   isReasoningModel,
   isSupportedReasoningEffortGrokModel,
   isSupportedReasoningEffortModel,
   isSupportedReasoningEffortOpenAIModel,
   isSupportedThinkingTokenClaudeModel,
+  isSupportedThinkingTokenDoubaoModel,
   isSupportedThinkingTokenGeminiModel,
   isSupportedThinkingTokenModel,
   isSupportedThinkingTokenQwenModel,
@@ -92,6 +95,23 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
       return {}
     }
     const reasoningEffort = assistant?.settings?.reasoning_effort
+
+    // Doubao 思考模式支持
+    if (isSupportedThinkingTokenDoubaoModel(model)) {
+      // reasoningEffort 为空，默认开启 enabled
+      if (!reasoningEffort) {
+        return { thinking: { type: 'disabled' } }
+      }
+      if (reasoningEffort === 'high') {
+        return { thinking: { type: 'enabled' } }
+      }
+      if (reasoningEffort === 'auto' && isDoubaoThinkingAutoModel(model)) {
+        return { thinking: { type: 'auto' } }
+      }
+      // 其他情况不带 thinking 字段
+      return {}
+    }
+
     if (!reasoningEffort) {
       if (isSupportedThinkingTokenQwenModel(model)) {
         return { enable_thinking: false }
@@ -106,9 +126,14 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         if (this.provider.id === 'openrouter') {
           return { reasoning: { max_tokens: 0, exclude: true } }
         }
-        return {
-          reasoning_effort: 'none'
+        if (GEMINI_FLASH_MODEL_REGEX.test(model.id)) {
+          return { reasoning_effort: 'none' }
         }
+        return {}
+      }
+
+      if (isSupportedThinkingTokenDoubaoModel(model)) {
+        return { thinking: { type: 'disabled' } }
       }
 
       return {}
@@ -160,6 +185,17 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
           budget_tokens: Math.floor(
             Math.max(1024, Math.min(budgetTokens, (maxTokens || DEFAULT_MAX_TOKENS) * effortRatio))
           )
+        }
+      }
+    }
+
+    // Doubao models
+    if (isSupportedThinkingTokenDoubaoModel(model)) {
+      if (assistant.settings?.reasoning_effort === 'high') {
+        return {
+          thinking: {
+            type: 'enabled'
+          }
         }
       }
     }

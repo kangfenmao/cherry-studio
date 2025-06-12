@@ -19,7 +19,13 @@ import {
 } from '@google/genai'
 import { nanoid } from '@reduxjs/toolkit'
 import { GenericChunk } from '@renderer/aiCore/middleware/schemas'
-import { findTokenLimit, isGeminiReasoningModel, isGemmaModel, isVisionModel } from '@renderer/config/models'
+import {
+  findTokenLimit,
+  GEMINI_FLASH_MODEL_REGEX,
+  isGeminiReasoningModel,
+  isGemmaModel,
+  isVisionModel
+} from '@renderer/config/models'
 import { CacheService } from '@renderer/services/CacheService'
 import { estimateTextTokens } from '@renderer/services/TokenService'
 import {
@@ -378,7 +384,6 @@ export class GeminiAPIClient extends BaseApiClient<
   private getBudgetToken(assistant: Assistant, model: Model) {
     if (isGeminiReasoningModel(model)) {
       const reasoningEffort = assistant?.settings?.reasoning_effort
-      const GEMINI_FLASH_MODEL_REGEX = new RegExp('gemini-.*-flash.*$')
 
       // 如果thinking_budget是undefined，不思考
       if (reasoningEffort === undefined) {
