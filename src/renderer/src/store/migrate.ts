@@ -1558,6 +1558,14 @@ const migrateConfig = {
     } catch (error) {
       return state
     }
+  },
+  '112': (state: RootState) => {
+    try {
+      addProvider(state, 'cephalon')
+      return state
+    } catch (error) {
+      return state
+    }
   }
 }
 

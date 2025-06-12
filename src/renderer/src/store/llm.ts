@@ -27,6 +27,16 @@ export interface LlmState {
 
 export const INITIAL_PROVIDERS: Provider[] = [
   {
+    id: 'cephalon',
+    name: 'Cephalon',
+    type: 'openai',
+    apiKey: '',
+    apiHost: 'https://cephalon.cloud/user-center/v1/model',
+    models: SYSTEM_MODELS.cephalon,
+    isSystem: true,
+    enabled: true
+  },
+  {
     id: 'silicon',
     name: 'Silicon',
     type: 'openai',
