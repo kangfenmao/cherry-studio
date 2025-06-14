@@ -10,7 +10,7 @@
       "add.prompt.placeholder": "输入提示词",
       "add.prompt.variables.tip": {
         "title": "可用的变量",
-        "content": "{{date}}:\t日期\n{{time}}:\t时间\n{{datetime}}:\t日期和时间\n{{system}}:\t操作系统\n{{arch}}:\tCPU架构\n{{language}}:\t语言\n{{model_name}}:\t模型名称"
+        "content": "{{date}}:\t日期\n{{time}}:\t时间\n{{datetime}}:\t日期和时间\n{{system}}:\t操作系统\n{{arch}}:\tCPU架构\n{{language}}:\t语言\n{{model_name}}:\t模型名称\n{{username}}:\t用户名"
       },
       "add.title": "创建智能体",
       "import": {

@@ -10,7 +10,7 @@
       "add.prompt.placeholder": "Enter prompt",
       "add.prompt.variables.tip": {
         "title": "Available variables",
-        "content": "{{date}}:\tDate\n{{time}}:\tTime\n{{datetime}}:\tDate and time\n{{system}}:\tOperating system\n{{arch}}:\tCPU architecture\n{{language}}:\tLanguage\n{{model_name}}:\tModel name"
+        "content": "{{date}}:\tDate\n{{time}}:\tTime\n{{datetime}}:\tDate and time\n{{system}}:\tOperating system\n{{arch}}:\tCPU architecture\n{{language}}:\tLanguage\n{{model_name}}:\tModel name\n{{username}}:\tUsername"
       },
       "add.title": "Create Agent",
       "import": {
