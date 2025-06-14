@@ -406,7 +406,8 @@ const MessageMenubar: FC<Props> = (props) => {
           menu={{
             style: {
               maxHeight: 250,
-              overflowY: 'auto'
+              overflowY: 'auto',
+              backgroundClip: 'border-box'
             },
             items: [
               ...TranslateLanguageOptions.map((item) => ({
