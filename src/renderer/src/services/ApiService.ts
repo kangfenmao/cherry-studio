@@ -516,7 +516,7 @@ export async function fetchGenerate({ prompt, content }: { prompt: string; conte
 
 function hasApiKey(provider: Provider) {
   if (!provider) return false
-  if (provider.id === 'ollama' || provider.id === 'lmstudio') return true
+  if (provider.id === 'ollama' || provider.id === 'lmstudio' || provider.type === 'vertexai') return true
   return !isEmpty(provider.apiKey)
 }
 
@@ -538,14 +538,19 @@ export function checkApiProvider(provider: Provider): void {
   const key = 'api-check'
   const style = { marginTop: '3vh' }
 
-  if (provider.id !== 'ollama' && provider.id !== 'lmstudio') {
+  if (
+    provider.id !== 'ollama' &&
+    provider.id !== 'lmstudio' &&
+    provider.type !== 'vertexai' &&
+    provider.id !== 'copilot'
+  ) {
     if (!provider.apiKey) {
       window.message.error({ content: i18n.t('message.error.enter.api.key'), key, style })
       throw new Error(i18n.t('message.error.enter.api.key'))
     }
   }
 
-  if (!provider.apiHost) {
+  if (!provider.apiHost && provider.type !== 'vertexai') {
     window.message.error({ content: i18n.t('message.error.enter.api.host'), key, style })
     throw new Error(i18n.t('message.error.enter.api.host'))
   }
