@@ -1019,7 +1019,8 @@
       "qiniu": "七牛云 AI 推理",
       "tokenflux": "TokenFlux",
       "302ai": "302.AI",
-      "cephalon": "Cephalon"
+      "cephalon": "Cephalon",
+      "lanyun": "LANYUN"
     },
     "restore": {
       "confirm": "データを復元しますか？",
