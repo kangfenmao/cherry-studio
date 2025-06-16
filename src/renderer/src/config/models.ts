@@ -521,40 +521,64 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
   ],
   aihubmix: [
     {
+      id: 'o3',
+      provider: 'aihubmix',
+      name: 'o3',
+      group: 'gpt'
+    },
+    {
+      id: 'o4-mini',
+      provider: 'aihubmix',
+      name: 'o4-mini',
+      group: 'gpt'
+    },
+    {
+      id: 'gpt-4.1',
+      provider: 'aihubmix',
+      name: 'gpt-4.1',
+      group: 'gpt'
+    },
+    {
       id: 'gpt-4o',
       provider: 'aihubmix',
-      name: 'GPT-4o',
-      group: 'GPT-4o'
+      name: 'gpt-4o',
+      group: 'gpt'
     },
     {
-      id: 'claude-3-5-sonnet-latest',
+      id: 'gpt-image-1',
       provider: 'aihubmix',
-      name: 'Claude 3.5 Sonnet',
-      group: 'Claude 3.5'
+      name: 'gpt-image-1',
+      group: 'gpt'
     },
     {
-      id: 'gemini-2.0-flash-exp-search',
+      id: 'DeepSeek-V3',
       provider: 'aihubmix',
-      name: 'Gemini 2.0 Flash Exp Search',
-      group: 'Gemini 2.0'
+      name: 'DeepSeek-V3',
+      group: 'DeepSeek'
     },
     {
-      id: 'deepseek-chat',
+      id: 'claude-sonnet-4-20250514',
       provider: 'aihubmix',
-      name: 'DeepSeek Chat',
-      group: 'DeepSeek Chat'
+      name: 'claude-sonnet-4-20250514',
+      group: 'claude'
     },
     {
-      id: 'aihubmix-Llama-3-3-70B-Instruct',
+      id: 'gemini-2.5-pro-preview-05-06',
       provider: 'aihubmix',
-      name: 'Llama-3.3-70b',
-      group: 'Llama 3.3'
+      name: 'gemini-2.5-pro-preview-05-06',
+      group: 'gemini'
     },
     {
-      id: 'Qwen/QVQ-72B-Preview',
+      id: 'gemini-2.5-flash-preview-05-20-nothink',
       provider: 'aihubmix',
-      name: 'Qwen/QVQ-72B',
-      group: 'Qwen'
+      name: 'gemini-2.5-flash-preview-05-20-nothink',
+      group: 'gemini'
+    },
+    {
+      id: 'gemini-2.5-flash',
+      provider: 'aihubmix',
+      name: 'gemini-2.5-flash',
+      group: 'gemini'
     }
   ],
 
