@@ -254,12 +254,20 @@ async function fetchExternalTool(
     const enabledMCPs = assistant.mcpServers
     if (enabledMCPs && enabledMCPs.length > 0) {
       try {
-        const toolPromises = enabledMCPs.map(async (mcpServer) => {
-          const tools = await window.api.mcp.listTools(mcpServer)
-          return tools.filter((tool: any) => !mcpServer.disabledTools?.includes(tool.name))
+        const toolPromises = enabledMCPs.map<Promise<MCPTool[]>>(async (mcpServer) => {
+          try {
+            const tools = await window.api.mcp.listTools(mcpServer)
+            return tools.filter((tool: any) => !mcpServer.disabledTools?.includes(tool.name))
+          } catch (error) {
+            console.error(`Error fetching tools from MCP server ${mcpServer.name}:`, error)
+            return []
+          }
         })
-        const results = await Promise.all(toolPromises)
-        mcpTools = results.flat() // Flatten the array of arrays
+        const results = await Promise.allSettled(toolPromises)
+        mcpTools = results
+          .filter((result): result is PromiseFulfilledResult<MCPTool[]> => result.status === 'fulfilled')
+          .map((result) => result.value)
+          .flat()
       } catch (toolError) {
         console.error('Error fetching MCP tools:', toolError)
       }
