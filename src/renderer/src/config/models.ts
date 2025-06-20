@@ -2688,7 +2688,7 @@ export function isOpenRouterBuiltInWebSearchModel(model: Model): boolean {
     return false
   }
 
-  return isOpenAIWebSearchModel(model) || model.id.includes('sonar')
+  return isOpenAIWebSearchChatCompletionOnlyModel(model) || model.id.includes('sonar')
 }
 
 export function isGenerateImageModel(model: Model): boolean {
