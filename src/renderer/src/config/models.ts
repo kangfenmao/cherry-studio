@@ -2720,7 +2720,7 @@ export function isSupportedDisableGenerationModel(model: Model): boolean {
     return false
   }
 
-  return SUPPORTED_DISABLE_GENERATION_MODELS.includes(model.id)
+  return SUPPORTED_DISABLE_GENERATION_MODELS.includes(getBaseModelName(model.id))
 }
 
 export function getOpenAIWebSearchParams(model: Model, isEnableWebSearch?: boolean): Record<string, any> {
