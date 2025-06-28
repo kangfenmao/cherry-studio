@@ -1628,9 +1628,6 @@ const migrateConfig = {
           }
         }
       })
-      if (state.settings) {
-        state.settings.testChannel = UpgradeChannel.LATEST
-      }
       return state
     } catch (error) {
       return state
@@ -1654,6 +1651,9 @@ const migrateConfig = {
 
         // @ts-ignore eslint-disable-next-line
         delete state.websearch.contentLimit
+      }
+      if (state.settings) {
+        state.settings.testChannel = UpgradeChannel.LATEST
       }
 
       return state
