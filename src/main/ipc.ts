@@ -142,14 +142,20 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
     configManager.setAutoUpdate(isActive)
   })
 
-  ipcMain.handle(IpcChannel.App_SetEnableEarlyAccess, async (_, isActive: boolean) => {
-    appUpdater.cancelDownload()
-    configManager.setEnableEarlyAccess(isActive)
+  ipcMain.handle(IpcChannel.App_SetTestPlan, async (_, isActive: boolean) => {
+    log.info('set test plan', isActive)
+    if (isActive !== configManager.getTestPlan()) {
+      appUpdater.cancelDownload()
+      configManager.setTestPlan(isActive)
+    }
   })
 
-  ipcMain.handle(IpcChannel.App_SetUpgradeChannel, async (_, channel: UpgradeChannel) => {
-    appUpdater.cancelDownload()
-    configManager.setUpgradeChannel(channel)
+  ipcMain.handle(IpcChannel.App_SetTestChannel, async (_, channel: UpgradeChannel) => {
+    log.info('set test channel', channel)
+    if (channel !== configManager.getTestChannel()) {
+      appUpdater.cancelDownload()
+      configManager.setTestChannel(channel)
+    }
   })
 
   ipcMain.handle(IpcChannel.Config_Set, (_, key: string, value: any, isNotify: boolean = false) => {
