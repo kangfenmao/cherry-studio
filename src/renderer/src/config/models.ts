@@ -2508,9 +2508,11 @@ export function isSupportedThinkingTokenQwenModel(model?: Model): boolean {
   return (
     baseName.startsWith('qwen3') ||
     [
+      'qwen-plus',
       'qwen-plus-latest',
       'qwen-plus-0428',
       'qwen-plus-2025-04-28',
+      'qwen-turbo',
       'qwen-turbo-latest',
       'qwen-turbo-0428',
       'qwen-turbo-2025-04-28'
