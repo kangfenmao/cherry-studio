@@ -4,6 +4,7 @@ import CopyIcon from '@renderer/components/Icons/CopyIcon'
 import { HStack } from '@renderer/components/Layout'
 import { isEmbeddingModel } from '@renderer/config/models'
 import { translateLanguageOptions } from '@renderer/config/translate'
+import { useCodeStyle } from '@renderer/context/CodeStyleProvider'
 import db from '@renderer/databases'
 import { useDefaultModel } from '@renderer/hooks/useAssistant'
 import { useProviders } from '@renderer/hooks/useProvider'
@@ -26,7 +27,6 @@ import { find, isEmpty, sortBy } from 'lodash'
 import { HelpCircle, Settings2, TriangleAlert } from 'lucide-react'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import ReactMarkdown from 'react-markdown'
 import styled from 'styled-components'
 
 let _text = ''
@@ -216,9 +216,11 @@ const TranslateSettings: FC<{
 
 const TranslatePage: FC = () => {
   const { t } = useTranslation()
+  const { shikiMarkdownIt } = useCodeStyle()
   const [targetLanguage, setTargetLanguage] = useState(_targetLanguage)
   const [text, setText] = useState(_text)
   const [result, setResult] = useState(_result)
+  const [renderedMarkdown, setRenderedMarkdown] = useState<string>('')
   const { translateModel, setTranslateModel } = useDefaultModel()
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -378,6 +380,24 @@ const TranslatePage: FC = () => {
   useEffect(() => {
     isEmpty(text) && setResult('')
   }, [text])
+
+  // Render markdown content when result or enableMarkdown changes
+  useEffect(() => {
+    if (enableMarkdown && result) {
+      let isMounted = true
+      shikiMarkdownIt(result).then((rendered) => {
+        if (isMounted) {
+          setRenderedMarkdown(rendered)
+        }
+      })
+      return () => {
+        isMounted = false
+      }
+    } else {
+      setRenderedMarkdown('')
+      return undefined
+    }
+  }, [result, enableMarkdown, shikiMarkdownIt])
 
   useEffect(() => {
     runAsyncFunction(async () => {
@@ -607,13 +627,13 @@ const TranslatePage: FC = () => {
             />
           </OperationBar>
 
-          <OutputText ref={outputTextRef} onScroll={handleOutputScroll} className="selectable">
+          <OutputText ref={outputTextRef} onScroll={handleOutputScroll} className={'selectable'}>
             {!result ? (
               t('translate.output.placeholder')
             ) : enableMarkdown ? (
-              <ReactMarkdown>{result}</ReactMarkdown>
+              <div className="markdown" dangerouslySetInnerHTML={{ __html: renderedMarkdown }} />
             ) : (
-              result
+              <div className="plain">{result}</div>
             )}
           </OutputText>
         </OutputContainer>
@@ -703,7 +723,19 @@ const OutputText = styled.div`
   flex: 1;
   padding: 5px 16px;
   overflow-y: auto;
-  white-space: pre-wrap;
+
+  .plain {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .markdown {
+    /* for shiki code block overflow */
+    .line * {
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+  }
 `
 
 const TranslateButton = styled(Button)``
