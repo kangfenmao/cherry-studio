@@ -113,7 +113,7 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
     }
 
     return isMac ? [preprocessOptions, ocrOptions] : [preprocessOptions]
-  }, [ocrProviders, preprocessProviders])
+  }, [ocrProviders, preprocessProviders, t])
 
   const onOk = async () => {
     try {
