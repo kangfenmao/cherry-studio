@@ -1754,6 +1754,15 @@ const migrateConfig = {
     } catch (error) {
       return state
     }
+  },
+  '119': (state: RootState) => {
+    try {
+      addProvider(state, 'ph8')
+      state.llm.providers = moveProvider(state.llm.providers, 'ph8', 3)
+      return state
+    } catch (error) {
+      return state
+    }
   }
 }
 
