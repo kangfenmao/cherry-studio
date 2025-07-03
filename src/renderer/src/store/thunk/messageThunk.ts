@@ -1165,6 +1165,29 @@ export const regenerateAssistantResponseThunk =
       // 1. Use selector to get all messages for the topic
       const allMessagesForTopic = selectMessagesForTopic(state, topicId)
 
+      const askId = assistantMessageToRegenerate.askId
+
+      if (!askId) {
+        console.error(
+          `[appendAssistantResponseThunk] Existing assistant message ${assistantMessageToRegenerate.id} does not have an askId.`
+        )
+        return // Stop if askId is missing
+      }
+
+      if (!state.messages.entities[askId]) {
+        console.error(
+          `[appendAssistantResponseThunk] Original user query (askId: ${askId}) not found in entities. Cannot create assistant response without corresponding user message.`
+        )
+
+        // Show error popup instead of creating error message block
+        window.message.error({
+          content: t('error.missing_user_message'),
+          key: 'missing-user-message-error'
+        })
+
+        return
+      }
+
       // 2. Find the original user query (Restored Logic)
       const originalUserQuery = allMessagesForTopic.find((m) => m.id === assistantMessageToRegenerate.askId)
       if (!originalUserQuery) {
@@ -1375,10 +1398,17 @@ export const appendAssistantResponseThunk =
 
       // (Optional but recommended) Verify the original user query exists
       if (!state.messages.entities[askId]) {
-        console.warn(
-          `[appendAssistantResponseThunk] Original user query (askId: ${askId}) not found in entities. Proceeding, but state might be inconsistent.`
+        console.error(
+          `[appendAssistantResponseThunk] Original user query (askId: ${askId}) not found in entities. Cannot create assistant response without corresponding user message.`
         )
-        // Decide whether to proceed or return based on requirements
+
+        // Show error popup instead of creating error message block
+        window.message.error({
+          content: t('error.missing_user_message'),
+          key: 'missing-user-message-error'
+        })
+
+        return
       }
 
       // 2. Create the new assistant message stub
