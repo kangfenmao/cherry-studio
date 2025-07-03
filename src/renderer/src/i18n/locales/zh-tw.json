@@ -1671,6 +1671,7 @@
       "models.provider_key_no_change": "{{provider}} 的 API 密鑰沒有變化",
       "models.provider_key_add_failed_by_empty_data": "添加提供者 API 密鑰失敗，數據為空",
       "models.provider_key_add_failed_by_invalid_data": "添加提供者 API 密鑰失敗，數據格式錯誤",
+      "models.provider_key_override_confirm": "{{provider}} 已存在相同 API 金鑰, 是否覆蓋？",
       "moresetting": "更多設定",
       "moresetting.check.confirm": "確認勾選",
       "moresetting.check.warn": "請謹慎勾選此選項，勾選錯誤會導致模型無法正常使用！！！",

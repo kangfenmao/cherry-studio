@@ -1668,6 +1668,7 @@
       "models.provider_key_no_change": "API ключ для {{provider}} не изменился",
       "models.provider_key_add_failed_by_empty_data": "Не удалось добавить API ключ для {{provider}}, данные пусты",
       "models.provider_key_add_failed_by_invalid_data": "Не удалось добавить API ключ для {{provider}}, данные имеют неверный формат",
+      "models.provider_key_override_confirm": "{{provider}} уже имеет API ключ ({{existingKey}}). Вы хотите заменить его новым ключом ({{newKey}})?",
       "moresetting": "Дополнительные настройки",
       "moresetting.check.confirm": "Подтвердить выбор",
       "moresetting.check.warn": "Пожалуйста, будьте осторожны при выборе этой опции. Неправильный выбор может привести к сбою в работе модели!",

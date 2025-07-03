@@ -1668,6 +1668,7 @@
       "models.provider_key_no_change": "{{provider}} の API キーは変更されませんでした",
       "models.provider_key_add_failed_by_empty_data": "{{provider}} の API キーを追加できませんでした。データが空です。",
       "models.provider_key_add_failed_by_invalid_data": "{{provider}} の API キーを追加できませんでした。データ形式が無効です。",
+      "models.provider_key_override_confirm": "{{provider}} はすでに API キー ({{existingKey}}) を持っています。新しいキー ({{newKey}}) で上書きしますか？",
       "moresetting": "詳細設定",
       "moresetting.check.confirm": "選択を確認",
       "moresetting.check.warn": "このオプションを選択する際は慎重に行ってください。誤った選択はモデルの誤動作を引き起こす可能性があります！",
