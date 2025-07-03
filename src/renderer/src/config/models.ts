@@ -50,8 +50,8 @@ import { default as GoogleModelLogo, default as GoogleModelLogoDark } from '@ren
 import ChatGPT35ModelLogo from '@renderer/assets/images/models/gpt_3.5.png'
 import ChatGPT4ModelLogo from '@renderer/assets/images/models/gpt_4.png'
 import {
-  default as ChatGPT35ModelLogoDark,
   default as ChatGPT4ModelLogoDark,
+  default as ChatGPT35ModelLogoDark,
   default as ChatGptModelLogoDakr,
   default as ChatGPTo1ModelLogoDark
 } from '@renderer/assets/images/models/gpt_dark.png'
