@@ -5793,7 +5793,7 @@ __metadata:
     remove-markdown: "npm:^0.6.2"
     rollup-plugin-visualizer: "npm:^5.12.0"
     sass: "npm:^1.88.0"
-    selection-hook: "npm:^0.9.23"
+    selection-hook: "npm:^1.0.3"
     shiki: "npm:^3.7.0"
     string-width: "npm:^7.2.0"
     styled-components: "npm:^6.1.11"
@@ -13955,6 +13955,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^8.4.0":
+  version: 8.4.0
+  resolution: "node-addon-api@npm:8.4.0"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10c0/d51be099e1b9a6ac4a72f1a60787004d44c8ffe4be1efa38755d54b2a9f4f66647cc6913070e0ed20256d0e6eacceabfff90175fba2ef71153c2d06f8db8e7a9
+  languageName: node
+  linkType: hard
+
 "node-api-version@npm:^0.2.0":
   version: 0.2.1
   resolution: "node-api-version@npm:0.2.1"
@@ -16714,13 +16723,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selection-hook@npm:^0.9.23":
-  version: 0.9.23
-  resolution: "selection-hook@npm:0.9.23"
+"selection-hook@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "selection-hook@npm:1.0.3"
   dependencies:
+    node-addon-api: "npm:^8.4.0"
     node-gyp: "npm:latest"
     node-gyp-build: "npm:^4.8.4"
-  checksum: 10c0/3b91193814c063e14dd788cff3b27020821bbeae24eab106d2ce5bf600c034c1b3db96ce573c456b74d0553346dfcf4c7cc8d49386a22797b42667f7ed3eee01
+  checksum: 10c0/812df47050d470d398974ca9833caba3bc55fcacf76aec5207cffcef4b81cf22d5a0992263e2074afd05c21781f903ffac25177cd9553417525648136405b474
   languageName: node
   linkType: hard
 
