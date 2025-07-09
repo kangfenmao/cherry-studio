@@ -1219,7 +1219,9 @@
           "directory.select_error_app_data_path": "新路徑不能與應用數據路徑相同",
           "directory.select_error_in_app_install_path": "新路徑不能與應用安裝路徑相同",
           "directory.select_error_write_permission": "新路徑沒有寫入權限",
-          "directory.select_title": "選擇備份目錄"
+          "directory.select_title": "選擇備份目錄",
+          "restore.confirm.content": "從本地備份恢復將覆蓋當前數據，是否繼續？",
+          "restore.confirm.title": "確認恢復"
         },
         "export_menu": {
           "title": "匯出選單設定",
@@ -1328,8 +1330,7 @@
           "syncStatus": "備份狀態",
           "title": "WebDAV",
           "user": "WebDAV 使用者名稱",
-          "maxBackups": "最大備份數量",
-          "maxBackups.unlimited": "不限"
+          "maxBackups": "最大備份數量"
         },
         "s3": {
           "title": "S3 相容儲存",

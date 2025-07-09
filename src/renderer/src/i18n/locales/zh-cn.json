@@ -1219,7 +1219,9 @@
           "directory.select_error_app_data_path": "新路径不能与应用数据路径相同",
           "directory.select_error_in_app_install_path": "新路径不能与应用安装路径相同",
           "directory.select_error_write_permission": "新路径没有写入权限",
-          "directory.select_title": "选择备份目录"
+          "directory.select_title": "选择备份目录",
+          "restore.confirm.content": "从本地备份恢复将会覆盖当前数据，是否继续？",
+          "restore.confirm.title": "确认恢复"
         },
         "export_menu": {
           "title": "导出菜单设置",
@@ -1330,8 +1332,7 @@
           "syncStatus": "备份状态",
           "title": "WebDAV",
           "user": "WebDAV 用户名",
-          "maxBackups": "最大备份数",
-          "maxBackups.unlimited": "不限"
+          "maxBackups": "最大备份数"
         },
         "s3": {
           "title": "S3 兼容存储",

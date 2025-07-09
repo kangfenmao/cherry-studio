@@ -1217,7 +1217,9 @@
           "directory.select_error_app_data_path": "新パスはアプリデータパスと同じです。別のパスを選択してください",
           "directory.select_error_in_app_install_path": "新パスはアプリインストールパスと同じです。別のパスを選択してください",
           "directory.select_error_write_permission": "新パスに書き込み権限がありません",
-          "directory.select_title": "バックアップディレクトリを選択"
+          "directory.select_title": "バックアップディレクトリを選択",
+          "restore.confirm.content": "ローカルバックアップから復元すると、現在のデータが上書きされます。続行しますか？",
+          "restore.confirm.title": "復元を確認"
         },
         "export_menu": {
           "title": "エクスポートメニュー設定",
@@ -1308,8 +1310,7 @@
           "syncStatus": "バックアップ状態",
           "title": "WebDAV",
           "user": "WebDAVユーザー",
-          "maxBackups": "最大バックアップ数",
-          "maxBackups.unlimited": "無制限"
+          "maxBackups": "最大バックアップ数"
         },
         "s3": {
           "title": "S3互換ストレージ",
