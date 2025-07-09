@@ -935,6 +935,7 @@
         "app_knowledge.remove_all_confirm": "La suppression des fichiers de la base de connaissances libérera de l'espace de stockage, mais ne supprimera pas les données vectorisées de la base de connaissances. Après la suppression, vous ne pourrez plus ouvrir les fichiers sources. Souhaitez-vous continuer ?",
         "app_knowledge.remove_all_success": "Fichiers supprimés avec succès",
         "app_logs": "Journaux de l'application",
+        "app_logs.button": "Ouvrir les journaux",
         "backup.skip_file_data_help": "Passer outre les fichiers de données tels que les images et les bases de connaissances lors de la sauvegarde, et ne sauvegarder que les conversations et les paramètres. Cela réduit l'occupation d'espace et accélère la vitesse de sauvegarde.",
         "backup.skip_file_data_title": "Sauvegarde réduite",
         "clear_cache": {

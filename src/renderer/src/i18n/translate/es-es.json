@@ -936,6 +936,7 @@
         "app_knowledge.remove_all_confirm": "Eliminar los archivos de la base de conocimientos reducirá el uso del espacio de almacenamiento, pero no eliminará los datos vectorizados de la base de conocimientos. Después de la eliminación, no se podrán abrir los archivos originales. ¿Desea eliminarlos?",
         "app_knowledge.remove_all_success": "Archivos eliminados con éxito",
         "app_logs": "Registros de la aplicación",
+        "app_logs.button": "Abrir registros",
         "clear_cache": {
           "button": "Limpiar caché",
           "confirm": "Limpiar caché eliminará los datos de la caché de la aplicación, incluyendo los datos de las aplicaciones mini. Esta acción no se puede deshacer, ¿desea continuar?",
