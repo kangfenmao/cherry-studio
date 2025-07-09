@@ -338,6 +338,12 @@
       "topics.unpinned": "Открепленные темы",
       "translate": "Перевести"
     },
+    "html_artifacts": {
+      "code": "Код",
+      "generating": "Генерация",
+      "preview": "Предпросмотр",
+      "split": "Разделить"
+    },
     "code_block": {
       "collapse": "Свернуть",
       "copy": "Копировать",

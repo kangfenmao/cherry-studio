@@ -101,8 +101,7 @@ const SettingsTab: FC<Props> = (props) => {
     messageNavigation,
     enableQuickPanelTriggers,
     enableBackspaceDeleteModel,
-    showTranslateConfirm,
-    showTokens
+    showTranslateConfirm
   } = useSettings()
 
   const onUpdateAssistantSettings = (settings: Partial<AssistantSettings>) => {

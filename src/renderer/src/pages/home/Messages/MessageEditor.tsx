@@ -43,7 +43,7 @@ const MessageBlockEditor: FC<Props> = ({ message, topicId, onSave, onResend, onC
   const model = assistant.model || assistant.defaultModel
   const isVision = useMemo(() => isVisionModel(model), [model])
   const supportExts = useMemo(() => [...textExts, ...documentExts, ...(isVision ? imageExts : [])], [isVision])
-  const { pasteLongTextAsFile, pasteLongTextThreshold, fontSize, sendMessageShortcut, enableSpellCheck } = useSettings()
+  const { pasteLongTextThreshold, fontSize, sendMessageShortcut, enableSpellCheck } = useSettings()
   const { t } = useTranslation()
   const textareaRef = useRef<TextAreaRef>(null)
   const attachmentButtonRef = useRef<AttachmentButtonRef>(null)

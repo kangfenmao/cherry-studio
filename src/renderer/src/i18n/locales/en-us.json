@@ -338,6 +338,12 @@
       "topics.unpinned": "Unpinned Topics",
       "translate": "Translate"
     },
+    "html_artifacts": {
+      "code": "Code",
+      "generating": "Generating",
+      "preview": "Preview",
+      "split": "Split"
+    },
     "code_block": {
       "collapse": "Collapse",
       "copy": "Copy",

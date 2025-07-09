@@ -338,6 +338,12 @@
       "topics.unpinned": "固定解除",
       "translate": "翻訳"
     },
+    "html_artifacts": {
+      "code": "コード",
+      "generating": "生成中",
+      "preview": "プレビュー",
+      "split": "分割"
+    },
     "code_block": {
       "collapse": "折りたたむ",
       "copy": "コピー",

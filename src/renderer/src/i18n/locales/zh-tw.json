@@ -338,6 +338,12 @@
       "topics.unpinned": "取消固定",
       "translate": "翻譯"
     },
+    "html_artifacts": {
+      "code": "程式碼",
+      "generating": "生成中",
+      "preview": "預覽",
+      "split": "分屏"
+    },
     "code_block": {
       "collapse": "折疊",
       "copy": "複製",
