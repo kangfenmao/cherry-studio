@@ -1463,8 +1463,6 @@
           "code_failed": "Falha ao obter Código do Dispositivo, tente novamente",
           "code_generated_desc": "Por favor, copie o Código do Dispositivo para o link do navegador abaixo",
           "code_generated_title": "Obter Código do Dispositivo",
-          "confirm_login": "O uso excessivo pode resultar no bloqueio da sua conta do Github, use com cuidado!!!!",
-          "confirm_title": "Aviso de Risco",
           "connect": "Conectar ao Github",
           "custom_headers": "Cabeçalhos Personalizados",
           "description": "Sua conta do Github precisa assinar o Copilot",
@@ -1477,8 +1475,7 @@
           "logout_success": "Saiu com sucesso",
           "model_setting": "Configuração do Modelo",
           "open_verification_first": "Por favor, clique no link acima para acessar a página de verificação",
-          "rate_limit": "Limite de Taxa",
-          "tooltip": "Para usar o Github Copilot, você precisa fazer login no Github"
+          "rate_limit": "Limite de Taxa"
         },
         "delete.content": "Tem certeza de que deseja excluir este fornecedor de modelo?",
         "delete.title": "Excluir Fornecedor",

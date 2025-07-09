@@ -1462,8 +1462,6 @@
           "code_failed": "Échec de l'obtention du code Device, veuillez réessayer",
           "code_generated_desc": "Veuillez copier le code Device dans le lien du navigateur ci-dessous",
           "code_generated_title": "Obtenir le code Device",
-          "confirm_login": "L'utilisation excessive peut entraîner la suspension de votre compte Github, utilisez avec prudence!!!!",
-          "confirm_title": "Avertissement de risque",
           "connect": "Connectez-vous à Github",
           "custom_headers": "Entêtes de requête personnalisées",
           "description": "Votre compte Github doit souscrire à Copilot",
@@ -1476,8 +1474,7 @@
           "logout_success": "Déconnexion réussie",
           "model_setting": "Paramètres du modèle",
           "open_verification_first": "Cliquez d'abord sur le lien ci-dessus pour accéder à la page de vérification",
-          "rate_limit": "Limite de taux",
-          "tooltip": "Pour utiliser Github Copilot, vous devez vous connecter à Github"
+          "rate_limit": "Limite de taux"
         },
         "delete.content": "Êtes-vous sûr de vouloir supprimer ce fournisseur de modèles ?",
         "delete.title": "Supprimer le fournisseur",

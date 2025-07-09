@@ -1,5 +1,6 @@
 import CodeEditor from '@renderer/components/CodeEditor'
 import { TopView } from '@renderer/components/TopView'
+import { useCopilot } from '@renderer/hooks/useCopilot'
 import { useProvider } from '@renderer/hooks/useProvider'
 import { Provider } from '@renderer/types'
 import { Modal, Space } from 'antd'
@@ -20,17 +21,30 @@ const PopupContainer: React.FC<Props> = ({ provider, resolve }) => {
   const [open, setOpen] = useState(true)
   const { t } = useTranslation()
   const { updateProvider } = useProvider(provider.id)
-  const [headerText, setHeaderText] = useState<string>(JSON.stringify(provider.extra_headers || {}, null, 2))
+  const { defaultHeaders, updateDefaultHeaders } = useCopilot()
+
+  const headers =
+    provider.id === 'copilot'
+      ? JSON.stringify(defaultHeaders || {}, null, 2)
+      : JSON.stringify(provider.extra_headers || {}, null, 2)
+
+  const [headerText, setHeaderText] = useState<string>(headers)
 
   const onUpdateHeaders = useCallback(() => {
     try {
       const headers = headerText.trim() ? JSON.parse(headerText) : {}
-      updateProvider({ ...provider, extra_headers: headers })
+
+      if (provider.id === 'copilot') {
+        updateDefaultHeaders(headers)
+      } else {
+        updateProvider({ ...provider, extra_headers: headers })
+      }
+
       window.message.success({ content: t('message.save.success.title') })
     } catch (error) {
       window.message.error({ content: t('settings.provider.copilot.invalid_json') })
     }
-  }, [headerText, provider, updateProvider, t])
+  }, [headerText, provider, t, updateDefaultHeaders, updateProvider])
 
   const onOk = () => {
     onUpdateHeaders()
