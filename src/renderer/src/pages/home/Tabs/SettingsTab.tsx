@@ -41,7 +41,6 @@ import {
   setRenderInputMessageAsMarkdown,
   setShowInputEstimatedTokens,
   setShowPrompt,
-  setShowTokens,
   setShowTranslateConfirm,
   setThoughtAutoCollapse
 } from '@renderer/store/settings'
@@ -298,11 +297,6 @@ const SettingsTab: FC<Props> = (props) => {
           <SettingRow>
             <SettingRowTitleSmall>{t('settings.messages.prompt')}</SettingRowTitleSmall>
             <Switch size="small" checked={showPrompt} onChange={(checked) => dispatch(setShowPrompt(checked))} />
-          </SettingRow>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitleSmall>{t('settings.messages.tokens')}</SettingRowTitleSmall>
-            <Switch size="small" checked={showTokens} onChange={(checked) => dispatch(setShowTokens(checked))} />
           </SettingRow>
           <SettingDivider />
           <SettingRow>

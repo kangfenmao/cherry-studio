@@ -1890,7 +1890,6 @@
       "messages.navigation.none": "不显示",
       "messages.prompt": "显示提示词",
       "messages.title": "消息设置",
-      "messages.tokens": "显示 Token 用量",
       "messages.use_serif_font": "使用衬线字体",
       "mineru.api_key": "MinerU现在提供每日500页的免费额度，您不需要填写密钥。",
       "miniapps": {
