@@ -955,14 +955,14 @@ const Container = styled.div`
   flex-direction: column;
   position: relative;
   z-index: 2;
-  padding: 0 16px 16px 16px;
+  padding: 0 20px 18px 20px;
 `
 
 const InputBarContainer = styled.div`
   border: 0.5px solid var(--color-border);
   transition: all 0.2s ease;
   position: relative;
-  border-radius: 15px;
+  border-radius: 20px;
   padding-top: 8px; // 为拖动手柄留出空间
   background-color: var(--color-background-opacity);
 
