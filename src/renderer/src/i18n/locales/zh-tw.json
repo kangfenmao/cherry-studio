@@ -764,7 +764,7 @@
         "invoking": "調用中",
         "pending": "等待中",
         "preview": "預覽",
-        "raw": "原始碼"
+        "autoApproveEnabled": "此工具已啟用自動批准"
       },
       "topic.added": "新話題已新增",
       "upgrade.success.button": "重新啟動",
@@ -1888,7 +1888,14 @@
           "availableTools": "可用工具",
           "inputSchema": "輸入模式",
           "loadError": "獲取工具失敗",
-          "noToolsAvailable": "無可用工具"
+          "noToolsAvailable": "無可用工具",
+          "enable": "啟用工具",
+          "autoApprove": "自動批准",
+          "autoApprove.tooltip.howToEnable": "啟用工具後才能使用自動批准",
+          "autoApprove.tooltip.enabled": "工具將自動運行而無需批准",
+          "autoApprove.tooltip.disabled": "工具運行前需要手動批准",
+          "autoApprove.tooltip.confirm": "是否運行該MCP工具？",
+          "run": "運行"
         },
         "type": "類型",
         "types": {
