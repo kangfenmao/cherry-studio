@@ -231,7 +231,11 @@ class FileStorage {
     await fs.promises.rm(path.join(this.storageDir, id), { recursive: true })
   }
 
-  public readFile = async (_: Electron.IpcMainInvokeEvent, id: string): Promise<string> => {
+  public readFile = async (
+    _: Electron.IpcMainInvokeEvent,
+    id: string,
+    detectEncoding: boolean = false
+  ): Promise<string> => {
     const filePath = path.join(this.storageDir, id)
 
     const fileExtension = path.extname(filePath)
@@ -259,8 +263,11 @@ class FileStorage {
     }
 
     try {
-      const result = readTextFileWithAutoEncoding(filePath)
-      return result
+      if (detectEncoding) {
+        return readTextFileWithAutoEncoding(filePath)
+      } else {
+        return fs.readFileSync(filePath, 'utf-8')
+      }
     } catch (error) {
       logger.error(error)
       return 'failed to read file'
