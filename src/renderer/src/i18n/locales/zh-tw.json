@@ -13,6 +13,7 @@
         "title": "可用的變數"
       },
       "add.title": "建立智慧代理人",
+      "add.unsaved_changes_warning": "有未保存的變更，確定要關閉嗎？",
       "delete.popup.content": "確定要刪除此智慧代理人嗎？",
       "edit.model.select.title": "選擇模型",
       "edit.title": "編輯智慧代理人",

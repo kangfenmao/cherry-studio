@@ -13,6 +13,7 @@
         "title": "可用的变量"
       },
       "add.title": "创建智能体",
+      "add.unsaved_changes_warning": "你有未保存的内容，确定要关闭吗？",
       "delete.popup.content": "确定要删除此智能体吗？",
       "edit.model.select.title": "选择模型",
       "edit.title": "编辑智能体",

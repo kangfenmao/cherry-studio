@@ -13,6 +13,7 @@
         "title": "利用可能な変数"
       },
       "add.title": "エージェントを作成",
+      "add.unsaved_changes_warning": "未保存の変更があります。続行しますか？",
       "delete.popup.content": "このエージェントを削除してもよろしいですか？",
       "edit.model.select.title": "モデルを選択",
       "edit.title": "エージェントを編集",
