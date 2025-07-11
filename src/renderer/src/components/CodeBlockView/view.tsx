@@ -4,7 +4,7 @@ import { CodeTool, CodeToolbar, TOOL_SPECS, useCodeTool } from '@renderer/compon
 import { useSettings } from '@renderer/hooks/useSettings'
 import { pyodideService } from '@renderer/services/PyodideService'
 import { extractTitle } from '@renderer/utils/formats'
-import { getExtensionByLanguage, isValidPlantUML } from '@renderer/utils/markdown'
+import { getExtensionByLanguage, isHtmlCode, isValidPlantUML } from '@renderer/utils/markdown'
 import dayjs from 'dayjs'
 import { CirclePlay, CodeXml, Copy, Download, Eye, Square, SquarePen, SquareSplitHorizontal } from 'lucide-react'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -229,7 +229,7 @@ export const CodeBlockView: React.FC<Props> = memo(({ children, language, onSave
   }, [specialView, sourceView, viewMode])
 
   // HTML 代码块特殊处理 - 在所有 hooks 调用之后
-  if (language === 'html') {
+  if (language === 'html' && isHtmlCode(children)) {
     return <HtmlArtifactsCard html={children} />
   }
 

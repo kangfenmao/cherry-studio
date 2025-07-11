@@ -95,7 +95,7 @@ const MessageItem: FC<Props> = ({
     stopEditing()
   }, [stopEditing])
 
-  const isLastMessage = index === 0
+  const isLastMessage = index === 0 || !!isGrouped
   const isAssistantMessage = message.role === 'assistant'
   const showMenubar = !hideMenuBar && !isStreaming && !message.status.includes('ing') && !isEditing
 
@@ -190,6 +190,7 @@ const MessageContainer = styled.div`
   transform: translateZ(0);
   will-change: transform;
   padding: 10px;
+  padding-bottom: 0;
   border-radius: 10px;
   &.message-highlight {
     background-color: var(--color-primary-mute);

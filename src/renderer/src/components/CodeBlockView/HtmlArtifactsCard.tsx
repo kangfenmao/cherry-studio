@@ -250,7 +250,7 @@ const Container = styled.div<{ $isStreaming: boolean }>`
   border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
-  margin: 16px 0;
+  margin: 10px 0;
 `
 
 const GeneratingContainer = styled.div`
