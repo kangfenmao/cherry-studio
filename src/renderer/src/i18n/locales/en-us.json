@@ -2115,6 +2115,7 @@
         "api_key": "API Key",
         "api_key.tip": "Multiple keys separated by commas or spaces",
         "api_version": "API Version",
+        "azure.apiversion.tip": "The API version of Azure OpenAI, if you want to use Response API, please enter the preview version",
         "basic_auth": "HTTP authentication",
         "basic_auth.password": "Password",
         "basic_auth.password.tip": "",

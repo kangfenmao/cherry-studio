@@ -2211,7 +2211,8 @@
             "private_key_placeholder": "輸入服務帳戶私密金鑰",
             "title": "服務帳戶設定"
           }
-        }
+        },
+        "azure.apiversion.tip": "Azure OpenAI 的 API 版本，如果想要使用 Response API，請輸入 preview 版本"
       },
       "proxy": {
         "mode": {
