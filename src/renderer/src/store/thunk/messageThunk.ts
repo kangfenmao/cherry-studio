@@ -42,9 +42,8 @@ import {
   resetAssistantMessage
 } from '@renderer/utils/messageUtils/create'
 import { findMainTextBlocks, getMainTextContent } from '@renderer/utils/messageUtils/find'
-import { getTopicQueue } from '@renderer/utils/queue'
-import { waitForTopicQueue } from '@renderer/utils/queue'
-import { isOnHomePage } from '@renderer/utils/window'
+import { getTopicQueue, waitForTopicQueue } from '@renderer/utils/queue'
+import { isFocused, isOnHomePage } from '@renderer/utils/window'
 import { t } from 'i18next'
 import { isEmpty, throttle } from 'lodash'
 import { LRUCache } from 'lru-cache'
@@ -719,7 +718,8 @@ export const streamCallback = (
         status: error.status || error.code,
         requestId: error.request_id
       }
-      if (!isOnHomePage()) {
+      const msgDuration = Date.now() - startTime
+      if ((!isOnHomePage() && msgDuration > 30 * 1000) || (!isFocused() && msgDuration > 30 * 1000)) {
         await notificationService.send({
           id: uuid(),
           type: 'error',
@@ -789,10 +789,9 @@ export const streamCallback = (
           smartBlockUpdate(possibleBlockId, changes, lastBlockType!, true)
         }
 
-        const endTime = Date.now()
-        const duration = endTime - startTime
         const content = getMainTextContent(finalAssistantMsg)
-        if (!isOnHomePage() && duration > 60 * 1000) {
+        const msgDuration = Date.now() - startTime
+        if ((!isOnHomePage() && msgDuration > 30 * 1000) || (!isFocused() && msgDuration > 30 * 1000)) {
           await notificationService.send({
             id: uuid(),
             type: 'success',
@@ -800,7 +799,8 @@ export const streamCallback = (
             message: content.length > 50 ? content.slice(0, 47) + '...' : content,
             silent: false,
             timestamp: Date.now(),
-            source: 'assistant'
+            source: 'assistant',
+            channel: 'system'
           })
         }
 
@@ -813,8 +813,7 @@ export const streamCallback = (
             response?.usage?.prompt_tokens === 0 ||
             response?.usage?.completion_tokens === 0)
         ) {
-          const usage = await estimateMessagesUsage({ assistant, messages: finalContextWithAssistant })
-          response.usage = usage
+          response.usage = await estimateMessagesUsage({ assistant, messages: finalContextWithAssistant })
         }
         // dispatch(newMessagesActions.setTopicLoading({ topicId, loading: false }))
       }
