@@ -30,9 +30,10 @@ const ThinkingEffect: React.FC<Props> = ({ isThinking, thinkingTimeText, content
   }, [expanded, isThinking])
 
   const LINE_HEIGHT = 14
+
   const containerHeight = useMemo(() => {
-    if (!showThinking || messages.length < 2) return 38
-    return Math.min(68, Math.max(messages.length + 1, 2) * LINE_HEIGHT + 10)
+    if (!showThinking || messages.length < 1) return 38
+    return Math.min(75, Math.max(messages.length + 1, 2) * LINE_HEIGHT + 25)
   }, [showThinking, messages.length])
 
   return (
@@ -103,7 +104,7 @@ const Title = styled.div`
   font-size: 14px;
   line-height: 14px;
   font-weight: 500;
-  padding: 6px 0;
+  padding: 10px 0;
   z-index: 99;
   transition: padding-top 150ms;
   &.showThinking {
@@ -131,6 +132,7 @@ const LoadingContainer = styled.div`
 const TextContainer = styled.div`
   flex: 1;
   height: 100%;
+  padding: 5px 0;
   overflow: hidden;
   position: relative;
 `
