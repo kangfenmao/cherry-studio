@@ -4,6 +4,7 @@ import { loggerService } from '@logger'
 import { getConfigDir } from '@main/utils/file'
 import { OAuthClientProvider } from '@modelcontextprotocol/sdk/client/auth'
 import { OAuthClientInformation, OAuthClientInformationFull, OAuthTokens } from '@modelcontextprotocol/sdk/shared/auth'
+import { sanitizeUrl } from 'strict-url-sanitise'
 import open from 'open'
 
 import { JsonFileStorage } from './storage'
