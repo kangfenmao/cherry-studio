@@ -1,7 +1,8 @@
+import { loggerService } from '@logger'
 import { isMac } from '@main/constant'
-import Logger from 'electron-log'
 
 import { windowService } from '../WindowService'
+const logger = loggerService.withContext('URLSchema:handleProvidersProtocolUrl')
 
 function ParseData(data: string) {
   try {
@@ -9,7 +10,7 @@ function ParseData(data: string) {
 
     return JSON.stringify(result)
   } catch (error) {
-    Logger.error('ParseData error:', { error })
+    logger.error('ParseData error:', error)
     return null
   }
 }
@@ -33,7 +34,7 @@ export async function handleProvidersProtocolUrl(url: URL) {
       const data = ParseData(params.get('data')?.replaceAll('_', '+').replaceAll('-', '/') || '')
 
       if (!data) {
-        Logger.error('handleProvidersProtocolUrl data is null or invalid')
+        logger.error('handleProvidersProtocolUrl data is null or invalid')
         return
       }
 
@@ -41,7 +42,7 @@ export async function handleProvidersProtocolUrl(url: URL) {
       const version = params.get('v')
       if (version == '1') {
         // TODO: handle different version
-        Logger.info('handleProvidersProtocolUrl', { data, version })
+        logger.debug('handleProvidersProtocolUrl', { data, version })
       }
 
       // add check there is window.navigate function in mainWindow
@@ -59,14 +60,14 @@ export async function handleProvidersProtocolUrl(url: URL) {
         }
       } else {
         setTimeout(() => {
-          Logger.info('handleProvidersProtocolUrl timeout', { data, version })
+          logger.debug('handleProvidersProtocolUrl timeout', { data, version })
           handleProvidersProtocolUrl(url)
         }, 1000)
       }
       break
     }
     default:
-      Logger.error(`Unknown MCP protocol URL: ${url}`)
+      logger.error(`Unknown MCP protocol URL: ${url}`)
       break
   }
 }
