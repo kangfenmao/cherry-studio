@@ -1,6 +1,5 @@
 'use strict'
 Object.defineProperty(exports, '__esModule', { value: true })
-exports.main = main
 var fs = require('fs')
 var path = require('path')
 var sort_1 = require('./sort')
@@ -9,42 +8,38 @@ var baseLocale = 'zh-cn'
 var baseFileName = ''.concat(baseLocale, '.json')
 var baseFilePath = path.join(translationsDir, baseFileName)
 /**
- * 递归检查并同步目标对象与模板对象的键值结构
- * 1. 如果目标对象缺少模板对象中的键，抛出错误
- * 2. 如果目标对象存在模板对象中不存在的键，抛出错误
- * 3. 对于嵌套对象，递归执行同步操作
+ * 递归同步 target 对象，使其与 template 对象保持一致
+ * 1. 如果 template 中存在 target 中缺少的 key，则添加（'[to be translated]'）
+ * 2. 如果 target 中存在 template 中不存在的 key，则删除
+ * 3. 对于子对象，递归同步
  *
- * 该函数用于确保所有翻译文件与基准模板（通常是中文翻译文件）保持完全一致的键值结构。
- * 任何结构上的差异都会导致错误被抛出，以便及时发现和修复翻译文件中的问题。
- *
- * @param target 需要检查的目标翻译对象
- * @param template 作为基准的模板对象（通常是中文翻译文件）
- * @throws {Error} 当发现键值结构不匹配时抛出错误
+ * @param target 目标对象（需要更新的语言对象）
+ * @param template 主模板对象（中文）
+ * @returns 返回是否对 target 进行了更新
  */
-function checkRecursively(target, template) {
+function syncRecursively(target, template) {
+  // 添加 template 中存在但 target 中缺少的 key
   for (var key in template) {
     if (!(key in target)) {
-      throw new Error('\u7F3A\u5C11\u5C5E\u6027 '.concat(key))
+      target[key] =
+        typeof template[key] === 'object' && template[key] !== null ? {} : '[to be translated]:'.concat(template[key])
+      console.log('\u6DFB\u52A0\u65B0\u5C5E\u6027\uFF1A'.concat(key))
     }
     if (typeof template[key] === 'object' && template[key] !== null) {
       if (typeof target[key] !== 'object' || target[key] === null) {
-        throw new Error('\u5C5E\u6027 '.concat(key, ' \u4E0D\u662F\u5BF9\u8C61'))
+        target[key] = {}
       }
-      // 递归检查子对象
-      checkRecursively(target[key], template[key])
+      // 递归同步子对象
+      syncRecursively(target[key], template[key])
     }
   }
   // 删除 target 中存在但 template 中没有的 key
   for (var targetKey in target) {
     if (!(targetKey in template)) {
-      throw new Error('\u591A\u4F59\u5C5E\u6027 '.concat(targetKey))
+      console.log('\u79FB\u9664\u591A\u4F59\u5C5E\u6027\uFF1A'.concat(targetKey))
+      delete target[targetKey]
     }
   }
-}
-function isSortedI18N(obj) {
-  // fs.writeFileSync('./test_origin.json', JSON.stringify(obj))
-  // fs.writeFileSync('./test_sorted.json', JSON.stringify(sortedObjectByKeys(obj)))
-  return JSON.stringify(obj) === JSON.stringify((0, sort_1.sortedObjectByKeys)(obj))
 }
 /**
  * 检查 JSON 对象中是否存在重复键，并收集所有重复键
@@ -77,21 +72,23 @@ function checkDuplicateKeys(obj) {
   checkObject(obj)
   return duplicateKeys
 }
-function checkTranslations() {
+function syncTranslations() {
   if (!fs.existsSync(baseFilePath)) {
-    throw new Error(
+    console.error(
       '\u4E3B\u6A21\u677F\u6587\u4EF6 '.concat(
         baseFileName,
         ' \u4E0D\u5B58\u5728\uFF0C\u8BF7\u68C0\u67E5\u8DEF\u5F84\u6216\u6587\u4EF6\u540D'
       )
     )
+    return
   }
   var baseContent = fs.readFileSync(baseFilePath, 'utf-8')
   var baseJson = {}
   try {
     baseJson = JSON.parse(baseContent)
   } catch (error) {
-    throw new Error('\u89E3\u6790 '.concat(baseFileName, ' \u51FA\u9519\u3002').concat(error))
+    console.error('\u89E3\u6790 '.concat(baseFileName, ' \u51FA\u9519\u3002').concat(error))
+    return
   }
   // 检查主模板是否存在重复键
   var duplicateKeys = checkDuplicateKeys(baseJson)
@@ -102,14 +99,16 @@ function checkTranslations() {
         .concat(duplicateKeys.join('\n'))
     )
   }
-  // 检查主模板是否有序
-  if (!isSortedI18N(baseJson)) {
-    throw new Error(
-      '\u4E3B\u6A21\u677F\u6587\u4EF6 '.concat(
-        baseFileName,
-        ' \u7684\u952E\u503C\u672A\u6309\u5B57\u5178\u5E8F\u6392\u5E8F\u3002'
-      )
-    )
+  // 为主模板排序
+  var sortedJson = (0, sort_1.sortedObjectByKeys)(baseJson)
+  if (JSON.stringify(baseJson) !== JSON.stringify(sortedJson)) {
+    try {
+      fs.writeFileSync(baseFilePath, JSON.stringify(sortedJson, null, 2) + '\n', 'utf-8')
+      console.log('\u4E3B\u6A21\u677F\u5DF2\u6392\u5E8F')
+    } catch (error) {
+      console.error('\u5199\u5165 '.concat(baseFilePath, ' \u51FA\u9519\u3002'), error)
+      return
+    }
   }
   var files = fs.readdirSync(translationsDir).filter(function (file) {
     return file.endsWith('.json') && file !== baseFileName
@@ -123,29 +122,22 @@ function checkTranslations() {
       var fileContent = fs.readFileSync(filePath, 'utf-8')
       targetJson = JSON.parse(fileContent)
     } catch (error) {
-      throw new Error('\u89E3\u6790 '.concat(file, ' \u51FA\u9519\u3002'))
+      console.error('\u89E3\u6790 '.concat(file, ' \u51FA\u9519\uFF0C\u8DF3\u8FC7\u6B64\u6587\u4EF6\u3002'), error)
+      continue
     }
-    // 检查有序性
-    if (!isSortedI18N(targetJson)) {
-      throw new Error(
-        '\u7FFB\u8BD1\u6587\u4EF6 '.concat(file, ' \u7684\u952E\u503C\u672A\u6309\u5B57\u5178\u5E8F\u6392\u5E8F\u3002')
-      )
-    }
+    syncRecursively(targetJson, baseJson)
+    var sortedJson_1 = (0, sort_1.sortedObjectByKeys)(targetJson)
     try {
-      checkRecursively(targetJson, baseJson)
-    } catch (e) {
-      throw new Error('\u5728\u68C0\u67E5 '.concat(filePath, ' \u65F6\u51FA\u9519\uFF1A').concat(e))
+      fs.writeFileSync(filePath, JSON.stringify(sortedJson_1, null, 2) + '\n', 'utf-8')
+      console.log(
+        '\u6587\u4EF6 '.concat(
+          file,
+          ' \u5DF2\u6392\u5E8F\u5E76\u540C\u6B65\u66F4\u65B0\u4E3A\u4E3B\u6A21\u677F\u7684\u5185\u5BB9'
+        )
+      )
+    } catch (error) {
+      console.error('\u5199\u5165 '.concat(file, ' \u51FA\u9519\u3002').concat(error))
     }
   }
 }
-function main() {
-  try {
-    checkTranslations()
-  } catch (e) {
-    console.error(e)
-    throw new Error(
-      '\u68C0\u67E5\u672A\u901A\u8FC7\u3002\u5C1D\u8BD5\u8FD0\u884C yarn sync:i18n \u4EE5\u89E3\u51B3\u95EE\u9898\u3002'
-    )
-  }
-}
-main()
+syncTranslations()

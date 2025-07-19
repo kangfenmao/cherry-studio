@@ -44,6 +44,7 @@
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "check:i18n": "node scripts/check-i18n.js",
+    "sync:i18n": "node scripts/sync-i18n.js",
     "test": "vitest run --silent",
     "test:main": "vitest run --project main",
     "test:renderer": "vitest run --project renderer",
@@ -53,6 +54,7 @@
     "test:watch": "vitest",
     "test:e2e": "yarn playwright test",
     "test:lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts",
+    "test:scripts": "vitest scripts",
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "prepare": "git config blame.ignoreRevsFile .git-blame-ignore-revs && husky"
@@ -198,6 +200,7 @@
     "p-queue": "^8.1.0",
     "playwright": "^1.52.0",
     "prettier": "^3.5.3",
+    "prettier-plugin-sort-json": "^4.1.1",
     "proxy-agent": "^6.5.0",
     "rc-virtual-list": "^3.18.6",
     "react": "^19.0.0",
