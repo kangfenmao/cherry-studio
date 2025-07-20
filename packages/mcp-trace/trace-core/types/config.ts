@@ -20,7 +20,6 @@ export interface TelemetryConfig {
   endpoint?: string
   headers?: Record<string, string>
   defaultTracerName?: string
-  isDevModel?: boolean
 }
 
 export interface TraceConfig extends TelemetryConfig {
@@ -62,6 +61,5 @@ export interface SpanEntity {
 export const defaultConfig: TelemetryConfig = {
   serviceName: 'default',
   headers: {},
-  defaultTracerName: 'default',
-  isDevModel: true
+  defaultTracerName: 'default'
 }

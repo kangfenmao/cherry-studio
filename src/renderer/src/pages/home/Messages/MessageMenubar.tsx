@@ -1,5 +1,4 @@
 import { CheckOutlined, EditOutlined, QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons'
-import { defaultConfig } from '@mcp-trace/trace-core'
 import ObsidianExportPopup from '@renderer/components/Popups/ObsidianExportPopup'
 import SaveToKnowledgePopup from '@renderer/components/Popups/SaveToKnowledgePopup'
 import SelectModelPopup from '@renderer/components/Popups/SelectModelPopup'
@@ -8,7 +7,7 @@ import { translateLanguageOptions } from '@renderer/config/translate'
 import { useMessageEditing } from '@renderer/context/MessageEditingContext'
 import { useChatContext } from '@renderer/hooks/useChatContext'
 import { useMessageOperations, useTopicLoading } from '@renderer/hooks/useMessageOperations'
-import { useMessageStyle } from '@renderer/hooks/useSettings'
+import { useEnableDeveloperMode, useMessageStyle } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { getMessageTitle } from '@renderer/services/MessagesService'
 import { translateText } from '@renderer/services/TranslateService'
@@ -47,7 +46,7 @@ import {
   ThumbsUp,
   Trash
 } from 'lucide-react'
-import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
@@ -88,6 +87,7 @@ const MessageMenubar: FC<Props> = (props) => {
   } = useMessageOperations(topic)
 
   const { isBubbleStyle } = useMessageStyle()
+  const { enableDeveloperMode } = useEnableDeveloperMode()
 
   const loading = useTopicLoading(topic)
 
@@ -179,14 +179,7 @@ const MessageMenubar: FC<Props> = (props) => {
     [isTranslating, message, getTranslationUpdater, mainTextContent]
   )
 
-  const [isDevelopModel, setIsDevelopModel] = useState(true)
-
-  useEffect(() => {
-    setIsDevelopModel(defaultConfig.isDevModel || false)
-  }, [])
-
   const handleTraceUserMessage = useCallback(async () => {
-    console.log('current traceId', message.traceId, 'start send')
     if (message.traceId) {
       window.api.trace.openWindow(
         message.topicId,
@@ -594,7 +587,7 @@ const MessageMenubar: FC<Props> = (props) => {
             </Tooltip>
           </ActionButton>
         </Popconfirm>
-        {isDevelopModel && message.traceId && (
+        {enableDeveloperMode && message.traceId && (
           <Tooltip title={t('trace.label')} mouseEnterDelay={0.8}>
             <ActionButton className="message-action-button" onClick={() => handleTraceUserMessage()}>
               <TraceIcon size={16} className={'lucide lucide-trash'} />

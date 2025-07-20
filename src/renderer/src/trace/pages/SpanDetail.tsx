@@ -1,6 +1,7 @@
 import './Trace.css'
 
 import { DoubleLeftOutlined } from '@ant-design/icons'
+import { loggerService } from '@logger'
 // import TraceModal from '@renderer/trace/TraceModal'
 import { TraceModal } from '@renderer/trace/pages/TraceModel'
 import { FC, useCallback, useEffect, useState } from 'react'
@@ -9,6 +10,8 @@ import ReactJson from 'react-json-view'
 
 import { Box, Button, Text } from './Component'
 import { convertTime } from './TraceTree'
+
+const logger = loggerService.withContext('SpanDetail')
 
 interface SpanDetailProps {
   node: TraceModal
@@ -41,7 +44,7 @@ const SpanDetail: FC<SpanDetailProps> = ({ node, clickShowModal }) => {
         setIsJson(true)
         return
       } catch {
-        console.error('failed to parse json data:', data)
+        logger.error('failed to parse json data:', data)
       }
     } else if (typeof data === 'object' || Array.isArray(data)) {
       setJsonData(data)
@@ -82,16 +85,17 @@ const SpanDetail: FC<SpanDetailProps> = ({ node, clickShowModal }) => {
 
   return (
     <Box padding={5}>
-      <Box padding={0} style={{ marginBottom: 10 }}>
+      <Box padding={0} style={{ marginBottom: 16 }}>
         <a
           onClick={(e) => {
             e.preventDefault()
             clickShowModal(true)
           }}
           href={'#'}
-          style={{ marginRight: 8, fontSize: '14px' }}>
-          <DoubleLeftOutlined style={{ fontSize: '12px' }} />
-          &nbsp;{t('trace.backList')}
+          style={{ color: '#1677ff' }}
+          className="back-button">
+          <DoubleLeftOutlined style={{ fontSize: '14px' }} />
+          <span style={{ marginLeft: '6px', fontSize: '14px' }}>{t('trace.backList')}</span>
         </a>
       </Box>
       <Text style={{ fontWeight: 'bold', fontSize: 14 }}>{t('trace.spanDetail')}</Text>
@@ -130,7 +134,7 @@ const SpanDetail: FC<SpanDetailProps> = ({ node, clickShowModal }) => {
         <Text style={{ fontWeight: 'bold' }}>{t('trace.parentId')}: </Text>
         <Text>{node.parentId}</Text>
       </Box> */}
-      <Box style={{ position: 'relative', margin: '5px 0 0' }}>
+      <Box style={{ position: 'relative', margin: '15px 0 15px' }}>
         <Button className={`content-button ${showInput ? 'active' : ''}`} onClick={() => setShowInput(true)}>
           {t('trace.inputs')}
         </Button>
@@ -168,4 +172,5 @@ const SpanDetail: FC<SpanDetailProps> = ({ node, clickShowModal }) => {
     </Box>
   )
 }
+
 export default SpanDetail

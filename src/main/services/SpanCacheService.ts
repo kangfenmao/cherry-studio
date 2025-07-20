@@ -1,16 +1,14 @@
-import {
-  Attributes,
-  convertSpanToSpanEntity,
-  defaultConfig,
-  SpanEntity,
-  TokenUsage,
-  TraceCache
-} from '@mcp-trace/trace-core'
+import { loggerService } from '@logger'
+import { Attributes, convertSpanToSpanEntity, SpanEntity, TokenUsage, TraceCache } from '@mcp-trace/trace-core'
 import { SpanStatusCode } from '@opentelemetry/api'
 import { ReadableSpan } from '@opentelemetry/sdk-trace-base'
 import fs from 'fs/promises'
 import * as os from 'os'
 import * as path from 'path'
+
+import { configManager } from './ConfigManager'
+
+const logger = loggerService.withContext('SpanCacheService')
 
 class SpanCacheService implements TraceCache {
   private topicMap: Map<string, string> = new Map<string, string>()
@@ -23,7 +21,7 @@ class SpanCacheService implements TraceCache {
   }
 
   createSpan: (span: ReadableSpan) => void = (span: ReadableSpan) => {
-    if (!defaultConfig.isDevModel) {
+    if (!configManager.getEnableDeveloperMode()) {
       return
     }
     const spanEntity = convertSpanToSpanEntity(span)
@@ -33,7 +31,7 @@ class SpanCacheService implements TraceCache {
   }
 
   endSpan: (span: ReadableSpan) => void = (span: ReadableSpan) => {
-    if (!defaultConfig.isDevModel) {
+    if (!configManager.getEnableDeveloperMode()) {
       return
     }
     const spanId = span.spanContext().spanId
@@ -84,12 +82,12 @@ class SpanCacheService implements TraceCache {
         })
       )
       .catch((err) => {
-        console.error('Error cleaning local data:', err)
+        logger.error('Error cleaning local data:', err)
       })
   }
 
   async saveSpans(topicId: string) {
-    if (!defaultConfig.isDevModel) {
+    if (!configManager.getEnableDeveloperMode()) {
       return
     }
     let traceId: string | undefined
@@ -140,7 +138,7 @@ class SpanCacheService implements TraceCache {
   }
 
   saveEntity(entity: SpanEntity) {
-    if (!defaultConfig.isDevModel) {
+    if (!configManager.getEnableDeveloperMode()) {
       return
     }
     if (this.cache.has(entity.id)) {
@@ -216,7 +214,7 @@ class SpanCacheService implements TraceCache {
       try {
         await fs.rm(filePath, { recursive: true })
       } catch (error) {
-        console.error(error)
+        logger.error('Error cleaning local data:', error)
       }
     }
   }
@@ -361,7 +359,7 @@ class SpanCacheService implements TraceCache {
             try {
               yield JSON.parse(trimmed) as SpanEntity
             } catch (e) {
-              console.error(`JSON解析失败: ${trimmed}`, e)
+              logger.error(`JSON解析失败: ${trimmed}`, e)
             }
           }
         }
@@ -371,7 +369,7 @@ class SpanCacheService implements TraceCache {
         .filter((span) => span.topicId === topicId && span.traceId === traceId && span.modelName)
         .filter((span) => !modelName || span.modelName === modelName)
     } catch (err) {
-      console.error('Error parsing JSON:', err)
+      logger.error('Error parsing JSON:', err)
       throw err
     }
   }
@@ -389,7 +387,7 @@ class SpanCacheService implements TraceCache {
       await fs.access(filePath)
       return true
     } catch (err) {
-      console.log('delete trace file error:', err)
+      logger.error('delete trace file error:', err)
       return false
     }
   }

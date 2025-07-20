@@ -1,9 +1,11 @@
 import { MessageStream } from '@anthropic-ai/sdk/resources/messages/messages'
-import { defaultConfig, SpanEntity, TokenUsage } from '@mcp-trace/trace-core'
+import { loggerService } from '@logger'
+import { SpanEntity, TokenUsage } from '@mcp-trace/trace-core'
 import { cleanContext, endContext, getContext, startContext } from '@mcp-trace/trace-web'
 import { Context, context, Span, SpanStatusCode, trace } from '@opentelemetry/api'
 import { isAsyncIterable } from '@renderer/aiCore/middleware/utils'
 import { db } from '@renderer/databases'
+import { getEnableDeveloperMode } from '@renderer/hooks/useSettings'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import { handleAsyncIterable } from '@renderer/trace/dataHandler/AsyncIterableHandler'
 import { handleResult } from '@renderer/trace/dataHandler/CommonResultHandler'
@@ -15,6 +17,8 @@ import type { Message } from '@renderer/types/newMessage'
 import { MessageBlockType } from '@renderer/types/newMessage'
 import { SdkRawChunk } from '@renderer/types/sdk'
 import { Stream } from 'openai/streaming'
+
+const logger = loggerService.withContext('SpanManagerService')
 
 class SpanManagerService {
   private spanMap: Map<string, ModelSpanEntity[]> = new Map()
@@ -35,10 +39,11 @@ class SpanManagerService {
   }
 
   startTrace(params: StartSpanParams, models?: Model[]) {
-    if (!defaultConfig.isDevModel) {
-      console.warn('Trace is enabled in developer mode.')
+    if (!getEnableDeveloperMode()) {
+      logger.warn('Trace is enabled in developer mode.')
       return
     }
+
     const span = webTracer.startSpan(params.name || 'root', {
       root: true,
       attributes: {
@@ -60,8 +65,8 @@ class SpanManagerService {
   }
 
   async restartTrace(message: Message, text?: string) {
-    if (!defaultConfig.isDevModel) {
-      console.warn('Trace is enabled in developer mode.')
+    if (!getEnableDeveloperMode()) {
+      logger.warn('Trace is enabled in developer mode.')
       return
     }
 
@@ -95,8 +100,8 @@ class SpanManagerService {
   }
 
   async appendTrace(message: Message, model: Model) {
-    if (!defaultConfig.isDevModel) {
-      console.warn('Trace is enabled in developer mode.')
+    if (!getEnableDeveloperMode()) {
+      logger.warn('Trace is enabled in developer mode.')
       return
     }
     if (!message.traceId) {
@@ -189,8 +194,8 @@ class SpanManagerService {
   }
 
   addSpan(params: StartSpanParams) {
-    if (!defaultConfig.isDevModel) {
-      console.warn('Trace is enabled in developer mode.')
+    if (!getEnableDeveloperMode()) {
+      logger.warn('Trace is enabled in developer mode.')
       return
     }
     const entity = this.getModelSpanEntity(params.topicId, params.modelName)
@@ -230,7 +235,7 @@ class SpanManagerService {
       rootEntity.addModelError(params.error)
     }
     if (!span) {
-      console.info(`No active span found for topicId: ${params.topicId}-modelName: ${params.modelName}.`)
+      logger.info(`No active span found for topicId: ${params.topicId}-modelName: ${params.modelName}.`)
       return
     }
 

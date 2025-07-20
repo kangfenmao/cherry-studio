@@ -1,22 +1,22 @@
 import { isDev } from '@main/constant'
-import { CacheBatchSpanProcessor, defaultConfig, FunctionSpanExporter } from '@mcp-trace/trace-core'
+import { CacheBatchSpanProcessor, FunctionSpanExporter } from '@mcp-trace/trace-core'
 import { NodeTracer as MCPNodeTracer } from '@mcp-trace/trace-node/nodeTracer'
 import { context, SpanContext, trace } from '@opentelemetry/api'
 import { BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
 
 import { ConfigKeys, configManager } from './ConfigManager'
+import { loggerService } from './LoggerService'
 import { spanCacheService } from './SpanCacheService'
 
 export const TRACER_NAME = 'CherryStudio'
 
+const logger = loggerService.withContext('NodeTraceService')
+
 export class NodeTraceService {
   init() {
-    // TODO get developer mode setting from config
-    defaultConfig.isDevModel = true
-
     const exporter = new FunctionSpanExporter(async (spans) => {
-      console.log(`Spans length:`, spans.length)
+      logger.info(`Spans length: ${spans.length}`)
     })
 
     MCPNodeTracer.init(
@@ -74,8 +74,7 @@ export function openTraceWindow(topicId: string, traceId: string, autoOpen = tru
     minimizable: true,
     resizable: true,
     title: 'Call Chain Window',
-    frame: false,
-    titleBarStyle: 'hidden',
+    frame: true,
     titleBarOverlay: { height: 40 },
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
