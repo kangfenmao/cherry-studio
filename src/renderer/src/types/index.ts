@@ -123,6 +123,8 @@ export type LegacyMessage = {
 
 export type Usage = OpenAI.Completions.CompletionUsage & {
   thoughts_tokens?: number
+  // OpenRouter specific fields
+  cost?: number
 }
 
 export type Metrics = {
