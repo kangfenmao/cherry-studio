@@ -12,6 +12,7 @@ import { SettingHelpLink, SettingHelpText, SettingHelpTextRow, SettingSubtitle }
 import { useAppDispatch } from '@renderer/store'
 import { setModel } from '@renderer/store/assistants'
 import { Model } from '@renderer/types'
+import { filterModelsByKeywords } from '@renderer/utils'
 import { Button, Flex, Tooltip } from 'antd'
 import { groupBy, sortBy, toPairs } from 'lodash'
 import { ListCheck, Plus } from 'lucide-react'
@@ -51,9 +52,7 @@ const ModelList: React.FC<ModelListProps> = ({ providerId }) => {
   }, [])
 
   const modelGroups = useMemo(() => {
-    const filteredModels = searchText
-      ? models.filter((model) => model.name.toLowerCase().includes(searchText.toLowerCase()))
-      : models
+    const filteredModels = searchText ? filterModelsByKeywords(searchText, models) : models
     return groupBy(filteredModels, 'group')
   }, [searchText, models])
 
