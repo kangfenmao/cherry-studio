@@ -408,7 +408,7 @@ const TranslatePage: FC = () => {
       await saveTranslateHistory(text, translatedText, actualSourceLanguage.langCode, actualTargetLanguage.langCode)
       setLoading(false)
     } catch (error) {
-      logger.error('Translation error:', error)
+      logger.error('Translation error:', error as Error)
       window.message.error({
         content: String(error),
         key: 'translate-message'
@@ -525,7 +525,7 @@ const TranslatePage: FC = () => {
         )
       }
     } catch (error) {
-      logger.error('Error getting language display:', error)
+      logger.error('Error getting language display:', error as Error)
       setBidirectionalPair([LanguagesEnum.enUS, LanguagesEnum.zhCN])
     }
 
