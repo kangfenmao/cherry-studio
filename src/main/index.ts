@@ -180,13 +180,12 @@ if (!app.requestSingleInstanceLock()) {
   })
 
   app.on('will-quit', async () => {
-    // event.preventDefault()
+    // 简单的资源清理，不阻塞退出流程
     try {
       await mcpService.cleanup()
     } catch (error) {
-      logger.error('Error cleaning up MCP service:', error)
+      logger.warn('Error cleaning up MCP service:', error)
     }
-
     // finish the logger
     logger.finish()
   })
