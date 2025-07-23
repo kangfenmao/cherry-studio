@@ -29,9 +29,10 @@ import { newMessagesActions, selectMessagesForTopic } from '../newMessage'
 
 const logger = loggerService.withContext('MessageThunk')
 
-const handleChangeLoadingOfTopic = async (topicId: string) => {
+const finishTopicLoading = async (topicId: string) => {
   await waitForTopicQueue(topicId)
   store.dispatch(newMessagesActions.setTopicLoading({ topicId, loading: false }))
+  store.dispatch(newMessagesActions.setTopicFulfilled({ topicId, fulfilled: true }))
 }
 // TODO: 后续可以将db操作移到Listener Middleware中
 export const saveMessageAndBlocksToDB = async (message: Message, blocks: MessageBlock[], messageIndex: number = -1) => {
@@ -956,7 +957,7 @@ export const sendMessage =
     } catch (error) {
       logger.error('Error in sendMessage thunk:', error as Error)
     } finally {
-      handleChangeLoadingOfTopic(topicId)
+      finishTopicLoading(topicId)
     }
   }
 
@@ -1213,7 +1214,7 @@ export const resendMessageThunk =
     } catch (error) {
       logger.error(`[resendMessageThunk] Error resending user message ${userMessageToResend.id}:`, error as Error)
     } finally {
-      handleChangeLoadingOfTopic(topicId)
+      finishTopicLoading(topicId)
     }
   }
 
@@ -1347,7 +1348,7 @@ export const regenerateAssistantResponseThunk =
       )
       // dispatch(newMessagesActions.setTopicLoading({ topicId, loading: false }))
     } finally {
-      handleChangeLoadingOfTopic(topicId)
+      finishTopicLoading(topicId)
     }
   }
 
@@ -1524,7 +1525,7 @@ export const appendAssistantResponseThunk =
       // Optionally dispatch an error action or notification
       // Resetting loading state should be handled by the underlying fetchAndProcessAssistantResponseImpl
     } finally {
-      handleChangeLoadingOfTopic(topicId)
+      finishTopicLoading(topicId)
     }
   }
 

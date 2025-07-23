@@ -23,6 +23,7 @@ import { fetchMessagesSummary } from '@renderer/services/ApiService'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import store from '@renderer/store'
 import { RootState } from '@renderer/store'
+import { newMessagesActions } from '@renderer/store/newMessage'
 import { setGenerating } from '@renderer/store/runtime'
 import { Assistant, Topic } from '@renderer/types'
 import { classNames, removeSpecialCharactersForFileName } from '@renderer/utils'
@@ -35,15 +36,16 @@ import {
   exportTopicToNotion,
   topicToMarkdown
 } from '@renderer/utils/export'
-import { hasTopicPendingRequests } from '@renderer/utils/queue'
 import { Dropdown, MenuProps, Tooltip } from 'antd'
 import { ItemType, MenuItemType } from 'antd/es/menu/interface'
 import dayjs from 'dayjs'
 import { findIndex } from 'lodash'
-import { FC, useCallback, useDeferredValue, useMemo, useRef, useState } from 'react'
+import { FC, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
+// const logger = loggerService.withContext('TopicsTab')
 
 interface Props {
   assistant: Assistant
@@ -59,6 +61,8 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic,
   const { showTopicTime, pinTopicsToTop, setTopicPosition, topicPosition } = useSettings()
 
   const renamingTopics = useSelector((state: RootState) => state.runtime.chat.renamingTopics)
+  const topicLoadingQuery = useSelector((state: RootState) => state.messages.loadingByTopic)
+  const topicFulfilledQuery = useSelector((state: RootState) => state.messages.fulfilledByTopic)
   const newlyRenamedTopics = useSelector((state: RootState) => state.runtime.chat.newlyRenamedTopics)
 
   const borderRadius = showTopicTime ? 12 : 'var(--list-item-border-radius)'
@@ -66,27 +70,13 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic,
   const [deletingTopicId, setDeletingTopicId] = useState<string | null>(null)
   const deleteTimerRef = useRef<NodeJS.Timeout>(null)
 
-  const pendingTopics = useMemo(() => {
-    return new Set<string>()
-  }, [])
-  const isPending = useCallback(
-    (topicId: string) => {
-      const hasPending = hasTopicPendingRequests(topicId)
-      if (topicId === activeTopic.id && !hasPending) {
-        pendingTopics.delete(topicId)
-        return false
-      }
-      if (pendingTopics.has(topicId)) {
-        return true
-      }
-      if (hasPending) {
-        pendingTopics.add(topicId)
-        return true
-      }
-      return false
-    },
-    [activeTopic.id, pendingTopics]
-  )
+  const isPending = useCallback((topicId: string) => topicLoadingQuery[topicId], [topicLoadingQuery])
+  const isFulfilled = useCallback((topicId: string) => topicFulfilledQuery[topicId], [topicFulfilledQuery])
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(newMessagesActions.setTopicFulfilled({ topicId: activeTopic.id, fulfilled: false }))
+  }, [activeTopic.id, dispatch, topicFulfilledQuery])
 
   const isRenaming = useCallback(
     (topicId: string) => {
@@ -480,6 +470,7 @@ const Topics: FC<Props> = ({ assistant: _assistant, activeTopic, setActiveTopic,
               onClick={() => onSwitchTopic(topic)}
               style={{ borderRadius }}>
               {isPending(topic.id) && !isActive && <PendingIndicator />}
+              {isFulfilled(topic.id) && !isActive && <FulfilledIndicator />}
               <TopicNameContainer>
                 <TopicName className={getTopicNameClassName()} title={topicName}>
                   {topicName}
@@ -644,7 +635,20 @@ const PendingIndicator = styled.div.attrs({
   left: 3px;
   top: 15px;
   border-radius: 50%;
-  background-color: var(--color-primary);
+  background-color: var(--color-status-warning);
+`
+
+const FulfilledIndicator = styled.div.attrs({
+  className: 'animation-pulse'
+})`
+  --pulse-size: 5px;
+  width: 5px;
+  height: 5px;
+  position: absolute;
+  left: 3px;
+  top: 15px;
+  border-radius: 50%;
+  background-color: var(--color-status-success);
 `
 
 const AddTopicButton = styled.div`
