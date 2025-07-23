@@ -1,5 +1,5 @@
 import { useAssistants } from '@renderer/hooks/useAssistant'
-import { useSettings } from '@renderer/hooks/useSettings'
+import { useNavbarPosition, useSettings } from '@renderer/hooks/useSettings'
 import { useActiveTopic } from '@renderer/hooks/useTopic'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
 import NavigationService from '@renderer/services/NavigationService'
@@ -17,6 +17,7 @@ let _activeAssistant: Assistant
 const HomePage: FC = () => {
   const { assistants } = useAssistants()
   const navigate = useNavigate()
+  const { isLeftNavbar } = useNavbarPosition()
 
   const location = useLocation()
   const state = location.state
@@ -81,14 +82,16 @@ const HomePage: FC = () => {
 
   return (
     <Container id="home-page">
-      <Navbar
-        activeAssistant={activeAssistant}
-        activeTopic={activeTopic}
-        setActiveTopic={setActiveTopic}
-        setActiveAssistant={setActiveAssistant}
-        position="left"
-      />
-      <ContentContainer id="content-container">
+      {isLeftNavbar && (
+        <Navbar
+          activeAssistant={activeAssistant}
+          activeTopic={activeTopic}
+          setActiveTopic={setActiveTopic}
+          setActiveAssistant={setActiveAssistant}
+          position="left"
+        />
+      )}
+      <ContentContainer id={isLeftNavbar ? 'content-container' : undefined}>
         {showAssistants && (
           <HomeTabs
             activeAssistant={activeAssistant}
@@ -113,7 +116,12 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-width: calc(100vw - var(--sidebar-width));
+  [navbar-position='left'] & {
+    max-width: calc(100vw - var(--sidebar-width));
+  }
+  [navbar-position='top'] & {
+    max-width: 100vw;
+  }
 `
 
 const ContentContainer = styled.div`

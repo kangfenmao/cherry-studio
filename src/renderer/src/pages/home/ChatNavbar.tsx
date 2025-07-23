@@ -1,4 +1,4 @@
-import { Navbar, NavbarLeft, NavbarRight } from '@renderer/components/app/Navbar'
+import { NavbarHeader } from '@renderer/components/app/Navbar'
 import { HStack } from '@renderer/components/Layout'
 import SearchPopup from '@renderer/components/Popups/SearchPopup'
 import { isMac } from '@renderer/config/constant'
@@ -14,7 +14,7 @@ import { setNarrowMode } from '@renderer/store/settings'
 import { Assistant, Topic } from '@renderer/types'
 import { Tooltip } from 'antd'
 import { t } from 'i18next'
-import { Menu, MessageSquareDiff, PanelLeftClose, PanelRightClose, Search } from 'lucide-react'
+import { Menu, PanelLeftClose, PanelRightClose, Search } from 'lucide-react'
 import { FC, useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -84,68 +84,59 @@ const HeaderNavbar: FC<Props> = ({ activeAssistant, setActiveAssistant, activeTo
   }
 
   return (
-    <Navbar className="home-navbar">
-      {showAssistants && (
-        <NavbarLeft style={{ justifyContent: 'space-between', borderRight: 'none', padding: 0 }}>
+    <NavbarHeader className="home-navbar">
+      <HStack alignItems="center">
+        {showAssistants && (
           <Tooltip title={t('navbar.hide_sidebar')} mouseEnterDelay={0.8}>
-            <NavbarIcon onClick={handleToggleShowAssistants} style={{ marginLeft: isMac && !isFullscreen ? 16 : 0 }}>
+            <NavbarIcon onClick={handleToggleShowAssistants}>
               <PanelLeftClose size={18} />
             </NavbarIcon>
           </Tooltip>
-          <Tooltip title={t('settings.shortcuts.new_topic')} mouseEnterDelay={0.8}>
-            <NavbarIcon onClick={() => EventEmitter.emit(EVENT_NAMES.ADD_NEW_TOPIC)} style={{ marginRight: 5 }}>
-              <MessageSquareDiff size={18} />
+        )}
+        {!showAssistants && (
+          <Tooltip title={t('navbar.show_sidebar')} mouseEnterDelay={0.8}>
+            <NavbarIcon
+              onClick={() => toggleShowAssistants()}
+              style={{ marginRight: 8, marginLeft: isMac && !isFullscreen ? 4 : -12 }}>
+              <PanelRightClose size={18} />
             </NavbarIcon>
           </Tooltip>
-        </NavbarLeft>
-      )}
-      <NavbarRight style={{ justifyContent: 'space-between', flex: 1 }} className="home-navbar-right">
-        <HStack alignItems="center">
-          {!showAssistants && (
-            <Tooltip title={t('navbar.show_sidebar')} mouseEnterDelay={0.8}>
-              <NavbarIcon
-                onClick={() => toggleShowAssistants()}
-                style={{ marginRight: 8, marginLeft: isMac && !isFullscreen ? 4 : -12 }}>
-                <PanelRightClose size={18} />
-              </NavbarIcon>
-            </Tooltip>
-          )}
-          {!showAssistants && (
-            <NavbarIcon onClick={onShowAssistantsDrawer} style={{ marginRight: 8 }}>
-              <Menu size={18} />
+        )}
+        {!showAssistants && (
+          <NavbarIcon onClick={onShowAssistantsDrawer} style={{ marginRight: 8 }}>
+            <Menu size={18} />
+          </NavbarIcon>
+        )}
+        <SelectModelButton assistant={assistant} />
+      </HStack>
+      <HStack alignItems="center" gap={8}>
+        <UpdateAppButton />
+        <Tooltip title={t('chat.assistant.search.placeholder')} mouseEnterDelay={0.8}>
+          <NarrowIcon onClick={() => SearchPopup.show()}>
+            <Search size={18} />
+          </NarrowIcon>
+        </Tooltip>
+        <Tooltip title={t('navbar.expand')} mouseEnterDelay={0.8}>
+          <NarrowIcon onClick={handleNarrowModeToggle}>
+            <i className="iconfont icon-icon-adaptive-width"></i>
+          </NarrowIcon>
+        </Tooltip>
+        {topicPosition === 'right' && !showTopics && (
+          <Tooltip title={t('navbar.show_sidebar')} mouseEnterDelay={2}>
+            <NavbarIcon onClick={() => toggleShowTopics()}>
+              <PanelLeftClose size={18} />
             </NavbarIcon>
-          )}
-          <SelectModelButton assistant={assistant} />
-        </HStack>
-        <HStack alignItems="center" gap={8}>
-          <UpdateAppButton />
-          <Tooltip title={t('chat.assistant.search.placeholder')} mouseEnterDelay={0.8}>
-            <NarrowIcon onClick={() => SearchPopup.show()}>
-              <Search size={18} />
-            </NarrowIcon>
           </Tooltip>
-          <Tooltip title={t('navbar.expand')} mouseEnterDelay={0.8}>
-            <NarrowIcon onClick={handleNarrowModeToggle}>
-              <i className="iconfont icon-icon-adaptive-width"></i>
-            </NarrowIcon>
+        )}
+        {topicPosition === 'right' && showTopics && (
+          <Tooltip title={t('navbar.hide_sidebar')} mouseEnterDelay={2}>
+            <NavbarIcon onClick={() => handleToggleShowTopics()}>
+              <PanelRightClose size={18} />
+            </NavbarIcon>
           </Tooltip>
-          {topicPosition === 'right' && !showTopics && (
-            <Tooltip title={t('navbar.show_sidebar')} mouseEnterDelay={2}>
-              <NavbarIcon onClick={() => toggleShowTopics()}>
-                <PanelLeftClose size={18} />
-              </NavbarIcon>
-            </Tooltip>
-          )}
-          {topicPosition === 'right' && showTopics && (
-            <Tooltip title={t('navbar.hide_sidebar')} mouseEnterDelay={2}>
-              <NavbarIcon onClick={() => handleToggleShowTopics()}>
-                <PanelRightClose size={18} />
-              </NavbarIcon>
-            </Tooltip>
-          )}
-        </HStack>
-      </NavbarRight>
-    </Navbar>
+        )}
+      </HStack>
+    </NavbarHeader>
   )
 }
 

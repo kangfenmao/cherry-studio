@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons'
 import { loggerService } from '@logger'
 import { HStack } from '@renderer/components/Layout'
+import TextBadge from '@renderer/components/TextBadge'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useModel } from '@renderer/hooks/useModel'
 import MemoryService from '@renderer/services/MemoryService'
@@ -611,17 +612,7 @@ const MemorySettings = () => {
         <HStack style={{ justifyContent: 'space-between', alignItems: 'center' }}>
           <HStack style={{ alignItems: 'center', gap: '2px' }}>
             <SettingRowTitle>{t('memory.global_memory')}</SettingRowTitle>
-            <span
-              style={{
-                fontSize: '12px',
-                color: 'var(--color-primary)',
-                background: 'var(--color-primary-bg)',
-                padding: '2px 6px',
-                borderRadius: '4px',
-                fontWeight: '500'
-              }}>
-              Beta
-            </span>
+            <TextBadge text="Beta" />
           </HStack>
           <HStack style={{ alignItems: 'center', gap: 10 }}>
             <Switch checked={globalMemoryEnabled} onChange={handleGlobalMemoryToggle} />
