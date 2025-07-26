@@ -2080,6 +2080,10 @@
         "title": "Local Backup"
       },
       "markdown_export": {
+        "exclude_citations": {
+          "help": "Exclude citations and references when exporting to Markdown, keeping only the main content",
+          "title": "Exclude Citations"
+        },
         "force_dollar_math": {
           "help": "When enabled, $$ will be forcibly used to mark LaTeX formulas when exporting to Markdown. Note: This option also affects all export methods through Markdown, such as Notion, Yuque, etc.",
           "title": "Force $$ for LaTeX formulas"
@@ -2095,6 +2099,10 @@
         "show_model_provider": {
           "help": "Display the model provider (e.g., OpenAI, Gemini) when exporting to Markdown",
           "title": "Show Model Provider"
+        },
+        "standardize_citations": {
+          "help": "When enabled, citation markers will be converted to standard Markdown footnote format [^1] and citation lists will be formatted.",
+          "title": "Standardize Citation Format"
         },
         "title": "Markdown Export"
       },

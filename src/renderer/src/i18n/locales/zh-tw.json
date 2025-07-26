@@ -2080,6 +2080,10 @@
         "title": "本地備份"
       },
       "markdown_export": {
+        "exclude_citations": {
+          "help": "匯出 Markdown 時排除引用和參考文獻，僅保留主要內容",
+          "title": "不匯出引用內容"
+        },
         "force_dollar_math": {
           "help": "開啟後，匯出 Markdown 時會強制使用 $$ 來標記 LaTeX 公式。注意：該項也會影響所有透過 Markdown 匯出的方式，如 Notion、語雀等",
           "title": "LaTeX 公式強制使用 $$"
@@ -2095,6 +2099,10 @@
         "show_model_provider": {
           "help": "在匯出 Markdown 時顯示模型供應商，如 OpenAI、Gemini 等",
           "title": "顯示模型供應商"
+        },
+        "standardize_citations": {
+          "help": "將引用標記轉換為標準 Markdown 腳註格式 [^1]，並格式化引用列表",
+          "title": "標準化引用格式"
         },
         "title": "Markdown 匯出"
       },
