@@ -1975,6 +1975,12 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       provider: 'perplexity',
       name: 'sonar',
       group: 'Sonar'
+    },
+    {
+      id: 'sonar-deep-research',
+      provider: 'perplexity',
+      name: 'sonar-deep-research',
+      group: 'Sonar'
     }
   ],
   infini: [
@@ -2406,7 +2412,13 @@ export const GEMINI_SEARCH_REGEX = new RegExp('gemini-2\\..*', 'i')
 
 export const OPENAI_NO_SUPPORT_DEV_ROLE_MODELS = ['o1-preview', 'o1-mini']
 
-export const PERPLEXITY_SEARCH_MODELS = ['sonar-pro', 'sonar', 'sonar-reasoning', 'sonar-reasoning-pro']
+export const PERPLEXITY_SEARCH_MODELS = [
+  'sonar-pro',
+  'sonar',
+  'sonar-reasoning',
+  'sonar-reasoning-pro',
+  'sonar-deep-research'
+]
 
 export function isTextToImageModel(model: Model): boolean {
   return TEXT_TO_IMAGE_REGEX.test(model.id)
@@ -2547,7 +2559,11 @@ export function isSupportedReasoningEffortModel(model?: Model): boolean {
     return false
   }
 
-  return isSupportedReasoningEffortOpenAIModel(model) || isSupportedReasoningEffortGrokModel(model)
+  return (
+    isSupportedReasoningEffortOpenAIModel(model) ||
+    isSupportedReasoningEffortGrokModel(model) ||
+    isSupportedReasoningEffortPerplexityModel(model)
+  )
 }
 
 export function isGrokModel(model?: Model): boolean {
@@ -2683,6 +2699,20 @@ export const isHunyuanReasoningModel = (model?: Model): boolean => {
   return isSupportedThinkingTokenHunyuanModel(model) || model.id.toLowerCase().includes('hunyuan-t1')
 }
 
+export const isPerplexityReasoningModel = (model?: Model): boolean => {
+  if (!model) {
+    return false
+  }
+
+  const baseName = getLowerBaseModelName(model.id, '/')
+  return isSupportedReasoningEffortPerplexityModel(model) || baseName.includes('reasoning')
+}
+
+export const isSupportedReasoningEffortPerplexityModel = (model: Model): boolean => {
+  const baseName = getLowerBaseModelName(model.id, '/')
+  return baseName.includes('sonar-deep-research')
+}
+
 export function isReasoningModel(model?: Model): boolean {
   if (!model || isEmbeddingModel(model) || isRerankModel(model) || isTextToImageModel(model)) {
     return false
@@ -2708,6 +2738,7 @@ export function isReasoningModel(model?: Model): boolean {
     isQwenReasoningModel(model) ||
     isGrokReasoningModel(model) ||
     isHunyuanReasoningModel(model) ||
+    isPerplexityReasoningModel(model) ||
     model.id.toLowerCase().includes('glm-z1') ||
     model.id.toLowerCase().includes('magistral') ||
     model.id.toLowerCase().includes('minimax-m1')
