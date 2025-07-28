@@ -32,11 +32,13 @@ export function getDefaultAssistant(): Assistant {
     regularPhrases: [], // Added regularPhrases
     settings: {
       temperature: DEFAULT_TEMPERATURE,
+      enableTemperature: true,
       contextCount: DEFAULT_CONTEXTCOUNT,
       enableMaxTokens: false,
       maxTokens: 0,
       streamOutput: true,
       topP: 1,
+      enableTopP: true,
       toolUseMode: 'prompt',
       customParameters: []
     }
@@ -125,7 +127,9 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
   return {
     contextCount: contextCount === MAX_CONTEXT_COUNT ? UNLIMITED_CONTEXT_COUNT : contextCount,
     temperature: assistant?.settings?.temperature ?? DEFAULT_TEMPERATURE,
+    enableTemperature: assistant?.settings?.enableTemperature ?? true,
     topP: assistant?.settings?.topP ?? 1,
+    enableTopP: assistant?.settings?.enableTopP ?? true,
     enableMaxTokens: assistant?.settings?.enableMaxTokens ?? false,
     maxTokens: getAssistantMaxTokens(),
     streamOutput: assistant?.settings?.streamOutput ?? true,
@@ -155,11 +159,13 @@ export async function createAssistantFromAgent(agent: Agent) {
     regularPhrases: agent.regularPhrases || [], // Ensured regularPhrases
     settings: agent.settings || {
       temperature: DEFAULT_TEMPERATURE,
+      enableTemperature: true,
       contextCount: DEFAULT_CONTEXTCOUNT,
       enableMaxTokens: false,
       maxTokens: 0,
       streamOutput: true,
       topP: 1,
+      enableTopP: true,
       toolUseMode: 'prompt',
       customParameters: []
     }
