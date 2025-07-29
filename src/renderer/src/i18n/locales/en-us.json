@@ -913,6 +913,7 @@
     "thai": "Thai",
     "turkish": "Turkish",
     "ukrainian": "Ukrainian",
+    "unknown": "unknown",
     "urdu": "Urdu",
     "vietnamese": "Vietnamese"
   },
@@ -3394,6 +3395,7 @@
     },
     "close": "Close",
     "closed": "Translation closed",
+    "complete": "Translation completed",
     "confirm": {
       "content": "Translation will replace the original text, continue?",
       "title": "Translation Confirmation"
@@ -3405,13 +3407,17 @@
     "empty": "Translation content is empty",
     "error": {
       "failed": "Translation failed",
-      "not_configured": "Translation model is not configured"
+      "not_configured": "Translation model is not configured",
+      "unknown": "An unknown error occurred during translation"
     },
     "history": {
       "clear": "Clear History",
       "clear_description": "Clear history will delete all translation history, continue?",
       "delete": "Delete",
       "empty": "No translation history",
+      "error": {
+        "save": "Failed to save translation history"
+      },
       "title": "Translation History"
     },
     "input": {

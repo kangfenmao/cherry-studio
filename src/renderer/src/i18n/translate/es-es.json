@@ -913,6 +913,7 @@
     "thai": "tailandés",
     "turkish": "turco",
     "ukrainian": "ucraniano",
+    "unknown": "desconocido",
     "urdu": "urdu",
     "vietnamese": "vietnamita"
   },
@@ -2891,7 +2892,7 @@
         },
         "supported_text_delta": {
           "label": "salida de texto incremental",
-          "tooltip": "Cuando el modelo no lo admita, desactive este botón"
+          "tooltip": "Cuando el modelo no sea compatible, desactive este botón."
         }
       },
       "api_key": "Clave API",
@@ -3394,6 +3395,7 @@
     },
     "close": "Cerrar",
     "closed": "La traducción ha sido desactivada",
+    "complete": "traducción completada",
     "confirm": {
       "content": "La traducción reemplazará el texto original, ¿desea continuar?",
       "title": "Confirmación de traducción"
@@ -3405,13 +3407,17 @@
     "empty": "El contenido de traducción está vacío",
     "error": {
       "failed": "Fallo en la traducción",
-      "not_configured": "El modelo de traducción no está configurado"
+      "not_configured": "El modelo de traducción no está configurado",
+      "unknown": "Se produjo un error desconocido durante la traducción"
     },
     "history": {
       "clear": "Borrar historial",
       "clear_description": "Borrar el historial eliminará todos los registros de traducciones, ¿desea continuar?",
       "delete": "Eliminar",
       "empty": "Sin historial de traducciones por el momento",
+      "error": {
+        "save": "Error al guardar el historial de traducciones"
+      },
       "title": "Historial de traducciones"
     },
     "input": {
