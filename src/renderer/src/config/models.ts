@@ -2345,7 +2345,8 @@ export const SYSTEM_MODELS: Record<string, Model[]> = {
       group: 'google'
     }
   ],
-  'new-api': []
+  'new-api': [],
+  'aws-bedrock': []
 }
 
 export const TEXT_TO_IMAGES_MODELS = [
