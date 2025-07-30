@@ -127,6 +127,11 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ children }) => {
     navigate(lastSettingsPath)
   }
 
+  const handleTabClick = (tab: Tab) => {
+    hideMinappPopup()
+    navigate(tab.path)
+  }
+
   return (
     <Container>
       <TabsBar $isFullscreen={isFullscreen}>
@@ -134,15 +139,7 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ children }) => {
           .filter((tab) => !specialTabs.includes(tab.id))
           .map((tab) => {
             return (
-              <Tab
-                key={tab.id}
-                active={tab.id === activeTabId}
-                onClick={() => {
-                  hideMinappPopup()
-                  // 我不确定这个还需不需要，从Siderbar那边复制过来的
-                  // await modelGenerating()
-                  navigate(tab.path)
-                }}>
+              <Tab key={tab.id} active={tab.id === activeTabId} onClick={() => handleTabClick(tab)}>
                 <TabHeader>
                   {tab.id && <TabIcon>{getTabIcon(tab.id)}</TabIcon>}
                   <TabTitle>{getTitleLabel(tab.id)}</TabTitle>

@@ -27,6 +27,27 @@ export const TopNavbarOpenedMinappTabs: FC = () => {
     return () => clearTimeout(timer)
   }, [openedKeepAliveMinapps])
 
+  // animation for minapp switch indicator
+  useEffect(() => {
+    const iconDefaultWidth = 30 // 22px icon + 8px gap
+    const iconDefaultOffset = 10 // initial offset
+    const container = document.querySelector('.TopNavContainer') as HTMLElement
+    const activeIcon = document.querySelector('.TopNavContainer .opened-active') as HTMLElement
+
+    let indicatorLeft = 0,
+      indicatorBottom = 0
+    if (minappShow && activeIcon && container) {
+      indicatorLeft = activeIcon.offsetLeft + activeIcon.offsetWidth / 2 - 4 // 4 is half of the indicator's width (8px)
+      indicatorBottom = 0
+    } else {
+      indicatorLeft =
+        ((keepAliveMinapps.length > 0 ? keepAliveMinapps.length : 1) / 2) * iconDefaultWidth + iconDefaultOffset - 4
+      indicatorBottom = -50
+    }
+    container?.style.setProperty('--indicator-left', `${indicatorLeft}px`)
+    container?.style.setProperty('--indicator-bottom', `${indicatorBottom}px`)
+  }, [currentMinappId, keepAliveMinapps, minappShow])
+
   const handleOnClick = (app: MinAppType) => {
     if (minappShow && currentMinappId === app.id) {
       hideMinappPopup()
@@ -43,6 +64,7 @@ export const TopNavbarOpenedMinappTabs: FC = () => {
 
   return (
     <TopNavContainer
+      className="TopNavContainer"
       style={{ backgroundColor: keepAliveMinapps.length > 0 ? 'var(--color-list-item)' : 'transparent' }}>
       <TopNavMenus>
         {keepAliveMinapps.map((app) => {
@@ -62,22 +84,22 @@ export const TopNavbarOpenedMinappTabs: FC = () => {
               }
             }
           ]
+
           const isActive = minappShow && currentMinappId === app.id
 
           return (
-            <StyledLink key={app.id}>
+            <Tooltip key={app.id} title={app.name} mouseEnterDelay={0.8} placement="bottom">
               <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']} overlayStyle={{ zIndex: 10000 }}>
                 <TopNavItemContainer
-                  className={`${isActive ? 'opened-active' : ''}`}
                   onClick={() => handleOnClick(app)}
-                  theme={theme}>
+                  theme={theme}
+                  className={`${isActive ? 'opened-active' : ''}`}>
                   <TopNavIcon theme={theme}>
                     <MinAppIcon size={22} app={app} style={{ border: 'none', padding: 0 }} />
                   </TopNavIcon>
-                  <TopNavLabel>{app.name}</TopNavLabel>
                 </TopNavItemContainer>
               </Dropdown>
-            </StyledLink>
+            </Tooltip>
           )
         })}
       </TopNavMenus>
@@ -158,16 +180,14 @@ export const SidebarOpenedMinappTabs: FC = () => {
 
             return (
               <Tooltip key={app.id} title={app.name} mouseEnterDelay={0.8} placement="right">
-                <StyledLink>
-                  <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']} overlayStyle={{ zIndex: 10000 }}>
-                    <Icon
-                      theme={theme}
-                      onClick={() => handleOnClick(app)}
-                      className={`${isActive ? 'opened-active' : ''}`}>
-                      <MinAppIcon size={20} app={app} style={{ borderRadius: 6 }} sidebar />
-                    </Icon>
-                  </Dropdown>
-                </StyledLink>
+                <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']} overlayStyle={{ zIndex: 10000 }}>
+                  <Icon
+                    theme={theme}
+                    onClick={() => handleOnClick(app)}
+                    className={`${isActive ? 'opened-active' : ''}`}>
+                    <MinAppIcon size={20} app={app} style={{ borderRadius: 6 }} sidebar />
+                  </Icon>
+                </Dropdown>
               </Tooltip>
             )
           })}
@@ -201,16 +221,14 @@ export const SidebarPinnedApps: FC = () => {
         const isActive = minappShow && currentMinappId === app.id
         return (
           <Tooltip key={app.id} title={app.name} mouseEnterDelay={0.8} placement="right">
-            <StyledLink>
-              <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']} overlayStyle={{ zIndex: 10000 }}>
-                <Icon
-                  theme={theme}
-                  onClick={() => openMinappKeepAlive(app)}
-                  className={`${isActive ? 'active' : ''} ${openedKeepAliveMinapps.some((item) => item.id === app.id) ? 'opened-minapp' : ''}`}>
-                  <MinAppIcon size={20} app={app} style={{ borderRadius: 6 }} sidebar />
-                </Icon>
-              </Dropdown>
-            </StyledLink>
+            <Dropdown menu={{ items: menuItems }} trigger={['contextMenu']} overlayStyle={{ zIndex: 10000 }}>
+              <Icon
+                theme={theme}
+                onClick={() => openMinappKeepAlive(app)}
+                className={`${isActive ? 'active' : ''} ${openedKeepAliveMinapps.some((item) => item.id === app.id) ? 'opened-minapp' : ''}`}>
+                <MinAppIcon size={20} app={app} style={{ borderRadius: 6 }} sidebar />
+              </Icon>
+            </Dropdown>
           </Tooltip>
         )
       }}
@@ -239,16 +257,10 @@ const Icon = styled.div<{ theme: string }>`
     background-color: ${({ theme }) => (theme === 'dark' ? 'var(--color-black)' : 'var(--color-white)')};
     opacity: 0.8;
     cursor: pointer;
-    .icon {
-      color: var(--color-icon-white);
-    }
   }
   &.active {
     background-color: ${({ theme }) => (theme === 'dark' ? 'var(--color-black)' : 'var(--color-white)')};
     border: 0.5px solid var(--color-border);
-    .icon {
-      color: var(--color-primary);
-    }
   }
 
   @keyframes borderBreath {
@@ -276,14 +288,6 @@ const Icon = styled.div<{ theme: string }>`
     border-radius: inherit;
     opacity: 0.3;
     border: 0.5px solid var(--color-primary);
-  }
-`
-
-const StyledLink = styled.div`
-  text-decoration: none;
-  -webkit-app-region: none;
-  &* {
-    user-select: none;
   }
 `
 
@@ -330,64 +334,45 @@ const TopNavContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 2px;
-  gap: 6px;
+  gap: 4px;
   background-color: var(--color-list-item);
   border-radius: 20px;
   margin: 0 5px;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: var(--indicator-left, 0);
+    bottom: var(--indicator-bottom, 0);
+    width: 8px;
+    height: 4px;
+    background-color: var(--color-primary);
+    transition:
+      left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      bottom 0.3s ease-in-out;
+    border-radius: 2px;
+  }
 `
 
 const TopNavMenus = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 2px;
   height: 100%;
 `
 
 const TopNavIcon = styled(Icon)`
   width: 22px;
   height: 22px;
-
-  .icon {
-    width: 22px;
-    height: 22px;
-  }
-
-  &.opened-active {
-    background-color: ${({ theme }) => (theme === 'dark' ? 'var(--color-black)' : 'var(--color-white)')};
-    border: 0.5px solid var(--color-border);
-    border-radius: 25%;
-    .icon {
-      color: var(--color-primary);
-    }
-  }
-`
-
-const TopNavLabel = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
 `
 
 const TopNavItemContainer = styled.div`
   display: flex;
-  padding: 4px 2px;
   transition: border 0.2s ease;
   border-radius: 18px;
-  /* 避免布局偏移 */
-  border: 1px solid transparent;
-
-  &:hover {
-    border-bottom: 2px solid var(--color-primary);
-    opacity: 0.8;
-    cursor: pointer;
-  }
-
-  &.opened-active {
-    border: 1px solid var(--color-primary);
-    .icon {
-      color: var(--color-primary);
-    }
-  }
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2px;
 `
