@@ -76,6 +76,59 @@
     },
     "title": "Agents"
   },
+  "apiServer": {
+    "actions": {
+      "copy": "Copy",
+      "regenerate": "Regenerate",
+      "restart": {
+        "button": "Restart",
+        "tooltip": "Restart Server"
+      }
+    },
+    "authHeaderText": "Use in Authorization header:",
+    "configuration": "Configuration",
+    "description": "Expose Cherry Studio's AI capabilities through OpenAI-compatible HTTP APIs",
+    "documentation": {
+      "title": "API Documentation",
+      "unavailable": {
+        "description": "Start the API server to view the interactive documentation",
+        "title": "API Documentation Unavailable"
+      }
+    },
+    "fields": {
+      "apiKey": {
+        "copyTooltip": "Copy API Key",
+        "label": "API Key",
+        "placeholder": "API key will be auto-generated"
+      },
+      "port": {
+        "helpText": "Stop server to change port",
+        "label": "Port"
+      },
+      "url": {
+        "copyTooltip": "Copy URL",
+        "label": "URL"
+      }
+    },
+    "messages": {
+      "apiKeyCopied": "API Key copied to clipboard",
+      "apiKeyRegenerated": "API Key regenerated",
+      "operationFailed": "API Server operation failed: ",
+      "restartError": "Failed to restart API Server: ",
+      "restartFailed": "API Server restart failed: ",
+      "restartSuccess": "API Server restarted successfully",
+      "startError": "Failed to start API Server: ",
+      "startSuccess": "API Server started successfully",
+      "stopError": "Failed to stop API Server: ",
+      "stopSuccess": "API Server stopped successfully",
+      "urlCopied": "Server URL copied to clipboard"
+    },
+    "status": {
+      "running": "Running",
+      "stopped": "Stopped"
+    },
+    "title": "API Server"
+  },
   "assistants": {
     "abbr": "Assistants",
     "clear": {
