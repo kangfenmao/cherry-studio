@@ -2,23 +2,30 @@ import { GlobalOutlined } from '@ant-design/icons'
 import OcrIcon from '@renderer/components/Icons/OcrIcon'
 import { HStack } from '@renderer/components/Layout'
 import ListItem from '@renderer/components/ListItem'
-import { FileCode } from 'lucide-react'
+import { FileCode, Server } from 'lucide-react'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import ApiServerSettings from './ApiServerSettings/ApiServerSettings'
 import OcrSettings from './OcrSettings'
 import PreprocessSettings from './PreprocessSettings'
 import WebSearchSettings from './WebSearchSettings'
 
+let _menu: string = 'web-search'
+
 const ToolSettings: FC = () => {
   const { t } = useTranslation()
-  const [menu, setMenu] = useState<string>('web-search')
+  const [menu, setMenu] = useState<string>(_menu)
   const menuItems = [
     { key: 'web-search', title: 'settings.tool.websearch.title', icon: <GlobalOutlined style={{ fontSize: 16 }} /> },
     { key: 'preprocess', title: 'settings.tool.preprocess.title', icon: <FileCode size={16} /> },
-    { key: 'ocr', title: 'settings.tool.ocr.title', icon: <OcrIcon /> }
+    { key: 'ocr', title: 'settings.tool.ocr.title', icon: <OcrIcon /> },
+    { key: 'api-server', title: 'apiServer.title', icon: <Server size={16} /> }
   ]
+
+  _menu = menu
+
   return (
     <Container>
       <MenuList>
@@ -36,6 +43,7 @@ const ToolSettings: FC = () => {
       {menu == 'web-search' && <WebSearchSettings />}
       {menu == 'preprocess' && <PreprocessSettings />}
       {menu == 'ocr' && <OcrSettings />}
+      {menu == 'api-server' && <ApiServerSettings />}
     </Container>
   )
 }

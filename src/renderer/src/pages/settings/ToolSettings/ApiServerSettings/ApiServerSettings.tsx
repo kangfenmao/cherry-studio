@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { SettingContainer } from '..'
+import { SettingContainer } from '../..'
 
 const logger = loggerService.withContext('ApiServerSettings')
 const { Text, Title } = Typography
