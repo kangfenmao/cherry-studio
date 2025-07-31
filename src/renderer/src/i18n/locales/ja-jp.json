@@ -922,7 +922,7 @@
     "search_placeholder": "検索するテキストを入力",
     "settings": {
       "preprocessing": "預処理",
-      "preprocessing_tooltip": "アップロードされたファイルのOCR預処理",
+      "preprocessing_tooltip": "アップロードされたファイルの預処理",
       "title": "ナレッジベース設定"
     },
     "sitemap_added": "追加成功",
@@ -3302,26 +3302,11 @@
     },
     "title": "設定",
     "tool": {
-      "ocr": {
-        "mac_system_ocr_options": {
-          "min_confidence": "最小信頼度",
-          "mode": {
-            "accurate": "正確",
-            "fast": "速い",
-            "title": "認識モード"
-          }
-        },
-        "provider": "OCRプロバイダー",
-        "provider_placeholder": "OCRプロバイダーを選択",
-        "title": "OCR（オーシーアール）"
-      },
       "preprocess": {
         "provider": "プレプロセスプロバイダー",
         "provider_placeholder": "前処理プロバイダーを選択してください",
-        "title": "前処理"
-      },
-      "preprocessOrOcr": {
-        "tooltip": "設定 → ツールで、ドキュメント前処理サービスプロバイダーまたはOCRを設定します。ドキュメント前処理は、複雑な形式のドキュメントやスキャンされたドキュメントの検索性能を効果的に向上させます。OCRは、ドキュメント内の画像内のテキストまたはスキャンされたPDFテキストのみを認識できます。"
+        "title": "前処理",
+        "tooltip": "設定 → ツールで、ドキュメント前処理サービスプロバイダーを設定します。ドキュメント前処理は、複雑な形式のドキュメントやスキャンされたドキュメントの検索性能を効果的に向上させます。"
       },
       "title": "ツール設定",
       "websearch": {

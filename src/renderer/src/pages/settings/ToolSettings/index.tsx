@@ -1,5 +1,4 @@
 import { GlobalOutlined } from '@ant-design/icons'
-import OcrIcon from '@renderer/components/Icons/OcrIcon'
 import { HStack } from '@renderer/components/Layout'
 import ListItem from '@renderer/components/ListItem'
 import { FileCode, Server } from 'lucide-react'
@@ -8,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import ApiServerSettings from './ApiServerSettings/ApiServerSettings'
-import OcrSettings from './OcrSettings'
 import PreprocessSettings from './PreprocessSettings'
 import WebSearchSettings from './WebSearchSettings'
 
@@ -20,7 +18,6 @@ const ToolSettings: FC = () => {
   const menuItems = [
     { key: 'web-search', title: 'settings.tool.websearch.title', icon: <GlobalOutlined style={{ fontSize: 16 }} /> },
     { key: 'preprocess', title: 'settings.tool.preprocess.title', icon: <FileCode size={16} /> },
-    { key: 'ocr', title: 'settings.tool.ocr.title', icon: <OcrIcon /> },
     { key: 'api-server', title: 'apiServer.title', icon: <Server size={16} /> }
   ]
 
@@ -42,7 +39,6 @@ const ToolSettings: FC = () => {
       </MenuList>
       {menu == 'web-search' && <WebSearchSettings />}
       {menu == 'preprocess' && <PreprocessSettings />}
-      {menu == 'ocr' && <OcrSettings />}
       {menu == 'api-server' && <ApiServerSettings />}
     </Container>
   )
