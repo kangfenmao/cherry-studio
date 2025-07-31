@@ -1,12 +1,11 @@
 import { GlobalOutlined } from '@ant-design/icons'
 import { HStack } from '@renderer/components/Layout'
 import ListItem from '@renderer/components/ListItem'
-import { FileCode, Server } from 'lucide-react'
+import { FileCode } from 'lucide-react'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import ApiServerSettings from './ApiServerSettings/ApiServerSettings'
 import PreprocessSettings from './PreprocessSettings'
 import WebSearchSettings from './WebSearchSettings'
 
@@ -17,8 +16,7 @@ const ToolSettings: FC = () => {
   const [menu, setMenu] = useState<string>(_menu)
   const menuItems = [
     { key: 'web-search', title: 'settings.tool.websearch.title', icon: <GlobalOutlined style={{ fontSize: 16 }} /> },
-    { key: 'preprocess', title: 'settings.tool.preprocess.title', icon: <FileCode size={16} /> },
-    { key: 'api-server', title: 'apiServer.title', icon: <Server size={16} /> }
+    { key: 'preprocess', title: 'settings.tool.preprocess.title', icon: <FileCode size={16} /> }
   ]
 
   _menu = menu
@@ -39,7 +37,6 @@ const ToolSettings: FC = () => {
       </MenuList>
       {menu == 'web-search' && <WebSearchSettings />}
       {menu == 'preprocess' && <PreprocessSettings />}
-      {menu == 'api-server' && <ApiServerSettings />}
     </Container>
   )
 }
