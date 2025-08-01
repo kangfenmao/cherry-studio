@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { loggerService } from '@renderer/services/LoggerService'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
@@ -27,6 +28,8 @@ import shortcuts from './shortcuts'
 import tabs from './tabs'
 import translate from './translate'
 import websearch from './websearch'
+
+const logger = loggerService.withContext('Store')
 
 const rootReducer = combineReducers({
   assistants,
@@ -100,5 +103,11 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 export const useAppStore = useStore.withTypes<typeof store>()
 window.store = store
+
+export async function handleSaveData() {
+  logger.info('Flushing redux persistor data')
+  await persistor.flush()
+  logger.info('Flushed redux persistor data')
+}
 
 export default store
