@@ -49,21 +49,6 @@ const GeneralSettingsPanel: React.FC<GeneralSettingsPanelProps> = ({
 
       <SettingsItem>
         <div className="settings-label">
-          {t('settings.tool.preprocess.title')}
-          <InfoTooltip title={t('settings.tool.preprocess.tooltip')} placement="right" />
-        </div>
-        <Select
-          value={selectedDocPreprocessProvider?.id}
-          style={{ width: '100%' }}
-          onChange={handleDocPreprocessChange}
-          placeholder={t('settings.tool.preprocess.provider_placeholder')}
-          options={docPreprocessSelectOptions}
-          allowClear
-        />
-      </SettingsItem>
-
-      <SettingsItem>
-        <div className="settings-label">
           {t('models.embedding_model')}
           <InfoTooltip title={t('models.embedding_model_tooltip')} placement="right" />
         </div>
@@ -102,6 +87,21 @@ const GeneralSettingsPanel: React.FC<GeneralSettingsPanelProps> = ({
           value={getModelUniqId(newBase.rerankModel) || undefined}
           placeholder={t('settings.models.empty')}
           onChange={handleRerankModelChange}
+          allowClear
+        />
+      </SettingsItem>
+
+      <SettingsItem>
+        <div className="settings-label">
+          {t('settings.tool.preprocess.title')}
+          <InfoTooltip title={t('settings.tool.preprocess.tooltip')} placement="right" />
+        </div>
+        <Select
+          value={selectedDocPreprocessProvider?.id}
+          style={{ width: '100%' }}
+          onChange={handleDocPreprocessChange}
+          placeholder={t('settings.tool.preprocess.provider_placeholder')}
+          options={docPreprocessSelectOptions}
           allowClear
         />
       </SettingsItem>
