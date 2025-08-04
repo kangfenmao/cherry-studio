@@ -1,4 +1,5 @@
 import { loggerService } from '@logger'
+import { defaultByPassRules } from '@shared/config/constant'
 import axios from 'axios'
 import { app, ProxyConfig, session } from 'electron'
 import { socksDispatcher } from 'fetch-socks'
@@ -7,7 +8,6 @@ import https from 'https'
 import { getSystemProxy } from 'os-proxy-config'
 import { ProxyAgent } from 'proxy-agent'
 import { Dispatcher, EnvHttpProxyAgent, getGlobalDispatcher, setGlobalDispatcher } from 'undici'
-import { defaultByPassRules } from '@shared/config/constant'
 
 const logger = loggerService.withContext('ProxyManager')
 let byPassRules = defaultByPassRules.split(',')
