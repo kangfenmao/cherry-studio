@@ -32,11 +32,6 @@ export class WindowService {
   private wasMainWindowFocused: boolean = false
   private lastRendererProcessCrashTime: number = 0
 
-  private miniWindowSize: { width: number; height: number } = {
-    width: DEFAULT_MINIWINDOW_WIDTH,
-    height: DEFAULT_MINIWINDOW_HEIGHT
-  }
-
   public static getInstance(): WindowService {
     if (!WindowService.instance) {
       WindowService.instance = new WindowService()
@@ -448,9 +443,21 @@ export class WindowService {
   }
 
   public createMiniWindow(isPreload: boolean = false): BrowserWindow {
+    if (this.miniWindow && !this.miniWindow.isDestroyed()) {
+      return this.miniWindow
+    }
+
+    const miniWindowState = windowStateKeeper({
+      defaultWidth: DEFAULT_MINIWINDOW_WIDTH,
+      defaultHeight: DEFAULT_MINIWINDOW_HEIGHT,
+      file: 'miniWindow-state.json'
+    })
+
     this.miniWindow = new BrowserWindow({
-      width: this.miniWindowSize.width,
-      height: this.miniWindowSize.height,
+      x: miniWindowState.x,
+      y: miniWindowState.y,
+      width: miniWindowState.width,
+      height: miniWindowState.height,
       minWidth: 350,
       minHeight: 380,
       maxWidth: 1024,
@@ -476,6 +483,8 @@ export class WindowService {
         webviewTag: true
       }
     })
+
+    miniWindowState.manage(this.miniWindow)
 
     //miniWindow should show in current desktop
     this.miniWindow?.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
@@ -505,13 +514,6 @@ export class WindowService {
 
     this.miniWindow.on('hide', () => {
       this.miniWindow?.webContents.send(IpcChannel.HideMiniWindow)
-    })
-
-    this.miniWindow.on('resized', () => {
-      this.miniWindowSize = this.miniWindow?.getBounds() || {
-        width: DEFAULT_MINIWINDOW_WIDTH,
-        height: DEFAULT_MINIWINDOW_HEIGHT
-      }
     })
 
     this.miniWindow.on('show', () => {
@@ -559,9 +561,10 @@ export class WindowService {
       if (cursorDisplay.id !== miniWindowDisplay.id) {
         const workArea = cursorDisplay.bounds
 
-        // use remembered size to avoid the bug of Electron with screens of different scale factor
-        const miniWindowWidth = this.miniWindowSize.width
-        const miniWindowHeight = this.miniWindowSize.height
+        // use current window size to avoid the bug of Electron with screens of different scale factor
+        const currentBounds = this.miniWindow.getBounds()
+        const miniWindowWidth = currentBounds.width
+        const miniWindowHeight = currentBounds.height
 
         // move to the center of the cursor's screen
         const miniWindowX = Math.round(workArea.x + (workArea.width - miniWindowWidth) / 2)
@@ -582,7 +585,11 @@ export class WindowService {
       return
     }
 
-    this.miniWindow = this.createMiniWindow()
+    if (!this.miniWindow || this.miniWindow.isDestroyed()) {
+      this.miniWindow = this.createMiniWindow()
+    }
+
+    this.miniWindow.show()
   }
 
   public hideMiniWindow() {
