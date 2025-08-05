@@ -25,6 +25,7 @@ import {
 import {
   isSupportArrayContentProvider,
   isSupportDeveloperRoleProvider,
+  isSupportQwen3EnableThinkingProvider,
   isSupportStreamOptionsProvider
 } from '@renderer/config/providers'
 import { processPostsuffixQwen3Model, processReqMessages } from '@renderer/services/ModelMessageService'
@@ -526,7 +527,11 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         }
 
         const lastUserMsg = userMessages.findLast((m) => m.role === 'user')
-        if (lastUserMsg && isSupportedThinkingTokenQwenModel(model) && model.provider !== 'dashscope') {
+        if (
+          lastUserMsg &&
+          isSupportedThinkingTokenQwenModel(model) &&
+          !isSupportQwen3EnableThinkingProvider(this.provider)
+        ) {
           const postsuffix = '/no_think'
           const qwenThinkModeEnabled = assistant.settings?.qwenThinkMode === true
           const currentContent = lastUserMsg.content
