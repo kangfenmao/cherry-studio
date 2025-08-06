@@ -740,6 +740,13 @@
     "warning": "Warning",
     "you": "You"
   },
+  "discover": {
+    "install": "Installation",
+    "title": "Discover",
+    "uninstall": "uninstall",
+    "update": "update",
+    "update_all": "Full Update"
+  },
   "docs": {
     "title": "Docs"
   },
@@ -3443,6 +3450,7 @@
   "title": {
     "agents": "Agents",
     "apps": "Apps",
+    "discover": "Discover",
     "files": "Files",
     "home": "Home",
     "knowledge": "Knowledge Base",

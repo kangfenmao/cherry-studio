@@ -740,6 +740,13 @@
     "warning": "Advertencia",
     "you": "Usuario"
   },
+  "discover": {
+    "install": "instalación",
+    "title": "Descubrir",
+    "uninstall": "desinstalar",
+    "update": "actualización",
+    "update_all": "Todo actualizado."
+  },
   "docs": {
     "title": "Documentación de Ayuda"
   },
@@ -3439,6 +3446,7 @@
   "title": {
     "agents": "Agentes",
     "apps": "Aplicaciones",
+    "discover": "Descubrir",
     "files": "Archivos",
     "home": "Inicio",
     "knowledge": "Base de conocimiento",
