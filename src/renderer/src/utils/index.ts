@@ -1,9 +1,7 @@
 import { loggerService } from '@logger'
 import { Language, Model, ModelType, Provider } from '@renderer/types'
 import { ModalFuncProps } from 'antd'
-import { type ClassValue, clsx } from 'clsx'
 import { isEqual } from 'lodash'
-import { twMerge } from 'tailwind-merge'
 import { v4 as uuidv4 } from 'uuid'
 
 const logger = loggerService.withContext('Utils')
@@ -234,10 +232,6 @@ export function mapLanguageToQwenMTModel(language: Language): string {
 
 export function uniqueObjectArray<T>(array: T[]): T[] {
   return array.filter((obj, index, self) => index === self.findIndex((t) => isEqual(t, obj)))
-}
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
 }
 
 export * from './api'

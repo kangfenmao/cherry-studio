@@ -740,13 +740,6 @@
     "warning": "警告",
     "you": "あなた"
   },
-  "discover": {
-    "install": "インストール",
-    "title": "発見",
-    "uninstall": "アンインストール",
-    "update": "更新",
-    "update_all": "すべて更新"
-  },
   "docs": {
     "title": "ドキュメント"
   },
@@ -3450,7 +3443,6 @@
   "title": {
     "agents": "エージェント",
     "apps": "アプリ",
-    "discover": "発見",
     "files": "ファイル",
     "home": "ホーム",
     "knowledge": "ナレッジベース",

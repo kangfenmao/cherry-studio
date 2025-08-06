@@ -740,13 +740,6 @@
     "warning": "Aviso",
     "you": "Você"
   },
-  "discover": {
-    "install": "Instalação",
-    "title": "Descoberta",
-    "uninstall": "desinstalar",
-    "update": "atualização",
-    "update_all": "Todas as atualizações"
-  },
   "docs": {
     "title": "Documentação de Ajuda"
   },
@@ -3446,7 +3439,6 @@
   "title": {
     "agents": "Agentes",
     "apps": "Miniaplicativos",
-    "discover": "Descoberta",
     "files": "Arquivos",
     "home": "Página Inicial",
     "knowledge": "Base de Conhecimento",

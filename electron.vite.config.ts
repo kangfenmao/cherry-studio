@@ -58,7 +58,6 @@ export default defineConfig({
   },
   renderer: {
     plugins: [
-      (async () => (await import('@tailwindcss/vite')).default())(),
       react({
         tsDecorators: true,
         plugins: [

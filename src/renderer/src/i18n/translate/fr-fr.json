@@ -740,13 +740,6 @@
     "warning": "Avertissement",
     "you": "Vous"
   },
-  "discover": {
-    "install": "installer",
-    "title": "Découvrir",
-    "uninstall": "désinstaller",
-    "update": "Mise à jour",
-    "update_all": "Mises à jour complètes"
-  },
   "docs": {
     "title": "Documentation d'aide"
   },
@@ -3446,7 +3439,6 @@
   "title": {
     "agents": "Agent intelligent",
     "apps": "Mini-programmes",
-    "discover": "Découvrir",
     "files": "Fichiers",
     "home": "Page d'accueil",
     "knowledge": "Base de connaissances",

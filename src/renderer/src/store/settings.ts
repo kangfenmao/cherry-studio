@@ -20,25 +20,16 @@ import { RemoteSyncState } from './backup'
 
 export type SendMessageShortcut = 'Enter' | 'Shift+Enter' | 'Ctrl+Enter' | 'Command+Enter' | 'Alt+Enter'
 
-export type SidebarIcon =
-  | 'assistants'
-  | 'agents'
-  | 'paintings'
-  | 'translate'
-  | 'minapp'
-  | 'knowledge'
-  | 'files'
-  | 'discover'
+export type SidebarIcon = 'assistants' | 'agents' | 'paintings' | 'translate' | 'minapp' | 'knowledge' | 'files'
 
 export const DEFAULT_SIDEBAR_ICONS: SidebarIcon[] = [
   'assistants',
-  // 'agents',
+  'agents',
   'paintings',
   'translate',
-  // 'minapp',
+  'minapp',
   'knowledge',
-  'files',
-  'discover'
+  'files'
 ]
 
 export interface NutstoreSyncRuntime extends RemoteSyncState {}

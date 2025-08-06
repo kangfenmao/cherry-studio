@@ -12,15 +12,16 @@ import { ThemeMode } from '@renderer/types'
 import { classNames } from '@renderer/utils'
 import { Tooltip } from 'antd'
 import {
-  Compass,
   FileSearch,
   Folder,
   Home,
   Languages,
+  LayoutGrid,
   Monitor,
   Moon,
   Palette,
   Settings,
+  Sparkle,
   SquareTerminal,
   Sun,
   X
@@ -40,14 +41,14 @@ const getTabIcon = (tabId: string): React.ReactNode | undefined => {
   switch (tabId) {
     case 'home':
       return <Home size={14} />
-    // case 'agents':
-    //   return <Sparkle size={14} />
+    case 'agents':
+      return <Sparkle size={14} />
     case 'translate':
       return <Languages size={14} />
     case 'paintings':
       return <Palette size={14} />
-    // case 'apps':
-    //   return <LayoutGrid size={14} />
+    case 'apps':
+      return <LayoutGrid size={14} />
     case 'knowledge':
       return <FileSearch size={14} />
     case 'mcp':
@@ -56,8 +57,6 @@ const getTabIcon = (tabId: string): React.ReactNode | undefined => {
       return <Folder size={14} />
     case 'settings':
       return <Settings size={14} />
-    case 'discover':
-      return <Compass size={14} />
     default:
       return null
   }

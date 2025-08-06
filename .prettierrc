@@ -3,11 +3,9 @@
   "endOfLine": "lf",
   "jsonRecursiveSort": true,
   "jsonSortOrder": "{\"*\": \"lexical\"}",
-  "plugins": ["prettier-plugin-sort-json", "prettier-plugin-tailwindcss"],
+  "plugins": ["prettier-plugin-sort-json"],
   "printWidth": 120,
   "semi": false,
   "singleQuote": true,
-  "tailwindFunctions": ["clsx"],
-  "tailwindStylesheet": "./src/renderer/src/assets/styles/tailwind.css",
   "trailingComma": "none"
 }

@@ -740,13 +740,6 @@
     "warning": "警告",
     "you": "您"
   },
-  "discover": {
-    "install": "安裝",
-    "title": "發現",
-    "uninstall": "卸載",
-    "update": "更新",
-    "update_all": "全部更新"
-  },
   "docs": {
     "title": "說明文件"
   },
@@ -3450,7 +3443,6 @@
   "title": {
     "agents": "智能體",
     "apps": "小程序",
-    "discover": "發現",
     "files": "文件",
     "home": "主頁",
     "knowledge": "知識庫",
