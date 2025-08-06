@@ -1432,9 +1432,24 @@ const migrateConfig = {
         serviceTier: 'auto'
       }
 
-      state.settings.codeExecution = settingsInitialState.codeExecution
-      state.settings.codeEditor = settingsInitialState.codeEditor
-      state.settings.codePreview = settingsInitialState.codePreview
+      state.settings.codeExecution = {
+        enabled: false,
+        timeoutMinutes: 1
+      }
+      state.settings.codeEditor = {
+        enabled: false,
+        themeLight: 'auto',
+        themeDark: 'auto',
+        highlightActiveLine: false,
+        foldGutter: false,
+        autocompletion: true,
+        keymap: false
+      }
+      // @ts-ignore eslint-disable-next-line
+      state.settings.codePreview = {
+        themeLight: 'auto',
+        themeDark: 'auto'
+      }
 
       // @ts-ignore eslint-disable-next-line
       if (state.settings.codeStyle) {
@@ -1969,10 +1984,6 @@ const migrateConfig = {
     try {
       addProvider(state, 'poe')
 
-      if (!state.settings.proxyBypassRules) {
-        state.settings.proxyBypassRules = defaultByPassRules
-      }
-
       // 迁移api选项设置
       state.llm.providers.forEach((provider) => {
         // 新字段默认支持
@@ -2001,9 +2012,31 @@ const migrateConfig = {
         }
       }
 
+      if (!state.settings.proxyBypassRules) {
+        state.settings.proxyBypassRules = defaultByPassRules
+      }
       return state
     } catch (error) {
       logger.error('migrate 127 error', error as Error)
+      return state
+    }
+  },
+  '128': (state: RootState) => {
+    try {
+      // @ts-ignore eslint-disable-next-line
+      if (state.settings.codePreview) {
+        // @ts-ignore eslint-disable-next-line
+        state.settings.codeViewer = state.settings.codePreview
+      } else {
+        state.settings.codeViewer = {
+          themeLight: 'auto',
+          themeDark: 'auto'
+        }
+      }
+
+      return state
+    } catch (error) {
+      logger.error('migrate 128 error', error as Error)
       return state
     }
   }
