@@ -12,8 +12,6 @@ import {
   updateProviders
 } from '@renderer/store/llm'
 import { Assistant, Model, Provider } from '@renderer/types'
-import { getFancyProviderName } from '@renderer/utils'
-import { useTranslation } from 'react-i18next'
 
 import { useDefaultModel } from './useAssistant'
 
@@ -48,14 +46,8 @@ export function useAllProviders() {
 }
 
 export function useProvider(id: string) {
-  let provider = useAppSelector((state) => state.llm.providers.find((p) => p.id === id))
+  const provider = useAppSelector((state) => state.llm.providers.find((p) => p.id === id)) || getDefaultProvider()
   const dispatch = useAppDispatch()
-  const { t } = useTranslation()
-
-  if (!provider) {
-    provider = getDefaultProvider()
-    window.message.warning(t('warning.missing_provider', { provider: getFancyProviderName(provider) }))
-  }
 
   return {
     provider,
