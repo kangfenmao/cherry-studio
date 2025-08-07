@@ -15,7 +15,7 @@ import {
   uuid
 } from '@renderer/utils'
 import { Avatar, Button, Card, Dropdown, Input, MenuProps, Tag } from 'antd'
-import { Eye, EyeOff, PlusIcon, Search, UserPen } from 'lucide-react'
+import { Eye, EyeOff, GripVertical, PlusIcon, Search, UserPen } from 'lucide-react'
 import { FC, startTransition, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
@@ -479,6 +479,9 @@ const ProvidersList: FC = () => {
                 key={JSON.stringify(provider)}
                 className={provider.id === selectedProvider?.id ? 'active' : ''}
                 onClick={() => setSelectedProvider(provider)}>
+                <DragHandle>
+                  <GripVertical size={12} />
+                </DragHandle>
                 {getProviderAvatar(provider)}
                 <ProviderItemName className="text-nowrap">{getFancyProviderName(provider)}</ProviderItemName>
                 {provider.enabled && (
@@ -531,6 +534,7 @@ const ProviderListItem = styled.div`
   transition: all 0.2s ease-in-out;
   border: 0.5px solid transparent;
   user-select: none;
+  cursor: pointer;
   &:hover {
     background: var(--color-background-soft);
   }
@@ -538,6 +542,26 @@ const ProviderListItem = styled.div`
     background: var(--color-background-soft);
     border: 0.5px solid var(--color-border);
     font-weight: bold !important;
+  }
+`
+
+const DragHandle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -8px;
+  width: 12px;
+  color: var(--color-text-3);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  cursor: grab;
+
+  ${ProviderListItem}:hover & {
+    opacity: 1;
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 `
 
