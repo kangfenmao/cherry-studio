@@ -16,6 +16,7 @@ import {
   MCPTool,
   MCPToolResponse,
   Model,
+  OpenAIServiceTier,
   Provider,
   ToolCallResponse,
   WebSearchSource
@@ -341,8 +342,8 @@ export class OpenAIResponseAPIClient extends OpenAIBaseClient<
   }
 
   public extractMessagesFromSdkPayload(sdkPayload: OpenAIResponseSdkParams): OpenAIResponseSdkMessageParam[] {
-    if (typeof sdkPayload.input === 'string') {
-      return [{ role: 'user', content: sdkPayload.input }]
+    if (!sdkPayload.input || typeof sdkPayload.input === 'string') {
+      return [{ role: 'user', content: sdkPayload.input ?? '' }]
     }
     return sdkPayload.input
   }
@@ -440,7 +441,7 @@ export class OpenAIResponseAPIClient extends OpenAIBaseClient<
         }
 
         tools = tools.concat(extraTools)
-        const commonParams = {
+        const commonParams: OpenAIResponseSdkParams = {
           model: model.id,
           input:
             isRecursiveCall && recursiveSdkMessages && recursiveSdkMessages.length > 0
@@ -451,7 +452,8 @@ export class OpenAIResponseAPIClient extends OpenAIBaseClient<
           max_output_tokens: maxTokens,
           stream: streamOutput,
           tools: !isEmpty(tools) ? tools : undefined,
-          service_tier: this.getServiceTier(model),
+          // groq 有不同的 service tier 配置，不符合 openai 接口类型
+          service_tier: this.getServiceTier(model) as OpenAIServiceTier,
           ...(this.getReasoningEffort(assistant, model) as OpenAI.Reasoning),
           // 只在对话场景下应用自定义参数，避免影响翻译、总结等其他业务逻辑
           ...(coreRequest.callType === 'chat' ? this.getCustomParameters(assistant) : {})
