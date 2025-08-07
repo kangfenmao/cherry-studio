@@ -60,7 +60,7 @@ export type ThinkingModelType =
   | 'gemini'
   | 'gemini_pro'
   | 'qwen'
-  | 'qwen_3235ba22b_thinking'
+  | 'qwen_thinking'
   | 'doubao'
   | 'hunyuan'
   | 'zhipu'
@@ -75,7 +75,7 @@ const ThinkModelTypes: ThinkingModelType[] = [
   'gemini',
   'gemini_pro',
   'qwen',
-  'qwen_3235ba22b_thinking',
+  'qwen_thinking',
   'doubao',
   'hunyuan',
   'zhipu',
@@ -83,7 +83,7 @@ const ThinkModelTypes: ThinkingModelType[] = [
 ] as const
 
 export function isThinkModelType(type: string): type is ThinkingModelType {
-  return ThinkModelTypes.includes(type as ThinkingModelType)
+  return ThinkModelTypes.some((t) => t === type)
 }
 
 export const EFFORT_RATIO: EffortRatio = {

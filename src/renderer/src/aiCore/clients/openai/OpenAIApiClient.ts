@@ -8,7 +8,7 @@ import {
   isDoubaoThinkingAutoModel,
   isGrokReasoningModel,
   isNotSupportSystemMessageModel,
-  isQwen3235BA22BThinkingModel,
+  isQwenAlwaysThinkModel,
   isQwenMTModel,
   isQwenReasoningModel,
   isReasoningModel,
@@ -150,10 +150,8 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         }
         return { reasoning: { enabled: false, exclude: true } }
       }
+
       if (isSupportedThinkingTokenQwenModel(model) || isSupportedThinkingTokenHunyuanModel(model)) {
-        if (isQwen3235BA22BThinkingModel(model)) {
-          return {}
-        }
         return { enable_thinking: false }
       }
 
@@ -182,6 +180,8 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
 
       return {}
     }
+
+    // reasoningEffort有效的情况
     const effortRatio = EFFORT_RATIO[reasoningEffort]
     const budgetTokens = Math.floor(
       (findTokenLimit(model.id)?.max! - findTokenLimit(model.id)?.min!) * effortRatio + findTokenLimit(model.id)?.min!
@@ -199,9 +199,9 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     }
 
     // Qwen models
-    if (isSupportedThinkingTokenQwenModel(model)) {
+    if (isQwenReasoningModel(model)) {
       const thinkConfig = {
-        enable_thinking: isQwen3235BA22BThinkingModel(model) ? undefined : true,
+        enable_thinking: isQwenAlwaysThinkModel(model) ? undefined : true,
         thinking_budget: budgetTokens
       }
       if (this.provider.id === 'dashscope') {
