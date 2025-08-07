@@ -413,12 +413,12 @@ const ProvidersList: FC = () => {
   const getProviderAvatar = (provider: Provider) => {
     const logoSrc = getProviderLogo(provider.id)
     if (logoSrc) {
-      return <ProviderLogo shape="circle" src={logoSrc} size={25} />
+      return <ProviderLogo draggable="false" shape="circle" src={logoSrc} size={25} />
     }
 
     const customLogo = providerLogos[provider.id]
     if (customLogo) {
-      return <ProviderLogo shape="square" src={customLogo} size={25} />
+      return <ProviderLogo draggable="false" shape="square" src={customLogo} size={25} />
     }
 
     return (
@@ -464,6 +464,7 @@ const ProvidersList: FC = () => {
           onDragStart={() => setDragging(true)}
           estimateSize={useCallback(() => 40, [])}
           overscan={3}
+          disabled={searchText !== ''}
           style={{
             height: `calc(100% - 2 * ${BUTTON_WRAPPER_HEIGHT}px)`
           }}
@@ -525,11 +526,11 @@ const ProviderListItem = styled.div`
   align-items: center;
   padding: 5px 10px;
   width: 100%;
-  cursor: grab;
   border-radius: var(--list-item-border-radius);
   font-size: 14px;
   transition: all 0.2s ease-in-out;
   border: 0.5px solid transparent;
+  user-select: none;
   &:hover {
     background: var(--color-background-soft);
   }
