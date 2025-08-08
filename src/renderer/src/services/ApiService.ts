@@ -96,9 +96,19 @@ async function fetchExternalTool(
   const globalMemoryEnabled = selectGlobalMemoryEnabled(store.getState())
   const shouldSearchMemory = globalMemoryEnabled && assistant.enableMemory
 
+  // 获取 MCP 工具
+  let mcpTools: MCPTool[] = []
+  const allMcpServers = store.getState().mcp.servers || []
+  const activedMcpServers = allMcpServers.filter((s) => s.isActive)
+  const assistantMcpServers = assistant.mcpServers || []
+  const enabledMCPs = activedMcpServers.filter((server) => assistantMcpServers.some((s) => s.id === server.id))
+  const showListTools = enabledMCPs && enabledMCPs.length > 0
+
+  // 是否使用工具
+  const hasAnyTool = shouldWebSearch || shouldKnowledgeSearch || shouldSearchMemory || showListTools
+
   // 在工具链开始时发送进度通知
-  const willUseTools = shouldWebSearch || shouldKnowledgeSearch
-  if (willUseTools) {
+  if (hasAnyTool) {
     onChunkReceived({ type: ChunkType.EXTERNEL_TOOL_IN_PROGRESS })
   }
 
@@ -347,28 +357,7 @@ async function fetchExternalTool(
       }
     }
 
-    // 发送工具执行完成通知
-    const wasAnyToolEnabled = shouldWebSearch || shouldKnowledgeSearch || shouldSearchMemory
-    if (wasAnyToolEnabled) {
-      onChunkReceived({
-        type: ChunkType.EXTERNEL_TOOL_COMPLETE,
-        external_tool: {
-          webSearch: webSearchResponseFromSearch,
-          knowledge: knowledgeReferencesFromSearch,
-          memories: memorySearchReferences
-        }
-      })
-    }
-
-    // Get MCP tools (Fix duplicate declaration)
-    let mcpTools: MCPTool[] = []
-    const allMcpServers = store.getState().mcp.servers || []
-    const activedMcpServers = allMcpServers.filter((s) => s.isActive)
-    const assistantMcpServers = assistant.mcpServers || []
-
-    const enabledMCPs = activedMcpServers.filter((server) => assistantMcpServers.some((s) => s.id === server.id))
-
-    if (enabledMCPs && enabledMCPs.length > 0) {
+    if (showListTools) {
       try {
         const spanContext = currentSpan(lastUserMessage.topicId, assistant.model?.name)?.spanContext()
         const toolPromises = enabledMCPs.map<Promise<MCPTool[]>>(async (mcpServer) => {
@@ -385,9 +374,6 @@ async function fetchExternalTool(
           .filter((result): result is PromiseFulfilledResult<MCPTool[]> => result.status === 'fulfilled')
           .map((result) => result.value)
           .flat()
-        // 添加内置工具
-        // const { BUILT_IN_TOOLS } = await import('../tools')
-        // mcpTools.push(...BUILT_IN_TOOLS)
 
         // 根据toolUseMode决定如何构建系统提示词
         const basePrompt = assistant.prompt
@@ -401,6 +387,18 @@ async function fetchExternalTool(
       } catch (toolError) {
         logger.error('Error fetching MCP tools:', toolError as Error)
       }
+    }
+
+    // 发送工具执行完成通知
+    if (hasAnyTool) {
+      onChunkReceived({
+        type: ChunkType.EXTERNEL_TOOL_COMPLETE,
+        external_tool: {
+          webSearch: webSearchResponseFromSearch,
+          knowledge: knowledgeReferencesFromSearch,
+          memories: memorySearchReferences
+        }
+      })
     }
 
     return { mcpTools }
@@ -437,8 +435,6 @@ export async function fetchChatCompletion({
 }) {
   logger.debug('fetchChatCompletion', messages, assistant)
 
-  onChunkReceived({ type: ChunkType.LLM_RESPONSE_CREATED })
-
   if (assistant.prompt && containsSupportedVariables(assistant.prompt)) {
     assistant.prompt = await replacePromptVariables(assistant.prompt, assistant.model?.name)
   }
@@ -460,6 +456,8 @@ export async function fetchChatCompletion({
   // They will be retrieved and used by the messageThunk later to create CitationBlocks.
   const { mcpTools } = await fetchExternalTool(lastUserMessage, assistant, onChunkReceived, lastAnswer)
   const model = assistant.model || getDefaultModel()
+
+  onChunkReceived({ type: ChunkType.LLM_RESPONSE_CREATED })
 
   const { maxTokens, contextCount } = getAssistantSettings(assistant)
 
