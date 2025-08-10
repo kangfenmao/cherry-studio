@@ -405,7 +405,10 @@
       "regenerate": {
         "model": "Cambiar modelo"
       },
-      "useful": "Útil"
+      "useful": {
+        "label": "establecer como contexto",
+        "tip": "En este grupo de mensajes, este mensaje se seleccionará para unirse al contexto"
+      }
     },
     "multiple": {
       "select": {
