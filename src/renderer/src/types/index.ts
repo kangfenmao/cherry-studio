@@ -405,6 +405,9 @@ export interface GeneratePainting extends PaintingParams {
   background?: string
   personGeneration?: GenerateImagesConfig['personGeneration']
   numberOfImages?: number
+  safetyTolerance?: number
+  width?: number
+  height?: number
 }
 
 export interface EditPainting extends PaintingParams {
