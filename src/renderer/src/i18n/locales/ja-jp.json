@@ -840,6 +840,9 @@
     "created": "作成日",
     "last_updated": "最終更新日",
     "messages": "メッセージ",
+    "notion": {
+      "reasoning_truncated": "思考過程がブロック分割できません。切り捨てられています。"
+    },
     "user": "ユーザー"
   },
   "files": {
@@ -1257,7 +1260,8 @@
       },
       "notion": {
         "export": "Notionへのエクスポートに失敗しました。接続状態と設定を確認してください",
-        "no_api_key": "Notion ApiKey または Notion DatabaseID が設定されていません"
+        "no_api_key": "Notion ApiKey または Notion DatabaseID が設定されていません",
+        "no_content": "Notionにエクスポートできる内容がありません。"
       },
       "siyuan": {
         "export": "思源ノートのエクスポートに失敗しました。接続状態を確認し、ドキュメントに従って設定を確認してください",
@@ -1383,14 +1387,8 @@
       }
     },
     "warn": {
-      "notion": {
-        "exporting": "Notionにエクスポート中です。重複してエクスポートしないでください! "
-      },
-      "siyuan": {
-        "exporting": "思源ノートにエクスポート中です。重複してエクスポートしないでください!"
-      },
-      "yuque": {
-        "exporting": "語雀にエクスポート中です。重複してエクスポートしないでください!"
+      "export": {
+        "exporting": "他のエクスポートが実行中です。前のエクスポートが完了するまでお待ちください。"
       }
     },
     "warning": {
