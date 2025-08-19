@@ -2976,7 +2976,6 @@
         "label": "網格詳細資訊觸發"
       },
       "input": {
-        "enable_delete_model": "啟用刪除鍵刪除模型 / 附件",
         "enable_quick_triggers": "啟用 / 和 @ 觸發快捷選單",
         "paste_long_text_as_file": "將長文字貼上為檔案",
         "paste_long_text_threshold": "長文字長度",

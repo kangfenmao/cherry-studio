@@ -85,7 +85,6 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
     showInputEstimatedTokens,
     autoTranslateWithSpace,
     enableQuickPanelTriggers,
-    enableBackspaceDeleteModel,
     enableSpellCheck
   } = useSettings()
   const [expended, setExpend] = useState(false)
@@ -437,7 +436,7 @@ const Inputbar: FC<Props> = ({ assistant: _assistant, setActiveTopic, topic }) =
       }
     }
 
-    if (enableBackspaceDeleteModel && event.key === 'Backspace' && text.trim() === '' && files.length > 0) {
+    if (event.key === 'Backspace' && text.trim() === '' && files.length > 0) {
       setFiles((prev) => prev.slice(0, -1))
       return event.preventDefault()
     }

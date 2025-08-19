@@ -2976,7 +2976,6 @@
         "label": "グリッド詳細トリガー"
       },
       "input": {
-        "enable_delete_model": "バックスペースキーでモデル/添付ファイルを削除します。",
         "enable_quick_triggers": "/ と @ を有効にしてクイックメニューを表示します。",
         "paste_long_text_as_file": "長いテキストをファイルとして貼り付け",
         "paste_long_text_threshold": "長いテキストの長さ",

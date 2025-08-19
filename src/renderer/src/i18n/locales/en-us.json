@@ -2976,7 +2976,6 @@
         "label": "Grid detail trigger"
       },
       "input": {
-        "enable_delete_model": "Enable the backspace key to delete models/attachments.",
         "enable_quick_triggers": "Enable / and @ triggers",
         "paste_long_text_as_file": "Paste long text as file",
         "paste_long_text_threshold": "Paste long text length",

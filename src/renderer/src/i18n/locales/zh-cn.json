@@ -2976,7 +2976,6 @@
         "label": "网格详情触发"
       },
       "input": {
-        "enable_delete_model": "启用删除键删除输入的模型 / 附件",
         "enable_quick_triggers": "启用 / 和 @ 触发快捷菜单",
         "paste_long_text_as_file": "长文本粘贴为文件",
         "paste_long_text_threshold": "长文本长度",
