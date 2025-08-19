@@ -1578,6 +1578,7 @@
       "style_type_tip": "Style de l'image après édition, uniquement applicable aux versions V_2 et ultérieures"
     },
     "generate": {
+      "height": "Hauteur",
       "magic_prompt_option_tip": "Интеллектуальная оптимизация подсказок для улучшения результатов генерации",
       "model_tip": "Версия модели: V2 — это последняя модель API, V2A — быстрая модель, V_1 — первое поколение модели, _TURBO — ускоренная версия",
       "negative_prompt_tip": "Описывает элементы, которые вы не хотите видеть на изображении. Поддерживается только версиями V_1, V_1_TURBO, V_2 и V_2_TURBO",
@@ -1585,8 +1586,11 @@
       "person_generation": "Générer un personnage",
       "person_generation_tip": "Autoriser le modèle à générer des images de personnages",
       "rendering_speed_tip": "Contrôler l'équilibre entre la vitesse et la qualité du rendu, uniquement applicable à la version V_3",
+      "safety_tolerance": "Tolérance de sécurité",
+      "safety_tolerance_tip": "Contrôle la tolérance de sécurité dans la génération d'images, uniquement applicable à la version FLUX.1-Kontext-pro",
       "seed_tip": "Контролирует случайность генерации изображения, используется для воспроизведения одинаковых результатов",
-      "style_type_tip": "Стиль генерации изображения, применим к версии V_2 и выше"
+      "style_type_tip": "Стиль генерации изображения, применим к версии V_2 и выше",
+      "width": "Largeur"
     },
     "generated_image": "Image générée",
     "go_to_settings": "Aller aux paramètres",
@@ -2699,6 +2703,11 @@
     },
     "input": {
       "auto_translate_with_space": "Traduire en frappant rapidement 3 fois l'espace",
+      "clear": {
+        "all": "Effacer",
+        "knowledge_base": "Effacer les bases de connaissances sélectionnées",
+        "models": "Effacer tous les modèles"
+      },
       "show_translate_confirm": "Afficher la boîte de dialogue de confirmation de traduction",
       "target_language": {
         "chinese": "Chinois simplifié",

@@ -2703,6 +2703,11 @@
     },
     "input": {
       "auto_translate_with_space": "スペースを3回押して翻訳",
+      "clear": {
+        "all": "[to be translated]:清除",
+        "knowledge_base": "選択された知識ベースをクリア",
+        "models": "すべてのモデルをクリア"
+      },
       "show_translate_confirm": "翻訳確認ダイアログを表示",
       "target_language": {
         "chinese": "簡体字中国語",

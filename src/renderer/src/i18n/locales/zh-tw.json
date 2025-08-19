@@ -2703,6 +2703,11 @@
     },
     "input": {
       "auto_translate_with_space": "快速敲擊 3 次空格翻譯",
+      "clear": {
+        "all": "[to be translated]:清除",
+        "knowledge_base": "清除選中的知識庫",
+        "models": "清除@的所有模型"
+      },
       "show_translate_confirm": "顯示翻譯確認對話框",
       "target_language": {
         "chinese": "簡體中文",

@@ -2703,6 +2703,11 @@
     },
     "input": {
       "auto_translate_with_space": "Быстрый перевод с помощью 3-х пробелов",
+      "clear": {
+        "all": "[to be translated]:清除",
+        "knowledge_base": "Очистить выбранные базы знаний",
+        "models": "Очистить все модели"
+      },
       "show_translate_confirm": "Показать диалоговое окно подтверждения перевода",
       "target_language": {
         "chinese": "Китайский упрощенный",
