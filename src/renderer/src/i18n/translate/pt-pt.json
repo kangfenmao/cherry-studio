@@ -1438,6 +1438,27 @@
     },
     "title": "Pequeno aplicativo"
   },
+  "minapps": {
+    "baichuan": "Baichuan",
+    "baidu-ai-search": "Baidu AI Search",
+    "chatglm": "ChatGLM",
+    "dangbei": "Dangbei",
+    "doubao": "Doubao",
+    "hailuo": "MINIMAX",
+    "metaso": "Metaso",
+    "nami-ai": "Nami AI",
+    "nami-ai-search": "Nami AI Search",
+    "qwen": "Qwen",
+    "sensechat": "SenseChat",
+    "tencent-yuanbao": "Yuanbao",
+    "tiangong-ai": "Skywork",
+    "wanzhi": "Wanzhi",
+    "wenxin": "ERNIE",
+    "wps-copilot": "WPS Copilot",
+    "xiaoyi": "Xiaoyi",
+    "yuewen": "Yuewen",
+    "zhihu": "Zhihu"
+  },
   "miniwindow": {
     "alert": {
       "google_login": "Aviso: Caso encontre a mensagem do Google \"navegador não confiável\" ao fazer login, faça primeiro o login da conta no mini programa do Google na lista de mini programas, e depois use o login do Google em outros mini programas"
@@ -1578,7 +1599,7 @@
       "style_type_tip": "Estilo da imagem editada, disponível apenas para a versão V_2 ou superior"
     },
     "generate": {
-      "height": "[to be translated]:高度",
+      "height": "Altura",
       "magic_prompt_option_tip": "Otimização inteligente do prompt para melhorar os resultados da geração",
       "model_tip": "Versão do modelo: V2 é o modelo mais recente da interface, V2A é o modelo rápido, V_1 é o modelo de primeira geração e _TURBO é a versão acelerada",
       "negative_prompt_tip": "Descreve elementos que você não deseja ver nas imagens; suportado apenas nas versões V_1, V_1_TURBO, V_2 e V_2_TURBO",
@@ -1586,11 +1607,11 @@
       "person_generation": "Gerar Personagem",
       "person_generation_tip": "Permite que o modelo gere imagens de personagens",
       "rendering_speed_tip": "Controla o equilíbrio entre velocidade e qualidade de renderização, aplicável apenas à versão V_3",
-      "safety_tolerance": "[to be translated]:安全容忍度",
-      "safety_tolerance_tip": "[to be translated]:控制图像生成的安全容忍度，仅适用于 FLUX.1-Kontext-pro 版本",
+      "safety_tolerance": "Tolerância de segurança",
+      "safety_tolerance_tip": "Controle a tolerância de segurança para a geração de imagens, aplicável apenas à versão FLUX.1-Kontext-pro",
       "seed_tip": "Controla a aleatoriedade na geração das imagens, usado para reproduzir resultados idênticos",
       "style_type_tip": "Estilo de geração da imagem, aplicável apenas às versões V_2 e superiores",
-      "width": "[to be translated]:宽度"
+      "width": "Largura"
     },
     "generated_image": "Imagem gerada",
     "go_to_settings": "Ir para configurações",
@@ -2704,9 +2725,9 @@
     "input": {
       "auto_translate_with_space": "Traduzir com três espaços rápidos",
       "clear": {
-        "all": "[to be translated]:清除",
-        "knowledge_base": "[to be translated]:清除选中的知识库",
-        "models": "[to be translated]:清除@的所有模型"
+        "all": "Limpar",
+        "knowledge_base": "Limpar base de conhecimento selecionada",
+        "models": "Limpar todos os modelos"
       },
       "show_translate_confirm": "Mostrar diálogo de confirmação de tradução",
       "target_language": {
