@@ -1,4 +1,5 @@
-import { FileType } from '@renderer/types'
+import { FileMetadata, FileType } from '@renderer/types'
+import { filterSupportedFiles } from '@renderer/utils/file'
 import { Tooltip } from 'antd'
 import { Paperclip } from 'lucide-react'
 import { FC, useCallback, useImperativeHandle } from 'react'
@@ -30,20 +31,39 @@ const AttachmentButton: FC<Props> = ({
   const { t } = useTranslation()
 
   const onSelectFile = useCallback(async () => {
-    const _files = await window.api.file.select({
+    // when the number of extensions is greater than 20, use *.* to avoid selecting window lag
+    const useAllFiles = extensions.length > 20
+
+    const _files: FileMetadata[] = await window.api.file.select({
       properties: ['openFile', 'multiSelections'],
       filters: [
         {
           name: 'Files',
-          extensions: extensions.map((i) => i.replace('.', ''))
+          extensions: useAllFiles ? ['*'] : extensions.map((i) => i.replace('.', ''))
         }
       ]
     })
 
     if (_files) {
-      setFiles([...files, ..._files])
+      if (!useAllFiles) {
+        setFiles([...files, ..._files])
+        return
+      }
+      const supportedFiles = await filterSupportedFiles(_files, extensions)
+      if (supportedFiles.length > 0) {
+        setFiles([...files, ...supportedFiles])
+      }
+
+      if (supportedFiles.length !== _files.length) {
+        window.message.info({
+          key: 'file_not_supported',
+          content: t('chat.input.file_not_supported_count', {
+            count: _files.length - supportedFiles.length
+          })
+        })
+      }
     }
-  }, [extensions, files, setFiles])
+  }, [extensions, files, setFiles, t])
 
   const openQuickPanel = useCallback(() => {
     onSelectFile()
