@@ -3014,6 +3014,11 @@ export function isMandatoryWebSearchModel(model: Model): boolean {
   }
 
   const provider = getProviderByModel(model)
+
+  if (!provider) {
+    return false
+  }
+
   const modelId = getLowerBaseModelName(model.id)
 
   if (provider.id === 'perplexity' || provider.id === 'openrouter') {
