@@ -2679,7 +2679,8 @@
         "title": "Auto Update"
       },
       "avatar": {
-        "reset": "Reset Avatar"
+        "builtin": "Builtin avatar",
+        "reset": "Reset avatar"
       },
       "backup": {
         "button": "Backup",
