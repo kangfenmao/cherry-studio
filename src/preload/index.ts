@@ -17,9 +17,12 @@ import {
   MemoryConfig,
   MemoryListOptions,
   MemorySearchOptions,
+  OcrProvider,
+  OcrResult,
   Provider,
   S3Config,
   Shortcut,
+  SupportedOcrFile,
   ThemeMode,
   WebDavConfig
 } from '@types'
@@ -406,6 +409,10 @@ const api = {
       env: Record<string, string>,
       options?: { autoUpdateToLatest?: boolean }
     ) => ipcRenderer.invoke(IpcChannel.CodeTools_Run, cliTool, model, directory, env, options)
+  },
+  ocr: {
+    ocr: (file: SupportedOcrFile, provider: OcrProvider): Promise<OcrResult> =>
+      ipcRenderer.invoke(IpcChannel.OCR_ocr, file, provider)
   }
 }
 

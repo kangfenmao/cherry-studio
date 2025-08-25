@@ -1574,6 +1574,26 @@
     },
     "tip": "If the response is successful, then only messages exceeding 30 seconds will trigger a reminder"
   },
+  "ocr": {
+    "error": {
+      "provider": {
+        "cannot_remove_builtin": "Cannot delete built-in provider",
+        "existing": "The provider already exists",
+        "not_found": "OCR provider does not exist",
+        "update_failed": "Failed to update configuration"
+      },
+      "unknown": "An error occurred during the OCR process"
+    },
+    "file": {
+      "not_supported": "Unsupported file type {{type}}"
+    },
+    "processing": "OCR processing...",
+    "warning": {
+      "provider": {
+        "fallback": "Reverted to {{name}}, which may cause issues"
+      }
+    }
+  },
   "ollama": {
     "keep_alive_time": {
       "description": "The time in minutes to keep the connection alive, default is 5 minutes.",
@@ -3498,6 +3518,20 @@
     },
     "title": "Settings",
     "tool": {
+      "ocr": {
+        "image": {
+          "error": {
+            "provider_not_found": "The provider does not exist"
+          },
+          "tesseract": {
+            "langs": "Supported languages",
+            "temp_tooltip": "Currently only Chinese and English are supported"
+          },
+          "title": "Image"
+        },
+        "image_provider": "OCR service provider",
+        "title": "OCR service"
+      },
       "preprocess": {
         "provider": "Document Processing Provider",
         "provider_placeholder": "Choose a document processing provider",
