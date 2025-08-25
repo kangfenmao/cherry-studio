@@ -750,6 +750,9 @@
     "enabled": "Activé",
     "error": "erreur",
     "expand": "Développer",
+    "file": {
+      "not_supported": "Type de fichier non pris en charge {{type}}"
+    },
     "footnote": "Note de bas de page",
     "footnotes": "Notes de bas de page",
     "fullscreen": "Mode plein écran, appuyez sur F11 pour quitter",
@@ -790,6 +793,7 @@
     "success": "Succès",
     "swap": "Échanger",
     "topics": "Sujets",
+    "upload_files": "Uploader des fichiers",
     "warning": "Avertissement",
     "you": "Vous"
   },
@@ -3771,6 +3775,15 @@
     },
     "exchange": {
       "label": "Échanger la langue source et la langue cible"
+    },
+    "files": {
+      "drag_text": "Glisser-déposer ici",
+      "error": {
+        "multiple": "Impossible de téléverser plusieurs fichiers",
+        "too_large": "Fichier trop volumineux",
+        "unknown": "Échec de la lecture du contenu du fichier"
+      },
+      "reading": "Lecture du contenu du fichier en cours..."
     },
     "history": {
       "clear": "Effacer l'historique",

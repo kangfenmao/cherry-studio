@@ -750,6 +750,9 @@
     "enabled": "Activado",
     "error": "error",
     "expand": "Expandir",
+    "file": {
+      "not_supported": "Tipo de archivo no compatible {{type}}"
+    },
     "footnote": "Nota al pie",
     "footnotes": "Notas al pie",
     "fullscreen": "En modo pantalla completa, presione F11 para salir",
@@ -790,6 +793,7 @@
     "success": "Éxito",
     "swap": "Intercambiar",
     "topics": "Temas",
+    "upload_files": "Subir archivo",
     "warning": "Advertencia",
     "you": "Usuario"
   },
@@ -3771,6 +3775,15 @@
     },
     "exchange": {
       "label": "Intercambiar el idioma de origen y el idioma de destino"
+    },
+    "files": {
+      "drag_text": "Arrastrar y soltar aquí",
+      "error": {
+        "multiple": "No se permite cargar varios archivos",
+        "too_large": "El archivo es demasiado grande",
+        "unknown": "Error al leer el contenido del archivo"
+      },
+      "reading": "Leyendo el contenido del archivo..."
     },
     "history": {
       "clear": "Borrar historial",

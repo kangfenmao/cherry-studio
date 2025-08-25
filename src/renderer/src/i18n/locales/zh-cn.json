@@ -750,6 +750,9 @@
     "enabled": "已启用",
     "error": "错误",
     "expand": "展开",
+    "file": {
+      "not_supported": "不支持的文件类型 {{type}}"
+    },
     "footnote": "引用内容",
     "footnotes": "引用内容",
     "fullscreen": "已进入全屏模式，按 F11 退出",
@@ -790,6 +793,7 @@
     "success": "成功",
     "swap": "交换",
     "topics": "话题",
+    "upload_files": "上传文件",
     "warning": "警告",
     "you": "用户"
   },
@@ -3771,6 +3775,15 @@
     },
     "exchange": {
       "label": "交换源语言与目标语言"
+    },
+    "files": {
+      "drag_text": "拖放到此处",
+      "error": {
+        "multiple": "不允许上传多个文件",
+        "too_large": "文件过大",
+        "unknown": "读取文件内容失败"
+      },
+      "reading": "读取文件内容中..."
     },
     "history": {
       "clear": "清空历史",
