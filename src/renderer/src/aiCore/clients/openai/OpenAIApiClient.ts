@@ -6,6 +6,7 @@ import {
   getOpenAIWebSearchParams,
   getThinkModelType,
   isClaudeReasoningModel,
+  isDeepSeekHybridInferenceModel,
   isDoubaoThinkingAutoModel,
   isGeminiReasoningModel,
   isGPT5SeriesModel,
@@ -44,6 +45,7 @@ import {
   Assistant,
   EFFORT_RATIO,
   FileTypes,
+  isSystemProvider,
   MCPCallToolResponse,
   MCPTool,
   MCPToolResponse,
@@ -113,7 +115,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
    */
   // Method for reasoning effort, moved from OpenAIProvider
   override getReasoningEffort(assistant: Assistant, model: Model): ReasoningEffortOptionalParams {
-    if (this.provider.id === 'groq') {
+    if (this.provider.id === SystemProviderIds.groq) {
       return {}
     }
 
@@ -121,22 +123,6 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
       return {}
     }
     const reasoningEffort = assistant?.settings?.reasoning_effort
-
-    // Doubao 思考模式支持
-    if (isSupportedThinkingTokenDoubaoModel(model)) {
-      // reasoningEffort 为空，默认开启 enabled
-      if (!reasoningEffort) {
-        return { thinking: { type: 'disabled' } }
-      }
-      if (reasoningEffort === 'high') {
-        return { thinking: { type: 'enabled' } }
-      }
-      if (reasoningEffort === 'auto' && isDoubaoThinkingAutoModel(model)) {
-        return { thinking: { type: 'auto' } }
-      }
-      // 其他情况不带 thinking 字段
-      return {}
-    }
 
     if (isSupportedThinkingTokenZhipuModel(model)) {
       if (!reasoningEffort) {
@@ -146,7 +132,14 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     }
 
     if (!reasoningEffort) {
-      if (model.provider === 'openrouter') {
+      // DeepSeek hybrid inference models, v3.1 and maybe more in the future
+      // 不同的 provider 有不同的思考控制方式，在这里统一解决
+      // if (isDeepSeekHybridInferenceModel(model)) {
+      //   // do nothing for now. default to non-think.
+      // }
+
+      // openrouter: use reasoning
+      if (model.provider === SystemProviderIds.openrouter) {
         // Don't disable reasoning for Gemini models that support thinking tokens
         if (isSupportedThinkingTokenGeminiModel(model) && !GEMINI_FLASH_MODEL_REGEX.test(model.id)) {
           return {}
@@ -158,17 +151,22 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         return { reasoning: { enabled: false, exclude: true } }
       }
 
+      // providers that use enable_thinking
       if (
         isSupportEnableThinkingProvider(this.provider) &&
-        (isSupportedThinkingTokenQwenModel(model) || isSupportedThinkingTokenHunyuanModel(model))
+        (isSupportedThinkingTokenQwenModel(model) ||
+          isSupportedThinkingTokenHunyuanModel(model) ||
+          (this.provider.id === SystemProviderIds.dashscope && isDeepSeekHybridInferenceModel(model)))
       ) {
         return { enable_thinking: false }
       }
 
+      // claude
       if (isSupportedThinkingTokenClaudeModel(model)) {
         return {}
       }
 
+      // gemini
       if (isSupportedThinkingTokenGeminiModel(model)) {
         if (GEMINI_FLASH_MODEL_REGEX.test(model.id)) {
           return {
@@ -197,8 +195,48 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
       (findTokenLimit(model.id)?.max! - findTokenLimit(model.id)?.min!) * effortRatio + findTokenLimit(model.id)?.min!
     )
 
+    // DeepSeek hybrid inference models, v3.1 and maybe more in the future
+    // 不同的 provider 有不同的思考控制方式，在这里统一解决
+    if (isDeepSeekHybridInferenceModel(model)) {
+      if (isSystemProvider(this.provider)) {
+        switch (this.provider.id) {
+          case SystemProviderIds.dashscope:
+            return {
+              enable_thinking: true,
+              incremental_output: true
+            }
+          case SystemProviderIds.silicon:
+            return {
+              enable_thinking: true
+            }
+          case SystemProviderIds.doubao:
+            return {
+              thinking: {
+                type: 'enabled' // auto is invalid
+              }
+            }
+          case SystemProviderIds.openrouter:
+            return {
+              reasoning: {
+                enabled: true
+              }
+            }
+          case 'nvidia':
+            return {
+              chat_template_kwargs: {
+                thinking: true
+              }
+            }
+          default:
+            logger.warn(
+              `Skipping thinking options for provider ${this.provider.name} as DeepSeek v3.1 thinking control method is unknown`
+            )
+        }
+      }
+    }
+
     // OpenRouter models
-    if (model.provider === 'openrouter') {
+    if (model.provider === SystemProviderIds.openrouter) {
       if (isSupportedReasoningEffortModel(model) || isSupportedThinkingTokenModel(model)) {
         return {
           reasoning: {
@@ -208,6 +246,18 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
       }
     }
 
+    // Doubao 思考模式支持
+    if (isSupportedThinkingTokenDoubaoModel(model)) {
+      if (reasoningEffort === 'high') {
+        return { thinking: { type: 'enabled' } }
+      }
+      if (reasoningEffort === 'auto' && isDoubaoThinkingAutoModel(model)) {
+        return { thinking: { type: 'auto' } }
+      }
+      // 其他情况不带 thinking 字段
+      return {}
+    }
+
     // Qwen models
     if (isQwenReasoningModel(model)) {
       const thinkConfig = {
@@ -215,7 +265,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
           isQwenAlwaysThinkModel(model) || !isSupportEnableThinkingProvider(this.provider) ? undefined : true,
         thinking_budget: budgetTokens
       }
-      if (this.provider.id === 'dashscope') {
+      if (this.provider.id === SystemProviderIds.dashscope) {
         return {
           ...thinkConfig,
           incremental_output: true
