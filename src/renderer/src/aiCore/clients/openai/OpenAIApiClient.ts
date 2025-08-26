@@ -561,6 +561,9 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
             userMessages.push(await this.convertMessageToSdkParam(message, model))
           }
         }
+        if (userMessages.length === 0) {
+          logger.warn('No user message. Some providers may not support.')
+        }
 
         // poe 需要通过用户消息传递 reasoningEffort
         const reasoningEffort = this.getReasoningEffort(assistant, model)
@@ -588,8 +591,17 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
 
         // 4. 最终请求消息
         let reqMessages: OpenAISdkMessageParam[]
-        if (!systemMessage.content || isNotSupportSystemMessageModel(model)) {
+        if (!systemMessage.content) {
           reqMessages = [...userMessages]
+        } else if (isNotSupportSystemMessageModel(model)) {
+          // transform into user message
+          const firstUserMsg = userMessages.shift()
+          if (firstUserMsg) {
+            firstUserMsg.content = `System Instruction: \n${systemMessage.content}\n\nUser Message(s):\n${firstUserMsg.content}`
+            reqMessages = [firstUserMsg, ...userMessages]
+          } else {
+            reqMessages = []
+          }
         } else {
           reqMessages = [systemMessage, ...userMessages].filter(Boolean) as OpenAISdkMessageParam[]
         }
