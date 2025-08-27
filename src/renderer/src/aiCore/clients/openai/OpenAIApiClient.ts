@@ -881,7 +881,9 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
                 (typeof choice.delta.content === 'string' && choice.delta.content !== '') ||
                 (typeof (choice.delta as any).reasoning_content === 'string' &&
                   (choice.delta as any).reasoning_content !== '') ||
-                (typeof (choice.delta as any).reasoning === 'string' && (choice.delta as any).reasoning !== ''))
+                (typeof (choice.delta as any).reasoning === 'string' && (choice.delta as any).reasoning !== '') ||
+                ((choice.delta as OpenAISdkRawContentSource).images &&
+                  Array.isArray((choice.delta as OpenAISdkRawContentSource).images)))
             ) {
               contentSource = choice.delta
             } else if ('message' in choice) {
@@ -977,6 +979,20 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
               }
             } else {
               accumulatingText = false
+            }
+
+            // 处理图片内容 (e.g. from OpenRouter Gemini image generation models)
+            if (contentSource.images && Array.isArray(contentSource.images)) {
+              controller.enqueue({
+                type: ChunkType.IMAGE_CREATED
+              })
+              controller.enqueue({
+                type: ChunkType.IMAGE_COMPLETE,
+                image: {
+                  type: 'base64',
+                  images: contentSource.images.map((image) => image.image_url?.url || '')
+                }
+              })
             }
 
             // 处理工具调用
