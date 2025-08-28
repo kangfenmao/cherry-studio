@@ -868,6 +868,8 @@
   "files": {
     "actions": "Actions",
     "all": "Tous les fichiers",
+    "batch_delete": "supprimer en masse",
+    "batch_operation": "Tout sélectionner",
     "count": "Nombre de fichiers",
     "created_at": "Date de création",
     "delete": {
