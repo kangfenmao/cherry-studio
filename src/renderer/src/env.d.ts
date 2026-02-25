@@ -3,6 +3,7 @@
 import type { PermissionUpdate } from '@anthropic-ai/claude-agent-sdk'
 import type KeyvStorage from '@kangfenmao/keyv-storage'
 import type { HookAPI } from 'antd/es/modal/useModal'
+import type { Dexie } from 'dexie'
 import type { NavigateFunction } from 'react-router-dom'
 
 import type {
@@ -33,6 +34,7 @@ declare global {
     keyv: KeyvStorage
     store: any
     navigate: NavigateFunction
+    db: Dexie
     toast: {
       getToastQueue: typeof getToastQueue
       addToast: typeof addToast

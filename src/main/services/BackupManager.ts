@@ -256,6 +256,17 @@ class BackupManager {
       // Step 3: Close all connections
       logger.debug('[restoreDirect] Closing all data connections...')
       await closeAllDataConnections()
+
+      // Close IndexedDB connections in renderer process to avoid EBUSY error on Windows
+      logger.debug('[restoreDirect] Closing IndexedDB in renderer process...')
+      try {
+        // Call window.db.close() directly in renderer process
+        await mainWindow?.webContents.executeJavaScript('window.db.close()')
+        logger.debug('[restoreDirect] IndexedDB connections closed in renderer')
+      } catch (error) {
+        logger.warn('[restoreDirect] Failed to close IndexedDB in renderer', error as Error)
+      }
+
       onProgress({ stage: 'restoring_database', progress: 30, total: 100 })
 
       const userDataPath = app.getPath('userData')

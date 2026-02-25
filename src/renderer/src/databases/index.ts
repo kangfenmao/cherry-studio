@@ -135,4 +135,6 @@ db.version(10).stores({
   message_blocks: 'id, messageId, file.id'
 })
 
+window.db = db
+
 export default db
