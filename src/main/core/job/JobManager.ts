@@ -60,9 +60,12 @@ interface FinishedResolver {
  * 6-state state machine, schedule registry, retry backoff, startup recovery,
  * catch-up detection, GC.
  *
- * Phase 1 boundaries (see plan):
+ * See `docs/references/job-and-scheduler/` for the full architecture, the
+ * four-layer lock model, and the handler authoring contract.
+ *
+ * Phase 1 boundaries:
  *   - GC hardcoded (1h sweep + 100 per type + 7-day TTL)
- *   - globalMaxConcurrency = 50 (constructor default, not configurable)
+ *   - globalMaxConcurrency = 50 (not configurable)
  *   - No worker / child_process executor
  *   - No DAG / DLQ / priority preemption
  */
@@ -160,6 +163,16 @@ export class JobManager extends BaseService {
 
   // ---------------- Handler registry ----------------
 
+  /**
+   * Register a handler for a JobRegistry type. Must be called from the owning
+   * service's `onInit` so the handler is in place before `onReady`'s startup
+   * recovery (otherwise existing non-terminal jobs for this type are treated
+   * as orphans and cancelled).
+   *
+   * @param type - JobRegistry key (compile-time validated via declaration merging)
+   * @param handler - Handler implementation; `recovery` is required
+   * @throws Error if a handler is already registered for `type`
+   */
   registerHandler<K extends JobType>(type: K, handler: JobHandler<JobPayloadOf<K>>): void {
     if (this.handlers.has(type)) {
       throw new Error(`JobManager: handler for type "${type}" is already registered`)
@@ -168,12 +181,27 @@ export class JobManager extends BaseService {
     logger.info('Handler registered', { type, recovery: handler.recovery })
   }
 
+  /** True if a handler is registered for `type`. */
   hasHandler(type: string): boolean {
     return this.handlers.has(type)
   }
 
   // ---------------- enqueue / cancel / list / get ----------------
 
+  /**
+   * Persist a new job row and (if status is `pending`) dispatch it. If
+   * `opts.idempotencyKey` matches an existing non-terminal job, returns the
+   * existing handle without creating a new row. If `opts.scheduledAt` is in
+   * the future the row is stored in `delayed` state and a `once` schedule
+   * arms its promotion at the target time.
+   *
+   * @param type - JobRegistry key (compile-time validated via declaration merging)
+   * @param input - Strongly-typed payload bound to `type` via JobRegistry
+   * @param opts - Optional queue / priority / idempotency / scheduling overrides
+   * @returns Handle with `id`, initial `snapshot`, and a `finished` promise
+   * @throws Error with code `JOB_UNKNOWN_TYPE` if no handler is registered for `type`
+   * @throws Error with code `JOB_PAYLOAD_TOO_LARGE` if input JSON exceeds 1MB
+   */
   async enqueue<K extends JobType>(type: K, input: JobPayloadOf<K>, opts: EnqueueOptions = {}): Promise<JobHandle> {
     const handler = this.handlers.get(type)
     if (!handler) {
@@ -249,6 +277,20 @@ export class JobManager extends BaseService {
     return handle
   }
 
+  /**
+   * Request cancellation of a single job. For in-flight jobs aborts the
+   * AbortController and waits up to `handler.cancelTimeoutMs` (default 30s)
+   * for the handler to react — on timeout forces the row to `cancelled` so
+   * the dispatch slot frees up. For pending / delayed jobs finalizes
+   * directly to `cancelled` without invoking the handler.
+   *
+   * Already-terminal jobs are a no-op (the row's `cancelRequested` flag is
+   * set but the status stays as it was).
+   *
+   * @param jobId - Target job row id
+   * @param reason - Optional human-readable reason, surfaced in the error object
+   * @throws Error with code `JOB_CANCEL_REASON_TOO_LONG` if `reason` exceeds 500 chars
+   */
   async cancel(jobId: string, reason?: string): Promise<void> {
     if (reason !== undefined && reason.length > MAX_CANCEL_REASON_CHARS) {
       throw this.makeError(JOB_ERROR_CODES.CANCEL_REASON_TOO_LONG, 'Cancel reason exceeds 500 characters', {
@@ -298,19 +340,19 @@ export class JobManager extends BaseService {
 
   /**
    * Cancel all non-terminal jobs matching the filter. Aborts in-flight
-   * AbortControllers in this process and transitions pending/delayed rows
-   * directly to 'cancelled'. Covers reset() semantics for Phase 4 Knowledge
+   * AbortControllers in this process and transitions pending / delayed rows
+   * directly to `cancelled`. Covers reset() semantics for Phase 4 Knowledge
    * reset and Phase 3 FileProcessing batch cancellation.
    *
-   * Empty filter (no queue and no type) is rejected — preventing accidental
-   * "cancel all jobs in the system".
-   *
-   * Returns:
-   *   - `aborted`: in-flight controllers aborted in this process
-   *   - `transitioned`: pending/delayed rows finalized synchronously
-   *
    * Running jobs settle asynchronously through the normal handler-execute
-   * flow (handler observes signal.aborted) and are NOT counted as transitioned.
+   * flow (handler observes `signal.aborted`) and are NOT counted as
+   * `transitioned` — only the in-process abort is counted via `aborted`.
+   *
+   * @param filter - Must specify at least `queue` or `type` (empty filter rejected)
+   * @param reason - Optional human-readable reason
+   * @returns `aborted`: in-flight controllers aborted; `transitioned`: pending / delayed rows finalized synchronously
+   * @throws Error if both `filter.queue` and `filter.type` are undefined
+   * @throws Error with code `JOB_CANCEL_REASON_TOO_LONG` if `reason` exceeds 500 chars
    */
   async cancelMany(
     filter: { queue?: string; type?: string },
@@ -343,16 +385,38 @@ export class JobManager extends BaseService {
     return { aborted, transitioned: result.transitioned }
   }
 
+  /**
+   * Fetch a single job snapshot by id.
+   *
+   * @param jobId - Job row id
+   * @returns The snapshot, or `null` if the row does not exist
+   */
   async get(jobId: string): Promise<JobSnapshot | null> {
     return jobService.getById(jobId)
   }
 
+  /**
+   * List job snapshots matching the filter (defaults to all rows).
+   *
+   * @param filter - Status / type / queue / limit constraints (see `jobService.list`)
+   * @returns Matching snapshots ordered by `createdAt DESC`
+   */
   async list(filter: Parameters<typeof jobService.list>[0] = {}): Promise<JobSnapshot[]> {
     return jobService.list(filter)
   }
 
   // ---------------- Schedule registry (dual API: type+name / by id) ----------------
 
+  /**
+   * Persist a recurring schedule and arm it on SchedulerService so each fire
+   * enqueues a Job of the given type with `jobInputTemplate` as input.
+   *
+   * @param input - Schedule config (`type`, `trigger`, `jobInputTemplate`, `catchUpPolicy`, optional `name`)
+   * @returns `{ id }` — UUID used by all by-id control APIs
+   * @throws Error with code `JOB_UNKNOWN_TYPE` if no handler is registered for `input.type`
+   * @throws Error with code `JOB_SCHEDULE_NAME_CONFLICT` if `(type, name)` already exists
+   * @throws Error with code `JOB_SCHEDULE_SINGLETON_EXISTS` if `name` omitted on a multi-instance type
+   */
   async registerJobSchedule<K extends JobType>(input: JobScheduleRegistrationInput<K>): Promise<{ id: string }> {
     if (!this.handlers.has(input.type)) {
       throw this.makeError(JOB_ERROR_CODES.UNKNOWN_TYPE, `No handler for schedule type "${input.type}"`, {
@@ -373,6 +437,14 @@ export class JobManager extends BaseService {
     return { id: snapshot.id }
   }
 
+  /**
+   * Pause a schedule by id. Stops its SchedulerService timer and sets
+   * `enabled=false` in the DB. Pending jobs already enqueued by past fires
+   * are unaffected.
+   *
+   * @param id - Schedule row id (UUID returned by `registerJobSchedule`)
+   * @returns `true` if the row existed and was updated; `false` if not found
+   */
   async pauseJobScheduleById(id: string): Promise<boolean> {
     const disp = this.scheduleDisposables.get(id)
     if (disp) {
@@ -382,6 +454,13 @@ export class JobManager extends BaseService {
     return jobScheduleService.setEnabled(id, false)
   }
 
+  /**
+   * Resume a paused schedule by id. Sets `enabled=true` in the DB and re-arms
+   * the SchedulerService timer using the persisted trigger config.
+   *
+   * @param id - Schedule row id
+   * @returns `true` if the row existed and was updated; `false` if not found
+   */
   async resumeJobScheduleById(id: string): Promise<boolean> {
     const updated = await jobScheduleService.setEnabled(id, true)
     if (updated) {
@@ -391,6 +470,15 @@ export class JobManager extends BaseService {
     return updated
   }
 
+  /**
+   * Fire a schedule immediately (extra one-shot — does not affect the natural
+   * fire calendar). For cron triggers calls croner's `.trigger()`; for
+   * interval / once triggers (which have no croner backing) enqueues a job
+   * directly using the schedule's `jobInputTemplate`.
+   *
+   * @param id - Schedule row id
+   * @returns `true` if fired; `false` if no schedule exists for `id`
+   */
   async triggerJobScheduleNowById(id: string): Promise<boolean> {
     const schedule = await jobScheduleService.getById(id)
     if (!schedule) return false
@@ -404,6 +492,15 @@ export class JobManager extends BaseService {
     return true
   }
 
+  /**
+   * Delete a schedule by id. Disposes its SchedulerService timer and removes
+   * the row. Jobs previously enqueued by this schedule keep `scheduleId`
+   * referencing the now-deleted row — that linkage is intentional (lets
+   * `listRecentTerminalByScheduleId` still find historical jobs).
+   *
+   * @param id - Schedule row id
+   * @returns `true` if the row existed and was deleted; `false` if not found
+   */
   async unregisterJobScheduleById(id: string): Promise<boolean> {
     const disp = this.scheduleDisposables.get(id)
     if (disp) {
@@ -413,10 +510,22 @@ export class JobManager extends BaseService {
     return jobScheduleService.delete(id)
   }
 
+  /**
+   * Fetch a schedule snapshot by id.
+   *
+   * @param id - Schedule row id
+   * @returns The snapshot, or `null` if the row does not exist
+   */
   async getJobScheduleById(id: string): Promise<JobScheduleSnapshot | null> {
     return jobScheduleService.getById(id)
   }
 
+  /**
+   * List schedule snapshots matching the filter.
+   *
+   * @param filter - Type / name / enabled constraints (see `jobScheduleService.listAll`)
+   * @returns Matching snapshots
+   */
   async listJobSchedules(
     filter: Parameters<typeof jobScheduleService.listAll>[0] = {}
   ): Promise<JobScheduleSnapshot[]> {
@@ -425,26 +534,71 @@ export class JobManager extends BaseService {
 
   // By-name flavor — internal resolves to by-id.
 
+  /**
+   * Pause a schedule by (type, name). Convenience over `pauseJobScheduleById`
+   * when callers know the business-level identity but not the UUID.
+   *
+   * @param type - JobRegistry key
+   * @param name - Schedule name (omit if the type has exactly one schedule)
+   * @returns Whether the row was updated (see `pauseJobScheduleById`)
+   * @throws Error with code `JOB_SCHEDULE_NAME_REQUIRED` if `type` has multiple schedules and `name` is omitted
+   * @throws Error with code `JOB_SCHEDULE_NOT_FOUND_BY_NAME` if `(type, name)` is unknown
+   */
   async pauseJobSchedule<K extends JobType>(type: K, name?: string | null): Promise<boolean> {
     const id = await this.resolveScheduleIdByName(type, name)
     return this.pauseJobScheduleById(id)
   }
 
+  /**
+   * Resume a schedule by (type, name).
+   *
+   * @param type - JobRegistry key
+   * @param name - Schedule name (omit if the type has exactly one schedule)
+   * @returns Whether the row was updated (see `resumeJobScheduleById`)
+   * @throws Error with code `JOB_SCHEDULE_NAME_REQUIRED` / `JOB_SCHEDULE_NOT_FOUND_BY_NAME`
+   */
   async resumeJobSchedule<K extends JobType>(type: K, name?: string | null): Promise<boolean> {
     const id = await this.resolveScheduleIdByName(type, name)
     return this.resumeJobScheduleById(id)
   }
 
+  /**
+   * Fire a schedule immediately by (type, name).
+   *
+   * @param type - JobRegistry key
+   * @param name - Schedule name (omit if the type has exactly one schedule)
+   * @returns Whether the schedule was fired (see `triggerJobScheduleNowById`)
+   * @throws Error with code `JOB_SCHEDULE_NAME_REQUIRED` / `JOB_SCHEDULE_NOT_FOUND_BY_NAME`
+   */
   async triggerJobScheduleNow<K extends JobType>(type: K, name?: string | null): Promise<boolean> {
     const id = await this.resolveScheduleIdByName(type, name)
     return this.triggerJobScheduleNowById(id)
   }
 
+  /**
+   * Delete a schedule by (type, name).
+   *
+   * @param type - JobRegistry key
+   * @param name - Schedule name (omit if the type has exactly one schedule)
+   * @returns Whether the row was deleted (see `unregisterJobScheduleById`)
+   * @throws Error with code `JOB_SCHEDULE_NAME_REQUIRED` / `JOB_SCHEDULE_NOT_FOUND_BY_NAME`
+   */
   async unregisterJobSchedule<K extends JobType>(type: K, name?: string | null): Promise<boolean> {
     const id = await this.resolveScheduleIdByName(type, name)
     return this.unregisterJobScheduleById(id)
   }
 
+  /**
+   * Fetch a schedule snapshot by (type, name). Unlike the other by-name APIs,
+   * a "not found" result returns `null` rather than throwing — convenient for
+   * existence checks. `JOB_SCHEDULE_NAME_REQUIRED` is still surfaced when the
+   * type has multiple schedules and `name` is omitted.
+   *
+   * @param type - JobRegistry key
+   * @param name - Schedule name (omit if the type has exactly one schedule)
+   * @returns The snapshot, or `null` if no row matches `(type, name)`
+   * @throws Error with code `JOB_SCHEDULE_NAME_REQUIRED` if `type` has multiple schedules and `name` is omitted
+   */
   async getJobSchedule<K extends JobType>(type: K, name?: string | null): Promise<JobScheduleSnapshot | null> {
     const id = await this.resolveScheduleIdByName(type, name).catch((err) => {
       // For "name required" errors, surface them. For "not found", return null.
@@ -504,11 +658,19 @@ export class JobManager extends BaseService {
    * Try to claim one pending job in `queueName` and spawn its handler. Releases
    * both mutex layers before invoking the handler. Schedules a microtask
    * recursion to fill the next slot if one was claimed.
+   *
+   * Lock acquisition order is FIXED: Layer 1 (per-queue) first, Layer 0
+   * (global) second. Every call site must use this order so the two layers
+   * cannot deadlock against each other.
+   *
+   * @param queueName - Queue identifier (from `jobTable.queue`); no-op if the queue is unknown
    */
   async dispatch(queueName: string): Promise<void> {
     const queue = this.queues.get(queueName)
     if (!queue) return
 
+    // Layer 1 first (per-queue), then Layer 0 (global libsql tx serializer).
+    // Release happens in reverse order in the finally block below.
     const releaseQueue = await queue.mutex.acquire()
     const releaseGlobal = await this.globalDispatchMutex.acquire()
     let claimed: JobRow | null = null
@@ -536,6 +698,10 @@ export class JobManager extends BaseService {
     queueMicrotask(() => void this.dispatch(queueName))
   }
 
+  /**
+   * Kick every known queue. Used after startup recovery and after delayed-job
+   * promotion, where multiple queues may have new pending rows at once.
+   */
   private dispatchAll(): void {
     for (const name of this.queues.keys()) {
       void this.dispatch(name)
@@ -546,6 +712,16 @@ export class JobManager extends BaseService {
    * Build context, spawn handler.execute, transition state on terminal or
    * schedule retry on retryable failure. Errors thrown synchronously by
    * handler before its first await are caught inside the same task.
+   *
+   * The handler runs OUTSIDE both dispatch mutexes — execution may take
+   * seconds or minutes while other queues continue to dispatch in parallel.
+   * The job row is already in `running` state when this method is called
+   * (the claim happened inside the dispatch tx), so concurrent dispatchers
+   * see the seat occupied via the active-count query.
+   *
+   * Timeout handling: an unref'd setTimeout aborts the controller when
+   * `row.timeoutMs` elapses. The catch branch then classifies the error as
+   * `JOB_HANDLER_TIMEOUT` (vs the generic `JOB_HANDLER_THREW`).
    */
   private spawnExecute(row: JobRow): void {
     const handler = this.handlers.get(row.type)
@@ -627,6 +803,17 @@ export class JobManager extends BaseService {
     })()
   }
 
+  /**
+   * Terminal-state writer. Persists the final status, publishes the snapshot
+   * to the shared cache (renderer subscribers see it instantly), resolves the
+   * `JobHandle.finished` promise, invokes `handler.onSettled`, and kicks the
+   * queue once more in case another pending job is waiting for the freed slot.
+   *
+   * Tx failure here is logged but not thrown — the job will be re-detected on
+   * the next process restart by the recovery pass (it stays in `running`
+   * until then). Better to leak one row than to throw inside the handler's
+   * void-returning catch path.
+   */
   private async finalizeJob(
     jobId: string,
     status: 'completed' | 'failed' | 'cancelled',
@@ -678,6 +865,13 @@ export class JobManager extends BaseService {
     void this.dispatch(snapshot.queue)
   }
 
+  /**
+   * Transition a failed job into `delayed` with the next attempt number and
+   * future `scheduledAt`. Arms a `once` schedule that promotes `delayed → pending`
+   * when the backoff elapses, then re-dispatches the queue. Retry IDs include
+   * `attempt` so multiple retries on the same job do not collide in the
+   * SchedulerService id map.
+   */
   private async scheduleRetry(
     jobId: string,
     nextAttempt: number,
@@ -701,6 +895,13 @@ export class JobManager extends BaseService {
 
   // ---------------- Schedule arming + catch-up ----------------
 
+  /**
+   * Wire a `jobScheduleTable` row into SchedulerService so each fire enqueues
+   * a new Job. On every fire we also call `markFired` to update `lastRun` and
+   * `nextRun` — those columns drive overdue detection on next startup. A
+   * pre-existing disposable for the same id is disposed first (e.g. when a
+   * schedule is re-enabled or its trigger changes mid-process).
+   */
   private armSchedule(schedule: JobScheduleSnapshot): void {
     if (!schedule.enabled) return
     if (this.scheduleDisposables.has(schedule.id)) {
@@ -741,6 +942,16 @@ export class JobManager extends BaseService {
     })
   }
 
+  /**
+   * Walk every enabled schedule on startup, decide via `computeCatchUpAction`
+   * whether each missed its expected fire window, and:
+   *   - emit `onMissed` to the handler if defined (observability), AND
+   *   - enqueue a make-up job if the schedule's `catchUpPolicy` requested it
+   *     (currently `after-startup` is the only enqueuing policy).
+   *
+   * `skip-missed` still emits `onMissed` — handlers may use it for breaker
+   * logic or telemetry even when no make-up job is wanted.
+   */
   private async detectAndDispatchOverdue(schedules: JobScheduleSnapshot[]): Promise<void> {
     const nowMs = Date.now()
     for (const schedule of schedules) {
@@ -770,6 +981,11 @@ export class JobManager extends BaseService {
 
   // ---------------- GC ----------------
 
+  /**
+   * Prune terminal rows: drop anything older than the 7-day TTL, then drop
+   * rows beyond the per-type keep-latest threshold (100). Hardcoded for
+   * Phase 1 — turn into a per-handler config once a real consumer asks.
+   */
   private async runGC(): Promise<void> {
     const cutoff = Date.now() - GC_TERMINAL_TTL_MS
     const byTtl = await jobService.pruneTerminalOlderThan(cutoff)
@@ -781,6 +997,18 @@ export class JobManager extends BaseService {
 
   // ---------------- Helpers ----------------
 
+  /**
+   * Build a JobHandle for `snapshot`. Three branches:
+   *   1. Existing resolver in memory → reuse the same `finished` promise so
+   *      multiple `enqueue` calls with the same idempotency key share one.
+   *   2. Terminal status → wrap the snapshot in `Promise.resolve` (no resolver
+   *      needed; the work is already done).
+   *   3. New non-terminal → install a fresh deferred resolver in the map.
+   *
+   * onStop intentionally does NOT reject these promises — see the anti-leak
+   * comment in onStop. Callers awaiting across shutdown must add their own
+   * timeout race.
+   */
   private handleFor(snapshot: JobSnapshot): JobHandle {
     const existing = this.finishedResolvers.get(snapshot.id)
     if (existing) {
@@ -801,10 +1029,17 @@ export class JobManager extends BaseService {
     return status === 'completed' || status === 'failed' || status === 'cancelled'
   }
 
+  /** Push a job snapshot to the cross-window shared cache (renderer hooks read this). */
   private publishState(snapshot: JobSnapshot): void {
     application.get('CacheService').setShared(`${JOB_STATE_KEY_PREFIX}${snapshot.id}`, snapshot, 60_000)
   }
 
+  /**
+   * Retry delay in ms for the given attempt number.
+   *   - `none`: 0
+   *   - `fixed`: clamp(baseDelay, maxDelay)
+   *   - `exponential`: clamp(base × 2^(attempt-1), maxDelay)
+   */
   private computeBackoff(policy: RetryPolicy, attempt: number): number {
     if (policy.backoff === 'none') return 0
     if (policy.backoff === 'fixed') return Math.min(policy.baseDelayMs, policy.maxDelayMs)

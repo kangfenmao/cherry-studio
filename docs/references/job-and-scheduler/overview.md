@@ -17,19 +17,21 @@ Two independent main-process lifecycle services:
 
 `jobTable` is the **single source of truth**. Memory state (handlers Map, queues Map, AbortControllers) is a derived view that JobManager rebuilds on every startup.
 
-Each queue has a `DispatchQueue` instance holding `{ name, concurrency, mutex }`. The dispatch loop:
+Each queue has a `DispatchQueue` instance holding `{ name, concurrency, mutex }`. The dispatch loop (`JobManager.dispatch`):
 
-1. Acquire **Layer 0** global mutex (libsql tx serialization)
-2. Acquire **Layer 1** per-queue mutex (same-queue dispatch serialization)
+1. Acquire **Layer 1** per-queue mutex *first*
+2. Acquire **Layer 0** global mutex *second*
 3. Inside one DB transaction:
-   - Count queue-active jobs → check queue.concurrency
-   - Count globally-running jobs → check globalMaxConcurrency
+   - Count queue-active jobs → check `queue.concurrency`
+   - Count globally-running jobs → check `globalMaxConcurrency`
    - SELECT next pending → UPDATE to running (claim)
-4. Release both mutexes
-5. Spawn handler.execute outside the lock
+4. Release both mutexes (global first, then per-queue, reverse acquisition order)
+5. Spawn `handler.execute` outside the lock
 6. Queue a microtask to dispatch the same queue again (fill next slot)
 
 Spawning happens *outside* the mutex — the handler executes for seconds/minutes while new dispatches proceed.
+
+**Lock acquisition order is fixed** (per-queue then global). All call sites use this order so the two layers cannot deadlock against each other.
 
 ## Six-state state machine
 

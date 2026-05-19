@@ -17,15 +17,22 @@ interface IntervalEntry {
 /**
  * General-purpose stateless scheduler. Knows about "when" to fire a callback,
  * nothing about what the callback does. JobManager is its primary consumer but
- * any business module can use it directly for simple cron/interval/once needs
- * — see plan section "强制原则: SchedulerService 是项目内唯一的通用调度器".
+ * any business module can use it directly for simple cron/interval/once needs.
+ *
+ * See `docs/references/job-and-scheduler/scheduler-usage.md` for the decision
+ * tree on when to use this vs `BaseService.registerInterval` vs raw setInterval.
  *
  * Internals:
- *   - `cron` and `once` Triggers are backed by croner instances (pause/resume,
- *     timezone via Intl API, .trigger() for manual fire).
- *   - `interval` Trigger uses a chained setTimeout (more flexible than
- *     setInterval — handles slow callbacks without overlap and unrefs the loop).
- *   - No persistence. JobManager re-registers all schedules on startup.
+ *   - `cron` Triggers are backed by croner instances (pause/resume, timezone
+ *     via Intl API, .trigger() for manual fire, `protect: true` blocks
+ *     overlapping fires when async callbacks run long).
+ *   - `once` Triggers use a single setTimeout that self-removes from the map
+ *     before invoking the callback (re-entrant-safe).
+ *   - `interval` Triggers use a chained setTimeout — handles slow callbacks
+ *     without overlap and unrefs the loop. pause/resume are no-ops for these
+ *     (callers should unregister + re-register to "pause"); the method warns.
+ *   - No persistence. Re-register everything in `onReady` of each consumer
+ *     after process restart.
  */
 @Injectable('SchedulerService')
 @ServicePhase(Phase.WhenReady)
@@ -46,9 +53,14 @@ export class SchedulerService extends BaseService {
   }
 
   /**
-   * Register a callback to fire on schedule. Returns a Disposable that
-   * unregisters when disposed. Calling registerSchedule twice with the same
-   * id replaces the previous registration.
+   * Register a callback to fire on schedule. Calling `registerSchedule` twice
+   * with the same `id` replaces the previous registration (the old timer is
+   * stopped first).
+   *
+   * @param id - Unique identifier for this schedule; reused for `pause` / `resume` / `unregister` / `triggerNow`
+   * @param trigger - Cron expression, repeating interval, or one-shot delay
+   * @param callback - Function invoked on each fire; async callbacks are awaited (cron uses `protect: true` to block overlap)
+   * @returns Disposable that unregisters when disposed; the service also auto-cleans on `onStop`
    */
   registerSchedule(id: string, trigger: Trigger, callback: ScheduleCallback): Disposable {
     if (this.has(id)) this.unregister(id)
@@ -66,9 +78,11 @@ export class SchedulerService extends BaseService {
   }
 
   /**
-   * Pause a cron schedule. No-op (with warn log) for interval / once: those use
-   * chained setTimeout and cannot be paused — to "pause" an interval, callers
-   * should unregister and re-register when ready.
+   * Pause a cron schedule. No-op (with warn log) for `interval` / `once`:
+   * those use chained setTimeout and cannot be paused — to "pause" them,
+   * unregister and re-register when ready.
+   *
+   * @param id - Schedule identifier passed to `registerSchedule`
    */
   pause(id: string): void {
     const cron = this.cronJobs.get(id)
@@ -86,6 +100,12 @@ export class SchedulerService extends BaseService {
     logger.warn('pause called on unknown schedule id', { id })
   }
 
+  /**
+   * Resume a previously paused cron schedule. No-op (with warn log) for
+   * `interval` / `once` schedules and unknown ids.
+   *
+   * @param id - Schedule identifier passed to `registerSchedule`
+   */
   resume(id: string): void {
     const cron = this.cronJobs.get(id)
     if (cron) {
@@ -100,6 +120,13 @@ export class SchedulerService extends BaseService {
     logger.warn('resume called on unknown schedule id', { id })
   }
 
+  /**
+   * Stop a schedule and remove it from the registry. Idempotent — unknown
+   * ids are silently ignored. Prefer disposing the `Disposable` returned by
+   * `registerSchedule` when ownership is local.
+   *
+   * @param id - Schedule identifier passed to `registerSchedule`
+   */
   unregister(id: string): void {
     const cron = this.cronJobs.get(id)
     if (cron) {
@@ -117,12 +144,13 @@ export class SchedulerService extends BaseService {
   }
 
   /**
-   * Trigger a cron schedule immediately (extra one-shot fire — does not affect
-   * the natural fire schedule). croner's .trigger() returns a Promise that
-   * resolves after the callback finishes, so this method awaits it.
+   * Fire a cron schedule immediately as an extra one-shot — does not affect
+   * the natural fire calendar. Awaits croner's `.trigger()` so the caller
+   * observes the callback completing. Not supported for `interval` / `once`
+   * schedules (they have no croner backing).
    *
-   * Returns false if no cron schedule exists for `id` — interval/once cannot be
-   * manually triggered (no croner instance backing them).
+   * @param id - Schedule identifier passed to `registerSchedule`
+   * @returns `true` if a cron schedule was triggered; `false` if `id` is unknown or not a cron
    */
   async triggerNow(id: string): Promise<boolean> {
     const cron = this.cronJobs.get(id)
@@ -134,13 +162,22 @@ export class SchedulerService extends BaseService {
     return true
   }
 
-  /** Next scheduled fire time for cron schedules, or null otherwise. */
+  /**
+   * Next scheduled fire time for a cron schedule.
+   *
+   * @param id - Schedule identifier passed to `registerSchedule`
+   * @returns The next fire `Date`, or `null` for unknown id or non-cron triggers
+   */
   getNextRun(id: string): Date | null {
     const cron = this.cronJobs.get(id)
     if (cron) return cron.nextRun() ?? null
     return null
   }
 
+  /**
+   * @param id - Schedule identifier
+   * @returns `true` if a schedule with this id is registered (any kind)
+   */
   has(id: string): boolean {
     return this.cronJobs.has(id) || this.intervalHandles.has(id)
   }
