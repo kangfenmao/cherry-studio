@@ -162,7 +162,10 @@ export const EnqueueJobInputSchema = z.strictObject({
   queue: z.string().optional(),
   priority: z.number().int().optional(),
   idempotencyKey: z.string().optional(),
-  scheduledAt: z.string().optional(),
+  scheduledAt: z
+    .string()
+    .refine((s) => !Number.isNaN(Date.parse(s)), { message: 'scheduledAt must be a parseable ISO timestamp' })
+    .optional(),
   parentId: z.string().optional(),
   timeoutMs: z.number().int().min(1).optional(),
   maxAttempts: z.number().int().min(1).optional(),
@@ -236,3 +239,76 @@ export const JOB_ERROR_CODES = {
   CANCELLED: 'JOB_CANCELLED'
 } as const
 export type JobErrorCode = (typeof JOB_ERROR_CODES)[keyof typeof JOB_ERROR_CODES]
+
+// ============================================================================
+// API endpoint schemas
+// ============================================================================
+
+/**
+ * Comma-separated status filter, e.g. `?status=pending,running`. Empty string
+ * decays to undefined (no filter). Validation rejects unknown status values
+ * up-front so the handler does not silently drop them.
+ */
+const StatusListQuerySchema = z
+  .string()
+  .optional()
+  .transform((value, ctx) => {
+    if (!value) return undefined
+    const parts = value
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    if (parts.length === 0) return undefined
+    const out: JobStatus[] = []
+    for (const part of parts) {
+      const parsed = JobStatusAtomSchema.safeParse(part)
+      if (!parsed.success) {
+        ctx.addIssue({ code: 'custom', message: `invalid status value: ${part}` })
+        return z.NEVER
+      }
+      out.push(parsed.data)
+    }
+    return out
+  })
+
+export const ListJobsQuerySchema = z.strictObject({
+  status: StatusListQuerySchema,
+  queue: z.string().optional(),
+  type: z.string().optional(),
+  scheduleId: z.string().optional(),
+  limit: z.coerce.number().int().min(1).max(500).optional(),
+  offset: z.coerce.number().int().min(0).optional()
+})
+/** Input shape (URL query strings). Use {@link ListJobsQuerySchema} to parse. */
+export type ListJobsQueryParams = z.input<typeof ListJobsQuerySchema>
+
+/** DELETE /jobs/:id query — optional `reason` (≤ 500 chars), mirrors body shape. */
+export type CancelJobQueryParams = z.input<typeof CancelJobInputSchema>
+
+export type JobSchemas = {
+  '/jobs': {
+    /** List jobs, ordered by createdAt DESC. Supports status/queue/type/scheduleId filters and pagination. */
+    GET: {
+      query?: ListJobsQueryParams
+      response: JobSnapshot[]
+    }
+    /** Enqueue a job. `type` must match a registered handler in main; payload size ≤ 1MB. */
+    POST: {
+      body: EnqueueJobDto
+      response: JobSnapshot
+    }
+  }
+  '/jobs/:id': {
+    /** Fetch a single job snapshot. 404 if id does not exist. */
+    GET: {
+      params: { id: string }
+      response: JobSnapshot
+    }
+    /** Cancel a job. Idempotent — already-terminal jobs accept but do nothing. */
+    DELETE: {
+      params: { id: string }
+      query?: CancelJobQueryParams
+      response: void
+    }
+  }
+}
