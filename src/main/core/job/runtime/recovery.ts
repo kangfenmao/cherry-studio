@@ -33,9 +33,14 @@ export async function runStartupRecovery(handlers: ReadonlyMap<string, JobHandle
     const nonTerminal = await jobService.getNonTerminalByType(type)
     if (nonTerminal.length === 0) continue
 
-    // 1. cancelRequested → cancelled, regardless of strategy.
+    // 1. cancelRequested → cancelled, regardless of strategy. Includes pending
+    //    so a row whose cancelRequested=true flag was flipped between the
+    //    cancel tx and a process crash is not silently resurrected by the
+    //    next dispatch tick (the WHERE in claimNextPendingTx now excludes
+    //    cancelRequested=true rows from being claimed, but a leftover row
+    //    must still be reduced to a terminal state here).
     const cancelRequestedIds = nonTerminal
-      .filter((r) => r.cancelRequested && (r.status === 'running' || r.status === 'delayed'))
+      .filter((r) => r.cancelRequested && (r.status === 'running' || r.status === 'delayed' || r.status === 'pending'))
       .map((r) => r.id)
     if (cancelRequestedIds.length) {
       await jobService.cancelByIds(cancelRequestedIds, cancelledByRecovery)
@@ -88,10 +93,13 @@ export async function runStartupRecovery(handlers: ReadonlyMap<string, JobHandle
     }
   }
 
-  // 3. Orphan running jobs — handler no longer registered. Cancel them so they
-  // do not hang in 'running' forever (would block dispatch via active count).
-  const allRunning = await jobService.getStaleRunning()
-  const orphanIds = allRunning.filter((r) => !handlers.has(r.type)).map((r) => r.id)
+  // 3. Orphan non-terminal jobs — handler no longer registered. Covers
+  // running (would block dispatch via active count), delayed (would be
+  // promoted to pending but never run), and pending (would never be
+  // claimed). All three should be cancelled so no row leaks indefinitely.
+  const allNonTerminal = await jobService.getStaleNonTerminal()
+  const orphans = allNonTerminal.filter((r) => !handlers.has(r.type))
+  const orphanIds = orphans.map((r) => r.id)
   if (orphanIds.length) {
     await jobService.cancelByIds(orphanIds, {
       code: JOB_ERROR_CODES.CANCELLED,
@@ -99,9 +107,10 @@ export async function runStartupRecovery(handlers: ReadonlyMap<string, JobHandle
       retryable: false
     })
     stats.cancelled += orphanIds.length
-    logger.warn('Cancelled orphan running jobs (no handler registered)', {
+    logger.warn('Cancelled orphan non-terminal jobs (no handler registered)', {
       count: orphanIds.length,
-      types: Array.from(new Set(allRunning.filter((r) => !handlers.has(r.type)).map((r) => r.type)))
+      types: Array.from(new Set(orphans.map((r) => r.type))),
+      statuses: Array.from(new Set(orphans.map((r) => r.status)))
     })
   }
 

@@ -32,6 +32,8 @@ import { MockMainDbServiceExport } from '@test-mocks/main/DbService'
 import { eq } from 'drizzle-orm'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { drainTrailingDispatch } from './_helpers'
+
 vi.mock('@application', async () => {
   const mod = await import('@test-mocks/main/application')
   return mod.mockApplicationFactory()
@@ -70,15 +72,9 @@ function makeSlowHandler(recovery: 'abandon' | 'retry' | 'singleton'): JobHandle
   }
 }
 
+// Local alias so test bodies read naturally; implementation in _helpers.ts.
 async function drainAllQueues(jm: JobManager): Promise<void> {
-  const queues: Map<string, { mutex: { acquire: () => Promise<() => void> } }> = (
-    jm as unknown as { queues: typeof queues }
-  ).queues
-  for (const q of queues.values()) {
-    const release = await q.mutex.acquire()
-    release()
-  }
-  for (let i = 0; i < 3; i++) await new Promise<void>((r) => setImmediate(r))
+  return drainTrailingDispatch(jm)
 }
 
 interface BootstrapOptions {
@@ -123,8 +119,9 @@ async function bootstrapManager(opts: BootstrapOptions = {}): Promise<{
 }
 
 async function teardownManager(scheduler: SchedulerService, jobManager: JobManager): Promise<void> {
-  await jobManager._doStop().catch(() => {})
-  await scheduler._doStop().catch(() => {})
+  // Surface shutdown errors — a regression in _doStop should fail the suite.
+  await jobManager._doStop()
+  await scheduler._doStop()
 }
 
 describe('JobManager integration', () => {
@@ -148,9 +145,9 @@ describe('JobManager integration', () => {
           startedAt: now - 800,
           attempt: 0,
           maxAttempts: 1,
-          input: JSON.stringify({ message: 'a' }),
+          input: { message: 'a' },
           cancelRequested: false,
-          metadata: '{}'
+          metadata: {}
         },
         {
           type: 'task.abandon',
@@ -159,9 +156,9 @@ describe('JobManager integration', () => {
           scheduledAt: now + 60_000,
           attempt: 0,
           maxAttempts: 1,
-          input: JSON.stringify({ message: 'b' }),
+          input: { message: 'b' },
           cancelRequested: false,
-          metadata: '{}'
+          metadata: {}
         }
       ])
 
@@ -192,9 +189,9 @@ describe('JobManager integration', () => {
             startedAt: now - 800,
             attempt: 0,
             maxAttempts: 2,
-            input: JSON.stringify({ message: 'r-running' }),
+            input: { message: 'r-running' },
             cancelRequested: false,
-            metadata: '{}'
+            metadata: {}
           },
           {
             type: 'task.retry',
@@ -203,9 +200,9 @@ describe('JobManager integration', () => {
             scheduledAt: now + 60_000,
             attempt: 0,
             maxAttempts: 2,
-            input: JSON.stringify({ message: 'r-delayed' }),
+            input: { message: 'r-delayed' },
             cancelRequested: false,
-            metadata: '{}'
+            metadata: {}
           }
         ])
         .returning()
@@ -243,9 +240,9 @@ describe('JobManager integration', () => {
             startedAt: t0 + 100,
             attempt: 0,
             maxAttempts: 1,
-            input: JSON.stringify({ message: 'older' }),
+            input: { message: 'older' },
             cancelRequested: false,
-            metadata: '{}',
+            metadata: {},
             createdAt: t0
           },
           {
@@ -255,16 +252,16 @@ describe('JobManager integration', () => {
             scheduledAt: t0 + 1000,
             attempt: 0,
             maxAttempts: 1,
-            input: JSON.stringify({ message: 'newer' }),
+            input: { message: 'newer' },
             cancelRequested: false,
-            metadata: '{}',
+            metadata: {},
             createdAt: t0 + 1000
           }
         ])
         .returning()
 
-      const olderId = inserted.find((r) => r.input.includes('older'))!.id
-      const newerId = inserted.find((r) => r.input.includes('newer'))!.id
+      const olderId = inserted.find((r) => (r.input as { message: string }).message === 'older')!.id
+      const newerId = inserted.find((r) => (r.input as { message: string }).message === 'newer')!.id
 
       const { scheduler, jobManager } = await bootstrapManager({
         handlers: [['task.singleton', makeSlowHandler('singleton') as JobHandler]]
@@ -292,9 +289,9 @@ describe('JobManager integration', () => {
         startedAt: Date.now(),
         attempt: 0,
         maxAttempts: 1,
-        input: '"orphan"',
+        input: 'orphan',
         cancelRequested: false,
-        metadata: '{}'
+        metadata: {}
       })
 
       // Intentionally do NOT register task.gone — it's an orphan.

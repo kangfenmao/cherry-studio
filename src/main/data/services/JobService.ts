@@ -4,7 +4,13 @@ import { defaultHandlersFor, withSqliteErrors } from '@data/db/sqliteErrors'
 import type { DbOrTx } from '@data/db/types'
 import { timestampToISO } from '@data/services/utils/rowMappers'
 import { loggerService } from '@logger'
-import { type JobError, type JobSnapshot, type JobStatus, TERMINAL_JOB_STATUSES } from '@shared/data/api/schemas/jobs'
+import {
+  type JobError,
+  JobErrorSchema,
+  type JobSnapshot,
+  type JobStatus,
+  TERMINAL_JOB_STATUSES
+} from '@shared/data/api/schemas/jobs'
 import { and, asc, count, desc, eq, inArray, lte, type SQL } from 'drizzle-orm'
 
 const logger = loggerService.withContext('JobService')
@@ -131,16 +137,26 @@ export class JobService {
   /**
    * Atomically claim the next pending job in a queue and transition it to
    * running. The double-mutex (Layer 0 global + Layer 1 per-queue) outside this
-   * tx ensures no two callers race on the same queue; the optimistic
-   * `WHERE status='pending'` is a belt-and-suspenders guard. Returns the
-   * claimed row (already updated to `running`) or null if none available.
+   * tx ensures no two callers race on the same queue.
+   *
+   * `cancelRequested=false` is part of the WHERE clause so a cancel() call
+   * that flipped the flag while the row was still pending cannot lose the
+   * race against dispatch — see the cancel pending→running race fix. The
+   * UPDATE re-checks both conditions for belt-and-suspenders correctness.
    */
   async claimNextPendingTx(tx: DbOrTx, queue: string): Promise<JobRow | null> {
     const now = Date.now()
     const [candidate] = await tx
       .select()
       .from(jobTable)
-      .where(and(eq(jobTable.queue, queue), eq(jobTable.status, 'pending'), lte(jobTable.scheduledAt, now)))
+      .where(
+        and(
+          eq(jobTable.queue, queue),
+          eq(jobTable.status, 'pending'),
+          eq(jobTable.cancelRequested, false),
+          lte(jobTable.scheduledAt, now)
+        )
+      )
       .orderBy(asc(jobTable.priority), asc(jobTable.scheduledAt))
       .limit(1)
     if (!candidate) return null
@@ -148,7 +164,7 @@ export class JobService {
     const updated = await tx
       .update(jobTable)
       .set({ status: 'running', startedAt: now, updatedAt: now })
-      .where(and(eq(jobTable.id, candidate.id), eq(jobTable.status, 'pending')))
+      .where(and(eq(jobTable.id, candidate.id), eq(jobTable.status, 'pending'), eq(jobTable.cancelRequested, false)))
       .returning()
     return updated[0] ?? null
   }
@@ -168,8 +184,11 @@ export class JobService {
         status,
         finishedAt: now,
         updatedAt: now,
-        output: output !== undefined ? JSON.stringify(output) : null,
-        error: error ? JSON.stringify(error) : null
+        // Drizzle JSON columns: pass JS value (incl. null) directly; the ORM
+        // handles serialization. `undefined` is the "don't update" sentinel,
+        // so we explicitly write `null` to clear output when not provided.
+        output: output !== undefined ? output : null,
+        error
       })
       .where(eq(jobTable.id, jobId))
   }
@@ -194,7 +213,7 @@ export class JobService {
         scheduledAt,
         startedAt: null,
         updatedAt: now,
-        error: error ? JSON.stringify(error) : null
+        error
       })
       .where(eq(jobTable.id, jobId))
   }
@@ -205,15 +224,13 @@ export class JobService {
   }
 
   /**
-   * Atomically replace jobTable.metadata. Used by JobContext.patchMetadata
-   * to persist cross-restart state (e.g. remote-poll providerTaskId). The
-   * caller computes the merged JSON outside this method (so the in-memory
-   * row's metadata stays in sync without a re-fetch) and passes the final
-   * stringified payload in.
+   * Atomically replace jobTable.metadata. Used by JobContext.patchMetadata to
+   * persist cross-restart state (e.g. remote-poll providerTaskId). Caller
+   * passes the merged object — drizzle's JSON column serializes it.
    */
-  async setMetadataTx(tx: DbOrTx, jobId: string, mergedMetadataJson: string): Promise<void> {
+  async setMetadataTx(tx: DbOrTx, jobId: string, metadata: Record<string, unknown>): Promise<void> {
     const now = Date.now()
-    await tx.update(jobTable).set({ metadata: mergedMetadataJson, updatedAt: now }).where(eq(jobTable.id, jobId))
+    await tx.update(jobTable).set({ metadata, updatedAt: now }).where(eq(jobTable.id, jobId))
   }
 
   // ---------------- Startup recovery (JobManager.onReady) ----------------
@@ -223,13 +240,31 @@ export class JobService {
     return this.getDb().select().from(jobTable).where(eq(jobTable.status, 'running'))
   }
 
-  /** All non-terminal jobs for a type, sorted newest first — singleton recovery uses this. */
+  /**
+   * All non-terminal jobs across statuses. Recovery uses this for the orphan
+   * sweep — a row whose `type` has no registered handler should be cancelled
+   * regardless of whether it's running, pending, or delayed. Without this a
+   * delayed orphan would silently sit forever (no handler to ever run it,
+   * no timer to surface it).
+   */
+  async getStaleNonTerminal(): Promise<JobRow[]> {
+    return this.getDb().select().from(jobTable).where(inArray(jobTable.status, NON_TERMINAL_STATUSES))
+  }
+
+  /**
+   * All non-terminal jobs for a type, sorted newest first — singleton
+   * recovery uses this. `id DESC` is appended as a tiebreaker because
+   * `createdAt` resolution is milliseconds and two rows created in the same
+   * ms would otherwise leave SQLite's row order implementation-defined.
+   * uuidv7 ids are lexicographically monotonic within a millisecond so this
+   * gives a deterministic "newest" pick.
+   */
   async getNonTerminalByType(type: string): Promise<JobRow[]> {
     return this.getDb()
       .select()
       .from(jobTable)
       .where(and(eq(jobTable.type, type), inArray(jobTable.status, NON_TERMINAL_STATUSES)))
-      .orderBy(desc(jobTable.createdAt))
+      .orderBy(desc(jobTable.createdAt), desc(jobTable.id))
   }
 
   async resetToPendingByIds(jobIds: string[]): Promise<void> {
@@ -250,7 +285,7 @@ export class JobService {
         status: 'cancelled',
         finishedAt: now,
         updatedAt: now,
-        error: error ? JSON.stringify(error) : null
+        error
       })
       .where(inArray(jobTable.id, jobIds))
   }
@@ -295,7 +330,7 @@ export class JobService {
           status: 'cancelled',
           finishedAt: now,
           updatedAt: now,
-          error: error ? JSON.stringify(error) : null
+          error
         })
         .where(inArray(jobTable.id, nonRunningIds))
       transitioned = result.rowsAffected
@@ -368,6 +403,10 @@ export class JobService {
    * nothing for `nullsToUndefined` to translate anyway.
    */
   rowToSnapshot(row: JobRow): JobSnapshot {
+    // Drizzle's `text({ mode: 'json' })` columns return parsed JS values:
+    // input / output / metadata are already typed; error is `JobError | null`.
+    // `validateError` still runs because drizzle only checks JSON syntax,
+    // not schema shape (schema drift between app versions can leak through).
     return {
       id: row.id,
       type: row.type,
@@ -381,25 +420,36 @@ export class JobService {
       finishedAt: row.finishedAt != null ? timestampToISO(row.finishedAt) : null,
       attempt: row.attempt,
       maxAttempts: row.maxAttempts,
-      input: this.parseJson(row.input, undefined),
-      output: row.output != null ? this.parseJson(row.output, null) : null,
-      error: row.error != null ? (this.parseJson(row.error, null) as JobError | null) : null,
+      input: row.input,
+      output: row.output ?? null,
+      error: row.error != null ? this.validateError(row.id, row.error) : null,
       parentId: row.parentId,
       cancelRequested: row.cancelRequested,
-      metadata: (this.parseJson(row.metadata, {}) as Record<string, unknown>) ?? {},
+      metadata: row.metadata,
       timeoutMs: row.timeoutMs,
       createdAt: timestampToISO(row.createdAt),
       updatedAt: timestampToISO(row.updatedAt)
     }
   }
 
-  private parseJson(raw: string | null, fallback: unknown): unknown {
-    if (raw == null) return fallback
-    try {
-      return JSON.parse(raw)
-    } catch (err) {
-      logger.warn('Failed to parse JSON field', { rawHead: raw.slice(0, 100), error: (err as Error).message })
-      return fallback
+  /**
+   * Best-effort validate `error` shape against JobErrorSchema. On failure
+   * (schema drift, manual SQL edit) log a warn and return a sentinel so
+   * renderer code still receives a typed value rather than a structurally-
+   * invalid object.
+   */
+  private validateError(rowId: string, parsed: unknown): JobError | null {
+    if (parsed == null) return null
+    const result = JobErrorSchema.safeParse(parsed)
+    if (result.success) return result.data
+    logger.warn('Job error column failed schema validation — using sentinel', {
+      rowId,
+      issues: result.error.issues.map((i) => i.message)
+    })
+    return {
+      code: 'JOB_CORRUPT_ERROR_ROW',
+      message: 'Persisted error column did not match JobErrorSchema',
+      retryable: false
     }
   }
 }

@@ -39,13 +39,13 @@ Why not SchedulerService here? `registerInterval` is the project convention for 
 
 Use raw `setInterval` / `setTimeout` inside the owning module. The classic example is a protocol heartbeat whose interval is dictated by the server's `hello` frame and may change on reconnect. SchedulerService's `Trigger` type is deliberately closed to keep its surface small — heartbeats stay outside it.
 
-This is a **conscious design boundary**, not a deficiency. See plan section "明确不走 SchedulerService 的场景" for the rationale.
+This is a **conscious design boundary**, not a deficiency. The rationale: SchedulerService accepts only declarative triggers (`cron` / `interval` / `once`); a heartbeat whose cadence is dictated by the peer is fundamentally a state-machine concern that belongs to the owning module. Forcing it through SchedulerService would require imperative reschedule APIs that pollute the simple surface.
 
 ## Common mistakes
 
 - **Reaching for SchedulerService when `registerInterval` would suffice.** SchedulerService is for cross-cutting / cron / user-visible schedules. A service that just needs "sweep every 5 minutes for its own caches" should use `registerInterval`. SchedulerService adds nothing here and the timer becomes harder to reason about.
 - **Reaching for raw `setInterval` for a cron-style cadence.** "Once per day at 03:00 in user's timezone" is what `croner` solves. Don't write a 86_400_000 ms interval — it drifts and ignores DST.
-- **Building your own persistent schedule table.** The project has exactly one: `jobScheduleTable`, owned by JobManager. Need persistence? Build a JobHandler. Plan calls this rule out as a hard constraint — see "强制原则: SchedulerService 是项目内唯一的通用调度器".
+- **Building your own persistent schedule table.** The project has exactly one: `jobScheduleTable`, owned by JobManager. Need persistence? Build a JobHandler. **Hard constraint**: SchedulerService is the project's single general-purpose scheduler — every recurring task should reach time via JobManager (persistent) or SchedulerService (transient), never via a private parallel scheduler.
 - **Forgetting that SchedulerService is stateless.** It does not survive restart. Re-register in `onReady` if you call it directly.
 
 ## SchedulerService internal ID conventions

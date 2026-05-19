@@ -17,6 +17,7 @@ import {
 import { Mutex } from 'async-mutex'
 
 import type { JobPayloadOf, JobType } from './jobRegistry'
+import { computeBackoff } from './runtime/backoff'
 import { computeCatchUpAction } from './runtime/catchUp'
 import { DispatchQueue } from './runtime/DispatchQueue'
 import { runStartupRecovery } from './runtime/recovery'
@@ -44,10 +45,24 @@ const MAX_INPUT_BYTES = 1_048_576 // 1MB
 const MAX_CANCEL_REASON_CHARS = 500
 
 const DEFAULT_GLOBAL_MAX_CONCURRENCY = 50
+const DEFAULT_CANCEL_TIMEOUT_MS = 30_000
 const GC_INTERVAL_MS = 60 * 60 * 1000 // 1h
 const GC_TERMINAL_TTL_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
 const GC_KEEP_PER_TYPE = 100
 const DELAYED_PROMOTION_INTERVAL_MS = 5 * 60 * 1000 // 5min
+
+/**
+ * Sentinel thrown via `controller.abort(new JobHandlerTimeoutError())` when a
+ * handler's `timeoutMs` elapses. Used instead of string-matching `err.message`
+ * so a handler that throws a generic error containing "timeout" cannot be
+ * misclassified as a timeout.
+ */
+class JobHandlerTimeoutError extends Error {
+  constructor() {
+    super('JobHandlerTimeout')
+    this.name = 'JobHandlerTimeoutError'
+  }
+}
 
 interface FinishedResolver {
   resolve: (snapshot: JobSnapshot) => void
@@ -63,21 +78,33 @@ interface FinishedResolver {
  * See `docs/references/job-and-scheduler/` for the full architecture, the
  * four-layer lock model, and the handler authoring contract.
  *
- * Phase 1 boundaries:
- *   - GC hardcoded (1h sweep + 100 per type + 7-day TTL)
- *   - globalMaxConcurrency = 50 (not configurable)
- *   - No worker / child_process executor
+ * Current shape:
+ *   - GC sweep 1h, keep 100 per type, 7-day TTL — promote to per-handler
+ *     config once a concrete consumer asks
+ *   - globalMaxConcurrency = 50, fixed
+ *   - In-process executor only (no worker / child_process pool)
  *   - No DAG / DLQ / priority preemption
+ *
+ * Lifecycle: only same-phase dependencies are declared here. DbService and
+ * CacheService are BeforeReady and ordered automatically by the container.
  */
 @Injectable('JobManager')
 @ServicePhase(Phase.WhenReady)
-@DependsOn(['DbService', 'CacheService', 'SchedulerService'])
+@DependsOn(['SchedulerService'])
 export class JobManager extends BaseService {
   private readonly handlers = new Map<string, JobHandler>()
   private readonly queues = new Map<string, DispatchQueue>()
   private readonly globalDispatchMutex = new Mutex()
   private readonly abortControllers = new Map<string, AbortController>()
   private readonly finishedResolvers = new Map<string, FinishedResolver>()
+  /**
+   * In-flight execution markers populated by `spawnExecute` regardless of who
+   * enqueued the job. Used by `cancel()` to wait for the handler to release —
+   * this lives independent of `finishedResolvers` because cross-restart
+   * dispatch never builds a `handleFor` entry, leaving the resolver map empty
+   * even while a controller is registered.
+   */
+  private readonly inFlightExecuted = new Map<string, Promise<void>>()
   private readonly scheduleDisposables = new Map<string, Disposable>()
   private readonly globalMaxConcurrency = DEFAULT_GLOBAL_MAX_CONCURRENCY
 
@@ -91,13 +118,20 @@ export class JobManager extends BaseService {
     const stats = await runStartupRecovery(this.handlers)
     logger.info('Startup recovery complete', stats)
 
-    // Arm all enabled schedules so SchedulerService can fire them.
+    // Catch-up FIRST, then arm. Two reasons:
+    //   1. `detectAndDispatchOverdue` reads `lastRun` / `nextRun` from the DB
+    //      and is independent of in-process scheduler state — arming order
+    //      cannot change its decisions.
+    //   2. If we armed first, a cron schedule with `protect: true` could
+    //      still fire its natural calendar concurrently with our catch-up
+    //      enqueue (protect only blocks overlapping callbacks, not external
+    //      callers). Sequencing catch-up before arm guarantees the make-up
+    //      enqueue lands before croner's first natural fire.
     const schedules = await jobScheduleService.listEnabled()
+    await this.detectAndDispatchOverdue(schedules)
     for (const schedule of schedules) {
       this.armSchedule(schedule)
     }
-
-    await this.detectAndDispatchOverdue(schedules)
 
     // GC + delayed-promotion ticks. registerInterval auto-unrefs + clears on stop.
     this.registerInterval(() => void this.runGC(), GC_INTERVAL_MS)
@@ -150,6 +184,7 @@ export class JobManager extends BaseService {
     // rejecting their promises. Callers awaiting them keep an unsettled
     // Promise — their responsibility to wrap in a timeout / race.
     this.finishedResolvers.clear()
+    this.inFlightExecuted.clear()
     this.abortControllers.clear()
   }
 
@@ -158,6 +193,7 @@ export class JobManager extends BaseService {
     this.queues.clear()
     this.abortControllers.clear()
     this.finishedResolvers.clear()
+    this.inFlightExecuted.clear()
     this.scheduleDisposables.clear()
   }
 
@@ -211,11 +247,32 @@ export class JobManager extends BaseService {
       })
     }
 
-    const inputJson = JSON.stringify(input ?? null)
-    if (inputJson.length > MAX_INPUT_BYTES) {
+    // Drizzle serializes JSON columns automatically, but we still need the
+    // stringified length for the size guard — the 1MB cap is on the on-disk
+    // bytes, not on the live object shape.
+    const inputForSizing = input === undefined ? null : input
+    const inputJsonLength = JSON.stringify(inputForSizing).length
+    if (inputJsonLength > MAX_INPUT_BYTES) {
       throw this.makeError(JOB_ERROR_CODES.PAYLOAD_TOO_LARGE, 'Job input payload exceeds 1MB', {
         type,
-        sizeBytes: inputJson.length
+        sizeBytes: inputJsonLength
+      })
+    }
+
+    // Mirror EnqueueJobInputSchema's `min(1)` runtime check — internal TS
+    // callers do not get the Zod parse step, so the floor is enforced here so
+    // an in-process miscall cannot create a maxAttempts=0 row that never
+    // retries and surprises the operator.
+    if (opts.maxAttempts !== undefined && (!Number.isInteger(opts.maxAttempts) || opts.maxAttempts < 1)) {
+      throw this.makeError('JOB_INVALID_MAX_ATTEMPTS', 'maxAttempts must be an integer >= 1', {
+        type,
+        value: opts.maxAttempts
+      })
+    }
+    if (opts.timeoutMs !== undefined && (!Number.isInteger(opts.timeoutMs) || opts.timeoutMs < 1)) {
+      throw this.makeError('JOB_INVALID_TIMEOUT_MS', 'timeoutMs must be an integer >= 1', {
+        type,
+        value: opts.timeoutMs
       })
     }
 
@@ -250,10 +307,10 @@ export class JobManager extends BaseService {
       scheduledAt,
       attempt: 0,
       maxAttempts,
-      input: inputJson,
+      input: inputForSizing,
       parentId: opts.parentId ?? null,
       cancelRequested: false,
-      metadata: JSON.stringify(opts.metadata ?? {}),
+      metadata: opts.metadata ?? {},
       timeoutMs: opts.timeoutMs ?? handler.defaultTimeoutMs ?? null
     }
 
@@ -306,16 +363,15 @@ export class JobManager extends BaseService {
     const controller = this.abortControllers.get(jobId)
     if (controller) {
       controller.abort(new Error(`Job cancelled${reason ? `: ${reason}` : ''}`))
-      // Wait up to handler.cancelTimeoutMs (default 30s) for the handler to
-      // acknowledge. If the timeout fires the handler is misbehaving — force
-      // the job into 'cancelled' so the dispatch queue slot frees up.
       const snapshot = await jobService.getById(jobId)
       const handler = snapshot ? this.handlers.get(snapshot.type) : undefined
-      const graceMs = handler?.cancelTimeoutMs ?? 30_000
-      const finished = this.finishedResolvers.get(jobId)?.promise
-      if (finished) {
+      const graceMs = handler?.cancelTimeoutMs ?? DEFAULT_CANCEL_TIMEOUT_MS
+      // Wait on the executor signal — populated by `spawnExecute` regardless of
+      // who enqueued the job, so this works after cross-restart recovery too.
+      const executed = this.inFlightExecuted.get(jobId)
+      if (executed) {
         const timeout = new Promise<'timeout'>((resolve) => setTimeout(() => resolve('timeout'), graceMs))
-        const winner = await Promise.race([finished.then(() => 'done' as const), timeout])
+        const winner = await Promise.race([executed.then(() => 'done' as const), timeout])
         if (winner === 'timeout') {
           logger.warn('cancel timed out — forcing terminal state', { jobId, graceMs })
           await this.finalizeJob(jobId, 'cancelled', undefined, {
@@ -326,7 +382,11 @@ export class JobManager extends BaseService {
         }
       }
     } else {
-      // Not in-flight — pending / delayed → finalize directly as cancelled
+      // Not in-flight — pending / delayed → finalize directly as cancelled.
+      // (Once the pending/cancelRequested filter is in claimNextPendingTx,
+      // dispatch cannot promote a cancelRequested row to running between the
+      // tx above and this branch, so the snapshot here is guaranteed terminal-
+      // or-cancellable.)
       const snapshot = await jobService.getById(jobId)
       if (snapshot && (snapshot.status === 'pending' || snapshot.status === 'delayed')) {
         await this.finalizeJob(jobId, 'cancelled', undefined, {
@@ -472,9 +532,11 @@ export class JobManager extends BaseService {
 
   /**
    * Fire a schedule immediately (extra one-shot — does not affect the natural
-   * fire calendar). For cron triggers calls croner's `.trigger()`; for
-   * interval / once triggers (which have no croner backing) enqueues a job
-   * directly using the schedule's `jobInputTemplate`.
+   * fire calendar). For cron triggers calls croner's `.trigger()` (the armed
+   * callback handles `markFired`). For interval / once triggers or when the
+   * SchedulerService entry is missing (e.g. not yet re-armed after restart),
+   * enqueues directly using `jobInputTemplate` and writes `markFired`
+   * synchronously to keep `lastRun` consistent with the cron path.
    *
    * @param id - Schedule row id
    * @returns `true` if fired; `false` if no schedule exists for `id`
@@ -482,13 +544,20 @@ export class JobManager extends BaseService {
   async triggerJobScheduleNowById(id: string): Promise<boolean> {
     const schedule = await jobScheduleService.getById(id)
     if (!schedule) return false
-    // Try Scheduler's native trigger first (works for cron triggers).
     const triggered = await application.get('SchedulerService').triggerNow(`schedule:${id}`)
     if (triggered) return true
-    // For interval/once schedules, enqueue directly using the schedule's template.
+    // Fallback path (non-cron OR cron not currently armed in this process).
     await this.enqueue(schedule.type as JobType, schedule.jobInputTemplate as never, {
       scheduleId: schedule.id
     })
+    try {
+      await jobScheduleService.markFired(schedule.id, Date.now(), null)
+    } catch (err) {
+      logger.warn('markFired failed after manual trigger — lastRun may be stale', {
+        scheduleId: schedule.id,
+        err: (err as Error).message
+      })
+    }
     return true
   }
 
@@ -523,7 +592,7 @@ export class JobManager extends BaseService {
   /**
    * List schedule snapshots matching the filter.
    *
-   * @param filter - Type / name / enabled constraints (see `jobScheduleService.listAll`)
+   * @param filter - `type` / `enabled` constraints + `limit` / `offset` paging (see `jobScheduleService.listAll`)
    * @returns Matching snapshots
    */
   async listJobSchedules(
@@ -639,11 +708,11 @@ export class JobManager extends BaseService {
    * Get or create a DispatchQueue.
    *
    * Concurrency is set at first creation and NOT updated on subsequent calls
-   * with the same queueName. If the same queueName is reached via different
-   * handlers with different `defaultConcurrency`, the first enqueue wins.
-   * Phase 1 follows the plan convention "one type ↔ one queue ↔ one
-   * concurrency", so this is unobservable in practice. Documented for the
-   * future-proof reader.
+   * with the same queueName. Project convention is "one type ↔ one queue ↔
+   * one concurrency", so a single owning handler defines the cap and reuse
+   * with a different `defaultConcurrency` is a misuse. The first enqueue
+   * wins by design; documented for the reader who might be tempted to
+   * "fix" it.
    */
   private ensureQueue(name: string, concurrency: number): DispatchQueue {
     let queue = this.queues.get(name)
@@ -738,28 +807,37 @@ export class JobManager extends BaseService {
     const controller = new AbortController()
     this.abortControllers.set(row.id, controller)
 
+    let resolveExecuted!: () => void
+    const executed = new Promise<void>((resolve) => {
+      resolveExecuted = resolve
+    })
+    this.inFlightExecuted.set(row.id, executed)
+
     let timeoutHandle: ReturnType<typeof setTimeout> | undefined
     if (row.timeoutMs && row.timeoutMs > 0) {
       timeoutHandle = setTimeout(() => {
-        controller.abort(new Error('JobHandlerTimeout'))
+        controller.abort(new JobHandlerTimeoutError())
       }, row.timeoutMs)
       timeoutHandle.unref?.()
     }
 
+    const initialMetadata = Object.freeze(row.metadata)
     const ctx: JobContext = {
       jobId: row.id,
-      input: this.parseJson(row.input, undefined),
+      input: row.input,
       attempt: row.attempt,
       signal: controller.signal,
-      metadata: (this.parseJson(row.metadata, {}) ?? {}) as Record<string, unknown>,
+      metadata: initialMetadata,
       patchMetadata: async (patch) => {
-        const current = (this.parseJson(row.metadata, {}) ?? {}) as Record<string, unknown>
-        const merged = { ...current, ...patch }
-        row.metadata = JSON.stringify(merged)
+        // Read latest from row.metadata so sequential patches accumulate.
+        // The DB write happens FIRST — if it throws, row.metadata stays in
+        // sync with the durable state and the handler observes the failure.
+        const merged = { ...row.metadata, ...patch }
         const db = application.get('DbService').getDb()
         await db.transaction(async (tx) => {
-          await jobService.setMetadataTx(tx, row.id, row.metadata)
+          await jobService.setMetadataTx(tx, row.id, merged)
         })
+        row.metadata = merged
       },
       reportProgress: (progress, detail) => {
         application.get('CacheService').setShared(`${JOB_PROGRESS_KEY_PREFIX}${row.id}`, { progress, detail }, 60_000)
@@ -774,31 +852,44 @@ export class JobManager extends BaseService {
         await this.finalizeJob(row.id, 'completed', output, null)
       } catch (err) {
         if (timeoutHandle) clearTimeout(timeoutHandle)
-        const isAbort = this.isAbortError(err)
-        const error: JobError = isAbort
-          ? {
-              code: JOB_ERROR_CODES.CANCELLED,
-              message: (err as Error).message || 'Cancelled',
-              retryable: false
-            }
-          : {
-              code: this.isTimeoutError(err) ? JOB_ERROR_CODES.HANDLER_TIMEOUT : JOB_ERROR_CODES.HANDLER_THREW,
-              message: (err as Error).message || String(err),
-              retryable: true
-            }
+        // Classify via controller state, not error message — handler errors with
+        // strings like "abort" or "timeout" cannot fool the classifier this way.
+        const isAbort = controller.signal.aborted
+        const abortReason = controller.signal.reason
+        const isTimeout = isAbort && abortReason instanceof JobHandlerTimeoutError
+        // For user-initiated cancellation the abort reason (built by `cancel()`
+        // / `cancelMany()`) holds the human message — prefer it over whatever
+        // string the handler chose to throw, so renderers see e.g.
+        // "Job cancelled: user requested" instead of a generic "AbortError".
+        const cancelMessage = abortReason instanceof Error ? abortReason.message : null
+        const error: JobError =
+          isAbort && !isTimeout
+            ? {
+                code: JOB_ERROR_CODES.CANCELLED,
+                message: cancelMessage || (err as Error).message || 'Cancelled',
+                retryable: false
+              }
+            : {
+                code: isTimeout ? JOB_ERROR_CODES.HANDLER_TIMEOUT : JOB_ERROR_CODES.HANDLER_THREW,
+                message: (err as Error).message || String(err),
+                retryable: true
+              }
 
         const retryPolicy = handler.defaultRetryPolicy ?? DEFAULT_RETRY_POLICY
-        const canRetry = !isAbort && error.retryable && row.attempt + 1 < row.maxAttempts
+        const userCancel = isAbort && !isTimeout
+        const canRetry = !userCancel && error.retryable && row.attempt + 1 < row.maxAttempts
 
         if (canRetry) {
-          const backoffMs = this.computeBackoff(retryPolicy, row.attempt + 1)
+          const backoffMs = computeBackoff(retryPolicy, row.attempt + 1)
           const scheduledAt = Date.now() + backoffMs
           await this.scheduleRetry(row.id, row.attempt + 1, scheduledAt, error, row.queue)
         } else {
-          await this.finalizeJob(row.id, isAbort ? 'cancelled' : 'failed', undefined, error)
+          await this.finalizeJob(row.id, userCancel ? 'cancelled' : 'failed', undefined, error)
         }
       } finally {
         this.abortControllers.delete(row.id)
+        this.inFlightExecuted.delete(row.id)
+        resolveExecuted()
       }
     })()
   }
@@ -809,10 +900,11 @@ export class JobManager extends BaseService {
    * `JobHandle.finished` promise, invokes `handler.onSettled`, and kicks the
    * queue once more in case another pending job is waiting for the freed slot.
    *
-   * Tx failure here is logged but not thrown — the job will be re-detected on
-   * the next process restart by the recovery pass (it stays in `running`
-   * until then). Better to leak one row than to throw inside the handler's
-   * void-returning catch path.
+   * If the terminal-write tx fails we synthesize a `failed` snapshot, kick the
+   * caller's queue, and resolve any pending handle with the synthetic shape.
+   * The DB row stays mismatched until the next process restart's recovery
+   * pass — but the in-memory queue slot frees up and `await handle.finished`
+   * unblocks instead of stranding the caller.
    */
   private async finalizeJob(
     jobId: string,
@@ -821,25 +913,31 @@ export class JobManager extends BaseService {
     error: JobError | null
   ): Promise<void> {
     const db = application.get('DbService').getDb()
+    let txFailed: Error | undefined
     try {
       await db.transaction(async (tx) => {
         await jobService.setTerminalTx(tx, jobId, status, output, error)
       })
     } catch (err) {
-      logger.error('finalizeJob: tx failed — job may stay running until next recovery', { jobId, status, err })
+      txFailed = err as Error
+      logger.error('finalizeJob: tx failed — synthesizing failed snapshot to release slot', { jobId, status, err })
+    }
+
+    const persisted = await jobService.getById(jobId)
+    const snapshot: JobSnapshot | null = persisted ?? (txFailed ? this.synthesizeFailedSnapshot(jobId, txFailed) : null)
+
+    if (!snapshot) {
+      // No row persisted AND no synthesis context — extremely rare (GC + delete
+      // race after a successful terminal write). Warn and resolve any waiting
+      // handle with a synthetic missing-row error to avoid stranding callers.
+      logger.warn('finalizeJob: row disappeared after terminal write', { jobId, status })
+      const synthetic = this.synthesizeFailedSnapshot(jobId, new Error('row disappeared after terminal write'))
+      this.resolveAndDispatch(jobId, synthetic)
       return
     }
 
-    const snapshot = await jobService.getById(jobId)
-    if (!snapshot) return
-
-    this.publishState(snapshot)
-
-    const resolver = this.finishedResolvers.get(jobId)
-    if (resolver) {
-      resolver.resolve(snapshot)
-      this.finishedResolvers.delete(jobId)
-    }
+    if (!txFailed) this.publishState(snapshot)
+    this.resolveAndDispatch(jobId, snapshot)
 
     const handler = this.handlers.get(snapshot.type)
     if (handler?.onSettled) {
@@ -848,7 +946,7 @@ export class JobManager extends BaseService {
           jobId,
           type: snapshot.type,
           scheduleId: snapshot.scheduleId,
-          status,
+          status: snapshot.status as 'completed' | 'failed' | 'cancelled',
           output: snapshot.output,
           error: snapshot.error,
           attempt: snapshot.attempt
@@ -860,9 +958,53 @@ export class JobManager extends BaseService {
         })
       }
     }
+  }
 
-    // A slot just freed — dispatch in case another job is waiting.
+  /** Resolve any waiting `JobHandle.finished` and kick the freed queue slot. */
+  private resolveAndDispatch(jobId: string, snapshot: JobSnapshot): void {
+    const resolver = this.finishedResolvers.get(jobId)
+    if (resolver) {
+      resolver.resolve(snapshot)
+      this.finishedResolvers.delete(jobId)
+    }
     void this.dispatch(snapshot.queue)
+  }
+
+  /**
+   * Build an in-memory failed snapshot for callers awaiting `handle.finished`
+   * when the DB write or row-fetch failed. The DB row may still claim
+   * `running` until recovery — that's expected; the synthesis only exists to
+   * unblock awaiters and free the in-memory slot.
+   */
+  private synthesizeFailedSnapshot(jobId: string, cause: Error): JobSnapshot {
+    const nowIso = new Date().toISOString()
+    return {
+      id: jobId,
+      type: 'unknown',
+      status: 'failed',
+      priority: 0,
+      queue: 'unknown',
+      idempotencyKey: null,
+      scheduleId: null,
+      scheduledAt: nowIso,
+      startedAt: null,
+      finishedAt: nowIso,
+      attempt: 0,
+      maxAttempts: 0,
+      input: undefined,
+      output: null,
+      error: {
+        code: 'JOB_FINALIZE_TX_FAILED',
+        message: cause.message,
+        retryable: true
+      },
+      parentId: null,
+      cancelRequested: true,
+      metadata: {},
+      timeoutMs: null,
+      createdAt: nowIso,
+      updatedAt: nowIso
+    }
   }
 
   /**
@@ -897,15 +1039,21 @@ export class JobManager extends BaseService {
 
   /**
    * Wire a `jobScheduleTable` row into SchedulerService so each fire enqueues
-   * a new Job. On every fire we also call `markFired` to update `lastRun` and
-   * `nextRun` — those columns drive overdue detection on next startup. A
-   * pre-existing disposable for the same id is disposed first (e.g. when a
-   * schedule is re-enabled or its trigger changes mid-process).
+   * a new Job. On every fire `markFired` updates `lastRun` and `nextRun` —
+   * those columns drive overdue detection on next startup. A pre-existing
+   * disposable for the same id is disposed first (e.g. when a schedule is
+   * re-enabled).
+   *
+   * `markFired` runs unconditionally in a finally block so a deterministic
+   * enqueue failure (`JOB_PAYLOAD_TOO_LARGE`, unregistered type, DB
+   * constraint) cannot leave `nextRun` stuck null and form an infinite
+   * "always overdue → catch-up enqueue → fails again" loop after restart.
+   * The error log keeps `{ code, stack }` so Sentry can bucket distinct
+   * failure modes instead of flattening to one opaque string.
    */
   private armSchedule(schedule: JobScheduleSnapshot): void {
     if (!schedule.enabled) return
     if (this.scheduleDisposables.has(schedule.id)) {
-      // Replace existing disposable (e.g. on edit / re-enable)
       this.scheduleDisposables.get(schedule.id)?.dispose()
       this.scheduleDisposables.delete(schedule.id)
     }
@@ -914,14 +1062,30 @@ export class JobManager extends BaseService {
     const scheduleKey = `schedule:${schedule.id}`
     const trigger: Trigger = schedule.trigger
     const disp = scheduler.registerSchedule(scheduleKey, trigger, async () => {
+      const firedAt = Date.now()
       try {
         await this.enqueue(schedule.type as JobType, schedule.jobInputTemplate as never, {
           scheduleId: schedule.id
         })
-        const nextRun = scheduler.getNextRun(scheduleKey)
-        await jobScheduleService.markFired(schedule.id, Date.now(), nextRun?.getTime() ?? null)
       } catch (err) {
-        logger.error('Schedule fire failed', { scheduleId: schedule.id, err: (err as Error).message })
+        const e = err as Error & { code?: string }
+        logger.error('Schedule fire failed', {
+          scheduleId: schedule.id,
+          type: schedule.type,
+          code: e.code,
+          message: e.message,
+          stack: e.stack
+        })
+      } finally {
+        try {
+          const nextRun = scheduler.getNextRun(scheduleKey)
+          await jobScheduleService.markFired(schedule.id, firedAt, nextRun?.getTime() ?? null)
+        } catch (markErr) {
+          logger.warn('markFired failed — nextRun may be stale', {
+            scheduleId: schedule.id,
+            err: (markErr as Error).message
+          })
+        }
       }
     })
     this.scheduleDisposables.set(schedule.id, disp)
@@ -931,6 +1095,12 @@ export class JobManager extends BaseService {
    * Schedule a `once` registration in the Scheduler so the delayed job gets
    * promoted + dispatched at its scheduledAt time. For `pending` jobs this
    * fast-path is skipped — the normal dispatch loop handles them.
+   *
+   * Uses the reserved `job:${jobId}` SchedulerService id prefix (see the
+   * reserved-prefix table in `docs/references/job-and-scheduler/scheduler-usage.md`).
+   * The disposable returned by `registerSchedule` is intentionally discarded —
+   * cancel() drives termination via the dispatch path rather than disposing
+   * the timer, and `scheduleOnce` self-cleans from its map before firing.
    */
   private armDelayedJob(snapshot: JobSnapshot): void {
     const scheduler = application.get('SchedulerService')
@@ -983,13 +1153,26 @@ export class JobManager extends BaseService {
 
   /**
    * Prune terminal rows: drop anything older than the 7-day TTL, then drop
-   * rows beyond the per-type keep-latest threshold (100). Hardcoded for
-   * Phase 1 — turn into a per-handler config once a real consumer asks.
+   * rows beyond the per-type keep-latest threshold (100). The two steps run
+   * in independent try/catch so a single failed prune (table locked, batch
+   * too large) does not abort the whole sweep silently — `registerInterval`'s
+   * exception isolation prevents a crash but does not log, so each step
+   * surfaces its own error.
    */
   private async runGC(): Promise<void> {
     const cutoff = Date.now() - GC_TERMINAL_TTL_MS
-    const byTtl = await jobService.pruneTerminalOlderThan(cutoff)
-    const byCount = await jobService.pruneTerminalKeepLatestPerType(GC_KEEP_PER_TYPE)
+    let byTtl = 0
+    let byCount = 0
+    try {
+      byTtl = await jobService.pruneTerminalOlderThan(cutoff)
+    } catch (err) {
+      logger.error('GC: pruneTerminalOlderThan failed', { err: (err as Error).message })
+    }
+    try {
+      byCount = await jobService.pruneTerminalKeepLatestPerType(GC_KEEP_PER_TYPE)
+    } catch (err) {
+      logger.error('GC: pruneTerminalKeepLatestPerType failed', { err: (err as Error).message })
+    }
     if (byTtl + byCount > 0) {
       logger.info('GC pass', { byTtl, byCount })
     }
@@ -1032,37 +1215,6 @@ export class JobManager extends BaseService {
   /** Push a job snapshot to the cross-window shared cache (renderer hooks read this). */
   private publishState(snapshot: JobSnapshot): void {
     application.get('CacheService').setShared(`${JOB_STATE_KEY_PREFIX}${snapshot.id}`, snapshot, 60_000)
-  }
-
-  /**
-   * Retry delay in ms for the given attempt number.
-   *   - `none`: 0
-   *   - `fixed`: clamp(baseDelay, maxDelay)
-   *   - `exponential`: clamp(base × 2^(attempt-1), maxDelay)
-   */
-  private computeBackoff(policy: RetryPolicy, attempt: number): number {
-    if (policy.backoff === 'none') return 0
-    if (policy.backoff === 'fixed') return Math.min(policy.baseDelayMs, policy.maxDelayMs)
-    // exponential: base * 2^(attempt-1)
-    const exp = policy.baseDelayMs * Math.pow(2, Math.max(0, attempt - 1))
-    return Math.min(exp, policy.maxDelayMs)
-  }
-
-  private parseJson(raw: string | null, fallback: unknown): unknown {
-    if (raw == null) return fallback
-    try {
-      return JSON.parse(raw)
-    } catch {
-      return fallback
-    }
-  }
-
-  private isAbortError(err: unknown): boolean {
-    return err instanceof Error && (err.name === 'AbortError' || err.message.toLowerCase().includes('abort'))
-  }
-
-  private isTimeoutError(err: unknown): boolean {
-    return err instanceof Error && err.message.includes('Timeout')
   }
 
   private makeError(code: string, message: string, params?: Record<string, unknown>): Error {

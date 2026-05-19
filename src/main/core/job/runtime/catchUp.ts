@@ -26,11 +26,16 @@ export interface CatchUpAction {
  * handler registered for its type. Pure function — JobManager owns the
  * iteration and the actual side-effect dispatch.
  *
- * "Overdue" is decided by `schedule.nextRun <= now` — JobManager / Scheduler
- * keep `nextRun` updated. If `nextRun` is null (schedule was never armed or
- * one-shot already fired), the schedule is considered not overdue.
+ * "Overdue" depends on trigger kind:
+ *   - cron: `schedule.nextRun <= now` (Scheduler / JobManager keep this updated)
+ *   - interval: `(lastRun ?? createdAt) + ms <= now` — Scheduler does not
+ *     compute a nextRun for non-cron triggers, so the catch-up branch falls
+ *     back to lastRun + interval. Without this, an interval schedule with
+ *     `after-startup` would never enqueue a make-up job.
+ *   - once: never overdue here. A `once` trigger that already fired
+ *     consumed itself; if it never fired, the SchedulerService timer will.
  *
- * Phase 1 catch-up policies:
+ * Catch-up policies:
  *   - skip-missed   : do NOT enqueue, but still emit missEvent (observability).
  *   - after-startup : enqueue once after `minutes * 60_000` ms; emit missEvent.
  *
@@ -38,8 +43,7 @@ export interface CatchUpAction {
  */
 export function computeCatchUpAction(schedule: JobScheduleSnapshot, handler: JobHandler, nowMs: number): CatchUpAction {
   const lastRunMs = schedule.lastRun ? Date.parse(schedule.lastRun) : null
-  const nextRunMs = schedule.nextRun ? Date.parse(schedule.nextRun) : null
-  const isOverdue = nextRunMs !== null && nextRunMs <= nowMs
+  const isOverdue = isScheduleOverdue(schedule, lastRunMs, nowMs)
 
   if (!isOverdue) {
     return { scheduleId: schedule.id, type: schedule.type, shouldEnqueue: false, enqueueDelayMs: 0, missEvent: null }
@@ -65,4 +69,25 @@ export function computeCatchUpAction(schedule: JobScheduleSnapshot, handler: Job
   const delayMs = schedule.catchUpPolicy.minutes * 60_000
   logger.debug('Catch-up: after-startup', { scheduleId: schedule.id, type: schedule.type, delayMs })
   return { scheduleId: schedule.id, type: schedule.type, shouldEnqueue: true, enqueueDelayMs: delayMs, missEvent }
+}
+
+/**
+ * Per-trigger overdue rule. Separated out so the trigger-kind switch is one
+ * place and computeCatchUpAction stays focused on policy.
+ */
+function isScheduleOverdue(schedule: JobScheduleSnapshot, lastRunMs: number | null, nowMs: number): boolean {
+  const trigger = schedule.trigger
+  if (trigger.kind === 'cron') {
+    const nextRunMs = schedule.nextRun ? Date.parse(schedule.nextRun) : null
+    return nextRunMs !== null && nextRunMs <= nowMs
+  }
+  if (trigger.kind === 'interval') {
+    // Anchor: lastRun (if ever fired) else createdAt. Scheduler does not write
+    // nextRun for non-cron triggers, so the anchor + ms math is the authority.
+    const anchorMs = lastRunMs ?? Date.parse(schedule.createdAt)
+    return anchorMs + trigger.ms <= nowMs
+  }
+  // once: armed in SchedulerService via setTimeout. If it hasn't fired by now,
+  // the timer is still pending — not overdue from catch-up's perspective.
+  return false
 }

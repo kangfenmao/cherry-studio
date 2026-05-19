@@ -7,13 +7,16 @@ import { loggerService } from '@logger'
 import { DataApiErrorFactory } from '@shared/data/api'
 import {
   type CatchUpPolicy,
+  CatchUpPolicySchema,
   type CreateJobScheduleDto,
   JOB_ERROR_CODES,
   JobScheduleNameAtomSchema,
   type JobScheduleSnapshot,
   type Trigger,
+  TriggerSchema,
   type UpdateJobScheduleDto
 } from '@shared/data/api/schemas/jobs'
+import { Mutex } from 'async-mutex'
 import { and, asc, eq, type SQL } from 'drizzle-orm'
 
 const logger = loggerService.withContext('JobScheduleService')
@@ -35,8 +38,26 @@ export interface JobScheduleListFilter {
  * `create()` instead.
  */
 export class JobScheduleService {
+  /**
+   * Per-type mutexes that serialize the single-instance existence check + insert
+   * in `create()`. SQLite's unique index on `(type, name)` cannot enforce
+   * "at most one schedule when name IS NULL" because every NULL is distinct;
+   * without this mutex two concurrent `registerJobSchedule` calls for the same
+   * unnamed type could both pass the existence check and double-insert.
+   */
+  private readonly singletonCreateMutexes = new Map<string, Mutex>()
+
   private getDb(): DbOrTx {
     return application.get('DbService').getDb()
+  }
+
+  private getSingletonMutex(type: string): Mutex {
+    let m = this.singletonCreateMutexes.get(type)
+    if (!m) {
+      m = new Mutex()
+      this.singletonCreateMutexes.set(type, m)
+    }
+    return m
   }
 
   // ---------------- Read ----------------
@@ -137,8 +158,13 @@ export class JobScheduleService {
           `Invalid schedule name: ${parsed.error.issues.map((i) => i.message).join('; ')}`
         )
       }
-    } else {
-      // Single-instance invariant: when name is null this type must have no schedules.
+      return this.insertSchedule(dto)
+    }
+    // Single-instance invariant: when name is null the type must have no
+    // schedules. Wrap existence check + insert in a per-type mutex so two
+    // concurrent registrations cannot both observe "no existing" and both
+    // insert (SQLite NULL uniqueness cannot enforce this at the index level).
+    return this.getSingletonMutex(dto.type).runExclusive(async () => {
       const existing = await this.getDb()
         .select({ id: jobScheduleTable.id })
         .from(jobScheduleTable)
@@ -149,16 +175,22 @@ export class JobScheduleService {
           `${JOB_ERROR_CODES.SCHEDULE_SINGLETON_EXISTS}: Cannot create unnamed schedule for type "${dto.type}" — it already has schedules. Provide a name to make it multi-instance.`
         )
       }
-    }
+      return this.insertSchedule(dto)
+    })
+  }
 
+  private async insertSchedule(dto: CreateJobScheduleDto): Promise<JobScheduleSnapshot> {
+    // Drizzle's `text({ mode: 'json' })` columns accept JS values directly —
+    // no manual JSON.stringify needed. The ORM serializes on write and parses
+    // on read.
     const insertData: InsertJobScheduleRow = {
       type: dto.type,
       name: dto.name ?? null,
-      trigger: JSON.stringify(dto.trigger),
-      jobInputTemplate: JSON.stringify(dto.jobInputTemplate),
-      catchUpPolicy: JSON.stringify(dto.catchUpPolicy),
+      trigger: dto.trigger,
+      jobInputTemplate: dto.jobInputTemplate,
+      catchUpPolicy: dto.catchUpPolicy,
       enabled: dto.enabled ?? true,
-      metadata: JSON.stringify(dto.metadata ?? {})
+      metadata: dto.metadata ?? {}
     }
 
     const result = await withSqliteErrors(() => this.getDb().insert(jobScheduleTable).values(insertData).returning(), {
@@ -187,11 +219,11 @@ export class JobScheduleService {
 
     const updateData: Partial<InsertJobScheduleRow> = { updatedAt: Date.now() }
     if (patch.name !== undefined) updateData.name = patch.name
-    if (patch.trigger !== undefined) updateData.trigger = JSON.stringify(patch.trigger)
-    if (patch.jobInputTemplate !== undefined) updateData.jobInputTemplate = JSON.stringify(patch.jobInputTemplate)
-    if (patch.catchUpPolicy !== undefined) updateData.catchUpPolicy = JSON.stringify(patch.catchUpPolicy)
+    if (patch.trigger !== undefined) updateData.trigger = patch.trigger
+    if (patch.jobInputTemplate !== undefined) updateData.jobInputTemplate = patch.jobInputTemplate
+    if (patch.catchUpPolicy !== undefined) updateData.catchUpPolicy = patch.catchUpPolicy
     if (patch.enabled !== undefined) updateData.enabled = patch.enabled
-    if (patch.metadata !== undefined) updateData.metadata = JSON.stringify(patch.metadata)
+    if (patch.metadata !== undefined) updateData.metadata = patch.metadata
 
     const result = await withSqliteErrors(
       () => this.getDb().update(jobScheduleTable).set(updateData).where(eq(jobScheduleTable.id, id)).returning(),
@@ -238,29 +270,51 @@ export class JobScheduleService {
    * boundary clean. See JobService.rowToSnapshot for the rationale.
    */
   rowToSnapshot(row: JobScheduleRow): JobScheduleSnapshot {
+    // Drizzle's `text({ mode: 'json' })` columns return parsed JS values.
+    // `validateTrigger` / `validateCatchUpPolicy` still apply for **shape**
+    // validation — they guard against schema drift between app versions, a
+    // class of corruption JSON-syntax-parsing cannot catch.
     return {
       id: row.id,
       type: row.type,
       name: row.name,
-      trigger: this.parseJson(row.trigger) as Trigger,
-      jobInputTemplate: this.parseJson(row.jobInputTemplate),
+      trigger: this.validateTrigger(row.id, row.trigger),
+      jobInputTemplate: row.jobInputTemplate,
       enabled: row.enabled,
       nextRun: row.nextRun != null ? timestampToISO(row.nextRun) : null,
       lastRun: row.lastRun != null ? timestampToISO(row.lastRun) : null,
-      catchUpPolicy: this.parseJson(row.catchUpPolicy) as CatchUpPolicy,
-      metadata: (this.parseJson(row.metadata) as Record<string, unknown>) ?? {},
+      catchUpPolicy: this.validateCatchUpPolicy(row.id, row.catchUpPolicy),
+      metadata: row.metadata,
       createdAt: timestampToISO(row.createdAt),
       updatedAt: timestampToISO(row.updatedAt)
     }
   }
 
-  private parseJson(raw: string): unknown {
-    try {
-      return JSON.parse(raw)
-    } catch (err) {
-      logger.warn('Failed to parse JSON field', { rawHead: raw.slice(0, 100), error: (err as Error).message })
-      return {}
-    }
+  /**
+   * Best-effort validate a row's trigger shape. A row that fails validation
+   * (schema drift across app versions, manual DB edit) logs a warn and falls
+   * back to a sentinel `once`-at-epoch trigger so SchedulerService does not
+   * silently default to `interval` with `ms: undefined` (its else branch).
+   * The sentinel will fire immediately on next arm — visible.
+   */
+  private validateTrigger(id: string, parsed: unknown): Trigger {
+    const result = TriggerSchema.safeParse(parsed)
+    if (result.success) return result.data
+    logger.warn('JobSchedule trigger failed schema validation — using once-at-epoch sentinel', {
+      id,
+      issues: result.error.issues.map((i) => i.message)
+    })
+    return { kind: 'once', at: 0 }
+  }
+
+  private validateCatchUpPolicy(id: string, parsed: unknown): CatchUpPolicy {
+    const result = CatchUpPolicySchema.safeParse(parsed)
+    if (result.success) return result.data
+    logger.warn('JobSchedule catchUpPolicy failed schema validation — defaulting to skip-missed', {
+      id,
+      issues: result.error.issues.map((i) => i.message)
+    })
+    return { kind: 'skip-missed' }
   }
 }
 

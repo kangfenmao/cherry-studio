@@ -1,3 +1,4 @@
+import type { CatchUpPolicy, JobError, Trigger } from '@shared/data/api/schemas/jobs'
 import { sql } from 'drizzle-orm'
 import { check, foreignKey, index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
 
@@ -23,13 +24,13 @@ export const jobScheduleTable = sqliteTable(
     id: uuidPrimaryKey(),
     type: text().notNull(),
     name: text(),
-    trigger: text().notNull(),
-    jobInputTemplate: text().notNull(),
+    trigger: text({ mode: 'json' }).$type<Trigger>().notNull(),
+    jobInputTemplate: text({ mode: 'json' }).$type<unknown>().notNull(),
     enabled: integer({ mode: 'boolean' }).notNull().default(true),
     nextRun: integer(),
     lastRun: integer(),
-    catchUpPolicy: text().notNull(),
-    metadata: text().notNull().default('{}'),
+    catchUpPolicy: text({ mode: 'json' }).$type<CatchUpPolicy>().notNull(),
+    metadata: text({ mode: 'json' }).$type<Record<string, unknown>>().notNull().default({}),
     ...createUpdateTimestamps
   },
   (t) => [
@@ -70,12 +71,12 @@ export const jobTable = sqliteTable(
     finishedAt: integer(),
     attempt: integer().notNull().default(0),
     maxAttempts: integer().notNull().default(3),
-    input: text().notNull(),
-    output: text(),
-    error: text(),
+    input: text({ mode: 'json' }).$type<unknown>().notNull(),
+    output: text({ mode: 'json' }).$type<unknown>(),
+    error: text({ mode: 'json' }).$type<JobError>(),
     parentId: text(),
     cancelRequested: integer({ mode: 'boolean' }).notNull().default(false),
-    metadata: text().notNull().default('{}'),
+    metadata: text({ mode: 'json' }).$type<Record<string, unknown>>().notNull().default({}),
     timeoutMs: integer(),
     ...createUpdateTimestamps
   },

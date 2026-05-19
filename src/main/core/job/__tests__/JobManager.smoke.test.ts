@@ -23,6 +23,8 @@ import { MockMainCacheServiceExport, MockMainCacheServiceUtils } from '@test-moc
 import { MockMainDbServiceExport } from '@test-mocks/main/DbService'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
+import { drainTrailingDispatch as drainHelper } from './_helpers'
+
 vi.mock('@application', async () => {
   const mod = await import('@test-mocks/main/application')
   return mod.mockApplicationFactory()
@@ -70,31 +72,10 @@ function makeEchoHandler(): JobHandler<EchoInput> {
   }
 }
 
-/**
- * Wait until JobManager's per-queue Layer 1 mutex is free for every known
- * queue, i.e. no dispatch transaction is currently in flight. JobManager
- * fires `void this.dispatch(queue)` from finalizeJob — after `await
- * handle.finished` resolves the caller, that follow-up tx is still in
- * flight against libsql. If the next operation (or the next test's
- * truncate) hits db.transaction before it completes, libsql client-ts
- * raises SQLITE_BUSY (upstream issue #288: busy_timeout not effective
- * for async transactions).
- *
- * Polling the queue mutex is more reliable than a fixed sleep — once the
- * mutex is free, the trailing tx has truly committed and a follow-up
- * write is safe.
- */
+// Local thin alias so existing call sites stay short — implementation lives
+// in __tests__/_helpers.ts and is shared with the integration suite.
 async function drainTrailingDispatch(): Promise<void> {
-  // Acquire+release every queue's mutex — guarantees no dispatch tx is mid-flight.
-  const queues: Map<string, { mutex: { acquire: () => Promise<() => void> } }> = (
-    jobManager as unknown as { queues: typeof queues }
-  ).queues
-  for (const q of queues.values()) {
-    const release = await q.mutex.acquire()
-    release()
-  }
-  // Plus a microtask flush so any queueMicrotask-scheduled follow-ups land.
-  for (let i = 0; i < 3; i++) await new Promise((r) => setImmediate(r))
+  return drainHelper(jobManager)
 }
 
 describe('JobManager smoke (dummy.echo)', () => {
@@ -128,8 +109,11 @@ describe('JobManager smoke (dummy.echo)', () => {
   })
 
   afterAll(async () => {
-    await jobManager._doStop().catch(() => {})
-    await scheduler._doStop().catch(() => {})
+    // Surface shutdown errors rather than swallowing them — a regression in
+    // `_doStop` (e.g. cancel-timeout misclassified, dangling promise) should
+    // fail the suite, not hide behind a silent catch.
+    await jobManager._doStop()
+    await scheduler._doStop()
     BaseService.resetInstances()
   })
 
@@ -182,7 +166,11 @@ describe('JobManager smoke (dummy.echo)', () => {
 
     expect(settled.status).toBe('cancelled')
     expect(settled.cancelRequested).toBe(true)
-    expect(settled.error?.code).toBe('JOB_CANCELLED')
+    expect(settled.error).toMatchObject({
+      code: 'JOB_CANCELLED',
+      retryable: false,
+      message: expect.stringContaining('user requested')
+    })
   })
 
   it('reuses an existing handle when idempotencyKey matches a non-terminal job', async () => {
