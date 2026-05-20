@@ -1,5 +1,5 @@
 /**
- * Schedule-control unit tests (F15 + updateJobSchedule branch coverage).
+ * Schedule-control unit tests (by-id / by-name APIs + updateJobSchedule branch coverage).
  *
  * Covers the public schedule APIs that the agent.task migration depends on:
  *   - by-id and by-name pause / resume / triggerNow / unregister

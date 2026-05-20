@@ -169,6 +169,50 @@ export class JobManager extends BaseService {
       logger.error('Startup recovery failed', err as Error)
     }
 
+    // Resurrect queues for any non-terminal rows from previous runs.
+    // dispatchAll() iterates this.queues, which is empty on cold start —
+    // pending rows reset by recovery would otherwise wait until the next
+    // enqueue arrives and lazily ensures a queue. Walking distinct
+    // (queue, type) lets pending dispatch on the next tick. Delayed rows
+    // piggyback: the queue is in place ahead of the next promoteDelayedDue
+    // tick, which calls dispatchAll().
+    //
+    // Concurrency consistency: ensureQueue here uses handler.defaultConcurrency
+    // ?? 1, identical to the enqueue path's ensureQueue call. Cold-start
+    // resurrection cannot drift from steady-state behaviour — same source of
+    // truth in both paths.
+    //
+    // First-writer-wins: ensureQueue ignores concurrency when the queue
+    // already exists, so if multiple types share a queue name, the FIRST
+    // (queue, type) pair returned by the SQL groupBy decides concurrency.
+    // No currently shipped type does this, but the semantics live here in
+    // case future code does.
+    //
+    // Harmless re-ensure: detectAndDispatchOverdue (below) and armSchedule
+    // both route through enqueue, which calls ensureQueue again on the same
+    // queue names we just resurrected. The first-writer-wins guard above
+    // means these re-ensures are no-ops — no double Mutex, no concurrency
+    // change.
+    try {
+      const activeQueues = await jobService.getDistinctActiveQueues()
+      for (const { queue, type } of activeQueues) {
+        const handler = this.handlers.get(type)
+        if (!handler) {
+          // runStartupRecovery should have cancelled orphan rows already, so
+          // a missing handler here is a recovery-implementation regression.
+          // Warn loudly instead of silently skipping.
+          logger.warn('Orphan (queue, type) survived recovery — skipping ensureQueue', { queue, type })
+          continue
+        }
+        this.ensureQueue(queue, handler.defaultConcurrency ?? 1)
+      }
+      if (activeQueues.length > 0) {
+        logger.info('Resurrected queues from non-terminal jobs', { count: activeQueues.length })
+      }
+    } catch (err) {
+      logger.error('Queue resurrection failed', err as Error)
+    }
+
     // Catch-up FIRST, then arm. Two reasons:
     //   1. `detectAndDispatchOverdue` reads `lastRun` / `nextRun` from the DB
     //      and is independent of in-process scheduler state — arming order
@@ -461,8 +505,8 @@ export class JobManager extends BaseService {
   /**
    * Cancel all non-terminal jobs matching the filter. Aborts in-flight
    * AbortControllers in this process and transitions pending / delayed rows
-   * directly to `cancelled`. Covers reset() semantics for Phase 4 Knowledge
-   * reset and Phase 3 FileProcessing batch cancellation.
+   * directly to `cancelled`. Used by knowledge-base reset and file-processing
+   * batch cancellation.
    *
    * Running jobs settle asynchronously through the normal handler-execute
    * flow (handler observes `signal.aborted`) and are NOT counted as
@@ -1321,10 +1365,6 @@ export class JobManager extends BaseService {
   }
 
   private makeError(code: string, message: string, params?: Record<string, unknown>): Error {
-    const err = new Error(`${code}: ${message}`)
-    ;(err as Error & { code: string; params?: Record<string, unknown>; retryable: boolean }).code = code
-    ;(err as Error & { code: string; params?: Record<string, unknown>; retryable: boolean }).params = params
-    ;(err as Error & { code: string; params?: Record<string, unknown>; retryable: boolean }).retryable = false
-    return err
+    return Object.assign(new Error(`${code}: ${message}`), { code, params, retryable: false })
   }
 }

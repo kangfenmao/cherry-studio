@@ -109,3 +109,34 @@ Pass an explicit name on multi-instance types — relying on "exactly one row" a
 | `JOB_CANCELLED` | recovery / cancel | no | Job cancelled by user, recovery, or shutdown |
 
 Renderer: `t(\`errors.jobs.${code.toLowerCase()}\`, params)`.
+
+## 6. Handler organization convention
+
+Business job handlers live inside the owning business module under a dedicated `tasks/` sub-directory. File names use a `JobHandler.ts` suffix:
+
+```
+src/main/services/knowledge/tasks/PrepareRootJobHandler.ts
+src/main/services/knowledge/tasks/IndexLeafJobHandler.ts
+```
+
+| Aspect | Convention |
+|---|---|
+| Location | `<module>/tasks/<Name>JobHandler.ts` |
+| Default export | Same name as the file (class or const handler object both fine) |
+| Co-located test | `<module>/tasks/__tests__/<Name>JobHandler.test.ts` |
+
+### Why "inside each business module" instead of `core/job/handlers/`
+
+- Handlers are tightly coupled to business domain knowledge (input/output schema, `recovery` strategy, `catchUpPolicy` are all defined by the business). Co-locating them with the owning service matches ownership boundaries.
+- `registerHandler` must be called from the business service's `onInit` so the handler is in place before `JobManager.onAllReady`'s startup recovery (§4). Keeping the implementation file next to the registration call site reads more naturally.
+- `src/main/core/job/` stays a pure framework module, free of business code.
+
+### Applicability
+
+| Scenario | Required |
+|---|---|
+| First batch of handlers (file-processing, knowledge, agent-task) | ✅ Yes |
+| All new handlers added later | ✅ Yes |
+| Experimental handlers (not in `JobRegistry`) | ⚠ Recommended, not blocking |
+| Pre-existing handlers, if any | Migrate opportunistically when touching nearby code |
+
