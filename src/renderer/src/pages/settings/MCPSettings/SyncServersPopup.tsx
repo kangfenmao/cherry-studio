@@ -20,7 +20,7 @@ import {
 import { dataApiService } from '@data/DataApiService'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TopView } from '@renderer/components/TopView'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import { cn } from '@renderer/utils/style'
 import type { MCPServer } from '@shared/data/types/mcpServer'
 import type React from 'react'
@@ -128,7 +128,7 @@ const schema = z.object({
 type FieldType = z.infer<typeof schema>
 
 const PopupContainer: React.FC<Props> = ({ resolve, existingServers }) => {
-  const { addMCPServer, refetch } = useMCPServers()
+  const { addMcpServer, refetch } = useMcpServers()
   const [open, setOpen] = useState(true)
   const [isSyncing, setIsSyncing] = useState(false)
   const [selectedProviderKey, setSelectedProviderKey] = useState(providers[0].key)
@@ -168,7 +168,7 @@ const PopupContainer: React.FC<Props> = ({ resolve, existingServers }) => {
 
         if (result.success && (result.addedServers?.length > 0 || result.updatedServers?.length > 0)) {
           for (const server of result.addedServers) {
-            await addMCPServer(server)
+            await addMcpServer(server)
           }
           const updatedServers = result.updatedServers
           if (updatedServers?.length > 0) {
@@ -191,7 +191,7 @@ const PopupContainer: React.FC<Props> = ({ resolve, existingServers }) => {
         setIsSyncing(false)
       }
     },
-    [addMCPServer, refetch, existingServers, selectedProvider, t, closeAndResolve]
+    [addMcpServer, refetch, existingServers, selectedProvider, t, closeAndResolve]
   )
 
   SyncServersPopup.hide = closeAndResolve

@@ -1,6 +1,6 @@
 import { Badge, Button, Popover, PopoverContent, PopoverTrigger, Tabs, TabsList, TabsTrigger } from '@cherrystudio/ui'
 import CollapsibleSearchBar from '@renderer/components/CollapsibleSearchBar'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import { getBuiltInMcpServerDescriptionLabel } from '@renderer/i18n/label'
 import { builtinMCPServers } from '@renderer/store/mcp'
 import { cn } from '@renderer/utils/style'
@@ -13,7 +13,7 @@ import { SettingTitle } from '..'
 
 const BuiltinMCPServerList: FC = () => {
   const { t } = useTranslation()
-  const { addMCPServer, mcpServers } = useMCPServers()
+  const { addMcpServer, mcpServers } = useMcpServers()
   const [searchText, setSearchText] = useState('')
   const [filter, setFilter] = useState<'all' | 'installed' | 'available'>('all')
 
@@ -135,7 +135,7 @@ const BuiltinMCPServerList: FC = () => {
                     className="h-7 rounded-lg px-2 text-muted-foreground text-xs shadow-none hover:bg-muted hover:text-foreground hover:shadow-none"
                     onClick={async () => {
                       try {
-                        await addMCPServer(server)
+                        await addMcpServer(server)
                         window.toast.success(t('settings.mcp.addSuccess'))
                       } catch {
                         window.toast.error(t('settings.mcp.addError'))

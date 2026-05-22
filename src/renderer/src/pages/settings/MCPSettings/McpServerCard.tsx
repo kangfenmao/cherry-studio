@@ -3,8 +3,8 @@ import { loggerService } from '@logger'
 import { ErrorBoundary } from '@renderer/components/ErrorBoundary'
 import { DeleteIcon } from '@renderer/components/Icons'
 import GeneralPopup from '@renderer/components/Popups/GeneralPopup'
-import { useMCPServerMutations } from '@renderer/hooks/useMCPServers'
-import { useMCPServerTrust } from '@renderer/hooks/useMCPServerTrust'
+import { useMcpServerMutations } from '@renderer/hooks/useMcpServers'
+import { useMcpServerTrust } from '@renderer/hooks/useMcpServerTrust'
 import { formatMcpError } from '@renderer/utils/error'
 import { formatErrorMessage } from '@renderer/utils/error'
 import { cn } from '@renderer/utils/style'
@@ -25,13 +25,13 @@ interface McpServerCardProps {
 }
 
 const McpServerCard: FC<McpServerCardProps> = ({ server, isEditing = false, onEdit }) => {
-  const { updateMCPServer, deleteMCPServer } = useMCPServerMutations(server.id)
+  const { updateMcpServer, deleteMcpServer } = useMcpServerMutations(server.id)
   const [loading, setLoading] = useState(false)
   const [version, setVersion] = useState<string | null>(null)
 
-  const updateServerBody = useCallback((body: Partial<MCPServer>) => updateMCPServer({ body }), [updateMCPServer])
+  const updateServerBody = useCallback((body: Partial<MCPServer>) => updateMcpServer({ body }), [updateMcpServer])
 
-  const { ensureServerTrusted } = useMCPServerTrust(updateServerBody)
+  const { ensureServerTrusted } = useMcpServerTrust(updateServerBody)
   const { t } = useTranslation()
 
   // Fetch version for active servers
@@ -73,19 +73,19 @@ const McpServerCard: FC<McpServerCardProps> = ({ server, isEditing = false, onEd
           await window.api.mcp.stopServer(serverForUpdate)
           setVersion(null)
         }
-        void updateMCPServer({ body: { isActive: active } })
+        void updateMcpServer({ body: { isActive: active } })
       } catch (error: any) {
         window.modal.error({
           title: t('settings.mcp.startError'),
           content: formatMcpError(error),
           centered: true
         })
-        void updateMCPServer({ body: { isActive: oldActiveState } })
+        void updateMcpServer({ body: { isActive: oldActiveState } })
       } finally {
         setLoading(false)
       }
     },
-    [server, ensureServerTrusted, fetchServerVersion, updateMCPServer, t]
+    [server, ensureServerTrusted, fetchServerVersion, updateMcpServer, t]
   )
 
   const handleDelete = useCallback(() => {
@@ -96,14 +96,14 @@ const McpServerCard: FC<McpServerCardProps> = ({ server, isEditing = false, onEd
         centered: true,
         onOk: async () => {
           await window.api.mcp.removeServer(server)
-          await deleteMCPServer({})
+          await deleteMcpServer({})
           window.toast.success(t('settings.mcp.deleteSuccess'))
         }
       })
     } catch (error: any) {
       window.toast.error(`${t('settings.mcp.deleteError')}: ${error.message}`)
     }
-  }, [server, deleteMCPServer, t])
+  }, [server, deleteMcpServer, t])
 
   const handleOpenUrl = useCallback(
     (event: React.MouseEvent) => {

@@ -4,7 +4,7 @@ import type { QuickPanelListItem } from '@renderer/components/QuickPanel'
 import { QuickPanelReservedSymbol, useQuickPanel } from '@renderer/components/QuickPanel'
 import { isGemini3Model, isGeminiModel } from '@renderer/config/models'
 import { useAssistant } from '@renderer/hooks/useAssistant'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import { useTimer } from '@renderer/hooks/useTimer'
 import type { ToolQuickPanelApi } from '@renderer/pages/home/Inputbar/types'
 import { getProviderByModel } from '@renderer/services/AssistantService'
@@ -114,7 +114,7 @@ const hammerIcon18 = <Hammer size={18} />
 const sparklesIcon18 = <Sparkles size={18} />
 
 const MCPToolsButton: FC<Props> = ({ quickPanel, setInputValue, resizeTextArea, assistantId }) => {
-  const { mcpServers: activedMcpServers } = useMCPServers({ isActive: true })
+  const { mcpServers: activedMcpServers } = useMcpServers({ isActive: true })
   const { t } = useTranslation()
   const quickPanelHook = useQuickPanel()
   const navigate = useNavigate()

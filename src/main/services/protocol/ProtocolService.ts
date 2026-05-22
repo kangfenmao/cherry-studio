@@ -116,7 +116,7 @@ export class ProtocolService extends BaseService {
 
       // Default branch: deep link with no main-process handler. Fan out to every
       // managed renderer (Main / Settings / SubWindow / pooled tool surfaces);
-      // consumers (oauth.ts, useNutstoreSSO, ...) filter by urlObj.hostname/pathname.
+      // consumers (oauth.ts, useNutstoreSso, ...) filter by urlObj.hostname/pathname.
       // broadcast() — not broadcastToType(Main) — because the flow-initiating
       // window is not necessarily Main: the Settings window owns CherryIN OAuth
       // in v2. Trade-off: the payload reaches renderers that don't need it; if

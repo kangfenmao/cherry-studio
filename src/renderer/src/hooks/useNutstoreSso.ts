@@ -1,10 +1,10 @@
 import { loggerService } from '@logger'
 import { useCallback } from 'react'
 
-const logger = loggerService.withContext('useNutstoreSSO')
+const logger = loggerService.withContext('useNutstoreSso')
 
-export function useNutstoreSSO() {
-  const nutstoreSSOHandler = useCallback(() => {
+export function useNutstoreSso() {
+  const nutstoreSsoHandler = useCallback(() => {
     return new Promise<string>((resolve, reject) => {
       const removeListener = window.api.protocol.onReceiveData(async (data) => {
         try {
@@ -23,5 +23,5 @@ export function useNutstoreSSO() {
     })
   }, [])
 
-  return nutstoreSSOHandler
+  return nutstoreSsoHandler
 }

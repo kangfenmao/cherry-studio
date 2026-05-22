@@ -8,7 +8,7 @@ import {
 import type { Provider, VertexProvider } from '@renderer/types'
 import { useDispatch } from 'react-redux'
 
-export function useVertexAISettings() {
+export function useVertexAiSettings() {
   const settings = useAppSelector((state) => state.llm.settings.vertexai)
   const dispatch = useDispatch()
 
@@ -22,19 +22,19 @@ export function useVertexAISettings() {
 }
 
 // FIXME: 这些redux设置状态被服务层使用，这是不应该的。
-export function getVertexAISettings() {
+export function getVertexAiSettings() {
   return store.getState().llm.settings.vertexai
 }
 
-export function getVertexAILocation() {
+export function getVertexAiLocation() {
   return store.getState().llm.settings.vertexai.location
 }
 
-export function getVertexAIProjectId() {
+export function getVertexAiProjectId() {
   return store.getState().llm.settings.vertexai.projectId
 }
 
-export function getVertexAIServiceAccount() {
+export function getVertexAiServiceAccount() {
   return store.getState().llm.settings.vertexai.serviceAccount
 }
 
@@ -44,7 +44,7 @@ export function getVertexAIServiceAccount() {
  * @returns VertexProvider 对象
  */
 export function createVertexProvider(baseProvider: Provider): VertexProvider {
-  const settings = getVertexAISettings()
+  const settings = getVertexAiSettings()
 
   return {
     ...baseProvider,
@@ -61,8 +61,8 @@ export function createVertexProvider(baseProvider: Provider): VertexProvider {
 /**
  * 检查 VertexAI 配置是否完整
  */
-export function isVertexAIConfigured(): boolean {
-  const settings = getVertexAISettings()
+export function isVertexAiConfigured(): boolean {
+  const settings = getVertexAiSettings()
   return !!(
     settings.serviceAccount.clientEmail &&
     settings.serviceAccount.privateKey &&

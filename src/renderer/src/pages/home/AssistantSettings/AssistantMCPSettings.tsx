@@ -1,5 +1,5 @@
 import { Box, EmptyState, InfoTooltip, Switch, Tooltip } from '@cherrystudio/ui'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import type { Assistant, McpMode } from '@renderer/types'
 import { getEffectiveMcpMode } from '@renderer/types'
 import { cn } from '@renderer/utils'
@@ -15,7 +15,7 @@ interface Props {
 
 const AssistantMCPSettings: React.FC<Props> = ({ assistant, updateAssistant }) => {
   const { t } = useTranslation()
-  const { mcpServers: allMcpServers } = useMCPServers()
+  const { mcpServers: allMcpServers } = useMcpServers()
 
   const currentMode = getEffectiveMcpMode(assistant)
 

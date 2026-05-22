@@ -1,4 +1,4 @@
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import ProviderDetail from '@renderer/pages/settings/MCPSettings/McpProviderSettings'
 import { providers } from '@renderer/pages/settings/MCPSettings/providers/config'
 import { useParams } from '@tanstack/react-router'
@@ -8,7 +8,7 @@ import { createFileRoute } from '@tanstack/react-router'
 const ProviderPage = () => {
   const params = useParams({ strict: false })
   const providerKey = params._splat
-  const { mcpServers } = useMCPServers()
+  const { mcpServers } = useMcpServers()
 
   const provider = providers.find((p) => p.key === providerKey)
 

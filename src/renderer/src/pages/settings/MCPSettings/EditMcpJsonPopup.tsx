@@ -13,7 +13,7 @@ import { usePreference } from '@data/hooks/usePreference'
 import { loggerService } from '@logger'
 import { TopView } from '@renderer/components/TopView'
 import { useCodeStyle } from '@renderer/context/CodeStyleProvider'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import type { MCPServer } from '@renderer/types'
 import { safeValidateMcpConfig } from '@renderer/types'
 import { parseJSON } from '@renderer/utils'
@@ -33,7 +33,7 @@ const PopupContainer: React.FC<Props> = ({ resolve }) => {
   const [jsonSaving, setJsonSaving] = useState(false)
   const [jsonError, setJsonError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const { mcpServers, refetch } = useMCPServers()
+  const { mcpServers, refetch } = useMcpServers()
   const [fontSize] = usePreference('chat.message.font_size')
   const { activeCmTheme } = useCodeStyle()
   const { t } = useTranslation()

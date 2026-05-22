@@ -15,8 +15,8 @@ vi.mock('@data/DataApiService', () => ({
   }
 }))
 
-vi.mock('@renderer/hooks/useMCPServers', () => ({
-  useMCPServers: () => ({
+vi.mock('@renderer/hooks/useMcpServers', () => ({
+  useMcpServers: () => ({
     mcpServers: mockMcpServers
   })
 }))
@@ -51,7 +51,7 @@ vi.mock('@renderer/store', () => ({
 
 vi.mock('@renderer/store/mcp', () => ({
   hubMCPServer: { id: 'hub', name: 'MCP Hub', type: 'inMemory', isActive: true },
-  addMCPServer: vi.fn()
+  addMcpServer: vi.fn()
 }))
 
 vi.mock('@renderer/store/assistants', () => ({

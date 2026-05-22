@@ -35,8 +35,8 @@ import CollapsibleSearchBar from '@renderer/components/CollapsibleSearchBar'
 import { DeleteIcon } from '@renderer/components/Icons'
 import Scrollbar from '@renderer/components/Scrollbar'
 import { useTheme } from '@renderer/context/ThemeProvider'
-import { useMCPServer } from '@renderer/hooks/useMCPServers'
-import { useMCPServerTrust } from '@renderer/hooks/useMCPServerTrust'
+import { useMcpServer } from '@renderer/hooks/useMcpServers'
+import { useMcpServerTrust } from '@renderer/hooks/useMcpServerTrust'
 import MCPDescription from '@renderer/pages/settings/MCPSettings/McpDescription'
 import type { MCPPrompt, MCPResource, MCPTool } from '@renderer/types'
 import { parseKeyValueString } from '@renderer/utils/env'
@@ -117,11 +117,11 @@ const McpSettings: React.FC = () => {
   const { t } = useTranslation()
   const params = useParams({ strict: false })
   const serverId = params.serverId
-  const { server, isLoading: isServerLoading, updateMCPServer, deleteMCPServer } = useMCPServer(serverId ?? '')
+  const { server, isLoading: isServerLoading, updateMcpServer, deleteMcpServer } = useMcpServer(serverId ?? '')
 
-  const updateServerBody = useCallback((body: Partial<MCPServer>) => updateMCPServer({ body }), [updateMCPServer])
+  const updateServerBody = useCallback((body: Partial<MCPServer>) => updateMcpServer({ body }), [updateMcpServer])
 
-  const { ensureServerTrusted } = useMCPServerTrust(updateServerBody)
+  const { ensureServerTrusted } = useMcpServerTrust(updateServerBody)
   const [serverType, setServerType] = useState<MCPServer['type']>('stdio')
   const form = useForm<MCPFormValues>({
     resolver: zodResolver(buildMcpSchema(t)) as any,
@@ -403,12 +403,12 @@ const McpSettings: React.FC = () => {
       if (server.isActive) {
         try {
           await window.api.mcp.restartServer(mcpServer)
-          await updateMCPServer({ body: { ...mcpServer, isActive: true } })
+          await updateMcpServer({ body: { ...mcpServer, isActive: true } })
           window.toast.success(t('settings.mcp.updateSuccess'))
           setIsFormChanged(false)
         } catch (error: any) {
           try {
-            await updateMCPServer({ body: { ...mcpServer, isActive: false } })
+            await updateMcpServer({ body: { ...mcpServer, isActive: false } })
           } catch (rollbackError) {
             logger.error('Failed to rollback MCP server active state after restart failure:', rollbackError as Error)
             window.toast.error(`${t('settings.mcp.updateError')}: ${formatErrorMessage(rollbackError)}`)
@@ -420,7 +420,7 @@ const McpSettings: React.FC = () => {
           })
         }
       } else {
-        await updateMCPServer({ body: { ...mcpServer, isActive: false } })
+        await updateMcpServer({ body: { ...mcpServer, isActive: false } })
         window.toast.success(t('settings.mcp.updateSuccess'))
         setIsFormChanged(false)
       }
@@ -485,7 +485,7 @@ const McpSettings: React.FC = () => {
           okButtonProps: { danger: true },
           onOk: async () => {
             await window.api.mcp.removeServer(serverToDelete)
-            await deleteMCPServer({})
+            await deleteMcpServer({})
             window.toast.success(t('settings.mcp.deleteSuccess'))
             void navigate({ to: '/settings/mcp' })
           }
@@ -495,7 +495,7 @@ const McpSettings: React.FC = () => {
       }
     },
 
-    [deleteMCPServer, t, navigate]
+    [deleteMcpServer, t, navigate]
   )
 
   const onToggleActive = async (active: boolean) => {
@@ -539,14 +539,14 @@ const McpSettings: React.FC = () => {
         await window.api.mcp.stopServer(serverForUpdate)
         setServerVersion(null)
       }
-      void updateMCPServer({ body: { isActive: active } })
+      void updateMcpServer({ body: { isActive: active } })
     } catch (error: any) {
       window.modal.error({
         title: t('settings.mcp.startError'),
         content: formatMcpError(error as McpError),
         centered: true
       })
-      void updateMCPServer({ body: { isActive: oldActiveState } }).catch((rollbackError) => {
+      void updateMcpServer({ body: { isActive: oldActiveState } }).catch((rollbackError) => {
         logger.error('Failed to rollback MCP server active state after toggle failure:', rollbackError as Error)
       })
     } finally {
@@ -572,9 +572,9 @@ const McpSettings: React.FC = () => {
       }
 
       // Save the updated server configuration
-      void updateMCPServer({ body: { disabledTools } })
+      void updateMcpServer({ body: { disabledTools } })
     },
-    [server, updateMCPServer]
+    [server, updateMcpServer]
   )
 
   // Handle toggling auto-approve for a tool
@@ -593,9 +593,9 @@ const McpSettings: React.FC = () => {
       }
 
       // Save the updated server configuration
-      void updateMCPServer({ body: { disabledAutoApproveTools } })
+      void updateMcpServer({ body: { disabledAutoApproveTools } })
     },
-    [server, updateMCPServer]
+    [server, updateMcpServer]
   )
 
   if (!server || isServerLoading) {

@@ -15,7 +15,7 @@ import {
 import CollapsibleSearchBar from '@renderer/components/CollapsibleSearchBar'
 import { EditIcon } from '@renderer/components/Icons'
 import Scrollbar from '@renderer/components/Scrollbar'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import { matchKeywordsInString } from '@renderer/utils/match'
 import type { CreateMCPServerDto } from '@shared/data/api/schemas/mcpServers'
 import type { MCPServer } from '@shared/data/types/mcpServer'
@@ -31,7 +31,7 @@ import EnvironmentDependencies from './EnvironmentDependencies'
 import McpServerCard from './McpServerCard'
 
 const McpServersList: FC = () => {
-  const { mcpServers, addMCPServer, reorderMCPServers } = useMCPServers()
+  const { mcpServers, addMcpServer, reorderMcpServers } = useMcpServers()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [isAddModalVisible, setIsAddModalVisible] = useState(false)
@@ -70,7 +70,7 @@ const McpServersList: FC = () => {
   const { onSortEnd } = useDndReorder({
     originalList: mcpServers,
     filteredList: filteredMcpServers,
-    onUpdate: reorderMCPServers,
+    onUpdate: reorderMcpServers,
     itemKey: 'id'
   })
 
@@ -97,7 +97,7 @@ const McpServersList: FC = () => {
   }, [])
 
   const onAddMcpServer = useCallback(async () => {
-    const newServer = await addMCPServer({
+    const newServer = await addMcpServer({
       name: t('settings.mcp.newServer'),
       description: '',
       baseUrl: '',
@@ -108,16 +108,16 @@ const McpServersList: FC = () => {
     })
     void navigate({ to: `/settings/mcp/settings/${newServer.id}` })
     window.toast.success(t('settings.mcp.addSuccess'))
-  }, [addMCPServer, navigate, t])
+  }, [addMcpServer, navigate, t])
 
   const handleAddServerSuccess = useCallback(
     async (dto: CreateMCPServerDto): Promise<MCPServer> => {
-      const created = await addMCPServer(dto)
+      const created = await addMcpServer(dto)
       setIsAddModalVisible(false)
       window.toast.success(t('settings.mcp.addSuccess'))
       return created
     },
-    [addMCPServer, t]
+    [addMcpServer, t]
   )
 
   const handleManualAdd = useCallback(() => {

@@ -1,6 +1,6 @@
 import { Badge, Button, Center, Flex, Input, RowFlex, Spinner } from '@cherrystudio/ui'
 import logo from '@renderer/assets/images/cherry-text-logo.svg'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import type { MCPServer } from '@renderer/types'
 import { getMcpConfigSampleFromReadme } from '@renderer/utils'
 import { Check, Plus } from 'lucide-react'
@@ -30,7 +30,7 @@ const NpxSearch: FC = () => {
   const [npmScope, setNpmScope] = useState('@modelcontextprotocol')
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResult[]>(_searchResults)
-  const { addMCPServer, mcpServers } = useMCPServers()
+  const { addMcpServer, mcpServers } = useMcpServers()
 
   _searchResults = searchResults
 
@@ -168,7 +168,7 @@ const NpxSearch: FC = () => {
                         }
 
                         try {
-                          await addMCPServer(newServer)
+                          await addMcpServer(newServer)
                           window.toast.success(t('settings.mcp.addSuccess'))
                         } catch {
                           window.toast.error(t('settings.mcp.addError'))

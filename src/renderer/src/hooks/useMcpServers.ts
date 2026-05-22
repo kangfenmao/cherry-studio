@@ -15,26 +15,26 @@ window.electron.ipcRenderer.on(IpcChannel.Mcp_AddServer, (_event, server: { id: 
 /**
  * MCP servers list hook — data fetching with optional filters and create mutation.
  */
-export const useMCPServers = (query?: ListMCPServersQuery) => {
+export const useMcpServers = (query?: ListMCPServersQuery) => {
   const { data, isLoading, mutate } = useQuery('/mcp-servers', { query })
 
   const mcpServers = useMemo(() => data?.items ?? [], [data])
 
-  const { trigger: createMCPServer } = useMutation('POST', '/mcp-servers', {
+  const { trigger: createMcpServer } = useMutation('POST', '/mcp-servers', {
     refresh: ['/mcp-servers']
   })
 
-  const addMCPServer = useCallback((dto: CreateMCPServerDto) => createMCPServer({ body: dto }), [createMCPServer])
+  const addMcpServer = useCallback((dto: CreateMCPServerDto) => createMcpServer({ body: dto }), [createMcpServer])
 
   const { trigger: reorderTrigger } = useMutation('PATCH', '/mcp-servers', {
     refresh: ['/mcp-servers']
   })
 
-  const reorderMCPServers = useCallback(
+  const reorderMcpServers = useCallback(
     (reorderedList: MCPServer[]) => {
       void mutate(data ? { ...data, items: reorderedList } : undefined, false)
       reorderTrigger({ body: { orderedIds: reorderedList.map((s) => s.id) } }).catch((error) => {
-        loggerService.withContext('useMCPServers').warn('Failed to reorder MCP servers, reverting', error as Error)
+        loggerService.withContext('useMcpServers').warn('Failed to reorder MCP servers, reverting', error as Error)
         void mutate()
       })
     },
@@ -44,8 +44,8 @@ export const useMCPServers = (query?: ListMCPServersQuery) => {
   return {
     mcpServers,
     isLoading,
-    addMCPServer,
-    reorderMCPServers,
+    addMcpServer,
+    reorderMcpServers,
     refetch: mutate
   }
 }
@@ -56,33 +56,33 @@ export const useMCPServers = (query?: ListMCPServersQuery) => {
  * from the unfiltered list). Mutations use refresh: ['/mcp-servers'] to
  * auto-invalidate all /mcp-servers caches (list, filtered, and detail).
  */
-export const useMCPServer = (id: string) => {
+export const useMcpServer = (id: string) => {
   const { data, isLoading } = useQuery('/mcp-servers', {
     query: { id },
     enabled: !!id
   })
 
-  const { updateMCPServer, deleteMCPServer } = useMCPServerMutations(id)
+  const { updateMcpServer, deleteMcpServer } = useMcpServerMutations(id)
 
   const server = useMemo(() => data?.items?.[0], [data])
 
-  return { server, isLoading, updateMCPServer, deleteMCPServer }
+  return { server, isLoading, updateMcpServer, deleteMcpServer }
 }
 
 /**
  * Mutation-only hook for a single MCP server — no query, no N+1.
- * Use when server data is already available from a parent (e.g. from useMCPServers list).
+ * Use when server data is already available from a parent (e.g. from useMcpServers list).
  */
-export const useMCPServerMutations = (id: string) => {
+export const useMcpServerMutations = (id: string) => {
   const path = `/mcp-servers/${id}` as const
 
-  const { trigger: updateMCPServer } = useMutation('PATCH', path, {
+  const { trigger: updateMcpServer } = useMutation('PATCH', path, {
     refresh: ['/mcp-servers']
   })
 
-  const { trigger: deleteMCPServer } = useMutation('DELETE', path, {
+  const { trigger: deleteMcpServer } = useMutation('DELETE', path, {
     refresh: ['/mcp-servers']
   })
 
-  return { updateMCPServer, deleteMCPServer }
+  return { updateMcpServer, deleteMcpServer }
 }

@@ -3,7 +3,7 @@ import { loggerService } from '@logger'
 import CollapsibleSearchBar from '@renderer/components/CollapsibleSearchBar'
 import Scrollbar from '@renderer/components/Scrollbar'
 import db from '@renderer/databases'
-import { useMCPServers } from '@renderer/hooks/useMCPServers'
+import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import type { MCPServer } from '@renderer/types'
 import { cn } from '@renderer/utils/style'
 import { Check, Plus, SquareArrowOutUpRight } from 'lucide-react'
@@ -21,7 +21,7 @@ interface Props {
 }
 
 const McpProviderSettings: React.FC<Props> = ({ provider, existingServers }) => {
-  const { addMCPServer } = useMCPServers()
+  const { addMcpServer } = useMcpServers()
   const [isFetching, setIsFetching] = useState(false)
   const [token, setToken] = useState<string>('')
   const [availableServers, setAvailableServers] = useState<MCPServer[]>([])
@@ -211,7 +211,7 @@ const McpProviderSettings: React.FC<Props> = ({ provider, existingServers }) => 
                       onClick={async () => {
                         if (!isAlreadyAdded) {
                           try {
-                            await addMCPServer(server)
+                            await addMcpServer(server)
                             window.toast.success(t('settings.mcp.addSuccess'))
                           } catch {
                             window.toast.error(t('settings.mcp.addError'))

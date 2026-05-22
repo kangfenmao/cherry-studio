@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  getMissingVertexAIConfigFields,
-  mergeVertexAILocationOptions,
-  parseVertexAIServiceAccountJson
-} from '../vertexAI'
+  getMissingVertexAiConfigFields,
+  mergeVertexAiLocationOptions,
+  parseVertexAiServiceAccountJson
+} from '../vertexAi'
 
-describe('parseVertexAIServiceAccountJson', () => {
+describe('parseVertexAiServiceAccountJson', () => {
   it('extracts service account fields from Google JSON key content', () => {
-    const parsed = parseVertexAIServiceAccountJson(
+    const parsed = parseVertexAiServiceAccountJson(
       JSON.stringify({
         type: 'service_account',
         project_id: 'vertex-project',
@@ -26,19 +26,19 @@ describe('parseVertexAIServiceAccountJson', () => {
 
   it('ignores plain private key input', () => {
     expect(
-      parseVertexAIServiceAccountJson('-----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY-----')
+      parseVertexAiServiceAccountJson('-----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY-----')
     ).toBeUndefined()
   })
 
   it('ignores JSON without required service account credentials', () => {
-    expect(parseVertexAIServiceAccountJson(JSON.stringify({ project_id: 'vertex-project' }))).toBeUndefined()
+    expect(parseVertexAiServiceAccountJson(JSON.stringify({ project_id: 'vertex-project' }))).toBeUndefined()
   })
 })
 
-describe('mergeVertexAILocationOptions', () => {
+describe('mergeVertexAiLocationOptions', () => {
   it('keeps the current location and removes duplicates', () => {
     expect(
-      mergeVertexAILocationOptions(
+      mergeVertexAiLocationOptions(
         [
           { value: 'us-central1', label: 'US Central' },
           { value: 'europe-west8', label: 'europe-west8' }
@@ -60,10 +60,10 @@ describe('mergeVertexAILocationOptions', () => {
   })
 })
 
-describe('getMissingVertexAIConfigFields', () => {
+describe('getMissingVertexAiConfigFields', () => {
   it('reports all missing required fields including location', () => {
     expect(
-      getMissingVertexAIConfigFields({
+      getMissingVertexAiConfigFields({
         projectId: ' ',
         location: '',
         serviceAccount: {
@@ -76,7 +76,7 @@ describe('getMissingVertexAIConfigFields', () => {
 
   it('returns an empty list when the configuration is complete', () => {
     expect(
-      getMissingVertexAIConfigFields({
+      getMissingVertexAiConfigFields({
         projectId: 'vertex-project',
         location: 'us-central1',
         serviceAccount: {

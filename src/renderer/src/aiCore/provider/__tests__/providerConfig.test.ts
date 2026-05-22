@@ -36,9 +36,9 @@ vi.mock('@renderer/store', () => {
 
 // @renderer/utils/api: use real implementations (pure functions + store-dependent formatVertexApiHost works via mocked store)
 
-vi.mock('@renderer/hooks/useVertexAI', () => ({
+vi.mock('@renderer/hooks/useVertexAi', () => ({
   isVertexProvider: vi.fn((p: { type: string }) => p.type === 'vertexai'),
-  isVertexAIConfigured: vi.fn(() => true),
+  isVertexAiConfigured: vi.fn(() => true),
   createVertexProvider: vi.fn((provider: Provider) => ({
     ...provider,
     type: 'vertexai',
@@ -65,7 +65,7 @@ import type { CherryInProviderSettings } from '@cherrystudio/ai-sdk-provider'
 import type { GitHubCopilotProviderSettings } from '@opeoginni/github-copilot-openai-compatible'
 import type { ProviderConfig } from '@renderer/aiCore/types'
 import { getAwsBedrockAuthType } from '@renderer/hooks/useAwsBedrock'
-import { isVertexAIConfigured } from '@renderer/hooks/useVertexAI'
+import { isVertexAiConfigured } from '@renderer/hooks/useVertexAi'
 import { getProviderByModel } from '@renderer/services/AssistantService'
 import { getProviderById } from '@renderer/services/ProviderService'
 import type { AwsBedrockAuthType, Model, Provider } from '@renderer/types'
@@ -785,7 +785,7 @@ describe('providerToAiSdkConfig', () => {
     })
 
     it('throws when VertexAI is not configured', () => {
-      vi.mocked(isVertexAIConfigured).mockReturnValue(false)
+      vi.mocked(isVertexAiConfigured).mockReturnValue(false)
 
       const provider = makeProvider({
         id: 'vertexai',
