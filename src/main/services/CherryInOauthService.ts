@@ -9,7 +9,7 @@ import { createHash, randomBytes } from 'crypto'
 import { net } from 'electron'
 import * as z from 'zod'
 
-const logger = loggerService.withContext('CherryINOAuthService')
+const logger = loggerService.withContext('CherryInOauthService')
 const CHERRYIN_PROVIDER_ID = 'cherryin'
 
 // Zod schemas for API response validation
@@ -90,7 +90,7 @@ export interface CherryINProfile {
   group: string | null
 }
 
-export interface OAuthFlowParams {
+export interface OauthFlowParams {
   authUrl: string
   state: string
 }
@@ -98,14 +98,14 @@ export interface OAuthFlowParams {
 const OAUTH_FLOW_TTL_MS = 10 * 60 * 1000
 const OAUTH_FLOW_CLEANUP_INTERVAL_MS = 60 * 1000
 
-class CherryINOAuthServiceError extends Error {
+class CherryInOauthServiceError extends Error {
   constructor(
     message: string,
     public readonly cause?: unknown,
     public readonly code?: string
   ) {
     super(message)
-    this.name = 'CherryINOAuthServiceError'
+    this.name = 'CherryInOauthServiceError'
   }
 }
 
@@ -114,7 +114,7 @@ class CherryINOAuthServiceError extends Error {
 // flow, captured at startOAuthFlow time so the protocol callback can be
 // delivered point-to-point to the originating window instead of being broadcast
 // to every window.
-interface PendingOAuthFlow {
+interface PendingOauthFlow {
   codeVerifier: string
   oauthServer: string
   apiHost: string
@@ -127,10 +127,10 @@ interface TokenRefreshResult {
   attempted: boolean
 }
 
-@Injectable('CherryINOAuthService')
+@Injectable('CherryInOauthService')
 @ServicePhase(Phase.Background)
-export class CherryINOAuthService extends BaseService implements Activatable {
-  private readonly pendingOAuthFlows = new Map<string, PendingOAuthFlow>()
+export class CherryInOauthService extends BaseService implements Activatable {
+  private readonly pendingOAuthFlows = new Map<string, PendingOauthFlow>()
   private refreshAccessTokenPromise: Promise<TokenRefreshResult> | null = null
   private cleanupTimerDisposable: Disposable | null = null
 
@@ -200,7 +200,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
    */
   private validateApiHost(apiHost: string): void {
     if (!CHERRYIN_CONFIG.ALLOWED_HOSTS.includes(apiHost)) {
-      throw new CherryINOAuthServiceError(`Unauthorized API host: ${apiHost}`)
+      throw new CherryInOauthServiceError(`Unauthorized API host: ${apiHost}`)
     }
   }
 
@@ -238,7 +238,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
     event: Electron.IpcMainInvokeEvent,
     oauthServer: string,
     apiHost?: string
-  ): Promise<OAuthFlowParams> => {
+  ): Promise<OauthFlowParams> => {
     this.cleanupExpiredFlows()
     this.validateApiHost(oauthServer)
 
@@ -249,7 +249,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
 
     const initiatorWindowId = application.get('WindowManager').getWindowIdByWebContents(event.sender)
     if (!initiatorWindowId) {
-      throw new CherryINOAuthServiceError('OAuth flow initiator is not a managed window')
+      throw new CherryInOauthServiceError('OAuth flow initiator is not a managed window')
     }
 
     // Generate PKCE parameters
@@ -359,7 +359,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
    * Internal helper for `handleOAuthCallback` — renderer no longer drives this
    * step, so this is no longer an IPC entry point.
    */
-  private performTokenExchange = async (code: string, flow: PendingOAuthFlow): Promise<string> => {
+  private performTokenExchange = async (code: string, flow: PendingOauthFlow): Promise<string> => {
     const { codeVerifier, oauthServer, apiHost } = flow
 
     logger.debug('Exchanging code for token')
@@ -385,7 +385,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
           status: tokenResponse.status,
           body: this.redactDiagnosticValue(errorText)
         })
-        throw new CherryINOAuthServiceError(`Failed to exchange code for token: ${tokenResponse.status}`)
+        throw new CherryInOauthServiceError(`Failed to exchange code for token: ${tokenResponse.status}`)
       }
 
       const tokenJson = await tokenResponse.json()
@@ -411,7 +411,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
           status: apiKeysResponse.status,
           body: this.redactDiagnosticValue(errorText)
         })
-        throw new CherryINOAuthServiceError(`Failed to fetch API keys: ${apiKeysResponse.status}`)
+        throw new CherryInOauthServiceError(`Failed to fetch API keys: ${apiKeysResponse.status}`)
       }
 
       const apiKeysJson = await apiKeysResponse.json()
@@ -419,7 +419,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
       const apiKeys = keysArray.filter(Boolean).join(',')
 
       if (!apiKeys) {
-        throw new CherryINOAuthServiceError('No API keys received')
+        throw new CherryInOauthServiceError('No API keys received')
       }
 
       await this.saveTokenInternal(accessToken, refreshToken)
@@ -428,7 +428,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
     } catch (error) {
       if (error instanceof z.ZodError) {
         logger.error('Invalid response format:', error.issues)
-        throw new CherryINOAuthServiceError('Invalid response format from server', error)
+        throw new CherryInOauthServiceError('Invalid response format from server', error)
       }
       throw error
     }
@@ -474,7 +474,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
       await this.saveTokenInternal(accessToken, refreshToken)
     } catch (error) {
       logger.error('Failed to save token:', error as Error)
-      throw new CherryINOAuthServiceError('Failed to save OAuth token', error)
+      throw new CherryInOauthServiceError('Failed to save OAuth token', error)
     }
   }
 
@@ -648,7 +648,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
   ): Promise<Response> => {
     const token = await this.getToken()
     if (!token) {
-      throw new CherryINOAuthServiceError('No OAuth token found')
+      throw new CherryInOauthServiceError('No OAuth token found')
     }
 
     const makeRequest = async (accessToken: string): Promise<Response> => {
@@ -684,7 +684,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
         } catch (clearError) {
           logger.error('Failed to clear OAuth session after refresh failure', clearError as Error)
         }
-        throw new CherryINOAuthServiceError(
+        throw new CherryInOauthServiceError(
           refreshResult.attempted
             ? 'OAuth session expired: failed to refresh access token'
             : 'OAuth session expired: no refresh token available',
@@ -746,7 +746,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
       const response = await this.authenticatedFetch(apiHost, '/api/v1/oauth/balance')
 
       if (!response.ok) {
-        throw new CherryINOAuthServiceError(`HTTP ${response.status} ${response.statusText} from /api/v1/oauth/balance`)
+        throw new CherryInOauthServiceError(`HTTP ${response.status} ${response.statusText} from /api/v1/oauth/balance`)
       }
 
       const json = await response.json()
@@ -754,7 +754,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
       const parsed = BalanceResponseSchema.parse(json)
 
       if (!parsed.success) {
-        throw new CherryINOAuthServiceError('API returned success: false')
+        throw new CherryInOauthServiceError('API returned success: false')
       }
 
       const { quota, used_quota: usedQuota } = parsed.data
@@ -773,11 +773,11 @@ export class CherryINOAuthService extends BaseService implements Activatable {
     } catch (error) {
       if (error instanceof z.ZodError) {
         logger.error('Invalid balance response format:', error.issues)
-        throw new CherryINOAuthServiceError('Invalid response format from server', error)
+        throw new CherryInOauthServiceError('Invalid response format from server', error)
       }
       logger.error('Failed to get balance:', error as Error)
       const detail = error instanceof Error && error.message ? `: ${error.message}` : ''
-      throw new CherryINOAuthServiceError(`Failed to get balance${detail}`, error)
+      throw new CherryInOauthServiceError(`Failed to get balance${detail}`, error)
     }
   }
 
@@ -819,7 +819,7 @@ export class CherryINOAuthService extends BaseService implements Activatable {
       logger.debug('Successfully cleared CherryIN OAuth tokens from auth config')
     } catch (error) {
       logger.error('Failed to logout:', error as Error)
-      throw new CherryINOAuthServiceError('Failed to logout', error)
+      throw new CherryInOauthServiceError('Failed to logout', error)
     }
   }
 }

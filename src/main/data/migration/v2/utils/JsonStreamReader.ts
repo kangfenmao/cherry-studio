@@ -7,7 +7,7 @@ import { createReadStream } from 'fs'
 import { parser } from 'stream-json'
 import { streamArray } from 'stream-json/streamers/StreamArray'
 
-export class JSONStreamReader {
+export class JsonStreamReader {
   private filePath: string
 
   constructor(filePath: string) {

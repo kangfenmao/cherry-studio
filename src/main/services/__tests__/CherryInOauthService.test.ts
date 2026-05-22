@@ -105,10 +105,10 @@ vi.mock('@main/core/lifecycle', async (importOriginal) => {
 import { net } from 'electron'
 
 import { mockMainLoggerService } from '../../../../tests/__mocks__/MainLoggerService'
-import { CherryINOAuthService } from '../CherryINOAuthService'
+import { CherryInOauthService } from '../CherryInOauthService'
 
-describe('CherryINOAuthService', () => {
-  let cherryINOAuthService: CherryINOAuthService
+describe('CherryInOauthService', () => {
+  let cherryInOauthService: CherryInOauthService
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -120,13 +120,13 @@ describe('CherryINOAuthService', () => {
         send: vi.fn()
       }
     })
-    cherryINOAuthService = new CherryINOAuthService()
+    cherryInOauthService = new CherryInOauthService()
   })
 
   it('registers CherryIN IPC handlers through the lifecycle init hook', async () => {
-    await (cherryINOAuthService as any).onInit()
+    await (cherryInOauthService as any).onInit()
 
-    const ipcHandle = (cherryINOAuthService as any).ipcHandle as ReturnType<typeof vi.fn>
+    const ipcHandle = (cherryInOauthService as any).ipcHandle as ReturnType<typeof vi.fn>
     expect(ipcHandle.mock.calls.map(([channel]) => channel)).toEqual([
       'cherryin:save-token',
       'cherryin:has-token',
@@ -137,22 +137,22 @@ describe('CherryINOAuthService', () => {
   })
 
   it('rejects OAuth callbacks with missing or unknown state (CSRF defense)', async () => {
-    await (cherryINOAuthService as any).onInit()
+    await (cherryInOauthService as any).onInit()
 
     const warnSpy = vi.spyOn(mockMainLoggerService, 'warn').mockImplementation(() => {})
 
-    const { state: validState } = await cherryINOAuthService.startOAuthFlow(
+    const { state: validState } = await cherryInOauthService.startOAuthFlow(
       { sender: { id: 7 } } as Electron.IpcMainInvokeEvent,
       'https://open.cherryin.ai'
     )
 
     // Case 1: missing state — silently dropped, no token exchange attempted.
-    await cherryINOAuthService.handleOAuthCallback(new URL('cherrystudio://oauth/callback?code=auth-code'))
+    await cherryInOauthService.handleOAuthCallback(new URL('cherrystudio://oauth/callback?code=auth-code'))
     expect(warnSpy).toHaveBeenCalledWith('OAuth callback missing state parameter, ignoring')
     expect(netMocks.fetch).not.toHaveBeenCalled()
 
     // Case 2: unknown state — silently dropped, valid pending flow stays intact.
-    await cherryINOAuthService.handleOAuthCallback(
+    await cherryInOauthService.handleOAuthCallback(
       new URL('cherrystudio://oauth/callback?state=attacker-forged-state&code=auth-code')
     )
     expect(warnSpy).toHaveBeenCalledWith('OAuth callback for unknown or expired state, ignoring')
@@ -160,45 +160,45 @@ describe('CherryINOAuthService', () => {
 
     // The legitimate pending flow remains and is still consumable on a
     // subsequent matching callback — confirms case-2 did not drop it.
-    const pendingFlows = (cherryINOAuthService as any).pendingOAuthFlows as Map<string, unknown>
+    const pendingFlows = (cherryInOauthService as any).pendingOAuthFlows as Map<string, unknown>
     expect(pendingFlows.has(validState)).toBe(true)
 
     warnSpy.mockRestore()
   })
 
   it('activates pending-flow cleanup only while an OAuth flow is active', async () => {
-    await (cherryINOAuthService as any).onInit()
-    expect(cherryINOAuthService.isActivated).toBe(false)
+    await (cherryInOauthService as any).onInit()
+    expect(cherryInOauthService.isActivated).toBe(false)
 
-    const { state } = await cherryINOAuthService.startOAuthFlow(
+    const { state } = await cherryInOauthService.startOAuthFlow(
       { sender: { id: 7 } } as Electron.IpcMainInvokeEvent,
       'https://open.cherryin.ai'
     )
 
     expect(state).toHaveLength(32)
-    expect(cherryINOAuthService.isActivated).toBe(true)
+    expect(cherryInOauthService.isActivated).toBe(true)
 
-    await cherryINOAuthService.handleOAuthCallback(
+    await cherryInOauthService.handleOAuthCallback(
       new URL(`cherrystudio://oauth/callback?state=${state}&error=access_denied`)
     )
 
-    expect(cherryINOAuthService.isActivated).toBe(false)
+    expect(cherryInOauthService.isActivated).toBe(false)
   })
 
   it('cleans up abandoned OAuth flows on the activation-scoped timer', async () => {
     vi.useFakeTimers()
-    await (cherryINOAuthService as any).onInit()
+    await (cherryInOauthService as any).onInit()
 
-    await cherryINOAuthService.startOAuthFlow(
+    await cherryInOauthService.startOAuthFlow(
       { sender: { id: 7 } } as Electron.IpcMainInvokeEvent,
       'https://open.cherryin.ai'
     )
 
-    expect(cherryINOAuthService.isActivated).toBe(true)
+    expect(cherryInOauthService.isActivated).toBe(true)
 
     await vi.advanceTimersByTimeAsync(10 * 60 * 1000 + 60 * 1000)
 
-    expect(cherryINOAuthService.isActivated).toBe(false)
+    expect(cherryInOauthService.isActivated).toBe(false)
 
     vi.useRealTimers()
   })
@@ -212,7 +212,7 @@ describe('CherryINOAuthService', () => {
     })
     providerServiceMocks.update.mockResolvedValue(undefined)
 
-    await cherryINOAuthService.saveToken({} as Electron.IpcMainInvokeEvent, 'new-access')
+    await cherryInOauthService.saveToken({} as Electron.IpcMainInvokeEvent, 'new-access')
 
     expect(providerServiceMocks.update).toHaveBeenCalledWith('cherryin', {
       authConfig: {
@@ -227,7 +227,7 @@ describe('CherryINOAuthService', () => {
   it('fails token saves without overwriting auth config when the current auth config cannot be read', async () => {
     providerServiceMocks.getAuthConfig.mockRejectedValue(new Error('sqlite busy'))
 
-    await expect(cherryINOAuthService.saveToken({} as Electron.IpcMainInvokeEvent, 'new-access')).rejects.toThrow(
+    await expect(cherryInOauthService.saveToken({} as Electron.IpcMainInvokeEvent, 'new-access')).rejects.toThrow(
       'Failed to save OAuth token'
     )
 
@@ -242,7 +242,7 @@ describe('CherryINOAuthService', () => {
       refreshToken: 'oauth-refresh'
     })
 
-    await expect(cherryINOAuthService.getToken()).resolves.toBe('oauth-access')
+    await expect(cherryInOauthService.getToken()).resolves.toBe('oauth-access')
   })
 
   it('maps balance/profile data and leaves monthly metrics null when those fields are unavailable', async () => {
@@ -280,7 +280,7 @@ describe('CherryINOAuthService', () => {
         })
       } as Response)
 
-    const result = await cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+    const result = await cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
 
     expect(result).toEqual({
       balance: 128.5,
@@ -327,7 +327,7 @@ describe('CherryINOAuthService', () => {
         })
       } as Response)
 
-    const result = await cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+    const result = await cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
 
     expect(result.profile).toEqual({
       displayName: 'Flat User',
@@ -394,8 +394,8 @@ describe('CherryINOAuthService', () => {
       } as Response
     })
 
-    const first = cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
-    const second = cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+    const first = cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+    const second = cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
 
     await vi.waitFor(() => {
       expect(vi.mocked(net.fetch).mock.calls.filter(([url]) => String(url).endsWith('/oauth2/token'))).toHaveLength(1)
@@ -447,7 +447,7 @@ describe('CherryINOAuthService', () => {
     } as Response)
 
     await expect(
-      cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+      cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
     ).rejects.toThrow('Failed to get balance: HTTP 500 Internal Server Error from /api/v1/oauth/balance')
   })
 
@@ -466,7 +466,7 @@ describe('CherryINOAuthService', () => {
     } as Response)
 
     await expect(
-      cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+      cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
     ).rejects.toThrow('OAuth session expired: no refresh token available')
 
     expect(providerServiceMocks.update).toHaveBeenCalledWith('cherryin', { authConfig: { type: 'api-key' } })
@@ -506,7 +506,7 @@ describe('CherryINOAuthService', () => {
     })
 
     await expect(
-      cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+      cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
     ).rejects.toThrow('Failed to get balance: HTTP 401 Unauthorized from /api/v1/oauth/balance')
 
     expect(errorSpy).toHaveBeenCalledWith(
@@ -536,7 +536,7 @@ describe('CherryINOAuthService', () => {
   })
 
   it('redacts form-encoded OAuth credentials and nested array values in diagnostics', () => {
-    const redact = (cherryINOAuthService as any).redactDiagnosticValue as (value: unknown) => unknown
+    const redact = (cherryInOauthService as any).redactDiagnosticValue as (value: unknown) => unknown
 
     expect(
       redact('grant_type=refresh_token&refresh_token=refresh-secret&access_token=access-secret&code=auth-code')
@@ -560,14 +560,14 @@ describe('CherryINOAuthService', () => {
     const forgedHost = 'https://attacker.example.com'
 
     await expect(
-      cherryINOAuthService.startOAuthFlow({ sender: { id: 1 } } as Electron.IpcMainInvokeEvent, forgedHost)
+      cherryInOauthService.startOAuthFlow({ sender: { id: 1 } } as Electron.IpcMainInvokeEvent, forgedHost)
     ).rejects.toThrow(/Unauthorized API host/)
 
-    await expect(cherryINOAuthService.getBalance({} as Electron.IpcMainInvokeEvent, forgedHost)).rejects.toThrow(
+    await expect(cherryInOauthService.getBalance({} as Electron.IpcMainInvokeEvent, forgedHost)).rejects.toThrow(
       /Unauthorized API host/
     )
 
-    await expect(cherryINOAuthService.logout({} as Electron.IpcMainInvokeEvent, forgedHost)).rejects.toThrow(
+    await expect(cherryInOauthService.logout({} as Electron.IpcMainInvokeEvent, forgedHost)).rejects.toThrow(
       /Unauthorized API host/
     )
   })
@@ -599,12 +599,12 @@ describe('CherryINOAuthService', () => {
       } as Response
     })
 
-    const { state } = await cherryINOAuthService.startOAuthFlow(
+    const { state } = await cherryInOauthService.startOAuthFlow(
       { sender: { id: 7 } } as Electron.IpcMainInvokeEvent,
       'https://open.cherryin.ai'
     )
 
-    await cherryINOAuthService.handleOAuthCallback(
+    await cherryInOauthService.handleOAuthCallback(
       new URL(`cherrystudio://oauth/callback?state=${state}&code=auth-code`)
     )
 
@@ -632,8 +632,8 @@ describe('CherryINOAuthService', () => {
       json: async () => ({ access_token: 'a', refresh_token: 'r' })
     } as Response)
 
-    await (cherryINOAuthService as any).onInit()
-    const { state } = await cherryINOAuthService.startOAuthFlow(
+    await (cherryInOauthService as any).onInit()
+    const { state } = await cherryInOauthService.startOAuthFlow(
       { sender: { id: 7 } } as Electron.IpcMainInvokeEvent,
       'https://open.cherryin.ai'
     )
@@ -645,13 +645,13 @@ describe('CherryINOAuthService', () => {
       webContents: { send: sendSpy }
     })
 
-    await cherryINOAuthService.handleOAuthCallback(
+    await cherryInOauthService.handleOAuthCallback(
       new URL(`cherrystudio://oauth/callback?state=${state}&code=auth-code`)
     )
 
     // No send fired (window is destroyed) and the pending flow is consumed.
     expect(sendSpy).not.toHaveBeenCalled()
-    const pendingFlows = (cherryINOAuthService as any).pendingOAuthFlows as Map<string, unknown>
+    const pendingFlows = (cherryInOauthService as any).pendingOAuthFlows as Map<string, unknown>
     expect(pendingFlows.has(state)).toBe(false)
   })
 
@@ -669,7 +669,7 @@ describe('CherryINOAuthService', () => {
       statusText: 'OK'
     } as Response)
 
-    await cherryINOAuthService.logout({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
+    await cherryInOauthService.logout({} as Electron.IpcMainInvokeEvent, 'https://open.cherryin.ai')
 
     expect(providerServiceMocks.update).toHaveBeenCalledWith('cherryin', {
       authConfig: {

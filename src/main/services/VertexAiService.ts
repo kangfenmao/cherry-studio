@@ -5,14 +5,14 @@ interface ServiceAccountCredentials {
   clientEmail: string
 }
 
-interface VertexAIAuthParams {
+interface VertexAiAuthParams {
   projectId: string
   serviceAccount?: ServiceAccountCredentials
 }
 
 const REQUIRED_VERTEX_AI_SCOPE = 'https://www.googleapis.com/auth/cloud-platform'
 
-export class VertexAIService {
+export class VertexAiService {
   private authClients: Map<string, GoogleAuth> = new Map()
 
   /**
@@ -52,7 +52,7 @@ export class VertexAIService {
   /**
    * 获取认证头用于 Vertex AI 请求
    */
-  async getAuthHeaders(params: VertexAIAuthParams): Promise<Record<string, string>> {
+  async getAuthHeaders(params: VertexAiAuthParams): Promise<Record<string, string>> {
     const { projectId, serviceAccount } = params
 
     if (!serviceAccount?.privateKey || !serviceAccount?.clientEmail) {
@@ -106,7 +106,7 @@ export class VertexAIService {
     }
   }
 
-  async getAccessToken(params: VertexAIAuthParams): Promise<string> {
+  async getAccessToken(params: VertexAiAuthParams): Promise<string> {
     const { projectId, serviceAccount } = params
 
     if (!serviceAccount?.privateKey || !serviceAccount?.clientEmail) {
@@ -162,4 +162,4 @@ export class VertexAIService {
   }
 }
 
-export const vertexAIService = new VertexAIService()
+export const vertexAiService = new VertexAiService()

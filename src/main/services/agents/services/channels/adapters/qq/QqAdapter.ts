@@ -33,12 +33,12 @@ const INTENTS = {
   GROUP_AND_C2C: 1 << 25
 }
 
-type QQTokenCache = {
+type QqTokenCache = {
   accessToken: string
   expiresAt: number
 }
 
-type QQAttachment = {
+type QqAttachment = {
   content_type?: string
   filename?: string
   height?: number
@@ -47,7 +47,7 @@ type QQAttachment = {
   url: string
 }
 
-type QQMessage = {
+type QqMessage = {
   id: string
   author: {
     id: string
@@ -61,16 +61,16 @@ type QQMessage = {
   guild_id?: string
   group_id?: string
   group_openid?: string
-  attachments?: QQAttachment[]
+  attachments?: QqAttachment[]
 }
 
-class QQAdapter extends ChannelAdapter {
+class QqAdapter extends ChannelAdapter {
   private ws: WebSocket | null = null
   private readonly appId: string
   private readonly clientSecret: string
   private readonly allowedChatIds: string[]
 
-  private tokenCache: QQTokenCache | null = null
+  private tokenCache: QqTokenCache | null = null
   private sessionId: string | null = null
   private lastSeq: number | null = null
   private heartbeatInterval: ReturnType<typeof setInterval> | null = null
@@ -345,45 +345,45 @@ class QQAdapter extends ChannelAdapter {
         this.log.info('QQ session resumed')
         break
       case 'C2C_MESSAGE_CREATE':
-        await this.handleC2CMessage(data as QQMessage)
+        await this.handleC2CMessage(data as QqMessage)
         break
       case 'GROUP_AT_MESSAGE_CREATE':
-        await this.handleGroupMessage(data as QQMessage)
+        await this.handleGroupMessage(data as QqMessage)
         break
       case 'AT_MESSAGE_CREATE':
-        await this.handleGuildMessage(data as QQMessage)
+        await this.handleGuildMessage(data as QqMessage)
         break
       case 'DIRECT_MESSAGE_CREATE':
-        await this.handleDirectMessage(data as QQMessage)
+        await this.handleDirectMessage(data as QqMessage)
         break
     }
   }
 
-  private async handleC2CMessage(msg: QQMessage): Promise<void> {
+  private async handleC2CMessage(msg: QqMessage): Promise<void> {
     const chatId = `c2c:${msg.author.user_openid}`
     if (!this.isAllowed(chatId, msg.author.user_openid)) return
     await this.processMessage(msg, chatId, msg.author.user_openid ?? msg.author.id, msg.author.username ?? '')
   }
 
-  private async handleGroupMessage(msg: QQMessage): Promise<void> {
+  private async handleGroupMessage(msg: QqMessage): Promise<void> {
     const chatId = `group:${msg.group_openid}`
     if (!this.isAllowed(chatId, msg.group_openid)) return
     await this.processMessage(msg, chatId, msg.author.member_openid ?? msg.author.id, msg.author.username ?? '')
   }
 
-  private async handleGuildMessage(msg: QQMessage): Promise<void> {
+  private async handleGuildMessage(msg: QqMessage): Promise<void> {
     const chatId = `channel:${msg.channel_id}`
     if (!this.isAllowed(chatId, msg.channel_id)) return
     await this.processMessage(msg, chatId, msg.author.id, msg.author.username ?? '')
   }
 
-  private async handleDirectMessage(msg: QQMessage): Promise<void> {
+  private async handleDirectMessage(msg: QqMessage): Promise<void> {
     const chatId = `dm:${msg.guild_id}`
     if (!this.isAllowed(chatId, msg.guild_id)) return
     await this.processMessage(msg, chatId, msg.author.id, msg.author.username ?? '')
   }
 
-  private async processMessage(msg: QQMessage, chatId: string, userId: string, userName: string): Promise<void> {
+  private async processMessage(msg: QqMessage, chatId: string, userId: string, userName: string): Promise<void> {
     const text = this.parseContent(msg.content)
 
     if (isSlashCommand(text)) {
@@ -413,7 +413,7 @@ class QQAdapter extends ChannelAdapter {
    * QQ CDN URLs may require the QQBot auth header.
    */
   private async downloadAttachments(
-    attachments?: QQAttachment[]
+    attachments?: QqAttachment[]
   ): Promise<{ images?: ImageAttachment[]; files?: FileAttachment[] }> {
     if (!attachments || attachments.length === 0) return {}
 
@@ -452,7 +452,7 @@ class QQAdapter extends ChannelAdapter {
     }
   }
 
-  private pushAttachment(att: QQAttachment, buffer: Buffer, images: ImageAttachment[], files: FileAttachment[]): void {
+  private pushAttachment(att: QqAttachment, buffer: Buffer, images: ImageAttachment[], files: FileAttachment[]): void {
     const mediaType = att.content_type || 'application/octet-stream'
     if (mediaType.startsWith('image/')) {
       images.push({ data: buffer.toString('base64'), media_type: mediaType })
@@ -630,7 +630,7 @@ class QQAdapter extends ChannelAdapter {
 
 // Self-registration
 registerAdapterFactory('qq', (channel, agentId) => {
-  return new QQAdapter({
+  return new QqAdapter({
     channelId: channel.id,
     channelType: channel.type,
     agentId,

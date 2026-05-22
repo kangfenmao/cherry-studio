@@ -7,11 +7,11 @@ import * as fs from 'fs'
 
 import { BaseFileService } from './BaseFileService'
 
-const logger = loggerService.withContext('OpenAIService')
+const logger = loggerService.withContext('OpenaiService')
 
 export class OpenaiService extends BaseFileService {
   private static readonly FILE_CACHE_DURATION = 7 * 24 * 60 * 60 * 1000
-  private static readonly generateUIFileIdCacheKey = (fileId: string) => `ui_file_id_${fileId}`
+  private static readonly generateUiFileIdCacheKey = (fileId: string) => `ui_file_id_${fileId}`
   private readonly client: OpenAI
 
   constructor(provider: Provider) {
@@ -40,7 +40,7 @@ export class OpenaiService extends BaseFileService {
       // 映射RemoteFileId到UIFileId上
       application
         .get('CacheService')
-        .set<string>(OpenaiService.generateUIFileIdCacheKey(file.id), response.id, OpenaiService.FILE_CACHE_DURATION)
+        .set<string>(OpenaiService.generateUiFileIdCacheKey(file.id), response.id, OpenaiService.FILE_CACHE_DURATION)
       return {
         fileId: response.id,
         displayName: file.origin_name,
@@ -88,7 +88,7 @@ export class OpenaiService extends BaseFileService {
     try {
       const cachedRemoteFileId = application
         .get('CacheService')
-        .get<string>(OpenaiService.generateUIFileIdCacheKey(fileId))
+        .get<string>(OpenaiService.generateUiFileIdCacheKey(fileId))
       await this.client.files.delete(cachedRemoteFileId || fileId)
       logger.debug(`File ${fileId} deleted`)
     } catch (error) {
@@ -102,7 +102,7 @@ export class OpenaiService extends BaseFileService {
       // 尝试反映射RemoteFileId
       const cachedRemoteFileId = application
         .get('CacheService')
-        .get<string>(OpenaiService.generateUIFileIdCacheKey(fileId))
+        .get<string>(OpenaiService.generateUiFileIdCacheKey(fileId))
       const response = await this.client.files.retrieve(cachedRemoteFileId || fileId)
 
       return {
