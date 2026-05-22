@@ -87,6 +87,8 @@ Choose based on **what the file's default / primary export is**:
 | Constants / enums only | `camelCase.ts` | `errorCodes.ts` |
 | Re-export barrel | `index.ts` | — |
 
+**Note:** Files under `packages/ui/` use `kebab-case.ts` regardless of export type (e.g. `use-dnd-reorder.ts`, `reorder-visible-subset.ts`), per §4.5 — that scope-specific rule overrides this section. The exported identifier (e.g. `useDndReorder`) remains `camelCase`.
+
 ### 3.3 Test Files
 
 - **Suffix**: `*.test.ts` or `*.test.tsx`. Do **not** use `.spec.*`.
