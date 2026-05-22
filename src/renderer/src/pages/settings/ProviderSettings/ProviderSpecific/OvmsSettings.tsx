@@ -14,7 +14,7 @@ const statusIcon = {
   'not-installed': XCircle
 } as const
 
-const OVMSSettings: FC = () => {
+const OvmsSettings: FC = () => {
   const { t } = useTranslation()
   const { isSupported } = useOvmsSupport()
 
@@ -179,4 +179,4 @@ const OVMSSettings: FC = () => {
   )
 }
 
-export default OVMSSettings
+export default OvmsSettings

@@ -24,11 +24,11 @@ const stepBgStyle: React.CSSProperties = {
   background: 'color-mix(in srgb, var(--color-primary) 4%, transparent)'
 }
 
-export interface AIDiagnosisSectionHandle {
+export interface AiDiagnosisSectionHandle {
   runDiagnosis: () => void
 }
 
-const AIDiagnosisSectionWithStatus = memo(
+const AiDiagnosisSectionWithStatus = memo(
   ({
     error,
     status,
@@ -44,7 +44,7 @@ const AIDiagnosisSectionWithStatus = memo(
     diagnosisContext?: DiagnosisContext
     blockId?: string
     cachedDiagnosis?: DiagnosisResult
-    ref?: React.Ref<AIDiagnosisSectionHandle>
+    ref?: React.Ref<AiDiagnosisSectionHandle>
   }) => {
     const { t, i18n } = useTranslation()
     const [result, setResult] = useState<DiagnosisResult | null>(cachedDiagnosis ?? null)
@@ -147,4 +147,4 @@ const AIDiagnosisSectionWithStatus = memo(
   }
 )
 
-export default AIDiagnosisSectionWithStatus
+export default AiDiagnosisSectionWithStatus

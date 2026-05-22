@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import CherryINOAuth from '../ProviderSpecific/CherryINOAuth'
+import CherryInOauth from '../ProviderSpecific/CherryInOauth'
 
 const useProviderMock = vi.fn()
 const useProviderAuthConfigMock = vi.fn()
@@ -30,7 +30,7 @@ vi.mock('@cherrystudio/ui/icons', () => ({
   }
 }))
 
-describe('CherryINOAuth', () => {
+describe('CherryInOauth', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     ;(window as any).toast = {
@@ -83,7 +83,7 @@ describe('CherryINOAuth', () => {
       refetch: vi.fn()
     })
 
-    render(<CherryINOAuth providerId="cherryin" />)
+    render(<CherryInOauth providerId="cherryin" />)
 
     await waitFor(() => {
       expect(window.api.cherryin.getBalance).toHaveBeenCalledWith('https://open.cherryin.ai')
@@ -122,7 +122,7 @@ describe('CherryINOAuth', () => {
       refetch: vi.fn()
     })
 
-    render(<CherryINOAuth providerId="cherryin" />)
+    render(<CherryInOauth providerId="cherryin" />)
 
     await waitFor(() => {
       expect(window.api.cherryin.getBalance).toHaveBeenCalledWith('https://open.cherryin.ai')
@@ -149,7 +149,7 @@ describe('CherryINOAuth', () => {
       refetch: vi.fn()
     })
 
-    render(<CherryINOAuth providerId="cherryin" />)
+    render(<CherryInOauth providerId="cherryin" />)
 
     expect(screen.getByRole('button', { name: /OAuth/i })).toBeInTheDocument()
     expect(screen.getByTestId('cherryin-avatar')).toBeInTheDocument()
@@ -185,7 +185,7 @@ describe('CherryINOAuth', () => {
       refetch: refetchAuthConfig
     })
 
-    render(<CherryINOAuth providerId="cherryin" />)
+    render(<CherryInOauth providerId="cherryin" />)
 
     fireEvent.click(screen.getByRole('button', { name: /退出登录|Logout/i }))
 
@@ -232,7 +232,7 @@ describe('CherryINOAuth', () => {
       refetch: refetchAuthConfig
     })
 
-    render(<CherryINOAuth providerId="cherryin" />)
+    render(<CherryInOauth providerId="cherryin" />)
 
     fireEvent.click(screen.getByRole('button', { name: /退出登录|Logout/i }))
 

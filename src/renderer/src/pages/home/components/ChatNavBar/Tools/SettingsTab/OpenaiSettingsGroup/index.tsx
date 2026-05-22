@@ -24,7 +24,7 @@ interface Props {
   SettingRowTitleSmall: FC<{ children: React.ReactNode }>
 }
 
-const OpenAISettingsGroup: FC<Props> = ({ model, providerId, SettingGroup, SettingRowTitleSmall }) => {
+const OpenaiSettingsGroup: FC<Props> = ({ model, providerId, SettingGroup, SettingRowTitleSmall }) => {
   const { t } = useTranslation()
   const { provider } = useProvider(providerId)
 
@@ -69,4 +69,4 @@ const OpenAISettingsGroup: FC<Props> = ({ model, providerId, SettingGroup, Setti
   )
 }
 
-export default OpenAISettingsGroup
+export default OpenaiSettingsGroup

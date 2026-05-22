@@ -5,12 +5,12 @@ import { SettingRow, SettingRowTitle, SettingSubtitle } from '../..'
 
 const PADDLEOCR_MODEL_OPTIONS = ['PaddleOCR-VL-1.5', 'PaddleOCR-VL', 'PP-StructureV3', 'PP-OCRv5'] as const
 
-type PaddleOCRModelSettingsProps = {
+type PaddleOcrModelSettingsProps = {
   value: string
   onChange: (value: string) => void
 }
 
-export function PaddleOCRModelSettings({ value, onChange }: PaddleOCRModelSettingsProps) {
+export function PaddleOcrModelSettings({ value, onChange }: PaddleOcrModelSettingsProps) {
   const { t } = useTranslation()
 
   const trimmedValue = value.trim()

@@ -15,7 +15,7 @@ import {
 } from '..'
 import { getMCPProviderLogo, getProviderDisplayName, providers } from './providers/config'
 
-const MCPSettings: FC = () => {
+const McpSettings: FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
@@ -94,4 +94,4 @@ const MCPSettings: FC = () => {
   )
 }
 
-export default MCPSettings
+export default McpSettings

@@ -1,6 +1,6 @@
 import { useMcpServers } from '@renderer/hooks/useMcpServers'
-import ProviderDetail from '@renderer/pages/settings/MCPSettings/McpProviderSettings'
-import { providers } from '@renderer/pages/settings/MCPSettings/providers/config'
+import ProviderDetail from '@renderer/pages/settings/McpSettings/McpProviderSettings'
+import { providers } from '@renderer/pages/settings/McpSettings/providers/config'
 import { useParams } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
 

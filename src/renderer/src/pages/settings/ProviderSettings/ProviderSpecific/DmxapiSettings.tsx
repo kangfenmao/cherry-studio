@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ProviderSettingsSubtitle } from '../primitives/ProviderSettingsPrimitives'
 
-interface DMXAPISettingsProps {
+interface DmxapiSettingsProps {
   providerId: string
 }
 
@@ -30,7 +30,7 @@ function resolveDmxPlatformFromProvider(provider: Provider | undefined): Platfor
   return PlatformDomain.OFFICIAL
 }
 
-const DMXAPISettings: FC<DMXAPISettingsProps> = ({ providerId }) => {
+const DmxapiSettings: FC<DmxapiSettingsProps> = ({ providerId }) => {
   const { provider, updateProvider } = useProvider(providerId)
   const { t } = useTranslation()
 
@@ -121,4 +121,4 @@ const DMXAPISettings: FC<DMXAPISettingsProps> = ({ providerId }) => {
   )
 }
 
-export default DMXAPISettings
+export default DmxapiSettings

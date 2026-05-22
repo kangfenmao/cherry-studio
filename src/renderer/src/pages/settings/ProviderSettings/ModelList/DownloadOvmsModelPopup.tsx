@@ -333,10 +333,10 @@ const PopupContainer: React.FC<Props> = ({ title, resolve }) => {
   )
 }
 
-export default class DownloadOVMSModelPopup {
+export default class DownloadOvmsModelPopup {
   static topviewId = 0
   static hide() {
-    TopView.hide('DownloadOVMSModelPopup')
+    TopView.hide('DownloadOvmsModelPopup')
   }
   static show(props: ShowParams) {
     return new Promise<any>((resolve) => {
@@ -348,7 +348,7 @@ export default class DownloadOVMSModelPopup {
             this.hide()
           }}
         />,
-        'DownloadOVMSModelPopup'
+        'DownloadOvmsModelPopup'
       )
     })
   }

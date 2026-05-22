@@ -13,7 +13,7 @@ import { uuid } from '@renderer/utils'
 
 import type { ConversationImporter, ImportResult } from '../types'
 
-const logger = loggerService.withContext('ChatGPTImporter')
+const logger = loggerService.withContext('ChatgptImporter')
 
 /**
  * ChatGPT Export Format Types
@@ -50,7 +50,7 @@ interface ChatGPTConversation {
  * ChatGPT conversation importer
  * Handles importing conversations from ChatGPT's conversations.json export format
  */
-export class ChatGPTImporter implements ConversationImporter {
+export class ChatgptImporter implements ConversationImporter {
   readonly name = 'ChatGPT'
   readonly emoji = '💬'
 

@@ -113,7 +113,7 @@ const sparklesIcon = <Sparkles />
 const hammerIcon18 = <Hammer size={18} />
 const sparklesIcon18 = <Sparkles size={18} />
 
-const MCPToolsButton: FC<Props> = ({ quickPanel, setInputValue, resizeTextArea, assistantId }) => {
+const McpToolsButton: FC<Props> = ({ quickPanel, setInputValue, resizeTextArea, assistantId }) => {
   const { mcpServers: activedMcpServers } = useMcpServers({ isActive: true })
   const { t } = useTranslation()
   const quickPanelHook = useQuickPanel()
@@ -584,4 +584,4 @@ const MCPToolsButton: FC<Props> = ({ quickPanel, setInputValue, resizeTextArea, 
   )
 }
 
-export default React.memo(MCPToolsButton)
+export default React.memo(McpToolsButton)

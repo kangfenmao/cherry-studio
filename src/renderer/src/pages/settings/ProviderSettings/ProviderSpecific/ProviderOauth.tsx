@@ -1,6 +1,6 @@
 import { Button, RowFlex } from '@cherrystudio/ui'
 import { resolveProviderIcon } from '@cherrystudio/ui/icons'
-import OAuthButton from '@renderer/components/OAuth/OAuthButton'
+import OauthButton from '@renderer/components/Oauth/OauthButton'
 import { PROVIDER_URLS } from '@renderer/config/providers'
 import { useProvider } from '@renderer/hooks/useProviders'
 import { getProviderLabel } from '@renderer/i18n/label'
@@ -15,7 +15,7 @@ interface Props {
   providerId: string
 }
 
-const ProviderOAuth: FC<Props> = ({ providerId }) => {
+const ProviderOauth: FC<Props> = ({ providerId }) => {
   const { t } = useTranslation()
   const { provider, updateProvider, addApiKey } = useProvider(providerId)
 
@@ -45,12 +45,12 @@ const ProviderOAuth: FC<Props> = ({ providerId }) => {
         </div>
       )}
       {!hasApiKeys(provider) ? (
-        <OAuthButton
+        <OauthButton
           provider={toV1ProviderShim(provider)}
           onSuccess={setApiKey}
           className="rounded-lg! px-3! py-[6px]! text-[13px]!">
           {t('settings.provider.oauth.button', { provider: getProviderLabel(provider.id) })}
-        </OAuthButton>
+        </OauthButton>
       ) : (
         <RowFlex className="gap-2.5">
           <Button
@@ -87,4 +87,4 @@ const ProviderOAuth: FC<Props> = ({ providerId }) => {
   )
 }
 
-export default ProviderOAuth
+export default ProviderOauth

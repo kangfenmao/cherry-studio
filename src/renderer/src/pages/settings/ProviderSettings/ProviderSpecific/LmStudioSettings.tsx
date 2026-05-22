@@ -11,13 +11,13 @@ import {
   ProviderSettingsSubtitle
 } from '../primitives/ProviderSettingsPrimitives'
 
-const logger = loggerService.withContext('LMStudioSettings')
+const logger = loggerService.withContext('LmStudioSettings')
 
 interface Props {
   providerId: string
 }
 
-const LMStudioSettings: FC<Props> = ({ providerId }) => {
+const LmStudioSettings: FC<Props> = ({ providerId }) => {
   const { provider, updateProvider } = useProvider(providerId)
   const { t } = useTranslation()
 
@@ -63,4 +63,4 @@ const LMStudioSettings: FC<Props> = ({ providerId }) => {
   )
 }
 
-export default LMStudioSettings
+export default LmStudioSettings

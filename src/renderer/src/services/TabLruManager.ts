@@ -26,14 +26,14 @@ export const TAB_LIMITS = {
 export type TabLimits = typeof TAB_LIMITS
 
 /**
- * TabLRUManager - 管理标签页的 LRU 休眠策略
+ * TabLruManager - 管理标签页的 LRU 休眠策略
  *
  * 功能：
  * - 当活跃标签数超过软上限时，选择 LRU 候选进行休眠
  * - 硬保险丝作为极端兜底，防止内存失控
  * - 支持豁免机制：当前标签、首页、置顶标签不参与休眠
  */
-export class TabLRUManager {
+export class TabLruManager {
   private softCap: number
   private hardCap: number
 

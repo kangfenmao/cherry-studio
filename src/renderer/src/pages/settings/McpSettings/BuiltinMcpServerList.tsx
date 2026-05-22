@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 import { SettingTitle } from '..'
 
-const BuiltinMCPServerList: FC = () => {
+const BuiltinMcpServerList: FC = () => {
   const { t } = useTranslation()
   const { addMcpServer, mcpServers } = useMcpServers()
   const [searchText, setSearchText] = useState('')
@@ -154,4 +154,4 @@ const BuiltinMCPServerList: FC = () => {
   )
 }
 
-export default BuiltinMCPServerList
+export default BuiltinMcpServerList

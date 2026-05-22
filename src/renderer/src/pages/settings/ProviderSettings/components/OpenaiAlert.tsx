@@ -8,7 +8,7 @@ interface Props {
   message?: string
 }
 
-export default function OpenAIAlert({ message }: Props) {
+export default function OpenaiAlert({ message }: Props) {
   const { t } = useTranslation()
   const [dismissed, setDismissed] = usePersistCache('settings.provider.openai.alert.dismissed')
   const resolvedMessage = message ?? t('settings.provider.openai.alert')

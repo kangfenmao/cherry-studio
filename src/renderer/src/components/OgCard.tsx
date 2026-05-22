@@ -10,7 +10,7 @@ type Props = {
   show: boolean
 }
 
-export const OGCard = ({ link, show }: Props) => {
+export const OgCard = ({ link, show }: Props) => {
   const openGraph = ['og:title', 'og:description', 'og:image', 'og:imageAlt'] as const
   const { metadata, isLoading, parseMetadata } = useMetaDataParser(link, openGraph)
 

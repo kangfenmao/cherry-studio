@@ -8,7 +8,7 @@ import type { FC } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface CherryINSettingsProps {
+interface CherryInSettingsProps {
   providerId: string
 }
 
@@ -30,7 +30,7 @@ const API_HOST_OPTIONS = [
   }
 ]
 
-const CherryINSettings: FC<CherryINSettingsProps> = ({ providerId }) => {
+const CherryInSettings: FC<CherryInSettingsProps> = ({ providerId }) => {
   const { provider, updateProvider } = useProvider(providerId)
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
@@ -115,4 +115,4 @@ const CherryINSettings: FC<CherryINSettingsProps> = ({ providerId }) => {
   )
 }
 
-export default CherryINSettings
+export default CherryInSettings

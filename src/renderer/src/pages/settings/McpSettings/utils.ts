@@ -1,7 +1,7 @@
 import { loggerService } from '@logger'
 import type { MCPServer } from '@shared/data/types/mcpServer'
 
-const logger = loggerService.withContext('MCPSettings/utils')
+const logger = loggerService.withContext('McpSettings/utils')
 
 /**
  * Whitelist of trusted MCP server URLs that auto-approve without user confirmation

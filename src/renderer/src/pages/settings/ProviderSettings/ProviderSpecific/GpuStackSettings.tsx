@@ -11,13 +11,13 @@ import {
   ProviderSettingsSubtitle
 } from '../primitives/ProviderSettingsPrimitives'
 
-const logger = loggerService.withContext('GPUStackSettings')
+const logger = loggerService.withContext('GpuStackSettings')
 
 interface Props {
   providerId: string
 }
 
-const GPUStackSettings: FC<Props> = ({ providerId }) => {
+const GpuStackSettings: FC<Props> = ({ providerId }) => {
   const { provider, updateProvider } = useProvider(providerId)
   const { t } = useTranslation()
 
@@ -63,4 +63,4 @@ const GPUStackSettings: FC<Props> = ({ providerId }) => {
   )
 }
 
-export default GPUStackSettings
+export default GpuStackSettings

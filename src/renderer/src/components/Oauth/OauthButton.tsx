@@ -17,7 +17,7 @@ interface Props extends React.ComponentProps<typeof Button> {
   onSuccess?: (key: string) => void
 }
 
-const OAuthButton: FC<Props> = ({ provider, onSuccess, ...buttonProps }) => {
+const OauthButton: FC<Props> = ({ provider, onSuccess, ...buttonProps }) => {
   const { t } = useTranslation()
 
   const onAuth = () => {
@@ -60,4 +60,4 @@ const OAuthButton: FC<Props> = ({ provider, onSuccess, ...buttonProps }) => {
   )
 }
 
-export default OAuthButton
+export default OauthButton

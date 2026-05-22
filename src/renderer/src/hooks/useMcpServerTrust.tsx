@@ -1,8 +1,8 @@
-import ProtocolInstallWarningContent from '@renderer/pages/settings/MCPSettings/ProtocolInstallWarning'
+import ProtocolInstallWarningContent from '@renderer/pages/settings/McpSettings/ProtocolInstallWarning'
 import {
   ensureServerTrusted as ensureServerTrustedCore,
   getCommandPreview
-} from '@renderer/pages/settings/MCPSettings/utils'
+} from '@renderer/pages/settings/McpSettings/utils'
 import { modalConfirm } from '@renderer/utils'
 import type { MCPServer } from '@shared/data/types/mcpServer'
 import { useCallback } from 'react'

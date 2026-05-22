@@ -5,7 +5,7 @@ import { SettingHelpLink, SettingHelpText, SettingHelpTextRow, SettingSubtitle }
 
 export const PADDLEOCR_DEPLOYMENT_URL = 'https://github.com/PaddlePaddle/PaddleOCR'
 
-export function PaddleOCRDeploymentInfo() {
+export function PaddleOcrDeploymentInfo() {
   const { t } = useTranslation()
 
   return (

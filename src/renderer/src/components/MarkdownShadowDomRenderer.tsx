@@ -7,7 +7,7 @@ interface Props {
   children: React.ReactNode
 }
 
-const ShadowDOMRenderer: React.FC<Props> = ({ children }) => {
+const ShadowDomRenderer: React.FC<Props> = ({ children }) => {
   const hostRef = useRef<HTMLDivElement>(null)
   const [shadowRoot, setShadowRoot] = React.useState<ShadowRoot | null>(null)
 
@@ -60,4 +60,4 @@ const ShadowDOMRenderer: React.FC<Props> = ({ children }) => {
   )
 }
 
-export default ShadowDOMRenderer
+export default ShadowDomRenderer

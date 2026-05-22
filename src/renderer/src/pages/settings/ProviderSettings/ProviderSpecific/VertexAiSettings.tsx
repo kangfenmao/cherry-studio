@@ -13,13 +13,13 @@ import {
   ProviderSettingsSubtitle
 } from '../primitives/ProviderSettingsPrimitives'
 
-const logger = loggerService.withContext('VertexAISettings')
+const logger = loggerService.withContext('VertexAiSettings')
 
 interface Props {
   providerId: string
 }
 
-const VertexAISettings: FC<Props> = ({ providerId }) => {
+const VertexAiSettings: FC<Props> = ({ providerId }) => {
   const { t } = useTranslation()
   const { provider } = useProvider(providerId)
   const { data: authConfig } = useProviderAuthConfig(providerId)
@@ -168,4 +168,4 @@ const VertexAISettings: FC<Props> = ({ providerId }) => {
   )
 }
 
-export default VertexAISettings
+export default VertexAiSettings

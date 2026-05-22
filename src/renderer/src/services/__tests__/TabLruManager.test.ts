@@ -1,7 +1,7 @@
 import type { Tab } from '@shared/data/cache/cacheValueTypes'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { TAB_LIMITS, TabLRUManager } from '../TabLRUManager'
+import { TAB_LIMITS, TabLruManager } from '../TabLruManager'
 
 // Helper to create a mock tab
 const createTab = (id: string, overrides: Partial<Tab> = {}): Tab => ({
@@ -15,11 +15,11 @@ const createTab = (id: string, overrides: Partial<Tab> = {}): Tab => ({
   ...overrides
 })
 
-describe('TabLRUManager', () => {
-  let manager: TabLRUManager
+describe('TabLruManager', () => {
+  let manager: TabLruManager
 
   beforeEach(() => {
-    manager = new TabLRUManager()
+    manager = new TabLruManager()
     // Suppress logger output during tests
     vi.spyOn(console, 'info').mockImplementation(() => {})
     vi.spyOn(console, 'warn').mockImplementation(() => {})
@@ -34,7 +34,7 @@ describe('TabLRUManager', () => {
     })
 
     it('should accept custom limits', () => {
-      const customManager = new TabLRUManager({ softCap: 5, hardCap: 15 })
+      const customManager = new TabLruManager({ softCap: 5, hardCap: 15 })
       const limits = customManager.getLimits()
       expect(limits.softCap).toBe(5)
       expect(limits.hardCap).toBe(15)
@@ -229,7 +229,7 @@ describe('TabLRUManager', () => {
 
   describe('getLimits', () => {
     it('should return current limits', () => {
-      const customManager = new TabLRUManager({ softCap: 8, hardCap: 20 })
+      const customManager = new TabLruManager({ softCap: 8, hardCap: 20 })
       const limits = customManager.getLimits()
 
       expect(limits).toEqual({ softCap: 8, hardCap: 20 })
@@ -238,7 +238,7 @@ describe('TabLRUManager', () => {
 
   describe('LRU ordering', () => {
     it('should correctly order tabs by lastAccessTime', () => {
-      const customManager = new TabLRUManager({ softCap: 3, hardCap: 10 })
+      const customManager = new TabLruManager({ softCap: 3, hardCap: 10 })
       const now = Date.now()
 
       const tabs = [

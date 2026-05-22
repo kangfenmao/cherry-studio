@@ -10,7 +10,7 @@ import type { FC } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-const logger = loggerService.withContext('CherryINOAuth')
+const logger = loggerService.withContext('CherryInOauth')
 
 const CHERRYIN_OAUTH_SERVER = 'https://open.cherryin.ai'
 const CHERRYIN_TOPUP_URL = 'https://open.cherryin.ai/console/topup'
@@ -36,7 +36,7 @@ interface BalanceInfo {
   monthlySpend: number | null
 }
 
-interface CherryINOAuthProps {
+interface CherryInOauthProps {
   providerId: string
 }
 
@@ -48,7 +48,7 @@ function formatCurrency(value: number | null | undefined): string {
   return `$${value.toFixed(2)}`
 }
 
-const CherryINOAuth: FC<CherryINOAuthProps> = ({ providerId }) => {
+const CherryInOauth: FC<CherryInOauthProps> = ({ providerId }) => {
   const { provider, updateProvider, addApiKey, deleteApiKey } = useProvider(providerId)
   const {
     data: authConfig,
@@ -267,4 +267,4 @@ const CherryINOAuth: FC<CherryINOAuthProps> = ({ providerId }) => {
   )
 }
 
-export default CherryINOAuth
+export default CherryInOauth

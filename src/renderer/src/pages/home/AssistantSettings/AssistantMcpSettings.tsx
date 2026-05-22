@@ -13,7 +13,7 @@ interface Props {
   updateAssistant: (assistant: Assistant) => void
 }
 
-const AssistantMCPSettings: React.FC<Props> = ({ assistant, updateAssistant }) => {
+const AssistantMcpSettings: React.FC<Props> = ({ assistant, updateAssistant }) => {
   const { t } = useTranslation()
   const { mcpServers: allMcpServers } = useMcpServers()
 
@@ -202,4 +202,4 @@ const ServerUrl = ({ className, ...props }: React.ComponentPropsWithoutRef<'div'
   <div className={cn('truncate text-[0.8rem] text-foreground-muted', className)} {...props} />
 )
 
-export default AssistantMCPSettings
+export default AssistantMcpSettings

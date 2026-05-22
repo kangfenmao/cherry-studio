@@ -10,7 +10,7 @@ interface Props {
   key?: string
 }
 
-const OpenAIAlert = ({ message = t('settings.provider.openai.alert'), key = LOCALSTORAGE_KEY }: Props) => {
+const OpenaiAlert = ({ message = t('settings.provider.openai.alert'), key = LOCALSTORAGE_KEY }: Props) => {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const OpenAIAlert = ({ message = t('settings.provider.openai.alert'), key = LOCA
   )
 }
 
-export default OpenAIAlert
+export default OpenaiAlert
