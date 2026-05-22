@@ -5,7 +5,7 @@ import { apiModelAdapter } from '@renderer/utils/model'
 import { groupBy, sortBy } from 'lodash'
 import React, { useMemo } from 'react'
 
-import SelectModelPopupView, { createModelPopup } from './base-popup'
+import SelectModelPopupView, { createModelPopup } from './BasePopup'
 
 interface PopupParams {
   model?: ApiModel

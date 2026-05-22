@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { getExtensionByLanguage } from '../code-language'
+import { getExtensionByLanguage } from '../codeLanguage'
 
-describe('code-language', () => {
+describe('codeLanguage', () => {
   describe('getExtensionByLanguage', () => {
     // 批量测试语言名称到扩展名的映射
     const testLanguageExtensions = (testCases: Record<string, string>) => {

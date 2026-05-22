@@ -71,8 +71,8 @@ import { getProviderById } from '@renderer/services/ProviderService'
 import type { AwsBedrockAuthType, Model, Provider } from '@renderer/types'
 
 import { COPILOT_DEFAULT_HEADERS } from '../constants'
-import type { AihubmixProviderSettings } from '../custom/aihubmix-provider'
-import type { NewApiProviderSettings } from '../custom/newapi-provider'
+import type { AihubmixProviderSettings } from '../custom/aihubmixProvider'
+import type { NewApiProviderSettings } from '../custom/newapiProvider'
 import { adaptProvider, formatProviderApiHost, getActualProvider, providerToAiSdkConfig } from '../providerConfig'
 
 const { __mockGetState: mockGetState } = vi.mocked(await import('@renderer/store')) as unknown as {

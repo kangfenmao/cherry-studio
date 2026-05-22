@@ -7,9 +7,9 @@ import {
   convertBase64ImageToAwsBedrockFormat,
   extractImageFormatFromMimeType,
   isAwsBedrockSupportedImageFormat
-} from '../aws-bedrock-utils'
+} from '../awsBedrockUtils'
 
-describe('utils/aws-bedrock-utils', () => {
+describe('utils/awsBedrockUtils', () => {
   describe('extractImageFormatFromMimeType', () => {
     it('should extract png format from mime type', () => {
       expect(extractImageFormatFromMimeType('image/png')).toBe('png')

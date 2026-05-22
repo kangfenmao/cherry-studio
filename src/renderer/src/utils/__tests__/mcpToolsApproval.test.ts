@@ -38,7 +38,7 @@ vi.mock('@renderer/config/models', () => ({
   isVisionModel: vi.fn()
 }))
 
-import { isToolAutoApproved } from '../mcp-tools'
+import { isToolAutoApproved } from '../mcpTools'
 
 function makeTool(overrides: Partial<MCPTool> = {}): MCPTool {
   return {

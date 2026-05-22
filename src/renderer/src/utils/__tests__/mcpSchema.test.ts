@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { filterProperties } from '../mcp-schema'
+import { filterProperties } from '../mcpSchema'
 
 describe('filterProperties', () => {
   describe('edge cases', () => {

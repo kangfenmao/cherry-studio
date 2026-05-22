@@ -47,7 +47,7 @@ export const YamlFrontMatter = Node.create({
   parseHTML() {
     return [
       {
-        tag: 'div[data-type="yaml-front-matter"]',
+        tag: 'div[data-type="yamlFrontMatter"]',
         getAttrs: (element) => {
           if (typeof element === 'string') return false
 
@@ -68,7 +68,7 @@ export const YamlFrontMatter = Node.create({
     return [
       'div',
       mergeAttributes(HTMLAttributes, {
-        'data-type': 'yaml-front-matter',
+        'data-type': 'yamlFrontMatter',
         'data-content': content
       }),
       content

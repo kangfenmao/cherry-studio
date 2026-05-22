@@ -14,7 +14,7 @@
  */
 // function createContextMenu(editor: Editor, node: Node, position: number): HTMLElement {
 //   const menu = document.createElement('div')
-//   menu.className = 'drag-context-menu'
+//   menu.className = 'dragContextMenu'
 //   menu.style.cssText = `
 //     position: fixed;
 //     background: var(--color-bg-base);

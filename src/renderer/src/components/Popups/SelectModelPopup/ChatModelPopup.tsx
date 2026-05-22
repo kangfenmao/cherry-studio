@@ -3,7 +3,7 @@ import type { Model, Provider } from '@renderer/types'
 import { sortBy } from 'lodash'
 import React, { useMemo } from 'react'
 
-import SelectModelPopupView, { createModelPopup } from './base-popup'
+import SelectModelPopupView, { createModelPopup } from './BasePopup'
 
 interface PopupParams {
   model?: Model

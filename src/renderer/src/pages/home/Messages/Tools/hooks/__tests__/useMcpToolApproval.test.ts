@@ -25,7 +25,7 @@ vi.mock('@renderer/hooks/agents/useActiveAgent', () => ({
   useActiveAgent: () => ({ agent: null })
 }))
 
-vi.mock('@renderer/utils/mcp-tools', () => ({
+vi.mock('@renderer/utils/mcpTools', () => ({
   isToolAutoApproved: vi.fn(() => false)
 }))
 
@@ -85,7 +85,7 @@ vi.stubGlobal('api', {
 })
 vi.stubGlobal('toast', { success: vi.fn() })
 
-import { isToolAutoApproved } from '@renderer/utils/mcp-tools'
+import { isToolAutoApproved } from '@renderer/utils/mcpTools'
 
 import { useMcpToolApproval } from '../useMcpToolApproval'
 

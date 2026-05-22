@@ -3,7 +3,7 @@ import { useActiveAgent } from '@renderer/hooks/agents/useActiveAgent'
 import { useMcpServers } from '@renderer/hooks/useMcpServers'
 import type { MCPToolResponse } from '@renderer/types'
 import type { ToolMessageBlock } from '@renderer/types/newMessage'
-import { isToolAutoApproved } from '@renderer/utils/mcp-tools'
+import { isToolAutoApproved } from '@renderer/utils/mcpTools'
 import {
   cancelToolAction,
   confirmToolAction,

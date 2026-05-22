@@ -19,7 +19,7 @@ export const CodeBlockShiki = CodeBlock.extend<CodeBlockShikiOptions>({
       defaultLanguage: 'text',
       theme: 'one-light',
       HTMLAttributes: {
-        class: 'code-block-shiki'
+        class: 'codeBlockShiki'
       }
     } as CodeBlockShikiOptions
   },
