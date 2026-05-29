@@ -2,21 +2,20 @@ import '@renderer/databases'
 
 import { preferenceService } from '@data/PreferenceService'
 import { loggerService } from '@logger'
+import { AppShell } from '@renderer/components/layout/AppShell'
+import TopViewContainer from '@renderer/components/TopView'
+import AntdProvider from '@renderer/context/AntdProvider'
+import { CodeStyleProvider } from '@renderer/context/CodeStyleProvider'
+import { NotificationProvider } from '@renderer/context/NotificationProvider'
+import StyleSheetManager from '@renderer/context/StyleSheetManager'
+import { TabsProvider } from '@renderer/context/TabsContext'
+import { ThemeProvider } from '@renderer/context/ThemeProvider'
 import store, { persistor } from '@renderer/store'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
-import { AppShell } from './components/layout/AppShell'
-import TopViewContainer from './components/TopView'
-import AntdProvider from './context/AntdProvider'
-import { CodeStyleProvider } from './context/CodeStyleProvider'
-import { NotificationProvider } from './context/NotificationProvider'
-import StyleSheetManager from './context/StyleSheetManager'
-import { TabsProvider } from './context/TabsContext'
-import { ThemeProvider } from './context/ThemeProvider'
-
-const logger = loggerService.withContext('App.tsx')
+const logger = loggerService.withContext('MainApp')
 
 void preferenceService.preloadAll()
 
@@ -30,8 +29,8 @@ const queryClient = new QueryClient({
   }
 })
 
-function App(): React.ReactElement {
-  logger.info('App initialized')
+function MainApp(): React.ReactElement {
+  logger.info('MainApp initialized')
 
   return (
     <Provider store={store}>
@@ -58,4 +57,4 @@ function App(): React.ReactElement {
   )
 }
 
-export default App
+export default MainApp

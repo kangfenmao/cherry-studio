@@ -24,7 +24,6 @@ import store, { useAppDispatch } from '@renderer/store'
 import { messageBlocksSelectors } from '@renderer/store/messageBlock'
 import { selectMessagesForTopic } from '@renderer/store/newMessage'
 import { removeBlocksThunk } from '@renderer/store/thunk/messageThunk'
-import { TraceIcon } from '@renderer/trace/pages/Component'
 import type { Assistant, Model, Topic } from '@renderer/types'
 import { type Message, MessageBlockStatus, MessageBlockType } from '@renderer/types/newMessage'
 import { captureScrollableAsBlob, captureScrollableAsDataURL, classNames } from '@renderer/utils'
@@ -48,6 +47,7 @@ import {
   findTranslationBlocksById,
   getMainTextContent
 } from '@renderer/utils/messageUtils/find'
+import { TraceIcon } from '@renderer/windows/trace/pages/Component'
 import type { TranslateLanguage } from '@shared/data/types/translate'
 import type { MenuProps } from 'antd'
 import { Dropdown, Popconfirm } from 'antd'

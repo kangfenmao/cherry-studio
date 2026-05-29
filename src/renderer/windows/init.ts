@@ -1,9 +1,8 @@
 import { preferenceService } from '@data/PreferenceService'
 import { loggerService } from '@logger'
-
-import { startAutoSync } from './services/BackupService'
-import { startNutstoreAutoSync } from './services/NutstoreService'
-import { webTraceService } from './services/WebTraceService'
+import { startAutoSync } from '@renderer/services/BackupService'
+import { startNutstoreAutoSync } from '@renderer/services/NutstoreService'
+import { webTraceService } from '@renderer/services/WebTraceService'
 loggerService.initWindowSource('mainWindow')
 
 function initAutoSync() {
