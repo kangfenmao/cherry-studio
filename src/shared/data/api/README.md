@@ -11,7 +11,7 @@ This directory contains type definitions for the DataApi system.
 ## Directory Structure
 
 ```
-packages/shared/data/api/
+src/shared/data/api/
 ├── index.ts           # Barrel exports
 ├── apiTypes.ts        # Core request/response types
 ├── apiPaths.ts        # Path template utilities

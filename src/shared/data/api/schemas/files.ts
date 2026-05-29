@@ -10,7 +10,7 @@
  *
  * The only allowed "derivation" inside DataApi is **SQL aggregation** (JOIN / GROUP BY /
  * COUNT), because that stays in the DB layer. Anything that requires FS IO or main-side
- * computation lives in **File IPC** (see `packages/shared/file/types/ipc.ts`).
+ * computation lives in **File IPC** (see `src/shared/file/types/ipc.ts`).
  *
  * Endpoints:
  * - `GET /files/entries`            — FileEntry list (fixed shape)

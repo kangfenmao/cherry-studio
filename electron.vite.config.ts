@@ -37,7 +37,7 @@ export default defineConfig({
         '@application': resolve('src/main/core/application'),
         '@types': resolve('src/renderer/src/types'),
         '@data': resolve('src/main/data'),
-        '@shared': resolve('packages/shared'),
+        '@shared': resolve('src/shared'),
         '@logger': resolve('src/main/core/logger/LoggerService'),
         '@mcp-trace/trace-core': resolve('packages/mcp-trace/trace-core'),
         '@mcp-trace/trace-node': resolve('packages/mcp-trace/trace-node'),
@@ -75,7 +75,7 @@ export default defineConfig({
     ],
     resolve: {
       alias: {
-        '@shared': resolve('packages/shared'),
+        '@shared': resolve('src/shared'),
         '@mcp-trace/trace-core': resolve('packages/mcp-trace/trace-core')
       }
     },
@@ -114,7 +114,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src'),
-        '@shared': resolve('packages/shared'),
+        '@shared': resolve('src/shared'),
         '@types': resolve('src/renderer/src/types'),
         '@logger': resolve('src/renderer/src/services/LoggerService'),
         '@data': resolve('src/renderer/src/data'),

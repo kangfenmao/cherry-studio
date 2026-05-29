@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@renderer/*": ["src/renderer/src/*"],
-      "@shared/*": ["packages/shared/*"],
+      "@shared/*": ["src/shared/*"],
       "@cherrystudio/provider-registry": ["packages/provider-registry/src/index.ts"]
     }
   }

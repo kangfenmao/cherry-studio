@@ -67,13 +67,13 @@ v2 把消费者分为三桶，对应不同的迁移目标：
 
 4. **旧 `FileStorage` IPC 是一个"超大杂货铺单例"**（2043 行、47+ 方法），混合了：受管文件 CRUD（`upload/delete/read/copy`）、外部文件 CRUD（`deleteExternalFile/readExternal/moveDir`）、特殊文件生成（`saveBase64Image/savePastedImage/download`）、格式分析（`pdfPageCount/isTextFile/isDirectory`）、对话框（`open/save/selectFolder`）、目录列表（ripgrep-based `listDirectory`、`getDirectoryStructure`）、chokidar watcher（6 个方法）、Notes 专用（`fileNameGuard/validateNotesDirectory/batchUploadMarkdown/renameDir`）和数据 URL 编解码（`base64Image/binaryImage/base64File`）。v2 新 `FileIpcApi` 只暴露 18 个方法 + `FileHandle` 多态，很多旧方法被折叠、移除或委托给 `ops/*`（详见 `handler-mapping.md`）。
 
-5. **Knowledge 域已经有完整 migrator，其他域尚未规划。** `src/main/data/migration/v2/migrators/KnowledgeMigrator.ts` + `mappings/KnowledgeMappings.ts` 已经处理了从旧 Dexie `files` 表到新 `KnowledgeItemData.file` 的转换（保留了 `FileMetadata` 形态作为 `FileItemData.file` 的 schema）。但 **message/painting/translate/notes 的迁移均未落地**。更糟的是，新 `KnowledgeItemData.file` 仍然用 `FileMetadataSchema`（`packages/shared/data/types/knowledge.ts:42`）表示，也就是说：**v2 的 SQLite 里会保留 FileMetadata 这个旧形状的持久化痕迹**——这是"migrator-only 存量"，不是长久之计。
+5. **Knowledge 域已经有完整 migrator，其他域尚未规划。** `src/main/data/migration/v2/migrators/KnowledgeMigrator.ts` + `mappings/KnowledgeMappings.ts` 已经处理了从旧 Dexie `files` 表到新 `KnowledgeItemData.file` 的转换（保留了 `FileMetadata` 形态作为 `FileItemData.file` 的 schema）。但 **message/painting/translate/notes 的迁移均未落地**。更糟的是，新 `KnowledgeItemData.file` 仍然用 `FileMetadataSchema`（`src/shared/data/types/knowledge.ts:42`）表示，也就是说：**v2 的 SQLite 里会保留 FileMetadata 这个旧形状的持久化痕迹**——这是"migrator-only 存量"，不是长久之计。
 
 ### 1.3 建议的迁移策略（分阶段）
 
 | 阶段                 | 目标                                                                                                                                | 风险                                                 |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **Phase 1**          | 新 FileEntry/FileManager/FileRef/IPC 架构落地（`src/main/file/**`、`packages/shared/file/types/**`）；旧 FileStorage 不动           | 低（已完成于 PR #13451）                             |
+| **Phase 1**          | 新 FileEntry/FileManager/FileRef/IPC 架构落地（`src/main/file/**`、`src/shared/file/types/**`）；旧 FileStorage 不动           | 低（已完成于 PR #13451）                             |
 | **Batch 0**          | Dexie `files` 表 + 旧 `FileStorage` 双读双写 shim；renderer 侧 `services/FileManager.ts` 改为同时操作两侧                           | 中，双写期需测试一致性                               |
 | **Batch A-E**        | 按域切换：**Messages 优先**（影响最大但数据结构最规整），其次 Knowledge（已有 migrator），然后 Painting，最后 Translate/Paste/Video | 高，业务域的 `FileMetadata` 字段内嵌需要全域 UI 改造 |
 | **Cleanup Batch**    | 删除 Dexie `files` 表、`FileStorage.ts`、`services/FileManager.ts`；清理 `FileMetadata` 类型；OCR/remotefile 域独立迁移             | 中，清理期需全回归                                   |
@@ -82,7 +82,7 @@ v2 把消费者分为三桶，对应不同的迁移目标：
 
 ## 2. FileMetadata 字段级使用统计
 
-旧 `FileMetadata`（定义在 `packages/shared/data/types/file/file.ts:17` 与 `src/renderer/src/types/file.ts:83`，两份完全同形）：
+旧 `FileMetadata`（定义在 `src/shared/data/types/file/file.ts:17` 与 `src/renderer/src/types/file.ts:83`，两份完全同形）：
 
 ```ts
 interface FileMetadata {
@@ -128,10 +128,10 @@ interface FileMetadata {
 
 | 文件                                         | 角色                                                                                           |
 | -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `packages/shared/data/types/file/file.ts:17` | shared 侧定义（带"need be refactored"注释），此文件 index.ts 通过 `export *` 对外暴露          |
+| `src/shared/data/types/file/file.ts:17` | shared 侧定义（带"need be refactored"注释），此文件 index.ts 通过 `export *` 对外暴露          |
 | `src/renderer/src/types/file.ts:83`          | renderer 侧定义（重复实现，字段一致）                                                          |
-| `packages/shared/data/types/knowledge.ts:42` | **v2 Schema 复用旧形状**：`FileMetadataSchema: z.ZodType<FileMetadata>` 被 `FileItemData` 引用 |
-| `packages/shared/file/types/common.ts`       | 新 `PhysicalFileMetadata` 类型（与旧 `FileMetadata` 完全不同，是物理层 stat 信息）             |
+| `src/shared/data/types/knowledge.ts:42` | **v2 Schema 复用旧形状**：`FileMetadataSchema: z.ZodType<FileMetadata>` 被 `FileItemData` 引用 |
+| `src/shared/file/types/common.ts`       | 新 `PhysicalFileMetadata` 类型（与旧 `FileMetadata` 完全不同，是物理层 stat 信息）             |
 
 两份定义同形但不共用，`renderer/src/types/file.ts` 额外导出 `ImageFileMetadata`、`PdfFileMetadata`、`isImageFileMetadata`。
 
@@ -399,7 +399,7 @@ files: 'id, name, origin_name, path, size, ext, type, created_at, count'
 - `KnowledgeFileItem.content: FileMetadata`（`types/knowledge.ts:26`）
 - `KnowledgeVideoItem.content: FileMetadata[]`（`types/knowledge.ts:35`）
 - `KnowledgeReference.file?: FileMetadata`（`types/knowledge.ts:150`）
-- v2 目标 schema：`FileItemData.file: FileMetadata`（`packages/shared/data/types/knowledge.ts:60`）— **仍保留 FileMetadata 形状**
+- v2 目标 schema：`FileItemData.file: FileMetadata`（`src/shared/data/types/knowledge.ts:60`）— **仍保留 FileMetadata 形状**
 
 **关键入口点**：
 
@@ -487,7 +487,7 @@ files: 'id, name, origin_name, path, size, ext, type, created_at, count'
 
 **新模型映射**：
 
-- 临时文本/粘贴图片应作为 `origin='internal'`（Cherry 全权管理），并通过 `tempSessionFileRef`（`packages/shared/data/types/file/ref/tempSession.ts`）持有引用，session 结束或真正挂到 message 时 promote 为 `chat_message` ref
+- 临时文本/粘贴图片应作为 `origin='internal'`（Cherry 全权管理），并通过 `tempSessionFileRef`（`src/shared/data/types/file/ref/tempSession.ts`）持有引用，session 结束或真正挂到 message 时 promote 为 `chat_message` ref
 
 **迁移复杂度**：**M**
 
@@ -585,7 +585,7 @@ files: 'id, name, origin_name, path, size, ext, type, created_at, count'
 
 | 代码位置                                                                                                                               | 原因                                                                                                        |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `packages/shared/data/types/file/file.ts`                                                                                              | 新类型替换后整份文件删除；index.ts 中 `export * from './file'` 改为 `export * from './fileEntry'`（已经有） |
+| `src/shared/data/types/file/file.ts`                                                                                              | 新类型替换后整份文件删除；index.ts 中 `export * from './file'` 改为 `export * from './fileEntry'`（已经有） |
 | `src/renderer/src/types/file.ts` 中的 `FileMetadata`/`ImageFileMetadata`/`PdfFileMetadata`/`isImageFileMetadata`                       | 全 renderer 切换后删除                                                                                      |
 | `src/renderer/src/types/file.ts:134 PdfFileMetadata`                                                                                   | **已经是死代码**（grep 未发现任何消费点）                                                                   |
 | `src/renderer/src/databases/index.ts` 中的 `files: EntityTable<FileMetadata, 'id'>` 和所有版本的 `files: 'id, name, origin_name, ...'` | Dexie files 表废弃                                                                                          |
@@ -594,7 +594,7 @@ files: 'id, name, origin_name, path, size, ext, type, created_at, count'
 | `src/main/services/FileStorage.ts` 整个文件                                                                                            | 2043 行全删；功能拆分到 `src/main/file/{FileManager,ops/*}`                                                 |
 | `src/main/services/remotefile/*` 的 `FileMetadata` 参数                                                                                | Phase 2+ 切为 FileEntryId                                                                                   |
 | `src/renderer/src/services/db/DexieMessageDataSource.ts:400-416`（引用计数维护）                                                       | file_ref 取代                                                                                               |
-| `src/preload/index.ts:218-286` 的 `file: {...}` 47 个方法                                                                              | 改用新 FileIpcApi（接口已在 `packages/shared/file/types/ipc.ts`）                                           |
+| `src/preload/index.ts:218-286` 的 `file: {...}` 47 个方法                                                                              | 改用新 FileIpcApi（接口已在 `src/shared/file/types/ipc.ts`）                                           |
 
 ### 8.2 需要分阶段清理（中置信）
 
@@ -609,7 +609,7 @@ files: 'id, name, origin_name, path, size, ext, type, created_at, count'
 
 ### 8.3 `knowledge.ts` 中的 FileMetadataSchema
 
-`packages/shared/data/types/knowledge.ts:42` 定义 `FileMetadataSchema: z.ZodType<FileMetadata>`，并在 `FileItemData` 里复用。这是 **最顽固的 FileMetadata 化石**，因为它同时：
+`src/shared/data/types/knowledge.ts:42` 定义 `FileMetadataSchema: z.ZodType<FileMetadata>`，并在 `FileItemData` 里复用。这是 **最顽固的 FileMetadata 化石**，因为它同时：
 
 - 被 SQLite `knowledge_item.data` 当 JSON 存
 - 是 KnowledgeMigrator 的终点 shape
@@ -644,7 +644,7 @@ files: 'id, name, origin_name, path, size, ext, type, created_at, count'
    - 旧 Dexie `files` 表和新 SQLite `file_entry` 并存多久？建议两个发布周期（双写 → 只读旧 → 删）。
 
 8. **临时文件（tempSessionFileRef）的 GC 策略**
-   - `packages/shared/data/types/file/ref/tempSession.ts` 已经定义了 `sourceType='temp_session'`, `role='pending'`。但具体谁在什么时机清理这些 temp ref？建议：session 结束时主动清理 + 启动时扫 "无任何 ref 的 internal entry" 做 sweep。
+   - `src/shared/data/types/file/ref/tempSession.ts` 已经定义了 `sourceType='temp_session'`, `role='pending'`。但具体谁在什么时机清理这些 temp ref？建议：session 结束时主动清理 + 启动时扫 "无任何 ref 的 internal entry" 做 sweep。
 
 9. **Painting state 的 Redux-persist 迁移**
    - paintings state 持久化到 electron-store 或类似，里面内嵌 FileMetadata。v2-refactor-temp 的 classification.json 是否覆盖 paintings？需要 data-classify migrator 也处理这层。

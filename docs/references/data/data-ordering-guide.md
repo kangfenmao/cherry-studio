@@ -40,7 +40,7 @@ export const userModel = sqliteTable(
 
 ### 2. API schema — `OrderEndpoints<TRes>`
 
-File: `packages/shared/data/api/schemas/_endpointHelpers.ts`. Intersect the resource's schema type with `OrderEndpoints<'/res'>` to inject the two PATCH endpoints into `ApiSchemas`.
+File: `src/shared/data/api/schemas/_endpointHelpers.ts`. Intersect the resource's schema type with `OrderEndpoints<'/res'>` to inject the two PATCH endpoints into `ApiSchemas`.
 
 ```typescript
 import type { OrderEndpoints } from './_endpointHelpers'

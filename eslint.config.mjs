@@ -381,8 +381,8 @@ export default defineConfig([
   // When ${xxx} placeholders are treated as literal strings, the key must match: xxx.yyy.zzz_www
   {
     files: [
-      'packages/shared/data/cache/cacheSchemas.ts',
-      'packages/shared/data/preference/preferenceSchemas.ts',
+      'src/shared/data/cache/cacheSchemas.ts',
+      'src/shared/data/preference/preferenceSchemas.ts',
       'src/main/core/paths/pathRegistry.ts'
     ],
     plugins: {

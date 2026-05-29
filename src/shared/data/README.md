@@ -13,7 +13,7 @@ For comprehensive documentation, see:
 ## Directory Structure
 
 ```
-packages/shared/data/
+src/shared/data/
 ├── api/                     # Data API type system
 │   ├── index.ts             # Barrel exports
 │   ├── apiTypes.ts          # Core request/response types

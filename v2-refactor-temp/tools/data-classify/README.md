@@ -173,8 +173,8 @@ npm run generate
 
 生成以下 TypeScript 文件：
 
-- `packages/shared/data/preference/preferenceSchemas.ts` - 偏好配置类型定义与默认值
-- `packages/shared/data/bootConfig/bootConfigSchemas.ts` - 启动配置类型定义与默认值
+- `src/shared/data/preference/preferenceSchemas.ts` - 偏好配置类型定义与默认值
+- `src/shared/data/bootConfig/bootConfigSchemas.ts` - 启动配置类型定义与默认值
 - `src/main/data/migration/v2/migrators/mappings/PreferencesMappings.ts` - 偏好迁移映射
 - `src/main/data/migration/v2/migrators/mappings/BootConfigMappings.ts` - 启动配置迁移映射
 

@@ -96,7 +96,7 @@ export function sanitizeAgentConfiguration(raw: unknown): {
 }
 
 // ============================================================================
-// Agent entity schemas (Rule C: entity schemas live in packages/shared/data/api/schemas/)
+// Agent entity schemas (Rule C: entity schemas live in src/shared/data/api/schemas/)
 // ============================================================================
 
 /** Core mutable fields shared between agent and session rows. */

@@ -96,9 +96,9 @@
   - 参考：`v2-refactor-temp/docs/knowledge/knowledge-vector-migrator.md`
 
 - 拆分临时镜像的文件类型。
-  - `packages/shared/data/types/knowledge.ts` 中仍有知识域临时镜像的 `FileMetadata`。
+  - `src/shared/data/types/knowledge.ts` 中仍有知识域临时镜像的 `FileMetadata`。
   - 后续等独立 file domain schema 稳定后，应迁移到专属文件领域类型。
-  - 参考：`packages/shared/data/types/knowledge.ts`
+  - 参考：`src/shared/data/types/knowledge.ts`
 
 ## 6. 发布与文档收尾
 

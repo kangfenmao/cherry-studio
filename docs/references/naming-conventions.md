@@ -220,7 +220,7 @@ The set of top-level directories under each of:
 - repository root `/`
 - `/src/`
 - `/src/main/`, `/src/renderer/`, `/src/preload/`
-- `/packages/shared/`
+- `/src/shared/`
 
 is **closed by default**. Adding one is a structural commitment.
 

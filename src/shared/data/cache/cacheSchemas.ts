@@ -168,7 +168,7 @@ export type UseCacheSchema = {
   // Message Streaming Cache (Temporary)
   // ============================================================================
   // TODO [v2]: Replace `any` with proper types after newMessage.ts types are
-  // migrated to packages/shared/data/types/message.ts
+  // migrated to src/shared/data/types/message.ts
   // Current types:
   // - StreamingTask: defined locally in StreamingService.ts
   // - Message: src/renderer/src/types/newMessage.ts (renderer format, not shared/Message)
