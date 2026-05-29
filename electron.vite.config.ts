@@ -35,7 +35,7 @@ export default defineConfig({
       alias: {
         '@main': resolve('src/main'),
         '@application': resolve('src/main/core/application'),
-        '@types': resolve('src/renderer/src/types'),
+        '@types': resolve('src/renderer/types'),
         '@data': resolve('src/main/data'),
         '@shared': resolve('src/shared'),
         '@logger': resolve('src/main/core/logger/LoggerService'),
@@ -101,8 +101,8 @@ export default defineConfig({
       tanstackRouter({
         target: 'react',
         autoCodeSplitting: true,
-        routesDirectory: resolve('src/renderer/src/routes'),
-        generatedRouteTree: resolve('src/renderer/src/routeTree.gen.ts')
+        routesDirectory: resolve('src/renderer/routes'),
+        generatedRouteTree: resolve('src/renderer/routeTree.gen.ts')
       }),
       (async () => (await import('@tailwindcss/vite')).default())(),
       react({
@@ -113,11 +113,11 @@ export default defineConfig({
     ],
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src'),
+        '@renderer': resolve('src/renderer'),
         '@shared': resolve('src/shared'),
-        '@types': resolve('src/renderer/src/types'),
-        '@logger': resolve('src/renderer/src/services/LoggerService'),
-        '@data': resolve('src/renderer/src/data'),
+        '@types': resolve('src/renderer/types'),
+        '@logger': resolve('src/renderer/services/LoggerService'),
+        '@data': resolve('src/renderer/data'),
         '@mcp-trace/trace-core': resolve('packages/mcp-trace/trace-core'),
         '@mcp-trace/trace-web': resolve('packages/mcp-trace/trace-web'),
         '@cherrystudio/ai-core/provider': resolve('packages/aiCore/src/core/providers'),

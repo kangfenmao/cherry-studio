@@ -82,7 +82,7 @@ src/shared/file/types/tree.ts   ← shared with renderer
 ├── CreateTreeIpcResult — { treeId, snapshot }
 └── TreeMutationPushPayload — { treeId, event }
 
-src/renderer/src/hooks/useDirectoryTree.ts   ← renderer hook
+src/renderer/hooks/useDirectoryTree.ts   ← renderer hook
 ├── On mount → File_TreeCreate → rehydrate TreeNode class hierarchy
 ├── On File_TreeMutation (filtered by treeId) → applyMutation in place
 ├── Returns { root, isLoading, error, version, treeId, getNode }
@@ -363,7 +363,7 @@ Three suites under `src/main/services/file/tree/__tests__/`:
 - **`TreeNode.test.ts`** — class invariants: rename cascade, identity preservation, JSON serialization shape.
 - **`search.test.ts`** — `listDirectory` happy path + error branches (ripgrep unavailable, EACCES on root).
 
-Renderer-side: `src/renderer/src/hooks/__tests__/useDirectoryTree.test.tsx` covers mount/unmount, mutation application, mid-flight cancel, StrictMode remount, post-unmount rejection, and treeId mismatch filtering.
+Renderer-side: `src/renderer/hooks/__tests__/useDirectoryTree.test.tsx` covers mount/unmount, mutation application, mid-flight cancel, StrictMode remount, post-unmount rejection, and treeId mismatch filtering.
 
 ---
 

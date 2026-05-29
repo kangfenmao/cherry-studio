@@ -268,8 +268,8 @@ See [App State Overview](./app-state-overview.md) for full rules and the key reg
 - `src/main/data/db/` - Database schemas
 
 ### Renderer Process Implementation
-- `src/renderer/src/data/DataApiService.ts` - API client
-- `src/renderer/src/data/CacheService.ts` - Cache service
-- `src/renderer/src/data/PreferenceService.ts` - Preference service
-- `src/renderer/src/data/hooks/` - React hooks
+- `src/renderer/data/DataApiService.ts` - API client
+- `src/renderer/data/CacheService.ts` - Cache service
+- `src/renderer/data/PreferenceService.ts` - Preference service
+- `src/renderer/data/hooks/` - React hooks
 

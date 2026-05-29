@@ -5,7 +5,7 @@
  *
  * Lives in shared because both the main-process `DirectoryTreeBuilder`
  * (`src/main/services/file/tree/`) and the renderer-side `useDirectoryTree`
- * hook (`src/renderer/src/hooks/useDirectoryTree.ts`) work against the
+ * hook (`src/renderer/hooks/useDirectoryTree.ts`) work against the
  * **same tree shape**. Splitting the classes into per-side mirrors made
  * us write the algorithms twice — there is no reason: every helper here
  * is pure string manipulation, no Node FS or Electron globals.

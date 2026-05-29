@@ -231,7 +231,7 @@ export const DEFAULT_TIMEOUT = 30 * 1000 * 60
  * The constant is only kept on disk because two v1-era call sites still
  * reference it:
  *   - `src/main/bootstrap.ts` (deprecated; no longer imported anywhere)
- *   - `src/renderer/src/pages/settings/DataSettings/BasicDataSettings.tsx`
+ *   - `src/renderer/pages/settings/DataSettings/BasicDataSettings.tsx`
  *     (v1 in-process migration flow, to be rewritten to the new BootConfig
  *     `temp.user_data_relocation` protocol)
  *

@@ -39,7 +39,7 @@ Non-obvious rules the code enforces; assume them when designing consumers.
 1. **Same-value write is a no-op.** Equality via `lodash.isEqual`. No broadcast, no subscriber fire, no hook re-render. (`src/main/data/CacheService.ts` `isEqual` guards before `broadcastSync` / notifier)
 2. **TTL-only refresh does not fire subscribers.** Updating `expireAt` on the same value is silent.
 3. **Subscribers fire only on explicit writes.** Lazy TTL cleanup, the 10-min GC sweep, and `onStop` do not fire.
-4. **Hooks + TTL is discouraged.** `useCache` / `useSharedCache` log a warn when the key has TTL (`src/renderer/src/data/hooks/useCache.ts:186-192,289-295`) — values can expire between renders.
+4. **Hooks + TTL is discouraged.** `useCache` / `useSharedCache` log a warn when the key has TTL (`src/renderer/data/hooks/useCache.ts:186-192,289-295`) — values can expire between renders.
 5. **Hooks pin cache entries.** `registerHook` / `unregisterHook` refcount keys; `delete` / `deleteShared` return `false` while any hook is active.
 6. **Persist has no delete.** Persist keys are fixed by schema; the API exposes only `getPersist` / `setPersist` / `hasPersist`.
 7. **TTL uses absolute `expireAt` (Unix ms).** Every process expires the same entry at the same instant, regardless of clock skew in IPC delivery.
@@ -107,4 +107,4 @@ Non-obvious rules the code enforces; assume them when designing consumers.
 
 - [Cache Usage](./cache-usage.md) — React hooks, direct API, patterns
 - [Cache Schema Guide](./cache-schema-guide.md) — Adding fixed and template keys
-- Source: `src/main/data/CacheService.ts`, `src/renderer/src/data/CacheService.ts`, `src/renderer/src/data/hooks/useCache.ts`, `src/shared/data/cache/`
+- Source: `src/main/data/CacheService.ts`, `src/renderer/data/CacheService.ts`, `src/renderer/data/hooks/useCache.ts`, `src/shared/data/cache/`

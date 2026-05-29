@@ -99,7 +99,7 @@ Use the `gh-create-issue` skill. Fallback: read `.agents/skills/gh-create-issue/
 
 ### TypeScript
 
-- Place shared type definitions in `src/renderer/src/types/` or `src/shared/`.
+- Place shared type definitions in `src/renderer/types/` or `src/shared/`.
 
 ### Naming Conventions
 
@@ -126,7 +126,7 @@ logger.error("message", error);
 
 - All user-visible strings must use `i18next` — never hardcode UI strings
 - Run `pnpm i18n:check` to validate; `pnpm i18n:sync` to add missing keys
-- Locale files in `src/renderer/src/i18n/`
+- Locale files in `src/renderer/i18n/`
 
 ### UI Design
 

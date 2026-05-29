@@ -171,8 +171,8 @@ export type UseCacheSchema = {
   // migrated to src/shared/data/types/message.ts
   // Current types:
   // - StreamingTask: defined locally in StreamingService.ts
-  // - Message: src/renderer/src/types/newMessage.ts (renderer format, not shared/Message)
-  // - MessageBlock: src/renderer/src/types/newMessage.ts
+  // - Message: src/renderer/types/newMessage.ts (renderer format, not shared/Message)
+  // - MessageBlock: src/renderer/types/newMessage.ts
   'message.streaming.task.${messageId}': any // StreamingTask
   'message.streaming.topic_tasks.${topicId}': string[]
   'message.streaming.content.${messageId}': any // Message (renderer format)

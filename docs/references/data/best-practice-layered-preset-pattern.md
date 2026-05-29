@@ -184,7 +184,7 @@ Create a custom hook that merges presets with user overrides:
 > **Note:** The hook below is a basic example. Your actual implementation should be tailored to your specific data structure and usage patterns. Consider factors like: which fields are user-editable, how merging should work for nested objects, whether you need filtering/sorting, etc.
 
 ```typescript
-// src/renderer/src/hooks/useProviders.ts
+// src/renderer/hooks/useProviders.ts
 
 import { useCallback, useMemo } from 'react'
 
