@@ -84,7 +84,7 @@ describe('IpcHandlersFor exhaustiveness', () => {
 
 describe('global registry reflects migrated domains', () => {
   // Extend these unions as each new domain is migrated onto IpcApi.
-  it('exposes the migrated file-processing + knowledge + selection + window request routes', () => {
+  it('exposes the migrated knowledge + selection + window + web search + file-processing request routes', () => {
     expectTypeOf<IpcRoute>().toEqualTypeOf<
       | 'file_processing.start_job'
       | 'file_processing.list_available_processors'
@@ -102,6 +102,8 @@ describe('global registry reflects migrated domains', () => {
       | 'selection.process_action'
       | 'selection.pin_action_window'
       | 'selection.get_linux_env_info'
+      | 'web_search.search_keywords'
+      | 'web_search.fetch_urls'
       | 'window.close'
       | 'window.minimize'
       | 'window.maximize'
