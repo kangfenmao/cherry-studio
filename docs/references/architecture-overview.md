@@ -149,7 +149,7 @@ cherry-studio
 │   │
 │   ├── preload/                 # Preload scripts (IPC bridge)
 │   │
-│   └── shared/                  # Shared types, schemas, constants
+│   └── shared/                  # Cross-process primitives: types, schemas/contracts, pure logic
 │
 ├── packages/
 │   ├── ui/                      #   @cherrystudio/ui (Shadcn + Tailwind)
@@ -167,6 +167,8 @@ cherry-studio
 ```
 
 Main-process and renderer code is organized by **feature** (`features/` — high-cohesion domain modules) versus **type-bucket** (`services/`, `utils/`, `components/`, `hooks/` — small, independent pieces). See [Naming Conventions §4.10](./naming-conventions.md) for the placement rule. For the renderer's full layering, directory responsibilities, and dependency rules, see [Renderer Architecture](./renderer-architecture.md).
+
+`src/shared/` is the **cross-process primitive layer**: it holds only types, schemas/contracts, and pure logic importable by **both** `main` and `renderer`, and depends on no app code. Being cross-process is the entry gate — code reachable from only one process belongs in that process's own layer (`src/renderer/*` or `src/main/*`), not here; plain shared *types* are the sole exception. See [Renderer Architecture §2](./renderer-architecture.md).
 
 ## Key Subsystems
 
