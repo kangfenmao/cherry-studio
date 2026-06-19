@@ -89,9 +89,11 @@ vi.mock('@cherrystudio/ui', () => {
   }
 })
 
-import { CommandProvider, useCommandHandler } from '../CommandProvider'
-import { ContextKeyProvider } from '../ContextKeyProvider'
-import { CommandContextMenu, type CommandContextMenuExtraItem } from '../menus'
+import { useCommandHandler } from '@renderer/hooks/command'
+
+import { CommandContextKeyProvider } from '../CommandContextKeyProvider'
+import { CommandContextMenu, type CommandContextMenuExtraItem } from '../CommandMenus'
+import { CommandProvider } from '../CommandProvider'
 
 function RegisteredTopicCreate({ onExecute }: { onExecute: () => void }) {
   useCommandHandler('topic.create', onExecute)
@@ -114,7 +116,7 @@ function renderMenu({
   location?: Parameters<typeof CommandContextMenu>[0]['location']
 } = {}) {
   return render(
-    <ContextKeyProvider>
+    <CommandContextKeyProvider>
       <CommandProvider>
         <RegisteredTopicCreate onExecute={onExecute} />
         <CommandContextMenu
@@ -125,7 +127,7 @@ function renderMenu({
           <button type="button">trigger</button>
         </CommandContextMenu>
       </CommandProvider>
-    </ContextKeyProvider>
+    </CommandContextKeyProvider>
   )
 }
 
@@ -393,7 +395,7 @@ describe('CommandContextMenu', () => {
     }
 
     render(
-      <ContextKeyProvider>
+      <CommandContextKeyProvider>
         <CommandProvider>
           <CommandContextMenu
             location="webcontents.context"
@@ -401,7 +403,7 @@ describe('CommandContextMenu', () => {
             <TriggerContent />
           </CommandContextMenu>
         </CommandProvider>
-      </ContextKeyProvider>
+      </CommandContextKeyProvider>
     )
 
     await waitFor(() => expect(mountCount).toHaveBeenCalledOnce())
