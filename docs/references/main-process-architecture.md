@@ -64,10 +64,11 @@ The charters imply a direction; dependencies flow toward the business-agnostic f
 - **`ai/` is foundational within the business tier**: `features/` and `services/` may depend on it; it must not import a feature.
 - **Feature domains are mutually isolated**: a `features/<domain>/` must not import a **sibling** feature — share through `services/`, `ai/`, `data/`, or `@shared`.
 - **`ipc/` is the boundary adapter**: it resolves services through the DI container (`application.get`) rather than importing domain modules directly.
+- **No renderer imports**: `src/main` and `src/preload` must not import renderer code. Cross-process types live in `@shared`, main-only types stay in `src/main` — see [Shared Layer Architecture](./shared-layer-architecture.md) for placement. Enforced by an ESLint `no-restricted-imports` rule banning `@types` / `@renderer` in `src/main` + `src/preload`; §7 tracks the one remaining exception.
 
 Two dependencies cut across **every** directory and are **not** layering edges — they are ambient infrastructure access: `@logger` (logging) and `@application` (the DI container / service locator). A raw import scan shows almost everything "depending on `core`" only because of these two; the rules above concern direct module imports between domains.
 
-There is no automated boundary enforcement yet (unlike the `import/no-restricted-paths` zones proposed for the renderer in [Renderer Architecture §5](./renderer-architecture.md)); direction is held by convention and review.
+There is no automated enforcement of the **internal** direction edges above yet (unlike the `import/no-restricted-paths` zones proposed for the renderer in [Renderer Architecture §5](./renderer-architecture.md)); direction is held by convention and review. The **external** main↔renderer boundary (no renderer imports) *is* enforced — see the rule above.
 
 ## 4. Closed Top-Level Governance
 
@@ -115,6 +116,7 @@ This page describes the **target**. Where current code does not yet match it, th
 |---|---|---|
 | `utils/index.ts` | a bucket-root `index.ts` holds loose helpers (`debounce`, `makeSureDirExists`, `toAsarUnpackedPath`, …) — the junk-drawer root barrel §2.1 forbids | split into named topic files (`utils/<topic>.ts`); `@shared` has already done exactly this — see [Shared Layer Architecture §6](./shared-layer-architecture.md) |
 | legacy `ipc.ts` | v1 IPC registration at the process root, coexisting with IpcApi | domains migrate into `ipc/` (IpcApi) incrementally until `ipc.ts` is retired (§1) |
+| `utils/language.ts` i18n | imports renderer i18n JSON via relative path (`../../renderer/i18n/locales/*`, `translate/*`) to build the main-process `t()` table — a main→renderer edge (§3 No-renderer-imports) the ESLint rule does not yet catch (relative `**/renderer/**` is intentionally left unbanned so this still compiles) | relocate the locale JSON to a process-neutral on-disk resource loaded per-process via `i18next-fs-backend`, so main reads its own slice. Marked `TODO(i18n-migration)` in the file; once done, tighten the ESLint group to also ban relative `**/renderer/**` |
 
 By-design edges are **not** deviations and are deliberately omitted: the `data/migration/v2/` migrators reading domain data (§1) and `@logger` / `@application` ambient access from any tier (§3).
 

@@ -138,6 +138,7 @@ After decomposition every edge is downward (`component → component`/`hook`, `h
 - Treating a cross-cutting capability as a peer feature.
 - Opening a new top-level directory for a single capability.
 - A feature using `export *`, or an external consumer deep-importing a feature's internals.
+- Importing a shared bucket root (`@renderer/utils`, `@renderer/types`) instead of the specific file/topic, or giving `types/`/`utils/` a re-export root `index.ts` (§5).
 - A hand-rolled `components/layout/` bucket — "layout" is not a layer here: route layouts live in `routes/` (TanStack layout routes), layout primitives (`Box`/`Stack`/`Grid`) in `packages/ui`, app shell in `windows/`.
 
 ## 8. Target vs Current State
