@@ -41,12 +41,12 @@ function extractAllLanguageData(): Record<string, LanguageData> {
 }
 
 /**
- * Generates the content for the languages.ts file.
+ * Generates the content for the code-languages.ts file.
  * @param languages The language data to include in the file.
  * @returns The generated file content as a string.
  */
 function generateLanguagesFileContent(languages: Record<string, LanguageData>): string {
-  console.log('📝 Generating languages.ts file content...')
+  console.log('📝 Generating code-languages.ts file content...')
   const sortedLanguages = Object.fromEntries(Object.entries(languages).sort(([a], [b]) => a.localeCompare(b)))
 
   const languagesObjectString = JSON.stringify(sortedLanguages, null, 2)
@@ -68,7 +68,7 @@ type LanguageData = {
   extensions?: string[];
 };
 
-export const languages: Record<string, LanguageData> = ${languagesObjectString};
+export const codeLanguages: Record<string, LanguageData> = ${languagesObjectString};
 `
   console.log('✅ File content generated.')
   return content
@@ -105,10 +105,10 @@ async function checkTypeScript(filePath: string): Promise<void> {
 }
 
 /**
- * Main function to update the languages.ts file.
+ * Main function to update the code-languages.ts file.
  */
 async function updateLanguagesFile(): Promise<void> {
-  console.log('🚀 Starting to update languages.ts...')
+  console.log('🚀 Starting to update code-languages.ts...')
   try {
     const extractedLanguages = extractAllLanguageData()
     const fileContent = generateLanguagesFileContent(extractedLanguages)
@@ -119,7 +119,7 @@ async function updateLanguagesFile(): Promise<void> {
     await format(LANGUAGES_FILE_PATH)
     await checkTypeScript(LANGUAGES_FILE_PATH)
 
-    console.log('🎉 Successfully updated languages.ts file!')
+    console.log('🎉 Successfully updated code-languages.ts file!')
     console.log(`📊 Contains ${Object.keys(extractedLanguages).length} languages.`)
   } catch (error) {
     console.error('❌ An error occurred during the update process:', (error as Error).message)
