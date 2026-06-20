@@ -18,8 +18,8 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
+import { application } from '@application'
 import { loggerService } from '@logger'
-import { HOME_CHERRY_DIR } from '@main/constants'
 import { BaseService, Injectable, Phase, ServicePhase } from '@main/core/lifecycle'
 import { isMac, isWin } from '@main/core/platform'
 import {
@@ -123,7 +123,7 @@ export class CodeCliService extends BaseService {
   }
 
   public async getBunPath() {
-    const dir = path.join(os.homedir(), HOME_CHERRY_DIR, 'bin')
+    const dir = application.getPath('cherry.bin')
     const bunName = await getBinaryName('bun')
     const bunPath = path.join(dir, bunName)
     return bunPath
@@ -184,7 +184,7 @@ export class CodeCliService extends BaseService {
    * We use Bun to run cli-wrapper.cjs, which works on all platforms.
    */
   private async getClaudeCodeCommand(bunPath: string): Promise<string> {
-    const globalInstallDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'install', 'global')
+    const globalInstallDir = application.getPath('feature.cli.install_global')
     const cliWrapperPath = path.join(
       globalInstallDir,
       'node_modules',
@@ -199,7 +199,7 @@ export class CodeCliService extends BaseService {
     }
 
     // Fallback: try to execute the binary directly (works if postinstall ran correctly)
-    const binDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'bin')
+    const binDir = application.getPath('cherry.bin')
     const executableName = await this.getCliExecutableName(codeCLI.claudeCode)
     const executablePath = path.join(binDir, executableName + (isWin ? '.exe' : ''))
     logger.warn(`cli-wrapper.cjs not found at ${cliWrapperPath}, falling back to direct execution: ${executablePath}`)
@@ -213,7 +213,7 @@ export class CodeCliService extends BaseService {
    * while opencode-ai's postinstall places the real executable under the package.
    */
   private async getOpenCodeCommand(): Promise<string> {
-    const globalInstallDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'install', 'global')
+    const globalInstallDir = application.getPath('feature.cli.install_global')
     const openCodeExecutablePath = path.join(globalInstallDir, 'node_modules', 'opencode-ai', 'bin', 'opencode.exe')
 
     if (fs.existsSync(openCodeExecutablePath)) {
@@ -222,7 +222,7 @@ export class CodeCliService extends BaseService {
     }
 
     // Fallback: try to execute the Bun global bin directly.
-    const binDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'bin')
+    const binDir = application.getPath('cherry.bin')
     const executableName = await this.getCliExecutableName(codeCLI.openCode)
     const executablePath = path.join(binDir, executableName + (isWin ? '.exe' : ''))
     logger.warn(
@@ -730,7 +730,7 @@ export class CodeCliService extends BaseService {
 
   private async isPackageInstalled(cliTool: string): Promise<boolean> {
     const executableName = await this.getCliExecutableName(cliTool)
-    const binDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'bin')
+    const binDir = application.getPath('cherry.bin')
     const executablePath = path.join(binDir, executableName + (isWin ? '.exe' : ''))
 
     // Ensure bin directory exists
@@ -767,7 +767,7 @@ export class CodeCliService extends BaseService {
           versionCommand = await this.getOpenCodeCommand()
         } else {
           const executableName = await this.getCliExecutableName(cliTool)
-          const binDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'bin')
+          const binDir = application.getPath('cherry.bin')
           const executablePath = path.join(binDir, executableName + (isWin ? '.exe' : ''))
           versionCommand = `"${executablePath}"`
         }
@@ -880,7 +880,7 @@ export class CodeCliService extends BaseService {
     try {
       const packageName = await this.getPackageName(cliTool)
       const bunPath = await this.getBunPath()
-      const bunInstallPath = path.join(os.homedir(), HOME_CHERRY_DIR)
+      const bunInstallPath = application.getPath('cherry.home')
       const registryUrl = await this.getNpmRegistryUrl()
 
       // Get logs directory for update output redirection
@@ -946,7 +946,7 @@ export class CodeCliService extends BaseService {
     const packageName = await this.getPackageName(cliTool)
     const bunPath = await this.getBunPath()
     const executableName = await this.getCliExecutableName(cliTool)
-    const binDir = path.join(os.homedir(), HOME_CHERRY_DIR, 'bin')
+    const binDir = application.getPath('cherry.bin')
     const executablePath = path.join(binDir, executableName + (isWin ? '.exe' : ''))
 
     logger.debug(`Package name: ${packageName}`)
@@ -1112,7 +1112,7 @@ export class CodeCliService extends BaseService {
       baseCommand = `${baseCommand} --model Cherry-${providerName}/${modelId}`
     }
 
-    const bunInstallPath = path.join(os.homedir(), HOME_CHERRY_DIR)
+    const bunInstallPath = application.getPath('cherry.home')
 
     if (isInstalled) {
       // If already installed, run executable directly (with optional update message)
