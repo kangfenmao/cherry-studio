@@ -146,40 +146,64 @@ artifactBuildCompleted: scripts/artifact-build-completed.js
 releaseInfo:
   releaseNotes: |
     <!--LANG:en-->
-    Cherry Studio 1.9.7 - Model Support & Bug Fixes
+    Cherry Studio 2.0.0 - Major Architecture Upgrade
 
     ✨ New Features
-    - [Models] Added support for grok-build-0.1 capabilities (reasoning, tool use, vision)
-    - [Providers] StepFun now supports Claude Code / Anthropic-compatible mode with auto-filled endpoint
-    - [Agents] DeepSeek V4 Flash and MiMo V2.5+ now properly support 1M context window in Claude Code
+    - [Migration] Redesigned V2 migration window with clearer progress and error handling
+    - [Settings] Added ability to delete provider models directly from settings
+    - [Knowledge] Added custom chunk strategy and separator options for better content processing
+    - [Knowledge] Added recovery for knowledge bases that lost embedding models during migration
+    - [Knowledge] Added pagination for data source items in knowledge base settings
+    - [Knowledge] Added conflict dialog when adding duplicate data sources
+    - [Power] Added option to prevent system sleep during long-running tasks
+    - [Providers] Added proxy support for provider HTTP requests
+    - [UI] Added required field indicators and improved form validation
+    - [Search] Restored global search panel
+    - [Chat] Restored chat history records page
 
     🐛 Bug Fixes
-    - [Web Search] Fixed ExaMCP web search not returning result content correctly
-    - [Code Viewer] Fixed code syntax highlighting issues where tokens could disappear in light theme
-    - [OpenCode] Fixed launch failures after CLI updates by using package-local executable
-    - [Agents] Fixed Agent mode not forwarding custom provider headers to Claude Code
-    - [Models] Fixed Grok 4.3 reasoning effort support in xAI responses
-    - [OpenClaw] Improved migration message clarity when external PATH installation is detected
-    - [Models] Fixed Gemini 3.x models using wrong UI and sending deprecated sampling parameters
-    - [Models] Fixed Qwen max series models incorrectly showing vision capability
-    - [Providers] Fixed AIHubMix reasoning effort configuration not working properly
+    - [Chat] Fixed message list scrolling behavior (pin-to-top and bottom-follow)
+    - [Settings] Fixed language selector not matching active UI language on startup
+    - [Painting] Fixed auto dimension selection for image generation
+    - [Knowledge] Fixed interrupted indexing items getting stranded
+    - [OCR] Fixed image OCR routing through file processing
+    - [UI] Fixed side panel display issues on non-Mac platforms
+    - [Agents] Fixed MCP tools blocking agent/chat startup
+    - [Migration] Fixed knowledge base migration issues on Windows
+    - [Navigation] Fixed Launchpad page 404 error
+    - [Knowledge] Fixed relative time display at unit boundaries
+
+    ⚡ Performance
+    - [Startup] Improved startup speed by deferring binary manager initialization
 
     <!--LANG:zh-CN-->
-    Cherry Studio 1.9.7 - 模型支持与错误修复
+    Cherry Studio 2.0.0 - 架构重大升级
 
     ✨ 新功能
-    - [模型] 支持 grok-build-0.1 模型能力（推理、工具调用、视觉）
-    - [提供商] StepFun 现在支持 Claude Code / Anthropic 兼容模式，并自动填充端点
-    - [智能体] DeepSeek V4 Flash 和 MiMo V2.5+ 现在在 Claude Code 中正确支持 1M 上下文窗口
+    - [迁移] 重设计 V2 迁移窗口，进度和错误处理更清晰
+    - [设置] 支持直接从设置中删除提供商模型
+    - [知识库] 支持自定义分块策略和分隔符选项，优化内容处理
+    - [知识库] 支持恢复迁移过程中丢失嵌入模型的知识库
+    - [知识库] 知识库设置中的数据源项目支持分页显示
+    - [知识库] 添加重复数据源时显示冲突提示
+    - [电源] 支持长时间运行任务时防止系统休眠
+    - [提供商] 支持代理配置用于提供商 HTTP 请求
+    - [界面] 添加必填字段标识并改进表单验证
+    - [搜索] 恢复全局搜索面板
+    - [聊天] 恢复聊天历史记录页面
 
     🐛 问题修复
-    - [网络搜索] 修复 ExaMCP 网络搜索无法正确返回结果内容的问题
-    - [代码查看器] 修复浅色主题下代码语法高亮标记可能消失的问题
-    - [OpenCode] 修复 CLI 更新后启动失败的问题，现在使用包本地可执行文件
-    - [智能体] 修复智能体模式未将自定义提供商标头转发给 Claude Code 的问题
-    - [模型] 修复 xAI 响应中 Grok 4.3 推理强度支持问题
-    - [OpenClaw] 改进检测到外部 PATH 安装时的迁移消息清晰度
-    - [模型] 修复 Gemini 3.x 模型使用错误 UI 并发送已弃用采样参数的问题
-    - [模型] 修复 Qwen max 系列模型错误显示视觉能力的问题
-    - [提供商] 修复 AIHubMix 推理强度配置无法正常工作的问题
+    - [聊天] 修复消息列表滚动行为（置顶和底部跟随）
+    - [设置] 修复启动时语言选择器与界面语言不匹配
+    - [绘图] 修复图像生成的自动尺寸选择
+    - [知识库] 修复中断的索引项目被遗留的问题
+    - [OCR] 修复图像 OCR 通过文件处理的路由
+    - [界面] 修复非 Mac 平台的侧边栏显示问题
+    - [智能体] 修复 MCP 工具阻塞智能体/聊天启动
+    - [迁移] 修复 Windows 上的知识库迁移问题
+    - [导航] 修复启动页 404 错误
+    - [知识库] 修复相对时间在单位边界处的显示
+
+    ⚡ 性能优化
+    - [启动] 通过延迟二进制管理器初始化提升启动速度
     <!--LANG:END-->
