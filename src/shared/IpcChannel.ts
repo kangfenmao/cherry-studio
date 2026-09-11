@@ -5,10 +5,6 @@
  * LAN transfer, and a handful of micro-domains.
  */
 export enum IpcChannel {
-  App_GetCacheSize = 'app:get-cache-size',
-  App_ClearCache = 'app:clear-cache',
-  App_SetLaunchOnBoot = 'app:set-launch-on-boot',
-  App_SetSpellCheckLanguages = 'app:set-spell-check-languages',
   App_Select = 'app:select',
   App_HasWritePermission = 'app:has-write-permission',
   App_ResolvePath = 'app:resolve-path',
@@ -16,13 +12,8 @@ export enum IpcChannel {
   Application_PreventQuit = 'application:prevent-quit',
   Application_AllowQuit = 'application:allow-quit',
   Application_Relaunch = 'application:relaunch',
-  App_ResetData = 'app:reset-data',
   App_LogToMain = 'app:log-to-main',
   App_QuoteToMain = 'app:quote-to-main',
-
-  // StorageMonitor: main-process disk-space watcher for the user-data volume
-  StorageMonitor_GetHealth = 'storage-monitor:get-health',
-  StorageMonitor_HealthChanged = 'storage-monitor:health-changed',
 
   // Python: main→renderer(pyodide)→main reverse RPC
   Python_ExecutionRequest = 'python:execution-request',
@@ -69,13 +60,9 @@ export enum IpcChannel {
   File_Mkdir = 'file:mkdir',
   File_Write = 'file:write',
   File_SaveImage = 'file:saveImage',
-  File_SavePastedImage = 'file:savePastedImage',
   File_BinaryImage = 'file:binaryImage',
   Fs_Read = 'fs:read',
   Fs_ReadText = 'fs:readText',
-  File_IsTextFile = 'file:isTextFile',
-  File_IsDirectory = 'file:isDirectory',
-  File_GetMetadata = 'file:getMetadata',
   File_ListDirectory = 'file:listDirectory',
   File_ListDirectoryEntries = 'file:listDirectoryEntries',
   File_CheckFileName = 'file:checkFileName',
@@ -88,12 +75,6 @@ export enum IpcChannel {
   File_GetPhysicalPath = 'file:getPhysicalPath',
   File_PermanentDelete = 'file:permanentDelete',
   File_RunSweep = 'file:runSweep',
-  // DirectoryTreeBuilder primitive — top-level file-module surface, parallel
-  // to the FileEntry channels above. See docs/references/file/directory-tree.md.
-  File_TreeCreate = 'file:tree:create',
-  File_TreeDispose = 'file:tree:dispose',
-  File_TreeRename = 'file:tree:rename',
-  File_TreeMutation = 'file:tree:mutation',
 
   // backup
   Backup_Backup = 'backup:backup',
@@ -151,9 +132,6 @@ export enum IpcChannel {
   // TRACE
   TRACE_GET_DATA = 'trace:getData',
   TRACE_CLEAN_LOCAL_DATA = 'trace:cleanLocalData',
-
-  // ExternalApps
-  ExternalApps_DetectInstalled = 'external-apps:detect-installed',
 
   // Global Skills
   Skill_ReadFile = 'skill:read-file',

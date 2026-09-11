@@ -3,6 +3,7 @@ import type { CherryMessagePart } from '@shared/data/types/message'
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 
+import { useMessageActivityState } from './hooks/useMessageActivityState'
 import { MessageListProvider } from './MessageListProvider'
 import type { MessageListActions, MessageListItem, MessageListProviderValue, MessageRenderConfig } from './types'
 import { defaultMessageRenderConfig } from './types'
@@ -26,6 +27,7 @@ function createFallbackTopic(messages: MessageListItem[]): Topic {
     id: topicId,
     assistantId: firstMessage?.assistantId || '',
     name: '',
+    lastActivityAt: firstMessage?.updatedAt || firstMessage?.createdAt || '',
     createdAt: firstMessage?.createdAt || '',
     updatedAt: firstMessage?.updatedAt || '',
     messages: []
@@ -41,6 +43,8 @@ export function MessageContentProvider({
   actions
 }: MessageContentProviderProps) {
   const resolvedActions = actions ?? EMPTY_MESSAGE_ACTIONS
+  const resolvedTopic = useMemo(() => topic ?? createFallbackTopic(messages), [messages, topic])
+  const messageActivity = useMessageActivityState(resolvedTopic.id)
   const mergedRenderConfig = useMemo(
     () => ({
       ...defaultMessageRenderConfig,
@@ -51,7 +55,7 @@ export function MessageContentProvider({
   const value = useMemo<MessageListProviderValue>(
     () => ({
       state: {
-        topic: topic ?? createFallbackTopic(messages),
+        topic: resolvedTopic,
         messages,
         partsByMessageId,
         hasOlder: false,
@@ -66,18 +70,15 @@ export function MessageContentProvider({
           isMultiSelectMode: false,
           selectedMessageIds: []
         },
-        getMessageActivityState: (message) => ({
-          isProcessing: message.status === 'pending',
-          isStreamTarget: message.status === 'pending',
-          isApprovalAnchor: false
-        })
+        getMessageActivityState: messageActivity.getMessageActivityState,
+        messageActivityStore: messageActivity.store
       },
       actions: resolvedActions,
       meta: {
         selectionLayer: false
       }
     }),
-    [mergedRenderConfig, messages, partsByMessageId, resolvedActions, topic]
+    [mergedRenderConfig, messageActivity, messages, partsByMessageId, resolvedActions, resolvedTopic]
   )
 
   return <MessageListProvider value={value}>{children}</MessageListProvider>

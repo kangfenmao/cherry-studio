@@ -19,7 +19,7 @@ export interface ImageTransportDescriptor {
 export interface ImageGenerationTransport {
   submit(input: ImageGenerationSubmitInput): Promise<{ taskId?: string; imageUrls?: string[] }>
   /**
-   * `modelDescriptor` is carried so a restart-resumed poll on a fresh transport
+   * `modelDescriptor` is carried so a poll on a fresh transport
    * instance can rebuild per-task state (e.g. DashScope's response family).
    */
   poll?(
@@ -45,6 +45,7 @@ export interface ImageGenerationSubmitInput {
   prompt: string | undefined
   n: number
   size: `${number}x${number}` | undefined
+  aspectRatio?: `${number}:${number}`
   seed: number | undefined
   files: ImageModelV3CallOptions['files']
   mask: ImageModelV3CallOptions['mask']
@@ -103,6 +104,7 @@ export function createImageGenerationModel(
         prompt: options.prompt,
         n: options.n,
         size: options.size,
+        aspectRatio: options.aspectRatio,
         seed: options.seed,
         files: options.files,
         mask: options.mask,

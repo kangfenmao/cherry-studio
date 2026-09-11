@@ -1,3 +1,4 @@
+import type * as I18nLabelModule from '@renderer/i18n/label'
 import type { Model, UniqueModelId } from '@shared/data/types/model'
 import type { Provider } from '@shared/data/types/provider'
 import { act, render, screen } from '@testing-library/react'
@@ -24,7 +25,8 @@ const { mockHoverCardContentProps, mockHoverCardProps, mockHoverCardOpenChange }
   mockHoverCardOpenChange: { current: undefined as ((open: boolean) => void) | undefined }
 }))
 
-vi.mock('@renderer/i18n/label', () => ({
+vi.mock('@renderer/i18n/label', async (importOriginal) => ({
+  ...(await importOriginal<typeof I18nLabelModule>()),
   getProviderLabel: (id: string) => id
 }))
 
@@ -36,6 +38,7 @@ vi.mock('react-i18next', () => ({
         'assistants.settings.reasoning_effort.default': 'Default',
         'assistants.settings.reasoning_effort.label': 'Reasoning Effort',
         'assistants.settings.reasoning_effort.max': 'Max',
+        'assistants.settings.reasoning_effort.ultra': 'Ultra',
         'assistants.settings.reasoning_effort.xhigh': 'Extra High',
         'models.detail.context_window': 'Context window',
         'models.detail.max_input_tokens': 'Max input tokens',
@@ -109,7 +112,7 @@ const provider: Provider = {
   name: 'OpenAI',
   apiKeys: [],
   authType: 'api-key',
-  apiFeatures: {} as Provider['apiFeatures'],
+  reportsActualCost: false,
   settings: {} as Provider['settings'],
   isEnabled: true
 } as Provider
@@ -132,6 +135,7 @@ function makeItem(model: Model): ModelSelectorModelItem {
   return {
     key: model.id,
     type: 'model',
+    groupKind: 'provider',
     model,
     provider,
     modelId: model.id,
@@ -274,20 +278,6 @@ describe('ModelSelectorDetailCard', () => {
     expect(mockHoverCardContentProps.at(-1)?.avoidCollisions).toBeUndefined()
   })
 
-  it('does not use a document fragment as the collision boundary', () => {
-    const model = makeModel()
-    const portalContainer = document.createDocumentFragment()
-
-    render(
-      <ModelSelectorDetailCard item={makeItem(model)} provider={provider} portalContainer={portalContainer}>
-        <button type="button">GPT-4o mini</button>
-      </ModelSelectorDetailCard>
-    )
-
-    expect(mockHoverCardContentProps.at(-1)).toMatchObject({ portalContainer })
-    expect(mockHoverCardContentProps.at(-1)?.collisionBoundary).toBeUndefined()
-  })
-
   it('renders reasoning options derived from the descriptor', () => {
     const model = makeModel({
       id: 'openai::gpt-5-codex-max' as UniqueModelId,
@@ -308,5 +298,23 @@ describe('ModelSelectorDetailCard', () => {
     // filtered out of the display; 'max' renders its i18n label).
     expect(screen.getByText('Reasoning Effort')).toBeInTheDocument()
     expect(screen.getByText('Max')).toBeInTheDocument()
+  })
+
+  it('renders the localized Ultra effort for GPT-6 Astra', () => {
+    const model = makeModel({
+      id: 'openai-codex::gpt-6-astra' as UniqueModelId,
+      providerId: 'openai-codex',
+      apiModelId: 'gpt-6-astra',
+      name: 'GPT-6 Astra',
+      reasoning: { selectableEfforts: ['ultra'] }
+    })
+
+    render(
+      <ModelSelectorDetailCard item={makeItem(model)} provider={provider}>
+        <button type="button">GPT-6 Astra</button>
+      </ModelSelectorDetailCard>
+    )
+
+    expect(screen.getByText('Ultra')).toBeInTheDocument()
   })
 })

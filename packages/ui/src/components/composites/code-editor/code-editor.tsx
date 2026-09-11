@@ -11,7 +11,7 @@ const codeEditorGutterTheme = EditorView.theme({
   '.cm-gutters': {
     backgroundColor: 'transparent',
     borderRight: 'none',
-    color: 'var(--color-muted-foreground)'
+    color: 'var(--muted-foreground)'
   },
   '.cm-activeLineGutter': {
     backgroundColor: 'transparent'
@@ -218,6 +218,9 @@ const CodeEditor = ({
         fontSize,
         marginTop: 0,
         borderRadius: 'inherit',
+        // ReactCodeMirror only sizes .cm-editor, so a percentage height collapses to
+        // auto unless this host element carries the same height.
+        ...(expanded ? undefined : { height }),
         ...style
       }}
       className={`code-editor ${className ?? ''}`}

@@ -3,17 +3,16 @@ import type { ReasoningSupport } from '../schemas/model'
 import type { ProviderModelOverride } from '../schemas/provider-models'
 import type { ReasoningWireProfile } from '../schemas/reasoningWire'
 import { defineProvider } from './types'
+import { modeWire, openaiResponsesSummaryWire } from './wires'
 
 const fixedSupport: ReasoningSupport = { controls: [] }
 
-const effortSupport = (values: ReasoningEffort[]): ReasoningSupport => ({
-  controls: [{ kind: 'effort', values }]
+const effortSupport = (values: ReasoningEffort[], defaultEffort?: ReasoningEffort): ReasoningSupport => ({
+  controls: [{ kind: 'effort', values, ...(defaultEffort ? { default: defaultEffort } : {}) }],
+  ...(defaultEffort ? { defaultEffort } : {})
 })
 
-const minimaxM3Wire: ReasoningWireProfile = {
-  off: { operations: [{ target: 'thinking.type', value: { source: 'literal', value: 'disabled' } }] },
-  auto: { operations: [{ target: 'thinking.type', value: { source: 'literal', value: 'adaptive' } }] }
-}
+const minimaxM3Wire: ReasoningWireProfile = modeWire('thinking.type', { off: 'disabled', auto: 'adaptive' })
 
 const qwenBudgetWire: ReasoningWireProfile = {
   off: { operations: [{ target: 'thinking.type', value: { source: 'literal', value: 'disabled' } }] },
@@ -29,6 +28,7 @@ const qwenBudgetWire: ReasoningWireProfile = {
 const chatFixedModels = [
   'glm-5',
   'glm-5-1',
+  'hy4-preview',
   'kimi-k2-5',
   'kimi-k2-6',
   'kimi-k2-7-code',
@@ -38,12 +38,35 @@ const chatFixedModels = [
   'mimo-v2-pro'
 ]
 
-const chatEffortModels: Array<{ modelId: string; values: ReasoningEffort[] }> = [
+const chatEffortModels: Array<{
+  modelId: string
+  values: ReasoningEffort[]
+  defaultEffort?: ReasoningEffort
+  pricing?: ProviderModelOverride['pricing']
+}> = [
+  { modelId: 'deepseek-flash', values: ['high', 'max'] },
   { modelId: 'deepseek-v4-flash', values: ['high', 'max'] },
+  { modelId: 'deepseek-v4-flash-vision-exp', values: ['high', 'max'] },
   { modelId: 'deepseek-v4-pro', values: ['high', 'max'] },
   { modelId: 'glm-5-2', values: ['high', 'max'] },
-  { modelId: 'grok-4-5', values: ['low', 'medium', 'high'] },
-  { modelId: 'kimi-k3', values: ['max'] }
+  { modelId: 'glm-5-3', values: ['low', 'high', 'max'], defaultEffort: 'max' },
+  {
+    modelId: 'glm-5-3-flash',
+    values: ['low', 'high', 'max'],
+    defaultEffort: 'max',
+    pricing: {
+      cacheRead: { currency: 'USD', perMillionTokens: 0.03 },
+      input: { currency: 'USD', perMillionTokens: 0.15 },
+      output: { currency: 'USD', perMillionTokens: 0.5 }
+    }
+  },
+  { modelId: 'hy3', values: ['none', 'low', 'high'] },
+  { modelId: 'kimi-k3', values: ['max'] },
+  // Stealth model, no creator entry: models.dev routes it through `@ai-sdk/openai-compatible`
+  // and prints an effort ladder, so pin chat/completions rather than let it fall back unpinned.
+  { modelId: 'ox-alpha', values: ['low', 'high', 'max'] },
+  // Same shape as ox-alpha: unclassified stealth SKU, chat/completions with a printed ladder.
+  { modelId: 'omen-alpha', values: ['low', 'high'] }
 ]
 
 const anthropicFixedModels = ['minimax-m2-5', 'minimax-m2-7']
@@ -52,7 +75,9 @@ const qwenBudgetModels = [
   { max: 81_920, modelId: 'qwen3-5-plus' },
   { max: 81_920, modelId: 'qwen3-6-plus' },
   { max: 262_144, modelId: 'qwen3-7-max' },
-  { max: 262_144, modelId: 'qwen3-7-plus' }
+  { max: 262_144, modelId: 'qwen3-7-plus' },
+  { max: 262_144, modelId: 'qwen3-8-flash' },
+  { max: 262_144, modelId: 'qwen3-8-max' }
 ]
 
 const endpointOverrides: Partial<ProviderModelOverride>[] = [
@@ -63,13 +88,54 @@ const endpointOverrides: Partial<ProviderModelOverride>[] = [
       'openai-chat-completions': { support: fixedSupport }
     }
   })),
-  ...chatEffortModels.map(({ modelId, values }) => ({
+  ...chatEffortModels.map(({ modelId, values, defaultEffort, pricing }) => ({
     modelId,
     endpointTypes: ['openai-chat-completions' as const],
+    ...(pricing ? { pricing } : {}),
     reasoningContracts: {
-      'openai-chat-completions': { support: effortSupport(values) }
+      'openai-chat-completions': { support: effortSupport(values, defaultEffort) }
     }
   })),
+  { modelId: 'longcat-2-0', endpointTypes: ['openai-chat-completions'] },
+  // models.dev routes Zen Go's Grok 4.5 through `@ai-sdk/openai` (Responses); the Go endpoint table
+  // still prints chat/completions, so Chat stays selectable behind the Responses default (#17860).
+  {
+    modelId: 'grok-4-5',
+    endpointTypes: ['openai-responses' as const, 'openai-chat-completions' as const],
+    reasoningContracts: {
+      'openai-responses': { support: effortSupport(['low', 'medium', 'high']) },
+      'openai-chat-completions': { support: effortSupport(['low', 'medium', 'high']) }
+    }
+  },
+  {
+    modelId: 'grok-4-6',
+    endpointTypes: ['openai-responses'],
+    reasoningContracts: {
+      'openai-responses': { support: effortSupport(['low', 'medium', 'high', 'xhigh']) }
+    }
+  },
+  {
+    modelId: 'gpt-5-6-luna',
+    endpointTypes: ['openai-responses' as const],
+    reasoningContracts: {
+      'openai-responses': { support: effortSupport(['none', 'low', 'medium', 'high', 'xhigh', 'max']) }
+    }
+  },
+  {
+    modelId: 'muse-spark-1-2-contributor',
+    endpointTypes: ['openai-responses' as const],
+    reasoningContracts: {
+      'openai-responses': { support: effortSupport(['minimal', 'low', 'medium', 'high', 'xhigh']) }
+    }
+  },
+  // Same @ai-sdk/openai classification as the 1.2 contributor SKU; 1.3 adds `max` to the family ladder.
+  {
+    modelId: 'muse-spark-1-3-contributor',
+    endpointTypes: ['openai-responses' as const],
+    reasoningContracts: {
+      'openai-responses': { support: effortSupport(['minimal', 'low', 'medium', 'high', 'xhigh', 'max']) }
+    }
+  },
   ...anthropicFixedModels.map((modelId) => ({
     modelId,
     endpointTypes: ['anthropic-messages' as const],
@@ -102,6 +168,7 @@ const endpointOverrides: Partial<ProviderModelOverride>[] = [
 export default defineProvider({
   id: 'opencode',
   name: 'OpenCode Go',
+  availableInEditions: ['global'],
   defaultChatEndpoint: 'openai-chat-completions',
   endpointConfigs: {
     'anthropic-messages': {
@@ -114,6 +181,11 @@ export default defineProvider({
       baseUrl: 'https://opencode.ai/zen/go/v1',
       modelsApiUrls: { default: 'https://opencode.ai/zen/go/v1/models' },
       reasoningFormat: { type: 'openai-chat' }
+    },
+    'openai-responses': {
+      adapterFamily: 'openai',
+      baseUrl: 'https://opencode.ai/zen/go/v1',
+      reasoningFormat: { type: 'openai-responses', wire: openaiResponsesSummaryWire }
     }
   },
   metadata: {

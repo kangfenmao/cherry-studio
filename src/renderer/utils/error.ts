@@ -7,11 +7,11 @@ import type {
   SerializedAiSdkNoSuchToolError,
   SerializedError
 } from '@renderer/types/error'
-import { isSerializedAiSdkApiCallError } from '@renderer/types/error'
-import { aiErrorDetail } from '@shared/ipc/errors/ai'
+import { isSerializedAiSdkApiCallError, isSerializedAiSdkRetryError } from '@renderer/types/error'
+import { getSafeProviderErrorMessage, serializeNestedProviderError } from '@shared/ai/providerError'
+import { aiErrorDetail, aiStreamAdmissionReason } from '@shared/ipc/errors/ai'
 import { safeSerialize } from '@shared/utils/serialize'
-import type { NoSuchToolError } from 'ai'
-import { AISDKError } from 'ai'
+import { AISDKError, APICallError, type NoSuchToolError } from 'ai'
 import { InvalidToolInputError } from 'ai'
 import { type AxiosError, isAxiosError } from 'axios'
 import { t } from 'i18next'
@@ -38,6 +38,8 @@ export function formatErrorMessage(error: unknown): string {
 }
 
 export function getErrorMessage(error: unknown): string {
+  const admissionMessage = getAiStreamAdmissionMessage(error)
+  if (admissionMessage) return admissionMessage
   if (error instanceof Error && error.message) {
     return error.message
   } else {
@@ -46,8 +48,29 @@ export function getErrorMessage(error: unknown): string {
 }
 
 export function formatErrorMessageWithPrefix(error: unknown, prefix: string): string {
+  const admissionMessage = getAiStreamAdmissionMessage(error)
+  if (admissionMessage) return admissionMessage
   const msg = getErrorMessage(error)
   return `${prefix}: ${msg}`
+}
+
+function getAiStreamAdmissionMessage(error: unknown): string | undefined {
+  switch (aiStreamAdmissionReason(error)) {
+    case 'SINGLE_MODEL_REQUIRED':
+      return t('message.error.stream_admission.single_model_required')
+    case 'TARGET_NOT_IN_LIVE_GROUP':
+      return t('message.error.stream_admission.target_not_in_live_group')
+    case 'MODEL_ALREADY_IN_LIVE_GROUP':
+      return t('message.error.stream_admission.model_already_in_live_group')
+    case 'EXECUTION_NOT_READY':
+      return t('message.error.stream_admission.execution_not_ready')
+    case 'EXECUTION_CHANGED':
+      return t('message.error.stream_admission.execution_changed')
+    case 'TOPIC_BUSY':
+      return t('message.error.stream_admission.topic_busy')
+    default:
+      return undefined
+  }
 }
 
 export const isTimeoutError = (error: any): boolean => {
@@ -128,6 +151,8 @@ const serializeNoSuchToolError = (error: NoSuchToolError): SerializedAiSdkNoSuch
 }
 
 export const serializeError = (error: AiSdkErrorUnion): SerializedError => {
+  if (APICallError.isInstance(error as unknown)) return serializeNestedProviderError(error) as SerializedError
+
   // 统一所有可能的错误字段
   const serializedError: SerializedError = {
     name: error.name ?? null,
@@ -178,8 +203,8 @@ export const serializeError = (error: AiSdkErrorUnion): SerializedError => {
   if ('availableProviders' in error) serializedError.availableProviders = error.availableProviders
   if ('availableTools' in error) serializedError.availableTools = error.availableTools ?? null
   if ('reason' in error) serializedError.reason = error.reason
-  if ('lastError' in error) serializedError.lastError = safeSerialize(error.lastError)
-  if ('errors' in error) serializedError.errors = error.errors.map((err: unknown) => safeSerialize(err))
+  if ('lastError' in error) serializedError.lastError = serializeNestedProviderError(error.lastError)
+  if ('errors' in error) serializedError.errors = error.errors.map(serializeNestedProviderError)
   if ('originalError' in error)
     serializedError.originalError = InvalidToolInputError.isInstance(error.originalError)
       ? serializeInvalidToolInputError(error.originalError)
@@ -282,9 +307,13 @@ export function formatAiSdkError(error: SerializedAiSdkError): string {
     if (error.statusCode) {
       text += `${t('error.statusCode')}: ${error.statusCode}\n`
     }
-    text += `${t('error.requestUrl')}: ${error.url}\n`
-    const requestBodyValues = safeToString(error.requestBodyValues)
-    text += `${t('error.requestBodyValues')}: ${requestBodyValues}\n`
+    if (error.url) {
+      text += `${t('error.requestUrl')}: ${error.url}\n`
+    }
+    if (error.requestBodyValues !== null) {
+      const requestBodyValues = safeToString(error.requestBodyValues)
+      text += `${t('error.requestBodyValues')}: ${requestBodyValues}\n`
+    }
     if (error.responseHeaders) {
       text += `${t('error.responseHeaders')}: ${JSON.stringify(error.responseHeaders, null, 2)}\n`
     }
@@ -299,6 +328,26 @@ export function formatAiSdkError(error: SerializedAiSdkError): string {
 
   return text.trim()
 }
+
+function retryProviderText(error: SerializedError): string {
+  if (!isSerializedAiSdkRetryError(error)) return ''
+  const attempts = Array.isArray(error.errors) ? [...error.errors].reverse() : []
+  for (const nested of [error.lastError, ...attempts]) {
+    if (!nested || typeof nested !== 'object' || Array.isArray(nested)) continue
+    const text = providerErrorText(nested as SerializedError)
+    if (text) return text
+  }
+  return ''
+}
+
+/** The provider's own error text. `message` degrades to the HTTP statusText ("Forbidden")
+ *  whenever the body misses the SDK's error schema, so `responseBody` wins. */
+export function providerErrorText(error: SerializedError | undefined): string {
+  if (!error) return ''
+  const payload = getSafeProviderErrorMessage({ responseBody: error.responseBody, data: error.data })
+  return payload || retryProviderText(error) || getSafeProviderErrorMessage({ message: error.message })
+}
+
 export const formatAgentServerError = (error: AgentServerError) =>
   `${t('common.error')}: ${error.error.code} ${error.error.message}`
 export const formatAxiosError = (error: AxiosError) => {

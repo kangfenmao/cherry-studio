@@ -29,7 +29,8 @@ export const QQChannelConfigSchema = z.object({
   type: z.literal('qq'),
   app_id: z.string(),
   client_secret: z.string(),
-  allowed_chat_ids: z.array(z.string()).default([])
+  allowed_chat_ids: z.array(z.string()).default([]),
+  mention_only: z.boolean().optional()
 })
 
 export type QQChannelConfig = z.infer<typeof QQChannelConfigSchema>
@@ -74,3 +75,9 @@ export type ChannelConfig = z.infer<typeof ChannelConfigSchema>
 
 export const CHANNEL_TYPES = ['telegram', 'feishu', 'qq', 'wechat', 'discord', 'slack'] as const
 export type ChannelType = (typeof CHANNEL_TYPES)[number]
+
+export interface ChannelStatus {
+  channelId: string
+  connected: boolean
+  error?: string
+}

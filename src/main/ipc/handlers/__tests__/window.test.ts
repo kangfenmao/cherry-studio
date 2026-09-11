@@ -1,7 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { appGetMock } = vi.hoisted(() => ({ appGetMock: vi.fn() }))
+const { appGetMock, captureScreenshotViaCdpMock } = vi.hoisted(() => ({
+  appGetMock: vi.fn(),
+  captureScreenshotViaCdpMock: vi.fn()
+}))
 vi.mock('@application', () => ({ application: { get: appGetMock } }))
+vi.mock('@main/utils/cdpScreenshot', () => ({ captureScreenshotViaCdp: captureScreenshotViaCdpMock }))
 
 import { windowHandlers } from '../window'
 
@@ -13,14 +17,18 @@ const windowManager = {
   setFullScreen: vi.fn(() => true),
   isMaximized: vi.fn(() => true),
   isFullScreen: vi.fn(() => false),
-  getInitData: vi.fn(() => ({ path: '/settings/provider' }))
+  getInitData: vi.fn(() => ({ path: '/settings/provider' })),
+  getWindow: vi.fn()
 }
 const mainWindowService = {
+  requestClose: vi.fn(() => false),
   setMainWindowMinimumSize: vi.fn(),
   resetMainWindowMinimumSize: vi.fn(),
   reloadMainWindow: vi.fn()
 }
 const subWindowService = { setAlwaysOnTop: vi.fn(() => true) }
+
+const callerWindow = { isDestroyed: vi.fn(() => false), webContents: { id: 7 } }
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -35,12 +43,26 @@ beforeEach(() => {
 const ctx = (senderId: string | null) => ({ senderId })
 
 describe('windowHandlers', () => {
-  it('close/minimize/maximize/unmaximize act on the caller window by its senderId', async () => {
+  it('lets MainWindowService handle a main-window close request', async () => {
+    mainWindowService.requestClose.mockReturnValue(true)
     await windowHandlers['window.close'](undefined, ctx('w1'))
+
+    expect(mainWindowService.requestClose).toHaveBeenCalledWith('w1')
+    expect(windowManager.close).not.toHaveBeenCalled()
+  })
+
+  it('delegates non-main close requests to WindowManager', async () => {
+    mainWindowService.requestClose.mockReturnValue(false)
+    await windowHandlers['window.close'](undefined, ctx('w2'))
+
+    expect(mainWindowService.requestClose).toHaveBeenCalledWith('w2')
+    expect(windowManager.close).toHaveBeenCalledWith('w2')
+  })
+
+  it('minimize/maximize/unmaximize act on the caller window by its senderId', async () => {
     await windowHandlers['window.minimize'](undefined, ctx('w2'))
     await windowHandlers['window.maximize'](undefined, ctx('w3'))
     await windowHandlers['window.unmaximize'](undefined, ctx('w4'))
-    expect(windowManager.close).toHaveBeenCalledWith('w1')
     expect(windowManager.minimize).toHaveBeenCalledWith('w2')
     expect(windowManager.maximize).toHaveBeenCalledWith('w3')
     expect(windowManager.unmaximize).toHaveBeenCalledWith('w4')
@@ -68,6 +90,7 @@ describe('windowHandlers', () => {
     await windowHandlers['window.close'](undefined, ctx(null))
     await windowHandlers['window.minimize'](undefined, ctx(null))
     await windowHandlers['window.set_full_screen'](true, ctx(null))
+    expect(mainWindowService.requestClose).not.toHaveBeenCalled()
     expect(windowManager.close).not.toHaveBeenCalled()
     expect(windowManager.minimize).not.toHaveBeenCalled()
     expect(windowManager.setFullScreen).not.toHaveBeenCalled()
@@ -94,5 +117,31 @@ describe('windowHandlers', () => {
     expect(mainWindowService.setMainWindowMinimumSize).toHaveBeenCalledWith(800, 600)
     expect(mainWindowService.resetMainWindowMinimumSize).toHaveBeenCalledOnce()
     expect(mainWindowService.reloadMainWindow).toHaveBeenCalledOnce()
+  })
+
+  describe('window.capture_screenshot', () => {
+    const input = { clip: { x: 0, y: 0, width: 100, height: 50 }, scale: 2 }
+
+    it('rasterizes through CDP against the caller window and returns the data URL', async () => {
+      windowManager.getWindow.mockReturnValue(callerWindow)
+      captureScreenshotViaCdpMock.mockResolvedValue('data:image/png;base64,QUJD')
+
+      const result = await windowHandlers['window.capture_screenshot'](input, ctx('w1'))
+
+      expect(windowManager.getWindow).toHaveBeenCalledWith('w1')
+      expect(captureScreenshotViaCdpMock).toHaveBeenCalledWith(callerWindow.webContents, input.clip, 2)
+      expect(result).toEqual({ dataUrl: 'data:image/png;base64,QUJD' })
+    })
+
+    it('rejects when the caller window is not tracked (senderId null)', async () => {
+      await expect(windowHandlers['window.capture_screenshot'](input, ctx(null))).rejects.toThrow('not found')
+      expect(captureScreenshotViaCdpMock).not.toHaveBeenCalled()
+    })
+
+    it('rejects when the caller window is destroyed', async () => {
+      windowManager.getWindow.mockReturnValue({ ...callerWindow, isDestroyed: vi.fn(() => true) })
+      await expect(windowHandlers['window.capture_screenshot'](input, ctx('w1'))).rejects.toThrow('not found')
+      expect(captureScreenshotViaCdpMock).not.toHaveBeenCalled()
+    })
   })
 })

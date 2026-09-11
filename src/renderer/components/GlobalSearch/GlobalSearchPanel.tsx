@@ -10,6 +10,7 @@ import {
   KbdGroup,
   SegmentedControl
 } from '@cherrystudio/ui'
+import { cacheService } from '@data/CacheService'
 import { dataApiService } from '@data/DataApiService'
 import { usePersistCache } from '@data/hooks/useCache'
 import { useInvalidateCache } from '@data/hooks/useDataApi'
@@ -28,6 +29,7 @@ import { useTabs } from '@renderer/hooks/tab'
 import { useConversationNavigation } from '@renderer/hooks/useConversationNavigation'
 import { mapApiTopicToRendererTopic } from '@renderer/hooks/useTopic'
 import { EVENT_NAMES, EventEmitter } from '@renderer/services/EventService'
+import { emitResourceListReveal } from '@renderer/services/resourceListRevealEvents'
 import { toast } from '@renderer/services/toast'
 import { cn } from '@renderer/utils/style'
 import type { EntitySearchItem } from '@shared/data/api/schemas/search'
@@ -96,7 +98,7 @@ const SEARCH_SCOPE_CONTROL_CLASS_NAME =
   'h-7 shrink-0 border-border-subtle bg-muted/40 p-0.5 [&_[role=radio]]:h-6 [&_[role=radio]]:px-2 [&_[role=radio]]:text-xs [&_[role=radio]]:leading-none'
 const logger = loggerService.withContext('GlobalSearchPanel')
 const RECENT_ITEMS_REFRESH_THROTTLE_MS = 60 * 1000 // 1 minute throttle
-const recentRefreshHistory = new Map<string, number>()
+const recentRefreshCacheKey = (id: string) => `global-search:recent-refresh:${id}`
 const FILTER_LABEL_KEYS: Record<GlobalSearchFilter, string> = {
   all: 'globalSearch.filters.all',
   topic: 'globalSearch.filters.topic',
@@ -396,11 +398,9 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
       return [entry]
     })
 
-    const now = Date.now()
     const due = refreshable.filter((entry) => {
       if (entry.title.trim() === '') return true
-      const lastRefresh = recentRefreshHistory.get(getGlobalSearchRecentEntryId(entry)) ?? 0
-      return now - lastRefresh > RECENT_ITEMS_REFRESH_THROTTLE_MS
+      return !cacheService.hasCasual(recentRefreshCacheKey(getGlobalSearchRecentEntryId(entry)))
     })
 
     if (due.length === 0) return
@@ -418,10 +418,10 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
           )
           const name = (fetched as { name?: string })?.name?.trim()
           if (name) {
-            recentRefreshHistory.set(refreshKey, Date.now())
+            cacheService.setCasual(recentRefreshCacheKey(refreshKey), true, RECENT_ITEMS_REFRESH_THROTTLE_MS)
             return { id: refreshKey, name }
           }
-          recentRefreshHistory.set(refreshKey, Date.now())
+          cacheService.setCasual(recentRefreshCacheKey(refreshKey), true, RECENT_ITEMS_REFRESH_THROTTLE_MS)
           return null
         } catch (error) {
           logger.warn('Failed to refresh recent title', { entryKind: entry.kind, id: refreshKey, error })
@@ -482,6 +482,7 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
         onClose()
         return
       }
+      emitResourceListReveal({ source: 'assistants', tabId: targetTabId })
       window.requestAnimationFrame(() => {
         emitGlobalSearchSelection(
           EVENT_NAMES.GLOBAL_SEARCH_SELECT_TOPIC,
@@ -509,6 +510,7 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
         onClose()
         return
       }
+      emitResourceListReveal({ source: 'agents', tabId: targetTabId })
       window.requestAnimationFrame(() => {
         emitGlobalSearchSelection(
           EVENT_NAMES.GLOBAL_SEARCH_SELECT_AGENT_SESSION,
@@ -551,6 +553,7 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
         onClose()
         return
       }
+      emitResourceListReveal({ source: 'assistants', tabId: targetTabId })
       window.requestAnimationFrame(() => {
         emitGlobalSearchSelection(
           EVENT_NAMES.GLOBAL_SEARCH_SELECT_TOPIC_MESSAGE,
@@ -585,6 +588,7 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
         onClose()
         return
       }
+      emitResourceListReveal({ source: 'agents', tabId: targetTabId })
       window.requestAnimationFrame(() => {
         emitGlobalSearchSelection(
           EVENT_NAMES.GLOBAL_SEARCH_SELECT_AGENT_SESSION_MESSAGE,
@@ -983,7 +987,7 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
               isListboxVisible && activeItemId ? getGlobalSearchOptionDomId(activeItemId) : undefined
             }
             spellCheck={false}
-            className="h-11 rounded-[22px] border-border-subtle bg-muted/20 pr-12 pl-12 text-[15px] shadow-none placeholder:text-muted-foreground focus-visible:ring-1"
+            className="h-11 rounded-[22px] border-border-subtle bg-muted/20 pr-12 pl-12 text-[15px] shadow-none placeholder:text-muted-foreground"
           />
           {query && (
             <button
@@ -993,6 +997,7 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
                 setQuery('')
                 setPanelMode('search')
                 setMessagePreviewTarget(null)
+                inputRef.current?.focus({ preventScroll: true })
               }}
               className="-translate-y-1/2 absolute top-1/2 right-3 flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
               <X className="size-4" />
@@ -1168,8 +1173,4 @@ export function GlobalSearchPanel({ onClose }: GlobalSearchPanelProps) {
       />
     </div>
   )
-}
-
-export const testOnlyClearRefreshHistory = () => {
-  recentRefreshHistory.clear()
 }

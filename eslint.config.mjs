@@ -26,11 +26,11 @@ const pageSiblingZones = PAGE_DOMAINS.map((p) => ({
   target: `src/renderer/pages/${p}`,
   from: 'src/renderer/pages',
   except: [`./${p}`],
-  message: 'A page must not import another page (cross-page coupling). renderer-architecture.md §7.'
+  message: 'A page must not import another page (cross-page coupling). architecture/renderer.md §7.'
 }))
 
 // Topic barrels under services/: a services/<topic>/ exposes exactly one curated index.ts as its sole
-// external entry (renderer-architecture.md §3.1/§5). Auto-discovered from the filesystem so a new topic dir
+// external entry (architecture/renderer.md §3.1/§5). Auto-discovered from the filesystem so a new topic dir
 // needs zero rule edits — mirrors pageSiblingZones above. A topic's own subtree is excluded from `target`
 // (extglob negation), so internal `./sibling` imports stay legal while every outside importer is limited to
 // the barrel. Applied in every renderer importer region via blocks L/P/B below.
@@ -51,7 +51,7 @@ const serviceBarrelZones = serviceTopics.map((topic) => ({
     `src/renderer/services/${topic}/!(index).{ts,tsx,js,jsx}`,
     `src/renderer/services/${topic}/!(index)/**/*`
   ],
-  message: `services/${topic}/ is a topic barrel — import @renderer/services/${topic} (its index.ts), not its internals. renderer-architecture.md §3.1/§5.`
+  message: `services/${topic}/ is a topic barrel — import @renderer/services/${topic} (its index.ts), not its internals. architecture/renderer.md §3.1/§5.`
 }))
 
 // Each block's `files` is scoped so the three no-restricted-paths instances (L/P/B) never both apply to one
@@ -72,6 +72,61 @@ const boundarySettings = {
 // Two independent gates: block1 (layer edges) is enforced as error — Stage 1 cleared it; block2 (sibling pages) stays warn until features-ization.
 const RENDERER_BOUNDARY = 'error'
 const PAGE_SIBLING = process.env.RENDERER_PAGE_SIBLING_ERROR ? 'error' : 'warn'
+
+// --- import bans (@typescript-eslint/no-restricted-imports) ---
+// Flat config replaces a rule wholesale rather than merging it, so every ban that
+// applies to the same files must live in ONE `patterns` array under ONE rule name.
+// To add a ban: define it here and list it in the scope block(s) below — never reach
+// for a second rule name (e.g. the base `no-restricted-imports`) to dodge the override.
+// To exempt a single sanctioned call site, put an eslint-disable comment on its import.
+const BAN_RENDERER_FROM_MAIN = {
+  group: ['@renderer', '@renderer/**', '**/renderer/**'],
+  message:
+    'Main/preload must not import renderer code. Use `@shared` for cross-process types, or `src/main` for main-only types. See docs/references/architecture/shared-layer.md.'
+}
+// Only reaches src/main + src/preload (below). `tests/**` is globally ignored by this
+// config, so the out-of-src harness is not covered — it goes through applyMigrations by
+// convention, not by enforcement.
+const BAN_DRIZZLE_MIGRATOR = {
+  group: ['drizzle-orm/*/migrator'],
+  message:
+    "Do not call drizzle's migrate() directly — its transaction makes drizzle-kit's `PRAGMA foreign_keys=OFF` a no-op, so any table-recreate migration silently cascades child rows away. Use applyMigrations() from @data/db/applyMigrations."
+}
+
+// Utility-process child code (protocol/runtime, entries, smoke entries) is bundled for a
+// separate process that has no lifecycle container, no logger, and no database. Importing a
+// main-only singleton there fails at runtime — or silently drags winston/Drizzle into the
+// child bundle. A resolved-path zone, so relative and aliased specifiers are judged alike;
+// the smoke build's entry-graph guard (scripts/utility-process-smoke/hermeticEntryGuardPlugin.ts)
+// is the transitive backstop (docs/references/utility-process/README.md).
+const UTILITY_CHILD_FILES = [
+  'src/main/core/utilityProcess/protocol/**/*.ts',
+  'src/main/core/utilityProcess/runtime/**/*.ts',
+  'src/main/**/utilityEntries/**/*.ts',
+  'scripts/utility-process-smoke/harness/utilityEntries/**/*.ts'
+]
+const UTILITY_CHILD_ZONE = {
+  target: UTILITY_CHILD_FILES,
+  from: [
+    'src/main/core/application',
+    'src/main/core/lifecycle',
+    'src/main/core/logger',
+    'src/main/core/paths',
+    'src/main/data',
+    'src/main/ipc',
+    'src/main/services/proxy',
+    'src/main/core/utilityProcess/host',
+    'src/main/core/utilityProcess/UtilityProcessManager.ts'
+  ],
+  message:
+    'Utility-process child code runs without the main process singletons. Use the child runtime (serveUtilityProcess) and the protocol layer instead; keep host-only code out of the entry graph.'
+}
+// Resolved against the node project: tsconfig.web.json maps @logger / @data/* to renderer files.
+const mainBoundarySettings = {
+  'import-x/resolver-next': [
+    createTypeScriptImportResolver({ project: path.join(RENDERER_DIRNAME, 'tsconfig.node.json'), alwaysTryTypes: true })
+  ]
+}
 
 // --- barrel / module-boundary rules (naming-conventions.md §6.4) ---
 // An inline custom plugin (like the `lifecycle` plugin below), not no-restricted-paths:
@@ -128,7 +183,7 @@ const BARREL_RESOLVE_CACHE = new Map()
 // Unresolved specs are skipped — misses only, never false positives. Deliberately unresolved:
 // `@logger` (single-file target, cannot hide a deep import), `@application` (bare-only usage,
 // zero `@application/` deep paths in src), `@test-helpers`/`@test-mocks` (tests are exempt),
-// `@cherrystudio/*`/`@mcp-trace/*` (packages/*, outside src).
+// `@cherrystudio/*` (packages/*, outside src).
 const resolveBarrelSpec = (spec, fromFile) => {
   const key = `${fromFile}\0${spec}`
   if (BARREL_RESOLVE_CACHE.has(key)) return BARREL_RESOLVE_CACHE.get(key)
@@ -435,9 +490,73 @@ export default defineConfig([
         {
           selector: 'CallExpression[callee.object.name="console"]',
           message:
-            '❗CherryStudio uses unified LoggerService: 📖 docs/en/guides/logging.md\n\n'
+            '❗CherryStudio uses unified LoggerService: 📖 docs/references/logging/README.md\n\n'
         }
       ]
+    }
+  },
+  // Path brand integrity — `as AbsoluteFilePath` / `as CanonicalFilePath` forge the
+  // brands, skipping the validation each asserts. `AbsoluteFilePath` asserts shape
+  // validation (build via AbsoluteFilePathSchema.parse); `CanonicalFilePath` asserts
+  // the byte-faithful lexical form that backs the external-path dedup key
+  // (build via the canonicalizeFilePath() factory). A forged
+  // `as CanonicalFilePath` silently bypasses canonicalization and can write a
+  // ghost-duplicate key, so the stronger brand is guarded too.
+  // Exemptions: test fixtures; and one deliberate raw-OS-path regime — the
+  // tree builder (tree/**) holds raw chokidar/OS event paths that are compared
+  // byte-for-byte against event paths and are trusted as-is, so they `as AbsoluteFilePath`
+  // rather than routing through validation.
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/main/services/file/tree/**',
+      'src/**/__tests__/**',
+      'src/**/__mocks__/**',
+      'src/**/*.test.*'
+    ],
+    plugins: {
+      'filepath-brand': {
+        rules: {
+          'no-as-filepath': {
+            meta: {
+              type: 'problem',
+              docs: {
+                description:
+                  'Disallow `as AbsoluteFilePath` / `as CanonicalFilePath` casts. Both are Zod-derived brands: AbsoluteFilePath asserts shape validation (absolute path, no null bytes), CanonicalFilePath additionally asserts the byte-faithful lexical form backing the dedup key. Forging either bypasses its validation. Construct via AbsoluteFilePathSchema.parse() / canonicalizeFilePath().',
+                recommended: true
+              },
+              messages: {
+                noAsFilePath:
+                  '`as AbsoluteFilePath` forges the brand, skipping AbsoluteFilePathSchema\'s absolute-path validation. Build it with AbsoluteFilePathSchema.parse(value) instead. If this is a deliberate raw-path regime, move it under an exempted path or justify with an eslint-disable + reason.',
+                noAsCanonicalFilePath:
+                  '`as CanonicalFilePath` forges the brand, skipping canonicalization — a non-canonical value silently becomes a ghost-duplicate dedup key. Build it with canonicalizeFilePath(value) instead, or justify the sanctioned producer with an eslint-disable + reason.'
+              }
+            },
+            create(context) {
+              // Matches both `x as T` (TSAsExpression) and `<T>x` (TSTypeAssertion).
+              // Limitation: name-based, so an aliased import (`import { AbsoluteFilePath as AFP }`
+              // then `x as AFP`) is not caught — aliasing a brand solely to forge it is not a
+              // real-world pattern, and resolving aliases would require full scope analysis.
+              function checkAssertion(node) {
+                const ann = node.typeAnnotation
+                if (ann?.type !== 'TSTypeReference' || ann.typeName?.type !== 'Identifier') return
+                if (ann.typeName.name === 'AbsoluteFilePath') {
+                  context.report({ node, messageId: 'noAsFilePath' })
+                } else if (ann.typeName.name === 'CanonicalFilePath') {
+                  context.report({ node, messageId: 'noAsCanonicalFilePath' })
+                }
+              }
+              return {
+                TSAsExpression: checkAssertion,
+                TSTypeAssertion: checkAssertion
+              }
+            }
+          }
+        }
+      }
+    },
+    rules: {
+      'filepath-brand/no-as-filepath': process.env.CI ? 'error' : 'warn'
     }
   },
   // Application lifecycle - all quit-related APIs and events are managed by Application.ts
@@ -463,7 +582,7 @@ export default defineConfig([
               },
               messages: {
                 restricted:
-                  'Quit-related APIs and events are managed by the Application lifecycle. Do not use "{{name}}" directly. See docs/en/references/lifecycle/application-overview.md'
+                  'Quit-related APIs and events are managed by the Application lifecycle. Do not use "{{name}}" directly. See docs/references/lifecycle/application-overview.md'
               }
             },
             create(context) {
@@ -520,6 +639,107 @@ export default defineConfig([
     },
     rules: {
       'lifecycle/no-direct-quit': 'warn'
+    }
+  },
+  // Transaction boundary — a `*Tx` method promises to run entirely on the transaction
+  // handle it was given. Acquiring the DB from the service singleton instead breaks that
+  // promise twice over: the read leaves the caller's transaction, and it inherits
+  // `DbService.getDb()`'s readiness gate, which throws while `onInit()` is still seeding.
+  // v2.0.11 shipped that: an edition filter added to `getNamesByUniqueIdsTx` reached the
+  // singleton three call hops away and aborted startup for upgrading profiles.
+  {
+    files: ['src/main/**/*.{ts,tsx}'],
+    ignores: ['src/main/**/__tests__/**', 'src/main/**/__mocks__/**', 'src/main/**/*.test.*'],
+    plugins: {
+      'tx-boundary': {
+        rules: {
+          'no-ambient-db-in-tx': {
+            meta: {
+              type: 'problem',
+              docs: {
+                description:
+                  'Disallow reaching for the DbService singleton, directly or through another service, inside a `*Tx` function.',
+                recommended: true
+              },
+              messages: {
+                ambientDb:
+                  '"{{name}}" inside `{{fn}}` leaves the caller\'s transaction and depends on DbService being ready. Use the `tx` parameter.',
+                serviceEscape:
+                  '`{{name}}` is not a `*Tx` method, so `{{fn}}` cannot know whether it opens its own connection. Call a `*Tx` variant, or a pure helper that takes the row.'
+              }
+            },
+            create(context) {
+              // One entry per function scope; `true` marks a `*Tx` function, so a
+              // callback nested inside one is still governed.
+              const txScopes = []
+
+              const declaredName = (node) => {
+                const parent = node.parent
+                if (parent?.type === 'MethodDefinition' || parent?.type === 'Property') {
+                  return parent.key?.type === 'Identifier' ? parent.key.name : null
+                }
+                if (parent?.type === 'VariableDeclarator') {
+                  return parent.id?.type === 'Identifier' ? parent.id.name : null
+                }
+                return node.id?.type === 'Identifier' ? node.id.name : null
+              }
+
+              const enter = (node) => {
+                const name = declaredName(node)
+                txScopes.push(name?.endsWith('Tx') ? name : null)
+              }
+              const exit = () => txScopes.pop()
+              const enclosingTx = () => txScopes.findLast?.((name) => name !== null) ?? null
+
+              return {
+                FunctionDeclaration: enter,
+                'FunctionDeclaration:exit': exit,
+                FunctionExpression: enter,
+                'FunctionExpression:exit': exit,
+                ArrowFunctionExpression: enter,
+                'ArrowFunctionExpression:exit': exit,
+
+                CallExpression(node) {
+                  const fn = enclosingTx()
+                  if (!fn) return
+
+                  const { callee } = node
+                  if (callee.type !== 'MemberExpression' || callee.property.type !== 'Identifier') return
+                  const method = callee.property.name
+
+                  if (method === 'getDb') {
+                    context.report({ node, messageId: 'ambientDb', data: { name: 'getDb()', fn } })
+                    return
+                  }
+
+                  if (callee.object.type !== 'Identifier') return
+                  const receiver = callee.object.name
+
+                  if (receiver === 'application' && method === 'get' && node.arguments[0]?.value === 'DbService') {
+                    context.report({
+                      node,
+                      messageId: 'ambientDb',
+                      data: { name: "application.get('DbService')", fn }
+                    })
+                    return
+                  }
+
+                  if (receiver.endsWith('Service') && !method.endsWith('Tx')) {
+                    context.report({
+                      node,
+                      messageId: 'serviceEscape',
+                      data: { name: `${receiver}.${method}()`, fn }
+                    })
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    rules: {
+      'tx-boundary/no-ambient-db-in-tx': 'warn'
     }
   },
   // i18n
@@ -592,6 +812,8 @@ export default defineConfig([
     }
   },
   {
+    // Import bans for main/preload — see the BAN_* definitions above for each one's rationale.
+    //
     // Boundary guard: the main process and preload must not import renderer code.
     // Cross-process symbols belong in `@shared`; main-only symbols in `src/main`.
     // Both the `@renderer` alias and relative `**/renderer/**` paths are banned; the
@@ -599,18 +821,19 @@ export default defineConfig([
     // catalog data read it from disk (fs) rather than importing it.
     files: ['src/main/**/*.{ts,tsx,js,jsx}', 'src/preload/**/*.{ts,tsx,js,jsx}'],
     rules: {
-      '@typescript-eslint/no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['@renderer', '@renderer/**', '**/renderer/**'],
-              message:
-                'Main/preload must not import renderer code. Use `@shared` for cross-process types, or `src/main` for main-only types. See docs/references/shared-layer-architecture.md.'
-            }
-          ]
-        }
-      ]
+      '@typescript-eslint/no-restricted-imports': ['error', { patterns: [BAN_RENDERER_FROM_MAIN, BAN_DRIZZLE_MIGRATOR] }]
+    }
+  },
+  {
+    // Child-safe zone: everything that is bundled into a utility process entry. Must come
+    // after the src/main block — flat config replaces a rule wholesale, so the main bans are
+    // repeated here; the child-only fence is the resolved-path zone.
+    files: UTILITY_CHILD_FILES,
+    plugins: { 'import-x': importX },
+    settings: mainBoundarySettings,
+    rules: {
+      '@typescript-eslint/no-restricted-imports': ['error', { patterns: [BAN_RENDERER_FROM_MAIN, BAN_DRIZZLE_MIGRATOR] }],
+      'import-x/no-restricted-paths': ['error', { basePath: RENDERER_DIRNAME, zones: [UTILITY_CHILD_ZONE] }]
     }
   },
   // Renderer boundary block L: layer edges into shared buckets — Zone A (shared→pages/windows) + Zone C (utils impurity).
@@ -634,12 +857,12 @@ export default defineConfig([
                 'src/renderer/utils'
               ],
               from: ['src/renderer/pages', 'src/renderer/windows'],
-              message: 'Shared buckets must not import pages/windows (reverse layer edge). renderer-architecture.md §7.'
+              message: 'Shared buckets must not import pages/windows (reverse layer edge). architecture/renderer.md §7.'
             },
             {
               target: 'src/renderer/utils',
               from: ['src/renderer/components', 'src/renderer/hooks'],
-              message: 'utils/ is stateless and may call downward infra (data/ipc) but must not import components/hooks or any higher app layer. renderer-architecture.md §3.'
+              message: 'utils/ is stateless and may call downward infra (data/ipc) but must not import components/hooks or any higher app layer. architecture/renderer.md §3.'
             },
             // @logger is a §2 primitive that physically lives under services/; keep it out of the restricted glob.
             {
@@ -648,7 +871,7 @@ export default defineConfig([
                 'src/renderer/services/!(LoggerService).{ts,tsx,js,jsx}',
                 'src/renderer/services/!(LoggerService)/**/*'
               ],
-              message: 'utils/ must not import renderer services (except @logger). renderer-architecture.md §3.'
+              message: 'utils/ must not import renderer services (except @logger). architecture/renderer.md §3.'
             },
             ...serviceBarrelZones
           ]
@@ -673,7 +896,7 @@ export default defineConfig([
             {
               target: 'src/renderer/pages',
               from: 'src/renderer/windows',
-              message: 'A page must not import a window (reverse edge). renderer-architecture.md §2/§7.'
+              message: 'A page must not import a window (reverse edge). architecture/renderer.md §2/§7.'
             },
             ...pageSiblingZones,
             ...serviceBarrelZones

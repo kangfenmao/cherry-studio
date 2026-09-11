@@ -1,6 +1,6 @@
 /**
  * Auto-generated preference mappings from classification.json
- * Generated at: 2026-07-24T02:40:59.414Z
+ * Generated at: 2026-09-02T07:04:52.519Z
  *
  * This file contains pure mapping relationships without default values.
  * Default values are managed in src/shared/data/preferences.ts
@@ -159,6 +159,14 @@ export const REDUX_STORE_MAPPINGS = {
       targetKey: 'assistant.icon_type'
     },
     {
+      originalKey: 'pasteLongTextAsFile',
+      targetKey: 'chat.input.paste_long_text_as_file'
+    },
+    {
+      originalKey: 'pasteLongTextThreshold',
+      targetKey: 'chat.input.paste_long_text_threshold'
+    },
+    {
       originalKey: 'renderInputMessageAsMarkdown',
       targetKey: 'chat.message.render_as_markdown'
     },
@@ -313,10 +321,6 @@ export const REDUX_STORE_MAPPINGS = {
     {
       originalKey: 'enableTopicNaming',
       targetKey: 'topic.naming.enabled'
-    },
-    {
-      originalKey: 'customCss',
-      targetKey: 'ui.custom_css'
     },
     {
       originalKey: 'topicNamingPrompt',
@@ -501,10 +505,6 @@ export const REDUX_STORE_MAPPINGS = {
     {
       originalKey: 'exportMenuOptions.plain_text',
       targetKey: 'data.export.menus.plain_text'
-    },
-    {
-      originalKey: 'exportMenuOptions.notes',
-      targetKey: 'data.export.menus.notes'
     },
     {
       originalKey: 'notification.assistant',

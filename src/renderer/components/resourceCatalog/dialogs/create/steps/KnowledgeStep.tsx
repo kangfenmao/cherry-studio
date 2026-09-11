@@ -14,8 +14,8 @@ type KnowledgeStepProps = {
 }
 
 /**
- * Step 3 (assistant): attach knowledge bases. Mirrors the edit dialog's
- * knowledge sub-form — picker popover + linked list — bound to `knowledgeBaseIds`.
+ * Attach knowledge bases. Mirrors the edit dialog's knowledge sub-form —
+ * picker popover + linked list — bound to `knowledgeBaseIds`.
  */
 export function KnowledgeStep({ form, isSubmitting = false, portalContainer }: KnowledgeStepProps) {
   const openKnowledgePage = useCallback(() => {
@@ -33,6 +33,7 @@ export function KnowledgeStep({ form, isSubmitting = false, portalContainer }: K
       form={form}
       portalContainer={portalContainer}
       formLabel={false}
+      labelClassName="font-medium"
       disabled={isSubmitting}
       onOpenKnowledgePage={openKnowledgePage}
     />

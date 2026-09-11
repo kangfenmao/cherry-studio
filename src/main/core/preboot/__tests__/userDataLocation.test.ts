@@ -9,7 +9,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
  *     dynamically import the module-under-test in each test, so we can swap
  *     platform values per scenario.
  *   - The global `electron` mock from tests/main.setup.ts lacks `setPath` and
- *     `isPackaged`. We shadow it via `vi.doMock('electron', ...)` per test.
+ *     pins `isPackaged: false`. We shadow it via `vi.doMock('electron', ...)`
+ *     per test.
  *   - The global `node:fs` mock lacks `accessSync` and `cpSync`. We shadow it
  *     per test with a full mock that exposes both.
  *   - `@main/data/bootConfig` is not globally mocked. We mock it per test with
@@ -71,7 +72,10 @@ function stubElectron(opts: ElectronStubOptions = {}) {
     app: {
       isPackaged,
       getPath,
-      setPath: setPathMock
+      setPath: setPathMock,
+      // Consumed by core/paths/constants.ts (now in this module's import
+      // graph via resolveDevUserDataSuffix) when isPackaged is false.
+      setAppLogsPath: vi.fn()
     }
   }))
 }
@@ -196,17 +200,17 @@ describe('getNormalizedExecutablePath', () => {
 
   it('Windows non-portable: returns app.getPath("exe") verbatim', async () => {
     stubConstants({ isLinux: false, isWin: true, isPortable: false })
-    stubElectron({ exePath: 'C:\\Program Files\\Cherry Studio\\CherryStudio.exe' })
+    stubElectron({ exePath: 'C:\\Program Files\\Cherry Studio\\Cherry Studio.exe' })
     stubBootConfig()
     stubFs()
     const { getNormalizedExecutablePath } = await loadModule()
-    expect(getNormalizedExecutablePath()).toBe('C:\\Program Files\\Cherry Studio\\CherryStudio.exe')
+    expect(getNormalizedExecutablePath()).toBe('C:\\Program Files\\Cherry Studio\\Cherry Studio.exe')
   })
 
   it('Windows portable: returns PORTABLE_EXECUTABLE_DIR/cherry-studio-portable.exe', async () => {
     vi.stubEnv('PORTABLE_EXECUTABLE_DIR', 'D:\\PortableApps\\CherryStudio')
     stubConstants({ isLinux: false, isWin: true, isPortable: true })
-    stubElectron({ exePath: 'D:\\PortableApps\\CherryStudio\\CherryStudio.exe' })
+    stubElectron({ exePath: 'D:\\PortableApps\\CherryStudio\\Cherry Studio.exe' })
     stubBootConfig()
     stubFs()
     const { getNormalizedExecutablePath } = await loadModule()
@@ -379,7 +383,7 @@ describe('resolveUserDataLocation', () => {
     it('BootConfig empty + isPortable=true: setPath called with portableDir/data', async () => {
       vi.stubEnv('PORTABLE_EXECUTABLE_DIR', 'D:\\PortableApps\\CherryStudio')
       stubConstants({ isLinux: false, isWin: true, isPortable: true })
-      stubElectron({ exePath: 'D:\\PortableApps\\CherryStudio\\CherryStudio.exe' })
+      stubElectron({ exePath: 'D:\\PortableApps\\CherryStudio\\Cherry Studio.exe' })
       stubBootConfig({ 'app.user_data_path': {} })
       stubFs()
       const { resolveUserDataLocation } = await loadModule()
@@ -417,7 +421,7 @@ describe('resolveUserDataLocation', () => {
     it('Windows portable normalized key matches in BootConfig: setPath called', async () => {
       vi.stubEnv('PORTABLE_EXECUTABLE_DIR', 'D:\\PortableApps\\CherryStudio')
       stubConstants({ isLinux: false, isWin: true, isPortable: true })
-      stubElectron({ exePath: 'D:\\PortableApps\\CherryStudio\\CherryStudio.exe' })
+      stubElectron({ exePath: 'D:\\PortableApps\\CherryStudio\\Cherry Studio.exe' })
       stubBootConfig({
         'app.user_data_path': {
           'D:\\PortableApps\\CherryStudio/cherry-studio-portable.exe': 'D:\\Data\\Cherry'

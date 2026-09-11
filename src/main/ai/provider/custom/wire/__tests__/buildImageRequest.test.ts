@@ -182,6 +182,10 @@ describe('buildVendorProviderOptions — Google native image family (contribute 
       vertex: { imageConfig: { imageSize: '2K' } }
     })
   })
+
+  it.each(['google', 'google-vertex'])('omits automatic imageResolution for %s', (providerId) => {
+    expect(engine(providerId, { imageResolution: 'auto', numImages: 1 })).toEqual({})
+  })
 })
 
 describe('buildVendorProviderOptions — DashScope (passthrough, mapped wins)', () => {
@@ -258,5 +262,25 @@ describe('buildVendorProviderOptions — Ollama (numInferenceSteps → steps; si
 
   it('returns {} when numInferenceSteps is unset', () => {
     expect(engine('ollama', {})).toEqual({})
+  })
+})
+
+describe('buildVendorProviderOptions — MiniMax image API', () => {
+  it('maps output, optimizer, and watermark fields under the MiniMax key', () => {
+    expect(
+      engine('minimax', {
+        numImages: 3,
+        aspectRatio: '16:9',
+        outputFormat: 'base64',
+        promptEnhancement: true,
+        addWatermark: true
+      })
+    ).toEqual({
+      minimax: {
+        response_format: 'base64',
+        prompt_optimizer: true,
+        aigc_watermark: true
+      }
+    })
   })
 })

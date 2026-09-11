@@ -10,7 +10,7 @@ const switchRootVariants = cva(
     'group relative cursor-pointer peer inline-flex shrink-0 items-center rounded-full shadow-xs outline-none transition-all',
     'data-[state=unchecked]:bg-gray-500/20 data-[state=checked]:bg-brand-600',
     'disabled:cursor-not-allowed disabled:opacity-40',
-    'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50'
+    'focus-visible:[box-shadow:inset_0_0_0_1px_var(--ring)]'
   ],
   {
     variants: {
@@ -161,7 +161,7 @@ const DescriptionSwitch = ({
         {/* TODO: use standard typography component */}
         {description && (
           <span
-            className={cn('text-foreground-secondary', {
+            className={cn('text-muted-foreground', {
               'text-[10px] leading-3': size === 'sm',
               'text-xs leading-3.5': size === 'md',
               'text-sm leading-4': size === 'lg'

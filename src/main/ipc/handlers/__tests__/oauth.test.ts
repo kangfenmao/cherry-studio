@@ -1,12 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { appGetMock } = vi.hoisted(() => ({ appGetMock: vi.fn() }))
+const { appGetMock, authorizeTokenDanceApiKeyMock } = vi.hoisted(() => ({
+  appGetMock: vi.fn(),
+  authorizeTokenDanceApiKeyMock: vi.fn(() => Promise.resolve('td-key'))
+}))
 vi.mock('@application', () => ({ application: { get: appGetMock } }))
+vi.mock('@main/services/tokenDanceOAuth', () => ({ authorizeTokenDanceApiKey: authorizeTokenDanceApiKeyMock }))
+
+import { OAuthSignInCancelledError } from '@main/services/oauth/errors'
+import { IpcError } from '@shared/ipc/errors/IpcError'
+import { oauthErrorCodes } from '@shared/ipc/errors/oauth'
 
 import { oauthHandlers } from '../oauth'
 
 const runtimeService = {
   signIn: vi.fn((providerId: string) => Promise.resolve({ accountId: `${providerId}-account` })),
+  joinActiveSignIn: vi.fn(() => Promise.resolve({ status: 'completed', account: { accountId: 'acc-1' } })),
+  cancelSignIn: vi.fn(() => Promise.resolve()),
   hasToken: vi.fn(() => Promise.resolve(true)),
   getAccount: vi.fn(() => Promise.resolve({ accountId: 'acc-1' })),
   logout: vi.fn(() => Promise.resolve()),
@@ -24,12 +34,46 @@ beforeEach(() => {
 
 const ctx = { senderId: 'w1' as const }
 const provider = { providerId: 'codex' }
+const signInObservation = { providerId: 'codex', requestId: 'request-1' }
 
 describe('oauthHandlers', () => {
-  it('dispatches sign_in to OAuthRuntimeService with the provider id', async () => {
-    await expect(oauthHandlers['oauth.sign_in'](provider, ctx)).resolves.toEqual({ accountId: 'codex-account' })
+  it('dispatches sign_in to OAuthRuntimeService with the provider and request ids', async () => {
+    await expect(oauthHandlers['oauth.sign_in'](signInObservation, ctx)).resolves.toEqual({
+      accountId: 'codex-account'
+    })
     expect(appGetMock).toHaveBeenCalledWith('OAuthRuntimeService')
-    expect(runtimeService.signIn).toHaveBeenCalledWith('codex')
+    expect(runtimeService.signIn).toHaveBeenCalledWith('codex', 'request-1')
+  })
+
+  it('maps sign_in cancellation to a stable IPC error', async () => {
+    runtimeService.signIn.mockRejectedValueOnce(new OAuthSignInCancelledError('codex'))
+
+    const error = await oauthHandlers['oauth.sign_in'](signInObservation, ctx).catch((caught: unknown) => caught)
+
+    expect(error).toBeInstanceOf(IpcError)
+    expect(error).toHaveProperty('code', oauthErrorCodes.SIGN_IN_CANCELLED)
+  })
+
+  it('dispatches sign_in.attach to OAuthRuntimeService with the provider and request ids', async () => {
+    await expect(oauthHandlers['oauth.sign_in.attach'](signInObservation, ctx)).resolves.toEqual({
+      status: 'completed',
+      account: { accountId: 'acc-1' }
+    })
+    expect(runtimeService.joinActiveSignIn).toHaveBeenCalledWith('codex', 'request-1')
+  })
+
+  it('maps sign_in.attach cancellation to a stable IPC error', async () => {
+    runtimeService.joinActiveSignIn.mockRejectedValueOnce(new OAuthSignInCancelledError('codex'))
+
+    const error = await oauthHandlers['oauth.sign_in.attach'](signInObservation, ctx).catch((caught: unknown) => caught)
+
+    expect(error).toBeInstanceOf(IpcError)
+    expect(error).toHaveProperty('code', oauthErrorCodes.SIGN_IN_CANCELLED)
+  })
+
+  it('dispatches cancel_sign_in with the request id', async () => {
+    await oauthHandlers['oauth.cancel_sign_in'](signInObservation, ctx)
+    expect(runtimeService.cancelSignIn).toHaveBeenCalledWith('codex', 'request-1')
   })
 
   it('dispatches has_token to OAuthRuntimeService', async () => {
@@ -45,6 +89,11 @@ describe('oauthHandlers', () => {
   it('dispatches logout to OAuthRuntimeService', async () => {
     await oauthHandlers['oauth.logout'](provider, ctx)
     expect(runtimeService.logout).toHaveBeenCalledWith('codex')
+  })
+
+  it('authorizes a TokenDance API key', async () => {
+    await expect(oauthHandlers['oauth.tokendance.authorize_api_key'](undefined, ctx)).resolves.toBe('td-key')
+    expect(authorizeTokenDanceApiKeyMock).toHaveBeenCalledOnce()
   })
 
   it('dispatches check_external_login to CodeCliService', async () => {

@@ -1,5 +1,7 @@
-appId: com.cherryai.cherrystudio
+appId: com.kangfenmao.CherryStudio
 productName: Cherry Studio
+extraMetadata:
+  cherryEdition: global
 electronLanguages:
   - zh-CN
   - zh-TW
@@ -21,6 +23,8 @@ files:
   - "**/*"
   - "!**/{.vscode,.yarn,.yarn-lock,.github,.cursorrules,.prettierrc}"
   - "!electron.vite.config.{js,ts,mjs,cjs}}"
+  - "!electron-builder.cn.config.cjs"
+  - "!electron.vite.entries.config.ts"
   - "!.*"
   - "!components.json"
   - "!**/{.eslintignore,.eslintrc.js,.eslintrc.json,.eslintcache,root.eslint.config.js,eslint.config.js,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,eslint.config.mjs,dev-app-update.yml,CHANGELOG.md,README.md,biome.jsonc}"
@@ -63,6 +67,7 @@ files:
   - "!node_modules/selection-hook/prebuilds/**/*" # we rebuild .node, don't use prebuilds
   - "!node_modules/selection-hook/node_modules" # we don't need what in the node_modules dir
   - "!node_modules/selection-hook/src" # we don't need source files
+  - "!**/node_modules/node-pty/build/**" # ship upstream prebuilds; the rebuilt binary needs GLIBC_2.34 and is never cross-compiled
   - "!node_modules/tesseract.js-core/{tesseract-core.js,tesseract-core.wasm,tesseract-core.wasm.js}" # we don't need source files
   - "!node_modules/tesseract.js-core/{tesseract-core-lstm.js,tesseract-core-lstm.wasm,tesseract-core-lstm.wasm.js}" # we don't need source files
   - "!node_modules/tesseract.js-core/{tesseract-core-simd-lstm.js,tesseract-core-simd-lstm.wasm,tesseract-core-simd-lstm.wasm.js}" # we don't need source files
@@ -77,8 +82,24 @@ asarUnpack:
   - "!resources/devtools/**"
   - "**/*.{metal,exp,lib}"
   - "node_modules/@img/sharp-*/**"
+  # DSH runs as an external Node process: bundle its JS and unpack only native/runtime files.
+  - "node_modules/@cherrystudio/dsh-bridge/dist/runtime/**"
+  - "node_modules/sharp/**"
+  - "node_modules/@img/colour/**"
+  - "node_modules/detect-libc/**"
+  - "node_modules/semver/**"
+  - "node_modules/node-pty/**"
+  - "node_modules/koffi/**"
+  - "node_modules/@koromix/koffi-*/**"
+  - "node_modules/@deepseek-ai/dsh-sandbox-windows-acl/**"
+  - "node_modules/@deepseek-ai/node-addon-landlock-run*/**"
   - "node_modules/@anthropic-ai/claude-agent-sdk-*/**" # native CLI binary must live on disk to be spawned
+  - "node_modules/@silvia-odwyer/photon-node/**" # pi SDK WASM dep: photon_rs.js does fs.readFileSync(__dirname/photon_rs_bg.wasm)
   - "node_modules/@aiany/sqlite-vec-*/**" # sqlite-vec extension (.dylib/.so/.dll) is dlopen'd at runtime — must live on disk
+  - "node_modules/@node-rs/xxhash-*/**" # native N-API binary must be unpacked for runtime loading
+  - "node_modules/@firecrawl/anydoc-*/**" # native N-API binary must be unpacked for runtime loading
+  - "node_modules/node-screenshots-*/**" # native N-API binary must be unpacked for runtime loading
+  - "node_modules/node-mac-permissions/**" # native N-API binary must be unpacked for runtime loading
 extraResources:
   - from: "migrations/sqlite-drizzle"
     to: "migrations/sqlite-drizzle"
@@ -87,6 +108,9 @@ extraResources:
 win:
   executableName: Cherry Studio
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  extraResources:
+    - from: "node_modules/@aiany/sqlite-vec-windows-${arch}/vec0.dll"
+      to: "app.asar.unpacked/node_modules/@aiany/sqlite-vec-windows-${arch}/vec0.dll"
   target:
     - target: nsis
     - target: portable
@@ -94,6 +118,8 @@ win:
     sign: scripts/win-sign.js
   verifyUpdateCodeSignature: false
 nsis:
+  # Preserve the existing global installer identity so either edition replaces the same Windows installation.
+  guid: 41a4ccd8-bcc0-5710-9eee-0e164da68057
   artifactName: ${productName}-${version}-${arch}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
@@ -107,6 +133,8 @@ nsis:
 portable:
   artifactName: ${productName}-${version}-${arch}-portable.${ext}
   buildUniversalInstaller: false
+  # electron-builder 26.15.6 uses true for a unique $PLUGINSDIR on every launch.
+  unpackDirName: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   notarize: false
@@ -152,40 +180,56 @@ artifactBuildCompleted: scripts/artifact-build-completed.js
 releaseInfo:
   releaseNotes: |
     <!--LANG:en-->
-    Cherry Studio 1.9.7 - Model Support & Bug Fixes
+    Cherry Studio 2.0.14 - New Features, Fixes, and Performance
 
     ✨ New Features
-    - [Models] Added support for grok-build-0.1 capabilities (reasoning, tool use, vision)
-    - [Providers] StepFun now supports Claude Code / Anthropic-compatible mode with auto-filled endpoint
-    - [Agents] DeepSeek V4 Flash and MiMo V2.5+ now properly support 1M context window in Claude Code
+    - [Agent] Agent sessions now label self-started replies — “Goal round N” for DSH goal continuations, or “Continued after background work” — so users understand why a new message appears.
+    - [Models] DeepSeek V4.1 Flash Expires-On-0910 vision model is now available in the catalog.
+    - [Cherry Cloud] Cloud sessions are now bound to the current computer, preserving free-grant history across credential resets.
 
     🐛 Bug Fixes
-    - [Web Search] Fixed ExaMCP web search not returning result content correctly
-    - [Code Viewer] Fixed code syntax highlighting issues where tokens could disappear in light theme
-    - [OpenCode] Fixed launch failures after CLI updates by using package-local executable
-    - [Agents] Fixed Agent mode not forwarding custom provider headers to Claude Code
-    - [Models] Fixed Grok 4.3 reasoning effort support in xAI responses
-    - [OpenClaw] Improved migration message clarity when external PATH installation is detected
-    - [Models] Fixed Gemini 3.x models using wrong UI and sending deprecated sampling parameters
-    - [Models] Fixed Qwen max series models incorrectly showing vision capability
-    - [Providers] Fixed AIHubMix reasoning effort configuration not working properly
+    - [Startup] Fixed Cherry Studio failing to start after an upgrade when the built-in Support Agent still needs to be created.
+    - [Local Models] Windows cleanup now tolerates transient DLL release failures after an inference utility process exits.
+    - [Knowledge Base] Fixed tables from PDFs imported through Mistral OCR being dropped; table contents are now indexed as Markdown tables.
+    - [Pi] Fix OpenCode Go/Zen requests failing with MissingSessionID by preserving the agent session header.
+    - [Export] Notion export now waits for the page body to be written and reports failed writes as errors instead of success.
+    - [Obsidian] Fix invalid front matter when the note title contains “: “ or starts with “#”, and export tags as a proper YAML list.
+    - [Prompt Polish] Add cancellation and a 60-second timeout so stalled requests return to a retryable state.
+    - [Chat] Show safe, actionable provider details instead of generic errors such as “400 null”.
+    - [Debug] Fixed truncated Outputs and UI freezes when inspecting long streaming responses in the message debug panel (Call Chain).
+    - [Provider] OpenCode Go/Zen requests from model health checks, topic naming, and context compaction now carry the required session header.
+    - [Chat] Deleting a response selected for context now preserves other replies and transfers context and follow-up messages to an adjacent reply.
+    - [Cherry Cloud] Unsupported client versions now show an update-required message instead of asking users to retry login.
+    - [Chat] Fixed text-only continuation turns incorrectly processing stale image attachments and failing before the response starts.
+    - [Cherry Cloud] Login now requires a configured client signing key for custom builds.
+
+    ⚡ Performance
+    - [Knowledge] Knowledge page management dialogs and item detail panels are now loaded on demand instead of with the page.
 
     <!--LANG:zh-CN-->
-    Cherry Studio 1.9.7 - 模型支持与错误修复
+    Cherry Studio 2.0.14 - 新功能、修复与性能优化
 
     ✨ 新功能
-    - [模型] 支持 grok-build-0.1 模型能力（推理、工具调用、视觉）
-    - [提供商] StepFun 现在支持 Claude Code / Anthropic 兼容模式，并自动填充端点
-    - [智能体] DeepSeek V4 Flash 和 MiMo V2.5+ 现在在 Claude Code 中正确支持 1M 上下文窗口
+    - [智能体] 智能体会话现在为自动发起的回复添加标签——DSH 目标推进显示”目标推进 · 第 N 轮”，后台工作后继续显示”后台工作后继续”——让用户了解为什么出现了新消息。
+    - [模型] DeepSeek V4.1 Flash Expires-On-0910 视觉模型现已上架模型目录。
+    - [樱桃云] 云会话现已绑定当前设备，在凭证重置后保留免费额度历史。
 
     🐛 问题修复
-    - [网络搜索] 修复 ExaMCP 网络搜索无法正确返回结果内容的问题
-    - [代码查看器] 修复浅色主题下代码语法高亮标记可能消失的问题
-    - [OpenCode] 修复 CLI 更新后启动失败的问题，现在使用包本地可执行文件
-    - [智能体] 修复智能体模式未将自定义提供商标头转发给 Claude Code 的问题
-    - [模型] 修复 xAI 响应中 Grok 4.3 推理强度支持问题
-    - [OpenClaw] 改进检测到外部 PATH 安装时的迁移消息清晰度
-    - [模型] 修复 Gemini 3.x 模型使用错误 UI 并发送已弃用采样参数的问题
-    - [模型] 修复 Qwen max 系列模型错误显示视觉能力的问题
-    - [提供商] 修复 AIHubMix 推理强度配置无法正常工作的问题
+    - [启动] 修复升级后需要首次创建内置产品反馈 Agent 时 Cherry Studio 无法启动的问题。
+    - [本地模型] 修复 Windows 下 inference utility process 退出后 DLL 短暂占用导致模型清理偶发失败的问题。
+    - [知识库] 修复通过 Mistral OCR 导入的 PDF 表格丢失问题；表格内容现在以 Markdown 表格形式索引。请重新索引已有条目以获取表格内容。
+    - [Pi] 修复 OpenCode Go/Zen 请求因 MissingSessionID 失败的问题，现已保留智能体会话头部。
+    - [导出] Notion 导出现在等待页面正文写入完成，写入失败时正确报错而非显示成功。
+    - [Obsidian] 修复笔记标题包含”: “或以”#”开头时导出无效前置数据的问题，并将标签导出为正确的 YAML 列表。
+    - [提示词润色] 支持取消和 60 秒超时，卡住的请求可立即恢复为可重试状态。
+    - [对话] 显示安全可操作的错误详情，而非”400 null”等通用错误。
+    - [调试] 修复消息调试面板(Call Chain)中长输出被截断和 UI 卡死的问题。
+    - [服务商] OpenCode Go/Zen 的模型健康检查、话题命名和上下文压缩请求现在携带必需的会话头部。
+    - [对话] 删除用于上下文的回复时，现在保留其他回复，并将上下文和后续消息转移到相邻回复。
+    - [樱桃云] 不支持的客户端版本现在显示更新提示，而非让用户重试登录。
+    - [对话] 修复纯文本续写轮次错误处理残留图片附件并在响应开始前失败的问题。
+    - [樱桃云] 自定义构建现在需要配置客户端签名密钥才能登录。
+
+    ⚡ 性能优化
+    - [知识库] 知识库页面管理对话框和条目详情面板现在按需加载，而非随页面加载。
     <!--LANG:END-->

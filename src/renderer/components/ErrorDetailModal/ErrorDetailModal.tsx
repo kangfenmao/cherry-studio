@@ -4,6 +4,7 @@ import CodeViewer from '@renderer/components/CodeViewer'
 import ContentPopup from '@renderer/components/popups/ContentPopup'
 import { useCodeStyle } from '@renderer/hooks/useCodeStyle'
 import i18n from '@renderer/i18n/resolver'
+import { createPopup, POPUP_EXIT_MS, type PopupInjectedProps } from '@renderer/services/popup'
 import { toast } from '@renderer/services/toast'
 import type { SerializedAiSdkError, SerializedAiSdkErrorUnion, SerializedError } from '@renderer/types/error'
 import {
@@ -33,20 +34,44 @@ import {
 import { formatAiSdkError, formatError, safeToString } from '@renderer/utils/error'
 import type { DiagnosisContext, DiagnosisResult } from '@renderer/utils/errorDiagnosis'
 import { parseDataUrl } from '@shared/utils/dataUrl'
-import { CheckCircle, Copy, Loader2, Stethoscope } from 'lucide-react'
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { CheckCircle, Copy, FileUp, Loader2, Stethoscope } from 'lucide-react'
+import React, { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Scrollbar from '../Scrollbar'
 import AiDiagnosisSectionWithStatus from './AiDiagnosisSection'
+import { buildDiagnosticReportDescription, type DiagnosticReportConfig } from './diagnosticReportDescription'
+
+const DiagnosticUploadDialog = lazy(() => import('@renderer/components/feedback/DiagnosticUploadDialog'))
 
 interface ErrorDetailContentProps {
   error?: SerializedError
   diagnosisContext?: DiagnosisContext
+  diagnosticReport?: DiagnosticReportConfig
   blockId?: string
   onDiagnosisComplete?: (partId: string, diagnosis: DiagnosisResult) => void | Promise<void>
+  onOpenDiagnosticReport?: (description: string) => void
   cachedDiagnosis?: DiagnosisResult
 }
+
+interface DiagnosticUploadPopupProps {
+  initialDescription: string
+}
+
+const DiagnosticUploadPopup = createPopup<DiagnosticUploadPopupProps, void>(
+  ({ initialDescription, open, resolve }: DiagnosticUploadPopupProps & PopupInjectedProps<void>) => (
+    <Suspense fallback={null}>
+      <DiagnosticUploadDialog
+        fixedRange="24h"
+        initialDescription={initialDescription}
+        open={open}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) resolve()
+        }}
+      />
+    </Suspense>
+  )
+)
 
 const truncateLargeData = (
   data: string,
@@ -93,7 +118,7 @@ const ErrorDetailLabel = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 const ErrorDetailValue = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'rounded-[4px] border border-[var(--color-border)] bg-background-subtle p-2 font-[var(--code-font-family)] text-[12px] text-foreground [word-break:break-word]',
+      'rounded-[4px] border border-border bg-background-subtle p-2 font-[var(--code-font-family)] text-[12px] text-foreground [word-break:break-word]',
       className
     )}
     {...props}
@@ -103,7 +128,7 @@ const ErrorDetailValue = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
 const StackTrace = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'rounded-[6px] border border-error-base bg-background-subtle p-3 [&_pre]:m-0 [&_pre]:whitespace-pre-wrap [&_pre]:font-[var(--code-font-family)] [&_pre]:text-[12px] [&_pre]:text-error-base [&_pre]:leading-[1.4] [&_pre]:[word-break:break-word]',
+      'rounded-[6px] border border-error-border bg-background-subtle p-3 [&_pre]:m-0 [&_pre]:whitespace-pre-wrap [&_pre]:font-[var(--code-font-family)] [&_pre]:text-[12px] [&_pre]:text-error [&_pre]:leading-[1.4] [&_pre]:[word-break:break-word]',
       className
     )}
     {...props}
@@ -112,9 +137,9 @@ const StackTrace = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement
 
 const TruncatedBadge = ({ className, style, ...props }: React.HTMLAttributes<HTMLSpanElement>) => (
   <span
-    className={cn('ml-2 rounded-[4px] px-1.5 py-0.5 font-normal text-[10px] text-[var(--color-warning)]', className)}
+    className={cn('ml-2 rounded-[4px] px-1.5 py-0.5 font-normal text-[10px] text-warning', className)}
     style={{
-      background: 'var(--color-warning-bg, rgba(250, 173, 20, 0.1))',
+      background: 'var(--warning-subtle)',
       ...style
     }}
     {...props}
@@ -495,8 +520,10 @@ const AiSdkError = memo(({ error }: { error: SerializedAiSdkErrorUnion }) => {
 const ErrorDetailContent: React.FC<ErrorDetailContentProps> = ({
   error,
   diagnosisContext,
+  diagnosticReport,
   blockId,
   onDiagnosisComplete,
+  onOpenDiagnosticReport,
   cachedDiagnosis
 }) => {
   const { t } = useTranslation()
@@ -536,6 +563,32 @@ const ErrorDetailContent: React.FC<ErrorDetailContentProps> = ({
     void navigator.clipboard.writeText(errorText)
     toast.success(t('message.copied'))
   }, [error, t])
+
+  const handleDiagnosisComplete = useCallback(
+    async (partId: string, diagnosis: DiagnosisResult) => {
+      await onDiagnosisComplete?.(partId, diagnosis)
+    },
+    [onDiagnosisComplete]
+  )
+
+  const openDiagnosticReport = useCallback(() => {
+    if (!diagnosticReport || !onOpenDiagnosticReport) return
+    onOpenDiagnosticReport(
+      buildDiagnosticReportDescription({
+        diagnosisContext,
+        error,
+        labels: {
+          errorMessage: t('error.message'),
+          errorName: t('error.name'),
+          location: t('error.diagnostic_report.location'),
+          model: t('error.modelId'),
+          provider: t('error.provider'),
+          statusCode: t('error.statusCode')
+        },
+        location: diagnosticReport.location
+      })
+    )
+  }, [diagnosticReport, diagnosisContext, error, onOpenDiagnosticReport, t])
 
   const renderErrorDetails = (error?: SerializedError) => {
     if (!error) {
@@ -583,7 +636,7 @@ const ErrorDetailContent: React.FC<ErrorDetailContentProps> = ({
             onStatusChange={setDiagStatus}
             diagnosisContext={diagnosisContext}
             blockId={blockId}
-            onDiagnosisComplete={onDiagnosisComplete}
+            onDiagnosisComplete={handleDiagnosisComplete}
             cachedDiagnosis={cachedDiagnosis}
           />
         )}
@@ -593,6 +646,12 @@ const ErrorDetailContent: React.FC<ErrorDetailContentProps> = ({
           <Copy size={14} />
           {t('common.copy')}
         </Button>
+        {diagnosticReport && onOpenDiagnosticReport ? (
+          <Button variant="outline" onClick={openDiagnosticReport}>
+            <FileUp size={14} />
+            {t('error.diagnostic_report.action')}
+          </Button>
+        ) : null}
         <Button disabled={diagStatus === 'loading'} onClick={handleDiagnose}>
           {diagStatus === 'loading' ? (
             <Loader2 size={14} className="animate-spin" />
@@ -608,10 +667,20 @@ const ErrorDetailContent: React.FC<ErrorDetailContentProps> = ({
   )
 }
 
-export function showErrorDetailPopup(params: ErrorDetailContentProps) {
+export function showErrorDetailPopup(params: Omit<ErrorDetailContentProps, 'onOpenDiagnosticReport'>) {
   void ContentPopup.show({
     title: i18n.t('error.detail'),
-    content: <ErrorDetailContent {...params} />,
+    content: (
+      <ErrorDetailContent
+        {...params}
+        onOpenDiagnosticReport={(initialDescription) => {
+          ContentPopup.hide()
+          setTimeout(() => {
+            void DiagnosticUploadPopup.show({ initialDescription })
+          }, POPUP_EXIT_MS)
+        }}
+      />
+    ),
     width: '60vw',
     styles: { content: { maxWidth: '1200px', minWidth: '600px' } }
   })

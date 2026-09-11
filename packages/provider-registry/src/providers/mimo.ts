@@ -1,31 +1,29 @@
 import type { ReasoningSupport } from '../schemas/model'
 import type { ReasoningWireProfile } from '../schemas/reasoningWire'
 import { defineProvider } from './types'
+import { EFFORT, modeWire } from './wires'
 
 const toggleSupport: ReasoningSupport = {
   controls: [{ kind: 'toggle', default: true }]
 }
 
-const chatWire: ReasoningWireProfile = {
-  off: { operations: [{ target: 'thinking.type', value: { source: 'literal', value: 'disabled' } }] },
-  auto: { operations: [{ target: 'thinking.type', value: { source: 'literal', value: 'enabled' } }] }
-}
+const chatWire: ReasoningWireProfile = modeWire('thinking.type', { off: 'disabled', auto: 'enabled' })
 
-const responsesWire: ReasoningWireProfile = {
-  off: { operations: [{ target: 'reasoningEffort', value: { source: 'literal', value: 'none' } }] },
-  auto: { operations: [{ target: 'reasoningEffort', value: { source: 'literal', value: 'medium' } }] }
-}
+const responsesWire: ReasoningWireProfile = modeWire(
+  'reasoningEffort',
+  { off: 'none', auto: EFFORT },
+  { autoEffort: 'medium' }
+)
 
 // MiMo's Anthropic-compatible API enables thinking by default. Omitting the
 // auto mode preserves that default without making the Anthropic SDK inject a
 // Claude-style budget_tokens field that MiMo does not document.
-const anthropicWire: ReasoningWireProfile = {
-  off: { operations: [{ target: 'thinking.type', value: { source: 'literal', value: 'disabled' } }] }
-}
+const anthropicWire: ReasoningWireProfile = modeWire('thinking.type', { off: 'disabled' })
 
 export default defineProvider({
   id: 'mimo',
   name: 'Xiaomi MiMo',
+  availableInEditions: ['global', 'cn'],
   defaultChatEndpoint: 'openai-chat-completions',
   endpointConfigs: {
     'anthropic-messages': {

@@ -31,6 +31,7 @@ const REASONING_EFFORT_LABEL_KEYS: Record<string, string> = {
   medium: 'assistants.settings.reasoning_effort.medium',
   minimal: 'assistants.settings.reasoning_effort.minimal',
   none: 'assistants.settings.reasoning_effort.off',
+  ultra: 'assistants.settings.reasoning_effort.ultra',
   xhigh: 'assistants.settings.reasoning_effort.xhigh'
 }
 
@@ -123,10 +124,18 @@ function DetailRow({ label, value }: { label: ReactNode; value?: ReactNode }) {
   )
 }
 
-function ModelSelectorDetailCardBody({ item, providerName }: { item: ModelSelectorModelItem; providerName: string }) {
+function ModelSelectorDetailCardBody({
+  item,
+  provider,
+  providerName
+}: {
+  item: ModelSelectorModelItem
+  provider: Provider
+  providerName: string
+}) {
   const { t } = useTranslation()
   const { model, modelIdentifier } = item
-  const tags = useMemo(() => getModelDisplayTags(model), [model])
+  const tags = useMemo(() => getModelDisplayTags(model, undefined, provider), [model, provider])
   const reasoningEfforts = formatReasoningEfforts(
     deriveThinkingOptions(model)?.filter((option) => option !== 'default'),
     t
@@ -220,7 +229,7 @@ export const ModelSelectorDetailCard = memo(function ModelSelectorDetailCard({
         collisionPadding={DETAIL_CARD_COLLISION_PADDING}
         portalContainer={portalContainer ?? undefined}
         className="w-84 max-w-(--radix-hover-card-content-available-width) p-0">
-        <ModelSelectorDetailCardBody item={item} providerName={providerName} />
+        <ModelSelectorDetailCardBody item={item} provider={provider} providerName={providerName} />
       </HoverCardContent>
     </HoverCard>
   )

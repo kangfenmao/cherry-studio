@@ -1,8 +1,9 @@
 import { application } from '@application'
 import { agentChannelService as channelService } from '@data/services/AgentChannelService'
 import { loggerService } from '@logger'
-import { BaseService, DependsOn, Injectable, Phase, ServicePhase } from '@main/core/lifecycle'
+import { BaseService, DependsOn, type Disposable, Injectable, Phase, ServicePhase } from '@main/core/lifecycle'
 import { WindowType } from '@main/core/window/types'
+import { t } from '@main/i18n'
 import type { AgentChannelEntity as ChannelRow, AgentChannelType } from '@shared/data/api/schemas/agentChannels'
 import type { ChannelConfig } from '@shared/data/types/channel'
 import type { IpcEventName } from '@shared/ipc/schemas/ipcSchemas'
@@ -62,7 +63,6 @@ export class ChannelManager extends BaseService {
     { resolve: (url: string) => void; timer: ReturnType<typeof setTimeout> }
   >()
   private readonly channelLogs = new ChannelLogBuffer()
-  private readonly channelStatuses = new Map<string, ChannelStatusEvent>()
 
   protected async onReady(): Promise<void> {
     await this.start()
@@ -70,6 +70,26 @@ export class ChannelManager extends BaseService {
 
   protected async onStop(): Promise<void> {
     await this.stop()
+  }
+
+  // ── Write quiesce (backup restore) ───────────────────────────────
+  // Thin delegates so the restore orchestrator reaches the channel writer via
+  // `application.get('ChannelManager')`. State lives on the `channelMessageHandler`
+  // singleton (it owns the debounce buffers); see its docs for the contract.
+
+  /** Stop channel intake and flush buffered debounce batches immediately. */
+  pause(reason?: string): Disposable {
+    return channelMessageHandler.pause(reason)
+  }
+
+  /** Await the flushed batches' agent-turn admissions, bounded by timeoutMs. */
+  drainInFlight(opts: { timeoutMs: number }): Promise<{ stragglerIds: string[] }> {
+    return channelMessageHandler.drainInFlight(opts)
+  }
+
+  /** Advisory pre-flight enumeration for the restore orchestrator. */
+  listActiveWork(): Array<{ id: string; summary: string }> {
+    return channelMessageHandler.listActiveWork()
   }
 
   async start(): Promise<void> {
@@ -97,13 +117,18 @@ export class ChannelManager extends BaseService {
   async stop(): Promise<void> {
     logger.info('Stopping channel manager')
     const disconnects = Array.from(this.adapters.values()).map((adapter) =>
-      adapter.disconnect().catch((err) => {
-        logger.warn('Error disconnecting adapter', {
-          agentId: adapter.agentId,
-          channelId: adapter.channelId,
-          error: err instanceof Error ? err.message : String(err)
+      adapter
+        .disconnect()
+        .catch((err) => {
+          logger.warn('Error disconnecting adapter', {
+            agentId: adapter.agentId,
+            channelId: adapter.channelId,
+            error: err instanceof Error ? err.message : String(err)
+          })
         })
-      })
+        .finally(() => {
+          this.publishStatus({ channelId: adapter.channelId, connected: false })
+        })
     )
     await Promise.all(disconnects)
     this.adapters.clear()
@@ -136,7 +161,7 @@ export class ChannelManager extends BaseService {
     return result
   }
 
-  /** Return all connected adapters for an agent. */
+  /** Return all registered adapters for an agent, connected or not (a dropped one stays for reconnect). */
   getAgentAdapters(agentId: string): ChannelAdapter[] {
     const result: ChannelAdapter[] = []
     for (const [, adapter] of this.adapters) {
@@ -159,22 +184,12 @@ export class ChannelManager extends BaseService {
     return this.channelLogs.get(channelId)
   }
 
-  /** Get live connection status for all active adapters. */
-  getAllStatuses(): ChannelStatusEvent[] {
-    const result: ChannelStatusEvent[] = []
-    for (const [, adapter] of this.adapters) {
-      const cached = this.channelStatuses.get(adapter.channelId)
-      result.push({
-        channelId: adapter.channelId,
-        connected: adapter.connected,
-        ...(cached?.error && !adapter.connected ? { error: cached.error } : {})
-      })
-    }
-    return result
-  }
-
   private sendToRenderer<E extends IpcEventName>(event: E, data: EventPayload<E>): void {
     application.get('IpcApiService').broadcastToType(WindowType.Main, event, data)
+  }
+
+  private publishStatus(status: ChannelStatusEvent): void {
+    application.get('CacheService').setShared(`channel.status.${status.channelId}`, status)
   }
 
   /** Disconnect the adapter for a single channel without reconnecting. */
@@ -196,6 +211,8 @@ export class ChannelManager extends BaseService {
           continue
         }
         throw err
+      } finally {
+        this.publishStatus({ channelId: adapter.channelId, connected: false })
       }
     }
   }
@@ -237,6 +254,7 @@ export class ChannelManager extends BaseService {
           })
           .finally(() => {
             this.adapters.delete(key)
+            this.publishStatus({ channelId: adapter.channelId, connected: false })
           })
       )
     )
@@ -302,6 +320,12 @@ export class ChannelManager extends BaseService {
       }
 
       adapter.on('message', (msg) => {
+        // Write-quiesce intake gate — also skips trackChatId's `activeChatIds` DB write. The
+        // handler's own gate is defense in depth; this one stops the config write too.
+        if (channelMessageHandler.isWriteQuiesced) {
+          logger.warn('Channel message dropped: intake is write-quiesced', { agentId, channelId: row.id })
+          return
+        }
         trackChatId(msg.chatId)
         channelMessageHandler.handleIncoming(adapter, msg).catch((err) => {
           logger.error('Unhandled error in message handler', {
@@ -310,12 +334,19 @@ export class ChannelManager extends BaseService {
             error: err instanceof Error ? err.message : String(err)
           })
           adapter
-            .sendMessage(msg.chatId, '⚠️ An error occurred while processing your message. Please try again later.')
+            .sendMessage(msg.chatId, t('common.channel_message_processing_error'), {
+              replyToMessageId: msg.messageId,
+              ...(msg.replyInThread && { replyInThread: true })
+            })
             .catch(() => {})
         })
       })
 
       adapter.on('command', (cmd) => {
+        if (channelMessageHandler.isWriteQuiesced) {
+          logger.warn('Channel command dropped: intake is write-quiesced', { agentId, channelId: row.id })
+          return
+        }
         trackChatId(cmd.chatId)
         channelMessageHandler.handleCommand(adapter, cmd).catch((err) => {
           logger.error('Unhandled error in command handler', {
@@ -324,7 +355,10 @@ export class ChannelManager extends BaseService {
             error: err instanceof Error ? err.message : String(err)
           })
           adapter
-            .sendMessage(cmd.chatId, '⚠️ An error occurred while processing the command. Please try again later.')
+            .sendMessage(cmd.chatId, t('common.channel_command_processing_error'), {
+              replyToMessageId: cmd.messageId,
+              ...(cmd.replyInThread && { replyInThread: true })
+            })
             .catch(() => {})
         })
       })
@@ -352,20 +386,20 @@ export class ChannelManager extends BaseService {
         })
       })
 
-      // Forward log & status events to renderer via IPC
+      // Logs remain event-like; connection status is a main-owned shared snapshot.
       adapter.on('log', (entry) => {
         this.channelLogs.append(entry.channelId, entry)
         this.sendToRenderer('channel.log', entry)
       })
 
       adapter.on('statusChange', (status) => {
-        this.channelStatuses.set(status.channelId, status)
-        this.sendToRenderer('channel.status_changed', status)
+        this.publishStatus(status)
       })
 
       // Register adapter immediately so it's discoverable. Callers can either
       // await connect for strict workflows or leave it in the background.
       this.adapters.set(key, adapter)
+      this.publishStatus({ channelId: row.id, connected: adapter.connected })
 
       const connect = async () => {
         try {
@@ -400,8 +434,7 @@ export class ChannelManager extends BaseService {
         connected: false,
         error: error instanceof Error ? error.message : String(error)
       }
-      this.channelStatuses.set(row.id, errorStatus)
-      this.sendToRenderer('channel.status_changed', errorStatus)
+      this.publishStatus(errorStatus)
       if (options.awaitConnect) {
         throw error
       }

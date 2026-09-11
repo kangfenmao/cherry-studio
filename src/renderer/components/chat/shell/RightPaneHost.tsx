@@ -4,9 +4,10 @@ import { useResizeDrag } from '@renderer/hooks/useResizeDrag'
 import { cn } from '@renderer/utils/style'
 import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from 'motion/react'
 import type { CSSProperties, MouseEvent as ReactMouseEvent, ReactNode, RefObject } from 'react'
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import type { RESOURCE_LIST_RIGHT_PANE_CACHE_KEY } from './paneLayout'
 import {
   ARTIFACT_RIGHT_PANE_CACHE_KEY,
   ARTIFACT_RIGHT_PANE_CLOSE_DRAG_OVERSHOOT,
@@ -19,20 +20,23 @@ import {
 import { buildDockedPaneWidthExpression, getPaneSpaceCap, resolveDockedPaneWidth } from './paneWidthPolicy'
 import {
   getInitialPersistentRightPaneState,
-  getRightPaneDockedClip,
+  getRightPanePhaseTransition,
+  getSettledRightPaneMode,
   isClosedRightPanePhase,
   isFullWidthRightPanePhase,
   type PersistentRightPaneVisualState,
+  planPersistentRightPaneReconnect,
   planPersistentRightPaneTransition,
   RIGHT_PANE_CLIP_COLLAPSED,
   RIGHT_PANE_CLIP_REVEALED,
+  RIGHT_PANE_WIDTH_FULL,
   type RightPaneLayoutMode
 } from './rightPaneTransition'
 import { getVerticalSplitterProps } from './splitterA11y'
 
 export type { RightPaneLayoutMode } from './rightPaneTransition'
 
-type RightPaneResizeCacheKey = typeof ARTIFACT_RIGHT_PANE_CACHE_KEY
+type RightPaneResizeCacheKey = typeof ARTIFACT_RIGHT_PANE_CACHE_KEY | typeof RESOURCE_LIST_RIGHT_PANE_CACHE_KEY
 
 interface RightPaneFrameProps {
   children?: ReactNode
@@ -67,6 +71,72 @@ export interface PersistentRightPaneHostProps extends ResizableRightPaneProps {
 function clampRightPaneWidth(width: number, minWidth: number, maxWidth: number): number {
   return Math.min(maxWidth, Math.max(minWidth, Math.round(width)))
 }
+
+/** Matches the gap the message list keeps between its content and the composer. */
+const COMPOSER_CLEARANCE_GAP_PX = 16
+
+// Measured here rather than published by the composer so the value lands on the pane's own
+// subtree: a shared root variable would invalidate style for the message list on every resize.
+function useElevatedComposerInset(paneRef: RefObject<HTMLDivElement | null>, active: boolean): number | null {
+  const [inset, setInset] = useState<number | null>(null)
+
+  useLayoutEffect(() => {
+    if (!active) {
+      setInset(null)
+      return
+    }
+    const pane = paneRef.current
+    const region = pane?.offsetParent
+    const shellRoot = pane?.closest('[data-chat-app-shell-root]')
+    if (!pane || !shellRoot || !(region instanceof HTMLElement)) return
+
+    let observer: ResizeObserver | null = null
+    let observedSurface: HTMLElement | null = null
+    // A composer that has yet to mount produces no resize, so watch the shell for its arrival
+    // instead. Only while the surface is absent — a subtree childList watch is not free.
+    let arrivalObserver: MutationObserver | null = null
+
+    const watchForArrival = () => {
+      if (arrivalObserver || typeof MutationObserver === 'undefined') return
+      arrivalObserver = new MutationObserver(() => update())
+      arrivalObserver.observe(shellRoot, { childList: true, subtree: true })
+    }
+
+    const update = () => {
+      // Switching sessions remounts the composer while a maximized pane survives, so resolve the
+      // surface every pass: a detached node measures as a zero rect and would inflate the inset.
+      const surface = shellRoot.querySelector<HTMLElement>('[data-composer-dock-surface]')
+      if (surface) {
+        arrivalObserver?.disconnect()
+        arrivalObserver = null
+      } else {
+        watchForArrival()
+      }
+      if (observer && surface !== observedSurface) {
+        if (observedSurface) observer.unobserve(observedSurface)
+        if (surface) observer.observe(surface)
+        observedSurface = surface
+      }
+      const covered = surface ? region.getBoundingClientRect().bottom - surface.getBoundingClientRect().top : 0
+      const next = covered > 0 ? Math.round(covered) + COMPOSER_CLEARANCE_GAP_PX : null
+      setInset((current) => (current === next ? current : next))
+    }
+    update()
+    if (typeof ResizeObserver === 'undefined') return () => arrivalObserver?.disconnect()
+
+    observer = new ResizeObserver(update)
+    observer.observe(region)
+    observedSurface = shellRoot.querySelector<HTMLElement>('[data-composer-dock-surface]')
+    if (observedSurface) observer.observe(observedSurface)
+    return () => {
+      observer?.disconnect()
+      arrivalObserver?.disconnect()
+    }
+  }, [active, paneRef])
+
+  return inset
+}
+
 /** Width of the pane's containing block (the main region), or null before first measure. */
 function useMainRegionWidth(paneRef: RefObject<HTMLDivElement | null>): number | null {
   const [width, setWidth] = useState<number | null>(null)
@@ -276,7 +346,7 @@ function RightPaneContents({
             onResize: setPaneWidth,
             invert: true
           })}
-          className="group/right-pane-resize-handle absolute top-0 bottom-0 left-0 z-30 w-2 cursor-col-resize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+          className="group/right-pane-resize-handle absolute top-0 bottom-0 left-0 z-30 w-2 cursor-col-resize focus-visible:bg-primary/40 focus-visible:outline-none">
           <div className="absolute top-0 left-0 h-full w-0.5 bg-primary/20 opacity-0 transition-opacity group-hover/right-pane-resize-handle:opacity-100 group-data-[resizing=true]/right-pane:bg-primary/35 group-data-[resizing=true]/right-pane:opacity-100" />
         </div>
       )}
@@ -296,6 +366,7 @@ export function RightPaneHost({ children, open, width = CHAT_SHELL_PANE_WIDTH, c
           animate={{ width, opacity: 1 }}
           exit={{ width: 0, opacity: 0 }}
           transition={CHAT_SHELL_TRANSITION}
+          data-ui="part:conversation-navigation"
           data-right-pane
           className={cn('h-full min-h-0 shrink-0 overflow-hidden', className)}
           style={style}>
@@ -337,21 +408,20 @@ export function PersistentRightPaneHost({
   })
   const mainRegionWidth = useMainRegionWidth(paneRef)
   useLayoutEffect(() => {
-    spaceCapRef.current = mainRegionWidth === null ? null : getPaneSpaceCap(mainRegionWidth)
-  }, [mainRegionWidth])
+    spaceCapRef.current = mainRegionWidth === null ? null : getPaneSpaceCap(mainRegionWidth, minWidth)
+  }, [mainRegionWidth, minWidth])
   const resolvedWidth = resizable ? paneWidth : width
-  // One expression drives the pane, the spacer, and the clip; diverging them would
-  // let the pane paint wider than the reserved space and overlap the center.
-  const dockedWidthExpression = buildDockedPaneWidthExpression(resolvedWidth)
+  // One expression drives both the pane and its spacer; diverging them would let the
+  // pane paint wider than the reserved space and overlap the center.
+  const dockedWidthExpression = buildDockedPaneWidthExpression(resolvedWidth, minWidth)
   const effectiveWidth =
     mainRegionWidth === null || typeof resolvedWidth !== 'number'
       ? paneWidth
-      : Math.round(resolveDockedPaneWidth(mainRegionWidth, resolvedWidth))
+      : Math.round(resolveDockedPaneWidth(mainRegionWidth, resolvedWidth, minWidth))
   const splitterMinWidth =
-    mainRegionWidth === null ? minWidth : Math.round(resolveDockedPaneWidth(mainRegionWidth, minWidth))
+    mainRegionWidth === null ? minWidth : Math.round(resolveDockedPaneWidth(mainRegionWidth, minWidth, minWidth))
   const splitterMaxWidth =
-    mainRegionWidth === null ? maxWidth : Math.round(resolveDockedPaneWidth(mainRegionWidth, maxWidth))
-  const dockedClip = getRightPaneDockedClip(dockedWidthExpression)
+    mainRegionWidth === null ? maxWidth : Math.round(resolveDockedPaneWidth(mainRegionWidth, maxWidth, minWidth))
   const hasChildren = children !== null && children !== undefined
   const targetMode: RightPaneLayoutMode = !open || !hasChildren ? 'closed' : maximized ? 'maximized' : 'docked'
   const [visualState, setVisualStateState] = useState<PersistentRightPaneVisualState>(() =>
@@ -362,9 +432,11 @@ export function PersistentRightPaneHost({
   const previousTargetModeRef = useRef(targetMode)
   const transitionTokenRef = useRef(0)
   const scheduledAnimationFrameRef = useRef<number | null>(null)
+  const effectsConnectedRef = useRef(false)
   const [initialAnimationState] = useState(() => ({
     clipPath: targetMode === 'closed' ? RIGHT_PANE_CLIP_COLLAPSED : RIGHT_PANE_CLIP_REVEALED,
-    opacity: targetMode === 'closed' ? 0 : 1
+    opacity: targetMode === 'closed' ? 0 : 1,
+    width: targetMode === 'maximized' ? RIGHT_PANE_WIDTH_FULL : dockedWidthExpression
   }))
   const onLayoutAnimationCompleteRef = useRef(onLayoutAnimationComplete)
 
@@ -373,23 +445,53 @@ export function PersistentRightPaneHost({
     setVisualStateState(nextState)
   }, [])
 
-  useLayoutEffect(() => {
-    onLayoutAnimationCompleteRef.current = onLayoutAnimationComplete
-  }, [onLayoutAnimationComplete])
-
-  useLayoutEffect(() => {
-    if (previousTargetModeRef.current === targetMode) return
-    previousTargetModeRef.current = targetMode
-
-    const token = ++transitionTokenRef.current
+  const invalidateActiveTransition = useCallback(() => {
+    transitionTokenRef.current += 1
     if (scheduledAnimationFrameRef.current !== null) {
       cancelAnimationFrame(scheduledAnimationFrameRef.current)
       scheduledAnimationFrameRef.current = null
     }
     animationControls.stop()
+  }, [animationControls])
+
+  useLayoutEffect(() => {
+    onLayoutAnimationCompleteRef.current = onLayoutAnimationComplete
+  }, [onLayoutAnimationComplete])
+
+  const reconcileAfterEffectsReconnect = useEffectEvent(() => {
+    const plan = planPersistentRightPaneReconnect(visualStateRef.current.phase, targetMode, dockedWidthExpression)
+    previousTargetModeRef.current = targetMode
+    if (!plan.completedMode) return
+
+    setVisualState(plan.settledState)
+    onLayoutAnimationCompleteRef.current?.(plan.completedMode)
+  })
+
+  // Activity preserves state while disconnecting effects. Invalidate any running
+  // transition on disconnect; when effects reconnect, converge an interrupted or
+  // hidden-time target change to the latest target without replaying the animation.
+  useLayoutEffect(() => {
+    if (effectsConnectedRef.current) {
+      reconcileAfterEffectsReconnect()
+    } else {
+      effectsConnectedRef.current = true
+    }
+
+    return invalidateActiveTransition
+    // `reconcileAfterEffectsReconnect` is an Effect Event that reads the latest
+    // target and visual state without turning normal renders into reconnects.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invalidateActiveTransition])
+
+  useLayoutEffect(() => {
+    if (previousTargetModeRef.current === targetMode) return
+    previousTargetModeRef.current = targetMode
+
+    invalidateActiveTransition()
+    const token = transitionTokenRef.current
 
     const plan = planPersistentRightPaneTransition(visualStateRef.current.phase, targetMode, {
-      dockedClip,
+      dockedWidth: dockedWidthExpression,
       reduceMotion: Boolean(reduceMotion)
     })
     if (!plan) return
@@ -432,34 +534,37 @@ export function PersistentRightPaneHost({
     if (plan.setBeforeStart) animationControls.set(plan.setBeforeStart)
     setVisualState(plan.runningState)
     start(plan.animateTo, complete, plan.deferUntilNextFrame)
-  }, [animationControls, dockedClip, paneRef, reduceMotion, setVisualState, targetMode])
+  }, [
+    animationControls,
+    dockedWidthExpression,
+    invalidateActiveTransition,
+    paneRef,
+    reduceMotion,
+    setVisualState,
+    targetMode
+  ])
 
-  // Runs after the docked width commits (pre-paint), when the docked-strip calc()
-  // clip already equals a zero inset — visually a no-op that restores the plain
-  // resting value so later transitions animate from a canonical clip. The target
-  // guard keeps it out of commits where a new transition just staged its own clip.
+  // Every settled mode re-declares its canonical pre-paint Motion state, restoring
+  // external visual state whenever Activity reconnects effects.
   useLayoutEffect(() => {
-    if (phase === 'docked' && targetMode === 'docked') {
-      animationControls.set({ clipPath: RIGHT_PANE_CLIP_REVEALED, opacity: 1 })
-    }
-  }, [animationControls, phase, targetMode])
+    const plan = planPersistentRightPaneReconnect(phase, targetMode, dockedWidthExpression)
+    if (plan.completedMode) return
 
-  useEffect(() => {
-    return () => {
-      transitionTokenRef.current += 1
-      if (scheduledAnimationFrameRef.current !== null) {
-        cancelAnimationFrame(scheduledAnimationFrameRef.current)
-        scheduledAnimationFrameRef.current = null
-      }
-      animationControls.stop()
-    }
-  }, [animationControls])
+    animationControls.set(plan.motionState)
+  }, [animationControls, dockedWidthExpression, phase, targetMode])
 
   const isDocked = phase === 'docked' && targetMode === 'docked'
   const fullWidthLayout = isFullWidthRightPanePhase(phase)
+  const composerInset = useElevatedComposerInset(paneRef, fullWidthLayout)
   const closed = isClosedRightPanePhase(phase)
   const interactionHidden = targetMode === 'closed'
-  const spacerTransition = isResizing || fullWidthLayout ? { duration: 0 } : CHAT_SHELL_TRANSITION
+  // Motion interpolates the width it is given, while `maxWidth` clamps the width that is used:
+  // animating a raw width the clamp then caps leaves the spacer parked until the two cross.
+  const spacerWidth = mainRegionWidth === null || typeof resolvedWidth !== 'number' ? resolvedWidth : effectiveWidth
+  // Settled phases track the region through re-measurement, which must land instantly; only a
+  // phase change travels, and then on the same transition as the box it reserves space for.
+  const spacerTravels = !isResizing && !reduceMotion && getSettledRightPaneMode(phase) === null
+  const spacerTransition = spacerTravels ? getRightPanePhaseTransition(phase) : { duration: 0 }
 
   const onFullWidthPhaseChangeRef = useRef(onFullWidthPhaseChange)
   const onResizingChangeRef = useRef(onResizingChange)
@@ -479,7 +584,7 @@ export function PersistentRightPaneHost({
       <motion.div
         aria-hidden="true"
         data-right-pane-spacer
-        animate={{ width: reservesDockedSpace ? resolvedWidth : 0 }}
+        animate={{ width: reservesDockedSpace ? spacerWidth : 0 }}
         transition={spacerTransition}
         className="h-full min-h-0 shrink-0"
         style={{ maxWidth: dockedWidthExpression }}
@@ -490,6 +595,7 @@ export function PersistentRightPaneHost({
         animate={animationControls}
         inert={interactionHidden}
         aria-hidden={interactionHidden || undefined}
+        data-ui="part:conversation-inspector"
         data-right-pane
         data-right-pane-mode={targetMode}
         data-right-pane-phase={phase}
@@ -499,19 +605,18 @@ export function PersistentRightPaneHost({
           'group/right-pane pointer-events-none absolute top-0 right-0 bottom-0 z-40 h-full min-h-0 overflow-hidden',
           className
         )}
-        style={{
-          ...style,
-          width: fullWidthLayout ? '100%' : resolvedWidth,
-          maxWidth: fullWidthLayout ? undefined : dockedWidthExpression,
-          visibility: closed ? 'hidden' : undefined
-        }}>
+        style={{ ...style, visibility: closed ? 'hidden' : undefined }}>
         <div
           data-shell-maximized-overlay-content={fullWidthLayout ? '' : undefined}
+          style={
+            composerInset === null ? undefined : ({ '--chat-composer-inset': `${composerInset}px` } as CSSProperties)
+          }
           className={cn(
-            'relative h-full min-h-0 overflow-hidden',
+            // One opaque surface in every layout: the theme's background carries alpha in dark mode,
+            // so a translucent pane both shows the chat it covers and flips colour when a phase settles.
+            'relative h-full min-h-0 overflow-hidden bg-card',
             !interactionHidden && 'pointer-events-auto',
-            fullWidthLayout && 'bg-background',
-            resizable && !fullWidthLayout && '[border-left:0.5px_solid_var(--color-border)]'
+            resizable && !fullWidthLayout && '[border-left:0.5px_solid_var(--border)]'
           )}>
           <RightPaneContents
             paneWidth={effectiveWidth}
